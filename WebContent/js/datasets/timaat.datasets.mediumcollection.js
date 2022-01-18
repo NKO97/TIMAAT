@@ -622,7 +622,7 @@
 
 		loadMediaCollections: function() {
 			$('#mediumcollection-metadata-form').data('type', 'mediumCollection');
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			this.setMediumCollectionList();
 			TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', null);
 			// TIMAAT.UI.subNavTab = 'dataSheet';
@@ -1417,7 +1417,7 @@
 						$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 						TIMAAT.MediumDatasets.container = 'media';
-						$('#previewTab').removeClass('annotationView');
+						$('#mediumPreviewTab').removeClass('annotationView');
 						switch (TIMAAT.UI.subNavTab) {
 							case 'dataSheet':
 								TIMAAT.UI.displayDataSetContentContainer('mediumcollection-data-tab', 'mediumcollection-metadata-form', 'mediumCollection');
@@ -1755,8 +1755,8 @@
 			return model;
 		},
 
-		createMediumCollection: async function(type, model, subTypeModel) {
-    	// console.log("TCL: createMediumCollection: type, model, subTypeModel", type, model, subTypeModel);
+		createMediumCollection: async function(type, model, subtypeModel) {
+    	// console.log("TCL: createMediumCollection: type, model, subtypeModel", type, model, subtypeModel);
 			try {				
 				// create medium collection
 				var newModel = await TIMAAT.MediumCollectionService.createMediumCollection(model);
@@ -1766,9 +1766,9 @@
 
 			try {
 				// create subtype with medium collection id
-				subTypeModel.mediaCollectionId = newModel.id;
+				subtypeModel.mediaCollectionId = newModel.id;
 				if (type != 'Collection') { //* Collection has no extra data table
-					await TIMAAT.MediumCollectionService.createMediumCollectionSubtype(type, newModel, subTypeModel);
+					await TIMAAT.MediumCollectionService.createMediumCollectionSubtype(type, newModel, subtypeModel);
 				}
 			} catch(error) {
 				console.error("ERROR: ", error);
@@ -1778,10 +1778,10 @@
 				// push new medium collection to dataset model
 				switch (type) {
 					case 'Album':
-						newModel.mediaCollectionAlbum = subTypeModel;
+						newModel.mediaCollectionAlbum = subtypeModel;
 					break;
 					case 'Series':
-						newModel.mediaCollectionSeries = subTypeModel;
+						newModel.mediaCollectionSeries = subtypeModel;
 					break;
 				};
 			} catch(error) {
@@ -1790,18 +1790,18 @@
 			return newModel;
 		},
 
-		updateMediumCollection: async function(subType, mediumCollection) {
-			// console.log("TCL: updateMediumCollection: async function -> mediumCollection at beginning of update process: ", subType, mediumCollection);
+		updateMediumCollection: async function(subtype, mediumCollection) {
+			// console.log("TCL: updateMediumCollection: async function -> mediumCollection at beginning of update process: ", subtype, mediumCollection);
 				try { // update subtype
 					var tempSubtypeModel;
-					switch (subType) {
+					switch (subtype) {
 						case 'Album':
 							tempSubtypeModel = mediumCollection.model.mediaCollectionAlbum;
-							await TIMAAT.MediumCollectionService.updateMediumCollectionSubtype(subType, tempSubtypeModel);
+							await TIMAAT.MediumCollectionService.updateMediumCollectionSubtype(subtype, tempSubtypeModel);
 						break;
 						case 'Series':
 							tempSubtypeModel = mediumCollection.model.mediaCollectionSeries;
-							await TIMAAT.MediumCollectionService.updateMediumCollectionSubtype(subType, tempSubtypeModel);
+							await TIMAAT.MediumCollectionService.updateMediumCollectionSubtype(subtype, tempSubtypeModel);
 							break;
 					}
 				} catch(error) {

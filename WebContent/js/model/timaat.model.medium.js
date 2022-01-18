@@ -30,13 +30,6 @@
 			var fileTypesAccepted = '*.*';
 			if (mediumType == 'medium') { // Necessary to fix upload button functionality
 				mediumType = model.mediaType.mediaTypeTranslations[0].type;
-				// if (model.mediumAudio) mediumType = 'audio';
-				// if (model.mediumDocument) mediumType = 'document';
-				// if (model.mediumImage) mediumType = 'image';
-				// if (model.mediumSoftware) mediumType = 'software';
-				// if (model.mediumText) mediumType = 'text';
-				// if (model.mediumVideo) mediumType = 'video';
-				// if (model.mediumVideogame) mediumType = 'videogame';
 			}
 			// if (mediumType == 'medium') { // only display icon in media list
 				// displayMediumTypeIcon = '  <i class="fas fa-photo-video"></i> '; // default media icon

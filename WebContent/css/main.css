@@ -871,35 +871,67 @@ select:disabled {
   line-height: 1;
 }
 
-[data-role="dynamic-title-fields"] > .form-group [data-role="add"] {
+[data-role="medium-dynamic-title-fields"] > .form-group [data-role="add"] {
   display: none;
 }
 
-[data-role="new-title-fields"] > .form-group [data-role="add"] {
+[data-role="medium-new-title-fields"] > .form-group [data-role="add"] {
 	display: none;
 }
 
-[data-role="new-title-fields"] > .form-group:last-child [data-role="add"] {
+[data-role="medium-new-title-fields"] > .form-group:last-child [data-role="add"] {
 	display: inline-block;
 }
 
-[data-role="new-title-fields"] > .form-group:last-child [data-role="remove"] {
+[data-role="medium-new-title-fields"] > .form-group:last-child [data-role="remove"] {
   display: none;
 }
 
-[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="add"] {
+[data-role="medium-dynamic-languagetrack-fields"] > .form-group [data-role="add"] {
 	display: none;
 }
 
-[data-role="new-languagetrack-fields"] > .form-group [data-role="add"] {
+[data-role="medium-new-languagetrack-fields"] > .form-group [data-role="add"] {
 	display: none;
 }
 
-[data-role="new-languagetrack-fields"] > .form-group:last-child [data-role="add"] {
+[data-role="medium-new-languagetrack-fields"] > .form-group:last-child [data-role="add"] {
 	display: inline-block;
 }
 
-[data-role="new-languagetrack-fields"] > .form-group:last-child [data-role="remove"] {
+[data-role="medium-new-languagetrack-fields"] > .form-group:last-child [data-role="remove"] {
+	display: none;
+}
+
+[data-role="music-dynamic-title-fields"] > .form-group [data-role="add"] {
+  display: none;
+}
+
+[data-role="music-new-title-fields"] > .form-group [data-role="add"] {
+	display: none;
+}
+
+[data-role="music-new-title-fields"] > .form-group:last-child [data-role="add"] {
+	display: inline-block;
+}
+
+[data-role="music-new-title-fields"] > .form-group:last-child [data-role="remove"] {
+  display: none;
+}
+
+[data-role="music-dynamic-languagetrack-fields"] > .form-group [data-role="add"] {
+	display: none;
+}
+
+[data-role="music-new-languagetrack-fields"] > .form-group [data-role="add"] {
+	display: none;
+}
+
+[data-role="music-new-languagetrack-fields"] > .form-group:last-child [data-role="add"] {
+	display: inline-block;
+}
+
+[data-role="music-new-languagetrack-fields"] > .form-group:last-child [data-role="remove"] {
 	display: none;
 }
 

@@ -1,6 +1,10 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 
@@ -27,6 +31,11 @@ public class Maqam implements Serializable {
 	@JoinColumn(name="maqam_type_id")
 	private MaqamType maqamType;
 
+	//bi-directional many-to-one association to MusicNashid
+	@OneToMany(mappedBy="maqam")
+	@JsonIgnore
+	private List<MusicNashid> musicNashidList;
+
 	public Maqam() {
 	}
 
@@ -52,6 +61,28 @@ public class Maqam implements Serializable {
 
 	public void setMaqamType(MaqamType maqamType) {
 		this.maqamType = maqamType;
+	}
+
+	public List<MusicNashid> getMusicNashidList() {
+		return this.musicNashidList;
+	}
+
+	public void setMusicNashidList(List<MusicNashid> musicNashidList) {
+		this.musicNashidList = musicNashidList;
+	}
+
+	public MusicNashid addMusicNashid(MusicNashid musicNashid) {
+		getMusicNashidList().add(musicNashid);
+		musicNashid.setMaqam(this);
+
+		return musicNashid;
+	}
+
+	public MusicNashid removeMusicNashid(MusicNashid musicNashid) {
+		getMusicNashidList().remove(musicNashid);
+		musicNashid.setMaqam(null);
+
+		return musicNashid;
 	}
 
 }

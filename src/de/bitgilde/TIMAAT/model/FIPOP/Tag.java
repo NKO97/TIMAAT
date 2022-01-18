@@ -58,6 +58,10 @@ public class Tag implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums;
 
+	//bi-directional many-to-many association to Music
+	@ManyToMany(mappedBy = "tags")
+	@JsonIgnore
+	private List<Music> musicList;
 
 	//bi-directional many-to-many association to WorkAnalysisList
 	// @ManyToMany(mappedBy="tags")
@@ -148,6 +152,14 @@ public class Tag implements Serializable {
 
 	public void setMediums(List<Medium> mediums) {
 		this.mediums = mediums;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
 	}
 
 	// public List<WorkAnalysisList> getWorkAnalysisLists() {

@@ -186,7 +186,6 @@
 
 			$('#medium-tab-metadata').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
@@ -201,7 +200,6 @@
 
 			$('#medium-tab-preview').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
@@ -226,7 +224,7 @@
 			$('.mediadatasheet-form-delete-button').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#videoPreview').get(0).pause();
+				$('#mediumVideoPreview').get(0).pause();
 				$('#timaat-mediadatasets-medium-delete').data('medium', $('#medium-metadata-form').data('medium'));
 				$('#timaat-mediadatasets-medium-delete').modal('show');
 			});
@@ -235,7 +233,6 @@
 			$('#timaat-mediadatasets-modal-delete-submit-button').on('click', async function(event) {
 				let modal = $('#timaat-mediadatasets-medium-delete');
 				let medium = modal.data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
         // console.log("TCL: $ -> type", type);
 				if (medium) {
@@ -275,6 +272,7 @@
 
 				var medium = $('#medium-metadata-form').data('medium');
 				var type = $('#medium-metadata-form').data('type');
+        console.log("TCL: $ -> type", type);
 
 				// create/edit medium window submitted data
 				TIMAAT.MediumDatasets.disableReadOnlyDataFields(false);
@@ -287,16 +285,16 @@
 				// console.log("TCL: formDataObject", formDataObject);
 				// sanitize form data
 				var formDataSanitized = formDataObject;
-				formDataSanitized.releaseDate = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
-				formDataSanitized.recordingStartDate = moment.utc(formDataObject.recordingStartDate, "YYYY-MM-DD");
-				formDataSanitized.recordingEndDate = moment.utc(formDataObject.recordingEndDate, "YYYY-MM-DD");
 				formDataSanitized.displayTitleLanguageId = Number(formDataObject.displayTitleLanguageId);
-				formDataSanitized.sourceUrl = (formDataObject.sourceUrl.length == 0 ) ? null : formDataObject.sourceUrl;
-				formDataSanitized.sourceIsPrimarySource = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
-				formDataSanitized.sourceLastAccessed = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+				formDataSanitized.isEpisode              = (formDataObject.isEpisode == "on") ? true : false;
+				formDataSanitized.length                 = TIMAAT.Util.parseTime(formDataObject.length);
+				formDataSanitized.recordingEndDate       = moment.utc(formDataObject.recordingEndDate, "YYYY-MM-DD");
+				formDataSanitized.recordingStartDate     = moment.utc(formDataObject.recordingStartDate, "YYYY-MM-DD");
+				formDataSanitized.releaseDate            = moment.utc(formDataObject.releaseDate, "YYYY-MM-DD");
+				formDataSanitized.sourceIsPrimarySource  = (formDataObject.sourceIsPrimarySource == "on") ? true : false;
 				formDataSanitized.sourceIsStillAvailable = (formDataObject.sourceIsStillAvailable == "on") ? true : false;
-				formDataSanitized.length = TIMAAT.Util.parseTime(formDataObject.length);
-				formDataSanitized.isEpisode = (formDataObject.isEpisode == "on") ? true : false;
+				formDataSanitized.sourceLastAccessed     = moment.utc(formDataObject.sourceLastAccessed, "YYYY-MM-DD HH:mm");
+				formDataSanitized.sourceUrl              = (formDataObject.sourceUrl.length == 0 ) ? null : formDataObject.sourceUrl;
         // console.log("TCL: formDataSanitized", formDataSanitized);
 
 				if (medium) { // update medium
@@ -305,6 +303,23 @@
 					// medium subtype data
 					switch (type) {
 						case "audio":
+							if (!medium.model.mediumAudio.audioPostProduction) { //* for existing audio media which were created before audio post production was added
+								let audioPostProductionModel = await TIMAAT.MediumService.createAudioPostProduction();
+								let audioPostProductionTranslationModel = await TIMAAT.MediumDatasets.createAudioPostProductionTranslationModel(formDataSanitized);
+								audioPostProductionTranslationModel.audioPostProduction.id = audioPostProductionModel.id;
+								audioPostProductionTranslationModel = await TIMAAT.MediumService.createAudioPostProductionTranslation(audioPostProductionTranslationModel);
+								medium.model.mediumAudio.audioPostProduction = {};
+								medium.model.mediumAudio.audioPostProduction.id = audioPostProductionModel.id;
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations = [];
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0] = audioPostProductionTranslationModel;
+							} else {
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].overdubbing = formDataSanitized.overdubbing;
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].reverb = formDataSanitized.reverb;
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].delay = formDataSanitized.delay;
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].panning = formDataSanitized.panning;
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].bass = formDataSanitized.bass;
+								medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].treble = formDataSanitized.treble;
+							}
 							medium.model.mediumAudio.length = formDataSanitized.length;
 						break;
 						case "document":
@@ -342,7 +357,14 @@
 					var displayTitleModel = await TIMAAT.MediumDatasets.createDisplayTitleModel(formDataSanitized);
 					var sourceModel = await TIMAAT.MediumDatasets.createSourceModel(formDataSanitized);
 					var mediumSubtypeModel = await TIMAAT.MediumDatasets.createMediumSubtypeModel(formDataSanitized, type);
-
+					if (type == 'audio') {
+						let audioPostProductionModel = await TIMAAT.MediumService.createAudioPostProduction();
+						let audioPostProductionTranslationModel = await TIMAAT.MediumDatasets.createAudioPostProductionTranslationModel(formDataSanitized);
+						audioPostProductionTranslationModel.audioPostProduction.id = audioPostProductionModel.id;
+						audioPostProductionTranslationModel = await TIMAAT.MediumService.createAudioPostProductionTranslation(audioPostProductionTranslationModel);
+						mediumSubtypeModel.audioPostProduction.id = audioPostProductionModel.id;
+						mediumSubtypeModel.audioPostProduction.audioPostProductionTranslations[0] = audioPostProductionTranslationModel;
+					}
 					var newMedium = await TIMAAT.MediumDatasets.createMedium(type, mediumModel, mediumSubtypeModel, displayTitleModel, sourceModel);
 					medium = new TIMAAT.Medium(newMedium, type);
 					medium.model.fileStatus = 'noFile';
@@ -364,7 +386,7 @@
 			});
 
 			// category set button handler
-			$('#datasheet-form-categoryset-button').on('click', async function(event) {
+			$('#medium-datasheet-form-categoryset-button').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-mediadatasets-medium-categorysets');
@@ -472,7 +494,7 @@
 			});
 
 			// category button handler
-			$('#datasheet-form-category-button').on('click', async function(event) {
+			$('#medium-datasheet-form-category-button').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-mediadatasets-medium-categories');
@@ -581,7 +603,7 @@
 			});
 
 			// tag button handler
-			$('#datasheet-form-tag-button').on('click', async function(event) {
+			$('#medium-datasheet-form-tag-button').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				var modal = $('#timaat-mediadatasets-medium-tags');
@@ -697,7 +719,6 @@
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				let medium = $('#medium-metadata-form').data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				medium = new TIMAAT.Medium(medium.model, type);
 				medium.listView.find('.timaat-medium-upload-file').click();
@@ -803,14 +824,12 @@
 					$('#medium-metadata-form-dismiss-button').trigger('click');
 				}
 			});
-			
 
 		},
 		
 		initTitles: function() {
 			$('#medium-tab-titles').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
@@ -838,10 +857,10 @@
 			});
 
 			// Add title button click
-			$(document).on('click','[data-role="new-title-fields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','[data-role="medium-new-title-fields"] > .form-group [data-role="add"]', function(event) {
 				event.preventDefault();
 				// console.log("TCL: add title to list");
-				var listEntry = $(this).closest('[data-role="new-title-fields"]');
+				var listEntry = $(this).closest('[data-role="medium-new-title-fields"]');
 				var title = '';
 				var languageId = null;
 				var languageName = '';
@@ -862,7 +881,7 @@
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 					var i = Number(indexString)+1;
           // console.log("i", i);
-					$('#dynamic-title-fields').append(
+					$('#medium-dynamic-title-fields').append(
 						`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
 							<div class="col-sm-2 col-md-1 text-center">
@@ -892,7 +911,7 @@
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
 								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
-												id="new-title-language-select-dropdown_`+i+`"
+												id="medium-new-title-language-select-dropdown_`+i+`"
 												name="newTitleLanguageId[`+i+`]"
 												data-role="newTitleLanguageId[`+i+`]"
 												required>
@@ -906,7 +925,7 @@
 						</div>
 					</div>`
 					);
-					$('#new-title-language-select-dropdown_'+i).select2({
+					$('#medium-new-title-language-select-dropdown_'+i).select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -938,12 +957,12 @@
 						},
 						minimumInputLength: 0,
 					});
-					var languageSelect = $('#new-title-language-select-dropdown_'+i);
+					var languageSelect = $('#medium-new-title-language-select-dropdown_'+i);
 					var option = new Option(languageName, languageId, true, true);
 					languageSelect.append(option).trigger('change');
 					$('input[name="newTitle['+i+']"]').rules('add', { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="newTitle['+i+']"]').attr('value', TIMAAT.MediumDatasets.replaceSpecialCharacters(title));
-					$('#title-language-select-dropdown').empty();
+					$('#medium-title-language-select-dropdown').empty();
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -957,7 +976,7 @@
 			});
 
 			// Remove title button click
-			$(document).on('click','[data-role="dynamic-title-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','[data-role="medium-dynamic-title-fields"] > .form-group [data-role="remove"]', function(event) {
 				event.preventDefault();
 				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
 				if (isDisplayTitle == "on") {
@@ -976,13 +995,13 @@
 				// console.log("TCL: Titles form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-title-fields");
+				var node = document.getElementById("medium-new-title-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				};
 				// test if form is valid 
 				if (!$('#medium-titles-form').valid()) {
-					$('[data-role="new-title-fields"]').append(TIMAAT.MediumDatasets.titleFormTitleToAppend());
+					$('[data-role="medium-new-title-fields"]').append(TIMAAT.MediumDatasets.titleFormTitleToAppend());
 					this.getTitleFormLanguageDropdownData();
 					return false;
 				}
@@ -1212,18 +1231,18 @@
 				}
 			});
 
-			$('#dynamic-title-fields').on('keypress', function(event) {
+			$('#medium-dynamic-title-fields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-title-fields').on('keypress', function(event) {
+			$('#medium-new-title-fields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
-					$('#new-title-fields').find('[data-role="add"]').trigger('click');
+					$('#medium-new-title-fields').find('[data-role="add"]').trigger('click');
 				}
 			});
 		},
@@ -1232,7 +1251,6 @@
 			// languagetrack tab click handling
 			$('#medium-tab-languagetracks').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
@@ -1247,9 +1265,9 @@
 			});
 
 			// Add languageTrack button click
-			$(document).on('click','[data-role="new-languagetrack-fields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','[data-role="medium-new-languagetrack-fields"] > .form-group [data-role="add"]', async function(event) {
 				event.preventDefault();
-				var listEntry = $(this).closest('[data-role="new-languagetrack-fields"]');
+				var listEntry = $(this).closest('[data-role="medium-new-languagetrack-fields"]');
 				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
 				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
 				var languageName = listEntry.find('[data-role="languageTrackLanguageId"]').text();
@@ -1274,7 +1292,7 @@
 					if (!duplicate) {
 						var i = Math.floor((languageTracksInForm.length -2) / 2 ); // length -2 as the 'add new track' row is still part of the form and has to be removed
 						// console.log("TCL: i", i);
-						$('#dynamic-languagetrack-fields').append(
+						$('#medium-dynamic-languagetrack-fields').append(
 							`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
 							<div class="form-row">
 								<div class="col-md-5">
@@ -1358,11 +1376,11 @@
 			});
 
 			// Remove languageTrack button click
-			$(document).on('click','[data-role="dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','[data-role="medium-dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', async function(event) {
 				event.preventDefault();
 				var entry = $(this).closest('.form-group').attr('data-id');
 				var medium = $('#medium-metadata-form').data('medium');
-				var listEntry = $(this).closest('[data-role="dynamic-languagetrack-fields"]');
+				var listEntry = $(this).closest('[data-role="medium-dynamic-languagetrack-fields"]');
 				var mediumLanguageTypeId = listEntry.find('[name="languageTrackTypeId['+entry+']"]').val();
 				var languageId = listEntry.find('[name="languageTrackLanguageId['+entry+']"]').val();
 				var i = 0;
@@ -1388,7 +1406,6 @@
 		initActorRoles: function() {
 			$('#medium-tab-actorwithroles').on('click', function(event) {
 				let medium = $('#medium-metadata-form').data('medium');
-				// let type = $('#medium-metadata-form').data('type');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
@@ -1402,10 +1419,10 @@
 			});
 
 			// add actorwithroles button click
-			$(document).on('click','[data-role="new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','[data-role="medium-new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
 				// console.log("TCL: add new actor with role(s)");
 				event.preventDefault();
-				var listEntry = $(this).closest('[data-role="new-actorwithrole-fields"]');
+				var listEntry = $(this).closest('[data-role="medium-new-actorwithrole-fields"]');
 				var newFormEntry = [];
 				if (listEntry.find('select').each(function(){           
 					newFormEntry.push($(this).val());
@@ -1452,12 +1469,14 @@
 					// var newActorId = newFormEntry[0];
 					var newActorSelectData = $('#mediumhasactorwithrole-actorid').select2('data');
 					var newActorId = newActorSelectData[0].id;
-					var newRoleSelectData = $('#actorwithroles-multi-select-dropdown').select2('data');
+          console.log("TCL: $ -> newActorId", newActorId);
+					var newRoleSelectData = $('#medium-actorwithroles-multi-select-dropdown').select2('data');
 					// var actorHasRoleIds = newFormEntry[1];
-					$('#dynamic-actorwithrole-fields').append(TIMAAT.MediumDatasets.appendActorWithRolesDataset(existingEntriesIdList.length, newActorId));
+					$('#medium-dynamic-actorwithrole-fields').append(TIMAAT.MediumDatasets.appendActorWithRolesDataset(existingEntriesIdList.length, newActorId));
 					TIMAAT.MediumDatasets.getMediumHasActorWithRoleData(newActorId);
 					// select actor for new entry
 					await TIMAAT.ActorService.getActor(newActorId).then(function (data) {
+            console.log("TCL: newActorId", newActorId);
 						var actorSelect = $('#mediumhasactorwithrole-actorid-'+newActorId);
 						// console.log("TCL: actorSelect", actorSelect);
 						// console.log("TCL: then: data", data);
@@ -1476,7 +1495,7 @@
 					// provide roles list for new actor entry
 					TIMAAT.MediumDatasets.getMediumHasActorWithRolesDropdownData(newActorId);
 
-					var roleSelect = $('#actorwithroles-multi-select-dropdown-'+newActorId);
+					var roleSelect = $('#medium-actorwithroles-multi-select-dropdown-'+newActorId);
 					var j = 0;
 					for (; j < newRoleSelectData.length; j++) {
 						var option = new Option(newRoleSelectData[j].text, newRoleSelectData[j].id, true, true);
@@ -1492,8 +1511,8 @@
 					// clear new entry values
 					$('#mediumhasactorwithrole-actorid').val(null).trigger('change');
 					// $('#mediumhasactorwithrole-actorid').prop('required', true);
-					$('#actorwithroles-multi-select-dropdown').val(null).trigger('change');
-					// $('#actorwithroles-multi-select-dropdown').prop('required', true);
+					$('#medium-actorwithroles-multi-select-dropdown').val(null).trigger('change');
+					// $('#medium-actorwithroles-multi-select-dropdown').prop('required', true);
 				}
 				else { // duplicate actor
 					$('#timaat-mediadatasets-actorwithrole-duplicate').modal('show');
@@ -1501,7 +1520,7 @@
 			});
 
 			// remove actorwithroles button click
-			$(document).on('click','[data-role="dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','[data-role="medium-dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
 				// console.log("TCL: remove actor with role(s)");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
@@ -1512,9 +1531,9 @@
 				// console.log("TCL: ActorWithRole form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-actorwithrole-fields");
+				var node = document.getElementById("medium-new-actorwithrole-fields");
 				while (node.lastChild) {
-					node.removeChild(node.lastChild)
+					node.removeChild(node.lastChild);
 				}
 
 				//! temp solution to prevent adding actors without roles
@@ -1522,7 +1541,7 @@
 
 				// test if form is valid 
 				if (!$('#medium-actorwithroles-form').valid()) {
-					$('[data-role="new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());				
+					$('[data-role="mediumnew-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());				
 					return false;
 				}
 
@@ -1592,7 +1611,7 @@
 					}
 					if (!datasetExists) {
 						// console.log("TCL: ADD actor entries with id: ", formEntryIds[i]);
-						var roleSelectData = $('#actorwithroles-multi-select-dropdown-'+formEntryIds[i]).select2('data');
+						var roleSelectData = $('#medium-actorwithroles-multi-select-dropdown-'+formEntryIds[i]).select2('data');
 						// console.log("TCL: roleSelectData", roleSelectData);
 						var k = 0;
 						for (; k < roleSelectData.length; k++) {
@@ -1618,7 +1637,7 @@
 						existingRoleIds.push(existingRoles[j].id);
 					}
 					// console.log("TCL: existing role ids for the current actor", existingRoleIds);
-					var roleSelectData = $('#actorwithroles-multi-select-dropdown-'+existingEntriesIdList[i]).select2('data');
+					var roleSelectData = $('#medium-actorwithroles-multi-select-dropdown-'+existingEntriesIdList[i]).select2('data');
 					// console.log("TCL: roleSelectData", roleSelectData);
 					if (roleSelectData == undefined) {
 						roleSelectData = [];
@@ -1703,7 +1722,7 @@
 		
 		loadMedia: function() {
 			$('#medium-metadata-form').data('type', 'medium');
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			this.setMediumList();
 			TIMAAT.UI.addSelectedClassToSelectedItem('medium', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
@@ -1723,7 +1742,7 @@
 		loadMediumSubtype: function(type) {
     	// console.log("TCL: $ -> type", type);
 			$('#medium-metadata-form').data('type', type);
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
 			this.showAddMediumButton();
@@ -1853,7 +1872,6 @@
 			}
 		},
 
-		// TODO check if obsolete
 		setMediumTitleList: function(medium) {
 			// console.log("TCL: setMediumTitleList -> medium", medium);
 			if ( !medium ) return;
@@ -1885,9 +1903,9 @@
 			$('.add-medium-button :input').prop('disabled', true);
 			$('#medium-metadata-form').data('type', type);
 			$('#medium-metadata-form').data('medium', null);
-			$('#medium-title-language-select-dropdown').empty().trigger('change');
+			$('#medium-displayTitle-language-select-dropdown').empty().trigger('change');
 			mediumFormMetadataValidator.resetForm();
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
@@ -1909,13 +1927,13 @@
 			$('#medium-metadata-form').trigger('reset');
 			this.initFormDataSheetData(type);
 			mediumFormMetadataValidator.resetForm();
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 
 			this.getMediumFormTitleLanguageDropdownData();
-			var languageSelect = $('#medium-title-language-select-dropdown');
+			var languageSelect = $('#medium-displayTitle-language-select-dropdown');
 			var option = new Option(data.model.displayTitle.language.name, data.model.displayTitle.language.id, true, true);
 			languageSelect.append(option).trigger('change');
-
+			
 			if ( action == 'show' ) {
 				$('#medium-metadata-form :input').prop('disabled', true);
 				$('.form-buttons').prop('disabled', false);
@@ -1925,7 +1943,7 @@
 				$('#medium-metadata-form-submit-button').hide();
 				$('#medium-metadata-form-dismiss-button').hide();
 				$('#mediumFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
-				$('#medium-title-language-select-dropdown').select2('destroy').attr("readonly", true);
+				$('#medium-displayTitle-language-select-dropdown').select2('destroy').attr("readonly", true);
 			}
 			else if ( action == 'edit' ) {
 				this.initFormDataSheetForEdit();
@@ -1940,8 +1958,8 @@
 			// setup UI
 			// medium data
 			$('#timaat-mediadatasets-metadata-medium-type-id').val(data.model.mediaType.id);
-			$('#timaat-mediadatasets-metadata-medium-remark').val(data.model.remark);
 			$('#timaat-mediadatasets-metadata-medium-copyright').val(data.model.copyright);
+			$('#timaat-mediadatasets-metadata-medium-remark').val(data.model.remark);
 			if (data.model.releaseDate != null && !(isNaN(data.model.releaseDate)))
 				$('#timaat-mediadatasets-metadata-medium-releasedate').val(moment.utc(data.model.releaseDate).format('YYYY-MM-DD'));
 				else $('#timaat-mediadatasets-metadata-medium-releasedate').val('');
@@ -1969,6 +1987,14 @@
 			switch (type) {
 				case 'audio':
 					$('#timaat-mediadatasets-metadata-audio-length').val(TIMAAT.Util.formatTime(data.model.mediumAudio.length));
+					if (data.model.mediumAudio.audioPostProduction) {
+						$('#timaat-mediadatasets-metadata-audio-audio-post-production-overdubbing').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].overdubbing);
+						$('#timaat-mediadatasets-metadata-audio-audio-post-production-reverb').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].reverb);
+						$('#timaat-mediadatasets-metadata-audio-audio-post-production-delay').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].delay);
+						$('#timaat-mediadatasets-metadata-audio-audio-post-production-panning').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].panning);
+						$('#timaat-mediadatasets-metadata-audio-audio-post-production-bass').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].bass);
+						$('#timaat-mediadatasets-metadata-audio-audio-post-production-treble').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].treble);
+					}
 				break;
 				case "mediumDocument":
 				break;
@@ -2025,10 +2051,10 @@
 				$('.image-preview').show();
 				switch (type) {
 					case 'image':
-						$('#mediumPreview').attr('src' , 'img/image-placeholder.png');
+						$('#mediumImagePreview').attr('src' , 'img/image-placeholder.png');
 					break;
 					default:
-						$('#mediumPreview').attr('src' , 'img/preview-placeholder.png');
+						$('#mediumImagePreview').attr('src' , 'img/preview-placeholder.png');
 					break;
 				}
 			} else {
@@ -2045,32 +2071,32 @@
 					case 'audio': // TODO check audio-preview functionality
 						$('.video-preview').hide();
 						$('.image-preview').hide();
-						$('#audioPreview').attr('src', '/TIMAAT/api/medium/audio/'+data.model.id+'/download'+'?token='+data.model.viewToken);
+						$('#mediumAudioPreview').attr('src', '/TIMAAT/api/medium/audio/'+data.model.id+'/download'+'?token='+data.model.viewToken);
 						$('.audio-preview').show();
 					break;
 					case 'image':
 						$('.audio-preview').hide();
 						$('.video-preview').hide();
-						$('#mediumPreview').attr('src', '/TIMAAT/api/medium/image/'+data.model.id+'/preview'+'?token='+data.model.viewToken);
-						$('#mediumPreview').attr('title', data.model.displayTitle.name);
-						$('#mediumPreview').attr('alt', data.model.displayTitle.name);
+						$('#mediumImagePreview').attr('src', '/TIMAAT/api/medium/image/'+data.model.id+'/preview'+'?token='+data.model.viewToken);
+						$('#mediumImagePreview').attr('title', data.model.displayTitle.name);
+						$('#mediumImagePreview').attr('alt', data.model.displayTitle.name);
 						$('.image-preview').show();
 					break;
 					case 'video':
 						if ( data.model.fileStatus && data.model.fileStatus != 'ready' && data.model.fileStatus != 'transcoding' && data.model.fileStatus != 'waiting' ) {
 							$('.video-preview').hide();
-							$('#mediumPreview').attr('src', 'img/preview-placeholder.png');
-							$('#mediumPreview').attr('title', 'placeholder');
-							$('#mediumPreview').attr('alt', 'placeholder');
+							$('#mediumImagePreview').attr('src', 'img/preview-placeholder.png');
+							$('#mediumImagePreview').attr('title', 'placeholder');
+							$('#mediumImagePreview').attr('alt', 'placeholder');
 							$('.image-preview').show();
 						} else {
 							$('.audio-preview').hide();
 							$('.image-preview').hide();
-							$('#videoPreview').attr('src', '/TIMAAT/api/medium/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
+							$('#mediumVideoPreview').attr('src', '/TIMAAT/api/medium/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
 							$('.video-preview').show();
 						}
 					default:
-						$('#mediumPreview').attr('src', 'img/preview-placeholder.png');
+						$('#mediumImagePreview').attr('src', 'img/preview-placeholder.png');
 					break;
 				}
 			}
@@ -2081,19 +2107,19 @@
 		},
 
 		mediumFormTitles: function(action, medium) {
-			// console.log("TCL: mediumFormTitles: action, medium", action, medium);
+			console.log("TCL: mediumFormTitles: (action, medium): ", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
-			var node = document.getElementById("dynamic-title-fields");
+			var node = document.getElementById("medium-dynamic-title-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			};
-			var node = document.getElementById("new-title-fields");
+			var node = document.getElementById("medium-new-title-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			};
 			$('#medium-titles-form').trigger('reset');
 			mediumFormTitlesValidator.resetForm();
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			
 			// setup UI
 			// display-title data
@@ -2101,8 +2127,8 @@
 			var numTitles = medium.model.titles.length;
       // console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i < numTitles; i++) {
-				// console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
-				$('[data-role="dynamic-title-fields"]').append(
+				console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
+				$('[data-role="medium-dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
 							<div class="col-sm-2 col-md-1 text-center">
@@ -2140,7 +2166,7 @@
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
 								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id" 
-												id="title-language-select-dropdown_`+medium.model.titles[i].id+`"
+												id="medium-title-language-select-dropdown_`+medium.model.titles[i].id+`"
 												name="titleLanguageId[`+i+`]" 
 												data-role="titleLanguageId[`+medium.model.titles[i].id+`]" 
 												data-placeholder="Select title language"
@@ -2156,7 +2182,7 @@
 						</div>
 					</div>`
 					);
-					$('#title-language-select-dropdown_'+medium.model.titles[i].id).select2({
+					$('#medium-title-language-select-dropdown_'+medium.model.titles[i].id).select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2188,7 +2214,7 @@
 						},
 						minimumInputLength: 0,
 					});
-					var languageSelect = $('#title-language-select-dropdown_'+medium.model.titles[i].id);
+					var languageSelect = $('#medium-title-language-select-dropdown_'+medium.model.titles[i].id);
 					var option = new Option(medium.model.titles[i].language.name, medium.model.titles[i].language.id, true, true);
 					languageSelect.append(option).trigger('change');
 
@@ -2207,14 +2233,14 @@
 				this.initFormForShow(medium.model);
 				$('#medium-titles-form-submit').hide();
 				$('#medium-titles-form-dismiss').hide();
-				$('[data-role="new-title-fields"').hide();
+				$('[data-role="medium-new-title-fields"').hide();
 				$('.title-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
 				$('#mediumTitlesLabel').html("Medium titles");
 				let i = 0;
 				for (; i < numTitles; i++) {
-					$('#title-language-select-dropdown_'+medium.model.titles[i].id).select2('destroy').attr("readonly", true);
+					$('#medium-title-language-select-dropdown_'+medium.model.titles[i].id).select2('destroy').attr("readonly", true);
 				}
 			}
 			else if (action == 'edit') {
@@ -2224,12 +2250,12 @@
 				$('#medium-titles-form-submit').show();
 				$('#medium-titles-form-dismiss').show();
 				$('#mediumTitlesLabel').html("Edit medium titles");
-				$('[data-role="new-title-fields"').show();
+				$('[data-role="medium-new-title-fields"').show();
 				$('.title-form-divider').show();				
 				$('#timaat-mediadatasets-metadata-medium-title').focus();
 
 				// fields for new title entry
-				$('[data-role="new-title-fields"]').append(this.titleFormTitleToAppend());
+				$('[data-role="medium-new-title-fields"]').append(this.titleFormTitleToAppend());
 				this.getTitleFormLanguageDropdownData();
 
 				$('#medium-titles-form').data('medium', medium);
@@ -2239,17 +2265,17 @@
 		mediumFormLanguageTracks: function(action, medium) {
     	// console.log("TCL: mediumFormLanguageTracks: action, medium", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
-			var node = document.getElementById("dynamic-languagetrack-fields");
+			var node = document.getElementById("medium-dynamic-languagetrack-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			};
-			var node = document.getElementById("new-languagetrack-fields");
+			var node = document.getElementById("medium-new-languagetrack-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			};
 			$('#medium-languagetracks-form').trigger('reset');
 			mediumFormLanguageTracksValidator.resetForm();
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			
 			// setup UI
 			// languageTrack data
@@ -2257,7 +2283,7 @@
 			// console.log("TCL: medium", medium);
 			var numLanguageTracks = medium.model.mediumHasLanguages.length;
 			for (; i < numLanguageTracks; i++) {
-				$('[data-role="dynamic-languagetrack-fields"]').append(
+				$('[data-role="medium-dynamic-languagetrack-fields"]').append(
 					`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
 						<div class="form-row">
 							<div class="col-md-5">
@@ -2334,7 +2360,7 @@
 				$('#medium-languagetracks-form :input').prop('disabled', true);
 				this.initFormForShow(medium.model);
 				$('#medium-languagetracks-form-done').hide();
-				$('[data-role="new-languagetrack-fields"').hide();
+				$('[data-role="medium-new-languagetrack-fields"').hide();
 				$('.languagetrack-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
@@ -2347,13 +2373,13 @@
 				this.hideFormButtons();
 				$('#medium-languagetracks-form-done').html("Done");
 				$('#medium-languagetracks-form-done').show();
-				$('[data-role="new-languagetrack-fields"').show();
+				$('[data-role="medium-new-languagetrack-fields"').show();
 				$('.languagetrack-form-divider').show();
 				$('#mediumLanguageTracksLabel').html("Edit medium track list");
 
 				// fields for new languageTrack entry
 				// add empty 'add new track' row to form when edit mode is enabled
-				$('[data-role="new-languagetrack-fields"]').append(
+				$('[data-role="medium-new-languagetrack-fields"]').append(
 					`<div class="form-group" data-role="languagetrack-entry">
 						<div class="form-row">
 							<div class="col-md-12 text-left">
@@ -2432,17 +2458,17 @@
 		mediumFormActorRoles: async function(action, medium) {
 			// console.log("TCL: mediumFormActorRoles: action, medium", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
-			var node = document.getElementById("dynamic-actorwithrole-fields");
+			var node = document.getElementById("medium-dynamic-actorwithrole-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			};
-			var node = document.getElementById("new-actorwithrole-fields");
+			var node = document.getElementById("medium-new-actorwithrole-fields");
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
 			};
 			$('#medium-actorwithroles-form').trigger('reset');
 			// mediumFormActorRolesValidator.resetForm();
-			$('#videoPreview').get(0).pause();
+			$('#mediumVideoPreview').get(0).pause();
 			
 			// setup UI
 			// actor roles data
@@ -2458,13 +2484,15 @@
 			// set up form content structure
 			i = 0;
 			for (; i < actorIdList.length; i++) {
-				$('[data-role="dynamic-actorwithrole-fields"]').append(this.appendActorWithRolesDataset(i, actorIdList[i]));
+        console.log("TCL: mediumFormActorRoles:function -> actorIdList", actorIdList);
+				$('[data-role="medium-dynamic-actorwithrole-fields"]').append(this.appendActorWithRolesDataset(i, actorIdList[i]));
 
 				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
 				this.getMediumHasActorWithRoleData(actorIdList[i]);
 				// select actor for each entry
 				// await TIMAAT.MediumService.getActorList(medium.model.id).then(function (data) {
 				await TIMAAT.ActorService.getActor(actorIdList[i]).then(function (data) {
+          console.log("TCL: actorIdList[i]", actorIdList[i]);
 					var actorSelect = $('#mediumhasactorwithrole-actorid-'+actorIdList[i]);
 					// console.log("TCL: actorSelect", actorSelect);
 					// console.log("TCL: then: data", data);
@@ -2483,7 +2511,7 @@
 				// provide roles list for new selected actor
 				this.getMediumHasActorWithRolesDropdownData(actorIdList[i]);
 
-				var roleSelect = $('#actorwithroles-multi-select-dropdown-'+actorIdList[i]);
+				var roleSelect = $('#medium-actorwithroles-multi-select-dropdown-'+actorIdList[i]);
 				// console.log("TCL: roleSelect", roleSelect);
 				await TIMAAT.MediumService.getActorHasRoleList(medium.model.id, actorIdList[i]).then(function (data) {
 					// console.log("TCL: then: data", data);
@@ -2511,7 +2539,7 @@
 				this.initFormForShow(medium.model);
 				$('#medium-actorwithroles-form-submit').hide();
 				$('#medium-actorwithroles-form-dismiss').hide();
-				$('[data-role="new-actorwithrole-fields"]').hide();
+				$('[data-role="medium-new-actorwithrole-fields"]').hide();
 				$('.actorwithrole-form-divider').hide();
 				$('[data-role="remove"]').hide();
 				$('[data-role="add"]').hide();
@@ -2525,12 +2553,12 @@
 				$('#medium-actorwithroles-form-submit').show();
 				$('#medium-actorwithroles-form-dismiss').show();
 				$('#mediumActorRolesLabel').html("Edit medium actor roles");
-				$('[data-role="new-actorwithrole-fields"]').show();
+				$('[data-role="medium-new-actorwithrole-fields"]').show();
 				$('.actorwithrole-form-divider').show();				
 				// $('#timaat-mediadatasets-metadata-medium-actorwithrole').focus();
 
 				// fields for new title entry
-				$('[data-role="new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
+				$('[data-role="medium-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
 
 				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
 				$('#mediumhasactorwithrole-actorid').select2({
@@ -2571,9 +2599,9 @@
 					// console.log("TCL: actor selection changed");
 					// console.log("TCL: selected Actor Id", $(this).val());
 					if (!($(this).val() == null)) {
-						$('#actorwithroles-multi-select-dropdown').val(null).trigger('change');
+						$('#medium-actorwithroles-multi-select-dropdown').val(null).trigger('change');
 						// provide roles list for new selected actor
-						$('#actorwithroles-multi-select-dropdown').select2({
+						$('#medium-actorwithroles-multi-select-dropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -2796,6 +2824,7 @@
 				switch (mediumSubtype) {
 					case 'audio':
 						tempSubtypeModel = medium.model.mediumAudio;
+						tempSubtypeModel.audioPostProduction.audioPostProductionTranslations[0] = await TIMAAT.MediumService.updateAudioPostProductionTranslation(medium.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0]); // TODO multi-language
 					break;
 					case 'document':
 						tempSubtypeModel = medium.model.mediumDocument;
@@ -3106,6 +3135,7 @@
     	// console.log("TCL: _mediumRemoved", medium);
 			// sync to server
 			try {
+				if (medium.model.mediumAudio && medium.model.mediumAudio.audioPostProduction) await TIMAAT.MediumService.deleteAudioPostProduction(medium.model.mediumAudio.audioPostProduction.id);
 				await TIMAAT.MediumService.removeMedium(medium);
 			} catch(error) {
 				console.error("ERROR: ", error);
@@ -3205,6 +3235,12 @@
 						audioCodecInformation: { // TODO get correct audio codec information
 							id: 1,
 						},
+						audioPostProduction: {
+							id: 0,
+							audioPostProductionTranslations: [{
+								id: 0,
+							}],
+						},
 						length: formDataObject.length,
 					};
 				break;
@@ -3285,6 +3321,25 @@
 			return model;
 		},
 
+		createAudioPostProductionTranslationModel: async function(formDataObject) {
+			let model = {
+				id: 0,
+				audioPostProduction: {
+					id: 0
+				},
+				language: {
+					id: 1 // TODO
+				},
+				overdubbing: formDataObject.overdubbing,
+				reverb: formDataObject.reverb,
+				delay: formDataObject.delay,
+				panning: formDataObject.panning,
+				bass: formDataObject.bass,
+				treble: formDataObject.treble
+			};
+			return model;
+		},
+
 		titleFormTitleToAppend: function() {
 			var titleToAppend =
 			`<div class="form-group" data-role="title-entry">
@@ -3309,7 +3364,7 @@
 					<div class="col-md-3">
 						<label class="sr-only">Title's Language</label>
 						<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
-										id="title-language-select-dropdown"
+										id="medium-title-language-select-dropdown"
 										name="titleLanguageId"
 										data-role="titleLanguageId"
 										data-placeholder="Select title language"
@@ -3327,7 +3382,7 @@
 		},
 
 		appendActorWithRolesDataset: function(i, actorId) {
-    	// console.log("TCL: i, actorId", i, actorId);
+    	console.log("TCL: appendActorWithRolesDataset (i, actorId): ", i, actorId);
 			var entryToAppend = 
 				`<div class="form-group" data-role="mediumhasactorwithrole-entry" data-id="`+i+`" data-actor-id=`+actorId+`>
 					<div class="form-row">
@@ -3346,7 +3401,7 @@
 								<div class="col-md-8">
 									<label class="sr-only">Has Role(s)</label>
 									<select class="form-control form-control-sm"
-													id="actorwithroles-multi-select-dropdown-`+actorId+`"
+													id="medium-actorwithroles-multi-select-dropdown-`+actorId+`"
 													name="roleId"
 													data-placeholder="Select role(s)"
 													data-role="actorWithRoles-`+actorId+`"
@@ -3387,7 +3442,7 @@
 									<div class="col-md-8">
 										<label class="sr-only">Has Role(s)</label>
 										<select class="form-control form-control-sm"
-														id="actorwithroles-multi-select-dropdown"
+														id="medium-actorwithroles-multi-select-dropdown"
 														name="roleId"
 														data-placeholder="Select role(s)"
 														multiple="multiple"
@@ -3484,7 +3539,7 @@
 		},
 
 		getMediumFormTitleLanguageDropdownData: function() {
-			$('#medium-title-language-select-dropdown').select2({
+			$('#medium-displayTitle-language-select-dropdown').select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -3519,7 +3574,7 @@
 		},
 
 		getTitleFormLanguageDropdownData: function() {
-			$('#title-language-select-dropdown').select2({
+			$('#medium-title-language-select-dropdown').select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -3554,6 +3609,7 @@
 		},
 
 		getMediumHasActorWithRoleData: function(id) {
+    	console.log("TCL: mediumFormActorRoles:function -> id", id);
 			$('#mediumhasactorwithrole-actorid-'+id).select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
@@ -3589,7 +3645,7 @@
 		},
 
 		getMediumHasActorWithRolesDropdownData: function(id) {
-			$('#actorwithroles-multi-select-dropdown-'+id).select2({
+			$('#medium-actorwithroles-multi-select-dropdown-'+id).select2({
 				closeOnSelect: false,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -4631,13 +4687,13 @@
 		},
 
 		setDataTableOnItemSelect: function(type, selectedItem) {
-    	// console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
+    	console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 			$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 			this.container = 'media';
-			$('#previewTab').removeClass('annotationView');
+			$('#mediumPreviewTab').removeClass('annotationView');
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
 					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');

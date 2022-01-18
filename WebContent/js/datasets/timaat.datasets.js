@@ -29,6 +29,7 @@
 			TIMAAT.MediumCollectionDatasets.init();
 			TIMAAT.MediumDatasets.init();
 			TIMAAT.AnalysisDatasets.init();
+			TIMAAT.MusicDatasets.init();
 		},
 
 		load: function() {
@@ -38,6 +39,7 @@
 			TIMAAT.LocationDatasets.load();
 			TIMAAT.MediumCollectionDatasets.load();
 			TIMAAT.MediumDatasets.load();
+			TIMAAT.MusicDatasets.load();
 		},
 
 		loadDataTables: function() {
@@ -46,6 +48,7 @@
 			TIMAAT.ActorDatasets.loadActorDataTables();
 			TIMAAT.AnalysisDatasets.loadAnalysisDataTables();
 			TIMAAT.EventDatasets.loadEventDataTables();
+			TIMAAT.MusicDatasets.loadMusicDataTables();
 		},
 
 	}

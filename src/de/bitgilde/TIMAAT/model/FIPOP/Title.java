@@ -23,12 +23,12 @@ public class Title implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Medium
-	@OneToMany(mappedBy="title1")
+	@OneToMany(mappedBy="displayTitle")
 	@JsonIgnore
 	private List<Medium> mediums1;
 
 	//bi-directional many-to-one association to Medium
-	@OneToMany(mappedBy="title2")
+	@OneToMany(mappedBy="originalTitle")
 	@JsonIgnore
 	private List<Medium> mediums2;
 
@@ -51,22 +51,19 @@ public class Title implements Serializable {
 		)
 	private List<Medium> mediums3;
 
-	//bi-directional many-to-one association to Nasheed
-	// @OneToMany(mappedBy="title")
-	// private List<Nasheed> nasheeds1;
-
-	//bi-directional many-to-many association to Nasheed
-	// @ManyToMany
-	// @JoinTable(
-	// 	name="nasheed_has_title"
-	// 	, joinColumns={
-	// 		@JoinColumn(name="title_id")
-	// 		}
-	// 	, inverseJoinColumns={
-	// 		@JoinColumn(name="nasheed_id")
-	// 		}
-	// 	)
-	// private List<Nasheed> nasheeds2;
+	//bi-directional many-to-many association to Music
+	@ManyToMany
+	@JsonIgnore
+	@JoinTable(
+		name="music_has_title"
+		, joinColumns={
+			@JoinColumn(name="title_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="music_id")
+			}
+		)
+	private List<Music> musicList;
 
 	public Title() {
 	}
@@ -147,34 +144,12 @@ public class Title implements Serializable {
 		this.mediums3 = mediums3;
 	}
 
-	// public List<Nasheed> getNasheeds1() {
-	// 	return this.nasheeds1;
-	// }
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
 
-	// public void setNasheeds1(List<Nasheed> nasheeds1) {
-	// 	this.nasheeds1 = nasheeds1;
-	// }
-
-	// public Nasheed addNasheeds1(Nasheed nasheeds1) {
-	// 	getNasheeds1().add(nasheeds1);
-	// 	nasheeds1.setTitle(this);
-
-	// 	return nasheeds1;
-	// }
-
-	// public Nasheed removeNasheeds1(Nasheed nasheeds1) {
-	// 	getNasheeds1().remove(nasheeds1);
-	// 	nasheeds1.setTitle(null);
-
-	// 	return nasheeds1;
-	// }
-
-	// public List<Nasheed> getNasheeds2() {
-	// 	return this.nasheeds2;
-	// }
-
-	// public void setNasheeds2(List<Nasheed> nasheeds2) {
-	// 	this.nasheeds2 = nasheeds2;
-	// }
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
+	}
 
 }

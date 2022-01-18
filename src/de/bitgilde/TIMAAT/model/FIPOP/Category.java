@@ -66,6 +66,11 @@ public class Category implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums;
 
+	//bi-directional many-to-many association to music
+	@ManyToMany(mappedBy="categories")
+	@JsonIgnore
+	private List<Music> musicList;
+
 	public Category() {
 	}
 
@@ -121,6 +126,14 @@ public class Category implements Serializable {
 
 	public void setMediums(List<Medium> mediums) {
 		this.mediums = mediums;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
 	}
 
 	public List<AnalysisSegment> getAnalysisSegments() {

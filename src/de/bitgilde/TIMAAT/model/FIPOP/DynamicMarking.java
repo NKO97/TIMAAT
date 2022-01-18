@@ -25,11 +25,16 @@ public class DynamicMarking implements Serializable {
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="dynamicMarking")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to DynamicMarkingTranslation
 	@OneToMany(mappedBy="dynamicMarking")
 	private List<DynamicMarkingTranslation> dynamicMarkingTranslations;
+
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="dynamicMarking")
+	@JsonIgnore
+	private List<Music> musicList;
 
 	public DynamicMarking() {
 	}
@@ -42,23 +47,23 @@ public class DynamicMarking implements Serializable {
 		this.id = id;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setDynamicMarking(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setDynamicMarking(null);
 
 		return analysisMusic;
@@ -84,6 +89,28 @@ public class DynamicMarking implements Serializable {
 		dynamicMarkingTranslation.setDynamicMarking(null);
 
 		return dynamicMarkingTranslation;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
+	}
+
+	public Music addMusic(Music music) {
+		getMusicList().add(music);
+		music.setDynamicMarking(this);
+
+		return music;
+	}
+
+	public Music removeMusic(Music music) {
+		getMusicList().remove(music);
+		music.setDynamicMarking(null);
+
+		return music;
 	}
 
 }

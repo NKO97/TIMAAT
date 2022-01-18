@@ -882,7 +882,7 @@
       $('#categorySets-multi-select-dropdown').val(null).trigger('change');
       var node = document.getElementById('dynamic-category-ispartof-categoryset-fields');
       while (node.lastChild) {
-        node.removeChild(node.lastChild)
+        node.removeChild(node.lastChild);
       }
       categoryOrCategorySetFormMetadataValidator.resetForm();
       
@@ -938,7 +938,7 @@
       $('#categories-multi-select-dropdown').val(null).trigger('change');
       var node = document.getElementById('dynamic-categoryset-contains-category-fields');
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
       }
       categoryOrCategorySetFormMetadataValidator.resetForm();
       
@@ -990,7 +990,7 @@
       // console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-category-ispartof-categoryset-fields');
       while (node.lastChild) {
-        node.removeChild(node.lastChild)
+        node.removeChild(node.lastChild);
       }
 
       // TIMAAT.UI.addSelectedClassToSelectedItem('category', data.model.id);
@@ -1073,7 +1073,7 @@
       // console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-categoryset-contains-category-fields');
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
       }
 
       // TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', data.model.id);

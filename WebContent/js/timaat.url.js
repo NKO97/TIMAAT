@@ -80,8 +80,9 @@
               $('#timaat-mediadatasets-medium-list tr[id='+pathSegments[1]+']').trigger('click');
               let medium = {};
               medium.model = await TIMAAT.MediumService.getMedium(pathSegments[1]);
+              let type = medium.model.mediaType.mediaTypeTranslations[0].type;
               TIMAAT.UI.clearLastSelection('medium');
-              $('#medium-metadata-form').data('type', 'medium');
+              $('#medium-metadata-form').data('type', type);
 			        $('#medium-metadata-form').data('medium', medium);
               if ( pathSegments.length == 2 ) { //* #medium/:id     (default view, show datasheet)
                 TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable', 'medium-tab-metadata', 'medium-metadata-form');
@@ -245,8 +246,9 @@
               $('#timaat-actordatasets-actor-list tr[id='+pathSegments[1]+']').trigger('click');
               let actor = {};
               actor.model = await TIMAAT.ActorService.getActor(pathSegments[1]);
+              let type = actor.model.actorType.actorTypeTranslations[0].type;
               TIMAAT.UI.clearLastSelection('actor');
-              $('#actor-metadata-form').data('type', 'actor');
+              $('#actor-metadata-form').data('type', type);
 			        $('#actor-metadata-form').data('actor', actor);
               if ( pathSegments.length == 2 ) { //* #actor/:id     (default view, show datasheet)
                 TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable', 'actor-tab-metadata', 'actor-metadata-form');
@@ -372,9 +374,9 @@
             $('#timaat-eventdatasets-event-list tr[id='+pathSegments[1]+']').trigger('click');
             let event = {};
             event.model = await TIMAAT.EventService.getEvent(pathSegments[1]);
-            // let type = event.model.eventType.eventTypeTranslations[0].type;
+            let type = event.model.eventType.eventTypeTranslations[0].type;
             TIMAAT.UI.clearLastSelection('event');
-            $('#event-metadata-form').data('type', 'event');
+            $('#event-metadata-form').data('type', type);
             $('#event-metadata-form').data('event', event);
             if ( pathSegments.length == 2 ) { //* #event/:id     (default view, show datasheet)
               TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable', 'event-tab-metadata', 'event-metadata-form');
@@ -395,6 +397,97 @@
               case 'list': //* #event/list
                 TIMAAT.EventDatasets.loadEvents();
                 TIMAAT.UI.displayComponent('event', 'event-tab', 'event-datatable');
+              break;
+              default:
+                this.redirectToDefaultView();
+              break;
+            }
+          }
+          break;
+          case 'music': // #music...
+          // show music component
+          TIMAAT.UI.showComponent('music');
+          // show corresponding music form
+          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current music
+            $('#timaat-musicdatasets-music-list tr[id='+pathSegments[1]+']').trigger('click');
+            let music = {};
+            music.model = await TIMAAT.MusicService.getMusic(pathSegments[1]);
+            let type = music.model.musicType.musicTypeTranslations[0].type;
+            TIMAAT.UI.clearLastSelection('music');
+            $('#music-metadata-form').data('type', type);
+            $('#music-metadata-form').data('music', music);
+            if ( pathSegments.length == 2 ) { //* #music/:id (default view, show datasheet)
+              TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-metadata', 'music-metadata-form');
+              TIMAAT.UI.displayDataSetContent('dataSheet', music, 'music');
+            }
+            else { // other music form than datasheet
+              switch (pathSegments[2]) {
+                case 'preview': //* #music/:id/preview
+                    TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-preview', 'music-preview-form');
+                    TIMAAT.UI.displayDataSetContent('preview', music, 'music');
+                  break;
+                  case 'titles': //* #music/:id/titles
+                    TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-titles', 'music-titles-form');
+                    TIMAAT.UI.displayDataSetContent('titles', music, 'music');
+                  break;
+                  case 'actorsWithRoles': //* #music/:id/actorsWithRoles
+                    TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-actorwithroles', 'music-actorwithroles-form');
+                    TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
+                  break;
+                  default:
+                    this.redirectToDefaultView();
+                  break;
+              }
+            }
+          }
+          else {
+            // TIMAAT.UI.clearLastSelection('music');
+            switch (pathSegments[1]) {
+              case 'list': //* #music/list
+                TIMAAT.MusicDatasets.loadMusicList();
+                TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable');
+              break;
+              case 'nashid':
+              case 'churchMusic':
+                if (pathSegments.length >= 3 && !isNaN(pathSegments[2])) { // path segment is id of current music
+                  $('#timaat-musicdatasets-'+pathSegments[1]+'-list tr[id='+pathSegments[2]+']').trigger('click');
+                  let music = {};
+                  music.model = await TIMAAT.MusicService.getMusic(pathSegments[2]);
+                  let type = music.model.musicType.musicTypeTranslations[0].type;
+                  TIMAAT.UI.clearLastSelection(type);
+                  $('#music-metadata-form').data('type', type);
+                  $('#music-metadata-form').data('music', music);
+                  if ( pathSegments.length == 3 ) { //* #music/:type/:id     (default view, show datasheet)
+                    TIMAAT.UI.displayComponent('music', type+'-tab', type+'-datatable', 'music-tab-metadata', 'music-metadata-form');
+                    TIMAAT.UI.displayDataSetContent('dataSheet', music, 'music');
+                  }
+                  else { // other music form than datasheet
+                    switch (pathSegments[3]) {
+                      case 'preview': //* #music/:type/:id/preview
+                        TIMAAT.UI.displayComponent('music', type+'-tab', type+'-datatable', 'music-tab-preview', 'music-preview-form');
+                        TIMAAT.UI.displayDataSetContent('preview', music, 'music');
+                      break;
+                      case 'titles': //* #music/:type/:id/titles
+                        TIMAAT.UI.displayComponent('music', type+'-tab', type+'-datatable', 'music-tab-titles', 'music-titles-form');
+                        TIMAAT.UI.displayDataSetContent('titles', music, 'music');
+                      break;
+                      case 'actorsWithRoles': //* #music/:type/:id/actorsWithRoles
+                        TIMAAT.UI.displayComponent('music', type+'-tab', type+'-datatable', 'music-tab-actorwithroles', 'music-actorwithroles-form');
+                        TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
+                      break;
+                      default:
+                        this.redirectToDefaultView();
+                      break;
+                    }
+                  }
+                }
+                else if (pathSegments.length >= 3 && pathSegments[2] == 'list') { //* .../list
+                  TIMAAT.UI.clearLastSelection(pathSegments[1]);
+                  TIMAAT.MusicDatasets.loadMusicSubtype(pathSegments[1]);
+                  TIMAAT.UI.displayComponent('music', pathSegments[1]+'-tab', pathSegments[1]+'-datatable');
+                } else {
+                    this.redirectToDefaultView();
+                }
               break;
               default:
                 this.redirectToDefaultView();

@@ -903,6 +903,99 @@
 			});	
 		},
 
+		async createAudioPostProduction() {
+			// console.log("TCL: createAudioPostProduction");
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/audioPostProduction/0",
+					type:"POST",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createAudioPostProduction -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+	
+		async deleteAudioPostProduction(id) {
+			// console.log("TCL: deleteAudioPostProduction -> id", id);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/audioPostProduction/"+id,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: deleteAudioPostProduction -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+	
+		async createAudioPostProductionTranslation(model) {
+			// console.log("TCL: createAudioPostProductionTranslation -> model", model);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/audioPostProduction/"+model.audioPostProduction.id+"/translation",
+					type:"POST",
+					data: JSON.stringify(model),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createAudioPostProductionTranslation -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async updateAudioPostProductionTranslation(model) {
+			// console.log("TCL: updateAudioPostProductionTranslation -> model", model);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/audioPostProduction/"+model.id+"/translation",
+					type:"PATCH",
+					data: JSON.stringify(model),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createAudioPostProductionTranslation -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
 
 	}	
 }, window));

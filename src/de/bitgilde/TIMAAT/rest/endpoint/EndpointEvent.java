@@ -59,14 +59,14 @@ public class EndpointEvent {
 	ServletContext servletContext;	
 
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
 	public Response getEvent(@PathParam("id") int id) {    	
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Event event = entityManager.find(Event.class, id);
 		if ( event == null ) return Response.status(Status.NOT_FOUND).build();    	    	
-	return Response.ok().entity(event).build();
+		return Response.ok().entity(event).build();
 	}
 
 	@GET
@@ -158,7 +158,7 @@ public class EndpointEvent {
   }
 
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("all")
 	public Response getAllEvents() {
@@ -194,8 +194,7 @@ public class EndpointEvent {
 																		 @QueryParam("search") String search,
 																		 @QueryParam("page") Integer page,
 																		 @QueryParam("per_page") Integer per_page,
-																		 @QueryParam("language") String languageCode)
-	{
+																		 @QueryParam("language") String languageCode) {
 		// System.out.println("EndpointEvent: getEventList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry

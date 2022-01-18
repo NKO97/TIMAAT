@@ -734,21 +734,21 @@ public class EndpointAnalysis {
 						List<Maqam> maqamList = castList(Maqam.class, query.getResultList());
 						List<SelectElementWithChildren> maqamSelectListWithChildren = new ArrayList<>();
 						for (Maqam maqam : maqamList) {
-							SelectElement maqamSubType = new SelectElement(maqam.getMaqamSubtype().getId(),
+							SelectElement maqamSubtype = new SelectElement(maqam.getMaqamSubtype().getId(),
 																														 maqam.getMaqamSubtype().getMaqamSubtypeTranslations().get(0).getSubtype());
-							List<SelectElement> maqamSubTypeList = new ArrayList<>();
-							maqamSubTypeList.add(maqamSubType);
+							List<SelectElement> maqamSubtypeList = new ArrayList<>();
+							maqamSubtypeList.add(maqamSubtype);
 							Integer index = maqamSelectListWithChildren.size() -1;
 							if (index == -1) {
 								SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(), 
-																																																		maqamSubTypeList);
+																																																		maqamSubtypeList);
 								maqamSelectListWithChildren.add(selectElementWithChildren);
 							}
 							else if (maqamSelectListWithChildren.get(index).text == maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType()) {
-								maqamSelectListWithChildren.get(index).children.add(maqamSubType);			
+								maqamSelectListWithChildren.get(index).children.add(maqamSubtype);			
 							} else {
 								SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(),
-																																																		maqamSubTypeList);
+																																																		maqamSubtypeList);
 								maqamSelectListWithChildren.add(selectElementWithChildren);			
 							}
 						}
@@ -1044,7 +1044,7 @@ public class EndpointAnalysis {
 	@Path("{annotationId}/{analysisMethodId}")
 	@Secured
 	public Response createAnalysis(@PathParam("annotationId") int annotationId,
-																 @PathParam("analysisMethodId") int analysisMethodId, 
+																 @PathParam("analysisMethodId") int analysisMethodId,
 																 String jsonData,
 																 @QueryParam("authToken") String authToken) {
 		System.out.println("EndpointAnalysis: createAnalysis: " + jsonData);

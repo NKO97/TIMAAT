@@ -46,7 +46,7 @@
           },
           preproduction: "",
           remark: remark
-        }; 
+        };
         var analysisMethodId;
         var analysisMethodVariantModel = {};
         var audioPostProductionModel = {};
@@ -633,7 +633,7 @@
           </div>
       </div>
       <div class="form-group">
-        <label ="audio-post-production-treble">Treble</label>
+        <label for="audio-post-production-treble">Treble</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
                     id="audio-post-production-treble"
@@ -1292,7 +1292,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-articulation-select-dropdown">Articulation [WIP]</label>
+              <label for="analysis-music-articulation-select-dropdown">Articulation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1335,9 +1335,9 @@
                         id="analysis-music-tempo"
                         name="tempo"
                         data-role="tempo"
-                        data-placeholder="Select tempo"
+                        data-placeholder="Enter tempo"
                         aria-describedby="Tempo"
-                        max-length="4"
+                        maxlength="4"
                         rows="1">
               </div>
             </div>

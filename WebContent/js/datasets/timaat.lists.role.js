@@ -537,11 +537,11 @@
       $('#actors-multi-select-dropdown').val(null).trigger('change'); //! clears the visible list entries but not the selected elements of the dropdown list
       var node = document.getElementById('dynamic-role-ispartof-rolegroup-fields');
       while (node.lastChild) {
-        node.removeChild(node.lastChild)
+        node.removeChild(node.lastChild);
       }
       node = document.getElementById('dynamic-role-actor-fields');
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
       }
       roleFormMetadataValidator.resetForm();
 
@@ -631,7 +631,7 @@
       // $('#roles-multi-select-dropdown').val(null).trigger('change'); //! clears the visible list entries but not the selected elements of the dropdown list
       var node = document.getElementById('dynamic-rolegroup-contains-role-fields');
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
       }
       roleGroupFormMetadataValidator.resetForm();
       
@@ -683,11 +683,11 @@
       // console.log("TCL: roleFormDataSheet - action, data: ", action, data);
       var node = document.getElementById('dynamic-role-ispartof-rolegroup-fields');
       while (node.lastChild) {
-        node.removeChild(node.lastChild)
+        node.removeChild(node.lastChild);
       }
       node = document.getElementById('dynamic-role-actor-fields');
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
       }
 
       TIMAAT.UI.addSelectedClassToSelectedItem('role', data.model.id);
@@ -822,7 +822,7 @@
       // console.log("TCL: roleGroupFormDataSheet - action, data: ", action, data);
       var node = document.getElementById('dynamic-rolegroup-contains-role-fields');
 			while (node.lastChild) {
-				node.removeChild(node.lastChild)
+				node.removeChild(node.lastChild);
       }
 
       TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', data.model.id);

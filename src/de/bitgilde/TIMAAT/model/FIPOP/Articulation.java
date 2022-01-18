@@ -18,16 +18,22 @@ public class Articulation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	// @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
 	//bi-directional many-to-one association to AnalysisMusic
 	@OneToMany(mappedBy="articulation")
 	@JsonIgnore
-	private List<AnalysisMusic> analysisMusics;
+	private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to ArticulationTranslation
 	@OneToMany(mappedBy="articulation")
 	private List<ArticulationTranslation> articulationTranslations;
+
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="articulation")
+	@JsonIgnore
+	private List<Music> musicList;
 
 	public Articulation() {
 	}
@@ -40,23 +46,23 @@ public class Articulation implements Serializable {
 		this.id = id;
 	}
 
-	public List<AnalysisMusic> getAnalysisMusics() {
-		return this.analysisMusics;
+	public List<AnalysisMusic> getAnalysisMusicList() {
+		return this.analysisMusicList;
 	}
 
-	public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-		this.analysisMusics = analysisMusics;
+	public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+		this.analysisMusicList = analysisMusicList;
 	}
 
 	public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().add(analysisMusic);
+		getAnalysisMusicList().add(analysisMusic);
 		analysisMusic.setArticulation(this);
 
 		return analysisMusic;
 	}
 
 	public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-		getAnalysisMusics().remove(analysisMusic);
+		getAnalysisMusicList().remove(analysisMusic);
 		analysisMusic.setArticulation(null);
 
 		return analysisMusic;
@@ -82,6 +88,28 @@ public class Articulation implements Serializable {
 		articulationTranslation.setArticulation(null);
 
 		return articulationTranslation;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
+	}
+
+	public Music addMusic(Music music) {
+		getMusicList().add(music);
+		music.setArticulation(this);
+
+		return music;
+	}
+
+	public Music removeMusic(Music music) {
+		getMusicList().remove(music);
+		music.setArticulation(null);
+
+		return music;
 	}
 
 }

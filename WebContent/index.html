@@ -356,6 +356,22 @@
                     <i class="fas fa-calendar-alt fa-fw"></i>
                   </a>
                 </li>
+                <li class="timaat-sidebar-tab timaat-sidebar-tab-music">
+                  <a
+                    onclick="TIMAAT.MusicDatasets.initMusicComponent()"
+                    data-toggle="popover"
+                    data-trigger="hover"
+                    data-animation="false"
+                    data-placement="right"
+                    data-template="
+                      <div class='popover' role='tooltip'>
+                          <div class='arrow'></div>
+                          <h3 class='popover-header'></h3>
+                      </div>"
+                    title="Music">
+                    <i class="fas fa-music fa-fw"></i>
+                  </a>
+                </li>
                 <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
                   <a
                     onclick="TIMAAT.Settings.initSettingsComponent()"
@@ -1339,9 +1355,9 @@
                   </div>
                   -->
                   <span id="timaat-videoplayer-video-title">Video title</span>
-                  <div id="timaat-videoplayer-video-user-log" class="float-right text-muted timaat-user-log">
+                  <!-- <div id="timaat-videoplayer-video-user-log" class="float-right text-muted timaat-user-log">
                     <i class="fas fa-user"></i>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>		
@@ -2056,7 +2072,7 @@
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="languageTrackDuplicateLabel">Language track already exists</h5>
+                        <h5 class="modal-title" id="mediumLanguageTrackDuplicateLabel">Language track already exists</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true"></span>
                         </button>
@@ -2076,7 +2092,7 @@
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="actorWithRoleDuplicateLabel">Actor already exists</h5>
+                        <h5 class="modal-title" id="mediumActorWithRoleDuplicateLabel">Actor already exists</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true"></span>
                         </button>
@@ -2464,7 +2480,7 @@
                           </li> -->
                         </ul>
                         <ul class="nav nav-tabs" id="medium-nav-tabs">
-                          <li class="nav-item medium-data-tabs preview-data-tab" id="previewTab">
+                          <li class="nav-item medium-data-tabs preview-data-tab" id="mediumPreviewTab">
                             <a class="nav-link content-nav-bar-link" id="medium-tab-preview">Medium preview</a>
                           </li>
                           <li class="nav-item medium-data-tabs medium-data-tab">
@@ -2681,14 +2697,14 @@
                           <div> <!-- Medium data -->
                             <div class="form-group preview-data medium-preview-data">
                               <div class="image-preview">
-                                <img src="img/image-placeholder.png" class="center" id="mediumPreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                                <img src="img/image-placeholder.png" class="center" id="mediumImagePreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
                               </div>
                               <div class="video-preview">
-                                <video id="videoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                <video id="mediumVideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
                                 </video>
                               </div>
                               <div class="audio-preview">
-                                <audio id="audioPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                <audio id="mediumAudioPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
                                 </audio>
                               </div>                              
                             </div>
@@ -2704,13 +2720,13 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="datasheet-form-categoryset-button" title="Category sets" name="category sets">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-categoryset-button" title="Category sets" name="category sets">
                                       <i class="fas fa-tags"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="datasheet-form-category-button" title="Categories" name="categories">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-category-button" title="Categories" name="categories">
                                       <i class="fas fa-tag"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="datasheet-form-tag-button" title="Tags" name="tags">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-tag-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
@@ -2738,9 +2754,9 @@
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
                                 </div>                            
                                 <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="medium-title-language-select-dropdown">Title's Language*</label>
+                                  <label class="col-form-label col-form-label-sm" for="medium-displayTitle-language-select-dropdown">Title's Language*</label>
                                   <select class="form-control form-control-sm"
-                                          id="medium-title-language-select-dropdown" 
+                                          id="medium-displayTitle-language-select-dropdown" 
                                           name="displayTitleLanguageId" 
                                           data-placeholder="Select title language"
                                           required>
@@ -2808,6 +2824,77 @@
                             <div class="form-group datasheet-data audio-data">
                               <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-audio-audiocodec">Audio Codec</label>
                               <input class="form-control form-control-sm" id="timaat-mediadatasets-metadata-audio-audiocodec" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec">
+                            </div>
+                            <div class="form-group datasheet-data audio-data">
+                              <hr>
+                              <h6>Post Production Information</h6>
+                              <div class="form-row">
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm"
+                                         for="timaat-mediadatasets-metadata-audio-audio-post-production-overdubbing">Overdubbing</label>
+                                  <textarea class="form-control form-control-sm"
+                                            id="timaat-mediadatasets-metadata-audio-audio-post-production-overdubbing"
+                                            maxlength="255"
+                                            aria-label="Overdubbing"
+                                            name="overdubbing"
+                                            placeholder="Enter description"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm"
+                                         for="timaat-mediadatasets-metadata-audio-audio-post-production-reverb">Reverb</label>
+                                  <textarea class="form-control form-control-sm"
+                                            id="timaat-mediadatasets-metadata-audio-audio-post-production-reverb"
+                                            maxlength="255"
+                                            aria-label="Reverb"
+                                            name="reverb"
+                                            placeholder="Enter description"></textarea>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm"
+                                         for="timaat-mediadatasets-metadata-audio-audio-post-production-delay">Delay</label>
+                                  <textarea class="form-control form-control-sm"
+                                            id="timaat-mediadatasets-metadata-audio-audio-post-production-delay"
+                                            maxlength="255"
+                                            aria-label="Delay"
+                                            name="delay"
+                                            placeholder="Enter description"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm"
+                                         for="timaat-mediadatasets-metadata-audio-audio-post-production-panning">Panning</label>
+                                  <textarea class="form-control form-control-sm"
+                                            id="timaat-mediadatasets-metadata-audio-audio-post-production-panning"
+                                            maxlength="255"
+                                            aria-label="Panning"
+                                            name="panning"
+                                            placeholder="Enter description"></textarea>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm"
+                                         for="timaat-mediadatasets-metadata-audio-audio-post-production-bass">Bass</label>
+                                  <textarea class="form-control form-control-sm"
+                                            id="timaat-mediadatasets-metadata-audio-audio-post-production-bass"
+                                            maxlength="255"
+                                            aria-label="Bass"
+                                            name="bass"
+                                            placeholder="Enter description"></textarea>
+                                  </div>
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm"
+                                         for="timaat-mediadatasets-metadata-audio-audio-post-production-treble">Treble</label>
+                                  <textarea class="form-control form-control-sm"
+                                            id="timaat-mediadatasets-metadata-audio-audio-post-production-treble"
+                                            maxlength="255"
+                                            aria-label="Treble"
+                                            name="treble"
+                                            placeholder="Enter description"></textarea>
+                                </div>
+                              </div>
+                              <hr>
                             </div>
                             <div class="form-group datasheet-data image-data">
                               <div class="form-row">
@@ -2938,7 +3025,7 @@
                             </div>
                           </div>
                           <div class="medium-titles-container">
-                            <div data-role="dynamic-title-fields" id="dynamic-title-fields">
+                            <div data-role="medium-dynamic-title-fields" id="medium-dynamic-title-fields">
                               <div class="form-group">                              
                               </div>
                             <!-- additional title form content will be created dynamically --> 
@@ -2947,7 +3034,7 @@
                               <br>
                               <hr>                            
                             </div>
-                            <div data-role="new-title-fields" id="new-title-fields">
+                            <div data-role="medium-new-title-fields" id="medium-new-title-fields">
                               <!-- one row for new title information that shall be added to the titles list --> 
                               <div class="form-group">                              
                               </div>
@@ -2995,7 +3082,7 @@
                             </div>
                           </div>
                           <div class="medium-languagetracks-container">
-                            <div data-role="dynamic-languagetrack-fields" id="dynamic-languagetrack-fields">
+                            <div data-role="medium-dynamic-languagetrack-fields" id="medium-dynamic-languagetrack-fields">
                               <div class="form-group">                              
                               </div>
                             <!-- additional language track form content will be created dynamically --> 
@@ -3004,7 +3091,7 @@
                               <br>
                               <hr>                            
                             </div>
-                            <div data-role="new-languagetrack-fields" id="new-languagetrack-fields">
+                            <div data-role="medium-new-languagetrack-fields" id="medium-new-languagetrack-fields">
                               <!-- one row for new language track information that shall be added to the language track list --> 
                               <div class="form-group">                              
                               </div>
@@ -3051,7 +3138,7 @@
                             </div>
                           </div>
                           <div class="medium-actorwithrole-container">
-                            <div data-role="dynamic-actorwithrole-fields" id="dynamic-actorwithrole-fields">
+                            <div data-role="medium-dynamic-actorwithrole-fields" id="medium-dynamic-actorwithrole-fields">
                               <div class="form-group">                              
                               </div>
                             <!-- additional actor role form content will be created dynamically --> 
@@ -3060,7 +3147,7 @@
                               <br>
                               <hr>                            
                             </div>
-                            <div data-role="new-actorwithrole-fields" id="new-actorwithrole-fields">
+                            <div data-role="medium-new-actorwithrole-fields" id="medium-new-actorwithrole-fields">
                               <!-- one row for new actor role information that shall be added to the actor role list --> 
                               <div class="form-group">                              
                               </div>
@@ -4522,6 +4609,952 @@
               </div>
             </div>
           </div>
+        </div>
+        <!-------------------------------------------------------------------->
+        <!-- Music                                                         -->
+        <!-------------------------------------------------------------------->
+        <div class="container-fluid timaat-component" id="timaat-component-music">
+          <div id="timaat-music-modals-container">
+            <div id="timaat-music-modals">
+              <div> <!-- delete modals-->
+                <div class="modal fade" id="timaat-musicdatasets-music-delete" tabindex="-1" role="dialog" aria-labelledby="musicDeleteLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="musicDeleteLabel">Music löschen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Möchten Sie das ausgewählte Music löschen?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="timaat-musicdatasets-modal-delete-submit-button">Delete music</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="modal fade" id="timaat-musiccollectiondatasets-musiccollection-delete" tabindex="-1" role="dialog" aria-labelledby="musicCollectionDeleteLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="musicCollectionDeleteLabel">Delete music collection</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Do you want to delete the selected music collection?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="timaat-musiccollectiondatasets-modal-delete-submit-button">Delete music collection</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>  -->
+              </div>
+              <div> <!-- duplicate language track modal -->
+                <div class="modal fade" id="timaat-musicdatasets-languagetrack-duplicate" tabindex="-1" role="dialog" aria-labelledby="languageTrackDuplicateLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="musicLanguageTrackDuplicateLabel">Language track already exists</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true"></span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        This language track already exists.
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+              <div> <!-- duplicate actor with role(s) modal -->
+                <div class="modal fade" id="timaat-musicdatasets-actorwithrole-duplicate" tabindex="-1" role="dialog" aria-labelledby="actorWithRoleDuplicateLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="musicActorWithRoleDuplicateLabel">Actor already exists</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true"></span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        This actor already exists.
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+              <!-- <div class="modal fade" id="timaat-musiccollectiondatasets-item-add" tabindex="-1" role="dialog" aria-labelledby="musicCollectionItemAddLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="musicCollectionItemAddLabel">Add music to collection</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div id="timaat-musiccollection-items-modal" class="timaat-musiccollection-modal">
+                        <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-musiccollection-items-modal .music-collection-wrapper">
+                          <i class="collapse-icon fas fa-fw"></i> Associated Music
+                        </button>
+                        <div class="music-collection-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
+                          <table class="music-collection table table-striped table-bordered table-hover">
+                            <thead class="thead-light">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                          </table>
+                        </div>
+                        <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#timaat-musiccollection-items-modal .music-available-wrapper">
+                          <i class="collapse-icon fas fa-fw"></i> Add music to collection
+                        </button>
+                        <div class="music-available-wrapper p-2 border border-light bg-light collapse show">
+                          <table class="music-available table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <!~~ <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+                      <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Ereignis löschen</button>
+                    </div> ~~>
+                  </div>
+                </div>
+              </div> -->
+              <div class="modal fade" id="timaat-musicdatasets-music-categorysets" tabindex="-1" role="dialog" aria-labelledby="musicCategorySetLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="musicCategorySetLabel">Edit music category sets</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-musicdatasets-modal-categoryset-submit">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="timaat-musicdatasets-music-categories" tabindex="-1" role="dialog" aria-labelledby="musicCategoryLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="musicCategoryLabel">Edit music categories</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-musicdatasets-modal-category-submit">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="timaat-musicdatasets-music-tags" tabindex="-1" role="dialog" aria-labelledby="musicTagLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="musicTagLabel">Edit music tags</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-musicdatasets-modal-tag-submit">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="modal fade" id="timaat-musiccollectiondatasets-musiccollection-tags" tabindex="-1" role="dialog" aria-labelledby="musicCollectionTagLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="musicCollectionTagLabel">Edit music collection tags</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary" id="timaat-musiccollectiondatasets-modal-tag-submit-button">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="timaat-musiccollectiondatasets-musiccollection-manage" tabindex="-1" role="dialog" aria-labelledby="musicCollectionManageLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <form class="modal-content" role="form" id="musicCollectionAccessRightsForm" name="musicCollectionAccessRightsForm" method="POST">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="musicCollectionManageLabel">Set music collection access rights</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">                  
+                    </div>
+                  </form>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          <div class="row" style="padding-top: 1em;">
+            <div class="col-md-12">
+              <ul class="nav nav-pills" id="music-tabs" role="tablist"> <!-- Nav bar tabs -->
+                <!-- <li class="nav-item">
+                  <a class="nav-link top-nav-bar-link" id="musiccollection-tab" data-toggle="tab" role="tab" aria-controls="music collections" aria-selected="false">
+                    <i class="fas fa-object-group"></i> Collections
+                  </a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link top-nav-bar-link" id="music-tab" data-toggle="tab" role="tab" aria-controls="all music" aria-selected="false">
+                    <i class="fas fa-photo-video"></i> All Music
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link top-nav-bar-link" id="nashid-tab" data-toggle="tab" role="tab" aria-controls="nashid" aria-selected="false">
+                    <i class="fas fa-file-audio"></i> Anashid
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link top-nav-bar-link" id="church-music-tab" data-toggle="tab" role="tab" aria-controls="churchMusic" aria-selected="false">
+                    <i class="fas fa-place-of-worship"></i> Church music
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content" id="musicTabsContent">
+                <div class="tab-pane fade show active" id="music" role="tabpanel" aria-labelledby="music-tab">
+                  <div class="row ui" style="padding-top: 1em;">
+                    <!-- Music lists -->
+                    <div class="col-md-4">
+                      <!-- <div class="card datatables" id="musiccollection-datatable">
+                        <div class="card-header">Music Collections
+                           <button type="button" onclick="TIMAAT.MusicCollectionDatasets.addMusicCollection()" class="btn btn-outline btn-success btn-sm float-right add-musiccollection-button">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="card-body">
+                          <table id="timaat-musiccollectiondatasets-musiccollection-list-table" class="table table-striped table-bordered table-hover timaat-musicdatasets-musiccollection-table">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-musiccollectiondatasets-musiccollection-list">
+                            </tbody>
+                          </table>
+                        </div>
+                      </div> -->
+                      <div class="card datatables" id="music-datatable">
+                        <div class="card-header">All Music
+                           <!-- <button type="button" id="timaat-musicdatasets-music-add" class="btn btn-outline btn-success btn-sm float-right">
+                            <i class="fas fa-plus"></i>
+                          </button> <!~~ TODO When re-added: open dialogue to ask which music type to add, then open corresponding form ~~> --> 
+                        </div>
+                        <div class="card-body">
+                          <table id="timaat-musicdatasets-music-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-musicdatasets-music-list">
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="card datatables" id="nashid-datatable">
+                        <div class="card-header">Anashid
+                          <button type="button" onclick="TIMAAT.MusicDatasets.addMusic('nashid')" class="btn btn-outline btn-success btn-sm float-right add-music-button" title="Add nashid">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="card-body">
+                          <table id="timaat-musicdatasets-nashid-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-musicdatasets-nashid-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-musicdatasets-nashid-list" class="list-group list-group-flush"></ul> -->
+                        </div>
+                      </div>
+                      <div class="card datatables" id="church-music-datatable">
+                        <div class="card-header">Church Music
+                          <button type="button" onclick="TIMAAT.MusicDatasets.addMusic('churchMusic')" class="btn btn-outline btn-success btn-sm float-right add-music-button" title="Add church music">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                        <div class="card-body">
+                          <table id="timaat-musicdatasets-church-music-table" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th>Title</th>
+                              </tr>
+                            </thead>
+                            <tbody id="timaat-musicdatasets-church-music-list">
+                            </tbody>
+                          </table>
+                          <!-- <ul id="timaat-musicdatasets-church-music-list" class="list-group list-group-flush"></ul> -->
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Music data -->
+                    <div class="col-md-8" id="timaat-musicdatasets-music-tabs-container">
+                      <div id="timaat-musicdatasets-music-tabs">
+                        <ul class="nav nav-tabs" id="music-nav-tabs">
+                          <li class="nav-item music-data-tabs preview-data-tab" id="musicPreviewTab">
+                            <a class="nav-link content-nav-bar-link" id="music-tab-preview">Music preview</a>
+                          </li>
+                          <li class="nav-item music-data-tabs music-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="music-tab-metadata">Data sheet</a>
+                          </li>
+                          <li class="nav-item music-data-tabs title-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="music-tab-titles">Music titles</a>
+                          </li>
+                          <!-- <li class="nav-item music-data-tabs languagetrack-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="music-tab-languagetracks">Languages</a>
+                          </li> -->
+                          <li class="nav-item music-data-tabs musicactorwithrole-data-tab">
+                            <a class="nav-link content-nav-bar-link" id="music-tab-actorwithroles">Actors</a>
+                          </li>
+                        </ul>
+                      <!-- </div>
+                      <div id="music-dataset-content"> -->
+                        <!-- Data tab content -->
+                        <!-- collection form -->
+                        <!-- <form class="form dataset-content" role="form" id="musiccollection-metadata-form" name="musiccollection-metadata-form" data-type="" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="musicCollectionFormHeader">Music Collection</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="musiccollection-form-tag-button" title="Tag collection" name="tag">
+                                      <i class="fas fa-tags"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="musiccollection-form-edit-button" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="musiccollection-form-permission-button" title="Edit access rights" name="userPermission">
+                                      <i class="fas fa-unlock-alt"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm form-buttons" id="musiccollection-form-delete-button" title="Delete music collection">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div> <!~~ Music collection data ~~>
+                            <fieldset>
+                              <legend>Collection Metadata</legend>
+                              <div class="form-group datasheet-data musiccollection-data">
+                                <div class="form-row">
+                                  <div class="col-md-12">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-title">Title*</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" required>
+                                  </div>                            
+                                </div>
+                              </div>
+                              <div class="form-group datasheet-data musiccollection-data">
+                                <div class="form-row">
+                                  <div class="col-md-6">
+                                    <label class="col-form-label col-form-label-sm" for="musiccollection-type-select-dropdown">Collection Type*</label>
+                                    <select class="form-control form-control-sm" 
+                                            id="musiccollection-type-select-dropdown" 
+                                            name="typeId"
+                                            data-placeholder="Select collection type..."
+                                            required>
+                                      <!~~ <option value="" disabled selected hidden>[Choose collection type...]</option>
+                                      <option value="1">Album</option>
+                                      <option value="2">Collection</option>
+                                      <option value="3">Series</option> ~~>
+                                    </select>
+                                  </div>
+                                  <div class="col-md-6" style="display:block; text-align:center">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-issystemic">Is Collection Systemic?</label>
+                                    <input type="checkbox" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-issystemic" name="isSystemic" aria-describedby="Is Collection Systemic">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group datasheet-data musiccollection-data">
+                                <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-remark">Remark</label>
+                                <textarea class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-remark" name="remark" placeholder="[Enter remarks]" aria-describedby="Remark" rows="4"></textarea>
+                              </div>
+                              <div class="form-group datasheet-data musiccollection-Series-data">
+                                <div class="form-row">
+                                  <div class="col-md-4">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-series-seasons">Seasons</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-series-seasons" name="seasons" placeholder="[Enter # seasons]" aria-describedby="Seasons">
+                                  </div>
+                                  <div class="col-md-4">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-series-started">Start Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-series-started" name="started" placeholder="[Enter start year]" aria-describedby="Start Year">
+                                  </div>
+                                  <div class="col-md-4">
+                                    <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-series-ended">End Year</label>
+                                    <input type="text" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-series-ended" name="ended" placeholder="[Enter end year]" aria-describedby="End Year">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group datasheet-data musiccollection-Album-data">
+                                <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-album-tracks">Tracks</label>
+                                <input type="text" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-album-tracks" name="tracks" placeholder="[Enter # tracks]" aria-describedby="Tracks">
+                              </div>
+                            </fieldset>
+                            <!~~ <div class="musiccollection-items-container">
+                              <div class="card datatables musiccollection-datatable">
+                                <div class="card-header">Collection Items
+                                  <button type="button" id="timaat-musiccollectiondatasets-musiccollection-add" class="btn btn-outline btn-success btn-sm float-right">
+                                    <i class="fas fa-plus"></i></button>
+                                </div>
+                                <div class="card-body">
+                                  <table id="timaat-musiccollectiondatasets-musiccollection-table" class="table table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                      <tr>
+                                        <th>Title</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="timaat-musiccollectiondatasets-musiccollection-list">
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div> ~~>
+                          </div>
+                          <!~~ Save/Cancel buttons ~~>
+                          <div class="musiccollection-datasheet-form-submit">
+                            <button type="submit" class="btn btn-primary form-submit-buttons" id="musiccollection-metadata-form-submit-button" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary form-dismiss-buttons" id="musiccollection-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                          </div>
+                        </form> -->
+                        <!-- collection items -->
+                        <!-- <div class="card dataset-content" id="musiccollection-musicItems"> <!~~ Music collection item data ~~>
+                          <div class="card-header">Collection Items
+                            <button type="button" id="musiccollection-items-add-button" class="btn btn-outline btn-success btn-sm float-right">
+                              <i class="fas fa-plus"></i></button>
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-musiccollectiondatasets-musiccollection-items-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Order</th>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Running time</th>
+                                  <th>Producer</th>
+                                  <th>Release date</th>
+                                  <th>Language</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-musiccollectiondatasets-musiccollection-items">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div> -->
+                        <!-- preview form -->
+                        <form class="form dataset-content" role="form" id="music-preview-form" name="music-preview-form" data-type="" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="musicPreviewFormHeader">Music Preview</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm musicdatasheet-form-delete-button form-buttons" title="Delete music">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div> <!-- Music data -->
+                            <div class="form-group preview-data music-preview-data">
+                              <div class="image-preview">
+                                <img src="img/image-placeholder.png" class="center" id="musicImagePreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                              </div>
+                              <div class="video-preview">
+                                <video id="musicideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                </video>
+                              </div>
+                              <div class="audio-preview">
+                                <audio id="musicAudioPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                                </audio>
+                              </div>                              
+                            </div>
+                          </div>
+                        </form>
+                        <!-- datasheet form -->
+                        <form class="form dataset-content" role="form" id="music-metadata-form" name="music-metadata-form" data-type="" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="musicFormHeader">Music</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-categoryset-button" title="Category sets" name="category sets">
+                                      <i class="fas fa-tags"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-category-button" title="Categories" name="categories">
+                                      <i class="fas fa-tag"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-tag-button" title="Tags" name="tags">
+                                      <i class="fas fa-tags"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm musicdatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger btn-sm musicdatasheet-form-delete-button form-buttons" title="Delete music">
+                                      <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div> <!-- Music data -->
+                            <div class="form-group datasheet-data title-data">
+                              <div class="form-row">
+                                <div class="col-md-9">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-title">Display Title*</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
+                                </div>                            
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-displayTitle-language-select-dropdown">Title's Language*</label>
+                                  <select class="form-control form-control-sm"
+                                          id="music-displayTitle-language-select-dropdown" 
+                                          name="displayTitleLanguageId" 
+                                          data-placeholder="Select title language"
+                                          required>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- <div class="form-group datasheet-data musictype-data">
+                              <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-type-id">Music Type*</label>
+                              <select class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-type-id" name="typeId" required>
+                                <option value="" disabled selected hidden>[Choose music type...]</option>
+                                <option value="1">Nashid</option>
+                                <option value="2">Church Music</option>
+                              </select>
+                            </div> -->
+                            <!-- <div class="form-group datasheet-data music-data">
+                              <div class="form-row">
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-releasedate">Release Date</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
+                                </div> 
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-recordingstartdate">Recording Start Date</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-recordingstartdate" name="recordingStartDate" placeholder="[Enter recording start date]" aria-describedby="Recording Start Date">
+                                </div> 
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-recordingenddate">Recording End Date</label>
+                                  <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-recordingenddate" name="recordingEndDate" placeholder="[Enter recording end date]" aria-describedby="Recording End Date">
+                                </div>
+                              </div>
+                            </div> -->
+                            <div class="form-group datasheet-data music-data">
+                              <div class="form-row">
+                                <div class="col-md-2">
+                                  <label class="col-form-label col-form-label-sm" for="music-tempo">Tempo (bpm)</label>
+                                  <input class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-tempo"
+                                          name="tempo"
+                                          data-role="tempo"
+                                          data-placeholder="Enter tempo"
+                                          aria-describedby="Tempo"
+                                          maxlength="4">
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="col-form-label col-form-label-sm" for="music-tempo-marking-select-dropdown">Tempo Marking</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-tempo-marking-select-dropdown"
+                                          name="tempoMarkingId"
+                                          data-role="tempoMarking"
+                                          data-placeholder="Select tempo marking"
+                                          aria-describedby="Tempo marking">
+                                  </select>
+                                </div>
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-beat">Beat/Meter</label>
+                                  <input class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-beat"
+                                          name="beat"
+                                          data-role="beat"
+                                          data-placeholder="Enter beat"
+                                          aria-describedby="Beat"
+                                          maxlength="45">
+                                </div>
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-musical-key-select-dropdown">Musical Key</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-musical-key-select-dropdown"
+                                          name="musicalKeyId"
+                                          data-role="musicalKey"
+                                          data-placeholder="Select musical key"
+                                          aria-describedby="Musical key">
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data music-data">
+                              <div class="form-row">
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-articulation-select-dropdown">Articulation</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-articulation-select-dropdown"
+                                          name="articulationId"
+                                          data-role="articulation"
+                                          data-placeholder="Select articulation">
+                                  </select>
+                                </div>
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-dynamic-marking-select-dropdown">Dynamic marking</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-dynamic-marking-select-dropdown"
+                                          name="dynamicMarkingId"
+                                          data-role="dynamicMarking"
+                                          data-placeholder="Select dynamic marking">
+                                  </select>
+                                </div>
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-change-in-dynamics-select-dropdown">Change in dynamics</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-change-in-dynamics-select-dropdown"
+                                          name="changeInDynamicsId"
+                                          data-role="changeInDynamics"
+                                          data-placeholder="Select change in dynamics">
+                                  </select>
+                                </div>
+                                <div class="col-md-3">
+                                  <label class="col-form-label col-form-label-sm" for="music-text-setting-select-dropdown">Text setting</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-text-setting-select-dropdown"
+                                          name="textSettingId"
+                                          data-role="textSetting"
+                                          data-placeholder="Select text setting">
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="datasheet-data music-data">
+                              <div class="music-has-voice-leading-pattern-container">
+                                <!-- <label class="col-form-label col-form-label-sm" for="music-has-voice-leading-pattern-fields">Voice-leading patterns</label> -->
+                                <div data-role="music-has-voice-leading-pattern-fields" id="music-has-voice-leading-pattern-fields">
+                                  <div class="form-group">
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- <input class="form-control form-control-sm" id="music-has-voice-leading-pattern-fields" name="audioCodec" placeholder="[Audio Codec]" aria-describedby="Audio Codec"> -->
+                            </div>
+                            <div class="form-group datasheet-data nashid-data">
+                              <div class="form-row">
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm" for="music-nashid-jins-select-dropdown">Jins</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-nashid-jins-select-dropdown"
+                                          name="jinsId"
+                                          data-role="jins"
+                                          data-placeholder="Select jins">
+                                  </select>
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="col-form-label col-form-label-sm" for="music-nashid-maqam-select-dropdown">Maqam</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-nashid-maqam-select-dropdown"
+                                          name="maqamId"
+                                          data-role="maqam"
+                                          data-placeholder="Select maqam">
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data churchMusic-data">
+                              <div class="form-row">
+                                <div class="col-md-12">
+                                  <label class="col-form-label col-form-label-sm" for="music-church-music-musical-key-select-dropdown">Church musical key</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-church-music-musical-key-select-dropdown"
+                                          name="churchMusicalKeyId"
+                                          data-role="churchMusicalKey"
+                                          data-placeholder="Select church musical key">
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data music-data">
+                              <label class="col-form-label col-form-label-sm" for="music-instrumentation">Instrumentation</label>
+                              <textarea class="form-control form-control-sm"
+                                        id="music-instrumentation"
+                                        name="instrumentation"
+                                        placeholder="[Enter instrumentation]"
+                                        aria-describedby="Instrumentation"
+                                        rows="4"></textarea>
+                            </div>
+                            <div class="form-group datasheet-data music-data">
+                              <label class="col-form-label col-form-label-sm" for="music-remark">Remark</label>
+                              <textarea class="form-control form-control-sm"
+                                        id="music-remark"
+                                        name="remark"
+                                        placeholder="[Enter remarks]"
+                                        aria-describedby="Remark"
+                                        rows="4"></textarea>
+                            </div>
+                          </div>
+                          <!-- Save/Cancel buttons -->
+                          <div class="music-datasheet-form-submit">
+                            <button type="submit" class="btn btn-primary form-submit-button" id="music-metadata-form-submit-button" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary form-dismiss-button" id="music-metadata-form-dismiss-button" name="dismiss">Cancel</button>
+                          </div>
+                        </form>
+                        <!-- titles form -->
+                        <form class="form dataset-content" role="form" id="music-titles-form" name="music-titles-form" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="musicTitlesLabel">Music titles</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm float-right musicdatasheet-form-edit-button form-buttons" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-sm-2 col-md-1">
+                                <h6 class="form-header">Display title</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-1">
+                                <h6 class="form-header">Original title</h6>
+                              </div>
+                              <div class="col-sm-5 col-md-7">
+                                <h6 class="form-header">Music title</h6>
+                              </div>
+                              <div class="col-sm-2 col-md-2">
+                                <h6 class="form-header">Title's language</h6>
+                              </div>
+                              <div class="col-sm-1 col-md-1">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="music-titles-container">
+                            <div data-role="music-dynamic-title-fields" id="music-dynamic-title-fields">
+                              <div class="form-group">                              
+                              </div>
+                            <!-- additional title form content will be created dynamically --> 
+                            </div>
+                            <div class="title-form-divider">
+                              <br>
+                              <hr>                            
+                            </div>
+                            <div data-role="music-new-title-fields" id="music-new-title-fields">
+                              <!-- one row for new title information that shall be added to the titles list --> 
+                              <div class="form-group">                              
+                              </div>
+                            </div>
+                          </div>
+                          <div class="title-form-divider">
+                            <hr>                            
+                          </div>
+                          <button type="submit" class="btn btn-primary" id="music-titles-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="music-titles-form-dismiss" name="dismiss">Cancel</button>
+                        </form>
+                        <!-- language tracks form -->
+                        <!-- <form class="form dataset-content" role="form" id="music-languagetracks-form" name="music-languagetracks-form" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="musicLanguageTracksLabel">Music language tracks</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm musicdatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-5">
+                                <h6 class="form-header">Track type</h6>
+                              </div>
+                              <div class="col-md-5">
+                                <h6 class="form-header">Track language</h6>
+                              </div>
+                              <div class="col-md-2">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="music-languagetracks-container">
+                            <div data-role="music-dynamic-languagetrack-fields" id="music-dynamic-languagetrack-fields">
+                              <div class="form-group">                              
+                              </div>
+                            <!~~ additional language track form content will be created dynamically ~~> 
+                            </div>
+                            <div class="languagetrack-form-divider">
+                              <br>
+                              <hr>                            
+                            </div>
+                            <div data-role="music-new-languagetrack-fields" id="music-new-languagetrack-fields">
+                              <!~~ one row for new language track information that shall be added to the language track list ~~> 
+                              <div class="form-group">                              
+                              </div>
+                            </div>
+                          </div>
+                          <div class="languagetrack-form-divider">
+                            <hr>                            
+                          </div>
+                          <button type="submit" class="btn btn-primary" id="music-languagetracks-form-done" name="done">Done</button>
+                        </form> -->
+                        <!-- actor-roles form -->
+                        <form class="form dataset-content" role="form" id="music-actorwithroles-form" name="music-actorwithroles-form" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title caps-title" id="musicActorRolesLabel">Music actor roles</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                      <i class="fas fa-file-upload"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                      <i class="fas fa-draw-polygon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm musicdatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                <h6 class="form-header">Actor</h6>
+                              </div>
+                              <div class="col-md-7">
+                                <h6 class="form-header">Has role(s)</h6>
+                              </div>
+                              <div class="col-md-1">
+                                <h6 class="form-header"></h6>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="music-actorwithrole-container">
+                            <div data-role="music-dynamic-actorwithrole-fields" id="music-dynamic-actorwithrole-fields">
+                              <div class="form-group">                              
+                              </div>
+                            <!-- additional actor role form content will be created dynamically --> 
+                            </div>
+                            <div class="actorwithrole-form-divider">
+                              <br>
+                              <hr>                            
+                            </div>
+                            <div data-role="music-new-actorwithrole-fields" id="music-new-actorwithrole-fields">
+                              <!-- one row for new actor role information that shall be added to the actor role list --> 
+                              <div class="form-group">                              
+                              </div>
+                            </div>
+                          </div>
+                          <div class="actorwithrole-form-divider">
+                            <hr>                            
+                          </div>
+                          <button type="submit" class="btn btn-primary" id="music-actorwithroles-form-submit" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary" id="music-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
         </div>
         <!-------------------------------------------------------------------->
         <!-- Settings                                                       -->

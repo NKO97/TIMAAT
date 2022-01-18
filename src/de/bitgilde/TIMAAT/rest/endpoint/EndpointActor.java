@@ -113,7 +113,7 @@ public class EndpointActor {
 		String actorQuery = "SELECT a FROM Actor a ORDER BY ";
 		String actorCountQuery = "SELECT COUNT(a) FROM Actor a";
 		// String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-		// String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+		// String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :displayTitle,'%'))";
 
 		// exclude actors from annotation if specified
 		if ( annotationID != null ) {
@@ -122,7 +122,7 @@ public class EndpointActor {
 				actorQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors ORDER BY ";
 				actorCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors";
 				// actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-				// actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :title1,'%'))";
+				// actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :displayTitle,'%'))";
 			}
 		}
 
@@ -182,7 +182,7 @@ public class EndpointActor {
 			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
 			// calculate search result # of records
 			// countQuery = entityManager.createQuery(actorSearchCountQuery);
-			// countQuery.setParameter("title1", search);
+			// countQuery.setParameter("displayTitle", search);
 			// recordsFiltered = (long) countQuery.getSingleResult();
 			// // perform search
 			// query = entityManager.createQuery(

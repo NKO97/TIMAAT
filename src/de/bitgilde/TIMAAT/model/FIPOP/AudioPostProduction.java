@@ -36,7 +36,7 @@ public class AudioPostProduction implements Serializable {
 
 	// //bi-directional many-to-one association to AnalysisMusic
 	// @OneToMany(mappedBy="audioPostProduction")
-	// private List<AnalysisMusic> analysisMusics;
+	// private List<AnalysisMusic> analysisMusicList;
 
 	//bi-directional many-to-one association to AnalysisSpeech
 	@OneToMany(mappedBy="audioPostProduction")
@@ -132,23 +132,23 @@ public class AudioPostProduction implements Serializable {
 	// 	return analysisAmbientSoundHasSoundEffect;
 	// }
 
-	// public List<AnalysisMusic> getAnalysisMusics() {
-	// 	return this.analysisMusics;
+	// public List<AnalysisMusic> getAnalysisMusicList() {
+	// 	return this.analysisMusicList;
 	// }
 
-	// public void setAnalysisMusics(List<AnalysisMusic> analysisMusics) {
-	// 	this.analysisMusics = analysisMusics;
+	// public void setAnalysisMusicList(List<AnalysisMusic> analysisMusicList) {
+	// 	this.analysisMusicList = analysisMusicList;
 	// }
 
 	// public AnalysisMusic addAnalysisMusic(AnalysisMusic analysisMusic) {
-	// 	getAnalysisMusics().add(analysisMusic);
+	// 	getAnalysisMusicList().add(analysisMusic);
 	// 	analysisMusic.setAudioPostProduction(this);
 
 	// 	return analysisMusic;
 	// }
 
 	// public AnalysisMusic removeAnalysisMusic(AnalysisMusic analysisMusic) {
-	// 	getAnalysisMusics().remove(analysisMusic);
+	// 	getAnalysisMusicList().remove(analysisMusic);
 	// 	analysisMusic.setAudioPostProduction(null);
 
 	// 	return analysisMusic;

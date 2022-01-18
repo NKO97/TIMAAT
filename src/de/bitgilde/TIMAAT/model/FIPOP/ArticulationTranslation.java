@@ -24,6 +24,7 @@ public class ArticulationTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Articulation
 	@ManyToOne
+	@JoinColumn(name="articulation_id")
 	@JsonIgnore
 	private Articulation articulation;
 
