@@ -22,7 +22,7 @@
 	TIMAAT.Inspector = class Inspector {
 		constructor(viewer) {
 			// console.log('TCL: Inspector -> constructor');
-			
+
 			// init sidebar control
 			this._viewer = viewer;
 			this._inspector = L.control.sidebar({
@@ -31,26 +31,26 @@
 				closeButton: true,
 				position   : 'right',
 			}).addTo(viewer);
-			
+
 			// activate floating inspector
 			$('#timaat-inspector').appendTo('#timaat-component-videoplayer');
 			$('#timaat-inspector').draggable({handle:'.inspector-title', containment:'#wrapper'});
 			$('#timaat-inspector .leaflet-sidebar-tabs ul:not(.inspector-tabs)').remove();
 			// ul#list li:not(.active)
-			
+
 			// init state system
 			this.state = {
 					item: null,
 					type: null,
 			}
-			
+
 			// init UI
 			this.ui = {};
 			this.ui.addAnimButton = $('#timaat-inspector-animation-add-button');
 			this.ui.removeAnimButton = $('#timaat-inspector-animation-delete-button');
 			this.ui.keyframeList = $('#timaat-inspector-animation-keyframes');
 			let inspector = this;
-			
+
 			// actors panel
 			this.ui.actorLang = {
 				"decimal"          : ",",
@@ -132,10 +132,10 @@
 						let displayActorTypeIcon = '';
 						let actorType = actor.actorType.actorTypeTranslations[0].type;
 						switch (actorType) {
-							case 'person': 
+							case 'person':
 								displayActorTypeIcon = '<i class="far fa-address-card"></i>';
 							break;
-							case 'collective': 
+							case 'collective':
 								displayActorTypeIcon = '<i class="fas fa-users"></i>';
 							break;
 						}
@@ -160,7 +160,7 @@
 				language: this.ui.actorLang,
 			});
 //			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Available Actors');
-			
+
 			this.ui.dataTableAnnoActors = $('#timaat-inspector-actors-pane .actors-annotation').DataTable({
 				lengthChange	: false,
 				pageLength		: 10,
@@ -217,10 +217,10 @@
 						let displayActorTypeIcon = '';
 						let actorType = actor.actorType.actorTypeTranslations[0].type
 						switch (actorType) {
-							case 'person': 
+							case 'person':
 								displayActorTypeIcon = '<i class="far fa-address-card"></i>';
 							break;
-							case 'collective': 
+							case 'collective':
 								displayActorTypeIcon = '<i class="fas fa-users"></i>';
 							break;
 						}
@@ -264,7 +264,7 @@
 					"last"    : ">>"
 				}
 			};
-			
+
 			this.ui.dataTableEvents = $('#timaat-inspector-events-pane .events-available').DataTable({
 				lengthChange	: false,
 				dom				: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
@@ -333,7 +333,7 @@
 				language: this.ui.eventLang,
 			});
 			// $(this.ui.dataTableEvents.table().container()).find('.table-title').text('Available Events');
-			
+
 			this.ui.dataTableAnnoEvents = $('#timaat-inspector-events-pane .events-annotation').DataTable({
 				lengthChange	: false,
 				pageLength		: 10,
@@ -433,8 +433,8 @@
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.url('/TIMAAT/api/analysis/method/list?visual='+anno.model.layerVisual+'&audio='+anno.model.layerAudio);
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 					} else {
-						let model = { 	
-							id: 0, 
+						let model = {
+							id: 0,
 							startTime: startTime,
 							endTime: endTime,
 							layerVisual: layerVisual,
@@ -471,7 +471,7 @@
 					var title = $('#timaat-inspector-meta-name').val();
 					var comment = $('#timaat-inspector-meta-comment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);		
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					if (list) {
 						TIMAAT.Util.setDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title', title);
 						TIMAAT.Util.setDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'text', comment);
@@ -501,7 +501,7 @@
 						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
-					// early out: segment's sequences and scenes do not exceed new time range 
+					// early out: segment's sequences and scenes do not exceed new time range
 					if (segment) {
 						let sequenceList = TIMAAT.VideoPlayer.curSegment.model.analysisSequences;
 						i = 0;
@@ -596,7 +596,7 @@
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Sequences need to cover a spatial area. Start and end time may not be identical.");
 						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
-					} 
+					}
 					// early out: sequence's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence out of bounds');
@@ -671,7 +671,7 @@
 						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 					}
-					
+
 				}
 				// analysis takes
 				if ( inspector.state.type == 'take' ) {
@@ -691,7 +691,7 @@
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Takes need to cover a spatial area. Start and end time may not be identical.");
 						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
-					} 
+					}
 					// early out: take's time range exceeds sequence's time range
 					if (startTime < TIMAAT.VideoPlayer.curSequence.model.startTime || endTime > TIMAAT.VideoPlayer.curSequence.model.endTime) {
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take out of bounds');
@@ -753,7 +753,7 @@
 						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 					}
-					
+
 				}
 				// analysis scenes
 				if ( inspector.state.type == 'scene' ) {
@@ -774,7 +774,7 @@
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Scenes need to cover a spatial area. Start and end time may not be identical.");
 						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
-					} 
+					}
 					// early out: scene's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene out of bounds');
@@ -795,7 +795,7 @@
 							}
 						}
 					}
-					
+
 					// scene has a time range, does not exceed its segment's, and still encompasses its sub elements. Now check for overlap with other scenes
 					var overlapping = false;
 					i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
@@ -848,7 +848,7 @@
 						var tempList = await TIMAAT.AnalysisListService.getAnalysisList(TIMAAT.VideoPlayer.curAnalysisList.id);
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 					}
-					
+
 				}
 				// analysis actions
 				if ( inspector.state.type == 'action' ) {
@@ -868,7 +868,7 @@
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Actions need to cover a spatial area. Start and end time may not be identical.");
 						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
-					} 
+					}
 					// early out: action's time range exceeds scene's time range
 					if (startTime < TIMAAT.VideoPlayer.curScene.model.startTime || endTime > TIMAAT.VideoPlayer.curScene.model.endTime) {
 						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action out of bounds');
@@ -876,7 +876,7 @@
 						$('#timaat-videoplayer-segment-element-modal').modal('show');
 						return;
 					}
-					
+
 					// action has a time range and does not exceed its scene's. Now check for overlap with other actions
 					var overlapping = false;
 					let i = TIMAAT.VideoPlayer.curAnalysisList.analysisSegments.findIndex(({id}) => id === TIMAAT.VideoPlayer.curSegment.model.id);
@@ -1024,7 +1024,7 @@
 					break;
 				}
 			});
-			
+
 			// setup annotation metadata UI and events
 			$('#timaat-inspector-meta-colorPicker').tinycolorpicker();
 			this.cp = $('#timaat-inspector-meta-colorPicker').data("plugin_tinycolorpicker");
@@ -1064,89 +1064,84 @@
 					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
 				}
 			});
-			
+
 			$('#timaat-inspector-meta-outline').on('click', function(ev) {
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
 					var stroke = $(this).hasClass('btn-primary') ? 0 : 2;
-					
-					if ( anno.opacity == 0 && stroke == 0 ) return; 
+
+					if ( anno.opacity == 0 && stroke == 0 ) return;
 					anno.stroke = stroke;
-					
+
 					inspector._setInspectorStroke(anno.stroke);
 				}
 			});
-			
+
 			$('#timaat-inspector-meta-start, #timaat-inspector-meta-end').on('blur change', function(ev) {
 				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 				startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 				endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
 				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));			
-				
+				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
+
 				if ( inspector.state.item && inspector.state.type == 'annotation' ) {
 					inspector.state.item.startTime = startTime;
 					inspector.state.item.endTime = endTime;
 					inspector.state.item.marker.updateView();
 				}
 			});
-			
+
 			$('#timaat-inspector-meta-setstart').on('click', function() {
-				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
-				var duration = endTime - startTime;
-				duration = Math.max(0, Math.min(duration, TIMAAT.VideoPlayer.duration));
-				startTime = TIMAAT.VideoPlayer.video.currentTime;
+				var startTimeInMs = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
+				var endTimeInMs = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+				var durationInMs = endTimeInMs - startTimeInMs;
+				let currentTimeInMs = TIMAAT.VideoPlayer.video.currentTime * 1000;
+				durationInMs = Math.max(0, Math.min(durationInMs, TIMAAT.VideoPlayer.duration * 1000));
+				startTimeInMs = TIMAAT.VideoPlayer.video.currentTime * 1000;
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
 					case 'sequence':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0)
-							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime / 1000.0;
-						duration = Math.max(0, Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0 - startTime));
-            // console.log("TCL: Inspector -> $ -> duration", duration);
-						// if ((startTime + duration) > TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0)
-						// 	duration = TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0 - startTime;
+					case 'scene':
+						if (currentTimeInMs < TIMAAT.VideoPlayer.curSegment.model.startTime || currentTimeInMs > TIMAAT.VideoPlayer.curSegment.model.endTime)
+							startTimeInMs = TIMAAT.VideoPlayer.curSegment.model.startTime;
+						durationInMs = Math.max(0, Math.min(durationInMs, TIMAAT.VideoPlayer.curSegment.model.endTime - startTimeInMs));
 					break;
 					case 'take':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime / 1000.0)
-							startTime = TIMAAT.VideoPlayer.curSequence.model.startTime / 1000.0;
-						duration = Math.max(0, Math.min(duration, TIMAAT.VideoPlayer.curSequence.model.endTime / 1000.0 - startTime));
-					break;
-					case 'scene':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0)
-							startTime = TIMAAT.VideoPlayer.curSegment.model.startTime / 1000.0;
-						duration = Math.max(0, Math.min(duration, TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0 - startTime));
+						if (currentTimeInMs < TIMAAT.VideoPlayer.curSequence.model.startTime || currentTimeInMs > TIMAAT.VideoPlayer.curSequence.model.endTime)
+							startTimeInMs = TIMAAT.VideoPlayer.curSequence.model.startTime;
+						durationInMs = Math.max(0, Math.min(durationInMs, TIMAAT.VideoPlayer.curSequence.model.endTime - startTimeInMs));
 					break;
 					case 'action':
-						if (TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime / 1000.0)
-							startTime = TIMAAT.VideoPlayer.curScene.model.startTime / 1000.0;
-						duration = Math.max(0, Math.min(duration, TIMAAT.VideoPlayer.curScene.model.endTime / 1000.0 - startTime));
+						if (currentTimeInMs < TIMAAT.VideoPlayer.curScene.model.startTime || currentTimeInMs > TIMAAT.VideoPlayer.curScene.model.endTime)
+							startTimeInMs = TIMAAT.VideoPlayer.curScene.model.startTime;
+						durationInMs = Math.max(0, Math.min(durationInMs, TIMAAT.VideoPlayer.curScene.model.endTime - startTimeInMs));
 					break;
 				}
-				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
-				endTime = startTime + duration;
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
+				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTimeInMs, true));
+				endTimeInMs = startTimeInMs + durationInMs;
+				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTimeInMs, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
 
 			$('#timaat-inspector-meta-setend').on('click', function() {
-				var endTime = TIMAAT.VideoPlayer.video.currentTime;
+				let currentTimeInMs = TIMAAT.VideoPlayer.video.currentTime * 1000;
+				let endTimeInMs = currentTimeInMs;
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
 					case 'sequence':
 					case 'scene':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSegment.model.startTime / 1000.0)
-							endTime = TIMAAT.VideoPlayer.curSegment.model.endTime / 1000.0;
+						if (currentTimeInMs > TIMAAT.VideoPlayer.curSegment.model.endTime || currentTimeInMs < TIMAAT.VideoPlayer.curSegment.model.startTime)
+							endTimeInMs = TIMAAT.VideoPlayer.curSegment.model.endTime;
 					break;
 					case 'take':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curSequence.model.endTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curSequence.model.startTime / 1000.0)
-							endTime = TIMAAT.VideoPlayer.curSequence.model.endTime / 1000.0;
+						if (currentTimeInMs > TIMAAT.VideoPlayer.curSequence.model.endTime || currentTimeInMs < TIMAAT.VideoPlayer.curSequence.model.startTime)
+							endTimeInMs = TIMAAT.VideoPlayer.curSequence.model.endTime;
 					break;
 					case 'action':
-						if (TIMAAT.VideoPlayer.video.currentTime > TIMAAT.VideoPlayer.curScene.model.endTime / 1000.0 || TIMAAT.VideoPlayer.video.currentTime < TIMAAT.VideoPlayer.curScene.model.startTime / 1000.0)
-							endTime = TIMAAT.VideoPlayer.curScene.model.endTime / 1000.0;
+						if (currentTimeInMs > TIMAAT.VideoPlayer.curScene.model.endTime || currentTimeInMs < TIMAAT.VideoPlayer.curScene.model.startTime)
+							endTimeInMs = TIMAAT.VideoPlayer.curScene.model.endTime;
 					break;
 				}
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
+				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTimeInMs, true));
 				$('#timaat-inspector-meta-start').trigger('blur');
 			});
 			$('#timaat-inspector-meta-duration').change(function(ev) {
@@ -1171,7 +1166,7 @@
 					let anno = TIMAAT.VideoPlayer.curAnnotation;
 					anno.addKeyframeAt(anno.endTime / 1000);
 					$('#timaat-inspector-meta-visual-layer').prop('checked', true);
-					
+
 				}
 			});
 
@@ -1186,11 +1181,11 @@
 				}
 			});
 		}
-		
+
 		get isOpen() {
 			return !$('#timaat-inspector').hasClass('collapsed');
 		}
-		
+
 		reset() {
 			this.setItem(null);
 			this.ui.dataTableActors.clear();
@@ -1198,7 +1193,7 @@
 			this.ui.dataTableEvents.clear();
 			this.ui.dataTableEvents.ajax.reload();
 		}
-		
+
 		switchPosition() {
 			if ( this.getPosition() == 'left' ) {
 				this.setPosition('right');
@@ -1209,19 +1204,19 @@
 				$('#timaat-inspector').removeClass('leaflet-sidebar-right');
 				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-left');
 			}
-		}		
+		}
 
 		setItem(item, type=null) {
       // console.log("TCL: Inspector -> setItem -> item, type", item, type);
 			this.state.item = item;
 			this.state.type = type;
 
-			// hide segment substructure elements 
+			// hide segment substructure elements
 			$('.timaat-segment-substructure-add').addClass("timaat-item-disabled");
 			$('.timaat-segment-substructure-add').removeAttr('onclick');
 
 			$('#segmentElementCategoriesForm').data('type', type);
-			
+
 			// metadata panel default UI setting
 			$('#timaat-inspector-meta-start').prop('disabled', false);
 			$('#timaat-inspector-meta-setstart').prop('disabled', false);
@@ -1238,7 +1233,7 @@
 				$('#timaat-inspector-meta-delete').attr('disabled');
 				$('#timaat-inspector-meta-delete').hide();
 			}
-			
+
 			// animation panel default UI setting
 			this.disablePanel('timaat-inspector-animation');
 			this.disablePanel('timaat-inspector-categories-and-tags');
@@ -1247,7 +1242,7 @@
 			// this.disablePanel('timaat-inspector-locations');
 			this.disablePanel('timaat-inspector-analysis');
 			this.ui.keyframeList.children().detach();
-			
+
 			// actors panel default UI setting
 			this.ui.dataTableAnnoActors.ajax.url('api/annotation/0/actors');
 
@@ -1341,7 +1336,7 @@
 					}
 					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					$('#timaat-inspector-meta-start').val(start);
-					$('#timaat-inspector-meta-end').val(end);	
+					$('#timaat-inspector-meta-end').val(end);
 					$('#timaat-inspector-categories-and-tags-title').html('Categories and tags');
 
 					if ( !anno ) this.open('timaat-inspector-metadata');
@@ -1412,7 +1407,7 @@
 									return {
 										search: params.term,
 										page: params.page
-									};          
+									};
 								},
 								processResults: function(data, params) {
 									params.page = params.page || 1;
@@ -1466,7 +1461,7 @@
 									return {
 										search: params.term,
 										page: params.page
-									};          
+									};
 								},
 								processResults: function(data, params) {
 									params.page = params.page || 1;
@@ -1520,17 +1515,17 @@
 					$('#timaat-inspector-metadata-title').html(heading);
 					$('#timaat-inspector-meta-submit').html(submit);
 					$('#timaat-inspector-meta-name').val(title).trigger('input');
-					$('#timaat-inspector-meta-comment').summernote('code', comment);	
+					$('#timaat-inspector-meta-comment').summernote('code', comment);
 					$('#timaat-inspector-categories-and-tags-title').html('Kategorien-Sets und Tags');
 					if ( item != null ) {
 						$('#mediumAnalysisList-categorySets-multi-select-dropdown').val(null).trigger('change');
-						if ($('#mediumAnalysisList-categorySets-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+						if ($('#mediumAnalysisList-categorySets-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
 							$('#mediumAnalysisList-categorySets-multi-select-dropdown').select2('destroy');
 						}
 						$('#mediumAnalysisList-categorySets-multi-select-dropdown').find('option').remove();
 
 						$('#mediumAnalysisList-tags-multi-select-dropdown').val(null).trigger('change');
-						if ($('#mediumAnalysisList-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+						if ($('#mediumAnalysisList-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
 							$('#mediumAnalysisList-tags-multi-select-dropdown').select2('destroy');
 						}
 						$('#mediumAnalysisList-tags-multi-select-dropdown').find('option').remove();
@@ -1559,7 +1554,7 @@
 									return {
 										search: params.term,
 										page: params.page
-									};          
+									};
 								},
 								processResults: function(data, params) {
 									params.page = params.page || 1;
@@ -1613,7 +1608,7 @@
 									return {
 										search: params.term,
 										page: params.page
-									};          
+									};
 								},
 								processResults: function(data, params) {
 									params.page = params.page || 1;
@@ -1675,7 +1670,7 @@
 						comment: "",
 						transcript: "",
 						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.video.currentTime * 1000,
-						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,	
+						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
 					};
 
 					if (item) {
@@ -1768,7 +1763,7 @@
 					if (item) {
 						// category panel
 						$('#segment-element-categories-multi-select-dropdown').val(null).trigger('change');
-						if ($('#segment-element-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {							
+						if ($('#segment-element-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
 							$('#segment-element-categories-multi-select-dropdown').select2('destroy');
 						}
 						$('#segment-element-categories-multi-select-dropdown').find('option').remove();
@@ -1797,7 +1792,7 @@
 									return {
 										search: params.term,
 										page: params.page
-									};          
+									};
 								},
 								processResults: function(data, params) {
 									params.page = params.page || 1;
@@ -1834,7 +1829,7 @@
 				break;
 			}
 		}
-		
+
 		initInspectorMetadataSegmentElements() {
 			$('#timaat-inspector-meta-color-group').hide();
 			$('#timaat-inspector-meta-opacity-group').hide();
@@ -1854,7 +1849,7 @@
 			$('#timaat-inspector-meta-name').val(model.name).trigger('input');
 			$('#timaat-inspector-meta-shortDescription').val(model.shortDescription).trigger('input');
 			$('#timaat-inspector-meta-comment').summernote('code', model.comment);
-			$('#timaat-inspector-meta-transcript').summernote('code', model.transcript);	
+			$('#timaat-inspector-meta-transcript').summernote('code', model.transcript);
 			$('#timaat-inspector-meta-start').val(model.start);
 			$('#timaat-inspector-meta-end').val(model.end);
 		}
@@ -1879,7 +1874,7 @@
 					// metadata panel
 					$('#timaat-inspector-meta-start').val(start);
 					$('#timaat-inspector-meta-end').val(end);
-					
+
 					// animation panel
 					if ( this.state.item.isAnimation() ) {
 						this.ui.addAnimButton.hide();
@@ -1949,7 +1944,7 @@
 				break;
 			}
 		}
-		
+
 		setMetaEnd(milliseconds) {
 			// console.log("TCL: setMetaEnd: function(milliseconds) ", milliseconds);
 			var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
@@ -1964,21 +1959,21 @@
 			endTime   = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
 			$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
 			$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
-			
+
 			if ( this.state.item && this.state.type == 'annotation' ) {
 				this.state.item.startTime = startTime;
 				this.state.item.endTime = endTime;
 				this.state.item.marker.updateView();
 			}
 		}
-		
+
 		getPosition() {
 			return this._inspector.getPosition();
 		}
 		setPosition(pos) {
-			return this._inspector.setPosition(pos);			
+			return this._inspector.setPosition(pos);
 		}
-		
+
 		enablePanel(panel) {
 			$('#'+panel+'-pane').show();
 			return this._inspector.enablePanel(panel);
@@ -1987,7 +1982,7 @@
 			$('#'+panel+'-pane').hide();
 			return this._inspector.disablePanel(panel);
 		}
-		
+
 		open(panel) {
 			return this._inspector.open(panel);
 		}
@@ -2002,10 +1997,10 @@
 			} else {
 				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-outline-secondary');
 				$('#timaat-inspector-meta-outline').find('i').attr('class', 'fas fa-border-style');
-			}					
+			}
 		}
 
-		
+
 	}
-	
+
 }, window));
