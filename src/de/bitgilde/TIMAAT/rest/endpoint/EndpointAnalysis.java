@@ -100,8 +100,8 @@ public class EndpointAnalysis {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-	ServletContext servletContext;	
- 
+	ServletContext servletContext;
+
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -150,7 +150,7 @@ public class EndpointAnalysis {
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
 		// System.out.println("records total: " + recordsTotal);
-		
+
 		// search
 		Query query;
 		String sql;
@@ -175,7 +175,7 @@ public class EndpointAnalysis {
 		}
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, analysisMethodTypeList)).build();
   }
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -193,7 +193,7 @@ public class EndpointAnalysis {
 		// if ( orderby != null ) {
 		// 	if (orderby.equalsIgnoreCase("name")) column = "amtt.name";
 		// }
-		
+
 		// determine which analysis method entries shall be displayed
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisMethodType analysisMethodType = entityManager.find(AnalysisMethodType.class, methodTypeId);
@@ -740,16 +740,16 @@ public class EndpointAnalysis {
 							maqamSubtypeList.add(maqamSubtype);
 							Integer index = maqamSelectListWithChildren.size() -1;
 							if (index == -1) {
-								SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(), 
+								SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(),
 																																																		maqamSubtypeList);
 								maqamSelectListWithChildren.add(selectElementWithChildren);
 							}
 							else if (maqamSelectListWithChildren.get(index).text == maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType()) {
-								maqamSelectListWithChildren.get(index).children.add(maqamSubtype);			
+								maqamSelectListWithChildren.get(index).children.add(maqamSubtype);
 							} else {
 								SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(),
 																																																		maqamSubtypeList);
-								maqamSelectListWithChildren.add(selectElementWithChildren);			
+								maqamSelectListWithChildren.add(selectElementWithChildren);
 							}
 						}
 						selectElementWithChildrenList = maqamSelectListWithChildren;
@@ -1070,7 +1070,7 @@ public class EndpointAnalysis {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
+
 		// parse JSON data
 		try {
 			newAnalysis = mapper.readValue(jsonData, Analysis.class);
@@ -1093,7 +1093,7 @@ public class EndpointAnalysis {
 			AnalysisMethodType analysisMethodType = entityManager.find(AnalysisMethodType.class, newAnalysis.getAnalysisMethod().getAnalysisMethodType().getId());
 			analysisMethod.setId(0);
 			analysisMethod.setAnalysisMethodType(analysisMethodType);
-		} 
+		}
 		newAnalysis.setAnnotation(annotation);
 		newAnalysis.setAnalysisMethod(analysisMethod);
 		annotation.addAnalysis(newAnalysis);
@@ -1126,14 +1126,14 @@ public class EndpointAnalysis {
 		System.out.println("EndpointAnalysis: createAnalysis - done");
 		return Response.ok().entity(newAnalysis).build();
 	}
-	
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisId}")
 	@Secured
 	public Response deleteAnalysis(@PathParam("analysisId") int analysisId,
-																 @QueryParam("authToken") String authToken) {   
-		System.out.println("EndpointAnalysis: deleteAnalysis"); 	
+																 @QueryParam("authToken") String authToken) {
+		System.out.println("EndpointAnalysis: deleteAnalysis");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Analysis analysis = entityManager.find(Analysis.class, analysisId);
@@ -1162,7 +1162,7 @@ public class EndpointAnalysis {
 		entityManager.refresh(annotation);
 		// add log entry
 		// UserLogManager.getLogger()
-		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.ANALYSISDELETED);
 		System.out.println("EndpointAnalysis: deleteAnalysis - delete complete");
 		return Response.ok().build();
@@ -1173,8 +1173,8 @@ public class EndpointAnalysis {
 	@Path("analysisAndMethod/{analysisMethodId}")
 	@Secured
 	public Response deleteAnalysisAndAnalysisMethod(@PathParam("analysisMethodId") int analysisMethodId,
-																									@QueryParam("authToken") String authToken) {   
-		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod"); 	
+																									@QueryParam("authToken") String authToken) {
+		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
@@ -1205,7 +1205,7 @@ public class EndpointAnalysis {
 		entityManager.refresh(annotation);
 		// add log entry
 		// UserLogManager.getLogger()
-		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.ANALYSISDELETED);
 		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod - delete complete");
 		return Response.ok().build();
@@ -1257,12 +1257,12 @@ public class EndpointAnalysis {
 		entityManager.remove(audioPostProduction);
 		//* ON DELETE CASCADE deletes connected audio_post_production_translation entries
 		entityTransaction.commit();
-		
+
 		// add log entry
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext
 		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
-		System.out.println("EndpointAnalysis: deleteAudioPostProduction - delete complete");	
+		System.out.println("EndpointAnalysis: deleteAudioPostProduction - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1271,7 +1271,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("audioPostProduction/{id}/translation")
 	@Secured
-	public Response createAudioPostProductionTranslation(@PathParam("id") int id, 
+	public Response createAudioPostProductionTranslation(@PathParam("id") int id,
 																											 String jsonData) {
 		System.out.println("EndpointAnalysis: createAudioPostProductionTranslation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1336,7 +1336,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("analysisMusic/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodAnalysisMusic(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodAnalysisMusic(@PathParam("analysisMethodId") int analysisMethodId,
 																										String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1391,13 +1391,13 @@ public class EndpointAnalysis {
 		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic - done");
 		return Response.ok().entity(analysisMusic).build();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("analysisSpeech/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodAnalysisSpeech(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodAnalysisSpeech(@PathParam("analysisMethodId") int analysisMethodId,
 																										 String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1448,13 +1448,13 @@ public class EndpointAnalysis {
 		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech - done");
 		return Response.ok().entity(analysisSpeech).build();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("soundEffectDescriptive/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodSoundEffectDescriptive(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodSoundEffectDescriptive(@PathParam("analysisMethodId") int analysisMethodId,
 																														 String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1511,7 +1511,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("cameraMovement/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodCameraMovement(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodCameraMovement(@PathParam("analysisMethodId") int analysisMethodId,
 																										 String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1552,7 +1552,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("takeLength/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodTakeLength(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodTakeLength(@PathParam("analysisMethodId") int analysisMethodId,
 																								 String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1605,7 +1605,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("editingMontage/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodEditingMontage(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodEditingMontage(@PathParam("analysisMethodId") int analysisMethodId,
 																										 String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1646,7 +1646,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("conceptCameraPositionAndPerspective/{analysisMethodId}")
 	@Secured
-	public Response createConceptCameraPositionAndPerspective(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createConceptCameraPositionAndPerspective(@PathParam("analysisMethodId") int analysisMethodId,
 																										 				String jsonData) {
 		System.out.println("EndpointAnalysis: conceptCameraPositionAndPerspective: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1701,7 +1701,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("analysisActor/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodAnalysisActor(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodAnalysisActor(@PathParam("analysisMethodId") int analysisMethodId,
 																							 			String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -1742,7 +1742,7 @@ public class EndpointAnalysis {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("lighting/{analysisMethodId}")
 	@Secured
-	public Response createAnalysisMethodLighting(@PathParam("analysisMethodId") int analysisMethodId, 
+	public Response createAnalysisMethodLighting(@PathParam("analysisMethodId") int analysisMethodId,
 																							 String jsonData) {
 		System.out.println("EndpointAnalysis: createAnalysisMethodLighting: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();

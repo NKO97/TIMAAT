@@ -27,6 +27,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole;
@@ -165,7 +166,7 @@ public class EndpointMusic {
 																@QueryParam("search") String search) {
 		// System.out.println("EndpointMusic: getNashidList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
@@ -179,7 +180,7 @@ public class EndpointMusic {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(mn.music) FROM MusicNashid mn");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -237,7 +238,7 @@ public class EndpointMusic {
 																		 @QueryParam("search") String search) {
 		// System.out.println("EndpointMusic: getChurchMusicList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
@@ -251,7 +252,7 @@ public class EndpointMusic {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(mcm.music) FROM MusicChurchMusic mcm");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -311,7 +312,7 @@ public class EndpointMusic {
 		// System.out.println("EndpointMusic: getRoleSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
@@ -372,7 +373,7 @@ public class EndpointMusic {
 
 		return Response.ok().entity(roleList).build();
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -451,7 +452,7 @@ public class EndpointMusic {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -462,7 +463,7 @@ public class EndpointMusic {
 	public Response getTagList(@PathParam("musicId") Integer musicId)
 	{
 		// System.out.println("EndpointMusic: getTagList");
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		entityManager.refresh(music);
@@ -476,7 +477,7 @@ public class EndpointMusic {
 	public Response getVoiceLeadingPatternList(@PathParam("musicId") Integer musicId)
 	{
 		// System.out.println("EndpointMusic: getTagList");
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();		
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		entityManager.refresh(music);
@@ -527,7 +528,7 @@ public class EndpointMusic {
 	@Path("{id}/titles/list")
 	public Response getTitlesList(@PathParam("id") int id) {
 		// // System.out.println("EndpointMusic: getTitlesList");
-		// Music music = TIMAATApp.emf.createEntityManager().find(Music.class, id);   
+		// Music music = TIMAATApp.emf.createEntityManager().find(Music.class, id);
     // 	if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		// // List<Title> titleList = TIMAATApp.emf.createEntityManager().createNamedQuery("titleList.findAll").getResultList();
 		// // return Response.ok().entity(titleList).build();
@@ -537,10 +538,48 @@ public class EndpointMusic {
 		// find music
 		Music music = entityManager.find(Music.class, id);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		entityManager.refresh(music);
-		
+
 		return Response.ok().entity(music.getTitles()).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("/primarySourceMedium/selectList")
+	public Response getPrimarySourceMediumSelectList(@PathParam("id") Integer id,
+																									 @QueryParam("start") Integer start,
+																									 @QueryParam("length") Integer length,
+																									 @QueryParam("search") String search,
+																									 @QueryParam("language") String languageCode)
+	{
+		// System.out.println("EndpointMusic: getPrimarySourceMediumSelectList - Id: "+ id);
+
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
+
+		List<SelectElement> selectElementList = new ArrayList<>();
+		List<SelectElementWithChildren> selectElementWithChildrenList = new ArrayList<>();
+		Query query;
+		if (search != null && search.length() > 0) {
+			query = TIMAATApp.emf.createEntityManager().createQuery(
+				"SELECT m FROM Medium m WHERE lower (m.displayTitle.name) LIKE lower(concat('%', :name, '%')) ORDER BY m.displayTitle.name ASC");
+			query.setParameter("name", search);
+		} else {
+		query = TIMAATApp.emf.createEntityManager().createQuery(
+			"SELECT m FROM Medium m ORDER BY m.displayTitle.name ASC");
+		}
+		List<Medium> MediumList = castList(Medium.class, query.getResultList());
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		for (Medium medium : MediumList) {
+			mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+		}
+		selectElementList = mediumSelectList;
+
+		if (selectElementList.size() > 0)
+			return Response.ok().entity(selectElementList).build();
+		else
+			return Response.ok().entity(selectElementWithChildrenList).build();
 	}
 
 	@GET
@@ -756,16 +795,16 @@ public class EndpointMusic {
 			maqamSubtypeList.add(maqamSubtype);
 			Integer index = maqamSelectListWithChildren.size() -1;
 			if (index == -1) {
-				SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(), 
+				SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(),
 																																														maqamSubtypeList);
 				maqamSelectListWithChildren.add(selectElementWithChildren);
 			}
 			else if (maqamSelectListWithChildren.get(index).text == maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType()) {
-				maqamSelectListWithChildren.get(index).children.add(maqamSubtype);			
+				maqamSelectListWithChildren.get(index).children.add(maqamSubtype);
 			} else {
 				SelectElementWithChildren selectElementWithChildren = new SelectElementWithChildren(maqam.getMaqamType().getMaqamTypeTranslations().get(0).getType(),
 																																														maqamSubtypeList);
-				maqamSelectListWithChildren.add(selectElementWithChildren);			
+				maqamSelectListWithChildren.add(selectElementWithChildren);
 			}
 		}
 		selectElementWithChildrenList = maqamSelectListWithChildren;
@@ -846,7 +885,7 @@ public class EndpointMusic {
 	public Response createMusic(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMusic: createMusic: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Music newMusic = null;  
+		Music newMusic = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		// parse JSON data
@@ -926,7 +965,7 @@ public class EndpointMusic {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, id);
 
-		if ( music == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedMusic = mapper.readValue(jsonData, Music.class);
@@ -934,7 +973,7 @@ public class EndpointMusic {
 			System.out.println("EndpointMusic: update music - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedMusic == null ) return Response.notModified().build();	
+		if ( updatedMusic == null ) return Response.notModified().build();
 
 		// update music
 		//! Don't change music type. MusicSubtype won't match anymore
@@ -945,6 +984,7 @@ public class EndpointMusic {
 		music.setDynamicMarking(updatedMusic.getDynamicMarking());
 		music.setChangeInDynamics(updatedMusic.getChangeInDynamics());
 		music.setMusicalKey(updatedMusic.getMusicalKey());
+		music.setPrimarySourceMedium(updatedMusic.getPrimarySourceMedium());
 		music.setTempo(updatedMusic.getTempo());
 		music.setTempoMarking(updatedMusic.getTempoMarking());
 		music.setTextSetting(updatedMusic.getTextSetting());
@@ -996,7 +1036,7 @@ public class EndpointMusic {
 		System.out.println("after");
 		System.out.println(music.getCreatedAt());
 		System.out.println(music.getLastEditedAt());
-		
+
 		// if ( music.getMusicVideo() != null ) {
 			// music.getFileStatus(music.getMusicType().getMusicTypeTranslations().get(0).getType());
 			// TODO necessary?
@@ -1034,9 +1074,9 @@ public class EndpointMusic {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.MUSICDELETED);
-		System.out.println("EndpointMusic: deleteMusic - delete complete");	
+		System.out.println("EndpointMusic: deleteMusic - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1093,30 +1133,30 @@ public class EndpointMusic {
 
 		System.out.println("EndpointMusic: update churchMusic - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MusicChurchMusic updatedChurchMusic = null;    	
+		MusicChurchMusic updatedChurchMusic = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MusicChurchMusic churchMusic = entityManager.find(MusicChurchMusic.class, id);
-		
-		if ( churchMusic == null ) return Response.status(Status.NOT_FOUND).build();		
+
+		if ( churchMusic == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedChurchMusic = mapper.readValue(jsonData, MusicChurchMusic.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedChurchMusic == null ) return Response.notModified().build();    	
-		
+		if ( updatedChurchMusic == null ) return Response.notModified().build();
+
 		// update churchMusic
 		// System.out.println("EndpointMusic: update churchMusic - churchMusic.id:"+churchMusic.getMusicId());
 		churchMusic.setChurchMusicalKey(updatedChurchMusic.getChurchMusicalKey());
-		
+
 		// update log metadata
 		churchMusic.getMusic().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			churchMusic.getMusic().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(churchMusic);
@@ -1125,9 +1165,9 @@ public class EndpointMusic {
 		entityManager.refresh(churchMusic);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.NASHIDEDITED);
-		System.out.println("EndpointMusic: update churchMusic - update complete");	
+		System.out.println("EndpointMusic: update churchMusic - update complete");
 		return Response.ok().entity(churchMusic).build();
 	}
 
@@ -1135,13 +1175,13 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("churchMusic/{id}")
 	@Secured
-	public Response deleteChurchMusic(@PathParam("id") int id) {  
+	public Response deleteChurchMusic(@PathParam("id") int id) {
 		System.out.println("EndpointMusic: deleteChurchMusic with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, id);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		MusicChurchMusic churchMusic = entityManager.find(MusicChurchMusic.class, id);
-		if ( churchMusic == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( churchMusic == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(churchMusic);
@@ -1150,9 +1190,9 @@ public class EndpointMusic {
 		entityTransaction.commit();
 		// add log entry
 		// UserLogManager.getLogger()
-		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.NASHIDDELETED);
-		System.out.println("EndpointMusic: deleteChurchMusic - churchMusic deleted");  
+		System.out.println("EndpointMusic: deleteChurchMusic - churchMusic deleted");
 		return Response.ok().build();
 	}
 
@@ -1209,31 +1249,31 @@ public class EndpointMusic {
 
 		System.out.println("EndpointMusic: update nashid - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MusicNashid updatedNashid = null;    	
+		MusicNashid updatedNashid = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MusicNashid nashid = entityManager.find(MusicNashid.class, id);
-		
-		if ( nashid == null ) return Response.status(Status.NOT_FOUND).build();		
+
+		if ( nashid == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedNashid = mapper.readValue(jsonData, MusicNashid.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedNashid == null ) return Response.notModified().build();    	
-		
+		if ( updatedNashid == null ) return Response.notModified().build();
+
 		// update nashid
 		// System.out.println("EndpointMusic: update nashid - nashid.id:"+nashid.getMusicId());
 		nashid.setJins(updatedNashid.getJins());
 		nashid.setMaqam(updatedNashid.getMaqam());
-		
+
 		// update log metadata
 		nashid.getMusic().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			nashid.getMusic().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(nashid);
@@ -1242,9 +1282,9 @@ public class EndpointMusic {
 		entityManager.refresh(nashid);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.NASHIDEDITED);
-		System.out.println("EndpointMusic: update nashid - update complete");	
+		System.out.println("EndpointMusic: update nashid - update complete");
 		return Response.ok().entity(nashid).build();
 	}
 
@@ -1252,13 +1292,13 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("nashid/{id}")
 	@Secured
-	public Response deleteNashid(@PathParam("id") int id) {  
+	public Response deleteNashid(@PathParam("id") int id) {
 		System.out.println("EndpointMusic: deleteNashid with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, id);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		MusicNashid nashid = entityManager.find(MusicNashid.class, id);
-		if ( nashid == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( nashid == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(nashid);
@@ -1267,9 +1307,9 @@ public class EndpointMusic {
 		entityTransaction.commit();
 		// add log entry
 		// UserLogManager.getLogger()
-		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.NASHIDDELETED);
-		System.out.println("EndpointMusic: deleteNashid - nashid deleted");  
+		System.out.println("EndpointMusic: deleteNashid - nashid deleted");
 		return Response.ok().build();
 	}
 
@@ -1284,7 +1324,7 @@ public class EndpointMusic {
 		ObjectMapper mapper = new ObjectMapper();
 		Title newTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newTitle = mapper.readValue(jsonData, Title.class);
@@ -1318,12 +1358,12 @@ public class EndpointMusic {
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);
 
-		// System.out.println("EndpointMusic: createTitle: add log entry");	
+		// System.out.println("EndpointMusic: createTitle: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
-		
+
 		System.out.println("EndpointMusic: create title: title created with id "+newTitle.getId());
 		System.out.println("EndpointMusic: create title: title created with language id "+newTitle.getLanguage().getId());
 
@@ -1341,7 +1381,7 @@ public class EndpointMusic {
 		ObjectMapper mapper = new ObjectMapper();
 		Title newTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newTitle = mapper.readValue(jsonData, Title.class);
@@ -1388,12 +1428,12 @@ public class EndpointMusic {
 		entityManager.refresh(music);
 		entityManager.refresh(newTitle);
 
-		System.out.println("EndpointMusic: addTitle: add log entry");	
+		System.out.println("EndpointMusic: addTitle: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
-		
+
 		System.out.println("EndpointMusic: addTitle: title added with id "+newTitle.getId());
 		System.out.println("EndpointMusic: addTitle: title added with language id "+newTitle.getLanguage().getId());
 
@@ -1408,11 +1448,11 @@ public class EndpointMusic {
 	public Response updateTitle(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMusic: update title - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Title updatedTitle = null;    	
+		Title updatedTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Title title = entityManager.find(Title.class, id);
 		if ( title == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointMusic: update title - old title :"+title.getName());		
+		// System.out.println("EndpointMusic: update title - old title :"+title.getName());
 		// parse JSON data
 		try {
 			updatedTitle = mapper.readValue(jsonData, Title.class);
@@ -1421,7 +1461,7 @@ public class EndpointMusic {
 		}
 		if ( updatedTitle == null ) return Response.notModified().build();
 		// update title
-		// System.out.println("EndpointMusic: update title - language id:"+updatedTitle.getLanguage().getId());	
+		// System.out.println("EndpointMusic: update title - language id:"+updatedTitle.getLanguage().getId());
 		if ( updatedTitle.getName() != null ) title.setName(updatedTitle.getName());
 		if ( updatedTitle.getLanguage() != null ) title.setLanguage(updatedTitle.getLanguage());
 
@@ -1431,7 +1471,7 @@ public class EndpointMusic {
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 		// 	title.getMusic().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
-		// 	// DEBUG do nothing - production system should abort with internal server error			
+		// 	// DEBUG do nothing - production system should abort with internal server error
 		// }
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1440,12 +1480,12 @@ public class EndpointMusic {
 		entityTransaction.commit();
 		entityManager.refresh(title);
 
-		// System.out.println("EndpointMusic: update title - only logging remains");	
+		// System.out.println("EndpointMusic: update title - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLEEDITED);
-		System.out.println("EndpointMusic: update title - update complete");	
+		System.out.println("EndpointMusic: update title - update complete");
 		return Response.ok().entity(title).build();
 	}
 
@@ -1453,8 +1493,8 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response deleteTitle(@PathParam("id") int id) {    
-		System.out.println("EndpointMusic: deleteTitle");	
+	public Response deleteTitle(@PathParam("id") int id) {
+		System.out.println("EndpointMusic: deleteTitle");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Title title = entityManager.find(Title.class, id);
 		if ( title == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1466,7 +1506,7 @@ public class EndpointMusic {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLEDELETED);
-		System.out.println("EndpointMusic: deleteTitle - delete complete");	
+		System.out.println("EndpointMusic: deleteTitle - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1474,7 +1514,7 @@ public class EndpointMusic {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{musicId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
-	public Response addMusicHasActorWithRoles(@PathParam("musicId") int musicId, 
+	public Response addMusicHasActorWithRoles(@PathParam("musicId") int musicId,
 																						 @PathParam("actorId") int actorId,
 																						 @PathParam("roleId") int roleId) {
 		System.out.println("EndpointMusic: addMusicHasActorWithRoles");
@@ -1544,8 +1584,8 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{musicId}/hasActor/{actorId}")
 	@Secured
-	public Response deleteActorFromMusicHasActorWithRoles(@PathParam("musicId") int musicId, 
-																												 @PathParam("actorId") int actorId) {    
+	public Response deleteActorFromMusicHasActorWithRoles(@PathParam("musicId") int musicId,
+																												 @PathParam("actorId") int actorId) {
 		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem");
 		// deletes all entries of music-actor matches
 
@@ -1570,7 +1610,7 @@ public class EndpointMusic {
 			return Response.notModified().build();
 		}
 
-		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem - delete complete");	
+		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1578,9 +1618,9 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{musicId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
-	public Response deleteRoleFromMusicHasActorWithRoles(@PathParam("musicId") int musicId, 
+	public Response deleteRoleFromMusicHasActorWithRoles(@PathParam("musicId") int musicId,
 																												@PathParam("actorId") int actorId,
-																												@PathParam("roleId") int roleId) {    
+																												@PathParam("roleId") int roleId) {
 		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem");
 		// deletes all entries of music-actor matches
 
@@ -1609,7 +1649,7 @@ public class EndpointMusic {
 			return Response.notModified().build();
 		}
 
-		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem - delete complete");	
+		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1619,14 +1659,14 @@ public class EndpointMusic {
 	@Secured
 	public Response addExistingTag(@PathParam("musicId") int musicId,
 																 @PathParam("tagId") int tagId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach tag to annotation and vice versa    	
+
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		music.getTags().add(tag);
@@ -1637,7 +1677,7 @@ public class EndpointMusic {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(music);
- 	
+
 		return Response.ok().entity(tag).build();
 	}
 
@@ -1647,14 +1687,14 @@ public class EndpointMusic {
 	@Secured
 	public Response removeTag(@PathParam("musicId") int musicId,
 														@PathParam("tagId") int tagId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach tag to annotation and vice versa    	
+
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		music.getTags().remove(tag);
@@ -1665,7 +1705,7 @@ public class EndpointMusic {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(music);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -1675,14 +1715,14 @@ public class EndpointMusic {
 	@Secured
 	public Response addExistingCategorySet(@PathParam("musicId") int musicId,
 																 				 @PathParam("categorySetId") int categorySetId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		music.getCategorySets().add(categorySet);
@@ -1693,7 +1733,7 @@ public class EndpointMusic {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(music);
- 	
+
 		return Response.ok().entity(categorySet).build();
 	}
 
@@ -1703,7 +1743,7 @@ public class EndpointMusic {
 	@Secured
 	public Response removeCategorySet(@PathParam("musicId") int musicId,
 																		@PathParam("categorySetId") int categorySetId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1734,7 +1774,7 @@ public class EndpointMusic {
 		entityTransaction.commit();
 		entityManager.refresh(music);
 
-		// attach categorySet to music and vice versa    	
+		// attach categorySet to music and vice versa
 		entityTransaction.begin();
 		music.getCategorySets().remove(categorySet);
 		categorySet.getMusicList().remove(music);
@@ -1744,7 +1784,7 @@ public class EndpointMusic {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(music);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -1752,15 +1792,15 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{musicId}/category/{categoryId}")
 	@Secured
-	public Response addExistingCategory(@PathParam("musicId") int musicId, 
-																			@PathParam("categoryId") int categoryId) {    	
+	public Response addExistingCategory(@PathParam("musicId") int musicId,
+																			@PathParam("categoryId") int categoryId) {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach category to annotation and vice versa    	
+
+		// attach category to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		music.getCategories().add(category);
@@ -1771,15 +1811,15 @@ public class EndpointMusic {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(music);
- 	
+
 		return Response.ok().entity(category).build();
 	}
-	
+
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{musicId}/category/{categoryId}")
 	@Secured
-	public Response removeCategory(@PathParam("musicId") int musicId, 
+	public Response removeCategory(@PathParam("musicId") int musicId,
 																 @PathParam("categoryId") int categoryId) {
     // System.out.println("TCL: EndpointMusic - removeCategory");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1803,12 +1843,12 @@ public class EndpointMusic {
 		// System.out.println("TCL: EndpointMusic - removeCategory - done");
 		return Response.ok().build();
 	}
-	
+
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());
 		for(Object o: c)
 			r.add(clazz.cast(o));
 		return r;
     }
-	
+
 }

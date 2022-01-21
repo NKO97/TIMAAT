@@ -27,7 +27,7 @@
       //   if ()
       //   window.location.hash = '';
       // });
-      
+
       $(window).on('popstate', async function() {
         // console.log("TCL ~ $ ~ popstate");
 
@@ -181,7 +181,7 @@
             // show media collection component
             TIMAAT.UI.showComponent('media');
             TIMAAT.UI.refreshDataTable('mediumCollection');
-            
+
             // show corresponding medium collection form
             if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current medium collection
               $('#timaat-mediumcollectiondatasets-mediumcollection-list tr[id='+pathSegments[1]+']').trigger('click');
@@ -423,25 +423,25 @@
             else { // other music form than datasheet
               switch (pathSegments[2]) {
                 case 'preview': //* #music/:id/preview
-                    TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-preview', 'music-preview-form');
-                    TIMAAT.UI.displayDataSetContent('preview', music, 'music');
-                  break;
-                  case 'titles': //* #music/:id/titles
-                    TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-titles', 'music-titles-form');
-                    TIMAAT.UI.displayDataSetContent('titles', music, 'music');
-                  break;
-                  case 'actorsWithRoles': //* #music/:id/actorsWithRoles
-                    TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-actorwithroles', 'music-actorwithroles-form');
-                    TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
-                  break;
-                  default:
-                    this.redirectToDefaultView();
-                  break;
+                  TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-preview', 'music-preview-form');
+                  TIMAAT.UI.displayDataSetContent('preview', music, 'music');
+                break;
+                case 'titles': //* #music/:id/titles
+                  TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-titles', 'music-titles-form');
+                  TIMAAT.UI.displayDataSetContent('titles', music, 'music');
+                break;
+                case 'actorsWithRoles': //* #music/:id/actorsWithRoles
+                  TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-actorwithroles', 'music-actorwithroles-form');
+                  TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
+                break;
+                default:
+                  this.redirectToDefaultView();
+                break;
               }
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection('music');
+            TIMAAT.UI.clearLastSelection(pathSegments[1]);
             switch (pathSegments[1]) {
               case 'list': //* #music/list
                 TIMAAT.MusicDatasets.loadMusicList();

@@ -32,11 +32,11 @@
 		selectedMediumId: null,
 		selectedMediumCollectionId: null,
 		selectedMusicId: null,
-		
+
 		init: function() {
 			// console.log("TCL: UI: init: function()");
 			$('[data-toggle="popover"]').popover();
-			
+
 			this.templates = {
 					notification: `<div class="toast mb-1" role="alert" aria-live="assertive" aria-atomic="true">
 						<div class="toast-header">
@@ -48,17 +48,17 @@
 						<div class="notification-message toast-body"></div>
 					</div>`,
 			}
-			
+
 			// init components
 			TIMAAT.Datasets.init();
 			TIMAAT.Lists.init();
 			TIMAAT.UploadManager.init();
-			TIMAAT.VideoChooser.init();	 
+			TIMAAT.VideoChooser.init();
 			TIMAAT.VideoPlayer.init();
 			TIMAAT.Settings.init();
 			TIMAAT.UserSettings.init();
 			TIMAAT.URLHistory.init();
-			
+
 			$('#timaat-login-user').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 			$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
 			$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
@@ -79,7 +79,7 @@
 			// 		$('#timaat-user-info').html(event.displayName);
 			// 	}
 			// });
-			
+
 			// init tag popover functionality
 			$(document).on('click', function (e) {
 				$('[data-toggle="popover"],[data-original-title]').each(function () {
@@ -88,7 +88,7 @@
 					}
 				});
 			});
-							
+
 			// init user log popover functionality
 			$('#timaat-user-log-list').popover({
 				placement: 'bottom',
@@ -99,7 +99,7 @@
 				container: 'body',
 				boundary: 'viewport',
 			});
-			
+
 			$('#timaat-user-log-list').on('inserted.bs.popover', function () {
 				TIMAAT.Service.getUserLog(TIMAAT.Service.session.id, 12, function(log) {
 					var html = '';
@@ -112,17 +112,17 @@
 						break;
 					case 'userCreated':
 					case 'mediumCreated':
-					case 'analysisListCreated':			    			
+					case 'analysisListCreated':
 					case 'annotationCreated':
 						icon = 'fas fa-plus-square';
 						break;
 					case 'mediumEdited':
-					case 'analysisListEdited':			    			
+					case 'analysisListEdited':
 					case 'analysisListDeleted':
 						icon = 'fas fa-edit';
 						break;
 					case 'mediumDeleted':
-					case 'analysisListDeleted':			    			
+					case 'analysisListDeleted':
 					case 'annotationDeleted':
 						icon = 'fas fa-trash-alt';
 						break;
@@ -132,7 +132,7 @@
 								+'</b><br>'+TIMAAT.Util.formatDate(entry.dateTime)+'<br>';
 				});
 				$('.timaat-user-log-details').html(html);
-					
+
 				$(log).each(function(index, entry) {TIMAAT.Service.idCache.set(entry.userAccount.id, entry.userAccount.displayName);});
 				//	$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"ich")});
 				});
@@ -140,14 +140,14 @@
 
 			$.datetimepicker.setDateFormatter('moment');
 		},
-		
+
 		hidePopups: function() {
 			// console.log("TCL: hidePopups: function()");
 			$('[data-toggle="popover"],[data-original-title]').each(function () {
 				(($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false
 			});
 		},
-		
+
 		showComponent: function(component) {
 			// console.log("TCL: showComponent: function(component)");
 			// console.log("TCL: component", component);
@@ -172,7 +172,7 @@
 			$('.timaat-sidebar-tab-'+component).addClass('bg-info');
 			$('.timaat-sidebar-tab-'+component+' a').addClass('selected');
 		},
-		
+
 		receiveNotification(notificationEvent) {
 			try {
 				// console.log("notification event", notificationEvent);
@@ -190,7 +190,7 @@
 				console.error("ERROR: ", error);
 			}
 		},
-		
+
 		sendNotification(type, dataID=0, data=null) {
 			if ( !this.notificationSocket || this.notificationSocket.readyState == WebSocket.CLOSED ) {
 				// init websocket
@@ -205,12 +205,12 @@
 				this.notificationSocket.onmessage = TIMAAT.UI.receiveNotification;
 				// send notification request to server
 			} else {
-				this.notificationSocket.onopen = function() { 
+				this.notificationSocket.onopen = function() {
 					TIMAAT.UI.notificationSocket.send(JSON.stringify({token:TIMAAT.Service.token,request:type,dataID:dataID}));
 				}
 			}
 		},
-		
+
 		showNotification(notification) {
 			if (!notification) return;
 			let ui = $(this.templates.notification);
@@ -218,7 +218,7 @@
 			let action = 'fa-question';
 			let user = notification.username;
 			let message = 'hat eine unbekannte Aktion durchgeführt';
-			
+
 			// parse and style notification
 			switch (notification.message) {
 				case 'subscribe-list':
@@ -280,21 +280,21 @@
 			ui.find('.notification-user').text(user);
 			ui.find('.notification-message').html(message);
 			ui.find('.notification-time').text(TIMAAT.Util.getFuzzyDate(notification.timestamp));
-			
+
 			$('#timaat-notification-pane').append(ui);
 			// display notification
 			ui.toast({delay:4000})
 			.on('hidden.bs.toast',function(){$(this).toast('dispose').remove();})
 			.toast('show');
 		},
-		
+
 		setWaiting: function(waiting) {
 			// console.log("TCL: setWaiting: function(waiting)");
 			// console.log("TCL: waiting", waiting);
 			if (waiting) $('#timaat-ui-waiting').modal('show');
 			else $('#timaat-ui-waiting').modal('hide');
 		},
-		
+
 		setLoginEnabled: function(enabled) {
 			$('#timaat-login-user').prop('disabled', !enabled);
 			$('#timaat-login-pass').prop('disabled', !enabled);
@@ -302,21 +302,21 @@
 			if ( enabled ) $('#timaat-login-submit i.login-spinner').addClass('d-none');
 			else $('#timaat-login-submit i.login-spinner').removeClass('d-none');
 		},
-		
+
 		processLogin: function() {
 			// console.log("TCL: processLogin: function()");
 			var user = jQuery('#timaat-login-user').val();
 			var pass = jQuery('#timaat-login-pass').val();
 			if ( user.length > 0 && pass.length > 0 ) {
 				TIMAAT.UI.setLoginEnabled(false);
-				
+
 				setTimeout(function() {
 					var hash = TIMAAT.Util.getArgonHash(pass, user + TIMAAT.Service.clientSalt); // TODO refactor
 					var credentials = {
 						username : user,
 						password: hash
 					}
-			
+
 					$.ajax({
 						// url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/authenticate",
 						url        : "api/authenticate",
@@ -333,7 +333,7 @@
 						$('body').removeClass('timaat-login-modal-open');
 						$('#timaat-login-modal').modal('hide');
 						// $('#timaat-user-info').html(e.accountName);
-						$('#timaat-user-info').html(e.displayName);						
+						$('#timaat-user-info').html(e.displayName);
 
 						TIMAAT.VideoChooser.loadCollections();
 						TIMAAT.Datasets.load();
@@ -355,7 +355,7 @@
 					});
 				}, 50);
 			}
-		},		
+		},
 
     // display all areas of the media component
 		displayComponent: function(type, navBarLinkId, dataTableCardClass, navTabLinkId=null, contentId=null) {
@@ -447,9 +447,9 @@
 				case 'medium':
 					$('#medium-nav-tabs').show();
 					if ($('#mediumPreviewTab').hasClass('annotationView')) {
-						$('.preview-data-tab').hide();
+						$('.medium-preview-data-tab').hide();
 					} else {
-						$('.preview-data-tab').show();
+						$('.medium-preview-data-tab').show();
 						$('#mediumPreviewTab').removeClass('annotationView');
 					}
 				break;
@@ -1120,17 +1120,17 @@
 				case 'language':
 					if (TIMAAT.LanguageLists.dataTableLanguages) {
 						TIMAAT.LanguageLists.dataTableLanguages.ajax.reload(null, false);
-					}	
+					}
 				break;
 				case 'event':
 					if (TIMAAT.EventDatasets.dataTableEvent) {
 						TIMAAT.EventDatasets.dataTableEvent.ajax.reload(null, false);
-					}	
+					}
 				break;
 				case 'music':
 					if (TIMAAT.MusicDatasets.dataTableMusic) {
 						TIMAAT.MusicDatasets.dataTableMusic.ajax.reload(null, false);
-					}	
+					}
 				break;
 				case 'nashid':
 					if (TIMAAT.MusicDatasets.dataTableNashid) {
@@ -1184,11 +1184,11 @@
 				case 'tag':
 					if (TIMAAT.TagLists.dataTableTags) {
 						TIMAAT.TagLists.dataTableTags.ajax.reload(null, false);
-					}	
+					}
 				break;
 			}
 		},
 
 	}
-	
+
 }, window));

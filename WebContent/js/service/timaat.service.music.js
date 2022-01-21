@@ -39,10 +39,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getActorHasRoleList(musicId, actorId) {
@@ -63,10 +63,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
     async getMusic(id) {
@@ -85,10 +85,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
     },
 
 		async getCategorySetList(musicId) {
@@ -109,10 +109,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getSelectedCategories(musicId) {
@@ -133,10 +133,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getTagList(musicId) {
@@ -157,10 +157,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async createMusic(musicModel) {
@@ -188,7 +188,7 @@
 		},
 
 		async createMusicSubtype(musicSubtype, musicModel, subtypeModel) {
-      // console.log("TCL: createMusicSubtype -> musicSubtype, musicModel, subtypeModel", musicSubtype, musicModel, subtypeModel);			
+      // console.log("TCL: createMusicSubtype -> musicSubtype, musicModel, subtypeModel", musicSubtype, musicModel, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicSubtype+"/"+musicModel.id,
@@ -324,7 +324,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-		});		
+		});
 		},
 
 		async addCategorySet(musicId, categorySetId) {
@@ -346,7 +346,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategorySet(musicId, categorySetId) {
@@ -366,10 +366,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addCategory(musicId, categoryId) {
@@ -391,7 +391,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategory(musicId, ) {
@@ -410,10 +410,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async updateMusic(musicModel) {
@@ -551,7 +551,7 @@
 		},
 
 		async removeActorFromMusicHasActorWithRoles(musicId, actorId) {
-      console.log("TCL: removeActorFromMusicHasActorWithRoles -> musicId, actorId", musicId, actorId);
+      // console.log("TCL: removeActorFromMusicHasActorWithRoles -> musicId, actorId", musicId, actorId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/hasActor/"+actorId,
@@ -572,7 +572,7 @@
 		},
 
 		async removeRoleFromMusicHasActorWithRoles(musicId, actorId, roleId) {
-      console.log("TCL: removeRoleFromMusicHasActorWithRoles -> musicId, actorId, roleId", musicId, actorId, roleId);
+      // console.log("TCL: removeRoleFromMusicHasActorWithRoles -> musicId, actorId, roleId", musicId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/hasActor/"+actorId+"/withRole/"+roleId,
@@ -608,10 +608,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getMusicHasVoiceLeadingPatternList(id) {
@@ -632,12 +632,12 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
   }
-	
+
 }, window));

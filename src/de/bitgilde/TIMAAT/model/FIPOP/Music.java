@@ -91,9 +91,9 @@ public class Music implements Serializable {
 	private DynamicMarking dynamicMarking;
 
 	//bi-directional many-to-one association to Medium
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="primary_source_medium_id")
-	private Medium medium;
+	private Medium primarySourceMedium;
 
 	//bi-directional many-to-one association to MusicType
 	@ManyToOne
@@ -340,12 +340,12 @@ public class Music implements Serializable {
 		this.dynamicMarking = dynamicMarking;
 	}
 
-	public Medium getMedium() {
-		return this.medium;
+	public Medium getPrimarySourceMedium() {
+		return this.primarySourceMedium;
 	}
 
-	public void setMedium(Medium medium) {
-		this.medium = medium;
+	public void setPrimarySourceMedium(Medium primarySourceMedium) {
+		this.primarySourceMedium = primarySourceMedium;
 	}
 
 	public MusicType getMusicType() {

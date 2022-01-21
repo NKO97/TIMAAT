@@ -56,7 +56,7 @@
     <!-- TIMAAT Inspector CSS -->
     <link href="css/timaat-inspector.css" rel="stylesheet" type="text/css">
 
-    
+
     <style type="text/css">
       body { margin:0; padding:0; }
       #tooltip {
@@ -120,7 +120,7 @@
         </div>
       </div>
     </div>
-    <div id="wrapper" class="toggled"> 
+    <div id="wrapper" class="toggled">
       <!-------------------------------------------------------------------->
       <!-- Notifications                                                  -->
       <!-------------------------------------------------------------------->
@@ -237,7 +237,7 @@
               <i class="fas fa-cog"></i>
             </li>
             <li class="ml-1">
-              <a href="#" onclick="TIMAAT.Service.logout()" id="timaat-logout"> 
+              <a href="#" onclick="TIMAAT.Service.logout()" id="timaat-logout">
                 <i class="fa fa-sign-out-alt fa-fw"></i>Logout
               </a>
             </li>
@@ -247,7 +247,7 @@
               <ul id="side-menu">
                 <li class="timaat-sidebar-tab timaat-sidebar-tab-videochooser">
                     <a
-                      onclick="TIMAAT.VideoChooser.initVideoChooserComponent()" 
+                      onclick="TIMAAT.VideoChooser.initVideoChooserComponent()"
                       data-toggle="popover"
                       data-trigger="hover"
                       data-animation="false"
@@ -423,7 +423,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" name="dismiss" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary" id="user-settings-change-password-submit-button" name="submit">Change password</button>  
+                <button type="submit" class="btn btn-primary" id="user-settings-change-password-submit-button" name="submit">Change password</button>
               </div>
             </form>
           </div>
@@ -461,7 +461,7 @@
                 </div>
               </div>
             </div>
-          </div>        
+          </div>
           <div class="modal fade" id="timaat-videochooser-mediacollection-meta" tabindex="-1" role="dialog" aria-labelledby="mediacollectionMetaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
@@ -485,7 +485,7 @@
                 </div>
               </div>
             </div>
-          </div>		
+          </div>
           <div class="row" style="padding-top: 1em;">
 			      <div class="col-3" style="padding-right:0">
           	  <div class="card datatables" id="videochooser-datatable">
@@ -507,7 +507,7 @@
                   <ul id="timaat-videochooser-collectionlist" class="list-group">
                   </ul>
                 </div>
-		          </div>	
+		          </div>
           	</div>
             <!-- --------------------- -->
             <div class="col-9">
@@ -557,9 +557,9 @@
                   </div>
                 </div>
               </div>
-            </div>				
+            </div>
           </div>
-        </div>      
+        </div>
         <!-------------------------------------------------------------------->
         <!-- Videoplayer                                                    -->
         <!-------------------------------------------------------------------->
@@ -611,7 +611,7 @@
                   </div>
                 </div>
               </div>
-            </div>		
+            </div>
             <div class="modal fade" id="timaat-videoplayer-download-publication" tabindex="-1" role="dialog" aria-labelledby="downloadPublicationLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -695,7 +695,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div class="modal-body">                  
+                  <div class="modal-body">
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -732,7 +732,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div class="modal-body">                  
+                  <div class="modal-body">
                   </div>
                   <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -910,7 +910,7 @@
                       </div>
                     </div>
                     <div class="input-group input-group-sm mb-3">
-                      <div class="input-group-prepend">				
+                      <div class="input-group-prepend">
                         <button id="timaat-inspector-meta-setend-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">End</button>
                         <div class="dropdown-menu"  id="timaat-inspector-meta-duration-menu">
                           <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.inspector.setMetaEnd(0)">This frame</a>
@@ -1231,12 +1231,12 @@
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
           <div class="row timaat-videoplayer-novideo" style="padding-top: 1em;">
             <div class="d-flex justify-content-center col-lg-12">
               <h1>Kein Video geladen</h1>
             </div>
-          </div>		
+          </div>
           <div class="row timaat-videoplayer-ui" style="padding-top: 1em;"> <!-- analysislist menu-->
             <div class="col-lg-3">
               <div class="card">
@@ -1285,7 +1285,7 @@
                   </div>
                   <ul id="timaat-annotation-list" class="list-group list-group-flush"></ul>
                 </div>
-                <!-- 
+                <!--
                 <div class="card-footer">
                   <button onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-videoplayer-annotation-add-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" type="submit"><i class="fas fa-plus fa-fw"></i></button>&nbsp;
                   <button onclick="TIMAAT.VideoPlayer.removeAnnotation()" id="timaat-videoplayer-annotation-remove-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" disabled type="submit"><i class="fas fa-minus fa-fw"></i></button>
@@ -1296,19 +1296,19 @@
             <div class="col-lg-9" id="timaat-annotation-metadata" style="max-height: 541px; min-height: 541px">
               <div class="card">
                 <div class="card-header">
-                  Annotation Metadaten                    
+                  Annotation Metadaten
                 </div>
-                <div class="card-body">			   	 
+                <div class="card-body">
                 </div>
               </div>
-            </div>		
+            </div>
             <div class="col-lg-9">
               <div class="card">
                 <div class="list-group list-group-flush">
                   <div id="timaat-videoplayer-viewer" class="timaat-videoplayer-video-viewer" style="width: 100%;">
                   </div>
                   <div id="timaat-videoplayer-viewer-overlay">
-                    x                    
+                    x
                   </div>
                 </div>
                 <div class="card-footer timaat-videoplayer-video-footer">
@@ -1343,7 +1343,7 @@
   <!--                   <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
                     <!-- Playback Speed Control -->
                     <div class="btn-group btn-group-sm float-right">
-                      <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i> 
+                      <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i>
                         <span class="video-speed-info">1&times;</span>
                       </button>
                     </div>
@@ -1360,7 +1360,7 @@
                   </div> -->
                 </div>
               </div>
-            </div>		
+            </div>
           </div>
           <div class="row timaat-videoplayer-ui timaat-videoplayer-timeline-area"> <!-- timeline -->
             <div class="col-lg-12">
@@ -1474,7 +1474,7 @@
         <!-------------------------------------------------------------------->
         <!-- Lists                                                          -->
         <!-------------------------------------------------------------------->
-        <div class="container-fluid timaat-component" id="timaat-component-lists">  
+        <div class="container-fluid timaat-component" id="timaat-component-lists">
           <div> <!-- delete modals-->
             <!-- delete role -->
             <div class="modal fade" id="timaat-rolelists-role-delete" tabindex="-1" role="dialog" aria-labelledby="roleDeleteLabel" aria-hidden="true">
@@ -1595,7 +1595,7 @@
                   </div>
                 </div>
               </div>
-            </div> 
+            </div>
           </div>
           <div> <!-- duplicate language modal -->
             <div class="modal fade" id="timaat-languagelists-language-duplicate" tabindex="-1" role="dialog" aria-labelledby="languageDuplicateLabel" aria-hidden="true">
@@ -1615,7 +1615,7 @@
                   </div>
                 </div>
               </div>
-            </div> 
+            </div>
           </div>
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
@@ -1925,7 +1925,7 @@
                           <button type="submit" class="btn btn-primary form-submit-button" id="role-metadata-form-submit-button" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary form-dismiss-button" id="role-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
-                      </form> 
+                      </form>
                       <!-- role group data sheet form -->
                       <form class="form dataset-content" role="form" id="rolegroup-metadata-form" name="rolegroup-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
@@ -1973,7 +1973,7 @@
                           <button type="submit" class="btn btn-primary form-submit-button" id="rolegroup-metadata-form-submit-button" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary form-dismiss-button" id="rolegroup-metadata-form-dismiss-button" name="dismiss">Cancel</button>
                         </div>
-                      </form> 
+                      </form>
                       <!-- language data sheet form -->
                       <form class="form dataset-content" role="form" id="language-metadata-form" name="language-metadata-form" data-type="" method="POST" novalidate>
                         <div class="form-header">
@@ -2015,7 +2015,7 @@
                         </div>
                       </form>
                     </div>
-                  </div> <!-- row -->	
+                  </div> <!-- row -->
                 </div>
               </div>
             </div>
@@ -2065,7 +2065,7 @@
                       </div>
                     </div>
                   </div>
-                </div> 
+                </div>
               </div>
               <div> <!-- duplicate language track modal -->
                 <div class="modal fade" id="timaat-mediadatasets-languagetrack-duplicate" tabindex="-1" role="dialog" aria-labelledby="languageTrackDuplicateLabel" aria-hidden="true">
@@ -2085,7 +2085,7 @@
                       </div>
                     </div>
                   </div>
-                </div> 
+                </div>
               </div>
               <div> <!-- duplicate actor with role(s) modal -->
                 <div class="modal fade" id="timaat-mediadatasets-actorwithrole-duplicate" tabindex="-1" role="dialog" aria-labelledby="actorWithRoleDuplicateLabel" aria-hidden="true">
@@ -2105,7 +2105,7 @@
                       </div>
                     </div>
                   </div>
-                </div> 
+                </div>
               </div>
               <div class="modal fade" id="timaat-mediumcollectiondatasets-item-add" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionItemAddLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2234,7 +2234,7 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body">                  
+                    <div class="modal-body">
                     </div>
                   </form>
                 </div>
@@ -2317,7 +2317,7 @@
                         <div class="card-header">All Media
                            <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> <!~~ TODO When re-added: open dialogue to ask which medium type to add, then open corresponding form ~~> --> 
+                          </button> <!~~ TODO When re-added: open dialogue to ask which medium type to add, then open corresponding form ~~> -->
                         </div>
                         <div class="card-body">
                           <table id="timaat-mediadatasets-media-table" class="table table-striped table-bordered table-hover">
@@ -2480,7 +2480,7 @@
                           </li> -->
                         </ul>
                         <ul class="nav nav-tabs" id="medium-nav-tabs">
-                          <li class="nav-item medium-data-tabs preview-data-tab" id="mediumPreviewTab">
+                          <li class="nav-item medium-data-tabs medium-preview-data-tab" id="mediumPreviewTab">
                             <a class="nav-link content-nav-bar-link" id="medium-tab-preview">Medium preview</a>
                           </li>
                           <li class="nav-item medium-data-tabs medium-data-tab">
@@ -2534,15 +2534,15 @@
                                   <div class="col-md-12">
                                     <label class="col-form-label col-form-label-sm" for="timaat-mediumcollectiondatasets-metadata-title">Title*</label>
                                     <input type="text" class="form-control form-control-sm" id="timaat-mediumcollectiondatasets-metadata-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" required>
-                                  </div>                            
+                                  </div>
                                 </div>
                               </div>
                               <div class="form-group datasheet-data mediumcollection-data">
                                 <div class="form-row">
                                   <div class="col-md-6">
                                     <label class="col-form-label col-form-label-sm" for="mediumcollection-type-select-dropdown">Collection Type*</label>
-                                    <select class="form-control form-control-sm" 
-                                            id="mediumcollection-type-select-dropdown" 
+                                    <select class="form-control form-control-sm"
+                                            id="mediumcollection-type-select-dropdown"
                                             name="typeId"
                                             data-placeholder="Select collection type..."
                                             required>
@@ -2683,7 +2683,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-danger btn-sm mediadatasheet-form-delete-button form-buttons" title="Delete medium">
@@ -2697,7 +2697,7 @@
                           <div> <!-- Medium data -->
                             <div class="form-group preview-data medium-preview-data">
                               <div class="image-preview">
-                                <img src="img/image-placeholder.png" class="center" id="mediumImagePreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                                <img id="mediumImagePreview" class="center" src="img/image-placeholder.png" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
                               </div>
                               <div class="video-preview">
                                 <video id="mediumVideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
@@ -2706,7 +2706,7 @@
                               <div class="audio-preview">
                                 <audio id="mediumAudioPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
                                 </audio>
-                              </div>                              
+                              </div>
                             </div>
                           </div>
                         </form>
@@ -2732,7 +2732,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
@@ -2752,12 +2752,12 @@
                                 <div class="col-md-9">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-title">Display Title*</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
-                                </div>                            
+                                </div>
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="medium-displayTitle-language-select-dropdown">Title's Language*</label>
                                   <select class="form-control form-control-sm"
-                                          id="medium-displayTitle-language-select-dropdown" 
-                                          name="displayTitleLanguageId" 
+                                          id="medium-displayTitle-language-select-dropdown"
+                                          name="displayTitleLanguageId"
                                           data-placeholder="Select title language"
                                           required>
                                   </select>
@@ -2782,11 +2782,11 @@
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-releasedate">Release Date</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
-                                </div> 
+                                </div>
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-recordingstartdate">Recording Start Date</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-recordingstartdate" name="recordingStartDate" placeholder="[Enter recording start date]" aria-describedby="Recording Start Date">
-                                </div> 
+                                </div>
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-recordingenddate">Recording End Date</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-recordingenddate" name="recordingEndDate" placeholder="[Enter recording end date]" aria-describedby="Recording End Date">
@@ -2798,7 +2798,7 @@
                                 <div class="col-md-9">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-url">Source (URL)</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-url" name="sourceUrl" placeholder="[Enter source url]" aria-describedby="Source URL">
-                                </div> 
+                                </div>
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isprimarysource">Primary source?</label>
                                   <input type="checkbox" checked class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isprimarysource" name="sourceIsPrimarySource" aria-describedby="Is This The Primary Source">
@@ -2810,7 +2810,7 @@
                                 <div class="col-md-9">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-lastaccessed">Source (last access)</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-lastaccessed" name="sourceLastAccessed" placeholder="[Enter source last accessed]" aria-describedby="Source Last Accessed">
-                                </div> 
+                                </div>
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-medium-source-isstillavailable">Source available ?</label>
                                   <input type="checkbox" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-medium-source-isstillavailable" name="sourceIsStillAvailable" aria-describedby="Is Source Still Available">
@@ -2906,7 +2906,7 @@
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-height">Image height</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-height" name="height" placeholder="[upload image]" aria-describedby="Image Height">
                                 </div>
-                                <div class="col-md-4">                                
+                                <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-image-bitdepth">Bit depth</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-image-bitdepth" name="bitDepth" placeholder="[upload image]" aria-describedby="Bit Depth">
                                 </div>
@@ -2945,7 +2945,7 @@
                                 <div class="col-md-6">
                                   <label class="col-form-label col-form-label-sm" for="timaat-mediadatasets-metadata-video-height">Video height</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-mediadatasets-metadata-video-height" name="height" max="65535" placeholder="[upload video]" aria-describedby="Height">
-                                </div>  
+                                </div>
                               </div>
                             </div>
                             <div class="form-group datasheet-data video-data">
@@ -2996,7 +2996,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm float-right mediadatasheet-form-edit-button form-buttons" name="edit">
@@ -3026,22 +3026,22 @@
                           </div>
                           <div class="medium-titles-container">
                             <div data-role="medium-dynamic-title-fields" id="medium-dynamic-title-fields">
-                              <div class="form-group">                              
+                              <div class="form-group">
                               </div>
-                            <!-- additional title form content will be created dynamically --> 
+                            <!-- additional title form content will be created dynamically -->
                             </div>
                             <div class="title-form-divider">
                               <br>
-                              <hr>                            
+                              <hr>
                             </div>
                             <div data-role="medium-new-title-fields" id="medium-new-title-fields">
-                              <!-- one row for new title information that shall be added to the titles list --> 
-                              <div class="form-group">                              
+                              <!-- one row for new title information that shall be added to the titles list -->
+                              <div class="form-group">
                               </div>
                             </div>
                           </div>
                           <div class="title-form-divider">
-                            <hr>                            
+                            <hr>
                           </div>
                           <button type="submit" class="btn btn-primary" id="medium-titles-form-submit" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary" id="medium-titles-form-dismiss" name="dismiss">Cancel</button>
@@ -3059,7 +3059,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
@@ -3083,22 +3083,22 @@
                           </div>
                           <div class="medium-languagetracks-container">
                             <div data-role="medium-dynamic-languagetrack-fields" id="medium-dynamic-languagetrack-fields">
-                              <div class="form-group">                              
+                              <div class="form-group">
                               </div>
-                            <!-- additional language track form content will be created dynamically --> 
+                            <!-- additional language track form content will be created dynamically -->
                             </div>
                             <div class="languagetrack-form-divider">
                               <br>
-                              <hr>                            
+                              <hr>
                             </div>
                             <div data-role="medium-new-languagetrack-fields" id="medium-new-languagetrack-fields">
-                              <!-- one row for new language track information that shall be added to the language track list --> 
-                              <div class="form-group">                              
+                              <!-- one row for new language track information that shall be added to the language track list -->
+                              <div class="form-group">
                               </div>
                             </div>
                           </div>
                           <div class="languagetrack-form-divider">
-                            <hr>                            
+                            <hr>
                           </div>
                           <button type="submit" class="btn btn-primary" id="medium-languagetracks-form-done" name="done">Done</button>
                         </form>
@@ -3115,7 +3115,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm mediadatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
@@ -3139,22 +3139,22 @@
                           </div>
                           <div class="medium-actorwithrole-container">
                             <div data-role="medium-dynamic-actorwithrole-fields" id="medium-dynamic-actorwithrole-fields">
-                              <div class="form-group">                              
+                              <div class="form-group">
                               </div>
-                            <!-- additional actor role form content will be created dynamically --> 
+                            <!-- additional actor role form content will be created dynamically -->
                             </div>
                             <div class="actorwithrole-form-divider">
                               <br>
-                              <hr>                            
+                              <hr>
                             </div>
                             <div data-role="medium-new-actorwithrole-fields" id="medium-new-actorwithrole-fields">
-                              <!-- one row for new actor role information that shall be added to the actor role list --> 
-                              <div class="form-group">                              
+                              <!-- one row for new actor role information that shall be added to the actor role list -->
+                              <div class="form-group">
                               </div>
                             </div>
                           </div>
                           <div class="actorwithrole-form-divider">
-                            <hr>                            
+                            <hr>
                           </div>
                           <button type="submit" class="btn btn-primary" id="medium-actorwithroles-form-submit" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary" id="medium-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
@@ -3165,7 +3165,7 @@
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
         <!-------------------------------------------------------------------->
         <!-- Actors                                                         -->
@@ -3211,7 +3211,7 @@
                   </div>
                 </div>
               </div>
-            </div> 
+            </div>
           </div>
           <div class="modal fade" id="timaat-actordatasets-actor-tags" tabindex="-1" role="dialog" aria-labelledby="actorTagLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -3260,7 +3260,7 @@
                         <div class="card-header">Actors
                           <!-- <button type="button" id="timaat-actordatasets-actor-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> <!~~ TODO When re-added: open dialogue to ask which actor type to add, then open corresponding form ~~> --> 
+                          </button> <!~~ TODO When re-added: open dialogue to ask which actor type to add, then open corresponding form ~~> -->
                         </div>
                           <div class="card-body">
                           <table id="timaat-actordatasets-actor-table" class="table table-striped table-bordered table-hover timaat-actordatasets-actor-table">
@@ -3396,7 +3396,7 @@
                                       <a class="carousel-control-next" data-slide="next">
                                         <span class="carousel-control-next-icon"></span>
                                       </a>
-                                      <!-- additional profile image form content will be created dynamically --> 
+                                      <!-- additional profile image form content will be created dynamically -->
                                     </div>
                                   </div>
                                 </div>
@@ -3493,7 +3493,7 @@
                                 </div>
                               </div>
                             </fieldset>
-                          </div>                        
+                          </div>
                           <div class="form-group datasheet-data collective-data"> <!-- collective information -->
                             <fieldset>
                               <legend>Period of activity</legend>
@@ -3682,22 +3682,22 @@
                         </div>
                         <div class="actor-names-container">
                           <div data-role="dynamic-name-fields" id="dynamic-name-fields">
-                            <div class="form-group">                              
+                            <div class="form-group">
                             </div>
-                          <!-- additional name form content will be created dynamically --> 
+                          <!-- additional name form content will be created dynamically -->
                           </div>
                           <div class="name-form-divider">
                             <br>
-                            <hr>                            
+                            <hr>
                           </div>
                           <div data-role="new-name-fields" id="new-name-fields">
-                            <!-- one row for new name information that shall be added to the names list --> 
-                            <div class="form-group">                              
+                            <!-- one row for new name information that shall be added to the names list -->
+                            <div class="form-group">
                             </div>
                           </div>
                         </div>
                         <div class="name-form-divider">
-                          <hr>                            
+                          <hr>
                         </div>
                         <button type="submit" class="btn btn-primary" id="actor-names-form-submit" name="submit">Save</button>
                         <button type="button" class="btn btn-secondary" id="actor-names-form-dismiss" name="dismiss">Cancel</button>
@@ -3756,22 +3756,22 @@
                         </div>
                         <div class="actor-addresses-container">
                           <div data-role="dynamic-actorhasaddress-fields" id="dynamic-actorhasaddress-fields">
-                            <div class="form-group">                              
+                            <div class="form-group">
                             </div>
-                          <!-- additional name form content will be created dynamically --> 
+                          <!-- additional name form content will be created dynamically -->
                           </div>
                           <div class="address-form-divider">
                             <br>
-                            <hr>                            
+                            <hr>
                           </div>
                           <div data-role="new-actorhasaddress-fields" id="new-actorhasaddress-fields">
-                            <!-- one row for new name information that shall be added to the addresses list --> 
-                            <div class="form-group">                              
+                            <!-- one row for new name information that shall be added to the addresses list -->
+                            <div class="form-group">
                             </div>
                           </div>
                         </div>
                         <div class="address-form-divider">
-                          <hr>                            
+                          <hr>
                         </div>
                         <button type="submit" class="btn btn-primary" id="actor-addresses-form-submit" name="submit">Save</button>
                         <button type="button" class="btn btn-secondary" id="actor-addresses-form-dismiss" name="dismiss">Cancel</button>
@@ -3805,22 +3805,22 @@
                         </div>
                         <div class="actor-emailaddresses-container">
                           <div data-role="dynamic-actorhasemailaddress-fields" id="dynamic-actorhasemailaddress-fields">
-                            <div class="form-group">                              
+                            <div class="form-group">
                             </div>
-                          <!-- additional name form content will be created dynamically --> 
+                          <!-- additional name form content will be created dynamically -->
                           </div>
                           <div class="emailaddress-form-divider">
                             <br>
-                            <hr>                            
+                            <hr>
                           </div>
                           <div data-role="new-actorhasemailaddress-fields" id="new-actorhasemailaddress-fields">
-                            <!-- one row for new name information that shall be added to the emailaddresses list --> 
-                            <div class="form-group">                              
+                            <!-- one row for new name information that shall be added to the emailaddresses list -->
+                            <div class="form-group">
                             </div>
                           </div>
                         </div>
                         <div class="emailaddress-form-divider">
-                          <hr>                            
+                          <hr>
                         </div>
                         <button type="submit" class="btn btn-primary" id="actor-emailaddresses-form-submit" name="submit">Save</button>
                         <button type="button" class="btn btn-secondary" id="actor-emailaddresses-form-dismiss" name="dismiss">Cancel</button>
@@ -3854,22 +3854,22 @@
                         </div>
                         <div class="actor-phonenumbers-container">
                           <div data-role="dynamic-actorhasphonenumber-fields" id="dynamic-actorhasphonenumber-fields">
-                            <div class="form-group">                              
+                            <div class="form-group">
                             </div>
-                          <!-- additional name form content will be created dynamically --> 
+                          <!-- additional name form content will be created dynamically -->
                           </div>
                           <div class="phonenumber-form-divider">
                             <br>
-                            <hr>                            
+                            <hr>
                           </div>
                           <div data-role="new-actorhasphonenumber-fields" id="new-actorhasphonenumber-fields">
-                            <!-- one row for new name information that shall be added to the phonenumbers list --> 
-                            <div class="form-group">                              
+                            <!-- one row for new name information that shall be added to the phonenumbers list -->
+                            <div class="form-group">
                             </div>
                           </div>
                         </div>
                         <div class="phonenumber-form-divider">
-                          <hr>                            
+                          <hr>
                         </div>
                         <button type="submit" class="btn btn-primary" id="actor-phonenumbers-form-submit" name="submit">Save</button>
                         <button type="button" class="btn btn-secondary" id="actor-phonenumbers-form-dismiss" name="dismiss">Cancel</button>
@@ -3908,14 +3908,14 @@
                         </div>
                         <div class="actor-memberofcollectives-container">
                           <div data-role="dynamic-personismemberofcollective-fields" id="dynamic-personismemberofcollective-fields">
-                            <div class="form-group"> 
+                            <div class="form-group">
                               <!-- <div data-role="dynamic-personismemberofcollective-details-fields" id="dynamic-personismemberofcollective-details-fields">
-                                <!~~ one row for dynamic memberOfCollective detail information that shall be added to the memberofcollective ~~> 
-                                <div class="form-group">                              
+                                <!~~ one row for dynamic memberOfCollective detail information that shall be added to the memberofcollective ~~>
+                                <div class="form-group">
                                 </div>
                               </div>  -->
                             </div>
-                          <!-- additional memberOfCollective form content will be created dynamically --> 
+                          <!-- additional memberOfCollective form content will be created dynamically -->
                           </div>
                           <div class="memberofcollective-form-divider">
                             <br>
@@ -3940,13 +3940,13 @@
                             </div>
                           </div>
                           <div data-role="new-personismemberofcollective-fields" id="new-personismemberofcollective-fields">
-                            <!-- one row for new memberOfCollective information that shall be added to the memberofcollectives list --> 
+                            <!-- one row for new memberOfCollective information that shall be added to the memberofcollectives list -->
                             <div class="form-group">
                             </div>
                           </div>
                         </div>
                         <div class="memberofcollective-form-divider">
-                          <hr>                            
+                          <hr>
                         </div>
                         <button type="submit" class="btn btn-primary" id="actor-memberofcollectives-form-submit" name="submit">Save</button>
                         <button type="button" class="btn btn-secondary" id="actor-memberofcollectives-form-dismiss" name="dismiss">Cancel</button>
@@ -3969,11 +3969,11 @@
                           <div data-role="dynamic-actorhasrole-fields" id="dynamic-actorhasrole-fields">
                             <div class="form-group">
                             </div>
-                          <!-- additional actor-role form content will be created dynamically --> 
+                          <!-- additional actor-role form content will be created dynamically -->
                           </div>
                         </div>
                         <div class="actorrole-form-divider">
-                          <hr>                            
+                          <hr>
                         </div>
                         <!-- Save/Cancel buttons -->
                         <button type="submit" class="btn btn-primary" id="actor-roles-form-submit" name="submit">Save</button>
@@ -4011,7 +4011,7 @@
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
         <!-------------------------------------------------------------------->
         <!-- Locations                                                      -->
@@ -4139,7 +4139,7 @@
                     </div>
                     <input type="text" class="form-control form-control-sm" id="timaat-country-meta-dst" placeholder="[Daylight Saving Time (e.g. UTC+02:00)]" aria-label="Daylight Saving Time">
                   </div>
-                </div>  
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-country-meta-submit" disabled>Hinzufügen</button>
@@ -4184,7 +4184,7 @@
                     </div>
                     <input type="text" class="form-control form-control-sm" id="timaat-province-meta-name" placeholder="[Name]" aria-label="Name">
                   </div>
-                </div>  
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-province-meta-submit" disabled>Hinzufügen</button>
@@ -4229,7 +4229,7 @@
                     </div>
                     <input type="text" class="form-control form-control-sm" id="timaat-county-meta-name" placeholder="[Name]" aria-label="Name">
                   </div>
-                </div>  
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-county-meta-submit" disabled>Hinzufügen</button>
@@ -4319,7 +4319,7 @@
                     </div>
                     <input type="text" class="form-control form-control-sm" id="timaat-street-meta-name" placeholder="[Name]" aria-label="Name">
                   </div>
-                </div>  
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" id="timaat-street-meta-submit" disabled>Hinzufügen</button>
@@ -4352,7 +4352,7 @@
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#territories"><i class="fas fa-object-group"></i> Territorien</a>
                 </li> -->
-              </ul>  
+              </ul>
               <div class="tab-content" id="locationsTabContent">
                 <!-- Locations UI -->
                 <div class="tab-pane fade show active" id="locations" role="tabpanel" aria-labelledby="location-tab">
@@ -4456,7 +4456,7 @@
                     </div>
                   </div>
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
@@ -4674,7 +4674,7 @@
                       </div>
                     </div>
                   </div>
-                </div> 
+                </div>
               </div>
               <div> <!-- duplicate actor with role(s) modal -->
                 <div class="modal fade" id="timaat-musicdatasets-actorwithrole-duplicate" tabindex="-1" role="dialog" aria-labelledby="actorWithRoleDuplicateLabel" aria-hidden="true">
@@ -4694,7 +4694,7 @@
                       </div>
                     </div>
                   </div>
-                </div> 
+                </div>
               </div>
               <!-- <div class="modal fade" id="timaat-musiccollectiondatasets-item-add" tabindex="-1" role="dialog" aria-labelledby="musicCollectionItemAddLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -4823,7 +4823,7 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body">                  
+                    <div class="modal-body">
                     </div>
                   </form>
                 </div>
@@ -4881,7 +4881,7 @@
                         <div class="card-header">All Music
                            <!-- <button type="button" id="timaat-musicdatasets-music-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
-                          </button> <!~~ TODO When re-added: open dialogue to ask which music type to add, then open corresponding form ~~> --> 
+                          </button> <!~~ TODO When re-added: open dialogue to ask which music type to add, then open corresponding form ~~> -->
                         </div>
                         <div class="card-body">
                           <table id="timaat-musicdatasets-music-table" class="table table-striped table-bordered table-hover">
@@ -4938,7 +4938,7 @@
                     <div class="col-md-8" id="timaat-musicdatasets-music-tabs-container">
                       <div id="timaat-musicdatasets-music-tabs">
                         <ul class="nav nav-tabs" id="music-nav-tabs">
-                          <li class="nav-item music-data-tabs preview-data-tab" id="musicPreviewTab">
+                          <li class="nav-item music-data-tabs music-preview-data-tab">
                             <a class="nav-link content-nav-bar-link" id="music-tab-preview">Music preview</a>
                           </li>
                           <li class="nav-item music-data-tabs music-data-tab">
@@ -4992,15 +4992,15 @@
                                   <div class="col-md-12">
                                     <label class="col-form-label col-form-label-sm" for="timaat-musiccollectiondatasets-metadata-title">Title*</label>
                                     <input type="text" class="form-control form-control-sm" id="timaat-musiccollectiondatasets-metadata-title" name="title" placeholder="[Enter title]" aria-describedby="Title" minlength="3" maxlength="200" required>
-                                  </div>                            
+                                  </div>
                                 </div>
                               </div>
                               <div class="form-group datasheet-data musiccollection-data">
                                 <div class="form-row">
                                   <div class="col-md-6">
                                     <label class="col-form-label col-form-label-sm" for="musiccollection-type-select-dropdown">Collection Type*</label>
-                                    <select class="form-control form-control-sm" 
-                                            id="musiccollection-type-select-dropdown" 
+                                    <select class="form-control form-control-sm"
+                                            id="musiccollection-type-select-dropdown"
                                             name="typeId"
                                             data-placeholder="Select collection type..."
                                             required>
@@ -5102,10 +5102,10 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                    </button> -->
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-danger btn-sm musicdatasheet-form-delete-button form-buttons" title="Delete music">
@@ -5118,17 +5118,17 @@
                           </div>
                           <div> <!-- Music data -->
                             <div class="form-group preview-data music-preview-data">
-                              <div class="image-preview">
-                                <img src="img/image-placeholder.png" class="center" id="musicImagePreview" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
-                              </div>
-                              <div class="video-preview">
-                                <video id="musicideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
+                              <!-- <div class="image-preview"> -->
+                                <img id="musicImagePreview" class="center" src="img/image-placeholder.png" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                              <!-- </div> -->
+                              <!-- <div class="video-preview"> -->
+                                <video id="musicVideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
                                 </video>
-                              </div>
-                              <div class="audio-preview">
+                              <!-- </div> -->
+                              <!-- <div class="audio-preview"> -->
                                 <audio id="musicAudioPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
                                 </audio>
-                              </div>                              
+                              <!-- </div> -->
                             </div>
                           </div>
                         </form>
@@ -5151,7 +5151,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-tag-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm musicdatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
@@ -5171,14 +5171,29 @@
                                 <div class="col-md-9">
                                   <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-title">Display Title*</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-title" name="displayTitle" placeholder="[Enter display title]" aria-describedby="Primary Title" minlength="3" maxlength="200" required>
-                                </div>                            
+                                </div>
                                 <div class="col-md-3">
                                   <label class="col-form-label col-form-label-sm" for="music-displayTitle-language-select-dropdown">Title's Language*</label>
                                   <select class="form-control form-control-sm"
-                                          id="music-displayTitle-language-select-dropdown" 
-                                          name="displayTitleLanguageId" 
+                                          id="music-displayTitle-language-select-dropdown"
+                                          name="displayTitleLanguageId"
                                           data-placeholder="Select title language"
                                           required>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group datasheet-data music-data">
+                              <div class="form-row">
+                                <div class="col-md-12">
+                                  <label class="col-form-label col-form-label-sm" for="music-primary-source-medium-select-dropdown">Primary source medium</label>
+                                  <select class="form-control form-control-sm"
+                                          style="width:100%;"
+                                          id="music-primary-source-medium-select-dropdown"
+                                          name="primarySourceMediumId"
+                                          data-role="primarySourceMedium"
+                                          data-placeholder="Select primary source medium"
+                                          aria-describedby="Primary source medium">
                                   </select>
                                 </div>
                               </div>
@@ -5196,11 +5211,11 @@
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-releasedate">Release Date</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-releasedate" name="releaseDate" placeholder="[Enter release date]" aria-describedby="Release Date">
-                                </div> 
+                                </div>
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-recordingstartdate">Recording Start Date</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-recordingstartdate" name="recordingStartDate" placeholder="[Enter recording start date]" aria-describedby="Recording Start Date">
-                                </div> 
+                                </div>
                                 <div class="col-md-4">
                                   <label class="col-form-label col-form-label-sm" for="timaat-musicdatasets-metadata-music-recordingenddate">Recording End Date</label>
                                   <input type="text" class="form-control form-control-sm" id="timaat-musicdatasets-metadata-music-recordingenddate" name="recordingEndDate" placeholder="[Enter recording end date]" aria-describedby="Recording End Date">
@@ -5382,10 +5397,10 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                    </button> -->
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm float-right musicdatasheet-form-edit-button form-buttons" name="edit">
@@ -5415,22 +5430,22 @@
                           </div>
                           <div class="music-titles-container">
                             <div data-role="music-dynamic-title-fields" id="music-dynamic-title-fields">
-                              <div class="form-group">                              
+                              <div class="form-group">
                               </div>
-                            <!-- additional title form content will be created dynamically --> 
+                            <!-- additional title form content will be created dynamically -->
                             </div>
                             <div class="title-form-divider">
                               <br>
-                              <hr>                            
+                              <hr>
                             </div>
                             <div data-role="music-new-title-fields" id="music-new-title-fields">
-                              <!-- one row for new title information that shall be added to the titles list --> 
-                              <div class="form-group">                              
+                              <!-- one row for new title information that shall be added to the titles list -->
+                              <div class="form-group">
                               </div>
                             </div>
                           </div>
                           <div class="title-form-divider">
-                            <hr>                            
+                            <hr>
                           </div>
                           <button type="submit" class="btn btn-primary" id="music-titles-form-submit" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary" id="music-titles-form-dismiss" name="dismiss">Cancel</button>
@@ -5448,7 +5463,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm musicdatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
@@ -5472,22 +5487,22 @@
                           </div>
                           <div class="music-languagetracks-container">
                             <div data-role="music-dynamic-languagetrack-fields" id="music-dynamic-languagetrack-fields">
-                              <div class="form-group">                              
+                              <div class="form-group">
                               </div>
-                            <!~~ additional language track form content will be created dynamically ~~> 
+                            <!~~ additional language track form content will be created dynamically ~~>
                             </div>
                             <div class="languagetrack-form-divider">
                               <br>
-                              <hr>                            
+                              <hr>
                             </div>
                             <div data-role="music-new-languagetrack-fields" id="music-new-languagetrack-fields">
-                              <!~~ one row for new language track information that shall be added to the language track list ~~> 
-                              <div class="form-group">                              
+                              <!~~ one row for new language track information that shall be added to the language track list ~~>
+                              <div class="form-group">
                               </div>
                             </div>
                           </div>
                           <div class="languagetrack-form-divider">
-                            <hr>                            
+                            <hr>
                           </div>
                           <button type="submit" class="btn btn-primary" id="music-languagetracks-form-done" name="done">Done</button>
                         </form> -->
@@ -5501,10 +5516,10 @@
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-annotate-button form-buttons" title="Annotate music" name="annotate">
+                                    </button> -->
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm musicdatasheet-form-edit-button form-buttons" title="Edit datasheet" name="edit">
@@ -5528,22 +5543,22 @@
                           </div>
                           <div class="music-actorwithrole-container">
                             <div data-role="music-dynamic-actorwithrole-fields" id="music-dynamic-actorwithrole-fields">
-                              <div class="form-group">                              
+                              <div class="form-group">
                               </div>
-                            <!-- additional actor role form content will be created dynamically --> 
+                            <!-- additional actor role form content will be created dynamically -->
                             </div>
                             <div class="actorwithrole-form-divider">
                               <br>
-                              <hr>                            
+                              <hr>
                             </div>
                             <div data-role="music-new-actorwithrole-fields" id="music-new-actorwithrole-fields">
-                              <!-- one row for new actor role information that shall be added to the actor role list --> 
-                              <div class="form-group">                              
+                              <!-- one row for new actor role information that shall be added to the actor role list -->
+                              <div class="form-group">
                               </div>
                             </div>
                           </div>
                           <div class="actorwithrole-form-divider">
-                            <hr>                            
+                            <hr>
                           </div>
                           <button type="submit" class="btn btn-primary" id="music-actorwithroles-form-submit" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary" id="music-actorwithroles-form-dismiss" name="dismiss">Cancel</button>
@@ -5554,12 +5569,12 @@
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
         <!-------------------------------------------------------------------->
         <!-- Settings                                                       -->
         <!-------------------------------------------------------------------->
-        <div class="container-fluid timaat-component" id="timaat-component-settings">     
+        <div class="container-fluid timaat-component" id="timaat-component-settings">
           <div class="row" style="padding-top: 1em;">
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="settings-tabs" role="tablist">
@@ -5584,10 +5599,10 @@
                     </div>
                     <div class="col-lg-6">
                     </div>
-                  </div> <!-- row -->	
+                  </div> <!-- row -->
                 </div>
                 <div class="tab-pane fade" id="timaat-settings-general" role="tabpanel" aria-labelledby="profile-tab">
-                  not yet implemented                
+                  not yet implemented
                 </div>
               </div>
             </div>

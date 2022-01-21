@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.MusicDatasets = {
     musicList: null,
 		nashidList: null,
@@ -42,7 +42,7 @@
         $('#music-tab').trigger('click');
       }
     },
-    
+
     initMusic: function() {
       $('#music-tab').on('click', function(event) {
         TIMAAT.MusicDatasets.initMusicComponent();
@@ -73,7 +73,7 @@
 				if ( type == 'music') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#music/' + id);
 				} else {
-					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#music/' + type + '/' + id);					
+					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#music/' + type + '/' + id);
 				}
 			});
 
@@ -107,7 +107,7 @@
 				let type = music.model.musicType.musicTypeTranslations[0].type;
         // console.log("TCL: $ -> type", type);
 				if (music) {
-					try {	
+					try {
 						await TIMAAT.MusicDatasets._musicRemoved(music);
 					} catch(error) {
 						console.error("ERROR: ", error);
@@ -133,7 +133,7 @@
 				let music = $('#music-metadata-form').data('music');
 				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, music, 'music', 'edit');
 			});
-			
+
 			// music form handlers
 			// submit music metadata button functionality
 			$('#music-metadata-form-submit-button').on('click', async function(event) {
@@ -170,6 +170,7 @@
 				formDataSanitized.jinsId                    = Number(formDataObject.jinsId);
 				formDataSanitized.maqamId                   = Number(formDataObject.maqamId);
 				formDataSanitized.musicalKeyId              = Number(formDataObject.musicalKeyId);
+				formDataSanitized.primarySourceMediumId			= Number(formDataObject.primarySourceMediumId);
 				formDataSanitized.tempoMarkingId            = Number(formDataObject.tempoMarkingId);
 				formDataSanitized.textSettingId             = Number(formDataObject.textSettingId);
 				formDataSanitized.voiceLeadingPatternList = voiceLeadingPatternIdList;
@@ -278,7 +279,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							params.page = params.page || 1;
@@ -317,7 +318,7 @@
 				event.preventDefault();
 				// console.log("TCL: submit category set list");
 				var modal = $('#timaat-musicdatasets-music-categorysets');
-				if (!$('#musicCategorySetsForm').valid()) 
+				if (!$('#musicCategorySetsForm').valid())
 					return false;
 				var music = modal.data('music');
 				// console.log("TCL: music", music);
@@ -386,7 +387,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							params.page = params.page || 1;
@@ -426,7 +427,7 @@
 				event.preventDefault();
 				// console.log("TCL: submit category list");
 				var modal = $('#timaat-musicdatasets-music-categories');
-				if (!$('#musicCategoriesForm').valid()) 
+				if (!$('#musicCategoriesForm').valid())
 					return false;
 				var music = modal.data('music');
 				// console.log("TCL: music", music);
@@ -495,7 +496,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							params.page = params.page || 1;
@@ -534,7 +535,7 @@
 			$('#timaat-musicdatasets-modal-tag-submit').on('click', async function(event) {
 				event.preventDefault();
 				var modal = $('#timaat-musicdatasets-music-tags');
-				if (!$('#musicTagsForm').valid()) 
+				if (!$('#musicTagsForm').valid())
 					return false;
 				var music = modal.data('music');
 				var formDataRaw = $('#musicTagsForm').serializeArray();
@@ -565,17 +566,20 @@
 			});
 
 			// annotate button handler
-			$('.datasheet-form-annotate-button').on('click', async function(event) {
+			$('.music-datasheet-form-annotate-button').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				var music = $('#music-metadata-form').data('music');
-				TIMAAT.UI.showComponent('videoplayer');
-				// setup video in player
-				TIMAAT.VideoPlayer.setupMusic(music.model);
-				// load video annotations from server
-				TIMAAT.AnalysisListService.getAnalysisLists(music.model.id, TIMAAT.VideoPlayer.setupMusicAnalysisLists);
+				if (music.model.primarySourceMedium && music.model.primarySourceMedium.fileStatus && music.model.primarySourceMedium.fileStatus != 'noFile') {
+					console.log("TCL: $ -> music", music);
+					TIMAAT.UI.showComponent('videoplayer');
+					// setup video in player
+					TIMAAT.VideoPlayer.setupMedium(music.model.primarySourceMedium);
+					// load video annotations from server
+					TIMAAT.AnalysisListService.getAnalysisLists(music.model.primarySourceMedium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+				}
 			});
-			
+
 			// data table events
 			$('#timaat-musicdatasets-music-table').on( 'page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
@@ -642,14 +646,14 @@
 				var title = '';
 				var languageId = null;
 				var languageName = '';
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					title = $(this).val();
 				}));
 				if (listEntry.find('select').each(function(){
 					languageId = $(this).val();
 					languageName =$(this).text();
 				}));
-				if (!$('#music-titles-form').valid()) 
+				if (!$('#music-titles-form').valid())
 					return false;
 				if (title != '' && languageId != null) {
 					var titlesInForm = $('#music-titles-form').serializeArray();
@@ -722,7 +726,7 @@
 								return {
 									search: params.term,
 									page: params.page
-								};          
+								};
 							},
 							processResults: function(data, params) {
 								// console.log("TCL: processResults: data", data);
@@ -758,7 +762,7 @@
 				event.preventDefault();
 				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
 				if (isDisplayTitle == "on") {
-					// TODO modal informing that display title entry cannot be deleted					
+					// TODO modal informing that display title entry cannot be deleted
 					console.info("CANNOT DELETE DISPLAY TITLE");
 				}
 				else {
@@ -777,7 +781,7 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				};
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#music-titles-form').valid()) {
 					$('[data-role="music-new-title-fields"]').append(TIMAAT.MusicDatasets.titleFormTitleToAppend());
 					this.getTitleFormLanguageDropdownData();
@@ -786,8 +790,8 @@
 				// console.log("TCL: Titles form: valid");
 
 				// the original music model (in case of editing an existing music)
-				var music = $('#music-titles-form').data("music");	
-				var type = music.model.musicType.musicTypeTranslations[0].type;		
+				var music = $('#music-titles-form').data("music");
+				var type = music.model.musicType.musicTypeTranslations[0].type;
         // console.log("TCL: type", type);
 
 				// Create/Edit music window submitted data
@@ -832,7 +836,7 @@
 					};
 					formTitleList[formTitleList.length] = element;
 				}
-				// console.log("formTitleList", formTitleList);				
+				// console.log("formTitleList", formTitleList);
 				// only updates to existing titles
 				if (formTitleList.length == music.model.titles.length) {
 					var i = 0;
@@ -974,12 +978,12 @@
 					for (; i >= formTitleList.length; i-- ) { // remove obsolete titles
 						if (music.model.originalTitle != null && music.model.originalTitle.id == music.model.titles[i].id) {
 							music.model.originalTitle = null;
-							// console.log("TCL: remove originalTitle before deleting title");		
+							// console.log("TCL: remove originalTitle before deleting title");
 							await TIMAAT.MusicDatasets.updateMusic(type, music);
 						}
-						// console.log("TCL: (update existing titles and) delete obsolete ones");		
+						// console.log("TCL: (update existing titles and) delete obsolete ones");
 						TIMAAT.MusicService.removeTitle(music.model.titles[i]);
-						music.model.titles.pop();		
+						music.model.titles.pop();
 					}
 				}
 				// console.log("TCL: show music title form");
@@ -1047,14 +1051,14 @@
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="music-new-actorwithrole-fields"]');
 				var newFormEntry = [];
-				if (listEntry.find('select').each(function(){           
+				if (listEntry.find('select').each(function(){
 					newFormEntry.push($(this).val());
 				}));
 				// var newEntryId = newFormEntry[0];
 				// console.log("TCL: newFormEntry", newFormEntry);
 
 				if (!$('#music-actorwithroles-form').valid() || newFormEntry[1].length == 0) //! temp solution to prevent adding actors without roles
-				// if (!$('#music-actorwithroles-form').valid())	
+				// if (!$('#music-actorwithroles-form').valid())
 				return false;
 
 				$('.disable-on-submit').prop('disabled', true);
@@ -1112,7 +1116,7 @@
 						});
 					});
 					$('#musichasactorwithrole-actorid-'+newActorId).prop('disabled', true);
-					
+
 					// provide roles list for new actor entry
 					TIMAAT.MusicDatasets.getMusicHasActorWithRolesDropdownData(newActorId);
 
@@ -1158,11 +1162,11 @@
 				}
 
 				//! temp solution to prevent adding actors without roles
-				//TODO 
+				//TODO
 
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#music-actorwithroles-form').valid()) {
-					$('[data-role="music-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());				
+					$('[data-role="music-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
 					return false;
 				}
 
@@ -1175,7 +1179,7 @@
 				$('[id^="musichasactorwithrole-actorid-"').prop('disabled', true);
 				$('.disable-on-submit').prop('disabled', false);
 				// console.log("TCL: formDataRaw", formDataRaw);
-				
+
 				var formDataObject = {};
         $(formDataRaw).each(function(i, field){
 					formDataObject[field.name] = field.value;
@@ -1310,17 +1314,17 @@
 							j--; // so the next list item is not jumped over due to the splicing
 						}
 					}
-					// no UPDATE as music-actor-role table only has ids and no information stored 
+					// no UPDATE as music-actor-role table only has ids and no information stored
 				}
 				music.model = await TIMAAT.MusicService.getMusic(music.model.id);
 				// music.updateUI();
-				TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');	
+				TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
 			});
 
 			// cancel add/edit button in titles form functionality
 			$('#music-actorwithroles-form-dismiss').on('click', function(event) {
 				let music = $('#music-metadata-form').data('music');
-				TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');	
+				TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
 			});
 
 		},
@@ -1357,7 +1361,7 @@
 				break;
 				case 'churchMusic':
 					this.setChurchMusicList();
-				break;				
+				break;
 			};
 		},
 
@@ -1399,9 +1403,9 @@
 			if ( !music ) return;
 			// setup model
 			var musicTitles = Array();
-			music.model.titles.forEach(function(title) { 
-				if ( title.id > 0 ) 
-					musicTitles.push(title); 
+			music.model.titles.forEach(function(title) {
+				if ( title.id > 0 )
+					musicTitles.push(title);
 			});
 			this.titles = musicTitles;
 		},
@@ -1422,6 +1426,7 @@
 			$('#music-musical-key-select-dropdown').empty().trigger('change');
 			$('#music-nashid-jins-select-dropdown').empty().trigger('change');
 			$('#music-nashid-maqam-select-dropdown').empty().trigger('change');
+			$('#music-primary-source-medium-select-dropdown').empty().trigger('change');
 			$('#music-tempo-marking-select-dropdown').empty().trigger('change');
 			$('#music-text-setting-select-dropdown').empty().trigger('change');
 			$('#voice-leading-pattern-multi-select-dropdown').val(null).trigger('change');
@@ -1445,6 +1450,7 @@
 			this.getMusicFormJinsDropdownData();
 			this.getMusicFormMaqamDropdownData();
 			this.getMusicFormMusicalKeyDropdownData();
+			this.getMusicFormPrimarySourceMediumDropdownData();
 			this.getMusicFormTempoMarkingDropdownData();
 			this.getMusicFormTextSettingDropdownData();
 			this.getMusicFormTitleLanguageDropdownData();
@@ -1472,7 +1478,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -1488,7 +1494,7 @@
     },
 
     musicFormDataSheet: async function(action, type, data) {
-      console.log("TCL: action, type, data", action, type, data);
+      // console.log("TCL: action, type, data", action, type, data);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
 			var node = document.getElementById('music-has-voice-leading-pattern-fields');
       while (node.lastChild) {
@@ -1506,6 +1512,7 @@
 			this.getMusicFormJinsDropdownData();
 			this.getMusicFormMaqamDropdownData();
 			this.getMusicFormMusicalKeyDropdownData();
+			this.getMusicFormPrimarySourceMediumDropdownData();
 			this.getMusicFormTempoMarkingDropdownData();
 			this.getMusicFormTextSettingDropdownData();
 			this.getMusicFormTitleLanguageDropdownData();
@@ -1529,6 +1536,7 @@
 				$('#music-displayTitle-language-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-dynamic-marking-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-musical-key-select-dropdown').select2('destroy').attr("readonly", true);
+				$('#music-primary-source-medium-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-tempo-marking-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-text-setting-select-dropdown').select2('destroy').attr("readonly", true);
 				switch(type) {
@@ -1585,6 +1593,13 @@
 			} else {
 				$('#music-musical-key-select-dropdown').empty().trigger('change');
 			}
+			if (data.model.primarySourceMedium) {
+				var primarySourceMediumSelect = $('#music-primary-source-medium-select-dropdown');
+				var option = new Option(data.model.primarySourceMedium.displayTitle.name, data.model.primarySourceMedium.id, true, true);
+				primarySourceMediumSelect.append(option).trigger('change');
+			} else {
+				$('#music-primary-source-medium-select-dropdown').empty().trigger('change');
+			}
 			if (data.model.tempoMarking) {
 				var tempoMarkingSelect = $('#music-tempo-marking-select-dropdown');
 				var option = new Option(data.model.tempoMarking.tempoMarkingTranslations[0].type, data.model.tempoMarking.id, true, true);
@@ -1621,7 +1636,7 @@
       });
 			// display-title data
 			$('#timaat-musicdatasets-metadata-music-title').val(data.model.displayTitle.name);
-				
+
 			// music subtype specific data
 			switch (type) {
 				case 'nashid':
@@ -1661,70 +1676,55 @@
 			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
 			$('#music-preview-form').trigger('reset');
 			// musicFormMetadataValidator.resetForm();
-			
+
 			// handling if type is 'music' and user is in all music view
-			type = data.model.musicType.musicTypeTranslations[0].type;
+			if (type == 'music') type = data.model.musicType.musicTypeTranslations[0].type;
+			let mediumType = null;
+			let medium = data.model.primarySourceMedium;
+			if (medium) mediumType = medium.mediaType.mediaTypeTranslations[0].type;
 
 			$('#music-preview-form :input').prop('disabled', true);
-			if ( data.model.fileStatus == 'noFile' || !data.model.fileStatus) {
-				// if (data.model.musicVideo || data.model.musicImage || data.model.musicAudio ) {
-				// 	$('.datasheet-form-upload-button').prop('disabled', false);
-				// 	$('.datasheet-form-upload-button').show();
-				// }
-				// $('.datasheet-form-annotate-button').hide();
-				// $('.datasheet-form-annotate-button').prop('disabled', true);
-				$('.video-preview').hide();
-				$('.image-preview').show();
-				switch (type) {
+			if (medium && medium.fileStatus && medium.fileStatus != 'noFile' && (mediumType == 'video' || mediumType == 'image' ||mediumType == 'audio')) {
+				$('.music-datasheet-form-annotate-button').prop('disabled', false);
+				$('#musicAudioPreview').hide();
+				$('#musicImagePreview').hide();
+				$('#musicVideoPreview').hide();
+				switch (mediumType) {
+					case 'audio': // TODO check audio-preview functionality
+						$('#musicAudioPreview').attr('src', '/TIMAAT/api/medium/audio/'+medium.id+'/download'+'?token='+medium.viewToken);
+						$('#musicAudioPreview').show();
+					break;
 					case 'image':
-						$('#musicPreview').attr('src' , 'img/image-placeholder.png');
+						$('#musicImagePreview').attr('src', '/TIMAAT/api/medium/image/'+medium.id+'/preview'+'?token='+medium.viewToken);
+						$('#musicImagePreview').attr('title', medium.displayTitle.name);
+						$('#musicImagePreview').attr('alt', medium.displayTitle.name);
+						$('#musicImagePreview').show();
+					break;
+					case 'video':
+						if ( medium.fileStatus && (medium.fileStatus == 'ready' || medium.fileStatus == 'transcoding' || medium.fileStatus == 'waiting') ) {
+							$('#musicVideoPreview').attr('src', '/TIMAAT/api/medium/video/'+medium.id+'/download'+'?token='+medium.viewToken);
+							$('#musicVideoPreview').show();
+						} else {
+							$('#musicImagePreview').attr('src', 'img/preview-placeholder.png');
+							$('#musicImagePreview').attr('title', 'placeholder');
+							$('#musicImagePreview').attr('alt', 'placeholder');
+							$('#musicImagePreview').show();
+						}
 					break;
 					default:
-						$('#musicPreview').attr('src' , 'img/preview-placeholder.png');
+						$('#musicImagePreview').attr('src', 'img/image-placeholder.png');
+						$('#musicVideoPreview').attr('src', '');
+						$('#musicAudioPreview').attr('src', '');
 					break;
 				}
 			} else {
-				// $('.datasheet-form-upload-button').hide();
-				// $('.datasheet-form-upload-button').prop('disabled', true);
-				// if (type == 'video' || type == 'image' || type == 'audio') {
-				// 	$('.datasheet-form-annotate-button').prop('disabled', false);
-				// 	$('.datasheet-form-annotate-button').show();
-				// } else {
-				// 	$('.datasheet-form-annotate-button').hide();
-				// 	$('.datasheet-form-annotate-button').prop('disabled', true);
-				// }
-				switch (type) {
-					case 'audio': // TODO check audio-preview functionality
-						$('.video-preview').hide();
-						$('.image-preview').hide();
-						$('#musicAudioPreview').attr('src', '/TIMAAT/api/music/audio/'+data.model.id+'/download'+'?token='+data.model.viewToken);
-						$('.audio-preview').show();
-					break;
-					case 'image':
-						$('.audio-preview').hide();
-						$('.video-preview').hide();
-						$('#musicPreview').attr('src', '/TIMAAT/api/music/image/'+data.model.id+'/preview'+'?token='+data.model.viewToken);
-						$('#musicPreview').attr('title', data.model.displayTitle.name);
-						$('#musicPreview').attr('alt', data.model.displayTitle.name);
-						$('.image-preview').show();
-					break;
-					case 'video':
-						if ( data.model.fileStatus && data.model.fileStatus != 'ready' && data.model.fileStatus != 'transcoding' && data.model.fileStatus != 'waiting' ) {
-							$('.video-preview').hide();
-							$('#musicPreview').attr('src', 'img/preview-placeholder.png');
-							$('#musicPreview').attr('title', 'placeholder');
-							$('#musicPreview').attr('alt', 'placeholder');
-							$('.image-preview').show();
-						} else {
-							$('.audio-preview').hide();
-							$('.image-preview').hide();
-							$('#musicVideoPreview').attr('src', '/TIMAAT/api/music/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
-							$('.video-preview').show();
-						}
-					default:
-						$('#musicPreview').attr('src', 'img/preview-placeholder.png');
-					break;
-				}
+				$('.music-datasheet-form-annotate-button').prop('disabled', true);
+				$('#musicAudioPreview').attr('src', '');
+				$('#musicImagePreview').attr('src', 'img/image-placeholder.png');
+				$('#musicVideoPreview').attr('src', '');
+				$('#musicAudioPreview').hide();
+				$('#musicImagePreview').show();
+				$('#musicVideoPreview').hide();
 			}
 			$('.musicdatasheet-form-delete-button').prop('disabled', false);
 			$('.musicdatasheet-form-delete-button :input').prop('disabled', false);
@@ -1746,7 +1746,7 @@
 			$('#music-titles-form').trigger('reset');
 			musicFormTitlesValidator.resetForm();
 			// $('#musicVideoPreview').get(0).pause(); // TODO check if needed
-			
+
 			// setup UI
 			// display-title data
 			var i = 0;
@@ -1770,7 +1770,7 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" 
+									<input class="form-check-input isOriginalTitle"
 												 type="radio"
 												 name="isOriginalTitle"
 												 data-role="originalTitle[`+music.model.titles[i].id+`]"
@@ -1791,16 +1791,16 @@
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-musicdatasets-music-titles-title-language-id" 
+								<select class="form-control form-control-sm timaat-musicdatasets-music-titles-title-language-id"
 												id="music-title-language-select-dropdown_`+music.model.titles[i].id+`"
-												name="titleLanguageId[`+i+`]" 
-												data-role="titleLanguageId[`+music.model.titles[i].id+`]" 
+												name="titleLanguageId[`+i+`]"
+												data-role="titleLanguageId[`+music.model.titles[i].id+`]"
 												data-placeholder="Select title language"
 												required>
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="btn btn-danger" 
+								<button class="btn btn-danger"
 												data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
@@ -1827,7 +1827,7 @@
 								return {
 									search: params.term,
 									page: params.page
-								};          
+								};
 							},
 							processResults: function(data, params) {
 								// console.log("TCL: processResults: data", data);
@@ -1845,10 +1845,10 @@
 					languageSelect.append(option).trigger('change');
 
 					if (music.model.titles[i].id == music.model.displayTitle.id) {
-						$('[data-role="displayTitle['+music.model.titles[i].id+']"]').prop('checked', true);							
+						$('[data-role="displayTitle['+music.model.titles[i].id+']"]').prop('checked', true);
 					}
 					if (music.model.originalTitle && music.model.titles[i].id == music.model.originalTitle.id) {
-						$('[data-role="originalTitle['+music.model.titles[i].id+']"]').prop('checked', true);							
+						$('[data-role="originalTitle['+music.model.titles[i].id+']"]').prop('checked', true);
 					}
 					$('input[name="title['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="title['+music.model.titles[i].id+']"]').attr("value", TIMAAT.MusicDatasets.replaceSpecialCharacters(music.model.titles[i].name));
@@ -1877,7 +1877,7 @@
 				$('#music-titles-form-dismiss').show();
 				$('#musicTitlesLabel').html("Edit music titles");
 				$('[data-role="music-new-title-fields"').show();
-				$('.title-form-divider').show();				
+				$('.title-form-divider').show();
 				$('#timaat-musicdatasets-metadata-music-title').focus();
 
 				// fields for new title entry
@@ -1902,7 +1902,7 @@
 			$('#music-actorwithroles-form').trigger('reset');
 			// musicFormActorRolesValidator.resetForm();
 			// $('#musicVideoPreview').get(0).pause(); // TODO check if needed
-			
+
 			// setup UI
 			// actor roles data
 			var actorIdList = [];
@@ -1985,7 +1985,7 @@
 				$('#music-actorwithroles-form-dismiss').show();
 				$('#musicActorRolesLabel').html("Edit music actor roles");
 				$('[data-role="music-new-actorwithrole-fields"]').show();
-				$('.actorwithrole-form-divider').show();				
+				$('.actorwithrole-form-divider').show();
 				// $('#timaat-musicdatasets-metadata-music-actorwithrole').focus();
 
 				// fields for new title entry
@@ -2011,7 +2011,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							// console.log("TCL: processResults: data", data);
@@ -2051,7 +2051,7 @@
 									return {
 										search: params.term,
 										page: params.page
-									};          
+									};
 								},
 								processResults: function(data, params) {
 									// console.log("TCL: processResults: data", data);
@@ -2066,7 +2066,7 @@
 						});
 					}
 				});
-				
+
 				$('#music-actorwithroles-form').data('music', music);
 			}
 		},
@@ -2080,7 +2080,7 @@
 				console.error("ERROR: ", error);
 			};
 
-			try {				
+			try {
 				// create music
 				var tempMusicModel = musicModel;
 				tempMusicModel.displayTitle = newDisplayTitle;
@@ -2107,7 +2107,7 @@
 			};
 			return newMusicModel;
 		},
-		
+
 		createTitle: async function(titleModel) {
 			// console.log("TCL: createTitle: async function -> titleModel", titleModel);
 			try {
@@ -2158,7 +2158,7 @@
 			} catch(error) {
 				console.error("ERROR: ", error);
 			};
-			
+
 			try { // update subtype
 				let tempSubtypeModel;
 				switch (musicSubtype) {
@@ -2508,6 +2508,14 @@
 					model.musicalKey.id = formDataObject.musicalKeyId;
 				}
 			} else model.musicalKey = null;
+			if (!isNaN(formDataObject.primarySourceMediumId)) {
+				if (model.primarySourceMedium) {
+					model.primarySourceMedium.id = formDataObject.primarySourceMediumId;
+				} else {
+					model.primarySourceMedium = {};
+					model.primarySourceMedium.id = formDataObject.primarySourceMediumId;
+				}
+			} else model.primarySourceMedium = null;
 			if (!isNaN(formDataObject.tempoMarkingId)) {
 				if (model.tempoMarking) {
 					model.tempoMarking.id = formDataObject.tempoMarkingId;
@@ -2591,6 +2599,10 @@
 				model.musicalKey = {};
 				model.musicalKey.id = formDataObject.musicalKeyId;
 			}
+			if (formDataObject.primarySourceMediumId > 0) {
+				model.primarySourceMedium = {};
+				model.primarySourceMedium.id = formDataObject.primarySourceMediumId;
+			}
 			if (formDataObject.tempoMarkingId > 0) {
 				model.tempoMarking = {};
 				model.tempoMarking.id = formDataObject.tempoMarkingId;
@@ -2656,7 +2668,7 @@
 					</div>
 					<div class="col-md-6">
 						<label class="sr-only">Title</label>
-						<input class="form-control form-control-sm timaat-musicdatasets-music-titles-title-name" 
+						<input class="form-control form-control-sm timaat-musicdatasets-music-titles-title-name"
 									 name="title"
 									 data-role="title"
 									 placeholder="[Enter title]"
@@ -2688,7 +2700,7 @@
 
 		appendActorWithRolesDataset: function(i, actorId) {
     	// console.log("TCL: i, actorId", i, actorId);
-			var entryToAppend = 
+			var entryToAppend =
 				`<div class="form-group" data-role="musichasactorwithrole-entry" data-id="`+i+`" data-actor-id=`+actorId+`>
 					<div class="form-row">
 						<div class="col-md-11">
@@ -2697,9 +2709,9 @@
 									<label class="sr-only">Actor</label>
 									<select class="form-control form-control-sm musichasactorwithrole-actorid"
 													id="musichasactorwithrole-actorid-`+actorId+`"
-													name="actorId" 
+													name="actorId"
 													data-placeholder="Select actor"
-													data-role="actorId-`+actorId+`" 
+													data-role="actorId-`+actorId+`"
 													required>
 									</select>
 								</div>
@@ -2738,7 +2750,7 @@
 										<label class="sr-only">Actor</label>
 										<select class="form-control form-control-sm musichasactorwithrole-actorid"
 														id="musichasactorwithrole-actorid"
-														name="actorId" 
+														name="actorId"
 														data-placeholder="Select actor"
 														data-role="actorId"
 														required>
@@ -2799,28 +2811,16 @@
 			$('.musicdatasheet-form-edit-button').prop('disabled', false);
 			$('.musicdatasheet-form-edit-button :input').prop('disabled', false);
 			$('.musicdatasheet-form-edit-button').show();
-			// $('.datasheet-form-upload-button').hide();
-			// $('.datasheet-form-upload-button').prop('disabled', true);
-			// if ( model.fileStatus == 'noFile' || !model.fileStatus) {
-			// 	if (model.musicVideo || model.musicImage || model.musicAudio) {
-			// 		$('.datasheet-form-upload-button').prop('disabled', false);
-			// 		$('.datasheet-form-upload-button').show();
-			// 	}
-			// 	$('.datasheet-form-annotate-button').hide();
-			// 	$('.datasheet-form-annotate-button').prop('disabled', true);
-			// } else {
-			// 	if (model.musicType.musicTypeTranslations[0].type == 'video' || model.musicType.musicTypeTranslations[0].type == 'image' || model.musicType.musicTypeTranslations[0].type == 'audio') {
-			// 		$('.datasheet-form-annotate-button').prop('disabled', false);
-			// 		$('.datasheet-form-annotate-button').show();
-			// 	} else {
-			// 		$('.datasheet-form-annotate-button').hide();
-			// 		$('.datasheet-form-annotate-button').prop('disabled', true);
-			// 	}
-			// }
-			// if (this.container == 'videoplayer') {
-			// 	$('.datasheet-form-annotate-button').hide();
-			// 	$('.datasheet-form-annotate-button').prop('disabled', true);
-			// }
+			if (model.primarySourceMedium &&
+				  model.primarySourceMedium.fileStatus &&
+					model.primarySourceMedium.fileStatus != 'noFile' &&
+					(model.primarySourceMedium.mediaType.mediaTypeTranslations[0].type == 'video' ||
+					 model.primarySourceMedium.mediaType.mediaTypeTranslations[0].type == 'image' ||
+					 model.primarySourceMedium.mediaType.mediaTypeTranslations[0].type == 'audio')) {
+				$('.music-datasheet-form-annotate-button').prop('disabled', false);
+			} else {
+				$('.music-datasheet-form-annotate-button').prop('disabled', true);
+			}
 		},
 
 		initFormDataSheetData: function(type) {
@@ -2862,7 +2862,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -2897,7 +2897,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -2932,7 +2932,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -2967,13 +2967,52 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
 						params.page = params.page || 1;
 						return {
 							results: data
+						};
+					},
+					cache: false
+				},
+				minimumInputLength: 0,
+			});
+		},
+
+		getMusicFormPrimarySourceMediumDropdownData: function() {
+			$('#music-primary-source-medium-select-dropdown').select2({
+				closeOnSelect: true,
+				scrollAfterSelect: true,
+				allowClear: true,
+				ajax: {
+					url: 'api/music/primarySourceMedium/selectList/',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};
+					},
+					processResults: function(data, params) {
+						console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+							// results: data.results,
+							// pagination: {
+							// 	more: (params.page * 10) < data.count_filtered
+							// }
 						};
 					},
 					cache: false
@@ -3002,7 +3041,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3037,7 +3076,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3072,7 +3111,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3107,7 +3146,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3142,7 +3181,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3177,7 +3216,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3212,7 +3251,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -3247,7 +3286,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3282,7 +3321,7 @@
 						return {
 							// search: params.term,
 							// page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3317,7 +3356,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3331,7 +3370,7 @@
 				minimumInputLength: 0,
 			});
 		},
-		
+
     replaceSpecialCharacters: function(unsafe) {
 			return unsafe
 			.replace(/</g, "&lt;")
@@ -3345,7 +3384,7 @@
 				// .replace(/'/g, "&#039;");
 		},
 
-		setupMusicDataTable: function() {			
+		setupMusicDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
 			this.dataTableMusic = $('#timaat-musicdatasets-music-table').DataTable({
@@ -3384,7 +3423,7 @@
           	// console.log("TCL: data", data);
 						// setup model
 						var musicList = Array();
-						data.data.forEach(function(music) { 
+						data.data.forEach(function(music) {
 							if ( music.id > 0 ) {
 								musicList.push(new TIMAAT.Music(music, 'music'));
 							}
@@ -3436,9 +3475,9 @@
 								break;
 							}
 							let noFileIcon = ' ';
-							// if (music.fileStatus == 'noFile') {
-							// 	noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-							// }
+							if (!music.primarySourceMedium || music.primarySourceMedium && (music.primarySourceMedium.fileStatus == 'noFile' || !music.primarySourceMedium.fileStatus)) {
+								noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+							}
 							let commentIcon = ' ';
 							if (music.remark.length > 0) {
 								commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
@@ -3472,11 +3511,11 @@
 						"next"    : ">",
 						"last"    : ">>"
 					},
-				},				
+				},
 			});
 		},
 
-		setupNashidDataTable: function() {			
+		setupNashidDataTable: function() {
 			// console.log("TCL: setupNashidDataTable");
 			// setup dataTable
 			this.dataTableNashid = $('#timaat-musicdatasets-nashid-table').DataTable({
@@ -3516,7 +3555,7 @@
 						// console.log("TCL: TIMAAT.MusicDatasets.nashidList (last)", TIMAAT.MusicDatasets.nashidList);
 						// setup model
 						var nashidList = Array();
-						data.data.forEach(function(music) { 
+						data.data.forEach(function(music) {
 							if ( music.id > 0 ) {
 								nashidList.push(new TIMAAT.Music(music, 'nashid'));
 							}
@@ -3554,19 +3593,19 @@
 					// 	music.fileStatus = TIMAAT.MusicService.updateFileStatus(music, 'nashid');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, music, meta) 
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, music, meta)
 					{
 						// console.log("TCL: musicFormActorRoles:function -> data", data);
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
-						if (music.fileStatus == 'noFile') {
+						if (!music.primarySourceMedium || music.primarySourceMedium && (music.primarySourceMedium.fileStatus == 'noFile' || !music.primarySourceMedium.fileStatus)) {
 							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
 						}
 						let commentIcon = ' ';
 						if (music.remark.length > 0) {
 							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
 						}
-						let titleDisplay = `<p>` + noFileIcon + commentIcon + music.displayTitle.name +`</p>`;		
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + music.displayTitle.name +`</p>`;
 						if (music.originalTitle != null && music.displayTitle.id != music.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+music.originalTitle.name+`)</i></p>`;
 						}
@@ -3577,7 +3616,7 @@
 						});
 						return titleDisplay;
 					}
-				},			
+				},
 				],
 				"language": {
 					"decimal"     : ",",
@@ -3594,11 +3633,11 @@
 						"next"    : ">",
 						"last"    : ">>"
 					},
-				},				
-			});				
+				},
+			});
 		},
 
-		setupChurchMusicDataTable: function() {			
+		setupChurchMusicDataTable: function() {
 			// console.log("TCL: setupChurchMusicDataTable");
 			// setup dataTable
 			this.dataTableChurchMusic = $('#timaat-musicdatasets-church-music-table').DataTable({
@@ -3638,7 +3677,7 @@
 						// console.log("TCL: TIMAAT.MusicDatasets.churchMusicList (last)", TIMAAT.MusicDatasets.churchMusicList);
 						// setup model
 						var churchMusicList = Array();
-						data.data.forEach(function(music) { 
+						data.data.forEach(function(music) {
 							if ( music.id > 0 ) {
 								churchMusicList.push(new TIMAAT.Music(music, 'churchMusic'));
 							}
@@ -3676,19 +3715,19 @@
 					// 	music.fileStatus = TIMAAT.MusicService.updateFileStatus(music, 'churchMusic');
 				},
 				"columns": [
-				{ data: 'id', name: 'title', className: 'title', render: function(data, type, music, meta) 
+				{ data: 'id', name: 'title', className: 'title', render: function(data, type, music, meta)
 					{
 						// console.log("TCL: musicFormActorRoles:function -> data", data);
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
-						// if (music.fileStatus == 'noFile') {
-						// 	noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-						// }
+						if (!music.primarySourceMedium || music.primarySourceMedium && (music.primarySourceMedium.fileStatus == 'noFile' || !music.primarySourceMedium.fileStatus)) {
+							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
+						}
 						let commentIcon = ' ';
 						if (music.remark.length > 0) {
 							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
 						}
-						let titleDisplay = `<p>` + noFileIcon + commentIcon + music.displayTitle.name +`</p>`;		
+						let titleDisplay = `<p>` + noFileIcon + commentIcon + music.displayTitle.name +`</p>`;
 						if (music.originalTitle != null && music.displayTitle.id != music.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+music.originalTitle.name+`)</i></p>`;
 						}
@@ -3699,7 +3738,7 @@
 						});
 						return titleDisplay;
 					}
-				},			
+				},
 				],
 				"language": {
 					"decimal"     : ",",
@@ -3716,8 +3755,8 @@
 						"next"    : ">",
 						"last"    : ">>"
 					},
-				},				
-			});				
+				},
+			});
 		},
 
     setDataTableOnItemSelect: function(type, selectedItem) {
@@ -3727,7 +3766,7 @@
 			$('#timaat-musicdatasets-music-tabs-container').append($('#timaat-musicdatasets-music-tabs'));
 			$('#timaat-music-modals-container').append($('#timaat-music-modals'));
 			// this.container = 'music';
-			$('#musicPreviewTab').removeClass('annotationView');
+			// $('#musicPreviewTab').removeClass('annotationView');
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
 					TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-metadata-form', 'music');
@@ -3769,5 +3808,5 @@
 		},
 
 	}
-	
+
 }, window));
