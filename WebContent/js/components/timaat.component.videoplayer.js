@@ -949,16 +949,11 @@
 			preview.removeClass('show');
 			preview.hide();
 
-			$('#video-seek-bar').change(function(ev) {
-				var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
-				TIMAAT.VideoPlayer.jumpTo(time);
-			});
-
 			$('#video-seek-bar').on('input', function(ev) {
 			  this.style.background="linear-gradient(to right, #ed1e24 0%,#ed1e24 "+this.value+"%,#939393 "+this.value+"%,#939393 100%)";
 			});
 
-			$('#video-seek-bar').on('click', function(ev) {
+			$('#video-seek-bar').on('click change', function(ev) {
 				var time = TIMAAT.VideoPlayer.video.duration * (this.value / 100);
 				TIMAAT.VideoPlayer.jumpTo(time);
 			});

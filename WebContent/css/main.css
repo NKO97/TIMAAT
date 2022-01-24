@@ -19,7 +19,7 @@ body {
 }
 
 hr {
-  border: 0;            
+  border: 0;
   background-color:#dee2e6;
   height: 1px;
 }
@@ -129,7 +129,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 
 #timaat-component-videochooser {
 	max-height: initial !important;
-} 
+}
 
 #timaat-videochooser-table_length, #timaat-videochooser-table_info {
 	padding-left: 1em;
@@ -231,7 +231,7 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 .timaat-item-disabled {
 	cursor: default !important;
 	color: #6c757d !important;
-	
+
 }
 .timaat-item-disabled:hover {
 	background-color: white !important;
@@ -322,9 +322,9 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	overflow-x: hidden;
 }
 
-#timaat-annotation-list li, 
-#timaat-categoryset-list li, 
-#timaat-event-list li, 
+#timaat-annotation-list li,
+#timaat-categoryset-list li,
+#timaat-event-list li,
 #timaat-location-list li,
 #timaat-country-list li,
 #timaat-province-list li,
@@ -346,9 +346,9 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	background-color: #e5e5e5;
 }
 
-.timaat-annotation-list-selected, 
-.timaat-categoryset-list-selected, 
-.timaat-event-list-selected, 
+.timaat-annotation-list-selected,
+.timaat-categoryset-list-selected,
+.timaat-event-list-selected,
 .timaat-location-list-selected,
 .timaat-country-list-selected,
 .timaat-province-list-selected,
@@ -443,7 +443,7 @@ a.dropdown-item {
 	z-index: 100;
 }
 
-#timaat-timeline-segment-pane, 
+#timaat-timeline-segment-pane,
 #timaat-timeline-take-pane,
 #timaat-timeline-action-pane {
 	width: 100%;
@@ -505,7 +505,7 @@ a.dropdown-item {
 	height: 15px;
 	float:left;
 	width: 0px;
-	background-color: #6c757d;	
+	background-color: #6c757d;
 	cursor: pointer;
 }
 .timaat-timeline-segment-name,
@@ -683,7 +683,7 @@ a.dropdown-item {
 	color: #337ab7;
 }
 #side-menu li a:hover {
-	color: #23527c;	
+	color: #23527c;
 }
 
 #timaat-timeline-slider-pane {
@@ -795,7 +795,7 @@ ul.timaat-upload-list li {
 	padding: 5px;
 }
 
-.form .error { 
+.form .error {
 	color:#ff0000
 }
 
@@ -992,7 +992,7 @@ fieldset legend {
 .carousel-control-prev-icon {
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
 }
- 
+
 .carousel-control-next-icon {
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
 }
@@ -1003,7 +1003,7 @@ td.details-control {
 }
 
 tr.shown td.details-control {
-	text-align: center; 
+	text-align: center;
 }
 
 .error {
@@ -1026,7 +1026,7 @@ Tooltip container
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
- 
+
   /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;
