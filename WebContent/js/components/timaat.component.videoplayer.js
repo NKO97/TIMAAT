@@ -923,6 +923,7 @@
 				$('.timaat-button-audio-layer').removeClass('btn-primary').addClass('btn-outline-secondary');
 				$('#timaat-timeline-marker-pane').removeClass('timaat-timeline-audio-layer').addClass('timaat-timeline-visual-layer');
 				$('.timaat-timeline-marker-audio').hide();
+				$('.timeline-section-audio').hide();
 				$('.timaat-timeline-marker-visual').show();
 				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() ){
 					$('#timaat-timeline-keyframe-pane').show();
@@ -940,6 +941,7 @@
 				$('.timaat-timeline-marker-visual').hide();
 				$('#timaat-timeline-keyframe-pane').hide();
 				$('.timaat-timeline-marker-audio').show();
+				$('.timeline-section-audio').show();
 				TIMAAT.VideoPlayer.activeLayer = 'audio';
 				TIMAAT.VideoPlayer.sortListUI();
 			});
