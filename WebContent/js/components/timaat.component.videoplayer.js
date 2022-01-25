@@ -1269,7 +1269,8 @@
 			$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedVideo.model);');
 			$('.timaat-sidebar-tab-videoplayer').attr('title', 'Annotate video');
 			$('#timaat-videoplayer-video-title').html(audio.displayTitle.name);
-			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumAudio.length, true));
+			let timeProgressDisplay = "00:00:00.000 / " + TIMAAT.Util.formatTime(this.model.video.mediumAudio.length, true);
+			$('.timaat-videoduration').html(timeProgressDisplay);
 			var audioUrl = '/TIMAAT/api/medium/audio/'+this.model.video.id+'/download'+'?token='+audio.viewToken;
 			this.audioBounds = L.latLngBounds([[ 450, 0], [ 0, 450]]);
 			TIMAAT.VideoPlayer.viewer.setMaxBounds(this.audioBounds);
@@ -1315,7 +1316,10 @@
 
 			$(this.video).on('timeupdate', function(ev) {
 				if (TIMAAT.VideoPlayer.duration == 0) return;
-				$('.videotime').val(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime * 1000, true));
+				let currentTime = TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime * 1000, true);
+				$('.videotime').val(currentTime);
+				let timeProgressDisplay = currentTime + " / " + TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.model.video.mediumAudio.length, true);
+				$('.timaat-videoduration').html(timeProgressDisplay);
 
 				// update timeline
 				TIMAAT.VideoPlayer.timeline.updateIndicator();
@@ -1491,7 +1495,8 @@
 			$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedVideo.model);');
 			$('.timaat-sidebar-tab-videoplayer').attr('title', 'Annotate video');
 			$('#timaat-videoplayer-video-title').html(video.displayTitle.name);
-			$('.timaat-videoduration').html(TIMAAT.Util.formatTime(this.model.video.mediumVideo.length, true));
+			let timeProgressDisplay = "00:00:00.000 / " + TIMAAT.Util.formatTime(this.model.video.mediumVideo.length, true);
+			$('.timaat-videoduration').html(timeProgressDisplay);
 			var videoUrl = '/TIMAAT/api/medium/video/'+this.model.video.id+'/download'+'?token='+video.viewToken;
 			// this.videoBounds = L.latLngBounds([[ video.mediumVideo.height, 0], [ 0, video.mediumVideo.width]]);
 			this.videoBounds = L.latLngBounds([[ 450, 0], [ 0, 450 / video.mediumVideo.height * video.mediumVideo.width]]);
@@ -1536,7 +1541,10 @@
 
 			$(this.video).on('timeupdate', function(ev) {
 				if (TIMAAT.VideoPlayer.duration == 0) return;
-				$('.videotime').val(TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime * 1000, true));
+				let currentTime = TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime * 1000, true);
+				$('.videotime').val(currentTime);
+				let timeProgressDisplay = currentTime + " / " + TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.model.video.mediumVideo.length, true);
+				$('.timaat-videoduration').html(timeProgressDisplay);
 
 				// update timeline
 				TIMAAT.VideoPlayer.timeline.updateIndicator();

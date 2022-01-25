@@ -1315,40 +1315,49 @@
                   <div id="timaat-timeline-slider-pane" class="mt-2 mb-2">
                     <input type="range" class="timaat-timeline-slider" id="video-seek-bar" min="0" max="100" step="0.4" value="0">
                   </div>
-                  <div class="timaat-videoplayer-video-controls"> <!-- Begin Video Controls -->
+                  <div class="timaat-videoplayer-video-controls row"> <!-- Begin Video Controls -->
                     <!-- Playback Controls -->
-                    <div class="btn-group btn-group-sm mr-1">
-                      <button title="Ein Bild zurück [&larr;]" class="stepBackButton btn btn-secondary">
-                        <i class="fas fa-step-backward"></i>
-                      </button>
-                      <button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary">
-                        <i class="play fas fa-play fa-fw"></i>
-                        <i class="pause fa fa-pause fa-fw"></i>
-                      </button>
-                      <button title="Ein Bild vorwärts [&rarr;]" class="stepForwardButton btn btn-secondary">
-                        <i class="fas fa-step-forward"></i>
-                      </button>
+                    <div class="col-sm-7">
+                      <div class="row">
+                        <div class="btn-group btn-group-sm ml-3 mr-1">
+                          <button title="Ein Bild zurück [&larr;]" class="stepBackButton btn btn-secondary">
+                            <i class="fas fa-step-backward"></i>
+                          </button>
+                          <button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary">
+                            <i class="play fas fa-play fa-fw"></i>
+                            <i class="pause fa fa-pause fa-fw"></i>
+                          </button>
+                          <button title="Ein Bild vorwärts [&rarr;]" class="stepForwardButton btn btn-secondary">
+                            <i class="fas fa-step-forward"></i>
+                          </button>
+                        </div>
+                        <!-- Playback Repeat Control -->
+                        <div class="btn-group btn-group-sm mr-1">
+                          <button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary">
+                            <i class="fas fa-sync"></i> A&rarr;B
+                          </button>
+                        </div>
+                        <!-- Volume Control -->
+                        <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol mr-1">
+                          <span id="timaat-volumeicon">
+                            <i class="volume fas fa-volume-up"></i>
+                            <i class="mute fas fa-volume-mute"></i>
+                          </span>
+                          <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
+                        </a>
+                        <!-- <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
+                        <!-- Playback Speed Control -->
+                        <div class="btn-group btn-group-sm">
+                          <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i>
+                            <span class="video-speed-info">1&times;</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <!-- Playback Repeat Control -->
-                    <div class="btn-group btn-group-sm mr-3">
-                      <button title="Annotationsbereich in Schleife abspielen [R]" class="repeatbutton btn btn-outline-secondary">
-                        <i class="fas fa-sync"></i> A&rarr;B
-                      </button>
-                    </div>
-                    <!-- Volume Control -->
-                    <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol">
-                      <span id="timaat-volumeicon">
-                        <i class="volume fas fa-volume-up"></i>
-                        <i class="mute fas fa-volume-mute"></i>
-                      </span>
-                      <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
-                    </a>
-  <!--                   <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
-                    <!-- Playback Speed Control -->
-                    <div class="btn-group btn-group-sm float-right">
-                      <button title="Abspielgeschwindigkeit [S]" id="timaat-videoplayer-video-speed" class="btn btn-outline-secondary"><i class="fas fa-tachometer-alt"></i>
-                        <span class="video-speed-info">1&times;</span>
-                      </button>
+                    <!-- playtime display -->
+                    <div class="col-sm-5">
+                      <div class="timaat-videoduration float-right">N/A
+                      </div>
                     </div>
                     <hr style="margin: 2px; padding: 0"/>
                   </div> <!-- End Video Controls -->
@@ -1385,7 +1394,6 @@
                         <i class="fas fa-headphones"></i> Audio
                       </button>
                 		</div>
- 						        <div class="timaat-videoduration">N/A</div>
                 	</div>
                 	<div id="timeline" class="pb-2">
                     <div id="timaat-timeline-zoomable">
@@ -1396,7 +1404,7 @@
                             <div class="input-group input-group-sm">
                               <div class="input-group-prepend">
                                 <button class="btn btn-sm btn-dark small" disabled><i class="fas fa-clock fa-fw"></i></button>
-                            </div>
+                              </div>
                               <input type="text" value="00:00:00.000" style="color:black; font-family: 'Courier', monospace;" class="form-control form-control-sm pl-1 pr-1 text-right videotime" disabled>
                             </div>
                           </div>

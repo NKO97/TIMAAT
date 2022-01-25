@@ -21,7 +21,7 @@
 
 	TIMAAT.Util = {
 		serverprefix: "",
-		
+
 		formatTime: function(timeInMilliseconds, withFraction = false) {
 			let timeInSeconds = timeInMilliseconds / 1000;
 			var hours         = Math.floor(timeInSeconds / 3600);
@@ -29,7 +29,7 @@
 			var seconds       = timeInSeconds - ((hours * 3600) + (minutes * 60));
 			var fraction      = seconds - Math.floor(seconds);
 			seconds       		= Math.floor(seconds);
-			
+
 			var time = "";
 			if ( hours < 10) time += "0";
 			time += hours + ":";
@@ -41,7 +41,7 @@
 
 			return time;
 		},
-		
+
 		formatDate: function (timestamp) {
 			var a      = new Date(timestamp);
 			// var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
@@ -54,7 +54,7 @@
 			var time   = date + '.' + month + '.' + year + ', ' + hour + ':' + min + ':' + sec ;
 			return time;
 		},
-		
+
 		formatLogType: function(type) {
     	// console.log("TCL: formatLogType: function(type)");
 			// var display = '['+type+']';
@@ -84,10 +84,10 @@
 				type = 'Annotation gelöscht';
 				break;
 			}
-			
+
 			return type;
 		},
-		
+
 		parseTime: function(timecode) {
     	// console.log("TCL: parseTime timecode ", timecode);
 			if (!timecode || timecode == "") {
@@ -98,11 +98,11 @@
 			let milliseconds = Math.floor(seconds * 1000);
 			return milliseconds;
 		},
-		
+
 		resolveUserID: function(idElement, myself) {
 			// console.log("TCL: resolveUserID: idElement, myself ", idElement, myself);
 			if ( !myself ) myself = "mir";
-			
+
 			var id = $(idElement).data('userId');
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);
 			else if ( TIMAAT.Service.idCache.has(id) ) $(idElement).text(TIMAAT.Service.idCache.get(id));
@@ -113,7 +113,7 @@
 				});
 			}
 		},
-		
+
 		getInterpolatedShape: function (shapeFrom, shapeTo, percent) {
 			if ( !shapeFrom || !shapeTo || percent == null ) return null;
 			percent = percent < 0 ? 0 : percent;
@@ -124,7 +124,7 @@
 			if ( percent == 1 ) return shapeTo;
 			let interShape = { id: shapeFrom.id, type: shapeFrom.type };
 			switch (shapeFrom.type) {
-				case 'rectangle': 
+				case 'rectangle':
 					interShape.bounds = [ this._lerpValue(shapeFrom.bounds[0], shapeTo.bounds[0], percent), this._lerpValue(shapeFrom.bounds[1], shapeTo.bounds[1], percent) ];
 					// interShape.bounds = L.latLngBounds( this._lerpValue(shapeFrom.bounds.getSouthWest(), shapeTo.bounds.getSouthWest(), percent), this._lerpValue(shapeFrom.bounds.getNorthEast(), shapeTo.bounds.getNorthEast(), percent) );
 					break;
@@ -134,7 +134,7 @@
 					for (let index=0; index < shapeFrom.points.length; index++)
 						interShape.points.push(this._lerpValue(shapeFrom.points[index], shapeTo.points[index], percent));
 					break;
-				
+
 				case "circle":
 					interShape.point = this._lerpValue(shapeFrom.point, shapeTo.point, percent);
 					interShape.radius = this._lerpValue(shapeFrom.radius, shapeTo.radius, percent);
@@ -142,7 +142,7 @@
 			}
 			return interShape;
 		},
-		
+
 		_lerpValue: function (from, to, percent) {
 			if ( !from || !to || percent == null ) return null;
 			if ( Array.isArray(from) )
@@ -150,7 +150,7 @@
 			else
 				return from + (to - from) * percent;
 		},
-		
+
 		getDefaultTranslation: function(item, list, prop) {
     	// console.log("TCL: item, list, prop", item, list, prop);
 			var value = null;
@@ -160,14 +160,14 @@
 			});
 			return value;
 		},
-		
+
 		setDefaultTranslation: function(item, list, prop, value) {
 			item[list].forEach(function(translation) {
 				if ( translation && translation.language && translation.language.code == 'default' )
 					translation[prop] = value;
 			});
 		},
-		
+
 		createUUIDv4() {
 		    let dt = new Date().getTime();
 		    let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -189,7 +189,7 @@
 			let weeks   = Math.floor(days / 7);
 			let months  = Math.floor(days / 30);
 			let years   = Math.floor(days / 365);
-			
+
 			if ( years > 0 ) fuzzyDate = (years == 1) ? 'vor einem Jahr' : 'vor '+years+' Jahren';
 			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'vor einem Monat' : 'vor '+months+' Monaten';
 			else if ( weeks > 0 ) fuzzyDate = (weeks == 1) ? 'letzte Woche' : 'vor '+weeks+' Wochen';
@@ -198,10 +198,10 @@
 			else if ( minutes > 0 ) fuzzyDate = (minutes == 1) ? 'vor einer Minute' : 'vor '+minutes+' Minuten';
 			else if ( seconds > 4 ) fuzzyDate = 'vor '+seconds+' Sekunden';
 			else fuzzyDate = 'jetzt';
-			
+
 			return fuzzyDate;
 		},
-		
+
 		getArgonHash: function(password, salt) {
 			// console.log("TCL: getArgonHash: function(password, salt)");
 			var hash = Module.allocate(new Array(32), 'i8', Module.ALLOC_NORMAL);
@@ -215,16 +215,16 @@
 
 			var hashArr = [];
 			for (var i = hash; i < hash + 32; i++) { hashArr.push(Module.HEAP8[i]); }
-	
+
 			var argonHash = hashArr.map(function(b) { return ('0' + (0xFF & b).toString(16)).slice(-2); }).join('');
-	
+
 			Module._free(passwordArr);
 			Module._free(saltArr);
 			Module._free(hash);
 			Module._free(encoded);
-	
+
 			return argonHash;
 		},
 	}
-	
+
 }, window));
