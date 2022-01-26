@@ -55,7 +55,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 @Path("/authenticate")
 public class EndpointAuthentication {
-	
+
 	@Context
 	private UriInfo uriInfo;
 
@@ -65,7 +65,7 @@ public class EndpointAuthentication {
 
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
-		
+
 		try {
 
 			// Authenticate the user using the credentials provided
@@ -92,16 +92,16 @@ public class EndpointAuthentication {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 	}
-	
+
 	@GET
   @Produces(MediaType.APPLICATION_JSON)
 	public Response getAuthenticationInfo() {
-		
+
 		return Response.ok("{"
 			+ "\"method\":\"argon2id\","
 			+ "\"params\": {"
 			+ ""
-			+ "}"				
+			+ "}"
 			+ "}").build();
 	}
 
@@ -123,7 +123,7 @@ public class EndpointAuthentication {
 		// admin account is always authorized
 		if (userId == 1) {
 			return Response.ok().entity(4).build();
-		}		
+		}
 		// check for permission level
 		int permissionType = EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId);
 		if ( permissionType < 1) {
@@ -151,7 +151,7 @@ public class EndpointAuthentication {
 		// admin account is always authorized
 		if (userId == 1) {
 			return Response.ok().entity(4).build();
-		}		
+		}
 		// check for permission level
 		int permissionType = EndpointUserAccount.getPermissionLevelForMediumCollection(userId, mediaCollectionId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -278,9 +278,9 @@ public class EndpointAuthentication {
 		return Response.ok().build();
 	}
 
-	
+
 	// ----------------------------------------------------------------------------
-	
+
 
 	private UserAccount authenticate(String username, String password) throws Exception {
 		// Authenticate against the FIP-OP database
@@ -303,7 +303,7 @@ public class EndpointAuthentication {
 			user.getUserPassword().getSalt().getBytes());
 
 		hash = hash.substring(hash.lastIndexOf("$")+1); // remove hash algorithm metadata
-		
+
 		String hexHash = toHex(Base64.getDecoder().decode(hash));
 		while (hexHash.length() < 64) hexHash = "0" + hexHash;
 
@@ -316,7 +316,7 @@ public class EndpointAuthentication {
 			throw new CredentialException();
 
 		return user;
-	
+
 	}
 
 	private String issueToken(String username, int userID) {
@@ -332,15 +332,15 @@ public class EndpointAuthentication {
 		.compact();
 	return token;
 	}
-	
+
 	public static Date toDate(LocalDateTime localDateTime) {
 		return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	}
-	
+
 	private static String toHex(byte[] arg) {
 		return String.format("%x", new BigInteger(1, arg));
 	}
-	
+
 	// private static byte[] hexStringToByteArray(String s) {
 	// 	int len = s.length();
 	// 	byte[] data = new byte[len / 2];
@@ -357,5 +357,5 @@ public class EndpointAuthentication {
 			r.add(clazz.cast(o));
 		return r;
     }
-	
+
 }
