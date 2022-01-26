@@ -731,11 +731,10 @@
 				ev.vertex.setLatLng(latLng);
 
 				if ( TIMAAT.VideoPlayer.curTool == 'circle' || (ev.vertex.editor.feature.getRadius != null) ) {
-					if ( ev.vertex.editor.feature.getLatLng() == ev.vertex.latLng ) return;
-					var radius = TIMAAT.VideoPlayer.viewer.distance(ev.vertex.editor.feature.getLatLng(),ev.vertex.latLng);
+					if ( ev.vertex.editor.feature.getLatLng() == ev.vertex.latlng ) return;
+					var radius = TIMAAT.VideoPlayer.viewer.distance(ev.vertex.editor.feature.getLatLng(), ev.vertex.latlng);
 					radius = Math.max(5,radius);
 					ev.vertex.editor.feature.setRadius( radius );
-					// console.log(ev.vertex, ev.vertex.editor.feature, ev.vertex.editor.feature.getRadius());
 				}
 
 
