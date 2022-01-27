@@ -20,7 +20,7 @@
 }(function (TIMAAT) {
 
 	TIMAAT.AnalysisListService = {
-		
+
 		getAnalysisLists(mediumId, callback) {
 			// console.log("TCL: getAnalysisLists -> getAnalysisLists(mediumId, callback) ");
 			// console.log("TCL: getAnalysisLists -> mediumId", mediumId);
@@ -39,7 +39,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 			});
-			
+
 		},
 
 		async getMediumAnalysisLists(mediumId) {
@@ -58,10 +58,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getAnalysisList(mediumAnalysisListId) {
@@ -81,10 +81,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getCategorySetList(mediumAnalysisListId) {
@@ -105,10 +105,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getSelectedCategories(typeId, type) {
@@ -129,10 +129,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getTagList(mediumAnalysisListId) {
@@ -153,10 +153,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		createAnalysisList(title, comment, mediumId, callback) {
@@ -168,8 +168,8 @@
 					"mediumAnalysisListTranslations": [{
 						"id": 0,
 						"text": comment,
-						"title": title,						
-					}],	
+						"title": title,
+					}],
 					"medium": {
 						id: mediumId
 					}
@@ -189,7 +189,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		updateAnalysisList(analysisList) {
@@ -255,11 +255,11 @@
 				});
 				}).catch((error) => {
 					console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addUserAccountHasMediumAnalysisListWithPermission(userAccountId, mediumAnalysisListId, permissionId) {
-			console.log("TCL: addUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
+			// console.log("TCL: addUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
@@ -282,7 +282,7 @@
 		},
 
 		async updateUserAccountHasMediumAnalysisListWithPermission(userAccountId, mediumAnalysisListId, permissionId) {
-			console.log("TCL: updateUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
+			// console.log("TCL: updateUserAccountHasMediumAnalysisListWithPermission -> userAccountId, mediumAnalysisListId, permission", userAccountId, mediumAnalysisListId, permissionId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
@@ -305,7 +305,7 @@
 		},
 
 		async removeUserAccountHasMediumAnalysisList(userAccountId, mediumAnalysisListId) {
-      console.log("TCL: removeUserAccountHasMediumAnalysisList -> userAccountId, mediumAnalysisListId", userAccountId, mediumAnalysisListId);
+      // console.log("TCL: removeUserAccountHasMediumAnalysisList -> userAccountId, mediumAnalysisListId", userAccountId, mediumAnalysisListId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+mediumAnalysisListId+"/userAccount/"+userAccountId+"/"+'?authToken='+TIMAAT.Service.session.token,
@@ -320,10 +320,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		removeAnalysisList(analysisList) {
@@ -362,7 +362,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategorySet(mediumAnalysisListId, categorySetId) {
@@ -382,10 +382,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addCategory(typeId, categoryId, type) {
@@ -407,7 +407,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategory(typeId, categoryId, type) {
@@ -427,10 +427,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addTag(mediumAnalysisListId, tagId) {
@@ -452,7 +452,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeTag(mediumAnalysisListId, tagId) {
@@ -471,10 +471,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async createSegmentElement(type, model, parentElementId) {
@@ -497,10 +497,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});		
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async updateSegmentElement(type, model) {
@@ -591,10 +591,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getDisplayNamesAndPermissions(mediumAnalysisListId) {
@@ -614,10 +614,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 	}

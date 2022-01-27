@@ -778,35 +778,7 @@
 			});
 
 			// data table events
-			$('#timaat-mediadatasets-media-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-audio-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-document-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-image-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-software-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-text-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-video-table').on( 'page.dt', function () {
-				$('.dataTables_scrollBody').scrollTop(0);
-			});
-
-			$('#timaat-mediadatasets-videogame-table').on( 'page.dt', function () {
+			$('.mediadataset-table').on('page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
