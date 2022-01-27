@@ -1193,7 +1193,7 @@
 					this.setupImage(medium);
 				break;
 				case 'video':
-					TIMAAT.Util.formatTime(medium.mediumVideo.length, true);
+					duration = TIMAAT.Util.formatTime(medium.mediumVideo.length, true);
 					this.setupVideo(medium);
 				break;
 				default:
@@ -1205,7 +1205,7 @@
 			// attach event handlers for UI elements
 			let curMedium = this.medium;
 
-			$(this.medium).on('timeupdate', function(ev) {
+			$(this.video).on('timeupdate', function(ev) {
 				if (TIMAAT.VideoPlayer.duration == 0) return;
 				let currentTime = TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.video.currentTime * 1000, true);
 				$('.videotime').val(currentTime);
