@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Keyframe = class Keyframe {
 		constructor(keyframe, annotation) {
 			this.parent = annotation;
@@ -26,7 +26,7 @@
 			this._time = this.model.time;
 			this._visible = true;
 			this._selected = false;
-			
+
 			this.shapes = [];
 			this.shapeMap = new Map();
 			for (let svgItem of this.model.shapes) {
@@ -113,14 +113,14 @@
 			this._updateOffsetUI();
 			this.updateTimeUI();
 		}
-		
+
 		addShape(shape) {
 			// check if shape id exists
 			if ( this.shapeMap.has(shape.id) ) return;
 			this.shapes.push(shape);
 			this.shapeMap.set(shape.id, shape);
 		}
-		
+
 		removeShape(shape) {
 			if ( !shape ) return;
 			let id = (shape.id) ? shape.id : shape;
@@ -131,7 +131,7 @@
 			this.shapes.splice(index, 1);
 			this.shapeMap.delete(id);
 		}
-		
+
 		get time() {
 			return this._time;
 		}
@@ -145,11 +145,11 @@
 			// send event
 			$(document).trigger('keyframechanged.annotation.TIMAAT', this.parent);
 		}
-		
+
 		getShape(id) {
 			return this.shapeMap.get(id);
 		}
-		
+
 		discardChanges() {
 			this._time = this.model.time;
 			this.shapes = [];
@@ -164,11 +164,11 @@
 			// send event
 			$(document).trigger('keyframechanged.annotation.TIMAAT', this.parent);
 		}
-		
+
 		saveChanges() {
 			this.model = this._syncToModel(this.shapes);
 		}
-		
+
 		_syncToModel(shapes) {
     	// console.log("TCL: Keyframe -> _syncToModel -> shapes", shapes);
 			let width = 0;
@@ -186,7 +186,7 @@
 					factor = TIMAAT.VideoPlayer.videoBounds.getNorth() / height;
 				break;
 			}
-				
+
 			let model = {
 					time: this._time,
 					shapes: []
@@ -245,10 +245,10 @@
 					model.shapes.push(jsonItem);
 				}
 			}
-			
+
 			return model;
 		}
-		
+
 		_parseModel(svgItem) {
       // console.log("TCL: Keyframe -> _parseModel -> svgItem", svgItem);
 			let shape = {
@@ -298,7 +298,7 @@
 					return shape;
 			}
 		}
-		
+
 		remove() {
 			// remove UI
 			this.ui.timelineView.remove();
@@ -311,14 +311,14 @@
 			let offset = (this.parent.startTime + this.time) / TIMAAT.VideoPlayer.duration * 100.0;
 			this.ui.timelineView.css('margin-left', offset + '%');
 		}
-		
+
 		updateStatus() {
 		}
-		
+
 		updateTimeUI() {
 			this.ui.inspectorView.find('.keyframe-time').val(TIMAAT.Util.formatTime(this.parent.startTime + this._time, true));
 		}
-		
+
 		updateUI() {
 			let visible = this.parent.isSelected() && this.parent.isAnimation();
 			if ( visible != this._visible ) {
@@ -334,7 +334,7 @@
 					this._selected = selected;
 					if ( selected ) this.ui.head.addClass('selected'); else this.ui.head.removeClass('selected');
 				}
-				
+
 				let maxPadding = (this.parent.svg.keyframes.length + 1).toString().length;
 				if (maxPadding < 2) maxPadding = 2;
 				let frameNumber = this.parent.svg.keyframes.indexOf(this) + 1;
@@ -347,7 +347,7 @@
 				this.ui.inspectorView.find('.keyframe-number').text(padNumber);
 			}
 		}
-		
+
 	}
-	
+
 }, window));

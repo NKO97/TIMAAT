@@ -763,10 +763,10 @@
               // console.log("TCL: setupView:function -> pathSegments[1]", pathSegments[1]);
               //* determine analysis list and corresponding medium via hashPath
               let analysisList = await TIMAAT.AnalysisListService.getAnalysisList(pathSegments[1]);
-              let video = await TIMAAT.MediumService.getMedium(analysisList.mediumID);
+              let medium = await TIMAAT.MediumService.getMedium(analysisList.mediumID);
               //* load necessary data to display UI
-              TIMAAT.VideoPlayer.setupMedium(video);
-              let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(video.id);
+              TIMAAT.VideoPlayer.setupMedium(medium);
+              let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.id);
               //* setup UI
               await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
               $('#timaat-analysislist-chooser').val(analysisList.id);

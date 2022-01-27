@@ -92,7 +92,7 @@ public class EndpointAnalysisList {
 	public Response getDisplayNamesAndPermissions(@PathParam("id") Integer mediumAnalysisListId,
 																							  @QueryParam("authToken") String authToken) {
 		// System.out.println("EndpointAnalysisList: getDisplayNames - ID: "+ mediumAnalysisListId);
-		
+
 		// verify auth token
 		int userId = 0;
 		if (AuthenticationFilter.isTokenValid(authToken)) {
@@ -122,7 +122,7 @@ public class EndpointAnalysisList {
 	@Path("{id}/hasTagList")
 	public Response getMediumAnalysisListTagList(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnalysisList: getTagList");
+		// System.out.println("EndpointAnalysisList: getTagList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
@@ -153,7 +153,7 @@ public class EndpointAnalysisList {
 	@Path("{id}/categorySet/list")
 	public Response getCategorySetList(@PathParam("id") Integer id)
 	{
-		System.out.println("EndpointAnalysisList: getCategorySetList - ID: "+ id);
+		// System.out.println("EndpointAnalysisList: getCategorySetList - ID: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, id);
 		List<CategorySet> categorySetList = mediumAnalysisList.getCategorySets();
@@ -188,7 +188,7 @@ public class EndpointAnalysisList {
 																							 @QueryParam("dir") String direction,
 																							 @QueryParam("search") String search)
 	{
-		System.out.println("EndpointAnalysisList: getSegmentCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointAnalysisList: getSegmentCategorySelectList - Id: "+ id);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment segment = entityManager.find(AnalysisSegment.class, id);
@@ -229,7 +229,7 @@ public class EndpointAnalysisList {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -258,7 +258,7 @@ public class EndpointAnalysisList {
 																							 @QueryParam("dir") String direction,
 																							 @QueryParam("search") String search)
 	{
-		System.out.println("EndpointAnalysisList: getSequenceCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointAnalysisList: getSequenceCategorySelectList - Id: "+ id);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, id);
@@ -299,7 +299,7 @@ public class EndpointAnalysisList {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -328,7 +328,7 @@ public class EndpointAnalysisList {
 																							 @QueryParam("dir") String direction,
 																							 @QueryParam("search") String search)
 	{
-		System.out.println("EndpointAnalysisList: getSceneCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointAnalysisList: getSceneCategorySelectList - Id: "+ id);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene scene = entityManager.find(AnalysisScene.class, id);
@@ -369,7 +369,7 @@ public class EndpointAnalysisList {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -381,10 +381,10 @@ public class EndpointAnalysisList {
 	public Response createAnalysisList(@PathParam("mediumId") int mediumId,
 																		 String jsonData) {
 		ObjectMapper mapper = new ObjectMapper();
-		MediumAnalysisList newList = null;    	
+		MediumAnalysisList newList = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
-		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			newList = mapper.readValue(jsonData, MediumAnalysisList.class);
@@ -412,7 +412,7 @@ public class EndpointAnalysisList {
 		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
 		newList.setCreatedAt(creationDate);
 		newList.setLastEditedAt(creationDate);
-		
+
 		// persist analysisList and polygons
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -440,10 +440,10 @@ public class EndpointAnalysisList {
 		entityTransaction.commit();
 		entityManager.refresh(userAccount);
 		entityManager.refresh(newList);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newList.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISLISTCREATED);
-		
+
 		return Response.ok().entity(newList).build();
 	}
 
@@ -472,7 +472,7 @@ public class EndpointAnalysisList {
 																							 @QueryParam("dir") String direction,
 																							 @QueryParam("search") String search)
 	{
-		System.out.println("EndpointAnalysisList: getActionCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointAnalysisList: getActionCategorySelectList - Id: "+ id);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction action = entityManager.find(AnalysisAction.class, id);
@@ -513,7 +513,7 @@ public class EndpointAnalysisList {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -542,7 +542,7 @@ public class EndpointAnalysisList {
 																							 @QueryParam("dir") String direction,
 																							 @QueryParam("search") String search)
 	{
-		System.out.println("EndpointAnalysisList: getTakeCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointAnalysisList: getTakeCategorySelectList - Id: "+ id);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake take = entityManager.find(AnalysisTake.class, id);
@@ -583,7 +583,7 @@ public class EndpointAnalysisList {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -609,7 +609,7 @@ public class EndpointAnalysisList {
 																		 String jsonData,
 																		 @QueryParam("authToken") String authToken) {
 
-		System.out.println("EndpointAnalysisList: updateAnalysisList "+ jsonData);
+		// System.out.println("EndpointAnalysisList: updateAnalysisList "+ jsonData);
 
 		// verify auth token
 		int userId = 0;
@@ -628,7 +628,7 @@ public class EndpointAnalysisList {
 		MediumAnalysisList updatedList = null;
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
     // parse JSON data
 		try {
 			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -638,7 +638,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedList == null ) return Response.notModified().build();
-		    	
+
     // update analysisList
 		if ( updatedList.getMediumAnalysisListTranslations() != null )
 			for ( MediumAnalysisListTranslation trans : updatedList.getMediumAnalysisListTranslations() ) {
@@ -651,7 +651,7 @@ public class EndpointAnalysisList {
 		mediumAnalysisList.setTags(updatedList.getTags());
 		mediumAnalysisList.setGlobalPermission(updatedList.getGlobalPermission());
 		if (updatedList.getUuid() == null) mediumAnalysisList.setUuid(UUID.randomUUID().toString()); // update entries that existed before uuid became a string
-		
+
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			mediumAnalysisList.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -659,7 +659,7 @@ public class EndpointAnalysisList {
 			return Response.serverError().build();
 		}
 		mediumAnalysisList.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(mediumAnalysisList);
@@ -704,11 +704,11 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 4) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
-	
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		// remove all associated annotations
@@ -730,11 +730,11 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/userAccount/{userAccountId}/withPermission/{permissionId}")
 	@Secured
-	public Response addUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId, 
+	public Response addUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId,
 																																		@PathParam("userAccountId") int userAccountId,
 																																		@PathParam("permissionId") int permissionTypeId,
 																																		@QueryParam("authToken") String authToken) {
-		System.out.println("EndpointMediumAnalysisList: addUserAccountHasMediumAnalysisListWithPermission");
+		// System.out.println("EndpointMediumAnalysisList: addUserAccountHasMediumAnalysisListWithPermission");
 
 		// verify auth token
 		int userId = 0;
@@ -749,10 +749,10 @@ public class EndpointAnalysisList {
 		// IF user is not sys admin AND (
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
-		if ((userId != 1) && ((permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+		if ((userId != 1) && ((permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) ||
 													(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
-		} // else user has permission for requested change 
+		} // else user has permission for requested change
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
@@ -783,7 +783,7 @@ public class EndpointAnalysisList {
 			// doesn't matter
 		}
 		if ( uahmal == null ) {
-			System.out.println("EndpointMediumAnalysisList: UserAccountHasMediumAnalysisList - create new entry");
+			// System.out.println("EndpointMediumAnalysisList: UserAccountHasMediumAnalysisList - create new entry");
 			uahmal = new UserAccountHasMediumAnalysisList();
 			uahmal.setMediumAnalysisList(mediumAnalysisList);
 			uahmal.setUserAccount(userAccount);
@@ -802,7 +802,7 @@ public class EndpointAnalysisList {
 				return Response.notModified().build();
 			}
 		}
-		System.out.println("EndpointMediumAnalysisList: addMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
+		// System.out.println("EndpointMediumAnalysisList: addMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
@@ -814,11 +814,11 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/userAccount/{userAccountId}/withPermission/{permissionId}")
 	@Secured
-	public Response updateUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId, 
+	public Response updateUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId,
 																																			 @PathParam("userAccountId") int userAccountId,
 																																			 @PathParam("permissionId") int permissionTypeId,
 																																			 @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointMediumAnalysisList: updateUserAccountHasMediumAnalysisListWithPermission");
+		// System.out.println("EndpointMediumAnalysisList: updateUserAccountHasMediumAnalysisListWithPermission");
 
 		// verify auth token
 		int userId = 0;
@@ -833,10 +833,10 @@ public class EndpointAnalysisList {
 		// IF user is not sys admin AND (
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
-		if ((userId != 1) && ((permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+		if ((userId != 1) && ((permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) ||
 													(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
-		} // else user has permission for requested change 
+		} // else user has permission for requested change
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
@@ -857,11 +857,11 @@ public class EndpointAnalysisList {
 		entityTransaction.commit();
 		entityManager.refresh(uahmal);
 
-		System.out.println("EndpointMediumAnalysisList: updateMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
+		// System.out.println("EndpointMediumAnalysisList: updateMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().entity(uahmal).build();
@@ -871,7 +871,7 @@ public class EndpointAnalysisList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/userAccount/{userAccountId}")
 	@Secured
-	public Response deleteUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId, 
+	public Response deleteUserAccountHasMediumAnalysisListWithPermission(@PathParam("analysisListId") int mediumAnalysisListId,
 																																			 @PathParam("userAccountId") int userAccountId,
 																																			 @QueryParam("authToken") String authToken) {
 		// verify auth token
@@ -899,10 +899,10 @@ public class EndpointAnalysisList {
 		// IF user is not sys admin AND (
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
-		if ((userId != 1) && ((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
+		if ((userId != 1) && ((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) ||
 													(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
-		} // else user has permission for requested change 
+		} // else user has permission for requested change
 
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
@@ -910,7 +910,7 @@ public class EndpointAnalysisList {
 		if ( userAccount == null ) return Response.status(Status.NOT_FOUND).build();
 		UserAccountHasMediumAnalysisList uahmalKey = new UserAccountHasMediumAnalysisList(userAccount, mediumAnalysisList);
 		UserAccountHasMediumAnalysisList uahmal = entityManager.find(UserAccountHasMediumAnalysisList.class, uahmalKey.getId());
-			
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
     entityManager.remove(uahmal);
@@ -920,7 +920,7 @@ public class EndpointAnalysisList {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().build();
@@ -949,10 +949,10 @@ public class EndpointAnalysisList {
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
-		AnalysisSegment analysisSegment = null;    	
+		AnalysisSegment analysisSegment = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
-		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// parse JSON data
 		try {
@@ -962,14 +962,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( analysisSegment == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		analysisSegment.setId(0);
 		mediumAnalysisList.addAnalysisSegment(analysisSegment);
 		analysisSegment.getAnalysisSegmentTranslations().get(0).setId(0);
 		analysisSegment.getAnalysisSegmentTranslations().get(0).setAnalysisSegment(analysisSegment);
 		analysisSegment.getAnalysisSegmentTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		
+
 		// persist analysisSegment and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -980,7 +980,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(mediumAnalysisList);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSegment);
-		entityManager.refresh(mediumAnalysisList);		
+		entityManager.refresh(mediumAnalysisList);
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
@@ -994,7 +994,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(analysisSegment).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1022,7 +1022,7 @@ public class EndpointAnalysisList {
 
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSegment updatedSegment = null;
-    	
+
 		// parse JSON data
 		try {
 			updatedSegment = mapper.readValue(jsonData, AnalysisSegment.class);
@@ -1030,7 +1030,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedSegment == null ) return Response.notModified().build();
-		    	
+
 		// update segment
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getName() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setName(updatedSegment.getAnalysisSegmentTranslations().get(0).getName());
 		if ( updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription() != null ) analysisSegment.getAnalysisSegmentTranslations().get(0).setShortDescription(updatedSegment.getAnalysisSegmentTranslations().get(0).getShortDescription());
@@ -1039,7 +1039,7 @@ public class EndpointAnalysisList {
 		analysisSegment.setStartTime(updatedSegment.getStartTime());
 		analysisSegment.setEndTime(updatedSegment.getEndTime());
 		analysisSegment.setCategories(updatedSegment.getCategories());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisSegment);
@@ -1055,7 +1055,7 @@ public class EndpointAnalysisList {
 																					 "edit-segment",
 																					 analysisSegment.getMediumAnalysisList().getId(),
 																					 analysisSegment);
-		
+
 		return Response.ok().entity(analysisSegment).build();
 	}
 
@@ -1065,7 +1065,7 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response deleteAnalysisSegment(@PathParam("id") int segmentId,
 																				@QueryParam("authToken") String authToken) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
 		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1081,14 +1081,14 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		MediumAnalysisList mediumAnalysisList = analysisSegment.getMediumAnalysisList();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisSegment);
 		entityTransaction.commit();
 		entityManager.refresh(mediumAnalysisList);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEGMENTDELETED);
@@ -1116,8 +1116,8 @@ public class EndpointAnalysisList {
 		AnalysisSequence analysisSequence = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
-		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();	
-		
+		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
+
 		// verify auth token
 		int userId = 0;
 		if (AuthenticationFilter.isTokenValid(authToken)) {
@@ -1138,15 +1138,15 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( analysisSequence == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		analysisSequence.setId(0);
 		analysisSegment.addAnalysisSequence(analysisSequence);
 		analysisSequence.getAnalysisSequenceTranslations().get(0).setId(0);
 		analysisSequence.getAnalysisSequenceTranslations().get(0).setAnalysisSequence(analysisSequence);
 		analysisSequence.getAnalysisSequenceTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		
-		
+
+
 		// persist analysisSequence and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1170,7 +1170,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(analysisSequence).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1179,7 +1179,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisSequence(@PathParam("id") int sequenceId,
 																				 String jsonData,
 																				 @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
+		// System.out.println("EndpointAnalysisList: updateAnalysisSegment "+ jsonData);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
@@ -1199,7 +1199,7 @@ public class EndpointAnalysisList {
 
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSequence updatedSequence = null;
-	
+
 		// parse JSON data
 		try {
 			updatedSequence = mapper.readValue(jsonData, AnalysisSequence.class);
@@ -1207,12 +1207,12 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedSequence == null ) return Response.notModified().build();
-		    	
+
     // update sequence
 		analysisSequence.setStartTime(updatedSequence.getStartTime());
 		analysisSequence.setEndTime(updatedSequence.getEndTime());
 		analysisSequence.setCategories(updatedSequence.getCategories());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisSequence);
@@ -1228,7 +1228,7 @@ public class EndpointAnalysisList {
 																					 "edit-sequence",
 																					 analysisSequence.getAnalysisSegment().getId(),
 																					 analysisSequence);
-		
+
 		return Response.ok().entity(analysisSequence).build();
 	}
 
@@ -1238,7 +1238,7 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response deleteAnalysisSequence(@PathParam("id") int id,
 																				 @QueryParam("authToken") String authToken) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, id);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1254,14 +1254,14 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		AnalysisSegment analysisSegment = analysisSequence.getAnalysisSegment();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisSequence);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSegment);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSEQUENCEDELETED);
@@ -1287,7 +1287,7 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
 
-		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			newTranslation = mapper.readValue(jsonData, AnalysisSequenceTranslation.class);
@@ -1296,14 +1296,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTranslation == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newTranslation.setId(0);
 		newTranslation.setAnalysisSequence(analysisSequence);
 		Language language = entityManager.find(Language.class, newTranslation.getLanguage().getId());
 		newTranslation.setLanguage(language);
 		analysisSequence.addAnalysisSequenceTranslation(newTranslation);
-		
+
 		// persist analysisSequence and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1327,7 +1327,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newTranslation).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1335,13 +1335,13 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response updateAnalysisSequenceTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
-		System.out.println("updateAnalysisSequenceTranslation - jsonData: "+ jsonData);
+		// System.out.println("updateAnalysisSequenceTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSequenceTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequenceTranslation analysisSequenceTranslation = entityManager.find(AnalysisSequenceTranslation.class, translationId);
 
-		if ( analysisSequenceTranslation == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisSequenceTranslation == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedTranslation = mapper.readValue(jsonData, AnalysisSequenceTranslation.class);
@@ -1349,13 +1349,13 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
-		    	
+
     	// update sequence translation
 		if ( updatedTranslation.getName() != null ) analysisSequenceTranslation.setName(updatedTranslation.getName());
 		analysisSequenceTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisSequenceTranslation.setComment(updatedTranslation.getComment());
 		analysisSequenceTranslation.setTranscript(updatedTranslation.getTranscript());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisSequenceTranslation);
@@ -1368,7 +1368,7 @@ public class EndpointAnalysisList {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-sequence", analysisSequenceTranslation.getAnalysisSequence().getId(), analysisSequenceTranslation);
-		
+
 		return Response.ok().entity(analysisSequenceTranslation).build();
 	}
 
@@ -1378,19 +1378,19 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response deleteAnalysisSequenceTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequenceTranslation analysisSequenceTranslation = entityManager.find(AnalysisSequenceTranslation.class, translationId);
 
 		if ( analysisSequenceTranslation == null ) return Response.status(Status.NOT_FOUND).build();
-	
+
 		AnalysisSequence analysisSequence = analysisSequenceTranslation.getAnalysisSequence();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisSequenceTranslation);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSequence);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSEQUENCEDELETED);
 
@@ -1434,14 +1434,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newScene == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newScene.setId(0);
 		analysisSegment.addAnalysisScene(newScene);
 		newScene.getAnalysisSceneTranslations().get(0).setId(0);
 		newScene.getAnalysisSceneTranslations().get(0).setAnalysisScene(newScene);
 		newScene.getAnalysisSceneTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		
+
 		// persist analysisScene and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1465,7 +1465,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newScene).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1474,7 +1474,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisScene(@PathParam("id") int id,
 																			String jsonData,
 																			@QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysisList: updateAnalysisScene "+ jsonData);
+		// System.out.println("EndpointAnalysisList: updateAnalysisScene "+ jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisScene updatedScene = null;
@@ -1502,12 +1502,12 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedScene == null ) return Response.notModified().build();
-		    	
+
     // update scene
 		analysisScene.setStartTime(updatedScene.getStartTime());
 		analysisScene.setEndTime(updatedScene.getEndTime());
 		analysisScene.setCategories(updatedScene.getCategories());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisScene);
@@ -1523,7 +1523,7 @@ public class EndpointAnalysisList {
 																					 "edit-scene",
 																					 analysisScene.getAnalysisSegment().getId(),
 																					 analysisScene);
-		
+
 		return Response.ok().entity(analysisScene).build();
 	}
 
@@ -1533,7 +1533,7 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response deleteAnalysisScene(@PathParam("id") int id,
 																			@QueryParam("authToken") String authToken) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, id);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1549,14 +1549,14 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		AnalysisSegment analysisSegment = analysisScene.getAnalysisSegment();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisScene);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSegment);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISSCENEDELETED);
@@ -1581,7 +1581,7 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
 
-		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			newTranslation = mapper.readValue(jsonData, AnalysisSceneTranslation.class);
@@ -1590,14 +1590,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTranslation == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newTranslation.setId(0);
 		newTranslation.setAnalysisScene(analysisScene);
 		Language language = entityManager.find(Language.class, newTranslation.getLanguage().getId());
 		newTranslation.setLanguage(language);
 		analysisScene.addAnalysisSceneTranslation(newTranslation);
-		
+
 		// persist analysisScene and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1621,7 +1621,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newTranslation).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1629,13 +1629,13 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response updateAnalysisSceneTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
-		System.out.println("updateAnalysisSceneTranslation - jsonData: "+ jsonData);
+		// System.out.println("updateAnalysisSceneTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisSceneTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSceneTranslation analysisSceneTranslation = entityManager.find(AnalysisSceneTranslation.class, translationId);
 
-		if ( analysisSceneTranslation == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisSceneTranslation == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedTranslation = mapper.readValue(jsonData, AnalysisSceneTranslation.class);
@@ -1643,13 +1643,13 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
-		    	
+
     	// update scene translation
 		if ( updatedTranslation.getName() != null ) analysisSceneTranslation.setName(updatedTranslation.getName());
 		analysisSceneTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisSceneTranslation.setComment(updatedTranslation.getComment());
 		analysisSceneTranslation.setTranscript(updatedTranslation.getTranscript());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisSceneTranslation);
@@ -1662,7 +1662,7 @@ public class EndpointAnalysisList {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-scene", analysisSceneTranslation.getAnalysisScene().getId(), analysisSceneTranslation);
-		
+
 		return Response.ok().entity(analysisSceneTranslation).build();
 	}
 
@@ -1671,19 +1671,19 @@ public class EndpointAnalysisList {
 	@Path("scene/translation/{translationId}")
 	@Secured
 	public Response deleteAnalysisSceneTranslation(@PathParam("translationId") int translationId) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSceneTranslation analysisSceneTranslation = entityManager.find(AnalysisSceneTranslation.class, translationId);
 
 		if ( analysisSceneTranslation == null ) return Response.status(Status.NOT_FOUND).build();
-	
+
 		AnalysisScene analysisScene = analysisSceneTranslation.getAnalysisScene();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisSceneTranslation);
 		entityTransaction.commit();
 		entityManager.refresh(analysisScene);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISSCENEDELETED);
 
@@ -1692,7 +1692,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().build();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1705,7 +1705,7 @@ public class EndpointAnalysisList {
 		AnalysisTake newTake = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
-		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// verify auth token
 		int userId = 0;
@@ -1727,15 +1727,15 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTake == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newTake.setId(0);
 		analysisSequence.addAnalysisTake(newTake);
 		newTake.getAnalysisTakeTranslations().get(0).setId(0);
 		newTake.getAnalysisTakeTranslations().get(0).setAnalysisTake(newTake);
 		newTake.getAnalysisTakeTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		
-		
+
+
 		// persist analysisTake and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1759,7 +1759,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newTake).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1768,7 +1768,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisTake(@PathParam("id") int id,
 																		 String jsonData,
 																		@QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysisList: updateAnalysisTake "+ jsonData);
+		// System.out.println("EndpointAnalysisList: updateAnalysisTake "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTake updatedTake = null;
 
@@ -1787,7 +1787,7 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		// parse JSON data
 		try {
 			updatedTake = mapper.readValue(jsonData, AnalysisTake.class);
@@ -1795,12 +1795,12 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedTake == null ) return Response.notModified().build();
-		    	
+
     // update take
 		analysisTake.setStartTime(updatedTake.getStartTime());
 		analysisTake.setEndTime(updatedTake.getEndTime());
 		analysisTake.setCategories(updatedTake.getCategories());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisTake);
@@ -1816,7 +1816,7 @@ public class EndpointAnalysisList {
 																					 "edit-take",
 																					 analysisTake.getAnalysisSequence().getId(),
 																					 analysisTake);
-		
+
 		return Response.ok().entity(analysisTake).build();
 	}
 
@@ -1826,7 +1826,7 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response deleteAnalysisTake(@PathParam("id") int id,
 																		 @QueryParam("authToken") String authToken) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, id);
 		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1842,14 +1842,14 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		AnalysisSequence analysisSequence = analysisTake.getAnalysisSequence();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisTake);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSequence);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISTAKEDELETED);
@@ -1874,7 +1874,7 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, takeId);
 
-		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			newTranslation = mapper.readValue(jsonData, AnalysisTakeTranslation.class);
@@ -1883,14 +1883,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTranslation == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newTranslation.setId(0);
 		newTranslation.setAnalysisTake(analysisTake);
 		Language language = entityManager.find(Language.class, newTranslation.getLanguage().getId());
 		newTranslation.setLanguage(language);
 		analysisTake.addAnalysisTakeTranslation(newTranslation);
-		
+
 		// persist analysisTake and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1914,7 +1914,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newTranslation).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -1922,13 +1922,13 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response updateAnalysisTakeTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
-		System.out.println("updateAnalysisTakeTranslation - jsonData: "+ jsonData);
+		// System.out.println("updateAnalysisTakeTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisTakeTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTakeTranslation analysisTakeTranslation = entityManager.find(AnalysisTakeTranslation.class, translationId);
 
-		if ( analysisTakeTranslation == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisTakeTranslation == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedTranslation = mapper.readValue(jsonData, AnalysisTakeTranslation.class);
@@ -1936,13 +1936,13 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
-		    	
+
     	// update take translation
 		if ( updatedTranslation.getName() != null ) analysisTakeTranslation.setName(updatedTranslation.getName());
 		analysisTakeTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisTakeTranslation.setComment(updatedTranslation.getComment());
 		analysisTakeTranslation.setTranscript(updatedTranslation.getTranscript());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisTakeTranslation);
@@ -1955,7 +1955,7 @@ public class EndpointAnalysisList {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-take", analysisTakeTranslation.getAnalysisTake().getId(), analysisTakeTranslation);
-		
+
 		return Response.ok().entity(analysisTakeTranslation).build();
 	}
 
@@ -1964,19 +1964,19 @@ public class EndpointAnalysisList {
 	@Path("take/translation/{translationId}")
 	@Secured
 	public Response deleteAnalysisTakeTranslation(@PathParam("translationId") int translationId) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTakeTranslation analysisTakeTranslation = entityManager.find(AnalysisTakeTranslation.class, translationId);
 
 		if ( analysisTakeTranslation == null ) return Response.status(Status.NOT_FOUND).build();
-	
+
 		AnalysisTake analysisTake = analysisTakeTranslation.getAnalysisTake();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisTakeTranslation);
 		entityTransaction.commit();
 		entityManager.refresh(analysisTake);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISTAKEDELETED);
 
@@ -1998,7 +1998,7 @@ public class EndpointAnalysisList {
 		AnalysisAction newAction = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
-		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// verify auth token
 		int userId = 0;
@@ -2020,14 +2020,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newAction == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newAction.setId(0);
 		analysisScene.addAnalysisAction(newAction);
 		newAction.getAnalysisActionTranslations().get(0).setId(0);
 		newAction.getAnalysisActionTranslations().get(0).setAnalysisAction(newAction);
 		newAction.getAnalysisActionTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-		
+
 		// persist analysisAction and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -2051,7 +2051,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newAction).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -2060,7 +2060,7 @@ public class EndpointAnalysisList {
 	public Response updateAnalysisAction(@PathParam("id") int id,
 																			 String jsonData,
 																			 @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysisList: updateAnalysisAction "+ jsonData);
+		// System.out.println("EndpointAnalysisList: updateAnalysisAction "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisAction updatedAction = null;
 
@@ -2079,7 +2079,7 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisAction.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		// parse JSON data
 		try {
 			updatedAction = mapper.readValue(jsonData, AnalysisAction.class);
@@ -2087,12 +2087,12 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedAction == null ) return Response.notModified().build();
-		    	
+
     // update action
 		analysisAction.setStartTime(updatedAction.getStartTime());
 		analysisAction.setEndTime(updatedAction.getEndTime());
 		analysisAction.setCategories(updatedAction.getCategories());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisAction);
@@ -2108,7 +2108,7 @@ public class EndpointAnalysisList {
 																					 "edit-action",
 																					 analysisAction.getAnalysisScene().getId(),
 																					 analysisAction);
-		
+
 		return Response.ok().entity(analysisAction).build();
 	}
 
@@ -2118,7 +2118,7 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response deleteAnalysisAction(@PathParam("id") int id,
 																			 @QueryParam("authToken") String authToken) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, id);
 		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2134,14 +2134,14 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisAction.getAnalysisScene().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-	
+
 		AnalysisScene analysisScene = analysisAction.getAnalysisScene();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisAction);
 		entityTransaction.commit();
 		entityManager.refresh(analysisScene);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					 UserLogManager.LogEvents.ANALYSISACTIONDELETED);
@@ -2166,7 +2166,7 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, actionId);
 
-		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			newTranslation = mapper.readValue(jsonData, AnalysisActionTranslation.class);
@@ -2175,14 +2175,14 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( newTranslation == null ) return Response.status(Status.BAD_REQUEST).build();
-		
+
 		// sanitize object data
 		newTranslation.setId(0);
 		newTranslation.setAnalysisAction(analysisAction);
 		Language language = entityManager.find(Language.class, newTranslation.getLanguage().getId());
 		newTranslation.setLanguage(language);
 		analysisAction.addAnalysisActionTranslation(newTranslation);
-		
+
 		// persist analysisAction and list
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -2206,7 +2206,7 @@ public class EndpointAnalysisList {
 
 		return Response.ok().entity(newTranslation).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -2214,13 +2214,13 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response updateAnalysisActionTranslation(@PathParam("translationId") int translationId,
 																										String jsonData) {
-		System.out.println("updateAnalysisActionTranslation - jsonData: "+ jsonData);
+		// System.out.println("updateAnalysisActionTranslation - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AnalysisActionTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisActionTranslation analysisActionTranslation = entityManager.find(AnalysisActionTranslation.class, translationId);
 
-		if ( analysisActionTranslation == null ) return Response.status(Status.NOT_FOUND).build();	
+		if ( analysisActionTranslation == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedTranslation = mapper.readValue(jsonData, AnalysisActionTranslation.class);
@@ -2228,13 +2228,13 @@ public class EndpointAnalysisList {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedTranslation == null ) return Response.notModified().build();
-		    	
+
     	// update action translation
 		if ( updatedTranslation.getName() != null ) analysisActionTranslation.setName(updatedTranslation.getName());
 		analysisActionTranslation.setShortDescription(updatedTranslation.getShortDescription());
 		analysisActionTranslation.setComment(updatedTranslation.getComment());
 		analysisActionTranslation.setTranscript(updatedTranslation.getTranscript());
-				
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(analysisActionTranslation);
@@ -2247,7 +2247,7 @@ public class EndpointAnalysisList {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-action", analysisActionTranslation.getAnalysisAction().getId(), analysisActionTranslation);
-		
+
 		return Response.ok().entity(analysisActionTranslation).build();
 	}
 
@@ -2256,19 +2256,19 @@ public class EndpointAnalysisList {
 	@Path("action/translation/{translationId}")
 	@Secured
 	public Response deleteAnalysisActionTranslation(@PathParam("translationId") int translationId) {
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisActionTranslation analysisActionTranslation = entityManager.find(AnalysisActionTranslation.class, translationId);
 
 		if ( analysisActionTranslation == null ) return Response.status(Status.NOT_FOUND).build();
-	
+
 		AnalysisAction analysisAction = analysisActionTranslation.getAnalysisAction();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(analysisActionTranslation);
 		entityTransaction.commit();
 		entityManager.refresh(analysisAction);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISACTIONDELETED);
 
@@ -2285,7 +2285,7 @@ public class EndpointAnalysisList {
 	public Response addExistingCategorySet(@PathParam("analysisListId") int mediumAnalysisListId,
 																 				 @PathParam("categorySetId") int categorySetId,
 																					@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2303,8 +2303,8 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		mediumAnalysisList.getCategorySets().add(categorySet);
@@ -2315,7 +2315,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(mediumAnalysisList);
- 	
+
 		return Response.ok().entity(categorySet).build();
 	}
 
@@ -2326,7 +2326,7 @@ public class EndpointAnalysisList {
 	public Response addExistingCategoryToSegment(@PathParam("segmentId") int segmentId,
 																 				 		 	 @PathParam("categoryId") int categoryId,
 																							 @QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
 		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2344,8 +2344,8 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSegment.getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisSegment.getCategories().add(category);
@@ -2356,7 +2356,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSegment);
- 	
+
 		return Response.ok().entity(category).build();
 	}
 
@@ -2367,7 +2367,7 @@ public class EndpointAnalysisList {
 	public Response addExistingCategoryToSequence(@PathParam("sequenceId") int sequenceId,
 																 				 		 	  @PathParam("categoryId") int categoryId,
 																								@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2385,8 +2385,8 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisSequence.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisSequence.getCategories().add(category);
@@ -2397,7 +2397,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSequence);
- 	
+
 		return Response.ok().entity(category).build();
 	}
 
@@ -2408,7 +2408,7 @@ public class EndpointAnalysisList {
 	public Response addExistingCategoryToTake(@PathParam("takeId") int takeId,
 																 				 		@PathParam("categoryId") int categoryId,
 																						@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, takeId);
 		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2426,8 +2426,8 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisTake.getAnalysisSequence().getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisTake.getCategories().add(category);
@@ -2438,7 +2438,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisTake);
- 	
+
 		return Response.ok().entity(category).build();
 	}
 
@@ -2449,7 +2449,7 @@ public class EndpointAnalysisList {
 	public Response addExistingCategoryToScene(@PathParam("sceneId") int sceneId,
 																 				 		 @PathParam("categoryId") int categoryId,
 																						 @QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2467,8 +2467,8 @@ public class EndpointAnalysisList {
 		if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, analysisScene.getAnalysisSegment().getMediumAnalysisList().getId()) < 2) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisScene.getCategories().add(category);
@@ -2479,7 +2479,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisScene);
- 	
+
 		return Response.ok().entity(category).build();
 	}
 
@@ -2490,7 +2490,7 @@ public class EndpointAnalysisList {
 	public Response addExistingCategoryToAction(@PathParam("actionId") int actionId,
 																 				 		 	@PathParam("categoryId") int categoryId,
 																							@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, actionId);
 		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2509,8 +2509,8 @@ public class EndpointAnalysisList {
 			return Response.status(Status.FORBIDDEN).build();
 		}
 
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisAction.getCategories().add(category);
@@ -2521,7 +2521,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisAction);
- 	
+
 		return Response.ok().entity(category).build();
 	}
 
@@ -2532,7 +2532,7 @@ public class EndpointAnalysisList {
 	public Response removeCategorySet(@PathParam("analysisListId") int mediumAnalysisListId,
 																		@PathParam("categorySetId") int categorySetId,
 																		@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2664,9 +2664,9 @@ public class EndpointAnalysisList {
 			}
 		}
 
-		
 
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		entityTransaction.begin();
 		mediumAnalysisList.getCategorySets().remove(categorySet);
 		categorySet.getMediumAnalysisLists().remove(mediumAnalysisList);
@@ -2676,7 +2676,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(mediumAnalysisList);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -2687,7 +2687,7 @@ public class EndpointAnalysisList {
 	public Response removeSegmentCategory(@PathParam("segmentId") int segmentId,
 																 				@PathParam("categoryId") int categoryId,
 																				@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSegment analysisSegment = entityManager.find(AnalysisSegment.class, segmentId);
 		if ( analysisSegment == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2707,7 +2707,7 @@ public class EndpointAnalysisList {
 		}
 
 		// attach categorySet to annotation and vice versa
-		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisSegment.getCategories().remove(category);
 		category.getAnalysisSegments().remove(analysisSegment);
@@ -2717,7 +2717,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSegment);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -2728,7 +2728,7 @@ public class EndpointAnalysisList {
 	public Response removeSequenceCategory(@PathParam("sequenceId") int sequenceId,
 																 				 @PathParam("categoryId") int categoryId,
 																				 @QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence analysisSequence = entityManager.find(AnalysisSequence.class, sequenceId);
 		if ( analysisSequence == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2748,7 +2748,7 @@ public class EndpointAnalysisList {
 		}
 
 		// attach categorySet to annotation and vice versa
-		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisSequence.getCategories().remove(category);
 		category.getAnalysisSequences().remove(analysisSequence);
@@ -2758,7 +2758,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisSequence);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -2769,7 +2769,7 @@ public class EndpointAnalysisList {
 	public Response removeTakeCategory(@PathParam("takeId") int takeId,
 																 		 @PathParam("categoryId") int categoryId,
 																		 @QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake analysisTake = entityManager.find(AnalysisTake.class, takeId);
 		if ( analysisTake == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2789,7 +2789,7 @@ public class EndpointAnalysisList {
 		}
 
 		// attach categorySet to annotation and vice versa
-		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisTake.getCategories().remove(category);
 		category.getAnalysisTakes().remove(analysisTake);
@@ -2799,7 +2799,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisTake);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -2810,7 +2810,7 @@ public class EndpointAnalysisList {
 	public Response removeSceneCategory(@PathParam("sceneId") int sceneId,
 																 			@PathParam("categoryId") int categoryId,
 																			@QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene analysisScene = entityManager.find(AnalysisScene.class, sceneId);
 		if ( analysisScene == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2830,7 +2830,7 @@ public class EndpointAnalysisList {
 		}
 
 		// attach categorySet to annotation and vice versa
-		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisScene.getCategories().remove(category);
 		category.getAnalysisScenes().remove(analysisScene);
@@ -2840,10 +2840,10 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisScene);
- 	
+
 		return Response.ok().build();
 	}
-	
+
 	@DELETE
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("action/{actionId}/category/{categoryId}")
@@ -2851,7 +2851,7 @@ public class EndpointAnalysisList {
 	public Response removeActionCategory(@PathParam("actionId") int actionId,
 																 			 @PathParam("categoryId") int categoryId,
 																			 @QueryParam("authToken") String authToken) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction analysisAction = entityManager.find(AnalysisAction.class, actionId);
 		if ( analysisAction == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2871,7 +2871,7 @@ public class EndpointAnalysisList {
 		}
 
 		// attach categorySet to annotation and vice versa
-		EntityTransaction entityTransaction = entityManager.getTransaction();    	
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisAction.getCategories().remove(category);
 		category.getAnalysisActions().remove(analysisAction);
@@ -2881,7 +2881,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(analysisAction);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -2891,14 +2891,14 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response addExistingTag(@PathParam("analysisListId") int analysisListId,
 																 @PathParam("tagId") int tagId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
 		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach tag to annotation and vice versa    	
+
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		analysisList.getTags().add(tag);
@@ -2909,7 +2909,7 @@ public class EndpointAnalysisList {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(analysisList);
- 	
+
 		return Response.ok().entity(tag).build();
 	}
 
@@ -2919,14 +2919,14 @@ public class EndpointAnalysisList {
 	@Secured
 	public Response removeTag(@PathParam("analysisListId") int analysisListId,
 														@PathParam("tagId") int tagId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAnalysisList analysisList = entityManager.find(MediumAnalysisList.class, analysisListId);
 		if ( analysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-		
-			// attach tag to annotation and vice versa    	
+
+			// attach tag to annotation and vice versa
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
 			analysisList.getTags().remove(tag);
@@ -2937,7 +2937,7 @@ public class EndpointAnalysisList {
 			entityManager.persist(tag);
 			entityTransaction.commit();
 			entityManager.refresh(analysisList);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -2954,7 +2954,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		if (userId != 1) { // only Admin may update file lengths
-			return Response.status(Status.FORBIDDEN).build(); 
+			return Response.status(Status.FORBIDDEN).build();
 		}
 
 		System.out.println("user authenticated. Retrieving keyframes.");
@@ -2989,7 +2989,7 @@ public class EndpointAnalysisList {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		if (userId != 1) { // only Admin may update file lengths
-			return Response.status(Status.FORBIDDEN).build(); 
+			return Response.status(Status.FORBIDDEN).build();
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
