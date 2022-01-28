@@ -103,11 +103,11 @@
 			// console.log("TCL: resolveUserID: idElement, myself ", idElement, myself);
 			if ( !myself ) myself = "mir";
 
-			var id = $(idElement).data('userId');
+			var id = $(idElement).data('userid');
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);
 			else if ( TIMAAT.Service.idCache.has(id) ) $(idElement).text(TIMAAT.Service.idCache.get(id));
 			else {
-				TIMAAT.Service.getUserDisplayName(id,function(name) {
+				TIMAAT.Service.getUserDisplayName(id, function(name) {
 					$(idElement).text(name);
 					TIMAAT.Service.idCache.set(id, name);
 				});

@@ -25,7 +25,7 @@
 		token: null,
 		idCache: new Map(),
 		clientSalt: "timaat.kunden.bitgilde.de",
-		
+
 		logout: function() {
 			// console.log("TCL: logout: function()");
 			TIMAAT.Service.state = 2;
@@ -35,7 +35,7 @@
 			// TODO refactor
 			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
 		},
-		
+
 		getAllCategorySets: function(callback) {
     // console.log("TCL: getAllCategorySets: function(callback)");
     // console.log("TCL: callback", callback);
@@ -57,7 +57,6 @@
 		},
 
 		getUserDisplayName: function(id, callback) {
-      // console.log("TCL: getUserDisplayName: function(id, callback)");
 			console.log("TCL: getUserDisplayName: id, callback", id, callback);
 			jQuery.ajax({
 				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/displayName",
@@ -92,10 +91,10 @@
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getUserAccountIdByDisplayName(displayName) {
@@ -114,10 +113,10 @@
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getUserAccountNameByDisplayName(displayName) {
@@ -136,10 +135,10 @@
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		getUserLog: function(id, limit, callback) {
@@ -159,7 +158,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText: ", error.responseText);
-			});		
+			});
 		},
 
 		listVideos(callback) {
@@ -180,7 +179,7 @@
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText: ", error.responseText);
 			});
-			
+
 		},
 
 		addTag(set, tagname, callback) {
@@ -190,7 +189,7 @@
 			// console.log("TCL: addTag -> callback", callback);
 			// console.log("TCL: addTag -> set, tagname, callback", set, tagname, callback);
 			var serviceEndpoint = "annotation";
-			if ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categoryset"; 
+			if ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categoryset";
 			else if ( set.constructor === TIMAAT.Actor ) serviceEndpoint = "actor";
 			else if ( set.constructor === TIMAAT.Location ) serviceEndpoint = "location";
 			else if ( set.constructor === TIMAAT.Country ) serviceEndpoint = "country";
@@ -210,7 +209,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		async createTag(tagName) {
@@ -233,7 +232,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-		});		
+		});
 		},
 
 		removeTag(set, tagname, callback) {
@@ -261,7 +260,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		// addCategory(set, catname, callback) {
@@ -282,7 +281,7 @@
 		// 	.fail(function(error) {
 		// 		console.error("ERROR: ", error);
 		// 		console.error("ERROR responseText:", error.responseText);
-		// 	});			
+		// 	});
 		// },
 
 		removeCategory(set, catname, callback) {
@@ -300,7 +299,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		updateCategorySets(categoryName) {
@@ -333,7 +332,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		updateCategorySet(categoryset) {
@@ -358,7 +357,7 @@
 				categoryset.model.name = data.name;
 				categoryset.model.categories = data.categories;
 				// console.log("TCL: updateCategorySet -> categoryset.updateUI()");
-				categoryset.updateUI();        
+				categoryset.updateUI();
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
@@ -381,7 +380,7 @@
 		// 		console.error("ERROR: ", error);
 		// 		console.error("ERROR responseText:", error.responseText);
 		// 	});
-		// },	
+		// },
 
 		deleteCategory(id) {
 			// console.log("TCL: removeCategory -> id", id);
@@ -398,7 +397,7 @@
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
-		},	
+		},
 
 	}
 
