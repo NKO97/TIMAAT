@@ -113,7 +113,7 @@ public class EndpointMedium {
 	ContainerRequestContext containerRequestContext;
 	@Context
 	ServletContext servletContext;
-	
+
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -187,7 +187,7 @@ public class EndpointMedium {
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
-		
+
 			for (Medium medium : mediumList) {
 				String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
 				switch (type) {
@@ -213,7 +213,7 @@ public class EndpointMedium {
 																			@QueryParam("orderby") String orderby,
 																			@QueryParam("search") String search)	{
 		// System.out.println("EndpointMedium: getMediumSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
-		
+
 		// TODO search all titles, not displayTitle only
 		// define default query strings
 		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.displayTitle.name";
@@ -258,9 +258,9 @@ public class EndpointMedium {
 
 		// String column = "m.id";
 		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema 
+		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema
 		// }
-		
+
 		// TODO search all titles, not displayTitle only
 		// define default query strings
 		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.displayTitle.name";
@@ -310,7 +310,7 @@ public class EndpointMedium {
 
 		// String column = "m.id";
 		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema 
+		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema
 		// }
 
 		// TODO search all titles, not displayTitle only
@@ -352,7 +352,7 @@ public class EndpointMedium {
 		// System.out.println("EndpointMedium: getMediaDatasetsTotal");
 		Query query = TIMAATApp.emf.createEntityManager()
 																.createQuery("SELECT COUNT (m.id) FROM Medium m");
-		long count = (long)query.getSingleResult();														
+		long count = (long)query.getSingleResult();
 		// int total = ((Integer)TIMAATApp.emf.createEntityManager()
 		// 												 .createQuery("SELECT m.id, COUNT(m) FROM Medium m")
 		// 												 .getSingleResult()).intValue();
@@ -364,7 +364,7 @@ public class EndpointMedium {
 	@Secured
 	@Path("mediaType/list")
 	public Response getMediaTypeList() {
-		// System.out.println("EndpointMedium: getMediaTypeList");		
+		// System.out.println("EndpointMedium: getMediaTypeList");
 		List<MediaType> mediaTypeList = castList(MediaType.class,TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList());
 		return Response.ok().entity(mediaTypeList).build();
 	}
@@ -381,7 +381,7 @@ public class EndpointMedium {
 															 @QueryParam("search") String search) {
 		// System.out.println("EndpointMedium: getAudioList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
@@ -395,7 +395,7 @@ public class EndpointMedium {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(ma.medium) FROM MediumAudio ma");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -469,7 +469,7 @@ public class EndpointMedium {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(md.medium) FROM MediumDocument md");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -543,7 +543,7 @@ public class EndpointMedium {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(mi.medium) FROM MediumImage mi");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -617,7 +617,7 @@ public class EndpointMedium {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(ms.medium) FROM MediumSoftware ms");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -660,7 +660,7 @@ public class EndpointMedium {
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			mediumList = castList(Medium.class, query.getResultList());
-		}	
+		}
 
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
@@ -691,7 +691,7 @@ public class EndpointMedium {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(mt.medium) FROM MediumText mt");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -738,7 +738,7 @@ public class EndpointMedium {
 
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
-	
+
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -771,7 +771,7 @@ public class EndpointMedium {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(mv.medium) FROM MediumVideo mv");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -848,7 +848,7 @@ public class EndpointMedium {
 		Query countQuery = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(mv.medium) FROM MediumVideogame mv");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		
+
 		// search
 		Query query;
 		String sql;
@@ -895,7 +895,7 @@ public class EndpointMedium {
 
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
-	
+
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -910,7 +910,7 @@ public class EndpointMedium {
 		// System.out.println("EndpointMedium: getRoleSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, actorId);
 		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
@@ -971,7 +971,7 @@ public class EndpointMedium {
 
 		return Response.ok().entity(roleList).build();
 	}
-	
+
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
@@ -1050,7 +1050,7 @@ public class EndpointMedium {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 			}
 		}
-		
+
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -1074,7 +1074,7 @@ public class EndpointMedium {
 	@Path("{id}/titles/list")
 	public Response getTitlesList(@PathParam("id") int id) {
 		// // System.out.println("EndpointMedium: getTitlesList");
-		// Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);   
+		// Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
     // 	if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		// // List<Title> titleList = TIMAATApp.emf.createEntityManager().createNamedQuery("titleList.findAll").getResultList();
 		// // return Response.ok().entity(titleList).build();
@@ -1084,9 +1084,9 @@ public class EndpointMedium {
 		// find medium
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		entityManager.refresh(medium);
-		
+
 		return Response.ok().entity(medium.getTitles()).build();
 	}
 
@@ -1098,7 +1098,7 @@ public class EndpointMedium {
 	public Response createMedium(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: createMedium: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Medium newMedium = null;  
+		Medium newMedium = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		// parse JSON data
@@ -1180,9 +1180,9 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
-	public Response getMedium(@PathParam("id") int id) {    	
+	public Response getMedium(@PathParam("id") int id) {
 		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
-		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		return Response.ok().entity(medium).build();
 	}
 
@@ -1190,7 +1190,7 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
 	@Secured
 	@Path("{id}/viewToken")
-	public Response getViewToken(@PathParam("id") int id) {    	
+	public Response getViewToken(@PathParam("id") int id) {
 		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		String viewToken = medium.getViewToken();
@@ -1211,7 +1211,7 @@ public class EndpointMedium {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 
-		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedMedium = mapper.readValue(jsonData, Medium.class);
@@ -1219,7 +1219,7 @@ public class EndpointMedium {
 			System.out.println("EndpointMedium: update medium - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedMedium == null ) return Response.notModified().build();	
+		if ( updatedMedium == null ) return Response.notModified().build();
 
 		// update medium
 		//! Don't change media type. MediumSubtype won't match anymore
@@ -1243,7 +1243,7 @@ public class EndpointMedium {
 			medium.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
 			// DEBUG do nothing - production system should abort with internal server error
-		}		
+		}
 
 		// persist medium
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1272,10 +1272,10 @@ public class EndpointMedium {
 		for (Tag tag : oldTags) {
 			entityManager.refresh(tag);
 		}
-		System.out.println("after");
-		System.out.println(medium.getCreatedAt());
-		System.out.println(medium.getLastEditedAt());
-		
+		// System.out.println("after");
+		// System.out.println(medium.getCreatedAt());
+		// System.out.println(medium.getLastEditedAt());
+
 		// if ( medium.getMediumVideo() != null ) {
 			// medium.getFileStatus(medium.getMediaType().getMediaTypeTranslations().get(0).getType());
 			// TODO necessary?
@@ -1313,9 +1313,9 @@ public class EndpointMedium {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.MEDIUMDELETED);
-		System.out.println("EndpointMedium: deleteMedium - delete complete");	
+		System.out.println("EndpointMedium: deleteMedium - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1343,7 +1343,7 @@ public class EndpointMedium {
 			System.out.println("EndpointMedium: createAudio: newAudio == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		
+
 		// sanitize object data
 		// AudioPostProduction audioPostProduction = new AudioPostProduction();
 
@@ -1374,32 +1374,32 @@ public class EndpointMedium {
 
 		System.out.println("EndpointMedium: update audio - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumAudio updatedAudio = null;    	
+		MediumAudio updatedAudio = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAudio audio = entityManager.find(MediumAudio.class, id);
-		
-		if ( audio == null ) return Response.status(Status.NOT_FOUND).build();		
+
+		if ( audio == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedAudio = mapper.readValue(jsonData, MediumAudio.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedAudio == null ) return Response.notModified().build();    	
-		
+		if ( updatedAudio == null ) return Response.notModified().build();
+
 		// update audio
 		// System.out.println("EndpointMedium: update audio - audio.id:"+audio.getMediumId());
 		if ( updatedAudio.getLength() > 0) audio.setLength(updatedAudio.getLength());
 		if ( updatedAudio.getAudioCodecInformation() != null ) audio.setAudioCodecInformation(updatedAudio.getAudioCodecInformation());
 		// if ( updatedAudio.getAudioPostProduction().getAudioPostProductionTranslations() != null ) audio.getAudioPostProduction().setAudioPostProductionTranslations(updatedAudio.getAudioPostProduction().getAudioPostProductionTranslations());
-		
+
 		// update log metadata
 		audio.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			audio.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}	
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1409,9 +1409,9 @@ public class EndpointMedium {
 		entityManager.refresh(audio);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.AUDIOEDITED);
-		System.out.println("EndpointMedium: update audio - update complete");	
+		System.out.println("EndpointMedium: update audio - update complete");
 		return Response.ok().entity(audio).build();
 	}
 
@@ -1419,13 +1419,13 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("audio/{id}")
 	@Secured
-	public Response deleteAudio(@PathParam("id") int id) {  
+	public Response deleteAudio(@PathParam("id") int id) {
 		System.out.println("EndpointMedium: deleteAudio with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumAudio audio = entityManager.find(MediumAudio.class, id);
-		if ( audio == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( audio == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(audio);
@@ -1434,9 +1434,9 @@ public class EndpointMedium {
 		entityTransaction.commit();
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.AUDIODELETED);
-		System.out.println("EndpointMedium: deleteAudio - audio deleted");  
+		System.out.println("EndpointMedium: deleteAudio - audio deleted");
 		return Response.ok().build();
 	}
 
@@ -1488,27 +1488,27 @@ public class EndpointMedium {
 	public Response updateDocument(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: update document - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumDocument updatedDocument = null;    	
+		MediumDocument updatedDocument = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumDocument document = entityManager.find(MediumDocument.class, id);
-		if ( document == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( document == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedDocument = mapper.readValue(jsonData, MediumDocument.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedDocument == null ) return Response.notModified().build();    	
+		if ( updatedDocument == null ) return Response.notModified().build();
 		// update document
-		// System.out.println("EndpointMedium: update document - document.id:"+document.getMediumId());	
+		// System.out.println("EndpointMedium: update document - document.id:"+document.getMediumId());
 		// no data to update at the moment
 		// update log metadata
 		document.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			document.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(document);
@@ -1517,9 +1517,9 @@ public class EndpointMedium {
 		entityManager.refresh(document);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.DOCUMENTEDITED);
-		System.out.println("EndpointMedium: update document - update complete");	
+		System.out.println("EndpointMedium: update document - update complete");
 		return Response.ok().entity(document).build();
 	}
 
@@ -1527,13 +1527,13 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("document/{id}")
 	@Secured
-	public Response deleteDocument(@PathParam("id") int id) {  
+	public Response deleteDocument(@PathParam("id") int id) {
 		System.out.println("EndpointMedium: deleteDocument with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumDocument document = entityManager.find(MediumDocument.class, id);
-		if ( document == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( document == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(document);
@@ -1541,9 +1541,9 @@ public class EndpointMedium {
 		entityManager.remove(document.getMedium()); // remove document, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.DOCUMENTDELETED);
-		System.out.println("EndpointMedium: deleteDocument - document deleted");  
+		System.out.println("EndpointMedium: deleteDocument - document deleted");
 		return Response.ok().build();
 	}
 
@@ -1595,10 +1595,10 @@ public class EndpointMedium {
 	public Response updateImage(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: update image - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumImage updatedImage = null;    	
+		MediumImage updatedImage = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumImage image = entityManager.find(MediumImage.class, id);
-		if ( image == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( image == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedImage = mapper.readValue(jsonData, MediumImage.class);
@@ -1617,8 +1617,8 @@ public class EndpointMedium {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			image.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(image);
@@ -1627,9 +1627,9 @@ public class EndpointMedium {
 		entityManager.refresh(image);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.IMAGEEDITED);
-		System.out.println("EndpointMedium: update image - update complete");	
+		System.out.println("EndpointMedium: update image - update complete");
 		return Response.ok().entity(image).build();
 	}
 
@@ -1637,13 +1637,13 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("image/{id}")
 	@Secured
-	public Response deleteImage(@PathParam("id") int id) {  
+	public Response deleteImage(@PathParam("id") int id) {
 		System.out.println("EndpointMedium: deleteImage with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumImage image = entityManager.find(MediumImage.class, id);
-		if ( image == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( image == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(image);
@@ -1651,9 +1651,9 @@ public class EndpointMedium {
 		entityManager.remove(image.getMedium()); // remove image, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.IMAGEDELETED);
-		System.out.println("EndpointMedium: deleteImage - image deleted");  
+		System.out.println("EndpointMedium: deleteImage - image deleted");
 		return Response.ok().build();
 	}
 
@@ -1705,20 +1705,20 @@ public class EndpointMedium {
 	public Response updateSoftware(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: update software - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumSoftware updatedSoftware = null;    	
+		MediumSoftware updatedSoftware = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumSoftware software = entityManager.find(MediumSoftware.class, id);
-		if ( software == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( software == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedSoftware = mapper.readValue(jsonData, MediumSoftware.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedSoftware == null ) return Response.notModified().build();  
+		if ( updatedSoftware == null ) return Response.notModified().build();
 
 		// update software
-		// System.out.println("EndpointMedium: update software - software.id:"+software.getMediumId());	
+		// System.out.println("EndpointMedium: update software - software.id:"+software.getMediumId());
 		if ( updatedSoftware.getVersion() != null ) software.setVersion(updatedSoftware.getVersion());
 
 		// update log metadata
@@ -1726,8 +1726,8 @@ public class EndpointMedium {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			software.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(software);
@@ -1736,9 +1736,9 @@ public class EndpointMedium {
 		entityManager.refresh(software);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.SOFTWAREEDITED);
-		System.out.println("EndpointMedium: update software - update complete");	
+		System.out.println("EndpointMedium: update software - update complete");
 		return Response.ok().entity(software).build();
 	}
 
@@ -1746,13 +1746,13 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("software/{id}")
 	@Secured
-	public Response deleteSoftware(@PathParam("id") int id) {  
+	public Response deleteSoftware(@PathParam("id") int id) {
 		System.out.println("EndpointMedium: deleteSoftware with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumSoftware software = entityManager.find(MediumSoftware.class, id);
-		if ( software == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( software == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(software);
@@ -1760,9 +1760,9 @@ public class EndpointMedium {
 		entityManager.remove(software.getMedium()); // remove software, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.SOFTWAREDELETED);
-		System.out.println("EndpointMedium: deleteSoftware - software deleted");  
+		System.out.println("EndpointMedium: deleteSoftware - software deleted");
 		return Response.ok().build();
 	}
 
@@ -1815,20 +1815,20 @@ public class EndpointMedium {
 	public Response updateText(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: update text - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumText updatedText = null;    	
+		MediumText updatedText = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumText text = entityManager.find(MediumText.class, id);
-		if ( text == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( text == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedText = mapper.readValue(jsonData, MediumText.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedText == null ) return Response.notModified().build();    	
+		if ( updatedText == null ) return Response.notModified().build();
 
 		// update text
-		// System.out.println("EndpointMedium: update text - text.id:"+text.getMediumId());	
+		// System.out.println("EndpointMedium: update text - text.id:"+text.getMediumId());
 		if ( updatedText.getContent() != null ) text.setContent(updatedText.getContent());
 
 		// update log metadata
@@ -1836,8 +1836,8 @@ public class EndpointMedium {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			text.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(text);
@@ -1846,9 +1846,9 @@ public class EndpointMedium {
 		entityManager.refresh(text);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.TEXTEDITED);
-		System.out.println("EndpointMedium: update text - update complete");	
+		System.out.println("EndpointMedium: update text - update complete");
 		return Response.ok().entity(text).build();
 	}
 
@@ -1856,13 +1856,13 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("text/{id}")
 	@Secured
-	public Response deleteText(@PathParam("id") int id) {  
+	public Response deleteText(@PathParam("id") int id) {
 		System.out.println("EndpointMedium: deleteText with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumText text = entityManager.find(MediumText.class, id);
-		if ( text == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( text == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(text);
@@ -1870,9 +1870,9 @@ public class EndpointMedium {
 		entityManager.remove(text.getMedium()); // remove text, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.TEXTDELETED);
-		System.out.println("EndpointMedium: deleteText - text deleted");  
+		System.out.println("EndpointMedium: deleteText - text deleted");
 		return Response.ok().build();
 	}
 
@@ -1952,7 +1952,7 @@ public class EndpointMedium {
 		if ( updatedVideo.getVideoCodec() != null ) video.setVideoCodec(updatedVideo.getVideoCodec());
 		if ( updatedVideo.getWidth() > 0 ) video.setWidth(updatedVideo.getWidth());
 		if ( updatedVideo.getHeight() > 0 ) video.setHeight(updatedVideo.getHeight());
-		if ( updatedVideo.getFrameRate() > 0 ) video.setFrameRate(updatedVideo.getFrameRate()); 
+		if ( updatedVideo.getFrameRate() > 0 ) video.setFrameRate(updatedVideo.getFrameRate());
 		if ( updatedVideo.getDataRate() > 0 ) video.setDataRate(updatedVideo.getDataRate());
 		if ( updatedVideo.getTotalBitrate() > 0 ) video.setTotalBitrate(updatedVideo.getTotalBitrate());
 		if ( updatedVideo.getIsEpisode() != null ) video.setIsEpisode(updatedVideo.getIsEpisode());
@@ -1974,10 +1974,10 @@ public class EndpointMedium {
 		entityManager.refresh(video);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.VIDEOEDITED);
 		System.out.println("EndpointMedium: update video - update complete");
-		
+
 		// TODO necessary?
 		// video.getMedium().getFileStatus("video");
 		// video.getMedium().getViewToken();
@@ -2006,9 +2006,9 @@ public class EndpointMedium {
 		entityManager.remove(video.getMedium().getDisplayTitle());
 		entityManager.remove(video.getMedium()); // remove video, then corresponding medium
 		entityTransaction.commit();
-		
+
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.VIDEODELETED);
 		System.out.println("EndpointMedium: deleteVideo - video deleted");
 
@@ -2064,10 +2064,10 @@ public class EndpointMedium {
 	public Response updateVideogame(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: update videogame - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		MediumVideogame updatedVideogame = null;    	
+		MediumVideogame updatedVideogame = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumVideogame videogame = entityManager.find(MediumVideogame.class, id);
-		if ( videogame == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( videogame == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedVideogame = mapper.readValue(jsonData, MediumVideogame.class);
@@ -2077,16 +2077,16 @@ public class EndpointMedium {
 		if ( updatedVideogame == null ) return Response.notModified().build();
 
 		// update videogame
-		// System.out.println("EndpointMedium: update videogame - videogame.id:"+videogame.getMediumId());	
-		if ( updatedVideogame.getIsEpisode() != null ) videogame.setIsEpisode(updatedVideogame.getIsEpisode()); 
+		// System.out.println("EndpointMedium: update videogame - videogame.id:"+videogame.getMediumId());
+		if ( updatedVideogame.getIsEpisode() != null ) videogame.setIsEpisode(updatedVideogame.getIsEpisode());
 
 		// update log metadata
 		videogame.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			videogame.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(videogame);
@@ -2095,9 +2095,9 @@ public class EndpointMedium {
 		entityManager.refresh(videogame);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.VIDEOGAMEEDITED);
-		System.out.println("EndpointMedium: update videogame - update complete");	
+		System.out.println("EndpointMedium: update videogame - update complete");
 		return Response.ok().entity(videogame).build();
 	}
 
@@ -2105,13 +2105,13 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("videogame/{id}")
 	@Secured
-	public Response deleteVideogame(@PathParam("id") int id) {  
+	public Response deleteVideogame(@PathParam("id") int id) {
 		System.out.println("EndpointMedium: deleteVideogame with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		MediumVideogame videogame = entityManager.find(MediumVideogame.class, id);
-		if ( videogame == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( videogame == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(videogame);
@@ -2119,9 +2119,9 @@ public class EndpointMedium {
 		entityManager.remove(videogame.getMedium()); // remove videogame, then corresponding medium
 		entityTransaction.commit();
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.VIDEOGAMEDELETED);
-		System.out.println("EndpointMedium: deleteVideogame - videogame deleted");  
+		System.out.println("EndpointMedium: deleteVideogame - videogame deleted");
 		return Response.ok().build();
 	}
 
@@ -2136,7 +2136,7 @@ public class EndpointMedium {
 		ObjectMapper mapper = new ObjectMapper();
 		Title newTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newTitle = mapper.readValue(jsonData, Title.class);
@@ -2170,12 +2170,12 @@ public class EndpointMedium {
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);
 
-		// System.out.println("EndpointMedium: createTitle: add log entry");	
+		// System.out.println("EndpointMedium: createTitle: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
-		
+
 		System.out.println("EndpointMedium: create title: title created with id "+newTitle.getId());
 		System.out.println("EndpointMedium: create title: title created with language id "+newTitle.getLanguage().getId());
 
@@ -2193,7 +2193,7 @@ public class EndpointMedium {
 		ObjectMapper mapper = new ObjectMapper();
 		Title newTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newTitle = mapper.readValue(jsonData, Title.class);
@@ -2240,12 +2240,12 @@ public class EndpointMedium {
 		entityManager.refresh(medium);
 		entityManager.refresh(newTitle);
 
-		System.out.println("EndpointMedium: addTitle: add log entry");	
+		System.out.println("EndpointMedium: addTitle: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
-		
+
 		System.out.println("EndpointMedium: addTitle: title added with id "+newTitle.getId());
 		System.out.println("EndpointMedium: addTitle: title added with language id "+newTitle.getLanguage().getId());
 
@@ -2260,11 +2260,11 @@ public class EndpointMedium {
 	public Response updateTitle(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: UPDATE TITLE - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Title updatedTitle = null;    	
+		Title updatedTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Title title = entityManager.find(Title.class, id);
 		if ( title == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointMedium: UPDATE TITLE - old title :"+title.getName());		
+		// System.out.println("EndpointMedium: UPDATE TITLE - old title :"+title.getName());
 		// parse JSON data
 		try {
 			updatedTitle = mapper.readValue(jsonData, Title.class);
@@ -2273,7 +2273,7 @@ public class EndpointMedium {
 		}
 		if ( updatedTitle == null ) return Response.notModified().build();
 		// update title
-		// System.out.println("EndpointMedium: UPDATE TITLE - language id:"+updatedTitle.getLanguage().getId());	
+		// System.out.println("EndpointMedium: UPDATE TITLE - language id:"+updatedTitle.getLanguage().getId());
 		if ( updatedTitle.getName() != null ) title.setName(updatedTitle.getName());
 		if ( updatedTitle.getLanguage() != null ) title.setLanguage(updatedTitle.getLanguage());
 
@@ -2283,7 +2283,7 @@ public class EndpointMedium {
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 		// 	title.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
-		// 	// DEBUG do nothing - production system should abort with internal server error			
+		// 	// DEBUG do nothing - production system should abort with internal server error
 		// }
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -2292,12 +2292,12 @@ public class EndpointMedium {
 		entityTransaction.commit();
 		entityManager.refresh(title);
 
-		// System.out.println("EndpointMedium: UPDATE TITLE - only logging remains");	
+		// System.out.println("EndpointMedium: UPDATE TITLE - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLEEDITED);
-		System.out.println("EndpointMedium: UPDATE TITLE - update complete");	
+		System.out.println("EndpointMedium: UPDATE TITLE - update complete");
 		return Response.ok().entity(title).build();
 	}
 
@@ -2305,8 +2305,8 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("title/{id}")
 	@Secured
-	public Response deleteTitle(@PathParam("id") int id) {    
-		System.out.println("EndpointMedium: deleteTitle");	
+	public Response deleteTitle(@PathParam("id") int id) {
+		System.out.println("EndpointMedium: deleteTitle");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Title title = entityManager.find(Title.class, id);
 		if ( title == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2318,7 +2318,7 @@ public class EndpointMedium {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLEDELETED);
-		System.out.println("EndpointMedium: deleteTitle - delete complete");	
+		System.out.println("EndpointMedium: deleteTitle - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2327,8 +2327,8 @@ public class EndpointMedium {
   // @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
-	public Response addMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
-																					 @PathParam("languageTypeId") int mediumLanguageTypeId, 
+	public Response addMediumHasLanguageItem(@PathParam("mediumId") int mediumId,
+																					 @PathParam("languageTypeId") int mediumLanguageTypeId,
 																					 @PathParam("languageId") int languageId) {
 		System.out.println("EndpointMedium: addLanguageTrack: "+mediumId+" "+mediumLanguageTypeId+ " "+languageId);
 		// System.out.println("EndpointMedium: addLanguageTrack: jsonData: "+jsonData);
@@ -2375,7 +2375,7 @@ public class EndpointMedium {
 				}
 			}
 		System.out.println("EndpointMedium: addLanguageTrack: entity transaction complete");
-					
+
 		// System.out.println("EndpointMedium: addLanguageTrack: add log entry");
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMEDITED);
@@ -2388,11 +2388,11 @@ public class EndpointMedium {
 	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/languageTrack/{languageTypeId}/{languageId}")
 	@Secured
-	public Response updateMediumHasLanguageItem(@PathParam("mediumId") int mediumId, 
-																							@PathParam("languageTypeId") int mediumLanguageTypeId, 
-																							@PathParam("languageId") int languageId, 
+	public Response updateMediumHasLanguageItem(@PathParam("mediumId") int mediumId,
+																							@PathParam("languageTypeId") int mediumLanguageTypeId,
+																							@PathParam("languageId") int languageId,
 																							String jsonData) throws IOException {
-		
+
 		System.out.println("EndpointMedium: updateLanguageTrack: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2403,7 +2403,7 @@ public class EndpointMedium {
 		MediumLanguageType mediumLanguageType = entityManager.find(MediumLanguageType.class, mediumLanguageTypeId);
 		if (mediumLanguageType == null) return Response.status(Status.NOT_FOUND).build();
 		System.out.println("EndpointMedium: updateLanguageTrack: initialization complete");
-		
+
 		JsonNode jsonNode = mapper.readTree(jsonData);
 		int jsonNodeMedium = jsonNode.get("mediumId").asInt();
 		int jsonNodeLanguage = jsonNode.get("languageId").asInt();
@@ -2469,8 +2469,8 @@ public class EndpointMedium {
 	@Secured
 	public Response deleteMediumHasLanguageItem(@PathParam("mediumId") int mediumId,
 																							@PathParam("languageTypeId") int mediumLanguageTypeId,
-																							@PathParam("languageId") int languageId) {    
-		System.out.println("EndpointMedium: deleteMediumHasLanguageItem");	
+																							@PathParam("languageId") int languageId) {
+		System.out.println("EndpointMedium: deleteMediumHasLanguageItem");
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Language language = entityManager.find(Language.class, languageId);
@@ -2496,7 +2496,7 @@ public class EndpointMedium {
 		}
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry((int) crc.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIUMHASLANGUAGEDELETED);
-		System.out.println("EndpointMedium: deleteMediumHasLanguageItem - delete complete");	
+		System.out.println("EndpointMedium: deleteMediumHasLanguageItem - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2504,7 +2504,7 @@ public class EndpointMedium {
   @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
-	public Response addMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
+	public Response addMediumHasActorWithRoles(@PathParam("mediumId") int mediumId,
 																						 @PathParam("actorId") int actorId,
 																						 @PathParam("roleId") int roleId) {
 		System.out.println("EndpointMedium: addMediumHasActorWithRoles");
@@ -2574,8 +2574,8 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/hasActor/{actorId}")
 	@Secured
-	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
-																												 @PathParam("actorId") int actorId) {    
+	public Response deleteActorFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId,
+																												 @PathParam("actorId") int actorId) {
 		System.out.println("EndpointMedium: deleteMediumHasActorWithRolesItem");
 		// deletes all entries of medium-actor matches
 
@@ -2600,7 +2600,7 @@ public class EndpointMedium {
 			return Response.notModified().build();
 		}
 
-		System.out.println("EndpointMedium: deleteMediumHasActorWithRolesItem - delete complete");	
+		System.out.println("EndpointMedium: deleteMediumHasActorWithRolesItem - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2608,9 +2608,9 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/hasActor/{actorId}/withRole/{roleId}")
 	@Secured
-	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId, 
+	public Response deleteRoleFromMediumHasActorWithRoles(@PathParam("mediumId") int mediumId,
 																												@PathParam("actorId") int actorId,
-																												@PathParam("roleId") int roleId) {    
+																												@PathParam("roleId") int roleId) {
 		System.out.println("EndpointMedium: deleteMediumHasActorWithRolesItem");
 		// deletes all entries of medium-actor matches
 
@@ -2639,7 +2639,7 @@ public class EndpointMedium {
 			return Response.notModified().build();
 		}
 
-		System.out.println("EndpointMedium: deleteMediumHasActorWithRolesItem - delete complete");	
+		System.out.println("EndpointMedium: deleteMediumHasActorWithRolesItem - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2655,7 +2655,7 @@ public class EndpointMedium {
 		ObjectMapper mapper = new ObjectMapper();
 		Source newSource = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newSource = mapper.readValue(jsonData, Source.class);
@@ -2704,17 +2704,17 @@ public class EndpointMedium {
 	public Response updateSource(@PathParam("id") int id, String jsonData) {
 		System.out.println("EndpointMedium: UPDATE SOURCE - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Source updatedSource = null;    	
+		Source updatedSource = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Source source = entityManager.find(Source.class, id);
-		if ( source == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( source == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedSource = mapper.readValue(jsonData, Source.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedSource == null ) return Response.notModified().build(); 
+		if ( updatedSource == null ) return Response.notModified().build();
 
 		// update source
 		// System.out.println("EndpointMedium: UPDATE SOURCE - source.id:"+source.getId());
@@ -2730,9 +2730,9 @@ public class EndpointMedium {
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 		// 	source.getMedium().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
-		// 	// DEBUG do nothing - production system should abort with internal server error			
-		// }	
-		
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// }
+
 		// persist source
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -2741,11 +2741,11 @@ public class EndpointMedium {
 		entityTransaction.commit();
 		entityManager.refresh(source);
 
-		// System.out.println("EndpointMedium: UPDATE SOURCE - only logging remains");	
+		// System.out.println("EndpointMedium: UPDATE SOURCE - only logging remains");
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.SOURCEEDITED);
-		System.out.println("EndpointMedium: UPDATE SOURCE - update complete");	
+		System.out.println("EndpointMedium: UPDATE SOURCE - update complete");
 		return Response.ok().entity(source).build();
 	}
 
@@ -2753,8 +2753,8 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("source/{id}")
 	@Secured
-	public Response deleteSource(@PathParam("id") int id) {    
-	System.out.println("EndpointMedium: deleteSource");	
+	public Response deleteSource(@PathParam("id") int id) {
+	System.out.println("EndpointMedium: deleteSource");
 	EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 	Source source = entityManager.find(Source.class, id);
 	if ( source == null ) return Response.status(Status.NOT_FOUND).build();
@@ -2763,12 +2763,12 @@ public class EndpointMedium {
 	entityManager.remove(source);
 	entityTransaction.commit();
 	// add log entry
-	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+	UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																					UserLogManager.LogEvents.SOURCEDELETED);
-	System.out.println("EndpointMedium: deleteSource - delete complete");	
+	System.out.println("EndpointMedium: deleteSource - delete complete");
 	return Response.ok().build();
 	}
-		
+
 	@POST
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -2815,12 +2815,12 @@ public class EndpointMedium {
 		entityManager.remove(audioPostProduction);
 		//* ON DELETE CASCADE deletes connected audio_post_production_translation entries
 		entityTransaction.commit();
-		
+
 		// add log entry
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext
 		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
-		System.out.println("EndpointMedium: deleteAudioPostProduction - delete complete");	
+		System.out.println("EndpointMedium: deleteAudioPostProduction - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2829,7 +2829,7 @@ public class EndpointMedium {
 	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("audioPostProduction/{id}/translation")
 	@Secured
-	public Response createAudioPostProductionTranslation(@PathParam("id") int id, 
+	public Response createAudioPostProductionTranslation(@PathParam("id") int id,
 																											 String jsonData) {
 		System.out.println("EndpointMedium: createAudioPostProductionTranslation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
@@ -2894,7 +2894,7 @@ public class EndpointMedium {
 	@Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("audioPostProduction/{id}/translation")
 	@Secured
-	public Response updateAudioPostProductionTranslation(@PathParam("id") int id, 
+	public Response updateAudioPostProductionTranslation(@PathParam("id") int id,
 																											 String jsonData) {
 		System.out.println("EndpointMedium: updateAudioPostProductionTranslation: " + jsonData);
 
@@ -2952,7 +2952,7 @@ public class EndpointMedium {
 
 	@POST
 	@Path("audio/{id}/upload")
-	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadAudio(@PathParam("id") int id,
@@ -2965,7 +2965,7 @@ public class EndpointMedium {
 
 		if ( mediumAudio.getMedium().getFileStatus().compareTo("noFile") != 0 )
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Audio file already exists").build();
-		
+
 		try {
 			// TODO assume MP3 upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
@@ -2990,17 +2990,17 @@ public class EndpointMedium {
 					+ "medium/audio/" + tempName);
 			// mediumAudio.setAudioCodec("");
 			mediumAudio.setLength(info.getDuration());
-			
+
 			// rename file with medium
 			int mediumId = mediumAudio.getMediumId();
-			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/audio/" + tempName);
 			File mediumDirectory = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/audio/" + mediumId);
 			mediumDirectory.mkdir();
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/audio/" + mediumId + "/" + mediumId + "-audio.mp3")); // TODO assume mp3 upload only
-			mediumAudio.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+			mediumAudio.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/audio/" + mediumId	+ "/" + mediumId + "-audio.mp3");
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -3026,7 +3026,7 @@ public class EndpointMedium {
 
 	@POST
 	@Path("image/{id}/upload")
-	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadImage(@PathParam("id") int id,
@@ -3039,7 +3039,7 @@ public class EndpointMedium {
 
 		if ( mediumImage.getMedium().getFileStatus().compareTo("noFile") != 0 )
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Image file already exists").build();
-		
+
 		try {
 			// TODO assume png upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
@@ -3058,7 +3058,7 @@ public class EndpointMedium {
 			stream.close();
 			System.out.println("You successfully uploaded !");
 
-			// get image metadata 
+			// get image metadata
 			ImageInformation info = getImageFileInfo( new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + tempName)
@@ -3074,7 +3074,7 @@ public class EndpointMedium {
 				+ "medium/image/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/image/" + mediumId + "-image-original." + fileExtension));
-			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/image/" + mediumId + "-image-original." + fileExtension);
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -3109,13 +3109,13 @@ public class EndpointMedium {
 				targetHeight = 90;
 			}
 			if (targetHeight > 0 && targetWidth > 0) {
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
 				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
 				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
 			} else { // original image is smaller than thumbnail dimensions
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
 				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
@@ -3133,13 +3133,13 @@ public class EndpointMedium {
 				targetHeight = 480;
 			}
 			if (targetHeight > 0 && targetWidth > 0) {
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
 				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
 				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
 			} else { // original image is smaller than 480p dimensions
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
 				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
@@ -3148,7 +3148,7 @@ public class EndpointMedium {
 			mediumImage.getMedium().setViewToken(issueFileToken(mediumImage.getMediumId()));
 			System.out.println("ViewToken: "+ mediumImage.getMedium().getViewToken());
 			// add log entry
-			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						 UserLogManager.LogEvents.MEDIUMCREATED);
 
 		} catch (IOException e) {
@@ -3157,10 +3157,10 @@ public class EndpointMedium {
 
 		return Response.ok().entity(mediumImage).build();
 	}
-		
+
 	@POST
 	@Path("video/{id}/upload")
-	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)  
+	@Consumes(jakarta.ws.rs.core.MediaType.MULTIPART_FORM_DATA)
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadVideo(@PathParam("id") int id,
@@ -3173,7 +3173,7 @@ public class EndpointMedium {
 
 		if ( mediumVideo.getMedium().getFileStatus().compareTo("noFile") != 0 )
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Video file already exists").build();
-		
+
 		try {
 			// TODO assume MP4 upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
@@ -3193,7 +3193,7 @@ public class EndpointMedium {
 			System.out.println("You successfully uploaded !");
 			/*
 			 * int read = 0; byte[] bytes = new byte[1024];
-			 * 
+			 *
 			 * while ((read = uploadedInputStream.read(bytes)) != -1) { out.write(bytes, 0,
 			 * read); out.flush(); } out.close();
 			 */
@@ -3207,7 +3207,7 @@ public class EndpointMedium {
 			title.setLanguage(lang);
 			title.setName(fileDetail.getFileName().substring(0, fileDetail.getFileName().length() - 4));
 			*/
-			
+
 			// mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "medium/video/" + tempName);
 			// mediumVideo.getMedium().setMediaType(mt);
 
@@ -3231,14 +3231,14 @@ public class EndpointMedium {
 			entityTransaction.commit();
 			entityManager.refresh(mediumVideo);
 			*/
-			
+
 			// rename file with medium
 			int mediumId = mediumVideo.getMediumId();
-			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + mediumId + "-video-original.mp4")); // TODO assume mp4 upload only
-			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) 
+			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + mediumId	+ "-video-original.mp4");
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -3280,7 +3280,7 @@ public class EndpointMedium {
 	@Produces("audio/mpeg")
 	public Response getAudioFileInfo(@PathParam("id") int id,
 																	 @QueryParam("token") String fileToken) {
-		
+
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
 		int tokenMediumID = 0;
@@ -3291,10 +3291,10 @@ public class EndpointMedium {
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 			if ( mediumFileStatus(id, "audio").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-			File file = new File( 
+			File file = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/audio/" + id + "/" + id + "-audio.mp4");
-			
+
 		return Response.ok()
 			.status( Response.Status.PARTIAL_CONTENT )
 			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
@@ -3307,7 +3307,7 @@ public class EndpointMedium {
 	@Produces("video/mp4")
 	public Response getVideoFileInfo(@PathParam("id") int id,
 																	 @QueryParam("token") String fileToken) {
-		
+
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
 		int tokenMediumID = 0;
@@ -3318,10 +3318,10 @@ public class EndpointMedium {
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 			if ( mediumFileStatus(id, "video").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-			File file = new File( 
+			File file = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/video/" + id + "/" + id + "-video.mp4");
-			
+
 		return Response.ok()
 			.status( Response.Status.PARTIAL_CONTENT )
 			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
@@ -3336,7 +3336,7 @@ public class EndpointMedium {
 															 @PathParam("id") int id,
 															 @QueryParam("token") String fileToken,
 															 @QueryParam("force") boolean force) {
-		
+
 		// verify token
 		if ( fileToken == null ) {
 			return Response.status(401).build();
@@ -3346,7 +3346,7 @@ public class EndpointMedium {
 			tokenMediumID = validateFileToken(fileToken);
 		} catch (Exception e) {
 			return Response.status(401).build();
-		}		
+		}
 		if ( tokenMediumID != id ) {
 			return Response.status(401).build();
 		}
@@ -3371,7 +3371,7 @@ public class EndpointMedium {
 															 @PathParam("id") int id,
 															 @QueryParam("token") String fileToken,
 															 @QueryParam("force") boolean force) {
-		
+
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
 		int tokenMediumID = 0;
@@ -3379,7 +3379,7 @@ public class EndpointMedium {
 			tokenMediumID = validateFileToken(fileToken);
 		} catch (Exception e) {
 			return Response.status(401).build();
-		}		
+		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
 		Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
@@ -3404,15 +3404,15 @@ public class EndpointMedium {
 		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/" + type + "/" + id);
 		// if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
-    	
+
 		return Response.ok().entity(mediumFileStatus(id, type)).build();
 	}
 
 	@GET
-	@Path("audio/{id}/audio/combined")
+	@Path("{id}/audio/combined")
 	@Produces("image/png")
-	public Response getAudioAudioWaveform(@PathParam("id") int id,
-																				@QueryParam("token") String fileToken) {
+	public Response getAudioWaveform(@PathParam("id") int id,
+																	 @QueryParam("token") String fileToken) {
 
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -3421,56 +3421,36 @@ public class EndpointMedium {
 			tokenMediumID = validateFileToken(fileToken);
 		} catch (Exception e) {
 			return Response.status(401).build();
-		}		
+		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, id);
+		String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
 
 		// load audio waveform image from storage
 		File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/audio/" + id + "/" + id + "-audio-all.png");
+			+ "medium/"+type+"/" + id + "/" + id + "-audio-all.png");
 		if ( !thumbnail.exists() ) {
 			// try to create waveform
-			System.out.println("Create audio waveform");
-			createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + id + "/" + id + "-audio.mp3", "audio");
+			switch (type) {
+				case "audio":
+					createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/audio/" + id + "/" + id + "-audio.mp3", "audio");
+				break;
+				case "video":
+					createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/video/" + id + "-video-original.mp4", "video");
+				break;
+			}
 			thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + id + "/" + id + "-audio-all.png");
+				+ "medium/"+type+"/" + id + "/" + id + "-audio-all.png");
 		}
 		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
-				
+
 		return Response.ok().entity(thumbnail).build();
 	}
 
-	@GET
-	@Path("video/{id}/audio/combined")
-	@Produces("image/png")
-	public Response getVideoAudioWaveform(@PathParam("id") int id,
-																				@QueryParam("token") String fileToken) {
-
-		// verify token
-		if ( fileToken == null ) return Response.status(401).build();
-		int tokenMediumID = 0;
-		try {
-			tokenMediumID = validateFileToken(fileToken);
-		} catch (Exception e) {
-			return Response.status(401).build();
-		}		
-		if ( tokenMediumID != id ) return Response.status(401).build();
-
-		// load audio waveform image from storage
-		File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/video/" + id + "/" + id + "-audio-all.png");
-		if ( !thumbnail.exists() ) {
-			// try to create waveform
-			createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "-video-original.mp4", "video");
-			thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "/" + id + "-audio-all.png");
-		}
-		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
-				
-		return Response.ok().entity(thumbnail).build();
-	}
-	
 	@GET
 	@Path("image/{id}/preview")
 	@Produces("image/png")
@@ -3528,7 +3508,7 @@ public class EndpointMedium {
 	@Produces("image/png")
 	public Response getImageFileInfo(@PathParam("id") int id,
 																	 @QueryParam("token") String fileToken) {
-		
+
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
 		int tokenMediumID = 0;
@@ -3539,10 +3519,10 @@ public class EndpointMedium {
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 			if ( mediumFileStatus(id, "image").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-			File file = new File( 
+			File file = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + id + "/" + id + "-image-scaled.png");
-			
+
 		return Response.ok()
 			.status( Response.Status.PARTIAL_CONTENT )
 			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
@@ -3583,8 +3563,8 @@ public class EndpointMedium {
 
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/image/" + id + "/" + id + "-image-scaled.png", headers, id+".png");
-	}	
-	
+	}
+
 	@GET
 	@Path("video/{id}/thumbnail")
 	@Produces("image/jpg")
@@ -3600,15 +3580,15 @@ public class EndpointMedium {
 			tokenMediumID = validateFileToken(fileToken);
 		} catch (Exception e) {
 			return Response.status(401).build();
-		}		
+		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
 		int seconds = -1;
 		if ( milliseconds != null ) try {
 			seconds = (int) (Integer.parseInt(milliseconds) / 1000);
-		} catch (NumberFormatException e) { seconds = -1; };		
+		} catch (NumberFormatException e) { seconds = -1; };
 		if ( seconds >= 0 ) seconds++;
-		
+
 		if ( seconds < 0 ) {
 			// load thumbnail from storage
 /*
@@ -3618,7 +3598,7 @@ public class EndpointMedium {
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + id + "/" + id + "-thumb.png");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
-		    	
+
 			return Response.ok().entity(thumbnail).build();
 		} else {
 			// load timecode thumbnail from storage
@@ -3626,7 +3606,7 @@ public class EndpointMedium {
 			File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "medium/video/" +id+"/frames");
 			if ( !frameDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
 */
-   	
+
 			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + id + "/frames/" + id + "-frame-" + String.format("%05d", seconds) + ".jpg");
 			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
@@ -3654,7 +3634,7 @@ public class EndpointMedium {
 		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		String sql = "SELECT DISTINCT mal FROM MediumAnalysisList mal, UserAccountHasMediumAnalysisList uahmal WHERE mal.medium.id = :mediumId AND (mal.id = uahmal.mediumAnalysisList.id AND uahmal.userAccount.id = :userId OR mal.globalPermission > 0)";
 		Query query = entityManager.createQuery(sql)
@@ -3669,8 +3649,8 @@ public class EndpointMedium {
 			entityManager.refresh(medium);
 			mediumAnalysisLists = medium.getMediumAnalysisLists();
 		}
-		
-		return Response.ok().entity(mediumAnalysisLists).build();    	
+
+		return Response.ok().entity(mediumAnalysisLists).build();
 	}
 
 	@POST
@@ -3679,14 +3659,14 @@ public class EndpointMedium {
 	@Secured
 	public Response addExistingTag(@PathParam("mediumId") int mediumId,
 																 @PathParam("tagId") int tagId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach tag to annotation and vice versa    	
+
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		medium.getTags().add(tag);
@@ -3697,7 +3677,7 @@ public class EndpointMedium {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
- 	
+
 		return Response.ok().entity(tag).build();
 	}
 
@@ -3707,14 +3687,14 @@ public class EndpointMedium {
 	@Secured
 	public Response removeTag(@PathParam("mediumId") int mediumId,
 														@PathParam("tagId") int tagId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach tag to annotation and vice versa    	
+
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		medium.getTags().remove(tag);
@@ -3725,7 +3705,7 @@ public class EndpointMedium {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -3735,14 +3715,14 @@ public class EndpointMedium {
 	@Secured
 	public Response addExistingCategorySet(@PathParam("mediumId") int mediumId,
 																 				 @PathParam("categorySetId") int categorySetId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach categorySet to annotation and vice versa    	
+
+		// attach categorySet to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		medium.getCategorySets().add(categorySet);
@@ -3753,7 +3733,7 @@ public class EndpointMedium {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
- 	
+
 		return Response.ok().entity(categorySet).build();
 	}
 
@@ -3763,7 +3743,7 @@ public class EndpointMedium {
 	@Secured
 	public Response removeCategorySet(@PathParam("mediumId") int mediumId,
 																		@PathParam("categorySetId") int categorySetId) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
@@ -3794,7 +3774,7 @@ public class EndpointMedium {
 		entityTransaction.commit();
 		entityManager.refresh(medium);
 
-		// attach categorySet to medium and vice versa    	
+		// attach categorySet to medium and vice versa
 		entityTransaction.begin();
 		medium.getCategorySets().remove(categorySet);
 		categorySet.getMediums().remove(medium);
@@ -3804,7 +3784,7 @@ public class EndpointMedium {
 		entityManager.persist(categorySet);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -3812,15 +3792,15 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/category/{categoryId}")
 	@Secured
-	public Response addExistingCategory(@PathParam("mediumId") int mediumId, 
-																			@PathParam("categoryId") int categoryId) {    	
+	public Response addExistingCategory(@PathParam("mediumId") int mediumId,
+																			@PathParam("categoryId") int categoryId) {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		Category category = entityManager.find(Category.class, categoryId);
 		if ( category == null ) return Response.status(Status.NOT_FOUND).build();
-		
-		// attach category to annotation and vice versa    	
+
+		// attach category to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		medium.getCategories().add(category);
@@ -3831,15 +3811,15 @@ public class EndpointMedium {
 		entityManager.persist(category);
 		entityTransaction.commit();
 		entityManager.refresh(medium);
- 	
+
 		return Response.ok().entity(category).build();
 	}
-	
+
 	@DELETE
   @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/category/{categoryId}")
 	@Secured
-	public Response removeCategory(@PathParam("mediumId") int mediumId, 
+	public Response removeCategory(@PathParam("mediumId") int mediumId,
 																 @PathParam("categoryId") int categoryId) {
     // System.out.println("TCL: EndpointMedium - removeCategory");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -3863,7 +3843,7 @@ public class EndpointMedium {
 		// System.out.println("TCL: EndpointMedium - removeCategory - done");
 		return Response.ok().build();
 	}
-	
+
 	@PATCH
   @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
   @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -3878,9 +3858,9 @@ public class EndpointMedium {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		if (userId != 1) { // only Admin may update file lengths
-			return Response.status(Status.FORBIDDEN).build(); 
+			return Response.status(Status.FORBIDDEN).build();
 		}
-		
+
 		Runtime r = Runtime.getRuntime();
 		Process p;     // Process tracks one external native process
 		BufferedReader is;  // reader for output of process
@@ -3889,7 +3869,7 @@ public class EndpointMedium {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		String sql = "SELECT m FROM Medium m WHERE m.filePath IS NOT NULL";
-		Query query = entityManager.createQuery(sql);		
+		Query query = entityManager.createQuery(sql);
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 
@@ -3948,15 +3928,15 @@ public class EndpointMedium {
 		System.out.println("Completed updating all file lengths.");
 		return Response.ok().build();
 }
-	
+
 	private Response downloadFile(String fileName, HttpHeaders headers) {
 		return downloadFile(fileName, headers, null);
 	}
 
-	private Response downloadFile(String fileName, HttpHeaders headers, String asFile) {     
+	private Response downloadFile(String fileName, HttpHeaders headers, String asFile) {
 		Response response = null;
 
-		// Retrieve the file 
+		// Retrieve the file
 		File file = new File(fileName);
 
 		if (file.exists()) {
@@ -3998,7 +3978,7 @@ public class EndpointMedium {
 //				builder.header("Pragma", "no-cache"); // HTTP 1.0
 //				builder.header("Expires", "0"); // Proxies
 //				builder.header("Content-Disposition", "attachment; filename=" + file.getName());
-			} 
+			}
 
 			RangedStreamingOutput stream = new RangedStreamingOutput(from, to, file);
 			builder.entity(stream);
@@ -4012,7 +3992,7 @@ public class EndpointMedium {
 
 		return response;
 	}
-	
+
 	public static String mediumFileStatus(int id, String type) {
 		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)	+ "medium/" + type + "/" + id);
 		// System.out.println("mediumDir: " + mediumDir);
@@ -4028,7 +4008,7 @@ public class EndpointMedium {
 
 		switch (type) {
 			case "audio": // currently mp3 files will only be uploaded but not converted
-				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready"; 
+				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
 			break;
 			case "image":
 				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "uploaded";
@@ -4053,7 +4033,7 @@ public class EndpointMedium {
 		Process p;     // Process tracks one external native process
 		BufferedReader is;  // reader for output of process
 		String line;
-		
+
 		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
 		"-v", "error", "-select_streams", "v:0",
 		"-show_entries", "stream=r_frame_rate,codec_name",
@@ -4121,13 +4101,13 @@ public class EndpointMedium {
 			} finally {
 				reader.dispose();
 			}
-		}	
+		}
 		throw new IOException("Not a known image file: " + imgFile.getAbsolutePath());
 		// Runtime r = Runtime.getRuntime();
 		// Process p;     // Process tracks one external native process
 		// BufferedReader is;  // reader for output of process
 		// String line;
-		
+
 		// String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
 		// "-v", "error", "-select_streams", "v:0",
 		// "-show_entries", "stream=width,height,r_frame_rate,codec_name",
@@ -4169,7 +4149,7 @@ public class EndpointMedium {
 		Process p;     // Process tracks one external native process
 		BufferedReader is;  // reader for output of process
 		String line;
-		
+
 		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffprobe"+TIMAATApp.systemExt,
 		"-v", "error", "-select_streams", "v:0",
 		"-show_entries", "stream=width,height,r_frame_rate,codec_name",
@@ -4220,7 +4200,7 @@ public class EndpointMedium {
 		graphics2D.dispose();
 		return resizedImage;
 	}
-	
+
 	private void createVideoThumbnails(int id, String filename) {
 		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/video/" + id);
@@ -4228,11 +4208,11 @@ public class EndpointMedium {
 
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
-	    
+
 	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 	    "-i", filename,
 	    "-ss", "00:00:01.000", // timecode of thumbnail
-	    "-vframes", "1", "-y", 
+	    "-vframes", "1", "-y",
 			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + id + "/" + id + "-thumb.png" };
 
@@ -4242,7 +4222,7 @@ public class EndpointMedium {
 			      p.waitFor();  // wait for process to complete
 			    } catch (InterruptedException e) {
 			      System.err.println(e);  // "Can'tHappen"
-			    }		    
+			    }
 		    } catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -4257,11 +4237,11 @@ public class EndpointMedium {
 
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
-	    
+
 	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 	    "-i", filename,
 	    "-filter_complex", "aformat=channel_layouts=mono,showwavespic=s=5000x300:colors=395C8D", // waveform settings
-	    "-frames:v", "1", "-y", 
+	    "-frames:v", "1", "-y",
 			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/"+mediumType+"/" + id + "/" + id + "-audio-all.png" };
 
@@ -4271,7 +4251,7 @@ public class EndpointMedium {
 					p.waitFor();  // wait for process to complete
 				} catch (InterruptedException e) {
 			    System.err.println(e);  // "Can'tHappen"
-			  }		    
+			  }
 		  } catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -4284,7 +4264,7 @@ public class EndpointMedium {
 	public static String issueFileToken(int mediumID, ContainerRequestContext crc) {
 		// System.out.println("issueFileToken for id "+ mediumID);
 		Key key = TIMAATKeyGenerator.generateKey();
-		
+
 		JwtBuilder jwtBuilder = Jwts.builder().claim("file", mediumID).setIssuer(
 			TIMAATApp.timaatProps.getProp(PropertyConstants.SERVER_NAME));
 		if ( crc != null ) jwtBuilder
@@ -4302,7 +4282,7 @@ public class EndpointMedium {
 
 		Key key = TIMAATKeyGenerator.generateKey();
 		int mediumID = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("file", Integer.class);
-	
+
 	return mediumID;
 	}
 
@@ -4312,5 +4292,5 @@ public class EndpointMedium {
 			r.add(clazz.cast(o));
 		return r;
     }
-	
+
 }

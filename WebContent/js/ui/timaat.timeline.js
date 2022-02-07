@@ -85,7 +85,6 @@
 				}
 			});
 
-
 		}
 
 		get isTacking() {
@@ -98,24 +97,17 @@
 			this.ui.track.addClass((this.ui.tracking)?'btn-primary':'btn-outline-secondary');
 		}
 
-		initAudio(audio) {
-			this.audio = audio;
-			if ( this.audio ) {
+		initMedium(medium) {
+			this.medium = medium;
+			if ( this.medium ) {
 				this.ui.zoom = 0;
-				this.duration = this.audio.mediumAudio.length;
-				this.durationSec = this.audio.mediumAudio.length / 1000.0;
-				this.ui.minZoom = Math.max(1, Math.floor(this.duration / 1000.0 / 40.0));
-				this.setZoom(this.ui.minZoom);
-				this.invalidateSize();
-				this.updateIndicator();
-			}
-		}
-		initVideo(video) {
-			this.video = video;
-			if ( this.video ) {
-				this.ui.zoom = 0;
-				this.duration = this.video.mediumVideo.length;
-				this.durationSec = this.video.mediumVideo.length / 1000.0;
+				if (this.medium.mediumAudio) {
+					this.duration = this.medium.mediumAudio.length;
+					this.durationSec = this.medium.mediumAudio.length / 1000.0;
+				} else if (this.medium.mediumVideo) {
+					this.duration = this.medium.mediumVideo.length;
+					this.durationSec = this.medium.mediumVideo.length / 1000.0;
+				}
 				this.ui.minZoom = Math.max(1, Math.floor(this.duration / 1000.0 / 40.0));
 				this.setZoom(this.ui.minZoom);
 				this.invalidateSize();
@@ -145,8 +137,8 @@
 		}
 
 		updateIndicator() {
-			if ( !TIMAAT.VideoPlayer.video || !TIMAAT.VideoPlayer.video.currentTime ) return;
-			let pos = (TIMAAT.VideoPlayer.video.currentTime / this.durationSec) * this.ui.width;
+			if ( !TIMAAT.VideoPlayer.medium || !TIMAAT.VideoPlayer.medium.currentTime ) return;
+			let pos = (TIMAAT.VideoPlayer.medium.currentTime / this.durationSec) * this.ui.width;
 			this.ui.indicator.css('margin-left', pos + 'px');
 
 			if ( this.ui.tracking ) {

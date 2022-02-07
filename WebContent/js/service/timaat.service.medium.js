@@ -36,7 +36,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		// listMedia(callback) {
@@ -54,7 +54,7 @@
 		// 	}).fail(function(error) {
 		// 		console.error("ERROR responseText: ", error.responseText);
 		// 		console.error("ERROR: ", error);
-		// 	});			
+		// 	});
 		// },
 
 		async getMediaDatasetsTotal() {
@@ -73,10 +73,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		listMediumSubtype(mediumSubtype, callback) {
@@ -97,7 +97,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		async getActorList(mediumId) {
@@ -118,10 +118,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getActorHasRoleList(mediumId, actorId) {
@@ -142,10 +142,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getMedium(id) {
@@ -164,10 +164,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getViewToken(id) {
@@ -186,10 +186,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getCategorySetList(mediumId) {
@@ -210,10 +210,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getSelectedCategories(mediumId) {
@@ -234,10 +234,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getTagList(mediumId) {
@@ -258,10 +258,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async createMedium(mediumModel) {
@@ -307,7 +307,7 @@
 
 		// not yet needed (no translation data or translation table available at the moment)
 		// async createMediumTranslation(model, modelTranslation) {
-		// 	// console.log("TCL: createMediumTranslation -> model, modelTranslation", model, modelTranslation);			
+		// 	// console.log("TCL: createMediumTranslation -> model, modelTranslation", model, modelTranslation);
 		// 	return new Promise(resolve => {
 		// 		$.ajax({
 		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+model.id+"/translation/"+modelTranslation.id,
@@ -330,7 +330,7 @@
 		// },
 
 		async createMediumSubtype(mediumSubtype, mediumModel, subtypeModel) {
-      // console.log("TCL: createMediumSubtype -> mediumSubtype, mediumModel, subtypeModel", mediumSubtype, mediumModel, subtypeModel);			
+      // console.log("TCL: createMediumSubtype -> mediumSubtype, mediumModel, subtypeModel", mediumSubtype, mediumModel, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+mediumModel.id,
@@ -466,7 +466,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-		});		
+		});
 		},
 
 		async addCategorySet(mediumId, categorySetId) {
@@ -488,7 +488,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategorySet(mediumId, categorySetId) {
@@ -508,10 +508,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addCategory(mediumId, categoryId) {
@@ -533,7 +533,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategory(mediumId, categoryId) {
@@ -552,10 +552,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async createSource(source) {
@@ -686,14 +686,14 @@
           	// console.log("TCL: updateFileStatus -> data: ", data);
 						// if ( medium.fileStatus && medium.fileStatus == data ) return;
 						// medium.fileStatus = data;
-						
+
 						// TIMAAT.VideoChooser.setVideoStatus(video);
 						// TIMAAT.MediumDatasets.setMediumStatus(medium);
-						
+
 						// if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
 						// 	window.clearInterval(medium.poll);
 						// return(data);
-						resolve(data);					
+						resolve(data);
 					}).fail(function(error) {
 						// TODO handle error
 						// window.clearInterval(medium.poll);
@@ -719,7 +719,7 @@
 						},
 					}).done(function(data) {
           	// console.log("TCL: updateViewToken -> data: ", data);
-						resolve(data);					
+						resolve(data);
 					}).fail(function(error) {
 						console.error("ERROR: ", error);
 						console.error("ERROR responseText: ", error.responseText);
@@ -897,10 +897,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async createAudioPostProduction() {
@@ -925,7 +925,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-	
+
 		async deleteAudioPostProduction(id) {
 			// console.log("TCL: deleteAudioPostProduction -> id", id);
 			return new Promise(resolve => {
@@ -947,7 +947,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-	
+
 		async createAudioPostProductionTranslation(model) {
 			// console.log("TCL: createAudioPostProductionTranslation -> model", model);
 			return new Promise(resolve => {
@@ -997,5 +997,5 @@
 		},
 
 
-	}	
+	}
 }, window));

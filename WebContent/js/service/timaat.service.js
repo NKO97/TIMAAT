@@ -57,7 +57,7 @@
 		},
 
 		getUserDisplayName: function(id, callback) {
-			console.log("TCL: getUserDisplayName: id, callback", id, callback);
+			// console.log("TCL: getUserDisplayName: id, callback", id, callback);
 			jQuery.ajax({
 				url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/"+id+"/displayName",
 				type       : "GET",

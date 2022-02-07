@@ -20,11 +20,10 @@
 }(function (TIMAAT) {
 
 	TIMAAT.VideoChooser = {
-		
 		collections: null,
 		collection: null,
-		curVideos: [],
-		videos: null,
+		curMediumList: [],
+		mediumList: null,
 		videoChooserLoaded: false,
 		currentPermissionLevel: null,
 
@@ -45,14 +44,14 @@
 			if (!this.videoChooserLoaded) {
 				// TIMAAT.VideoChooser.setMedia();
 				this.loadCollections();
-			} 
+			}
 			if (TIMAAT.UI.component != 'videochooser') {
 				this.dt.columns.adjust().draw(); // fix: needed due to scrollX behavior in hidden elements
 				TIMAAT.UI.showComponent('videochooser');
 				$('#timaat-videochooser-collectionlibrary').trigger('click');
 			}
 		},
-		
+
 		init: function() {
 			// setup video chooser list and UI events
 			$('#timaat-videochooser-collectionlibrary').on('click', function(ev) {
@@ -65,7 +64,7 @@
 
 			$('#timaat-videochooser-mediacollection-meta').on('show.bs.modal', function (ev) {
 				var modal = $(this);
-				var col = modal.data('mediacollection');				
+				var col = modal.data('mediacollection');
 				var heading = (col) ? "Mediensammlung bearbeiten" : "Mediensammlung hinzufügen";
 				var submit = (col) ? "Speichern" : "Hinzufügen";
 				var title = (col) ? col.title : "";
@@ -74,7 +73,7 @@
 				$('#mediumCollectionMetaLabel').html(heading);
 				$('#timaat-mediacollection-meta-submit-button').html(submit);
 				$("#timaat-mediacollection-meta-title").val(title).trigger('input');
-				$("#timaat-mediacollection-meta-comment").val(comment);				
+				$("#timaat-mediacollection-meta-comment").val(comment);
 			});
 
 			$('#timaat-mediacollection-delete-submit-button').on('click', function(ev) {
@@ -88,7 +87,7 @@
 				var modal = $('#timaat-videochooser-mediacollection-meta');
 				var col = modal.data('mediacollection');
 				var title = $("#timaat-mediacollection-meta-title").val();
-				var comment = $("#timaat-mediacollection-meta-comment").val();				
+				var comment = $("#timaat-mediacollection-meta-comment").val();
 				if (col) {
 					TIMAAT.VideoChooser.collection.title = title;
 					TIMAAT.VideoChooser.collection.remark = comment;
@@ -109,7 +108,7 @@
 					$('#timaat-mediacollection-meta-submit-button').attr('disabled');
 				}
 			});
-			
+
 			$('#timaat-videochooser-list-selectall input:checkbox').change(function() {
 				$('#timaat-videochooser-table tr input:checkbox').prop('checked', $(this).prop('checked'));
 				$('#timaat-videochooser-list-action-submit-button').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);
@@ -121,13 +120,13 @@
 				else
 					$('#timaat-videochooser-list-target').hide();
 			});
-			
+
 			$('#timaat-videochooser-list-action-submit-button').on('click', function() {
 				TIMAAT.VideoChooser.dt.$('input:checked').each(function(index, item) {
 					var medium = $(item).parents('tr').data('medium');
-				});				
+				});
 			});
-			
+
 			$('#timaat-videochooser-list-action-submit-button').on('click', function() {
 				var action = $('#timaat-videochooser-list-action').val();
 				if ( action == 'add' ) {
@@ -174,9 +173,9 @@
 				$('#timaat-videochooser-list-selectall input:checkbox').prop('checked', false);
 				$('#timaat-videochooser-list-action-submit-button').prop('disabled', true);
 				TIMAAT.VideoChooser.dt.$('input:checked').each(function(index, item) { $(item).prop('checked', false); });
-				
+
 			});
-			
+
 			$('#timaat-videochooser-table').on('page.dt', function() {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
@@ -191,28 +190,28 @@
 
 			$(document).on('success.upload.TIMAAT', function(event, video) {
 				if ( !video ) return;
-				let myVideo = $('#videochooser-item-'+video.id).parent().data('video');
-				if ( !myVideo ) return;
-				myVideo.mediumVideo.width = video.mediumVideo.width;
-				myVideo.mediumVideo.height = video.mediumVideo.height;
-				myVideo.mediumVideo.length = video.mediumVideo.length;
-				myVideo.mediumVideo.frameRate = video.mediumVideo.frameRate;
+				let myMedium = $('#videochooser-item-'+video.id).parent().data('video');
+				if ( !myMedium ) return;
+				myMedium.mediumVideo.width = medium.mediumVideo.width;
+				myMedium.mediumVideo.height = medium.mediumVideo.height;
+				myMedium.mediumVideo.length = medium.mediumVideo.length;
+				myMedium.mediumVideo.frameRate = medium.mediumVideo.frameRate;
 
-				myVideo.ui.find('.timaat-medium-upload').css('display', 'none');
-				myVideo.ui.find('.videochooser-annotate-button').show();
-				myVideo.ui.find('.timaat-medium-status').show();
-				myVideo.ui.find('.duration').html(TIMAAT.Util.formatTime(myVideo.mediumVideo.length,true));
-				TIMAAT.VideoChooser.updateVideoStatus(myVideo);
+				myMedium.ui.find('.timaat-medium-upload').css('display', 'none');
+				myMedium.ui.find('.videochooser-annotate-button').show();
+				myMedium.ui.find('.timaat-medium-status').show();
+				myMedium.ui.find('.duration').html(TIMAAT.Util.formatTime(myMedium.mediumVideo.length,true));
+				TIMAAT.VideoChooser.updateVideoStatus(myMedium);
 				TIMAAT.VideoChooser.dt.ajax.reload(null, false);
 			});
 
-			$(document).on('removed.upload.TIMAAT', function(event, video) {
-				if ( !video ) return;
-				let myVideo = $('#videochooser-item-'+video.id).parent().data('video');
+			$(document).on('removed.upload.TIMAAT', function(event, medium) {
+				if ( !medium ) return;
+				let myVideo = $('#videochooser-item-'+medium.id).parent().data('video');
 				if ( !myVideo ) return;
 				if ( myVideo.fileStatus == 'noFile' ) myVideo.ui.find('.timaat-medium-upload').css('display', 'block');
 			});
-			
+
 			$('#timaat-videochooser-list').hide();
 
 			var DataTable = $.fn.dataTable;
@@ -326,9 +325,9 @@
 						}
 					}
 				};
-				
+
 				// IE9 throws an 'unknown error' if document.activeElement is used
-				// inside an iframe or frame. 
+				// inside an iframe or frame.
 				var activeEl;
 
 				try {
@@ -389,17 +388,17 @@
 					},
 					"dataSrc": function(data) {
 						// setup model
-						var videos = Array();
-						var newVideo;
-						data.data.forEach(function(video) { 
-							if ( video.id > 0 && video.mediumVideo) {
-								newVideo = new TIMAAT.Medium(video, 'video');
-								videos.push(newVideo);
+						var mediumList = Array();
+						var newMedium;
+						data.data.forEach(function(medium) {
+							if ( medium.id > 0 && medium.mediumVideo) {
+								newMedium = new TIMAAT.Medium(medium, 'video');
+								mediumList.push(newMedium);
 							}
 						});
-						TIMAAT.VideoChooser.videos = videos;
-						TIMAAT.VideoChooser.videos.model = data.data;
-						return data.data; // data.map(medium => new TIMAAT.Medium(medium));            
+						TIMAAT.VideoChooser.mediumList = mediumList;
+						TIMAAT.VideoChooser.mediumList.model = data.data;
+						return data.data; // data.map(medium => new TIMAAT.Medium(medium));
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -416,7 +415,7 @@
 
 					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
 					TIMAAT.VideoChooser.setVideoStatus(medium);
-					
+
 					// set up events
 					mediumElement.on('click', '.timaat-medium-thumbnail', function(ev) {
 						mediumElement.find('.videochooser-annotate-button').click();
@@ -453,7 +452,7 @@
 						var row = $(this).parents('tr');
 						TIMAAT.VideoChooser._removeCollectionItemRow(row);
 					});
-					
+
 					mediumElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
 						//* only videos have thumbnail slideshow
 						if (!medium.mediumVideo) return;
@@ -463,14 +462,14 @@
 						timeCode = Math.min(Math.max(0, timeCode),length);
 						mediumElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
 					});
-					
+
 					mediumElement.find('.card-img-top').bind("mouseleave", function(ev) {
 						//* only videos have thumbnail slideshow
 						if (!medium.mediumVideo) return;
 						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
 						mediumElement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
 					});
-								
+
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 						TIMAAT.VideoChooser.updateVideoStatus(medium);
 
@@ -567,7 +566,7 @@
 						ui += '</div>';
 							return ui;
 						},
-					}				
+					}
 				],
 				"language": {
 					"decimal"     : ",",
@@ -584,20 +583,20 @@
 						"next"    : "N&auml;chste",
 						"last"    : "Letzte"
 					},
-				},				
+				},
 			});
 		},
-		
+
 		setupMediaCollections: function(collections) {
 			TIMAAT.VideoChooser.collections = collections;
 			$('#timaat-mediacollection-list-loader').hide();
-			
+
 			collections.forEach(function(collection) {
 				TIMAAT.VideoChooser._addCollection(collection);
 			});
 			TIMAAT.VideoChooser._sortCollections();
-			
-			// if ( !TIMAAT.VideoChooser.videos && TIMAAT.VideoChooser.collections.length > 0 ) {
+
+			// if ( !TIMAAT.VideoChooser.mediumList && TIMAAT.VideoChooser.collections.length > 0 ) {
 			// 	TIMAAT.VideoChooser.setCollection(TIMAAT.VideoChooser.collections[0]);
 			// }
 		},
@@ -616,9 +615,9 @@
         	// console.log("TCL: data", data);
 					if ( video.fileStatus && video.fileStatus == data ) return;
 					video.fileStatus = data;
-					
+
 					this.setVideoStatus(video);
-					
+
 					if (video.fileStatus == 'unavailable' || video.fileStatus == 'ready')
 						window.clearInterval(video.poll);
 						// console.log("TCL: video.fileStatus", video.fileStatus);
@@ -631,9 +630,9 @@
 				});
 
 			}, Math.round(30000+(Math.random()*15000)));
-			
+
 		},
-		
+
 		setVideoStatus: function (video) {
 			if ( !video || !video.ui ) return;
 			// clear ui status
@@ -642,8 +641,8 @@
 			video.ui.find('.timaat-medium-status i').removeClass('fa-hourglass-half');
 			video.ui.find('.timaat-medium-status i').addClass('fa-cog');
 			video.ui.find('.timaat-medium-transcoding').hide();
-			
-			if (video.fileStatus == 'unavailable' || video.fileStatus == 'ready') 
+
+			if (video.fileStatus == 'unavailable' || video.fileStatus == 'ready')
 				window.clearInterval(video.poll);
 
 			if ( video.fileStatus == 'unavailable' ) {
@@ -656,7 +655,7 @@
 			if ( video.fileStatus == 'noFile'  ) {
 				video.ui.find('.timaat-medium-upload').css('display', 'block');
 				video.ui.find('.videochooser-annotate-button').hide();
-				
+
 				// upload button click triggers file selection
 				video.ui.find('.timaat-medium-upload').off('click').on('click', function(ev) {
 					ev.preventDefault();
@@ -672,25 +671,25 @@
 			}
 			if ( TIMAAT.UploadManager.isUploading(video) ) video.ui.find('.timaat-medium-upload').css('display', 'none');
 		},
-		
+
 		setCollection: async function(collection) {
     	// console.log("TCL: collection", collection);
 			if ( this.collection == collection ) return;
 			if (collection) TIMAAT.VideoChooser.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(collection.id);
-			
+
 			$('#timaat-videochooser-list-loading').attr('style','');
 			$('#timaat-videochooser-list-selectall input:checkbox').prop('checked', false);
 			$('#timaat-videochooser-list-action-submit-button').prop('disabled', true);
 			$('#timaat-videochooser-list').hide();
 			$('#timaat-videochooser-list-action').val('add').change();
-			
+
 			$('#timaat-videochooser-collectionlibrary').removeClass("active");
 			$('#timaat-videochooser-collectionlibrary').addClass("text-info");
 			$('#timaat-videochooser-collectionlist li').removeClass("active");
 			$('#timaat-videochooser-collectionlist li button').addClass("btn-outline");
-			
+
 			this.collection = collection;
-			
+
 			$('#timaat-videochooser-list-action-remove').prop('disabled', collection == null);
 
 			if ( collection == null ) {
@@ -712,8 +711,8 @@
 /*
 				// load and set collection videos
 				var videos = [];
-				collection.mediaCollectionHasMediums.forEach(function (video) { 
-					videos.push(video.medium); 
+				collection.mediaCollectionHasMediums.forEach(function (video) {
+					videos.push(video.medium);
 				});
 //				this.setVideoList(videos);
 */
@@ -722,18 +721,18 @@
 					this.dt.ajax.url('/TIMAAT/api/mediumCollection/'+collection.id+'/media');
 					this.dt.ajax.reload();
 				}
-				
+
 			}
-			
+
 			$('#timaat-videochooser-list-loading').attr('style','display:none !important');
 			$('#timaat-videochooser-list').show();
 		},
-		
+
 		setMedia: function() {
 			// if (!TIMAAT.MediumDatasets.videos.model || this.videos) return;
 			// console.log("TCL: TIMAAT.MediumDatasets.videos.model", TIMAAT.MediumDatasets.videos.model);
-			if (!TIMAAT.VideoChooser.videos.model) return;			
-			// this.videos = TIMAAT.MediumDatasets.videos.model;			
+			if (!TIMAAT.VideoChooser.mediumList.model) return;
+			// this.videos = TIMAAT.MediumDatasets.videos.model;
 			if ( !TIMAAT.VideoChooser.collection ) {
 				TIMAAT.VideoChooser.collection = 'init';
 				TIMAAT.VideoChooser.setCollection(null);
@@ -746,11 +745,11 @@
 			// console.log("TCL: setVideoList: function(videos)");
 			// console.log("TCL: VIDEOCHOOSER: setVideoList -> videos", videos);
 			if ( !videos ) return;
-			
+
 			if ( this.dt != null ) {
 				this.dt.destroy();
 				this.dt = null;
-				
+
 				// TODO remove old listeners
 				/*
 				 			if ( video.ui ) {
@@ -767,48 +766,48 @@
 
 			// clear video UI list
 			$('#timaat-videochooser-list').empty();
-			
+
 			videos.forEach(function(video) {
 //				this._addVideo(video);
 			});
-			
+
 			this.curVideos = videos;
-			
+
 		},
 */
-		
-		loadThumbnail: function (video) {
-			if ( !video || !video.ui ) return;
+
+		loadThumbnail: function (medium) {
+			if ( !medium || !medium.ui ) return;
 			var img = $('<img />').appendTo('body').hide();
-			img.data('video', video );
+			img.data('video', medium );
 			img.on('load', function(ev) {
-				var video = $(ev.target).data('video');
-				if (video.mediumVideo) {
-					video.ui.find('.card-img-top').attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+				var medium = $(ev.target).data('video');
+				if (medium.mediumVideo) {
+					medium.ui.find('.card-img-top').attr('src', "api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
 				}
-				if (video.mediumImage) {
-					video.ui.find('.card-img-top').attr('src', "api/medium/image/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+				if (medium.mediumImage) {
+					medium.ui.find('.card-img-top').attr('src', "api/medium/image/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
 				}
-				$(ev.target).remove();			
+				$(ev.target).remove();
 			});
 			img.on('error', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				$(ev.target).remove();
 			});
-			if (video.mediumVideo) {
-				img.attr('src', "api/medium/video/"+video.id+"/thumbnail"+"?token="+video.viewToken);	
+			if (medium.mediumVideo) {
+				img.attr('src', "api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
 			}
-			if (video.mediumImage) {
-				img.attr('src', "api/medium/image/"+video.id+"/thumbnail"+"?token="+video.viewToken);
+			if (medium.mediumImage) {
+				img.attr('src', "api/medium/image/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
 			}
 		},
-		
+
 		addMediaCollection: function() {
 			$('#timaat-videochooser-mediacollection-meta').data('mediacollection', null);
-			$('#timaat-videochooser-mediacollection-meta').modal('show');	
+			$('#timaat-videochooser-mediacollection-meta').modal('show');
 		},
-		
+
 		updateMediaCollection: function(collection) {
 			// console.log("TCL: updateMediaCollection: function(collection)");
 			// console.log("TCL: collection", collection);
@@ -821,10 +820,10 @@
 			// update UI collection view
 			collection.ui.find('.collection-title').html(collection.title);
 			$('#timaat-videochooser-list-target-collection option[value="'+collection.id+'"]').text(collection.title);
-			
+
 			this._sortCollections();
 		},
-		
+
 		removeMediaCollection: function() {
 			// console.log("TCL: removeMediaCollection: function()");
 			if (TIMAAT.VideoChooser.currentPermissionLevel < 4) {
@@ -835,14 +834,14 @@
 			$('#timaat-videochooser-mediacollection-delete').data('mediacollection', this.collection);
 			$('#timaat-videochooser-mediacollection-delete').modal('show');
 		},
-		
+
 		_mediaCollectionAdded: async function(col) {
 			this.collections.push(col);
-			this._addCollection(col);			
+			this._addCollection(col);
 			this._sortCollections();
 			await TIMAAT.UI.refreshDataTable('mediumCollection');
 		},
-		
+
 		_mediaCollectionRemoved: async function(col) {
 			// console.log("TCL: _mediaCollectionRemoved: function(col)");
 			// console.log("TCL: col", col);
@@ -853,43 +852,43 @@
 			// remove from model lists
 			var index = this.collections.indexOf(col);
 			if (index > -1) this.collections.splice(index, 1);
-			
+
 			// update UI list view
 			if ( col.ui ) $('#timaat-videochooser-collection-'+col.id).remove();
 			index--;
 			if ( index < 0 ) index = 0;
 			if ( index > (this.collections.length-1) ) index = -1;
-			
+
 			if ( index >= 0 ) this.setCollection(this.collections[index]);
 			else this.setCollection(null);
-			
-			$('#timaat-videochooser-list-target-collection option[value="'+col.id+'"]').remove();			
+
+			$('#timaat-videochooser-list-target-collection option[value="'+col.id+'"]').remove();
 			this._sortCollections();
 		},
-		
+
 		_removeCollectionItemRow: function(row) {
 			if ( row == null ) return;
 			var video = $(row).data('medium');
 			// console.log(row, video);
-			
+
 			// remove from server
 			TIMAAT.MediumCollectionService.removeCollectionItem(this.collection.id, video.id).then((success) => {
 				// sync changes with UI
 				this.dt.row(row).remove().draw();
 			});
-			
+
 /*
 			var item = null;
-			this.collection.mediaCollectionHasMediums.forEach(function (colvideo) { 
+			this.collection.mediaCollectionHasMediums.forEach(function (colvideo) {
 				if ( colvideo.medium == video ) item = colvideo;
 			});
-			if ( !item ) return;				
+			if ( !item ) return;
 
 			var index = this.collection.mediaCollectionHasMediums.indexOf(item);
 			if (index > -1) this.collection.mediaCollectionHasMediums.splice(index, 1);
-*/			
+*/
 		},
-		
+
 		_sortCollections: function() {
 			$("#timaat-videochooser-collectionlist li").sort(function sort_li(a, b) { return ($(b).text().toLowerCase()) < ($(a).text().toLowerCase()) ? 1 : -1; }).appendTo('#timaat-videochooser-collectionlist');
 			$("#timaat-videochooser-list-target-collection option").sort(function sort_li(a, b) { return ($(b).text().toLowerCase()) < ($(a).text().toLowerCase()) ? 1 : -1; }).appendTo('#timaat-videochooser-list-target-collection');
@@ -898,12 +897,12 @@
 		_addCollection: function(collection) {
 			var collectionElement = $(`<li id="timaat-videochooser-collection-`+collection.id+`" class="list-group-item list-group-item-action">
 			<i class="fas fa-folder"></i><span class="collection-title"> `+collection.title+`</span></li>`);
-			
+
 			collectionElement.appendTo('#timaat-videochooser-collectionlist');
-			
+
 			// collection events
-			collectionElement.on('click', function(ev) { 
-				TIMAAT.VideoChooser.setCollection(collection); 
+			collectionElement.on('click', function(ev) {
+				TIMAAT.VideoChooser.setCollection(collection);
 				TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediaLibrary/'+collection.id);
 			});
 
@@ -917,9 +916,9 @@
 			var target = $('<option value="'+collection.id+'">'+collection.title+'</option>');
 			$('#timaat-videochooser-list-target-collection').append(target);
 			target.data('collection', collection);
-			
+
 		},
-		
+
 		_getProducer: function(video) {
 			if ( !video || !video.mediumHasActorWithRoles ) return "-";
 			var actors = [];
@@ -947,5 +946,5 @@
 		},
 
 	}
-	
+
 }, window));
