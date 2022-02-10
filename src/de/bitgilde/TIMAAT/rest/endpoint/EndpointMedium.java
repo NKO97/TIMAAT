@@ -1229,6 +1229,7 @@ public class EndpointMedium {
 		if ( updatedMedium.getRemark() != null ) medium.setRemark(updatedMedium.getRemark());
 		if ( updatedMedium.getCopyright() != null ) medium.setCopyright(updatedMedium.getCopyright());
 		if ( updatedMedium.getDisplayTitle() != null ) medium.setDisplayTitle(updatedMedium.getDisplayTitle());
+		medium.setMusic(updatedMedium.getMusic());
 		medium.setOriginalTitle(updatedMedium.getOriginalTitle()); // originalTitle can be set to null
 		List<CategorySet> oldCategorySets = medium.getCategorySets();
 		medium.setCategorySets(updatedMedium.getCategorySets());
@@ -1245,10 +1246,12 @@ public class EndpointMedium {
 			// DEBUG do nothing - production system should abort with internal server error
 		}
 
-		// persist medium
-		EntityTransaction entityTransaction = entityManager.getTransaction();
+		//* time inconsistency check print out
 		System.out.println(medium.getCreatedAt());
 		System.out.println(medium.getLastEditedAt());
+
+		// persist medium
+		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(medium);
 		entityManager.persist(medium);
@@ -1272,9 +1275,11 @@ public class EndpointMedium {
 		for (Tag tag : oldTags) {
 			entityManager.refresh(tag);
 		}
-		// System.out.println("after");
-		// System.out.println(medium.getCreatedAt());
-		// System.out.println(medium.getLastEditedAt());
+
+		//* time inconsistency check print out
+		System.out.println("after");
+		System.out.println(medium.getCreatedAt());
+		System.out.println(medium.getLastEditedAt());
 
 		// if ( medium.getMediumVideo() != null ) {
 			// medium.getFileStatus(medium.getMediaType().getMediaTypeTranslations().get(0).getType());

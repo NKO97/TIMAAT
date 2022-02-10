@@ -443,6 +443,7 @@ a.dropdown-item {
 	z-index: 100;
 }
 
+#timaat-timeline-music-form-element-pane,
 #timaat-timeline-segment-pane,
 #timaat-timeline-take-pane,
 #timaat-timeline-action-pane {
@@ -508,6 +509,16 @@ a.dropdown-item {
 	background-color: #6c757d;
 	cursor: pointer;
 }
+.timaat-timeline-music-form-element {
+	position: absolute;
+	height: 22px;
+	float:left;
+	width: 0px;
+	cursor: pointer;
+	border-style: double;
+	border-color: #0001;
+}
+.timaat-timeline-music-form-element-type,
 .timaat-timeline-segment-name,
 .timaat-timeline-sequence-name,
 .timaat-timeline-take-name,
@@ -518,6 +529,10 @@ a.dropdown-item {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.timaat-timeline-selected-music-form-element {
+	border-color: #000;
 }
 
 #timaat-timeline-marker-pane {

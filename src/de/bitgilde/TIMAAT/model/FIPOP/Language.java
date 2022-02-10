@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the language database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Language.findAll", query="SELECT l FROM Language l")
@@ -377,6 +377,16 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<MusicTypeTranslation> musicTypeTranslations;
+
+	//bi-directional many-to-one association to MusicFormElementTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MusicFormElementTranslation> musicFormElementTranslations;
+
+	//bi-directional many-to-one association to MusicFormElementTypeTranslation
+	@OneToMany(mappedBy="language")
+	@JsonIgnore
+	private List<MusicFormElementTypeTranslation> musicFormElementTypeTranslations;
 
 	// //bi-directional many-to-one association to NoiseSubtypeTranslation
 	// @OneToMany(mappedBy="language")
@@ -1894,6 +1904,50 @@ public class Language implements Serializable {
 		musicTypeTranslation.setLanguage(null);
 
 		return musicTypeTranslation;
+	}
+
+	public List<MusicFormElementTranslation> getMusicFormElementTranslations() {
+		return this.musicFormElementTranslations;
+	}
+
+	public void setMusicFormElementTranslations(List<MusicFormElementTranslation> musicFormElementTranslations) {
+		this.musicFormElementTranslations = musicFormElementTranslations;
+	}
+
+	public MusicFormElementTranslation addMusicFormElementTranslation(MusicFormElementTranslation musicFormElementTranslation) {
+		getMusicFormElementTranslations().add(musicFormElementTranslation);
+		musicFormElementTranslation.setLanguage(this);
+
+		return musicFormElementTranslation;
+	}
+
+	public MusicFormElementTranslation removeMusicFormElementTranslation(MusicFormElementTranslation musicFormElementTranslation) {
+		getMusicFormElementTranslations().remove(musicFormElementTranslation);
+		musicFormElementTranslation.setLanguage(null);
+
+		return musicFormElementTranslation;
+	}
+
+	public List<MusicFormElementTypeTranslation> getMusicFormElementTypeTranslations() {
+		return this.musicFormElementTypeTranslations;
+	}
+
+	public void setMusicFormElementTypeTranslations(List<MusicFormElementTypeTranslation> musicFormElementTypeTranslations) {
+		this.musicFormElementTypeTranslations = musicFormElementTypeTranslations;
+	}
+
+	public MusicFormElementTypeTranslation addMusicFormElementTypeTranslation(MusicFormElementTypeTranslation musicFormElementTypeTranslation) {
+		getMusicFormElementTypeTranslations().add(musicFormElementTypeTranslation);
+		musicFormElementTypeTranslation.setLanguage(this);
+
+		return musicFormElementTypeTranslation;
+	}
+
+	public MusicFormElementTypeTranslation removeMusicFormElementTypeTranslation(MusicFormElementTypeTranslation musicFormElementTypeTranslation) {
+		getMusicFormElementTypeTranslations().remove(musicFormElementTypeTranslation);
+		musicFormElementTypeTranslation.setLanguage(null);
+
+		return musicFormElementTypeTranslation;
 	}
 
 	// public List<NoiseSubtypeTranslation> getNoiseSubtypeTranslations() {

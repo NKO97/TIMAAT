@@ -595,6 +595,7 @@
 			tempMediumModel.tags = mediumModel.tags;
 			tempMediumModel.categorySets = mediumModel.categorySets;
 			tempMediumModel.categories = mediumModel.categories;
+			tempMediumModel.music = mediumModel.music;
       // console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
 			return new Promise(resolve => {
 				$.ajax({

@@ -170,7 +170,7 @@
 				formDataSanitized.jinsId                    = Number(formDataObject.jinsId);
 				formDataSanitized.maqamId                   = Number(formDataObject.maqamId);
 				formDataSanitized.musicalKeyId              = Number(formDataObject.musicalKeyId);
-				formDataSanitized.primarySourceMediumId			= Number(formDataObject.primarySourceMediumId);
+				formDataSanitized.mediumId									= Number(formDataObject.mediumId);
 				formDataSanitized.tempoMarkingId            = Number(formDataObject.tempoMarkingId);
 				formDataSanitized.textSettingId             = Number(formDataObject.textSettingId);
 				formDataSanitized.voiceLeadingPatternList = voiceLeadingPatternIdList;
@@ -210,14 +210,14 @@
 						break;
 					}
 					// music.model = await TIMAAT.MusicDatasets.updateMusic(type, music);
-					music.model = await TIMAAT.MusicDatasets.updateMusic(type, music);
+					music.model = await TIMAAT.MusicDatasets.updateMusic(type, music, formDataSanitized.mediumId);
 					// music.updateUI();
 				} else { // create new music
 					var musicModel = await TIMAAT.MusicDatasets.createMusicModel(formDataSanitized, type);
 					var displayTitleModel = await TIMAAT.MusicDatasets.createDisplayTitleModel(formDataSanitized);
 					var musicSubtypeModel = await TIMAAT.MusicDatasets.createMusicSubtypeModel(formDataSanitized, type);
 
-					var newMusic = await TIMAAT.MusicDatasets.createMusic(type, musicModel, musicSubtypeModel, displayTitleModel);
+					var newMusic = await TIMAAT.MusicDatasets.createMusic(type, musicModel, musicSubtypeModel, displayTitleModel, formDataSanitized.mediumId);
 					music = new TIMAAT.Music(newMusic, type);
 					// music.model.fileStatus = 'noFile';
 					$('#music-metadata-form').data('music', music);
@@ -570,13 +570,14 @@
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				var music = $('#music-metadata-form').data('music');
-				if (music.model.primarySourceMedium && music.model.primarySourceMedium.fileStatus && music.model.primarySourceMedium.fileStatus != 'noFile') {
-					console.log("TCL: $ -> music", music);
+				let medium = await TIMAAT.MusicService.getMediumByMusicId(music.model.id);
+				if (medium.id && medium.fileStatus && medium.fileStatus != 'noFile') {
 					TIMAAT.UI.showComponent('videoplayer');
 					// setup video in player
-					TIMAAT.VideoPlayer.setupMedium(music.model.primarySourceMedium);
+					TIMAAT.VideoPlayer.setupMedium(medium);
 					// load video annotations from server
-					TIMAAT.AnalysisListService.getAnalysisLists(music.model.primarySourceMedium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+					TIMAAT.AnalysisListService.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+					TIMAAT.VideoPlayer.loadAnalysisList(0);
 				}
 			});
 
@@ -1450,7 +1451,7 @@
 			this.getMusicFormJinsDropdownData();
 			this.getMusicFormMaqamDropdownData();
 			this.getMusicFormMusicalKeyDropdownData();
-			this.getMusicFormPrimarySourceMediumDropdownData();
+			this.getMusicFormMediumDropdownData();
 			this.getMusicFormTempoMarkingDropdownData();
 			this.getMusicFormTextSettingDropdownData();
 			this.getMusicFormTitleLanguageDropdownData();
@@ -1512,7 +1513,7 @@
 			this.getMusicFormJinsDropdownData();
 			this.getMusicFormMaqamDropdownData();
 			this.getMusicFormMusicalKeyDropdownData();
-			this.getMusicFormPrimarySourceMediumDropdownData();
+			this.getMusicFormMediumDropdownData();
 			this.getMusicFormTempoMarkingDropdownData();
 			this.getMusicFormTextSettingDropdownData();
 			this.getMusicFormTitleLanguageDropdownData();
@@ -1593,10 +1594,11 @@
 			} else {
 				$('#music-musical-key-select-dropdown').empty().trigger('change');
 			}
-			if (data.model.primarySourceMedium) {
-				var primarySourceMediumSelect = $('#music-primary-source-medium-select-dropdown');
-				var option = new Option(data.model.primarySourceMedium.displayTitle.name, data.model.primarySourceMedium.id, true, true);
-				primarySourceMediumSelect.append(option).trigger('change');
+			let medium = await TIMAAT.MusicService.getMediumByMusicId(data.model.id);
+			if (medium) {
+				var mediumSelect = $('#music-primary-source-medium-select-dropdown');
+				var option = new Option(medium.displayTitle.name, medium.id, true, true);
+				mediumSelect.append(option).trigger('change');
 			} else {
 				$('#music-primary-source-medium-select-dropdown').empty().trigger('change');
 			}
@@ -1671,7 +1673,7 @@
 			$('#music-metadata-form').data('music', data);
     },
 
-    musicFormPreview: function(type, data) {
+    musicFormPreview: async function(type, data) {
 			// console.log("TCL: musicFormPreview - type, data", type, data);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
 			$('#music-preview-form').trigger('reset');
@@ -1680,7 +1682,7 @@
 			// handling if type is 'music' and user is in all music view
 			if (type == 'music') type = data.model.musicType.musicTypeTranslations[0].type;
 			let mediumType = null;
-			let medium = data.model.primarySourceMedium;
+			let medium = await TIMAAT.MusicService.getMediumByMusicId(data.model.id);
 			if (medium) mediumType = medium.mediaType.mediaTypeTranslations[0].type;
 
 			$('#music-preview-form :input').prop('disabled', true);
@@ -2071,8 +2073,8 @@
 			}
 		},
 
-    createMusic: async function(musicSubtype, musicModel, musicSubtypeModel, title) {
-    	console.log("TCL: createMusic: musicSubtype, musicModel, musicSubtypeModel, title", musicSubtype, musicModel, musicSubtypeModel, title);
+    createMusic: async function(musicSubtype, musicModel, musicSubtypeModel, title, mediumId) {
+    	// console.log("TCL: createMusic: musicSubtype, musicModel, musicSubtypeModel, title, mediumId: ", musicSubtype, musicModel, musicSubtypeModel, title, mediumId);
 			try { // TODO needs to be called after createMusic once m-n-table is refactored to 1-n table (sure?)
 				// create display title
 				var newDisplayTitle = await TIMAAT.MusicService.createTitle(title);
@@ -2085,7 +2087,7 @@
 				var tempMusicModel = musicModel;
 				tempMusicModel.displayTitle = newDisplayTitle;
 				tempMusicModel.originalTitle = newDisplayTitle;
-				var newMusicModel = await TIMAAT.MusicService.createMusic(tempMusicModel);
+				var newMusicModel = await TIMAAT.MusicService.createMusic(tempMusicModel, mediumId);
 			} catch(error) {
 				console.error("ERROR: ", error);
 			};
@@ -2135,8 +2137,8 @@
 			};
 		},
 
-    updateMusic: async function(musicSubtype, music) {
-			console.log("TCL: updateMusic: async function -> music at beginning of update process: ", musicSubtype, music);
+    updateMusic: async function(musicSubtype, music, mediumId) {
+			// console.log("TCL: updateMusic: async function -> music at beginning of update process: ", musicSubtype, music, mediumId);
 			try { // update display title
 				var tempDisplayTitle = await TIMAAT.MusicService.updateTitle(music.model.displayTitle);
         // console.log("tempDisplayTitle", tempDisplayTitle);
@@ -2161,30 +2163,44 @@
 
 			try { // update subtype
 				let tempSubtypeModel;
+				let tempMusicSubtypeModel;
 				switch (musicSubtype) {
 					case 'nashid':
 						tempSubtypeModel = music.model.musicNashid;
-					break;
+						tempMusicSubtypeModel = await TIMAAT.MusicService.updateMusicSubtype(musicSubtype, tempSubtypeModel);
+						music.model.musicNashid = tempMusicSubtypeModel;
+						break;
 					case 'churchMusic':
 						tempSubtypeModel = music.model.musicChurchMusic;
-					break;
-				}
-				let tempMusicSubtypeModel = await TIMAAT.MusicService.updateMusicSubtype(musicSubtype, tempSubtypeModel);
-        // console.log("TCL: updateMusic:function -> tempMusicSubtypeModel", tempMusicSubtypeModel);
-				switch (musicSubtype) {
-					case 'nashid':
-						music.model.musicNashid = tempMusicSubtypeModel;
-					break;
-					case 'churchMusic':
+						tempMusicSubtypeModel = await TIMAAT.MusicService.updateMusicSubtype(musicSubtype, tempSubtypeModel);
 						music.model.musicChurchMusic = tempMusicSubtypeModel;
-					break;
+						break;
 				}
-				let musicModel = await TIMAAT.MusicService.updateMusic(music.model);
-        // console.log("TCL: updateMusic:function -> musicModel", musicModel);
-				return musicModel;
 			} catch(error) {
 				console.error("ERROR: ", error);
 			};
+
+			let musicModel = await TIMAAT.MusicService.updateMusic(music.model);
+			let medium = await TIMAAT.MusicService.getMediumByMusicId(musicModel.id);
+			// update medium if music.id has changed (null -> x || x -> y || x -> null)
+			if (medium && isNaN(mediumId)) { // source medium removed -> null
+				medium.music = null;
+				await TIMAAT.MediumService.updateMedium(medium);
+			} else if (!medium && !isNaN(mediumId)) { // source medium set from null -> x
+				medium = await TIMAAT.MediumService.getMedium(mediumId);
+				medium.music = {};
+				medium.music.id = musicModel.id;
+				await TIMAAT.MediumService.updateMedium(medium);
+			} else if (medium && medium.id != mediumId) { // source medium changed -> update old and new medium connected to music
+				medium.music = null;
+				await TIMAAT.MediumService.updateMedium(medium);
+				let medium2 = await TIMAAT.MediumService.getMedium(mediumId);
+				medium2.music = {};
+				medium2.music.id = musicModel.id;
+				await TIMAAT.MediumService.updateMedium(medium2);
+			} // else medium.id == mediumId -> no change
+
+			return musicModel;
 		},
 
 		updateTitle: async function(title, music) {
@@ -2508,14 +2524,6 @@
 					model.musicalKey.id = formDataObject.musicalKeyId;
 				}
 			} else model.musicalKey = null;
-			if (!isNaN(formDataObject.primarySourceMediumId)) {
-				if (model.primarySourceMedium) {
-					model.primarySourceMedium.id = formDataObject.primarySourceMediumId;
-				} else {
-					model.primarySourceMedium = {};
-					model.primarySourceMedium.id = formDataObject.primarySourceMediumId;
-				}
-			} else model.primarySourceMedium = null;
 			if (!isNaN(formDataObject.tempoMarkingId)) {
 				if (model.tempoMarking) {
 					model.tempoMarking.id = formDataObject.tempoMarkingId;
@@ -2599,9 +2607,9 @@
 				model.musicalKey = {};
 				model.musicalKey.id = formDataObject.musicalKeyId;
 			}
-			if (formDataObject.primarySourceMediumId > 0) {
-				model.primarySourceMedium = {};
-				model.primarySourceMedium.id = formDataObject.primarySourceMediumId;
+			if (formDataObject.mediumId > 0) {
+				model.medium = {};
+				model.medium.id = formDataObject.mediumId;
 			}
 			if (formDataObject.tempoMarkingId > 0) {
 				model.tempoMarking = {};
@@ -2807,16 +2815,17 @@
 			$('#timaat-musicdatasets-metadata-music-title').focus();
 		},
 
-		initFormForShow: function (model) {
+		initFormForShow: async function (model) {
 			$('.musicdatasheet-form-edit-button').prop('disabled', false);
 			$('.musicdatasheet-form-edit-button :input').prop('disabled', false);
 			$('.musicdatasheet-form-edit-button').show();
-			if (model.primarySourceMedium &&
-				  model.primarySourceMedium.fileStatus &&
-					model.primarySourceMedium.fileStatus != 'noFile' &&
-					(model.primarySourceMedium.mediaType.mediaTypeTranslations[0].type == 'video' ||
-					 model.primarySourceMedium.mediaType.mediaTypeTranslations[0].type == 'image' ||
-					 model.primarySourceMedium.mediaType.mediaTypeTranslations[0].type == 'audio')) {
+			let medium = await TIMAAT.MusicService.getMediumByMusicId(model.id);
+			if (medium &&
+				  medium.fileStatus &&
+					medium.fileStatus != 'noFile' &&
+					(medium.mediaType.mediaTypeTranslations[0].type == 'video' ||
+					 medium.mediaType.mediaTypeTranslations[0].type == 'image' ||
+					 medium.mediaType.mediaTypeTranslations[0].type == 'audio')) {
 				$('.music-datasheet-form-annotate-button').prop('disabled', false);
 			} else {
 				$('.music-datasheet-form-annotate-button').prop('disabled', true);
@@ -2982,13 +2991,13 @@
 			});
 		},
 
-		getMusicFormPrimarySourceMediumDropdownData: function() {
+		getMusicFormMediumDropdownData: function() {
 			$('#music-primary-source-medium-select-dropdown').select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: true,
 				ajax: {
-					url: 'api/music/primarySourceMedium/selectList/',
+					url: 'api/music/medium/selectList/',
 					type: 'GET',
 					dataType: 'json',
 					delay: 250,
@@ -3475,9 +3484,6 @@
 								break;
 							}
 							let noFileIcon = ' ';
-							if (!music.primarySourceMedium || music.primarySourceMedium && (music.primarySourceMedium.fileStatus == 'noFile' || !music.primarySourceMedium.fileStatus)) {
-								noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-							}
 							let commentIcon = ' ';
 							if (music.remark.length > 0) {
 								commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
@@ -3598,9 +3604,6 @@
 						// console.log("TCL: musicFormActorRoles:function -> data", data);
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
-						if (!music.primarySourceMedium || music.primarySourceMedium && (music.primarySourceMedium.fileStatus == 'noFile' || !music.primarySourceMedium.fileStatus)) {
-							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-						}
 						let commentIcon = ' ';
 						if (music.remark.length > 0) {
 							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
@@ -3720,9 +3723,6 @@
 						// console.log("TCL: musicFormActorRoles:function -> data", data);
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
-						if (!music.primarySourceMedium || music.primarySourceMedium && (music.primarySourceMedium.fileStatus == 'noFile' || !music.primarySourceMedium.fileStatus)) {
-							noFileIcon = '<i class="fas fa-file-upload" title="No file uploaded"></i> ';
-						}
 						let commentIcon = ' ';
 						if (music.remark.length > 0) {
 							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';

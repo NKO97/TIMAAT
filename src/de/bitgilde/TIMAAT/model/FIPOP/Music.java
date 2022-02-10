@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -89,11 +90,6 @@ public class Music implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="dynamic_marking_id")
 	private DynamicMarking dynamicMarking;
-
-	//bi-directional many-to-one association to Medium
-	@OneToOne
-	@JoinColumn(name="primary_source_medium_id")
-	private Medium primarySourceMedium;
 
 	//bi-directional many-to-one association to MusicType
 	@ManyToOne
@@ -206,7 +202,12 @@ public class Music implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="text_setting_id")
 	private TextSetting textSetting;
-	
+
+	//bi-directional many-to-one association to MusicFormElement
+	@OneToMany(mappedBy="music")
+  @JsonManagedReference(value = "Music-MusicFormElement")
+	private List<MusicFormElement> musicFormElements;
+
 
 	public Music() {
 	}
@@ -340,14 +341,6 @@ public class Music implements Serializable {
 		this.dynamicMarking = dynamicMarking;
 	}
 
-	public Medium getPrimarySourceMedium() {
-		return this.primarySourceMedium;
-	}
-
-	public void setPrimarySourceMedium(Medium primarySourceMedium) {
-		this.primarySourceMedium = primarySourceMedium;
-	}
-
 	public MusicType getMusicType() {
 		return this.musicType;
 	}
@@ -466,5 +459,26 @@ public class Music implements Serializable {
 
 	public void setVoiceLeadingPatternList(List<VoiceLeadingPattern> voiceLeadingPatternList) {
 		this.voiceLeadingPatternList = voiceLeadingPatternList;
+	}
+
+	public List<MusicFormElement> getMusicFormElements() {
+		return this.musicFormElements;
+	}
+
+	public void setMusicFormElements(List<MusicFormElement> musicFormElements) {
+		this.musicFormElements = musicFormElements;
+	}
+
+	public MusicFormElement addMusicFormElement(MusicFormElement musicFormElement) {
+		getMusicFormElements().add(musicFormElement);
+		musicFormElement.setMusic(this);
+
+		return musicFormElement;
+	}
+
+	public MusicFormElement removeMusicFormElement(MusicFormElement musicFormElement) {
+		getMusicFormElements().remove(musicFormElement);
+
+		return musicFormElement;
 	}
 }

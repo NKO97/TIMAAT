@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * The persistent class for the medium database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Medium.findAll", query="SELECT m FROM Medium m")
@@ -83,18 +83,18 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	@JsonIgnore
 	private List<MediaCollectionHasMedium> mediaCollectionHasMediums;
-	
+
 	//bi-directional many-to-one association to MediaType
 	@ManyToOne
 	@JoinColumn(name="media_type_id")
 	private MediaType mediaType;
-	
+
 	//bi-directional many-to-one association to PropagandaType
 	@ManyToOne
 	@JoinColumn(name="propaganda_type_id")
 	@JsonBackReference(value = "PropagandaType-Medium")
 	private PropagandaType propagandaType;
-		
+
 	//bi-directional many-to-one association to Reference
 	@ManyToOne
 	@JsonBackReference(value = "Reference-Medium")
@@ -195,7 +195,7 @@ public class Medium implements Serializable {
 	@OneToMany(mappedBy="medium")
 	private List<MediumHasLanguage> mediumHasLanguages;
 
-	
+
 	//bi-directional many-to-one association to MediumHasActorWithRole
 	@OneToMany(mappedBy="medium")
 	private List<MediumHasActorWithRole> mediumHasActorWithRoles;
@@ -265,6 +265,12 @@ public class Medium implements Serializable {
 	@JsonManagedReference(value = "Medium-Source")
 	private List<Source> sources;
 
+	// bi-directional one-to-one association to Music
+	@OneToOne
+	// @JoinColumn(name="music_id")
+	// @JsonBackReference(value="Medium-Music")
+	private Music music;
+
 	@Transient
 	private String fileStatus;
 
@@ -309,7 +315,7 @@ public class Medium implements Serializable {
 	public void setCreatedByUserAccount(UserAccount createdByUserAccount) {
 		this.createdByUserAccount = createdByUserAccount;
 	}
-	
+
 	public String getFileHash() {
 		return this.fileHash;
 	}
@@ -412,7 +418,7 @@ public class Medium implements Serializable {
 
 		return mediaCollectionHasMedium;
 	}
-	
+
 	public MediaType getMediaType() {
 		return this.mediaType;
 	}
@@ -730,11 +736,11 @@ public class Medium implements Serializable {
 	public MediumVideo getMediumVideo() {
 		return this.mediumVideo;
 	}
-	
+
 	public void setMediumVideo(MediumVideo mediumVideo) {
 		this.mediumVideo = mediumVideo;
 	}
-	
+
 	public MediumVideogame getMediumVideogame() {
 		return mediumVideogame;
 	}
@@ -763,6 +769,14 @@ public class Medium implements Serializable {
 		mediumHasActorWithRole.setMedium(null);
 
 		return mediumHasActorWithRole;
+	}
+
+	public Music getMusic() {
+		return this.music;
+	}
+
+	public void setMusic(Music music) {
+		this.music = music;
 	}
 
 	public String getFileStatus() {

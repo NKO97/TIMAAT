@@ -67,7 +67,7 @@
 			// add events
 			this.ui.head.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime / 1000 + ev.data.time / 1000);
+				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime + ev.data.time);
 			});
 
 			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
@@ -100,8 +100,7 @@
 
 			this.ui.inspectorView.find('.keyframe-jumpTo').on('click', this, function(ev) {
 				if ( !ev.data ) return;
-				let time = (ev.data.parent.model.startTime + ev.data.model.time) / 1000;
-				TIMAAT.VideoPlayer.jumpTo(time);
+				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.model.startTime + ev.data.model.time);
 			});
 
 			this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {

@@ -18,14 +18,14 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.AnalysisScene = class AnalysisScene {
 		constructor(model) {
 			// console.log("TCL: AnalysisScene -> constructor -> model", model);
 			// setup model
 			this.model = model;
 			this.active = false;
-			
+
 			// create and style list view element
 			this.listView = $(`
 				<li class="list-group-item timaat-annotation-list-scene p-0 bg-secondary">
@@ -42,11 +42,11 @@
 					<div class="timaat-timeline-scene-name text-white font-weight-bold"></div>
 				</div>`
 			);
-			
+
 			var scene = this; // save annotation for events
 
 		}
-				
+
 		updateUI() {
 			// console.log("TCL: AnalysisScene -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
@@ -60,22 +60,16 @@
 			this.listView.find('.timaat-annotation-scene-comment').html(this.model.analysisSceneTranslations[0].comment);
 			this.listView.find('.timaat-annotation-scene-transcript').html(this.model.analysisSceneTranslations[0].transcript);
 			this.timelineView.find('.timaat-timeline-scene-name ').html(this.model.analysisSceneTranslations[0].name);
-			
-			// comment
-			// if ( this.model.analysisSceneTranslations[0].comment && this.model.analysisSceneTranslations[0].comment.length > 0 )
-			// 	this.listView.find('.timaat-annotation-scene-comment-icon').show();
-			// else
-			// 	this.listView.find('.timaat-annotation-scene-comment-icon').hide();
-			
+
 			// update timeline position
-//			let width =  $('#video-seek-bar').width();
+			// let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
 			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * 100.0;
 			this.timelineView.css('width', length+'%');
 			this.timelineView.css('margin-left', (offset)+'%');
 
 		}
-		
+
 		addUI() {
 			// console.log("TCL: AnalysisScene -> addUI -> addUI()");
 			// $('#timaat-annotation-list').append(this.listView);
@@ -83,13 +77,6 @@
 
 			var scene = this; // save annotation for events
 			// attach event handlers
-			// this.listView.on('click', this, function(ev) {
-			// 	TIMAAT.VideoPlayer.curScene = scene;
-			// 	TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime, scene.model.endTime);
-			// 	TIMAAT.VideoPlayer.pause();
-			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
-			// });
 			this.timelineView.on('click', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === scene.model.segmentId);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
@@ -109,14 +96,6 @@
 					// TODO
 					// TIMAAT.URLHistory.setURL(null, 'Scene · '+scene.model.analysisSceneTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/scene/'+scene.model.id);
 			});
-			// this.listView.on('dblclick', this, function(ev) {
-			// 	TIMAAT.VideoPlayer.curScene = scene;
-			// 	TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime, scene.model.endTime);
-			// 	TIMAAT.VideoPlayer.pause();
-			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(scene, 'scene');
-			// 	TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
-			// });
 			this.timelineView.on('dblclick', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === scene.model.segmentId);
 				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
@@ -125,7 +104,8 @@
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'scene';
 				TIMAAT.VideoPlayer.curAction = null;
-				TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime, scene.model.endTime);
+				TIMAAT.VideoPlayer.jumpTo(scene.model.startTime);
+				// TIMAAT.VideoPlayer.jumpVisible(scene.model.startTime, scene.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -140,7 +120,7 @@
 			// console.log("TCL: AnalysisScene -> addUI -> this.updateUI()");
 			this.updateUI();
 		}
-		
+
 		removeUI() {
 			// console.log("TCL: AnalysisScene -> removeUI -> removeUI()");
 			// this.listView.remove();
@@ -149,7 +129,7 @@
 			// console.log("TCL: AnalysisScene -> removeUI -> this.updateUI()");
 			this.updateUI();
 		}
-			
+
 		updateStatus(timeInSeconds, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 			let time = timeInSeconds * 1000;
@@ -181,5 +161,5 @@
 		}
 
 	}
-	
+
 }, window));

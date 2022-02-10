@@ -18,14 +18,14 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.AnalysisAction = class AnalysisAction {
 		constructor(model) {
 			// console.log("TCL: AnalysisAction -> constructor -> model", model);
 			// setup model
 			this.model = model;
 			this.active = false;
-			
+
 			// create and style list view element
 			this.listView = $(`
 				<li class="list-group-item timaat-annotation-list-action p-0 bg-secondary">
@@ -42,11 +42,11 @@
 					<div class="timaat-timeline-action-name text-white font-weight-bold"></div>
 				</div>`
 			);
-			
+
 			var action = this; // save annotation for events
 
 		}
-				
+
 		updateUI() {
 			// console.log("TCL: AnalysisAction -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
@@ -60,36 +60,21 @@
 			this.listView.find('.timaat-annotation-action-comment').html(this.model.analysisActionTranslations[0].comment);
 			this.listView.find('.timaat-annotation-action-transcript').html(this.model.analysisActionTranslations[0].transcript);
 			this.timelineView.find('.timaat-timeline-action-name ').html(this.model.analysisActionTranslations[0].name);
-			
-			// comment
-			// if ( this.model.analysisActionTranslations[0].comment && this.model.analysisActionTranslations[0].comment.length > 0 )
-			// 	this.listView.find('.timaat-annotation-action-comment-icon').show();
-			// else
-			// 	this.listView.find('.timaat-annotation-action-comment-icon').hide();
-			
+
 			// update timeline position
-//			let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
 			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * 100.0;
 			this.timelineView.css('width', length+'%');
 			this.timelineView.css('margin-left', (offset)+'%');
 
 		}
-		
+
 		addUI() {
 			// console.log("TCL: AnalysisAction -> addUI -> addUI()");
-			// $('#timaat-annotation-list').append(this.listView);
 			$('#timaat-timeline-action-pane').append(this.timelineView);
 
 			var action = this; // save annotation for events
 			// attach event handlers
-			// this.listView.on('click', this, function(ev) {
-			// 	TIMAAT.VideoPlayer.curAction = action;
-			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
-			// 	TIMAAT.VideoPlayer.pause();
-			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
-			// });
 			this.timelineView.on('click', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === action.model.sceneId);
 				TIMAAT.VideoPlayer.curScene = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI[index];
@@ -110,14 +95,6 @@
 					// TODO
 					// TIMAAT.URLHistory.setURL(null, 'Action · '+action.model.analysisActionTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/action/'+action.model.id);
 			});
-			// this.listView.on('dblclick', this, function(ev) {
-			// 	TIMAAT.VideoPlayer.curAction = action;
-			// 	TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
-			// 	TIMAAT.VideoPlayer.pause();
-			// 	TIMAAT.VideoPlayer.selectAnnotation(null);
-			// 	TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
-			// 	TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
-			// });
 			this.timelineView.on('dblclick', this, function(ev) {
 				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === action.model.sceneId);
 				TIMAAT.VideoPlayer.curScene = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI[index];
@@ -127,7 +104,8 @@
 				this.classList.replace('bg-info', 'bg-primary');
 				this.classList.add('bg-primary');
 				TIMAAT.VideoPlayer.selectedElementType = 'action';
-				TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
+				TIMAAT.VideoPlayer.jumpTo(action.model.startTime);
+				// TIMAAT.VideoPlayer.jumpVisible(action.model.startTime, action.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -142,16 +120,14 @@
 			// console.log("TCL: AnalysisAction -> addUI -> this.updateUI()");
 			this.updateUI();
 		}
-		
+
 		removeUI() {
 			// console.log("TCL: AnalysisAction -> removeUI -> removeUI()");
-			// this.listView.remove();
 			this.timelineView.remove();
 			TIMAAT.VideoPlayer.selectedElementType = null;
-			// console.log("TCL: AnalysisAction -> removeUI -> this.updateUI()");
 			this.updateUI();
 		}
-			
+
 		updateStatus(timeInSeconds, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 			let time = timeInSeconds * 1000;
@@ -172,7 +148,7 @@
 			} else { // highlight remains unchanged
 				if (TIMAAT.VideoPlayer.selectedElementType != 'action') { // update bg-primary if other element in same structure is selected
 					this.timelineView.removeClass('bg-primary');
-					if(this.highlighted) {
+					if (this.highlighted) {
 						this.timelineView.addClass('bg-info');
 					}
 				}
@@ -183,5 +159,5 @@
 		}
 
 	}
-	
+
 }, window));

@@ -763,7 +763,7 @@
                 </div>
               </div>
             </div>
-            <div class="modal fade" id="timaat-videoplayer-segment-element-modal" tabindex="-1" role="dialog" aria-labelledby="elementModal" aria-hidden="true">
+            <div class="modal fade" id="timaat-videoplayer-segment-element-modal" tabindex="-1" role="dialog" aria-labelledby="segmentElementModal" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -794,6 +794,41 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 				            <button type="button" class="btn btn-danger" id="timaat-segment-element-delete-commit-submit-button">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-form-element-modal" tabindex="-1" role="dialog" aria-labelledby="musicFormElementModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-form-element-delete" tabindex="-1" role="dialog" aria-labelledby="musicFormElementDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="musicFormElementDeleteLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				            <button type="button" class="btn btn-danger" id="timaat-music-form-element-delete-commit-submit-button">Delete</button>
                   </div>
                 </div>
               </div>
@@ -860,6 +895,15 @@
                       </span>
                     </div>
                     <input type="text" class="form-control form-control-sm" id="timaat-inspector-meta-name" placeholder="Title" aria-label="Title" maxlength="100"/>
+                  </div>
+                  <div id="timaat-inspector-meta-music-form-element-type-group" class="input-group input-group-sm mb-1">
+                    <select class="form-control form-control-sm"
+                            style="width:100%"
+                            id="music-form-element-type-select-dropdown"
+                            name="musicFormElementTypeId"
+                            data-role="musicFormElementType"
+                            data-placeholder="Select form element type">
+                    </select>
                   </div>
                   <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
                     <div class="input-group-prepend">
@@ -945,6 +989,26 @@
                   <div id="timaat-inspector-meta-transcript-group" class="form-group form-group-sm mb-3">
                     <label class="col-form-label col-form-label-sm" for="timaat-inspector-meta-transcript">Transcript</label>
                     <textarea class="form-control form-control-sm" id="timaat-inspector-meta-transcript" placeholder="Transcript" aria-label="Transcript"></textarea>
+                  </div>
+                  <div id="timaat-inspector-meta-lyrics-group" class="form-group form-group-sm mb-3">
+                    <label class="col-form-label col-form-label-sm" for="timaat-inspector-meta-lyrics">Lyrics</label>
+                    <textarea class="form-control form-control-sm" id="timaat-inspector-meta-lyrics" rows="4" placeholder="Text" aria-label="Text"></textarea>
+                  </div>
+                  <div id="timaat-inspector-meta-repeat-last-row-group" class="input-group input-group-sm mb-1 form-inline">
+                    <label class="sr-only">Last row repeating?</label>
+                    <div class="input-group-prepend mr-sm-4">
+                      <div class="input-group-text">
+                        Last row repeating?
+                      </div>
+                    </div>
+                    <div class="vertical-aligned">
+                      <div class="form-check mr-sm-3">
+                        <input class="form-check-input" type="checkbox" id="timaat-inspector-meta-repeat-last-row">
+                        <label class="form-check-label" for="timaat-inspector-meta-repeat-last-row">
+                          <i class="fas fa-redo-alt fa-fw mr-1"></i>
+                        </label>
+                      </div>
+                    </div>
                   </div>
                   <button type="button" class="btn btn-outline-success" id="timaat-inspector-meta-submit" disabled>Add</button>
                   <button type="button" class="btn btn-outline-danger" id="timaat-inspector-meta-delete" disabled>Delete</button>
@@ -1247,15 +1311,15 @@
                       <button id="timaat-analysislist-options" class="btn btn-outline-secondary dropdown-toggle" type="button" disabled data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i title="Analysis list menu" class="fas fa-fw fa-list-alt"></i>
                       </button>
-                      <div class="dropdown-menu" id="timat-analysislist-menu">
-                        <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-annotation-add">Add annotation</a>
+                      <div class="dropdown-menu" id="timaat-analysislist-menu">
+                        <a class="dropdown-item timaat-annotation-add" onclick="TIMAAT.VideoPlayer.addAnnotation()">Add annotation</a>
                         <a class="dropdown-item dropdown-toggle" id="timaat-analysislist-segment-options" disabled href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Segment structure</a>
-                        <div class="dropdown-menu" id="timaat-analysislist-segment-dropdown">
-                          <a class="dropdown-item timaat-segment-structure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')" id="timaat-analysissegment-add">Add segment</a>
-                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')" id="timaat-analysissequence-add">Add sequence</a>
-                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')" id="timaat-analysistake-add">Add take</a>
-                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('scene')" id="timaat-analysisscene-add">Add scene</a>
-                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('action')" id="timaat-analysisaction-add">Add action</a>
+                        <div class="dropdown-menu timaat-analysislist-segment-dropdown">
+                          <a class="dropdown-item timaat-segment-structure-add timaat-analysissegment-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')">Add segment</a>
+                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysissequence-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')">Add sequence</a>
+                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysistake-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')">Add take</a>
+                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysisscene-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('scene')">Add scene</a>
+                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysisaction-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('action')">Add action</a>
                         </div>
                         <div role="separator" class="dropdown-divider"></div>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisList()" id="timaat-analysislist-add">Create new Analysis</a>
@@ -1387,14 +1451,39 @@
                       </div>
                       <button title="track playback bar in timeline on/off" class="btn btn-sm btn-outline-secondary small timeline-track"><i class="fas fa-map-pin fa-fw"></i></button>
                     </div>
-                		<div id="layer-buttons" class="btn-group center">
-                			<button type="button" class="btn btn-sm btn-primary timaat-button-visual-layer">
+                    <div id="timeline-layer-buttons" class="btn-group btn-group-sm mr-2" role="group" aria-label="Button group">
+                      <button type="button" class="btn btn-sm btn-primary timaat-button-visual-layer">
                         <i class="fas fa-video"></i> Video
                       </button>
-                			<button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audio-layer">
+                      <button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audio-layer">
                         <i class="fas fa-headphones"></i> Audio
                       </button>
-                		</div>
+                    </div>
+                    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Button group">
+                      <div class="dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" title="Segment structure" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-layer-group fa-fw fa-lg"></i>
+                        </button>
+                        <div class="dropdown-menu timaat-analysislist-segment-dropdown">
+                          <a class="dropdown-item timaat-segment-structure-add timaat-analysissegment-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')">Add segment</a>
+                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysissequence-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')">Add sequence</a>
+                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysistake-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')">Add take</a>
+                          <a class="dropdown-item dropdown-item-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysisscene-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('scene')">Add scene</a>
+                          <a class="dropdown-item dropdown-item-double-indented timaat-segment-structure-add timaat-segment-substructure-add timaat-analysisaction-add" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('action')">Add action</a>
+                        </div>
+                      </div>
+                      <button class="btn btn-sm btn-secondary timaat-annotation-add" type="button" title="Add annotation" onclick="TIMAAT.VideoPlayer.addAnnotation()">
+                        <i class="far fa-object-group fa-fw fa-lg"></i>
+                      </button>
+                      <div class="dropleft timaat-analysislist-music-dropdown">
+                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" title="Music structure" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-music"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-form-add" onclick="TIMAAT.VideoPlayer.addMusicFormElement()">Add music form</a>
+                        </div>
+                      </div>
+                    </div>
                 	</div>
                 	<div id="timeline" class="pb-2">
                     <div id="timaat-timeline-zoomable">
@@ -1428,7 +1517,7 @@
                           <div class="timeline-section timeline-section-segment-structure">
                             <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
                               <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-columns fa-fw"></i> Structure</span>
+                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-columns fa-fw"></i> Segment structure</span>
                                 <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
                               </div>
                             </div>
@@ -1440,10 +1529,22 @@
                               <div id="timaat-timeline-action-pane"></div>
                             </div>
                           </div>
+                          <div class="timeline-section timeline-section-music-structure">
+                            <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
+                              <div class="d-flex justify-content-between">
+                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-columns fa-fw"></i> Music structure</span>
+                                <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
+                              </div>
+                            </div>
+                            <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
+                              <div id="timaat-timeline-music-form-element-pane"></div>
+                              <!-- TODO: additional panes -->
+                            </div>
+                          </div>
                           <div class="timeline-section timeline-section-audio" style="height: 70px;">
                             <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
                               <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-wave-square fa-fw"></i> Audio Waveform</span>
+                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-wave-square fa-fw"></i> Audio waveform</span>
                                 <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
                               </div>
                             </div>
@@ -5195,12 +5296,12 @@
                             <div class="form-group datasheet-data music-data">
                               <div class="form-row">
                                 <div class="col-md-12">
-                                  <label class="col-form-label col-form-label-sm" for="music-primary-source-medium-select-dropdown">Primary source medium</label>
+                                  <label class="col-form-label col-form-label-sm" for="music-medium-select-dropdown">Primary source medium</label>
                                   <select class="form-control form-control-sm"
                                           style="width:100%;"
                                           id="music-primary-source-medium-select-dropdown"
-                                          name="primarySourceMediumId"
-                                          data-role="primarySourceMedium"
+                                          name="mediumId"
+                                          data-role="medium"
                                           data-placeholder="Select primary source medium"
                                           aria-describedby="Primary source medium">
                                   </select>

@@ -492,7 +492,6 @@
 				}).done(function(data) {
 					// console.log("TCL: }).done -> data", data);
 					resolve(data);
-					// callback(new TIMAAT.AnalysisSegment(data));
 				})
 				.fail(function(error) {
 					console.error("ERROR: ", error);
@@ -552,7 +551,7 @@
 		},
 
 		async removeSegmentElement(type, modelId) {
-			// console.log("TCL: removeSegment -> type, modelId", type, modelId);
+			// console.log("TCL: removeSegmentElement -> type, modelId", type, modelId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+modelId+'/?authToken='+TIMAAT.Service.session.token,

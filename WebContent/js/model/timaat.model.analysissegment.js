@@ -18,14 +18,14 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.AnalysisSegment = class AnalysisSegment {
 		constructor(model) {
 			// console.log("TCL: AnalysisSegment -> constructor -> model", model);
 			// setup model
 			this.model = model;
 			this.active = false;
-			
+
 			// create and style list view element
 			this.listView = $(`
 				<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
@@ -44,11 +44,11 @@
 			);
 			this.timelineView.attr('data-start', this.model.startTime);
 			this.timelineView.attr('data-end', this.model.endTime);
-			
+
 			var segment = this; // save annotation for events
 
 		}
-				
+
 		updateUI() {
 			// console.log("TCL: AnalysisSegment -> updateUI -> updateUI()");
 			this.listView.attr('data-starttime', this.model.startTime);
@@ -61,14 +61,14 @@
 			this.listView.find('.timaat-annotation-segment-shortDescription').html(this.model.analysisSegmentTranslations[0].shortDescription);
 			this.listView.find('.timaat-annotation-segment-comment').html(this.model.analysisSegmentTranslations[0].comment);
 			this.listView.find('.timaat-annotation-segment-transcript').html(this.model.analysisSegmentTranslations[0].transcript);
-			this.timelineView.find('.timaat-timeline-segment-name ').html(this.model.analysisSegmentTranslations[0].name);
-			
+			this.timelineView.find('.timaat-timeline-segment-name').html(this.model.analysisSegmentTranslations[0].name);
+
 			// comment
 			if ( this.model.analysisSegmentTranslations[0].comment && this.model.analysisSegmentTranslations[0].comment.length > 0 )
 				this.listView.find('.timaat-annotation-segment-comment-icon').show();
 			else
 				this.listView.find('.timaat-annotation-segment-comment-icon').hide();
-			
+
 			// update timeline position
 //			let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
@@ -77,7 +77,7 @@
 			this.timelineView.css('margin-left', (offset)+'%');
 
 		}
-		
+
 		addUI() {
 			// console.log("TCL: AnalysisSegment -> addUI -> addUI()");
 			$('#timaat-annotation-list').append(this.listView);
@@ -86,7 +86,7 @@
 
 			var segment = this; // save annotation for events
 			// console.log("TCL: AnalysisSegment -> addUI -> segment", segment);
-			
+
 			// attach event handlers
 			this.listView.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.curSegment = segment;
@@ -131,7 +131,8 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
+				TIMAAT.VideoPlayer.jumpTo(segment.model.startTime);
+				// TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -150,7 +151,8 @@
 				TIMAAT.VideoPlayer.selectedElementType = 'segment';
 				TIMAAT.VideoPlayer.curSequence = null;
 				TIMAAT.VideoPlayer.curTake = null;
-				TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
+				TIMAAT.VideoPlayer.jumpTo(segment.model.startTime);
+				// TIMAAT.VideoPlayer.jumpVisible(segment.model.startTime, segment.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				// TIMAAT.VideoPlayer.selectAnnotation(null);
 				if (TIMAAT.VideoPlayer.curAnnotation) {
@@ -165,14 +167,14 @@
 			// console.log("TCL: AnalysisSegment -> addUI -> this.updateUI()");
 			this.updateUI();
 		}
-		
+
 		removeUI() {
 			this.listView.remove();
 			this.timelineView.remove();
 			TIMAAT.VideoPlayer.selectedElementType = null;
 			this.updateUI();
 		}
-			
+
 		updateStatus(timeInSeconds, onTimeUpdate) {
 			// console.log("TCL: AnalysisSegment -> updateStatus -> time", time);
 			let time = timeInSeconds * 1000;
@@ -204,5 +206,5 @@
 		}
 
 	}
-	
+
 }, window));

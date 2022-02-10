@@ -769,8 +769,8 @@
               let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.id);
               //* setup UI
               await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
+              await TIMAAT.VideoPlayer.loadAnalysisList(analysisList.id);
               $('#timaat-analysislist-chooser').val(analysisList.id);
-              $('#timaat-analysislist-chooser').trigger('change');
               if ( pathSegments.length == 2 ) { //* #analysis/:id     (default view, show analysis list)
               } else { //* as long as no substructure is accessible via url
                 this.redirectToDefaultView();

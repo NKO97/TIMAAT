@@ -32,7 +32,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Address</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AddressType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AddressTypeTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.Analysis</class> 
+		<class>de.bitgilde.TIMAAT.model.FIPOP.Analysis</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisActionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisActor</class>
@@ -207,6 +207,10 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElement</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicNashid</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTypeTranslation</class>
@@ -221,7 +225,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Platform</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeed</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PlaybackSpeedTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>		
+		<class>de.bitgilde.TIMAAT.model.FIPOP.PropagandaType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Province</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Publication</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Reference</class>

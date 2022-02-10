@@ -1,14 +1,14 @@
 #timaat-inspector {
 	z-index: 1040; /* behind modal dialogs */
 	box-shadow: 2px 2px 8px 0px rgba(0,0,0,0.5); /* UI separation for floating inspector */
-	max-height: 600px;
+	max-height: 525px;
 	position: absolute;
-	height: 600px;
+	/* height: 525px; */
 	top: 100px;
 	bottom: 0;
 	right: 0;
 	width: 100%;
-	overflow: hidden;
+	overflow: auto;
 	transition: height 300ms;
 }
 #timaat-inspector.collapsed {

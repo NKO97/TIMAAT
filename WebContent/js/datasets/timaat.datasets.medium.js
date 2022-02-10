@@ -775,6 +775,7 @@
 				TIMAAT.VideoPlayer.setupMedium(medium.model);
 				// load video annotations from server
 				TIMAAT.AnalysisListService.getAnalysisLists(medium.model.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+				TIMAAT.VideoPlayer.loadAnalysisList(0);
 			});
 
 			// data table events
