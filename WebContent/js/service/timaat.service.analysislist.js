@@ -21,27 +21,6 @@
 
 	TIMAAT.AnalysisListService = {
 
-		getAnalysisLists(mediumId, callback) {
-			// console.log("TCL: getAnalysisLists -> getAnalysisLists(mediumId, callback) ");
-			// console.log("TCL: getAnalysisLists -> mediumId", mediumId);
-			jQuery.ajax({
-				url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/analysisLists/"+'?authToken='+TIMAAT.Service.session.token,
-				type:"GET",
-				contentType:"application/json; charset=utf-8",
-				dataType:"json",
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-				},
-			}).done(function(data) {
-				// console.log("TCL getAnalysisLists ~ data", data);
-				callback(data);
-			})
-			.fail(function(error) {
-				console.error("ERROR: ", error);
-			});
-
-		},
-
 		async getMediumAnalysisLists(mediumId) {
 			return new Promise(resolve => {
 				$.ajax({
