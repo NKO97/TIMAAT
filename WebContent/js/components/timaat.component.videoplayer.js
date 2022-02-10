@@ -1155,7 +1155,8 @@
 			// setup video in player
 			TIMAAT.VideoPlayer.setupMedium(medium);
 			// load video annotations from server
-			TIMAAT.AnalysisListService.getAnalysisLists(medium.id, TIMAAT.VideoPlayer.setupMediumAnalysisLists);
+			let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.id);
+			await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
 			TIMAAT.VideoPlayer.loadAnalysisList(0);
 		},
 
@@ -1202,10 +1203,10 @@
 		},
 
 		confineBounds: function(bounds, xOff, yOff) {
-//			console.log("TCL: confineBounds: function(bounds, xOff, yOff)");
-//			console.log("TCL: bounds", bounds);
-//			console.log("TCL: xOff", xOff);
-//			console.log("TCL: yOff", yOff);
+			// console.log("TCL: confineBounds: function(bounds, xOff, yOff)");
+			// console.log("TCL: bounds", bounds);
+			// console.log("TCL: xOff", xOff);
+			// console.log("TCL: yOff", yOff);
 	    	// check bounds
 	    	if ( bounds.getSouthWest().lng + xOff < 0 )
 	    		xOff -= bounds.getSouthWest().lng + xOff;
