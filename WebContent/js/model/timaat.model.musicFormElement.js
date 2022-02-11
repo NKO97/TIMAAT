@@ -40,6 +40,7 @@
 			this.timelineView = $(`
 				<div class="timaat-timeline-music-form-element">
 					<div class="timaat-timeline-music-form-element-type text-white font-weight-bold"></div>
+					<div class="timaat-timeline-music-form-element-lyrics" title="" html="true" data-html="true" data-toggle="tooltip"></div>
 				</div>`
 			);
 			this.timelineView.attr('data-start', this.model.startTime);
@@ -55,12 +56,10 @@
 			this.listView.attr('data-endtime', this.model.endTime);
 			this.listView.attr('id', 'musicFormElement-'+this.model.id);
 			this.listView.attr('data-type', 'musicFormElement');
-			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
-			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
-			// this.listView.find('.timaat-music-form-element-type').html(this.model.musicFormElementType.musicFormElementTypeTranslations[0].type);
-			// this.listView.find('.timaat-music-form-element-lyrics').html(this.model.musicFormElementTranslations[0].text);
 			this.timelineView.find('.timaat-timeline-music-form-element-type').html(this.model.musicFormElementType.musicFormElementTypeTranslations[0].type);
-
+			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html(this.model.musicFormElementTranslations[0].text);
+			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').prop('title', this.model.musicFormElementTranslations[0].text);
+			$('[data-toggle="tooltip"]').tooltip();
 			// update timeline position
 			// let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
@@ -69,8 +68,6 @@
 			this.timelineView.css('width', length+'%');
 			this.timelineView.css('margin-left', (offset)+'%');
 			this.timelineView.css('background-color', '#'+colorHex);
-			// this.timelineView.find('.timaat-timeline-music-form-element-type').title(this.model.musicFormElementTypeTranslations[0].text);
-
 		}
 
 		addUI() {

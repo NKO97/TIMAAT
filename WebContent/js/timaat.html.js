@@ -94,7 +94,7 @@ var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
     totalBitrate: {
       number: true,
       max: 65535
-    }       
+    }
   },
   messages: {
     displayTitle: {
@@ -257,7 +257,7 @@ var actorFormMetadataValidator = $('#actor-metadata-form').validate({
     },
     sexId: {
       required: true
-    }  
+    }
   },
   messages: {
     displayName: {
@@ -400,7 +400,7 @@ var eventFormMetadataValidator = $('#event-metadata-form').validate({
     },
     description: {
       maxlength: 4096,
-    }     
+    }
   },
   messages: {
     name: {
@@ -423,7 +423,7 @@ var roleFormMetadataValidator = $('#role-metadata-form').validate({
       required: true,
       minlength: 3,
       maxlength: 200
-    }    
+    }
   },
   messages: {
     name: {
@@ -443,7 +443,7 @@ var roleGroupFormMetadataValidator = $('#rolegroup-metadata-form').validate({
       required: true,
       minlength: 3,
       maxlength: 200
-    }    
+    }
   },
   messages: {
     name: {
@@ -463,7 +463,7 @@ var categoryOrCategorySetFormMetadataValidator = $('#category-metadata-form').va
       required: true,
       minlength: 3,
       maxlength: 200,
-    }    
+    }
   },
   messages: {
     name: {
