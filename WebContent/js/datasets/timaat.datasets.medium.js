@@ -774,7 +774,7 @@
 				// setup video in player
 				TIMAAT.VideoPlayer.setupMedium(medium.model);
 				// load video annotations from server
-				let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.id);
+				let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.model.id);
 				await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
 				TIMAAT.VideoPlayer.loadAnalysisList(0);
 			});
