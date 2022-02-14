@@ -1116,14 +1116,10 @@ public class EndpointMusic {
 		System.out.println("EndpointMusic: deleteMusic");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, id);
-
 		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		// for (Title title:music.getTitles()) {
-		// 	music.getTitles().remove(title);
-		// }
 		entityManager.remove(music.getDisplayTitle());
 		entityManager.remove(music);
 		entityTransaction.commit();

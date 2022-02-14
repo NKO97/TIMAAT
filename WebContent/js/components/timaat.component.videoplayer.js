@@ -981,8 +981,10 @@
 				$('#timaat-timeline-keyframe-pane').hide();
 				$('.timaat-timeline-marker-audio').show();
 				$('.timeline-section-audio').show();
+				if (TIMAAT.VideoPlayer.curMusic) {
 				$('.timeline-section-music-structure').show();
-				$('.timaat-analysislist-music-dropdown').show();
+					$('.timaat-analysislist-music-dropdown').show();
+				}
 				TIMAAT.VideoPlayer.activeLayer = 'audio';
 				TIMAAT.VideoPlayer.sortListUI();
 			});

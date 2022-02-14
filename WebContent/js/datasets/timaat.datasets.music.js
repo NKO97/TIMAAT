@@ -2186,6 +2186,7 @@
 			// update medium if music.id has changed (null -> x || x -> y || x -> null)
 			if (medium && isNaN(mediumId)) { // source medium removed -> null
 				medium.music = null;
+				TIMAAT.VideoPlayer.curMusic = null;
 				await TIMAAT.MediumService.updateMedium(medium);
 			} else if (!medium && !isNaN(mediumId)) { // source medium set from null -> x
 				medium = await TIMAAT.MediumService.getMedium(mediumId);
@@ -2194,6 +2195,7 @@
 				await TIMAAT.MediumService.updateMedium(medium);
 			} else if (medium && medium.id != mediumId) { // source medium changed -> update old and new medium connected to music
 				medium.music = null;
+				TIMAAT.VideoPlayer.curMusic = null;
 				await TIMAAT.MediumService.updateMedium(medium);
 				let medium2 = await TIMAAT.MediumService.getMedium(mediumId);
 				medium2.music = {};
@@ -2607,10 +2609,6 @@
 			if (formDataObject.musicalKeyId > 0) {
 				model.musicalKey = {};
 				model.musicalKey.id = formDataObject.musicalKeyId;
-			}
-			if (formDataObject.mediumId > 0) {
-				model.medium = {};
-				model.medium.id = formDataObject.mediumId;
 			}
 			if (formDataObject.tempoMarkingId > 0) {
 				model.tempoMarking = {};

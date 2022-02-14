@@ -537,9 +537,9 @@ a.dropdown-item {
 
 .timaat-timeline-music-form-element-lyrics {
 	font-size: x-small;
-	max-height: 50px;
 	border-style: ridge;
 	border-color: #0000;
+	overflow: hidden;
 }
 
 #timaat-timeline-marker-pane {
@@ -1036,6 +1036,7 @@ Tooltip container
 .tooltip {
   position: relative;
   display: inline-block;
+	/* pointer-events: none; */
   /* border-bottom: 1px dotted black; If you want dots under the hoverable text */
 }
 
@@ -1057,6 +1058,10 @@ Tooltip container
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+
+.tooltip-inner {
+	max-width: 400px;
 }
 
 /* .invalid class prevents CSS from automatically applying */

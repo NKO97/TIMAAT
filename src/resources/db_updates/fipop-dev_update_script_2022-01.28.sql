@@ -1,5 +1,5 @@
 ALTER TABLE `FIPOP`.`medium` ADD `music_id` INT NULL AFTER `work_id`;
-ALTER TABLE `FIPOP`.`medium` ADD CONSTRAINT `fk_medium_music1` FOREIGN KEY (`music_id`) REFERENCES `music`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `FIPOP`.`medium` ADD CONSTRAINT `fk_medium_music1` FOREIGN KEY (`music_id`) REFERENCES `music`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
 CREATE INDEX `fk_medium_music1_idx` ON `FIPOP`.`medium` (`music_id` ASC);
 
 ALTER TABLE `FIPOP`.`music` DROP INDEX `fk_music_medium1_idx`;

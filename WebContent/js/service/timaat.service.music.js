@@ -91,7 +91,7 @@
     },
 
 		async getMediumByMusicId(id) {
-      console.log("TCL: getMediumByMusicId -> musicId", id);
+      // console.log("TCL: getMediumByMusicId -> musicId", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/getMediumByMusicId/"+id,

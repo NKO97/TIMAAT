@@ -954,7 +954,8 @@
 					// musicFormElement has a time range and still encompasses its sub elements. Now check for overlap with other musicFormElements
 					var overlapping = false;
 					i = 0;
-					var musicFormElementList = TIMAAT.VideoPlayer.curMusic.musicFormElements;
+					var musicFormElementList = [];
+					if (TIMAAT.VideoPlayer.curMusic) musicFormElementList = TIMAAT.VideoPlayer.curMusic.musicFormElements;
 					if (musicFormElement) {
 						let index = musicFormElementList.findIndex(({id}) => id === musicFormElement.model.id);
 						musicFormElementList.splice(index,1);

@@ -40,7 +40,7 @@
 			this.timelineView = $(`
 				<div class="timaat-timeline-music-form-element">
 					<div class="timaat-timeline-music-form-element-type text-white font-weight-bold"></div>
-					<div class="timaat-timeline-music-form-element-lyrics" title="" html="true" data-html="true" data-toggle="tooltip"></div>
+					<div class="timaat-timeline-music-form-element-lyrics" data-role="lyricsTooltip" title="" html="true" data-html="true" data-toggle="tooltip"></div>
 				</div>`
 			);
 			this.timelineView.attr('data-start', this.model.startTime);
@@ -58,8 +58,8 @@
 			this.listView.attr('data-type', 'musicFormElement');
 			this.timelineView.find('.timaat-timeline-music-form-element-type').html(this.model.musicFormElementType.musicFormElementTypeTranslations[0].type);
 			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html(this.model.musicFormElementTranslations[0].text);
-			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').prop('title', this.model.musicFormElementTranslations[0].text);
-			$('[data-toggle="tooltip"]').tooltip();
+			// this.timelineView.find('.timaat-timeline-music-form-element-lyrics').prop('title', this.model.musicFormElementTranslations[0].text);
+			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').attr('data-original-title', this.model.musicFormElementTranslations[0].text);
 			// update timeline position
 			// let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
@@ -73,7 +73,6 @@
 		addUI() {
 			// console.log("TCL: MusicFormElement -> addUI -> addUI()");
 			$('#timaat-timeline-music-form-element-pane').append(this.timelineView);
-
 			var musicFormElement = this; // save annotation for events
 
 			// attach event handlers
@@ -106,6 +105,9 @@
 				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 				// TODO
 				// TIMAAT.URLHistory.setURL(null, 'MusicFormElement · '+musicFormElement.model.musicFormElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicFormElement/'+musicFormElement.model.id);
+			});
+			this.timelineView.on('.timaat-timeline-music-form-element-lyrics > mouseover', this, function(event) {
+				$('.timaat-timeline-music-form-element > [data-toggle="tooltip"]').tooltip({boundary: "window", trigger: "hover"});
 			});
 			// console.log("TCL: MusicFormElement -> addUI -> this.updateUI()");
 			this.updateUI();
