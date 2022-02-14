@@ -57,11 +57,19 @@
 			this.listView.attr('id', 'musicFormElement-'+this.model.id);
 			this.listView.attr('data-type', 'musicFormElement');
 			this.timelineView.find('.timaat-timeline-music-form-element-type').html(this.model.musicFormElementType.musicFormElementTypeTranslations[0].type);
+			// if (this.model.repeatLastRow && this.model.musicFormElementTranslations[0].text.length > 11) { // default value when empty, due to summernote, is '<p><br></p>
+			if (this.model.musicFormElementTranslations[0].text.length > 11) { // default value when empty, due to summernote, is '<p><br></p>
+			// 	this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html('<i class="timaat-timeline-music-form-element-repeatLastRow-icon fas fa-fw fa-redo-alt"></i>' + this.model.musicFormElementTranslations[0].text);
+			// } else {
 			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html(this.model.musicFormElementTranslations[0].text);
+			// }
 			// this.timelineView.find('.timaat-timeline-music-form-element-lyrics').prop('title', this.model.musicFormElementTranslations[0].text);
 			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').attr('data-original-title', this.model.musicFormElementTranslations[0].text);
+			} else {
+				this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html('');
+				this.timelineView.find('.timaat-timeline-music-form-element-lyrics').attr('data-original-title', '');
+			}
 			// update timeline position
-			// let width =  $('#video-seek-bar').width();
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
 			let offset = this.model.startTime / (TIMAAT.VideoPlayer.duration) * 100.0;
 			let colorHex = this.model.musicFormElementType.colorHex;
@@ -107,7 +115,10 @@
 				// TIMAAT.URLHistory.setURL(null, 'MusicFormElement · '+musicFormElement.model.musicFormElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicFormElement/'+musicFormElement.model.id);
 			});
 			this.timelineView.on('.timaat-timeline-music-form-element-lyrics > mouseover', this, function(event) {
-				$('.timaat-timeline-music-form-element > [data-toggle="tooltip"]').tooltip({boundary: "window", trigger: "hover"});
+				console.log("TCL: MusicFormElement -> this.timelineView.on -> musicFormElement.model.musicFormElementTranslations[0].text.length", musicFormElement.model.musicFormElementTranslations[0].text.length);
+				// if (musicFormElement.model.musicFormElementTranslations[0].text.length > 11) { // default value when empty, due to summernote, is '<p><br></p>
+					$('.timaat-timeline-music-form-element > [data-toggle="tooltip"]').tooltip({boundary: "window", trigger: "hover"});
+				// }
 			});
 			// console.log("TCL: MusicFormElement -> addUI -> this.updateUI()");
 			this.updateUI();

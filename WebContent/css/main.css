@@ -518,7 +518,6 @@ a.dropdown-item {
 	border-style: double;
 	border-color: #0001;
 }
-.timaat-timeline-music-form-element-type,
 .timaat-timeline-segment-name,
 .timaat-timeline-sequence-name,
 .timaat-timeline-take-name,
@@ -531,6 +530,16 @@ a.dropdown-item {
 	white-space: nowrap;
 }
 
+.timaat-timeline-music-form-element-type {
+	margin-bottom: auto;
+	padding-left: 3px;
+	font-size: 0.70rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
 .timaat-timeline-selected-music-form-element {
 	border-color: #000;
 }
@@ -539,6 +548,8 @@ a.dropdown-item {
 	font-size: x-small;
 	border-style: ridge;
 	border-color: #0000;
+	word-break: break-all;
+	max-height: 50px;
 	overflow: hidden;
 }
 
