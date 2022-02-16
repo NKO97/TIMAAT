@@ -2304,7 +2304,6 @@
 				});
 			}
 			if (TIMAAT.VideoPlayer.curMusic) {
-        console.log("TCL: TIMAAT.VideoPlayer.curMusic", TIMAAT.VideoPlayer.curMusic);
 				TIMAAT.VideoPlayer.curMusic.musicFormElementsUI = Array();
 				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI = Array();
 				TIMAAT.VideoPlayer.curMusic.musicFormElementList.forEach(function(musicFormElement) {
