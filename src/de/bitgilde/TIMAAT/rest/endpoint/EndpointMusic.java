@@ -22,6 +22,8 @@ import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamicsTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempo;
+import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChurchMusicalKeyTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation;
@@ -29,6 +31,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementType;
@@ -332,8 +335,7 @@ public class EndpointMusic {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("formElementType/selectList")
-	public Response getMusicFormElementTypeSelectList(@QueryParam("language") String languageCode)
-	{
+	public Response getMusicFormElementTypeSelectList(@QueryParam("language") String languageCode) {
 		// System.out.println("EndpointMusic: getMusicFormElementTypeSelectList");
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
@@ -345,6 +347,24 @@ public class EndpointMusic {
 			musicFormElementTypeSelectList.add(new SelectElement(musicFormElementTypeTranslation.getMusicFormElementType().getId(), musicFormElementTypeTranslation.getType()));
 		}
 		return Response.ok().entity(musicFormElementTypeSelectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("changeInTempoElementType/selectList")
+	public Response getMusicChangeInTempoElementTypeSelectList(@QueryParam("language") String languageCode) {
+		// System.out.println("EndpointMusic: getMusicChangeInTempoElementTypeSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
+		Query query;
+		query = TIMAATApp.emf.createEntityManager().createQuery("SELECT citt FROM ChangeInTempoTranslation citt WHERE citt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')");
+		List<ChangeInTempoTranslation> changeInTempoTranslationList = castList(ChangeInTempoTranslation.class, query.getResultList());
+		List<SelectElement> selectList = new ArrayList<>();
+		for (ChangeInTempoTranslation changeInTempoTranslation : changeInTempoTranslationList) {
+			selectList.add(new SelectElement(changeInTempoTranslation.getChangeInTempo().getId(), changeInTempoTranslation.getType()));
+		}
+		return Response.ok().entity(selectList).build();
 	}
 
 	@GET
@@ -1050,6 +1070,7 @@ public class EndpointMusic {
 		music.setTempoMarking(updatedMusic.getTempoMarking());
 		music.setTextSetting(updatedMusic.getTextSetting());
 		music.setVoiceLeadingPatternList(updatedMusic.getVoiceLeadingPatternList());
+		music.setMusicChangeInTempoElementList(updatedMusic.getMusicChangeInTempoElementList());
 		if ( updatedMusic.getDisplayTitle() != null ) music.setDisplayTitle(updatedMusic.getDisplayTitle());
 		music.setOriginalTitle(updatedMusic.getOriginalTitle()); // originalTitle can be set to null
 		List<CategorySet> oldCategorySets = music.getCategorySets();
@@ -2025,6 +2046,138 @@ public class EndpointMusic {
     return Response.ok().entity(musicFormElementType).build();
   }
 
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{musicId}/musicChangeInTempoElement/{changeInTempoId}") // TODO change so that ids are part of jsonData?
+	public Response createMusicChangeInTempoElement(@PathParam("musicId") int musicId,
+																			   					@PathParam("changeInTempoId") int changeInTempoId,
+																									String jsonData) {
+
+		System.out.println("createMusicChangeInTempoElement - jsonData: "+ jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		Music music = entityManager.find(Music.class, musicId);
+		ChangeInTempo	changeInTempo = entityManager.find(ChangeInTempo.class, changeInTempoId);
+		if ( music == null || changeInTempo == null ) return Response.status(Status.BAD_REQUEST).build();
+		MusicChangeInTempoElement musicChangeInTempoElement = null;
+		try {
+			musicChangeInTempoElement = mapper.readValue(jsonData, MusicChangeInTempoElement.class);
+		} catch (IOException e) {
+			System.out.println("createMusicChangeInTempoElement: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( musicChangeInTempoElement == null ) {
+			System.out.println("createMusicChangeInTempoElement: musicChangeInTempoElement == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+		musicChangeInTempoElement.setId(0);
+		musicChangeInTempoElement.setMusic(music);
+		musicChangeInTempoElement.setChangeInTempo(changeInTempo);
+		System.out.println("createMusicChangeInTempoElement - startTime: "+ musicChangeInTempoElement.getStartTime());
+		// changeInTempo.addMusicChangeInTempoElement(musicChangeInTempoElement);
+
+		// persist musicChangeInTempoElement and list
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(musicChangeInTempoElement);
+		entityManager.flush();
+		music.addMusicChangeInTempoElement(musicChangeInTempoElement);
+		entityManager.persist(music);
+		entityTransaction.commit();
+		entityManager.refresh(musicChangeInTempoElement);
+		entityManager.refresh(music);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTCREATED);
+		System.out.println("createMusicChangeInTempoElement - startTime: "+ musicChangeInTempoElement.getStartTime());
+		return Response.ok().entity(musicChangeInTempoElement).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("musicChangeInTempoElement/{id}")
+	@Secured
+	public Response updateMusicChangeInTempoElement(@PathParam("id") int musicChangeInTempoElementId,
+																					 				String jsonData) {
+		// System.out.println("EndpointAnalysisList: updateMusicChangeInTempoElement "+ jsonData);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MusicChangeInTempoElement musicChangeInTempoElement = entityManager.find(MusicChangeInTempoElement.class, musicChangeInTempoElementId);
+		if ( musicChangeInTempoElement == null ) return Response.status(Status.NOT_FOUND).build();
+
+		ObjectMapper mapper = new ObjectMapper();
+		MusicChangeInTempoElement updatedMusicChangeInTempoElement = null;
+		// parse JSON data
+		try {
+			updatedMusicChangeInTempoElement = mapper.readValue(jsonData, MusicChangeInTempoElement.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedMusicChangeInTempoElement == null ) return Response.notModified().build();
+
+		// update musicChangeInTempoElement
+		musicChangeInTempoElement.setStartTime(updatedMusicChangeInTempoElement.getStartTime());
+		musicChangeInTempoElement.setEndTime(updatedMusicChangeInTempoElement.getEndTime());
+		if (updatedMusicChangeInTempoElement.getChangeInTempo() != null) musicChangeInTempoElement.setChangeInTempo(updatedMusicChangeInTempoElement.getChangeInTempo());
+		//* music relation won't be changed
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(musicChangeInTempoElement);
+		entityManager.persist(musicChangeInTempoElement);
+		entityTransaction.commit();
+		entityManager.refresh(musicChangeInTempoElement);
+		entityManager.refresh(musicChangeInTempoElement.getMusic());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTEDITED);
+
+		return Response.ok().entity(musicChangeInTempoElement).build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("musicChangeInTempoElement/{id}")
+	@Secured
+	public Response deleteMusicChangeInTempoElement(@PathParam("id") int musicChangeInTempoElementId) {
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MusicChangeInTempoElement musicChangeInTempoElement = entityManager.find(MusicChangeInTempoElement.class, musicChangeInTempoElementId);
+		if ( musicChangeInTempoElement == null ) return Response.status(Status.NOT_FOUND).build();
+
+		Music music = musicChangeInTempoElement.getMusic();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(musicChangeInTempoElement);
+		entityTransaction.commit();
+		entityManager.refresh(music);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTDELETED);
+
+		return Response.ok().build();
+	}
+
+	@GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("changeInTempo/{id}")
+  public Response getChangeInTempo(@PathParam("id") int id) {
+    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    ChangeInTempo changeInTempo = entityManager.find(ChangeInTempo.class, id);
+    if (changeInTempo == null) return Response.status(Status.NOT_FOUND).build();
+    return Response.ok().entity(changeInTempo).build();
+  }
 
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());

@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the role database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
@@ -111,7 +111,7 @@ public class Role implements Serializable {
 		this.roleGroups = roleGroups;
 	}
 
-		public RoleGroup addRoleGroup(RoleGroup roleGroup) {
+	public RoleGroup addRoleGroup(RoleGroup roleGroup) {
 		getRoleGroups().add(roleGroup);
 		roleGroup.addRole(this);
 

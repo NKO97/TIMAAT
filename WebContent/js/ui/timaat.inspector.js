@@ -931,7 +931,7 @@
 						TIMAAT.VideoPlayer.curAnalysisList.analysisSegments = tempList.analysisSegments;
 					}
 				}
-				// annotations
+				// music form elements
 				if ( inspector.state.type == 'musicFormElement' ) {
 					var musicFormElement = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
@@ -946,16 +946,16 @@
 
 					// early out: musicFormElement has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-music-form-element-element-modal').find('.modal-title').html('Music Form Element has no time range');
-						$('#timaat-videoplayer-music-form-element-element-modal').find('.modal-body').html("Music Form Elements need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-music-form-element-element-modal').modal('show');
+						$('#timaat-videoplayer-music-form-element-modal').find('.modal-title').html('Music Form Element has no time range');
+						$('#timaat-videoplayer-music-form-element-modal').find('.modal-body').html("Music Form Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-music-form-element-modal').modal('show');
 						return;
 					}
-					// musicFormElement has a time range and still encompasses its sub elements. Now check for overlap with other musicFormElements
+					// musicFormElement has a time range and still encompasses its sub elements. Now check for overlap with other musicFormElementList
 					var overlapping = false;
 					i = 0;
 					var musicFormElementList = [];
-					if (TIMAAT.VideoPlayer.curMusic) musicFormElementList = TIMAAT.VideoPlayer.curMusic.musicFormElements;
+					if (TIMAAT.VideoPlayer.curMusic) musicFormElementList = TIMAAT.VideoPlayer.curMusic.musicFormElementList;
 					if (musicFormElement) {
 						let index = musicFormElementList.findIndex(({id}) => id === musicFormElement.model.id);
 						musicFormElementList.splice(index,1);
@@ -966,11 +966,11 @@
 							break;
 						}
 					}
-					// early out: musicFormElement overlaps with other musicFormElements
+					// early out: musicFormElement overlaps with other musicFormElementList
 					if (overlapping) {
-						$('#timaat-videoplayer-music-form-element-element-modal').find('.modal-title').html('Music Form Element is overlapping');
-						$('#timaat-videoplayer-music-form-element-element-modal').find('.modal-body').html("Music Form Elements are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-music-form-element-element-modal').modal('show');
+						$('#timaat-videoplayer-music-form-element-modal').find('.modal-title').html('Music Form Element is overlapping');
+						$('#timaat-videoplayer-music-form-element-modal').find('.modal-body').html("Music Form Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-music-form-element-modal').modal('show');
 					} else {
 						if (musicFormElement) {
 							musicFormElement.model.musicFormElementTranslations[0].text = text;
@@ -1002,7 +1002,72 @@
 							TIMAAT.VideoPlayer._musicFormElementAdded(musicFormElement, true);
 						}
 						var tempMusic = await TIMAAT.MusicService.getMusic(TIMAAT.VideoPlayer.curMusic.id);
-						TIMAAT.VideoPlayer.curMusic.musicFormElements = tempMusic.musicFormElements;
+						TIMAAT.VideoPlayer.curMusic.musicFormElementList = tempMusic.musicFormElementList;
+					}
+				}
+				// music change in tempo elements
+				if ( inspector.state.type == 'musicChangeInTempoElement' ) {
+					var musicChangeInTempoElement = inspector.state.item;
+          // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					let i = 0;
+					let changeInTempoId = $('#music-change-in-tempo-element-type-select-dropdown').val();
+
+					// early out: musicChangeInTempoElement has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-title').html('Music Change In Tempo Element has no time range');
+						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-body').html("Music Change In Tempo Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-music-change-in-tempo-element-modal').modal('show');
+						return;
+					}
+					// musicChangeInTempoElement has a time range and still encompasses its sub elements. Now check for overlap with other musicChangeInTempoElementList
+					var overlapping = false;
+					i = 0;
+					var musicChangeInTempoElementList = [];
+					if (TIMAAT.VideoPlayer.curMusic) musicChangeInTempoElementList = TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementList;
+					if (musicChangeInTempoElement) {
+						let index = musicChangeInTempoElementList.findIndex(({id}) => id === musicChangeInTempoElement.model.id);
+						musicChangeInTempoElementList.splice(index,1);
+					}
+					for (; i < musicChangeInTempoElementList.length; i++) {
+						if (!(endTime <= musicChangeInTempoElementList[i].startTime || startTime >= musicChangeInTempoElementList[i].endTime) ) {
+							overlapping = true;
+							break;
+						}
+					}
+					// early out: musicChangeInTempoElement overlaps with other musicChangeInTempoElementList
+					if (overlapping) {
+						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-title').html('Music Change In Tempo Element is overlapping');
+						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-body').html("Music Change In Tempo Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-music-change-in-tempo-element-modal').modal('show');
+					} else {
+						if (musicChangeInTempoElement) {
+							musicChangeInTempoElement.model.startTime = startTime;
+							musicChangeInTempoElement.model.endTime = endTime;
+							musicChangeInTempoElement.model.changeInTempo = {};
+							musicChangeInTempoElement.model.changeInTempo.id = changeInTempoId;
+
+							// update musicChangeInTempoElement UI
+							await TIMAAT.VideoPlayer.updateMusicChangeInTempoElement(musicChangeInTempoElement);
+						} else {
+							var model = {
+								id: 0,
+								changeInTempo: {
+									id: changeInTempoId,
+								},
+								startTime: startTime,
+								endTime: endTime,
+							};
+							// let musicId = TIMAAT.MusicService.getMusicIdByMediumId(TIMAAT.VideoPlayer.model.medium.id);
+							musicChangeInTempoElement = await TIMAAT.MusicService.createMusicChangeInTempoElement(model, TIMAAT.VideoPlayer.model.medium.music.id);
+              console.log("TCL: Inspector -> $ -> musicChangeInTempoElement", musicChangeInTempoElement);
+							musicChangeInTempoElement = new TIMAAT.MusicChangeInTempoElement(musicChangeInTempoElement);
+              console.log("TCL: Inspector -> $ -> musicChangeInTempoElement", musicChangeInTempoElement);
+							TIMAAT.VideoPlayer._musicChangeInTempoElementAdded(musicChangeInTempoElement, true);
+						}
+						var tempMusic = await TIMAAT.MusicService.getMusic(TIMAAT.VideoPlayer.curMusic.id);
+						TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementList = tempMusic.musicChangeInTempoElementList;
 					}
 				}
 			});
@@ -1068,6 +1133,10 @@
 				//* musicFormElement is not part of an analysisList and therefore modifying is not restricted to certain users
 				if (inspector.state.type == 'musicFormElement') {
 					TIMAAT.VideoPlayer.removeMusicFormElement(TIMAAT.VideoPlayer.curMusicFormElement);
+				}
+				//* musicChangeInTempoElement is not part of an analysisList and therefore modifying is not restricted to certain users
+				if (inspector.state.type == 'musicChangeInTempoElement') {
+					TIMAAT.VideoPlayer.removeMusicChangeInTempoElement(TIMAAT.VideoPlayer.curMusicChangeInTempoElement);
 				}
 				//* check if user has enough permission to change analysisList content
 				if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
@@ -1992,6 +2061,67 @@
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
+				case 'musicChangeInTempoElement':
+					// metadata panel
+					this.enablePanel('timaat-inspector-metadata');
+					this.initInspectorMetadataMusicChangeInTempoElements();
+					if (!item) this.open('timaat-inspector-metadata');
+
+					// setup UI from Video Player state
+					model = {
+						heading: '<i class="fas fa-indent"></i> Add music form',
+						submit: (item) ? "Save" : "Add",
+						type: null,
+						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+					};
+
+					if (item) {
+						model.heading       = '<i class="fas fa-indent"></i> Edit form element';
+						model.type          = item.model.changeInTempo.id;
+					}
+					this.fillInspectorMetadataMusicChangeInTempoElements(model);
+					// category panel
+					// $('#music-change-in-tempo-element-type-select-dropdown').empty().trigger('change');
+					$('#music-change-in-tempo-element-type-select-dropdown').select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/music/changeInTempoElementType/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								return {
+									search: params.term,
+									page: params.page
+								};
+							},
+							processResults: function(data, params) {
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: false
+						},
+						minimumInputLength: 0,
+					});
+					if (item && item.model.changeInTempo) {
+						var changeInTempoSelect = $('#music-change-in-tempo-element-type-select-dropdown');
+						var option = new Option(item.model.changeInTempo.changeInTempoTranslations[0].type, item.model.changeInTempo.id, true, true);
+						changeInTempoSelect.append(option).trigger('change');
+					} else {
+						$('#music-change-in-tempo-element-type-select-dropdown').empty().trigger('change');
+					}
+					TIMAAT.VideoPlayer.updateListUI();
+				break;
 			}
 		}
 
@@ -2005,6 +2135,7 @@
 			$('#timaat-inspector-meta-comment-group').show();
 			$('#timaat-inspector-meta-transcript-group').show();
 			$('#timaat-inspector-meta-music-form-element-type-group').hide();
+			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
 			$('#timaat-inspector-meta-lyrics-group').hide();
 			$('#timaat-inspector-meta-repeat-last-row-group').hide();
 		}
@@ -2019,8 +2150,24 @@
 			$('#timaat-inspector-meta-comment-group').hide();
 			$('#timaat-inspector-meta-transcript-group').hide();
 			$('#timaat-inspector-meta-music-form-element-type-group').show();
+			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
 			$('#timaat-inspector-meta-lyrics-group').show();
 			$('#timaat-inspector-meta-repeat-last-row-group').show();
+		}
+
+		initInspectorMetadataMusicChangeInTempoElements() {
+			$('#timaat-inspector-meta-name').hide();
+			$('#timaat-inspector-meta-color-group').hide();
+			$('#timaat-inspector-meta-opacity-group').hide();
+			$('#timaat-inspector-meta-type-group').hide();
+			$('#timaat-inspector-meta-timecode-group').show();
+			$('#timaat-inspector-meta-shortDescription-group').hide();
+			$('#timaat-inspector-meta-comment-group').hide();
+			$('#timaat-inspector-meta-transcript-group').hide();
+			$('#timaat-inspector-meta-music-form-element-type-group').hide();
+			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').show();
+			$('#timaat-inspector-meta-lyrics-group').hide();
+			$('#timaat-inspector-meta-repeat-last-row-group').hide();
 		}
 
 		fillInspectorMetadataSegmentElements(model) {
@@ -2048,6 +2195,17 @@
 			$('#timaat-inspector-meta-end').val(model.end);
 			$('#timaat-inspector-meta-lyrics').summernote('code', model.text);
 			$('#timaat-inspector-meta-repeat-last-row').val(model.repeatLastRow);
+		}
+
+		fillInspectorMetadataMusicChangeInTempoElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMetadataMusicChangeInTempoElements -> model", model);
+			model.start = TIMAAT.Util.formatTime(model.start, true);
+			model.end = TIMAAT.Util.formatTime(model.end, true);
+			$('#timaat-inspector-metadata-title').html(model.heading);
+			$('#timaat-inspector-meta-submit').html(model.submit);
+			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
+			$('#timaat-inspector-meta-start').val(model.start);
+			$('#timaat-inspector-meta-end').val(model.end);
 		}
 
 		updateItem() {

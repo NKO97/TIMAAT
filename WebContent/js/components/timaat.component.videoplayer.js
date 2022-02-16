@@ -20,29 +20,30 @@
 }(function (TIMAAT) {
 
 	TIMAAT.VideoPlayer = {
-		UI                    : Object(),
-		annotationList        : [],
-		curAction             : null,
-		curAnalysisList       : null,
-		curAnnotation         : null,
-		curCategorySet        : null,
-		curMusic 							: null,
-		curMusicFormElement		: null,
-		curScene              : null,
-		curSegment            : null,
-		curSequence           : null,
-		curTake               : null,
-		currentPermissionLevel: null,
-		duration              : 1,
-		markerList            : [],
-		model                 : Object(),
-		overlay               : null,
-		repeatSection         : false,
-		selectedElementType   : null,
-		selectedMedium        : null,
-		tagAutocomplete       : [],
-		userPermissionList    : null,
-		volume                : 1,
+		UI                          : Object(),
+		annotationList              : [],
+		curAction                   : null,
+		curAnalysisList             : null,
+		curAnnotation               : null,
+		curCategorySet              : null,
+		curMusic                    : null,
+		curMusicChangeInTempoElement: null,
+		curMusicFormElement         : null,
+		curScene                    : null,
+		curSegment                  : null,
+		curSequence                 : null,
+		curTake                     : null,
+		currentPermissionLevel      : null,
+		duration                    : 1,
+		markerList                  : [],
+		model                       : Object(),
+		overlay                     : null,
+		repeatSection               : false,
+		selectedElementType         : null,
+		selectedMedium              : null,
+		tagAutocomplete             : [],
+		userPermissionList          : null,
+		volume                      : 1,
 
 		init: function() {
 			// init UI
@@ -103,10 +104,18 @@
 						break;
 					}
 				}
-				if (TIMAAT.VideoPlayer.curMusic != null && TIMAAT.VideoPlayer.selectedElementType == 'musicFormElement') {
-					// TODO check what to do instead
-					// index = TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curMusicFormElement.model.id);
-					// TIMAAT.VideoPlayer.curMusic.musicFormElementsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+				if (TIMAAT.VideoPlayer.curMusic != null) {
+					switch(TIMAAT.VideoPlayer.selectedElementType) {
+						// TODO check what to do instead
+						// index = TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curMusicFormElement.model.id);
+						// TIMAAT.VideoPlayer.curMusic.musicFormElementsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+						case 'musicFormElement':
+
+						break;
+						case 'musicChangeInTempoElement':
+
+						break;
+					}
 				}
 			});
 
@@ -163,14 +172,6 @@
 					}
 				}
 			});
-
-			// musicFormElement created remotely
-			// $(document).on('add-music-form-element.notification.TIMAAT', function(ev, notification) {
-			// 	let musicFormElement = new TIMAAT.MusicFormElement(notification.data);
-			// 	if ( musicFormElement && TIMAAT.VideoPlayer.curMusic &&  TIMAAT.VideoPlayer.curMusic.id == notification.dataID ) {
-			// 		TIMAAT.VideoPlayer._musicFormElementAdded(musicFormElement, false);
-			// 	}
-			// });
 
 			// annotation created remotely
 			$(document).on('add-annotation.notification.TIMAAT', function(ev, notification) {
@@ -922,6 +923,21 @@
 				modal.modal('hide');
 			});
 
+			$('#timaat-music-change-in-tempo-element-delete-commit-submit-button').on('click', async function(ev) {
+				var modal = $('#timaat-videoplayer-music-change-in-tempo-element-delete');
+				var model = $('#timaat-videoplayer-music-change-in-tempo-element-delete').data('model');
+        // console.log("TCL: $ -> model", model);
+				if ( model ) {
+					await TIMAAT.MusicService.removeMusicChangeInTempoElement(model.id);
+					if (TIMAAT.VideoPlayer.curMusic) {
+						TIMAAT.VideoPlayer.refreshTimelineElementsStructure();
+					}
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curMusicChangeInTempoElement = null;
+				modal.modal('hide');
+			});
+
 			// close select2 drop-downs when clicking outside
 			$(document).on('click', function(event) {
 				var $target = $(event.target);
@@ -982,7 +998,7 @@
 				$('.timaat-timeline-marker-audio').show();
 				$('.timeline-section-audio').show();
 				if (TIMAAT.VideoPlayer.curMusic) {
-				$('.timeline-section-music-structure').show();
+					$('.timeline-section-music-structure').show();
 					$('.timaat-analysislist-music-dropdown').show();
 				}
 				TIMAAT.VideoPlayer.activeLayer = 'audio';
@@ -2012,9 +2028,9 @@
 			}
 		},
 
-		addMusicFormElement: function() {
+		addMusicElement: function(type) {
 			TIMAAT.VideoPlayer.pause();
-			TIMAAT.VideoPlayer.inspector.setItem(null, 'musicFormElement');
+			TIMAAT.VideoPlayer.inspector.setItem(null, type);
 		},
 
 		updateMusicFormElement: async function(musicFormElement) {
@@ -2030,6 +2046,19 @@
 			// this.sortListUI();
 		},
 
+		updateMusicChangeInTempoElement: async function(musicChangeInTempoElement) {
+			// console.log("TCL: updateMusicChangeInTempoElement:function -> musicChangeInTempoElement: ", musicChangeInTempoElement);
+			// sync to server
+			musicChangeInTempoElement.model.changeInTempo = await TIMAAT.MusicService.getChangeInTempo(musicChangeInTempoElement.model.changeInTempo.id);
+			await TIMAAT.MusicService.updateMusicChangeInTempoElement(musicChangeInTempoElement.model);
+			await TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI);
+
+			// update UI list view
+			musicChangeInTempoElement.updateUI();
+			this.updateListUI();
+			// this.sortListUI();
+		},
+
 		removeMusicFormElement: function(data) {
 			// console.log("TCL: removeMusicFormElement: data", data);
 			if (!data) return;
@@ -2038,6 +2067,16 @@
 			$('#timaat-videoplayer-music-form-element-delete').find('.modal-title').html("Delete music form element");
 			$('#timaat-videoplayer-music-form-element-delete').find('.modal-body').html("Do you want to delete the selected element?");
 			$('#timaat-videoplayer-music-form-element-delete').modal('show');
+		},
+
+		removeMusicChangeInTempoElement: function(data) {
+			// console.log("TCL: removeMusicChangeInTempoElement: data", data);
+			if (!data) return;
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-music-change-in-tempo-element-delete').data('model', data.model);
+			$('#timaat-videoplayer-music-change-in-tempo-element-delete').find('.modal-title').html("Delete music change in tempo element");
+			$('#timaat-videoplayer-music-change-in-tempo-element-delete').find('.modal-body').html("Do you want to delete the selected element?");
+			$('#timaat-videoplayer-music-change-in-tempo-element-delete').modal('show');
 		},
 
 		offLinePublication: function() {
@@ -2146,10 +2185,18 @@
 
 			if ( TIMAAT.VideoPlayer.annotationList ) for (let annotation of TIMAAT.VideoPlayer.annotationList) if ( TIMAAT.VideoPlayer.duration > 0 ) annotation.updateStatus(TIMAAT.VideoPlayer.medium.currentTime);
 
-			if ( TIMAAT.VideoPlayer.curMusic != null && TIMAAT.VideoPlayer.curMusic.musicFormElementsUI != null && TIMAAT.VideoPlayer.medium )
-			TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.forEach(function(musicFormElement) {
-				musicFormElement.updateStatus(TIMAAT.VideoPlayer.medium.currentTime, viaTimeUpdate);
-			});
+			if ( TIMAAT.VideoPlayer.curMusic != null && TIMAAT.VideoPlayer.medium ) {
+				if (TIMAAT.VideoPlayer.curMusic.musicFormElementsUI != null) {
+					TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.forEach(function(musicFormElement) {
+						musicFormElement.updateStatus(TIMAAT.VideoPlayer.medium.currentTime, viaTimeUpdate);
+					});
+				}
+				if ( TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI != null ) {
+					TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI.forEach(function(musicChangeInTempoElement) {
+						musicChangeInTempoElement.updateStatus(TIMAAT.VideoPlayer.medium.currentTime, viaTimeUpdate);
+					});
+				}
+			}
 		},
 
 		updateUI: function() {
@@ -2213,10 +2260,17 @@
 					});
 				}
 			}
-			if (TIMAAT.VideoPlayer.curMusic && TIMAAT.VideoPlayer.curMusic.musicFormElementsUI) {
-				TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.forEach(function(musicFormElement) {
-					musicFormElement.removeUI();
-				});
+			if (TIMAAT.VideoPlayer.curMusic) {
+				if (TIMAAT.VideoPlayer.curMusic.musicFormElementsUI) {
+					TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.forEach(function(musicFormElement) {
+						musicFormElement.removeUI();
+					});
+				}
+				if (TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI) {
+					TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI.forEach(function(musicChangeInTempoElement) {
+						musicChangeInTempoElement.removeUI();
+					});
+				}
 			}
 		},
 
@@ -2250,9 +2304,14 @@
 				});
 			}
 			if (TIMAAT.VideoPlayer.curMusic) {
+        console.log("TCL: TIMAAT.VideoPlayer.curMusic", TIMAAT.VideoPlayer.curMusic);
 				TIMAAT.VideoPlayer.curMusic.musicFormElementsUI = Array();
-				TIMAAT.VideoPlayer.curMusic.musicFormElements.forEach(function(musicFormElement) {
+				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI = Array();
+				TIMAAT.VideoPlayer.curMusic.musicFormElementList.forEach(function(musicFormElement) {
 					TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.push(new TIMAAT.MusicFormElement(musicFormElement));
+				});
+				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementList.forEach(function(musicChangeInTempoElement) {
+					TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI.push(new TIMAAT.MusicChangeInTempoElement(musicChangeInTempoElement));
 				});
 			}
 		},
@@ -2268,6 +2327,7 @@
 			}
 			if (this.curMusic) {
 				this.sort(this.curMusic.musicFormElementsUI);
+				this.sort(this.curMusic.musicChangeInTempoElementsUI);
 			}
 		},
 
@@ -2304,11 +2364,19 @@
 					}
 				}
 			}
-			if (this.curMusic != null && this.curMusic.musicFormElementsUI != null) {
-				this.curMusic.musicFormElementsUI.forEach(function(musicFormElement) {
-					musicFormElement.addUI();
-				});
-				$('#timaat-timeline-music-form-element-pane').show();
+			if (this.curMusic != null) {
+				if (this.curMusic.musicFormElementsUI != null) {
+					this.curMusic.musicFormElementsUI.forEach(function(musicFormElement) {
+						musicFormElement.addUI();
+					});
+					$('#timaat-timeline-music-form-element-pane').show();
+				}
+				if (this.curMusic.musicChangeInTempoElementsUI != null) {
+					this.curMusic.musicChangeInTempoElementsUI.forEach(function(musicChangeInTempoElement) {
+						musicChangeInTempoElement.addUI();
+					});
+					$('#timaat-timeline-music-change-in-tempo-element-pane').show();
+				}
 			}
 		},
 
@@ -2337,7 +2405,7 @@
 		},
 
 		jumpTo: function(timeInMilliseconds) {
-    	// console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> timeInSeconds", timeInSeconds);
+			// console.log("TCL: jumpTo() -> timeInMilliseconds: ", timeInMilliseconds);
 			if ( !this.medium || this.mediaType != 'video' && this.mediaType != 'audio' ) return;
 			this.medium.currentTime = timeInMilliseconds / 1000;
 			// this.updateListUI(); // obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
@@ -2768,6 +2836,30 @@
 
 			// update UI
 			$('#timaat-timeline-music-form-element-pane').show();
+			TIMAAT.VideoPlayer.updateListUI();
+			TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_musicChangeInTempoElementAdded: function(musicChangeInTempoElement, openInspector=true) {
+			console.log("TCL: _musicChangeInTempoElementAdded: function(musicChangeInTempoElement): ", musicChangeInTempoElement);
+			// TODO refactor for persistent music form data display independent from analysislist
+			if (!TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI) {
+				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI = [];
+			}
+			TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI.push(musicChangeInTempoElement);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI);
+			TIMAAT.VideoPlayer.jumpTo(musicChangeInTempoElement.model.startTime);
+			TIMAAT.VideoPlayer.selectedElementType = 'musicChangeInTempoElement';
+			musicChangeInTempoElement.addUI();
+			TIMAAT.VideoPlayer.curMusicChangeInTempoElement = musicChangeInTempoElement;
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.inspector.setItem(musicChangeInTempoElement, 'musicChangeInTempoElement');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			$('#timaat-timeline-music-change-in-tempo-element-pane').show();
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 		},

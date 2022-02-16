@@ -462,6 +462,14 @@ a.dropdown-item {
 	margin-bottom: 2px;
 }
 
+#timaat-timeline-music-change-in-tempo-element-pane {
+	width: 100%;
+	height: 15px;
+	display: none;
+	margin-bottom: 2px;
+	margin-top: 57px;
+}
+
 #timaat-timeline-keyframe-pane {
 	position: absolute;
 	width: 100%;
@@ -499,10 +507,11 @@ a.dropdown-item {
 .timaat-timeline-sequence,
 .timaat-timeline-take,
 .timaat-timeline-scene,
-.timaat-timeline-action {
+.timaat-timeline-action,
+.timaat-timeline-music-change-in-tempo-element {
 	position: absolute;
 	border-left: 1px solid #aeb8c1;
-	border-right: 1px solid #aeb8c1;
+	/* border-right: 1px solid #aeb8c1; */
 	height: 15px;
 	float:left;
 	width: 0px;
@@ -522,7 +531,8 @@ a.dropdown-item {
 .timaat-timeline-sequence-name,
 .timaat-timeline-take-name,
 .timaat-timeline-scene-name,
-.timaat-timeline-action-name {
+.timaat-timeline-action-name,
+.timaat-timeline-music-change-in-tempo-element-type {
 	padding-left: 3px;
 	font-size: 0.70rem;
 	overflow: hidden;
@@ -538,7 +548,6 @@ a.dropdown-item {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-
 
 .timaat-timeline-selected-music-form-element {
 	border-color: #000;
@@ -1165,10 +1174,12 @@ Tooltip container
 	box-shadow: 2px 0px 2px black;
 /* 	transition: width 0.6s; */
 }
-.timeline-section-segment-structure {
+.timeline-section-segment-structure,
+.timeline-section-music-structure {
 	height: 98px;
 }
-.timeline-section-segment-structure .timeline-section-content {
+.timeline-section-segment-structure .timeline-section-content,
+.timeline-section-music-structure .timeline-section-content {
 	overflow: hidden;
 }
 

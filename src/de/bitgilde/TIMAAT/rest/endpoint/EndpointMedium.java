@@ -2193,8 +2193,8 @@ public class EndpointMedium {
 	@Path("{mediumId}/title/{id}")
 	@Secured
 	public Response addTitle(@PathParam("mediumId") int mediumId, @PathParam("id") int id, String jsonData) {
-
 		System.out.println("EndpointMedium: addTitle: jsonData: "+jsonData);
+
 		ObjectMapper mapper = new ObjectMapper();
 		Title newTitle = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2228,7 +2228,7 @@ public class EndpointMedium {
 		entityManager.persist(language);
 		entityManager.persist(newTitle);
 		entityManager.flush();
-		newTitle.setLanguage(language);
+		newTitle.setLanguage(language); //! TODO already set above
 		entityTransaction.commit();
 		entityManager.refresh(newTitle);
 		entityManager.refresh(language);

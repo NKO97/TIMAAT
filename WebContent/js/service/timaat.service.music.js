@@ -732,11 +732,105 @@
 			});
 		},
 
+		async createMusicChangeInTempoElement(model, musicId) {
+			console.log("TCL: createMusicChangeInTempoElement -> model, musicId", model, musicId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/musicChangeInTempoElement/"+model.changeInTempo.id,
+					type:"POST",
+					data: JSON.stringify(model),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					console.log("TCL: }).done -> data", data);
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async updateMusicChangeInTempoElement(model) {
+      // console.log("TCL: updateMusicChangeInTempoElement ~ model", model);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/musicChangeInTempoElement/"+model.id,
+					type:"PATCH",
+					data: JSON.stringify(model),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async removeMusicChangeInTempoElement(modelId) {
+			// console.log("TCL: removeMusicChangeInTempoElement -> modelId", modelId);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/musicChangeInTempoElement/"+modelId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
 		async getMusicFormElementType(id) {
       // console.log("TCL: getMusicFormElementType -> id", id);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/musicFormElementType/"+id,
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				})
+				.fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async getChangeInTempo(id) {
+      // console.log("TCL: getChangeInTempo -> id", id);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/changeInTempo/"+id,
 					type:"GET",
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",

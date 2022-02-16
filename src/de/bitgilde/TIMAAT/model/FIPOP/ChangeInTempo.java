@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the change_in_tempo database table.
- * 
+ *
  */
 @Entity
 @Table(name="change_in_tempo")
@@ -30,6 +30,11 @@ public class ChangeInTempo implements Serializable {
 	//bi-directional many-to-one association to ChangeInTempoTranslation
 	@OneToMany(mappedBy="changeInTempo")
 	private List<ChangeInTempoTranslation> changeInTempoTranslations;
+
+	// bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="changeInTempo")
+	@JsonIgnore
+	private List<MusicChangeInTempoElement> musicChangeInTempoElementList;
 
 	public ChangeInTempo() {
 	}
@@ -85,5 +90,27 @@ public class ChangeInTempo implements Serializable {
 
 		return changeInTempoTranslation;
 	}
+
+	public List<MusicChangeInTempoElement> getMusicChangeInTempoElementList() {
+		return this.musicChangeInTempoElementList;
+	}
+
+	public void setMusicChangeInTempoElementList(List<MusicChangeInTempoElement> musicChangeInTempoElementList) {
+		this.musicChangeInTempoElementList = musicChangeInTempoElementList;
+	}
+
+	// public MusicChangeInTempoElement addMusicChangeInTempoElement(MusicChangeInTempoElement musicChangeInTempoElement) {
+	// 	getMusicChangeInTempoElementList().add(musicChangeInTempoElement);
+	// 	musicChangeInTempoElement.addChangeInTempo(this);
+
+	// 	return musicChangeInTempoElement;
+	// }
+
+	// public MusicChangeInTempoElement removeMusicChangeInTempoElement(MusicChangeInTempoElement musicChangeInTempoElement) {
+	// 	getMusicChangeInTempoElementList().remove(musicChangeInTempoElement);
+	// 	musicChangeInTempoElement.removeChangeInTempo(this);
+
+	// 	return musicChangeInTempoElement;
+	// }
 
 }

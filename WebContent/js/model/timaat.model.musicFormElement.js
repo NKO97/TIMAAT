@@ -115,7 +115,6 @@
 				// TIMAAT.URLHistory.setURL(null, 'MusicFormElement · '+musicFormElement.model.musicFormElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicFormElement/'+musicFormElement.model.id);
 			});
 			this.timelineView.on('.timaat-timeline-music-form-element-lyrics > mouseover', this, function(event) {
-				console.log("TCL: MusicFormElement -> this.timelineView.on -> musicFormElement.model.musicFormElementTranslations[0].text.length", musicFormElement.model.musicFormElementTranslations[0].text.length);
 				// if (musicFormElement.model.musicFormElementTranslations[0].text.length > 11) { // default value when empty, due to summernote, is '<p><br></p>
 					$('.timaat-timeline-music-form-element > [data-toggle="tooltip"]').tooltip({boundary: "window", trigger: "hover"});
 				// }

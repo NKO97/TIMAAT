@@ -834,6 +834,41 @@
                 </div>
               </div>
             </div>
+            <div class="modal fade" id="timaat-videoplayer-music-change-in-tempo-element-modal" tabindex="-1" role="dialog" aria-labelledby="musicChangeInTempoElementModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-change-in-tempo-element-delete" tabindex="-1" role="dialog" aria-labelledby="musicChangeInTempoElementDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="musicChangeInTempoElementDeleteLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				            <button type="button" class="btn btn-danger" id="timaat-music-change-in-tempo-element-delete-commit-submit-button">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="modal fade" id="analysisListNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="analysisListNoPermissionLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -904,6 +939,15 @@
                             name="musicFormElementTypeId"
                             data-role="musicFormElementType"
                             data-placeholder="Select form element type">
+                    </select>
+                  </div>
+                  <div id="timaat-inspector-meta-music-change-in-tempo-element-type-group" class="input-group input-group-sm mb-1">
+                    <select class="form-control form-control-sm"
+                            style="width:100%"
+                            id="music-change-in-tempo-element-type-select-dropdown"
+                            name="musicChangeInTempoElementTypeId"
+                            data-role="musicChangeInTempoElementType"
+                            data-placeholder="Select change in tempo element type">
                     </select>
                   </div>
                   <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
@@ -1481,7 +1525,8 @@
                           <i class="fas fa-music"></i>
                         </button>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-form-add" onclick="TIMAAT.VideoPlayer.addMusicFormElement()">Add music form</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-form-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicFormElement')">Add music form element</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-changeInTempo-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicChangeInTempoElement')">Add music change in tempo element</a>
                         </div>
                       </div>
                     </div>
@@ -1539,6 +1584,7 @@
                             </div>
                             <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
                               <div id="timaat-timeline-music-form-element-pane"></div>
+                              <div id="timaat-timeline-music-change-in-tempo-element-pane"></div>
                               <!-- TODO: additional panes -->
                             </div>
                           </div>

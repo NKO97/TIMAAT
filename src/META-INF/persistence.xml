@@ -206,6 +206,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRolePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTranslation</class>

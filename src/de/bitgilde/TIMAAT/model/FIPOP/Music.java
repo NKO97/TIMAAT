@@ -206,7 +206,12 @@ public class Music implements Serializable {
 	//bi-directional many-to-one association to MusicFormElement
 	@OneToMany(mappedBy="music")
   @JsonManagedReference(value = "Music-MusicFormElement")
-	private List<MusicFormElement> musicFormElements;
+	private List<MusicFormElement> musicFormElementList;
+
+	//bi-directional many-to-one association to MusicChangeInTempoElement
+	@OneToMany(mappedBy="music")
+	@JsonManagedReference(value = "Music-MusicChangeInTempoElement")
+	private List<MusicChangeInTempoElement> musicChangeInTempoElementList;
 
 
 	public Music() {
@@ -461,24 +466,47 @@ public class Music implements Serializable {
 		this.voiceLeadingPatternList = voiceLeadingPatternList;
 	}
 
-	public List<MusicFormElement> getMusicFormElements() {
-		return this.musicFormElements;
+	public List<MusicFormElement> getMusicFormElementList() {
+		return this.musicFormElementList;
 	}
 
-	public void setMusicFormElements(List<MusicFormElement> musicFormElements) {
-		this.musicFormElements = musicFormElements;
+	public void setMusicFormElementList(List<MusicFormElement> musicFormElementList) {
+		this.musicFormElementList = musicFormElementList;
 	}
 
 	public MusicFormElement addMusicFormElement(MusicFormElement musicFormElement) {
-		getMusicFormElements().add(musicFormElement);
+		getMusicFormElementList().add(musicFormElement);
 		musicFormElement.setMusic(this);
 
 		return musicFormElement;
 	}
 
 	public MusicFormElement removeMusicFormElement(MusicFormElement musicFormElement) {
-		getMusicFormElements().remove(musicFormElement);
+		getMusicFormElementList().remove(musicFormElement);
 
 		return musicFormElement;
 	}
+
+	public List<MusicChangeInTempoElement> getMusicChangeInTempoElementList() {
+		return this.musicChangeInTempoElementList;
+	}
+
+	public void setMusicChangeInTempoElementList(List<MusicChangeInTempoElement> musicChangeInTempoElementList) {
+		this.musicChangeInTempoElementList = musicChangeInTempoElementList;
+	}
+
+	public MusicChangeInTempoElement addMusicChangeInTempoElement(MusicChangeInTempoElement musicChangeInTempoElement) {
+		getMusicChangeInTempoElementList().add(musicChangeInTempoElement);
+		musicChangeInTempoElement.setMusic(this);
+
+		return musicChangeInTempoElement;
+	}
+
+	public MusicChangeInTempoElement removeMusicChangeInTempoElement(MusicChangeInTempoElement musicChangeInTempoElement) {
+		getMusicChangeInTempoElementList().remove(musicChangeInTempoElement);
+		musicChangeInTempoElement.setMusic(null);
+
+		return musicChangeInTempoElement;
+	}
+
 }
