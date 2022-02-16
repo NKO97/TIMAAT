@@ -160,7 +160,7 @@
 			for (let i = 0; i <= Math.ceil(this.duration / 1000.0 / this.ui.zoom)+1; i++) {
 				let tick = $(this.ui.tickTemplate);
 				let time = i * this.ui.zoom;
-				tick.attr('data-start', time);
+				tick.attr('data-start', Math.floor(time * 1000));
 				let hour = Math.floor(time / 3600.0);
 				let min = Math.floor((time-(hour*60)) / 60.0);
 				let sek = time % 60;
