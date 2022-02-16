@@ -2406,7 +2406,7 @@
 		jumpTo: function(timeInMilliseconds) {
 			// console.log("TCL: jumpTo() -> timeInMilliseconds: ", timeInMilliseconds);
 			if ( !this.medium || this.mediaType != 'video' && this.mediaType != 'audio' ) return;
-			this.medium.currentTime = timeInMilliseconds / 1000;
+			this.medium.currentTime = Math.floor(timeInMilliseconds) / 1000;
 			// this.updateListUI(); // obsolete as updateListUI() is called within on(timeupdate), which is also called upon clicking within the time slider
 		},
 
