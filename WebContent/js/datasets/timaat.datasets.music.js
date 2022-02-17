@@ -574,7 +574,8 @@
 				if (medium.id && medium.fileStatus && medium.fileStatus != 'noFile') {
 					TIMAAT.UI.showComponent('videoplayer');
 					// setup video in player
-					TIMAAT.VideoPlayer.setupMedium(medium);
+					await TIMAAT.VideoPlayer.setupMedium(medium);
+					$('.timaat-button-audio-layer').click();
 					// load video annotations from server
 					let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.id);
 					await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
