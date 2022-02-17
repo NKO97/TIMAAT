@@ -74,49 +74,49 @@
 			$(window).resize( function() {
 				TIMAAT.VideoPlayer.timeline.invalidateSize();
 				let selected = TIMAAT.VideoPlayer.selectedElementType;
-				TIMAAT.VideoPlayer.refreshTimelineElementsStructure();
+				// TIMAAT.VideoPlayer.refreshTimelineElementsStructure();
 				let index;
 				TIMAAT.VideoPlayer.selectedElementType = selected;
 				if (TIMAAT.VideoPlayer.curAnalysisList != null) {
 					for (let marker of TIMAAT.VideoPlayer.markerList) marker._updateElementOffset();
 					for (let anno of TIMAAT.VideoPlayer.annotationList) for (let keyframe of anno.svg.keyframes) keyframe._updateOffsetUI();
           // console.log("TCL: $ -> TIMAAT.VideoPlayer.selectedElementType", TIMAAT.VideoPlayer.selectedElementType);
-					switch (TIMAAT.VideoPlayer.selectedElementType) {
-						case 'segment':
-							index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSegment.model.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
-						break;
-						case 'sequence':
-							index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSequence.model.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
-						break;
-						case 'action':
-							index = TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curAction.model.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
-						break;
-						case 'scene':
-							index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curScene.model.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
-						break;
-						case 'take':
-							index = TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curTake.model.id);
-							TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
-						break;
-					}
+					// switch (TIMAAT.VideoPlayer.selectedElementType) {
+					// 	case 'segment':
+					// 		index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSegment.model.id);
+					// 		TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					// 	break;
+					// 	case 'sequence':
+					// 		index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSequence.model.id);
+					// 		TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					// 	break;
+					// 	case 'action':
+					// 		index = TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curAction.model.id);
+					// 		TIMAAT.VideoPlayer.curAnalysisList.analysisActionsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					// 	break;
+					// 	case 'scene':
+					// 		index = TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curScene.model.id);
+					// 		TIMAAT.VideoPlayer.curAnalysisList.analysisScenesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					// 	break;
+					// 	case 'take':
+					// 		index = TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curTake.model.id);
+					// 		TIMAAT.VideoPlayer.curAnalysisList.analysisTakesUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+					// 	break;
+					// }
 				}
-				if (TIMAAT.VideoPlayer.curMusic != null) {
-					switch(TIMAAT.VideoPlayer.selectedElementType) {
-						// TODO check what to do instead
-						// index = TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curMusicFormElement.model.id);
-						// TIMAAT.VideoPlayer.curMusic.musicFormElementsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
-						case 'musicFormElement':
+				// if (TIMAAT.VideoPlayer.curMusic != null) {
+				// 	switch(TIMAAT.VideoPlayer.selectedElementType) {
+				// 		// TODO check what to do instead
+				// 		// index = TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curMusicFormElement.model.id);
+				// 		// TIMAAT.VideoPlayer.curMusic.musicFormElementsUI[index].timelineView[0].classList.replace('bg-info', 'bg-primary');
+				// 		case 'musicFormElement':
 
-						break;
-						case 'musicChangeInTempoElement':
+				// 		break;
+				// 		case 'musicChangeInTempoElement':
 
-						break;
-					}
-				}
+				// 		break;
+				// 	}
+				// }
 			});
 
 			this.initNotifications();
