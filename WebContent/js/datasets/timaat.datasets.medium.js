@@ -2482,7 +2482,7 @@
 					});
 				});
 
-				// url for role fetch needs to chance on actor change
+				// url for role fetch needs to change on actor change
 				// provide roles list for new selected actor
 				this.getMediumHasActorWithRolesDropdownData(actorIdList[i]);
 
@@ -2569,7 +2569,7 @@
 					minimumInputLength: 0,
 				});
 
-				// url for role fetch needs to chance on actor change
+				// url for role fetch needs to change on actor change
 				$('#mediumhasactorwithrole-actorid').on('change', function (event) {
 					// console.log("TCL: actor selection changed");
 					// console.log("TCL: selected Actor Id", $(this).val());
@@ -3584,7 +3584,7 @@
 		},
 
 		getMediumHasActorWithRoleData: function(id) {
-    	console.log("TCL: mediumFormActorRoles:function -> id", id);
+    	console.log("TCL: getMediumHasActorWithRoleData:function -> id", id);
 			$('#mediumhasactorwithrole-actorid-'+id).select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,

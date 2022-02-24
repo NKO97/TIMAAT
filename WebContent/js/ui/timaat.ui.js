@@ -354,7 +354,7 @@
 
     // display all areas of the media component
 		displayComponent: function(type, navBarLinkId, dataTableCardClass, navTabLinkId=null, contentId=null) {
-    // console.log("TCL: displayComponent - type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId: ", type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId);
+	    // console.log("TCL: displayComponent - type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId: ", type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId);
 			this.displayNavBarContainer(type);
 			this.setNavBarActiveLink(navBarLinkId);
 			this.setAndDisplayDataTableActiveActiveCard(dataTableCardClass);
@@ -419,11 +419,13 @@
 		},
 
 		hideDataSetContentContainer: function() {
+    	// console.log("TCL: hideDataSetContentContainer");
 			this.displayDataSetContentContainer(null, null, null);
 		},
 
 		// display dataset content tab bar row
 		displayAndSetDataSetContentNavTab: function(navTabLinkId, type=null) {
+    	// console.log("TCL: navTabLinkId, type=null: ", navTabLinkId, type);
       switch(type) {
 				case 'category':
 				case 'categorySet':
@@ -474,7 +476,7 @@
 		},
 
 		displayDataSetContent: function(form, data, type, mode = 'show') {
-    // console.log("TCL: displayDataSetContent: form, data, type, mode - ", form, data, type, mode);
+    	// console.log("TCL: displayDataSetContent: form, data, type, mode - ", form, data, type, mode);
 			this.subNavTab = form;
       switch(type) {
         case 'category':
@@ -579,6 +581,10 @@
 						case 'actorWithRoles':
 							this.setDataSetContentActiveNavTab('music-tab-actorwithroles');
 							TIMAAT.MusicDatasets.musicFormActorRoles(mode, data);
+						break;
+						case 'mediumHasMusicList':
+							this.setDataSetContentActiveNavTab('music-tab-mediumhasmusiclist');
+							TIMAAT.MusicDatasets.musicFormMediumHasMusicList(mode, data);
 						break;
 					}
 				break;

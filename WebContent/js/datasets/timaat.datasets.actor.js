@@ -33,7 +33,7 @@
 		personIsMemberOfCollectives: null,
 		actorsLoaded: false,
 
-		init: function() {   
+		init: function() {
 			this.initActors();
 			this.initNames();
 			this.initAddresses();
@@ -56,7 +56,7 @@
 		},
 
 		initActorTypes: function() {
-			// console.log("TCL: ActorDatasets: initActorTypes: function()");		
+			// console.log("TCL: ActorDatasets: initActorTypes: function()");
 			// delete actorType functionality
 			$('#timaat-actortype-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-actordatasets-actortype-delete');
@@ -72,7 +72,7 @@
 			$('#timaat-actordatasets-actortype-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit actorType window setup
 				var modal = $(this);
-				var actorType = modal.data('actorType');				
+				var actorType = modal.data('actorType');
 				var heading = (actorType) ? "ActorType bearbeiten" : "ActorType hinzufügen";
 				var submit = (actorType) ? "Speichern" : "Hinzufügen";
 				var type = (actorType) ? actorType.model.type : 0;
@@ -108,8 +108,8 @@
 				modal.modal('hide');
 			});
 
-			// validate actorType data	
-			// TODO validate all required fields				
+			// validate actorType data
+			// TODO validate all required fields
 			$('#timaat-actordatasets-actortype-meta-name').on('input', function(ev) {
 				if ( $('#timaat-actordatasets-actortype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-actortype-meta-submit').prop('disabled', false);
@@ -152,7 +152,7 @@
 				if ( type == 'actor') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + id);
 				} else {
-					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + id);					
+					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + id);
 				}
 			});
 
@@ -213,13 +213,13 @@
 				TIMAAT.UI.hidePopups();
 				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, $('#actor-metadata-form').data('actor'), 'actor', 'edit');
 			});
-			
+
 			// actor form handlers
 			// carousel button handler
 			$('a[data-slide="prev"]').on('click', function() {
 				$('#dynamic-profile-image-fields').carousel('prev');
 			});
-			
+
 			// carousel button handler
 			$('a[data-slide="next"]').on('click', function() {
 				$('#dynamic-profile-image-fields').carousel('next');
@@ -269,7 +269,7 @@
 				if (!$('#actor-metadata-form').valid()) return false;
 
 				var actor = $('#actor-metadata-form').data('actor');
-				var type = $('#actor-metadata-form').data('type');	
+				var type = $('#actor-metadata-form').data('type');
 				// var type = actor.model.actorType.actorTypeTranslations[0].type; // won't work for adding new actors
 
 				// create/Edit actor window submitted data
@@ -290,7 +290,7 @@
 				formDataSanitized.placeOfDeath  = (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath);
 				formDataSanitized.sexId         = Number(formDataObject.sexId);
 				delete formDataSanitized.imageId;
-				
+
 				var formImageIds = [];
 				var i = 0;
 				for (; i < formData.length; i++) {
@@ -301,7 +301,7 @@
 				// console.log("TCL: formImageIds", formImageIds);
 				formDataSanitized.profileImages = formImageIds;
         // console.log("TCL: formDataSanitized", formDataSanitized);
-				
+
 				if (actor) { // update actor
 					// actor data
 					actor.model.isFictional = formDataObject.isFictional;
@@ -408,7 +408,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							params.page = params.page || 1;
@@ -446,7 +446,7 @@
 			$('#timaat-actordatasets-modal-tag-submit').on('click', async function(event) {
 				event.preventDefault();
 				var modal = $('#timaat-actordatasets-actor-tags');
-				if (!$('#actorTagsModalForm').valid()) 
+				if (!$('#actorTagsModalForm').valid())
 					return false;
 				var actor = modal.data('actor');
         // console.log("TCL: actor", actor);
@@ -505,7 +505,7 @@
 					$('#actor-metadata-form-dismiss-button').trigger('click');
 				}
 			});
-			
+
 		},
 
 		initNames: function() {
@@ -543,12 +543,12 @@
 				// console.log("TCL: add name to list");
 				var listEntry = $(this).closest('[data-role="new-name-fields"]');
 				var newName = [];
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					newName.push($(this).val());
           // console.log("TCL: $(this).val()", $(this).val());
           // console.log("TCL: newName", newName);
 				}));
-				if (!$('#actor-names-form').valid()) 
+				if (!$('#actor-names-form').valid())
 					return false;
 				if (newName != '') { // TODO is '' proper check?
 					var namesInForm = $('#actor-names-form').serializeArray();
@@ -614,7 +614,7 @@
 				event.preventDefault();
 				var isDisplayName = $(this).closest('.form-group').find('input[name=isDisplayName]:checked').val();
 				if (isDisplayName == "on") {
-					// TODO modal informing that display name entry cannot be deleted					
+					// TODO modal informing that display name entry cannot be deleted
 					console.log("CANNOT DELETE DISPLAY NAME");
 				}
 				else {
@@ -633,9 +633,9 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#actor-names-form').valid()) {
-					$('[data-role="new-name-fields"]').append(TIMAAT.ActorDatasets.appendNewNameField());			
+					$('[data-role="new-name-fields"]').append(TIMAAT.ActorDatasets.appendNewNameField());
 					return false;
 				}
 
@@ -866,11 +866,11 @@
 						// console.log("TCL: actor.model", actor.model);
 						if (actor.model.birthName != null && actor.model.birthName.id == actor.model.actorNames[i].id) {
 							actor.model.birthName = null;
-							// console.log("TCL: remove birthName before deleting name");		
+							// console.log("TCL: remove birthName before deleting name");
 							// console.log("TCL type, actor", type, actor);
 							await TIMAAT.ActorDatasets.updateActor(type, actor);
 						}
-						// console.log("TCL: (update existing names and) delete obsolete ones");		
+						// console.log("TCL: (update existing names and) delete obsolete ones");
 						TIMAAT.ActorService.removeName(actor.model.actorNames[i]);
 						actor.model.actorNames.pop();
 					}
@@ -944,10 +944,10 @@
 				if (listEntry.find('select').each(function(){
 					addressTypeId = $(this).val();
 				}));
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					newAddress.push($(this).val());
 				}));
-				if (!$('#actor-addresses-form').valid()) 
+				if (!$('#actor-addresses-form').valid())
 					return false;
 				// console.log("TCL: newAddress", newAddress);
 				if (newAddress != '') { // TODO is '' proper check?
@@ -1113,9 +1113,9 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#actor-addresses-form').valid()) {
-					$('[data-role="new-actorhasaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewAddressField());				
+					$('[data-role="new-actorhasaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewAddressField());
 					return false;
 				}
 
@@ -1200,7 +1200,7 @@
 					var i = 0;
 					for (; i < actor.model.actorHasAddresses.length; i++ ) { // update existing actorHasAddresses
 						// console.log("TCL: actor", actor);
-						var actorHasAddress = {}; 
+						var actorHasAddress = {};
 						actorHasAddress = await TIMAAT.ActorDatasets.updateActorHasAddressModel(actor.model.actorHasAddresses[i], formActorHasAddressesList[i]);
 						// only update if anything changed
 						// if (actorHasAddress != actor.model.actorHasAddresses[i]) { // TODO currently actorHasAddresses[i] values change too early causing this check to always fail
@@ -1260,10 +1260,10 @@
 					for (; i >= formActorHasAddressesList.length; i-- ) { // remove obsolete addresses starting at end of list
 						if (actor.model.primaryAddress != null && actor.model.primaryAddress.id == actor.model.actorHasAddresses[i].address.id) {
 							actor.model.primaryAddress = null;
-							// console.log("TCL: remove primaryActorHasAddress before deleting address");		
+							// console.log("TCL: remove primaryActorHasAddress before deleting address");
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
-						// console.log("TCL: (update existing actorHasAddresses and) delete obsolete ones");		
+						// console.log("TCL: (update existing actorHasAddresses and) delete obsolete ones");
 						TIMAAT.ActorService.removeAddress(actor.model.actorHasAddresses[i].address);
 						actor.model.actorHasAddresses.pop();
 					}
@@ -1311,7 +1311,7 @@
 		},
 
 		initAddressTypes: function() {
-			// console.log("TCL: ActorDatasets: initAddressTypes: function()");		
+			// console.log("TCL: ActorDatasets: initAddressTypes: function()");
 			// delete addressType functionality
 			$('#timaat-addresstype-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-actordatasets-addresstype-delete');
@@ -1327,7 +1327,7 @@
 			$('#timaat-actordatasets-addresstype-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit addressType window setup
 				var modal = $(this);
-				var addressType = modal.data('addressType');				
+				var addressType = modal.data('addressType');
 				var heading = (addressType) ? "AddressType bearbeiten" : "AddressType hinzufügen";
 				var submit = (addressType) ? "Speichern" : "Hinzufügen";
 				var type = (addressType) ? addressType.model.type : 0;
@@ -1363,8 +1363,8 @@
 				modal.modal('hide');
 			});
 
-			// validate addressType data	
-			// TODO validate all required fields				
+			// validate addressType data
+			// TODO validate all required fields
 			$('#timaat-actordatasets-addresstype-meta-name').on('input', function(ev) {
 				if ( $('#timaat-actordatasets-addresstype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-addresstype-meta-submit').prop('disabled', false);
@@ -1402,10 +1402,10 @@
 				if (listEntry.find('select').each(function(){
 					emailAddressTypeId = $(this).val();
 				}));
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					newEmailAddress.push($(this).val());
 				}));
-				if (!$('#actor-emailaddresses-form').valid()) 
+				if (!$('#actor-emailaddresses-form').valid())
 					return false;
 				// console.log("TCL: newEmailAddress", newEmailAddress);
 				if (newEmailAddress != '') { // TODO is '' proper check?
@@ -1486,9 +1486,9 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#actor-emailaddresses-form').valid()) {
-					$('[data-role="new-actorhasemailaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());				
+					$('[data-role="new-actorhasemailaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());
 					return false;
 				}
 
@@ -1552,7 +1552,7 @@
 					var i = 0;
 					for (; i < actor.model.actorHasEmailAddresses.length; i++ ) { // update existing actorHasEmailAddresses
 						// console.log("TCL: actor", actor);
-						var actorHasEmailAddress = {}; 
+						var actorHasEmailAddress = {};
 						actorHasEmailAddress = await TIMAAT.ActorDatasets.updateActorHasEmailAddressModel(actor.model.actorHasEmailAddresses[i], formActorHasEmailAddressesList[i]);
 						// only update if anything changed
 						// if (actorHasEmailAddress != actor.model.actorHasEmailAddresses[i]) { // TODO currently actorHasEmailAddresses[i] values change too early causing this check to always fail
@@ -1612,10 +1612,10 @@
 					for (; i >= formActorHasEmailAddressesList.length; i-- ) { // remove obsolete addresses starting at end of list
 						if (actor.model.primaryEmailAddress != null && actor.model.primaryEmailAddress.id == actor.model.actorHasEmailAddresses[i].emailAddress.id) {
 							actor.model.primaryEmailAddress = null;
-							// console.log("TCL: remove primaryActorHasEmailAddress before deleting email address");		
+							// console.log("TCL: remove primaryActorHasEmailAddress before deleting email address");
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
-						// console.log("TCL: (update existing actorHasEmailAddresses and) delete obsolete ones");		
+						// console.log("TCL: (update existing actorHasEmailAddresses and) delete obsolete ones");
 						TIMAAT.ActorService.removeEmailAddress(actor.model.actorHasEmailAddresses[i].emailAddress);
 						actor.model.actorHasEmailAddresses.pop();
 					}
@@ -1662,7 +1662,7 @@
 		},
 
 		initEmailAddressTypes: function() {
-			// console.log("TCL: ActorDatasets: initEmailAddressTypes: function()");		
+			// console.log("TCL: ActorDatasets: initEmailAddressTypes: function()");
 			// delete emailAddressType functionality
 			$('#timaat-emailaddresstype-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-actordatasets-emailaddresstype-delete');
@@ -1678,7 +1678,7 @@
 			$('#timaat-actordatasets-emailaddresstype-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit emailAddressType window setup
 				var modal = $(this);
-				var emailAddressType = modal.data('emailAddressType');				
+				var emailAddressType = modal.data('emailAddressType');
 				var heading = (emailAddressType) ? "EmailAddressType bearbeiten" : "EmailAddressType hinzufügen";
 				var submit = (emailAddressType) ? "Speichern" : "Hinzufügen";
 				var type = (emailAddressType) ? emailAddressType.model.type : 0;
@@ -1714,8 +1714,8 @@
 				modal.modal('hide');
 			});
 
-			// validate emailAddressType data	
-			// TODO validate all required fields				
+			// validate emailAddressType data
+			// TODO validate all required fields
 			$('#timaat-actordatasets-emailaddresstype-meta-name').on('input', function(ev) {
 				if ( $('#timaat-actordatasets-emailaddresstype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-emailaddresstype-meta-submit').prop('disabled', false);
@@ -1753,10 +1753,10 @@
 				if (listEntry.find('select').each(function(){
 					phoneNumberTypeId = $(this).val();
 				}));
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					newPhoneNumber.push($(this).val());
 				}));
-				if (!$('#actor-phonenumbers-form').valid()) 
+				if (!$('#actor-phonenumbers-form').valid())
 					return false;
 				// console.log("TCL: newPhoneNumber", newPhoneNumber);
 				if (newPhoneNumber != '') { // TODO is '' proper check?
@@ -1838,9 +1838,9 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#actor-phonenumbers-form').valid()) {
-					$('[data-role="new-actorhasphonenumber-fields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());				
+					$('[data-role="new-actorhasphonenumber-fields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());
 					return false;
 				}
 
@@ -1904,7 +1904,7 @@
 					var i = 0;
 					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
 						// console.log("TCL: actor", actor);
-						var actorHasPhoneNumber = {}; 
+						var actorHasPhoneNumber = {};
 						actorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
 						// only update if anything changed
 						// if (actorHasPhoneNumber != actor.model.actorHasPhoneNumbers[i]) { // TODO currently actorHasPhoneNumbers[i] values change too early causing this check to always fail
@@ -1964,10 +1964,10 @@
 					for (; i >= formActorHasPhoneNumbersList.length; i-- ) { // remove obsolete phone numbers starting at end of list
 						if (actor.model.primaryPhoneNumber != null && actor.model.primaryPhoneNumber.id == actor.model.actorHasPhoneNumbers[i].phoneNumber.id) {
 							actor.model.primaryPhoneNumber = null;
-							// console.log("TCL: remove primaryActorHasPhoneNumber before deleting phone number");		
+							// console.log("TCL: remove primaryActorHasPhoneNumber before deleting phone number");
 							await TIMAAT.ActorDatasets.updateActor(actorType, actor);
 						}
-						// console.log("TCL: (update existing actorHasPhoneNumbers and) delete obsolete ones");		
+						// console.log("TCL: (update existing actorHasPhoneNumbers and) delete obsolete ones");
 						TIMAAT.ActorService.removePhoneNumber(actor.model.actorHasPhoneNumbers[i].phoneNumber);
 						actor.model.actorHasPhoneNumbers.pop();
 					}
@@ -2014,7 +2014,7 @@
 		},
 
 		initPhoneNumberTypes: function() {
-			// console.log("TCL: ActorDatasets: initPhoneNumberTypes: function()");		
+			// console.log("TCL: ActorDatasets: initPhoneNumberTypes: function()");
 			// delete phoneNumberType functionality
 			$('#timaat-phonenumbertype-delete-submit').on('click', function(ev) {
 				var modal = $('#timaat-actordatasets-phonenumbertype-delete');
@@ -2030,7 +2030,7 @@
 			$('#timaat-actordatasets-phonenumbertype-meta').on('show.bs.modal', function (ev) {
 				// Create/Edit phoneNumberType window setup
 				var modal = $(this);
-				var phoneNumberType = modal.data('phoneNumberType');				
+				var phoneNumberType = modal.data('phoneNumberType');
 				var heading = (phoneNumberType) ? "PhoneNumberType bearbeiten" : "PhoneNumberType hinzufügen";
 				var submit = (phoneNumberType) ? "Speichern" : "Hinzufügen";
 				var type = (phoneNumberType) ? phoneNumberType.model.type : 0;
@@ -2066,8 +2066,8 @@
 				modal.modal('hide');
 			});
 
-			// validate phoneNumberType data	
-			// TODO validate all required fields				
+			// validate phoneNumberType data
+			// TODO validate all required fields
 			$('#timaat-actordatasets-phonenumbertype-meta-name').on('input', function(ev) {
 				if ( $('#timaat-actordatasets-phonenumbertype-meta-name').val().length > 0 ) {
 					$('#timaat-actordatasets-phonenumbertype-meta-submit').prop('disabled', false);
@@ -2102,10 +2102,10 @@
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-fields"]');
 				var newFormEntry = [];
 				var newEntryId = null;
-				if (listEntry.find('select').each(function(){           
+				if (listEntry.find('select').each(function(){
 					newEntryId = Number($(this).val());
 				}));
-				if (listEntry.find('input').each(function(){           
+				if (listEntry.find('input').each(function(){
 					newFormEntry.push($(this).val());
 				}));
 				// console.log("TCL: newFormEntry", newFormEntry);
@@ -2116,7 +2116,7 @@
 				var actor = $('#actor-metadata-form').data('actor');
 				var type = actor.model.actorType.actorTypeTranslations[0].type;
 
-				$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', false);			
+				$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', false);
 				$('.disable-on-submit').prop('disabled', true);
 				var existingEntriesInForm = $('#actor-memberofcollectives-form').serializeArray();
 				$('.disable-on-submit').prop('disabled', false);
@@ -2175,7 +2175,7 @@
 					}));
 					$('.timaat-actordatasets-actor-memberofcollectives-joinedat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 					$('.timaat-actordatasets-actor-memberofcollectives-leftat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-					
+
 					// only needed when changes have to be saved immediately
 					// await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor.model.id, newMemberOfCollectiveEntry);
 					// actor.updateUI();
@@ -2249,7 +2249,7 @@
 				var actor = $('#actor-metadata-form').data('actor');
 				var type = actor.model.actorType.actorTypeTranslations[0].type;
 
-				// test if form is valid 
+				// test if form is valid
 				if (!$('#actor-memberofcollectives-form').valid()) {
 					$('[data-role="new-personismemberofcollective-fields"]').append(TIMAAT.ActorDatasets.appendNewMemberOfCollectiveField());
 					var listType = (type == 'person') ? 'collective' : 'person'; // person needs collective entries and vice versa
@@ -2272,7 +2272,7 @@
 								return {
 									search: params.term,
 									page: params.page
-								};          
+								};
 							},
 							processResults: function(data, params) {
 								// console.log("TCL: processResults: data", data);
@@ -2346,6 +2346,7 @@
 						for (; i < actor.model.actorCollective.actorPersonIsMemberOfActorCollectives.length; i++) {
 							existingEntriesIdList.push(actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[i].id.actorPersonActorId);
 						}
+					break;
 				}
 				// DELETE memberOfCollective data if id is in existingEntriesIdList but not in formEntryIds
 				i = 0;
@@ -2368,7 +2369,7 @@
 							case 'collective':
 								await TIMAAT.ActorService.removeMemberOfCollective(actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[i]);
 								actor.model.actorCollective.actorPersonIsMemberOfActorCollectives.splice(i,1); // TODO should be moved to ActorDatasets.removeMemberOfCollective(..)
-							break
+							break;
 						}
 						existingEntriesIdList.splice(i,1);
 						i--; // so the next list item is not jumped over due to the splicing
@@ -2409,7 +2410,7 @@
 								}
 							}
 							var currentMemberOfCollective = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex];
-							var currentMemberOfCollectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex].id.memberOfActorCollectiveActorId;
+							// var currentMemberOfCollectiveId = actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex].id.memberOfActorCollectiveActorId;
 						break;
 						case 'collective':
 							for (; j < actor.model.actorCollective.actorPersonIsMemberOfActorCollectives.length; j++) {
@@ -2419,7 +2420,7 @@
 								}
 							}
 							var currentMemberOfCollective = actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex];
-							var currentMemberOfCollectiveId = actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex].id.actorPersonActorId;
+							// var currentMemberOfCollectiveId = actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[currentMemberOfCollectiveIndex].id.actorPersonActorId;
 						break;
 					}
 					// go through all membershipDetails and update/delete/add entries
@@ -2464,15 +2465,16 @@
 					// console.log("TCL: DELETE membershipDetail (end)");
 					// ADD membershipDetail data if id is not in existingMembershipDetailIdList but in membershipDetails of formEntries
 					j = 0;
+					var newMembershipDetails;
 					for (; j < formMembershipDetailIdList.length; j++) {
 						if (formMembershipDetailIdList[j] == 0) {
 							switch (type) {
 								case 'person':
-									var newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(actor.model.id, formEntries[i].collectiveId, formEntries[i].membershipDetails[j]);
+									newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(actor.model.id, formEntries[i].collectiveId, formEntries[i].membershipDetails[j]);
 									actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].membershipDetails.push(newMembershipDetails);
 								break;
 								case 'collective':
-									var newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(formEntries[i].actorId, actor.model.id, formEntries[i].membershipDetails[j]);
+									newMembershipDetails = await TIMAAT.ActorService.addMembershipDetails(formEntries[i].actorId, actor.model.id, formEntries[i].membershipDetails[j]);
 									actor.model.actorCollective.actorPersonIsMemberOfActorCollectives[i].membershipDetails.push(newMembershipDetails);
 								break;
 							}
@@ -2524,7 +2526,7 @@
 					TIMAAT.URLHistory.setURL(null, name + ' · Roles · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + id + '/roles');
 				}
 			});
-			
+
 			// actor role form handlers
 			// submit actor role button functionality
 			$('#actor-roles-form-submit').on('click', async function(event) {
@@ -2533,7 +2535,7 @@
 				// if (!$('#actor-roles-form').valid()) return false;
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-metadata-form').data('actor');				
+				var actor = $('#actor-metadata-form').data('actor');
         // console.log("TCL: actor", actor);
 
 				// create/edit role window submitted data
@@ -2546,7 +2548,7 @@
         // });
         // // delete formDataObject.roleId;
         // console.log("TCL: formDataObject", formDataObject);
-        // var formSelectData = formData;				
+        // var formSelectData = formData;
         // formSelectData.splice(0,1); // remove entries not part of multi select data
         // console.log("TCL: formSelectData", formSelectData);
         // create proper id list
@@ -2588,7 +2590,7 @@
 					TIMAAT.URLHistory.setURL(null, name + ' · Roles in Media · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + id + '/rolesInMedia');
 				}
 			});
-			
+
 			// actor role medium form handlers
 			// submit actor role medium button functionality
 			$('#actor-role-in-medium-form-submit').on('click', async function(event) {
@@ -2597,7 +2599,7 @@
 				// if (!$('#actor-roles-form').valid()) return false;
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-metadata-form').data('actor');				
+				var actor = $('#actor-metadata-form').data('actor');
         // console.log("TCL: actor", actor);
 
 				// create/edit role medium window submitted data
@@ -2610,7 +2612,7 @@
         // });
         // // delete formDataObject.roleId;
         // console.log("TCL: formDataObject", formDataObject);
-        // var formSelectData = formData;				
+        // var formSelectData = formData;
         // formSelectData.splice(0,1); // remove entries not part of multi select data
         // console.log("TCL: formSelectData", formSelectData);
         // create proper id list
@@ -2694,14 +2696,14 @@
 			if ( !actorTypes ) return;
 			// setup model
 			var actTypes = Array();
-			actorTypes.forEach(function(actorType) { 
-				if ( actorType.id > 0 ) 
-					actTypes.push(new TIMAAT.ActorType(actorType)); 
+			actorTypes.forEach(function(actorType) {
+				if ( actorType.id > 0 )
+					actTypes.push(new TIMAAT.ActorType(actorType));
 			});
 			TIMAAT.ActorDatasets.actorTypes = actTypes;
 			TIMAAT.ActorDatasets.actorTypes.model = actorTypes;
 		},
-		
+
 		setActorList: function() {
 			if ( this.actors == null ) return;
 			if ( this.dataTableActor ) {
@@ -2732,9 +2734,9 @@
 			if ( !actor ) return;
 			// setup model
 			var names = Array();
-			actor.model.actorNames.forEach(function(name) { 
+			actor.model.actorNames.forEach(function(name) {
 				if ( name.id > 0 )
-					names.push(name); 
+					names.push(name);
 			});
 			this.names = names;
 		},
@@ -2744,11 +2746,11 @@
 			if ( !actor ) return;
 			// setup model
 			var actorHasAddresses = Array();
-			actor.model.actorHasAddresses.forEach(function(actorHasAddress) { 
+			actor.model.actorHasAddresses.forEach(function(actorHasAddress) {
 				if ( actorHasAddress.id.actorId > 0 && actorHasAddress.id.addressId > 0 )
 				actorHasAddress.address.streetName = "TEMP NAME";
 				actorHasAddress.address.cityName = "TEMP NAME";
-				actorHasAddresses.push(actorHasAddress); 
+				actorHasAddresses.push(actorHasAddress);
 			});
 			this.actorHasAddresses = actorHasAddresses;
 		},
@@ -2758,9 +2760,9 @@
 			if ( !actor ) return;
 			// setup model
 			var actorHasEmailAddresses = Array();
-			actor.model.actorHasEmailAddresses.forEach(function(actorHasEmailAddress) { 
+			actor.model.actorHasEmailAddresses.forEach(function(actorHasEmailAddress) {
 				if ( actorHasEmailAddress.id.actorId > 0 && actorHasEmailAddress.id.emailAddressId > 0 )
-				actorHasEmailAddresses.push(actorHasEmailAddress); 
+				actorHasEmailAddresses.push(actorHasEmailAddress);
 			});
 			this.actorHasEmailAddresses = actorHasEmailAddresses;
 		},
@@ -2770,9 +2772,9 @@
 			if ( !actor ) return;
 			// setup model
 			var actorHasPhoneNumbers = Array();
-			actor.model.actorHasPhoneNumbers.forEach(function(actorHasPhoneNumber) { 
+			actor.model.actorHasPhoneNumbers.forEach(function(actorHasPhoneNumber) {
 				if ( actorHasPhoneNumber.id.actorId > 0 && actorHasPhoneNumber.id.emailAddressId > 0 )
-				actorHasPhoneNumbers.push(actorHasPhoneNumber); 
+				actorHasPhoneNumbers.push(actorHasPhoneNumber);
 			});
 			this.actorHasPhoneNumbers = actorHasPhoneNumbers;
 		},
@@ -2784,13 +2786,13 @@
 			var actorIsMOfCs = Array();
 			switch (type) {
 				case 'person':
-					actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.forEach(function(personIsMemberOfCollective) { 
+					actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.forEach(function(personIsMemberOfCollective) {
 						if ( personIsMemberOfCollective.id.actorPersonActorId > 0 && personIsMemberOfCollective.id.memberOfActorCollectiveActorId > 0 )
 						actorIsMOfCs.push(personIsMemberOfCollective);
 					});
 				break;
 				case 'collective':
-					actor.model.actorCollective.actorPersonIsMemberOfActorCollectives.forEach(function(personIsMemberOfCollective) { 
+					actor.model.actorCollective.actorPersonIsMemberOfActorCollectives.forEach(function(personIsMemberOfCollective) {
 						if ( personIsMemberOfCollective.id.actorPersonActorId > 0 && personIsMemberOfCollective.id.memberOfActorCollectiveActorId > 0 )
 						actorIsMOfCs.push(personIsMemberOfCollective);
 					});
@@ -2809,9 +2811,9 @@
 			if ( !addressTypes ) return;
 			// setup model
 			var addrTypes = Array();
-			addressTypes.forEach(function(addressType) { 
+			addressTypes.forEach(function(addressType) {
 				if ( addressType.id > 0 )
-					addrTypes.push(addressType); 
+					addrTypes.push(addressType);
 			});
 			TIMAAT.ActorDatasets.addressTypes = addrTypes;
 		},
@@ -2821,9 +2823,9 @@
 			if ( !emailAddressTypes ) return;
 			// setup model
 			var emailAddrTypes = Array();
-			emailAddressTypes.forEach(function(emailAddressType) { 
+			emailAddressTypes.forEach(function(emailAddressType) {
 				if ( emailAddressType.id > 0 )
-					emailAddrTypes.push(emailAddressType); 
+					emailAddrTypes.push(emailAddressType);
 			});
 			TIMAAT.ActorDatasets.emailAddressTypes = emailAddrTypes;
 		},
@@ -2833,14 +2835,14 @@
 			if ( !phoneNumberTypes ) return;
 			// setup model
 			var phoneNumberTypes = Array();
-			phoneNumberTypes.forEach(function(phoneNumberType) { 
+			phoneNumberTypes.forEach(function(phoneNumberType) {
 				if ( phoneNumberType.id > 0 )
-					phoneNumberTypes.push(phoneNumberType); 
+					phoneNumberTypes.push(phoneNumberType);
 			});
 			TIMAAT.ActorDatasets.phoneNumberTypes = phoneNumberTypes;
 		},
-		
-		addActor: function(type) {	
+
+		addActor: function(type) {
 			// console.log("TCL: addActor: type", type);
 			TIMAAT.UI.displayDataSetContentContainer('actor-tab-metadata', 'actor-metadata-form');
 			this.hideAddActorButton();
@@ -2874,7 +2876,7 @@
 			$('#dynamic-profile-image-fields-placeholder').show();
 			$('.carousel-item').first().addClass('active');
 			$('.carousel-indicators > li').first().addClass('active');
-			$('#dynamic-profile-image-fields').carousel();	
+			$('#dynamic-profile-image-fields').carousel();
 			// $('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
 		},
 
@@ -3155,7 +3157,7 @@
 			}
 			$('#actor-addresses-form').trigger('reset');
 			actorFormAddressesValidator.resetForm();
-			
+
 			// setup UI
 			var i = 0;
 			var numAddresses = actor.model.actorHasAddresses.length;
@@ -3353,7 +3355,7 @@
 			}
 			$('#actor-emailaddresses-form').trigger('reset');
 			actorFormEmailAddressesValidator.resetForm();
-			
+
 			// setup UI
 			var i = 0;
 			var numEmailAddresses = actor.model.actorHasEmailAddresses.length;
@@ -3440,7 +3442,7 @@
 			}
 			$('#actor-phonenumbers-form').trigger('reset');
 			actorFormPhoneNumbersValidator.resetForm();
-			
+
 			// setup UI
 			var i = 0;
 			var numPhoneNumbers = actor.model.actorHasPhoneNumbers.length;
@@ -3530,7 +3532,7 @@
 			}
 			$('#actor-memberofcollectives-form').trigger('reset');
 			actorFormMemberOfCollectivesValidator.resetForm();
-			
+
 			// setup UI
 			var i = 0;
 			switch (type) {
@@ -3545,6 +3547,7 @@
 			}
 			var listType = (type == 'person') ? 'collective' : 'person'; // person needs collective entries and vice versa
 			// console.log("TCL: listType", listType);
+			var editMode = (action == 'edit') ? true : false;
 			for (; i < numMemberOfCollectives; i++) {
 				switch (type) {
 					case 'person':
@@ -3561,7 +3564,6 @@
 					numMembershipDetails = 0;
 				} else numMembershipDetails = apimoac.membershipDetails.length;
 				let actorName = await TIMAAT.ActorService.getActorName(actorId);
-				var editMode = (action == 'edit') ? true : false;
 				var memberOfCollectiveFormData = this.appendMemberOfCollectiveDataset(i, actorId, actorName, apimoac.membershipDetails, 'sr-only', editMode);
 				// TODO expand form by membershipDetail information
 				$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
@@ -3644,7 +3646,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							// console.log("TCL: processResults: data", data);
@@ -3695,7 +3697,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -3790,7 +3792,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							// console.log("TCL: processResults: data", data);
@@ -3856,7 +3858,7 @@
 		},
 
 		createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel) {
-			// console.log("TCL: createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel)", 
+			// console.log("TCL: createActor: async function(actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel)",
 									// actorType, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
 			try {
 				// create actor
@@ -3976,7 +3978,7 @@
 					delete tempAddress.streetName;
 					delete tempAddress.cityName;
 					delete tempActorHasAddress.address;
-					
+
 					var addedAddressModel = await TIMAAT.ActorService.addAddress(actor.model.id, tempAddress);
 					var addedActorHasAddressModel = await TIMAAT.ActorService.updateActorHasAddress(actor.model.id, addedAddressModel.id, tempActorHasAddress);
 					addedActorHasAddressModel.address = {};
@@ -4000,7 +4002,7 @@
 					var tempEmailAddress = newActorHasEmailAddresses[i].emailAddress;
 					var tempActorHasEmailAddress = newActorHasEmailAddresses[i];
 					delete tempActorHasEmailAddress.emailAddress;
-					
+
 					var addedEmailAddressModel = await TIMAAT.ActorService.addEmailAddress(actor.model.id, tempEmailAddress);
 					var addedActorHasEmailAddressModel = await TIMAAT.ActorService.updateActorHasEmailAddress(actor.model.id, addedEmailAddressModel.id, tempActorHasEmailAddress);
 					addedActorHasEmailAddressModel.emailAddress = {};
@@ -4022,7 +4024,7 @@
 					var tempPhoneNumber = newActorHasPhoneNumbers[i].phoneNumber;
 					var tempActorHasPhoneNumber = newActorHasPhoneNumbers[i];
 					delete tempActorHasPhoneNumber.phoneNumber;
-					
+
 					var addedPhoneNumberModel = await TIMAAT.ActorService.addPhoneNumber(actor.model.id, tempPhoneNumber);
 					var addedActorHasPhoneNumberModel = await TIMAAT.ActorService.updateActorHasPhoneNumber(actor.model.id, addedPhoneNumberModel.id, tempActorHasPhoneNumber);
 					addedActorHasPhoneNumberModel.phoneNumber = {};
@@ -4057,7 +4059,7 @@
 						actor.model.actorCollective.actorPersonIsMemberOfActorCollectives.push(newPersonIsMemberOfCollective);
 					break;
 				}
-				
+
 			} catch(error) {
 				console.error("ERROR: ", error);
 			}
@@ -4092,7 +4094,7 @@
 				} catch(error) {
 					console.error("ERROR: ", error);
 				}
-	
+
 				try {
 					// update data that is part of actorSubtypeData
 					var tempSubtypeModel;
@@ -4145,7 +4147,7 @@
 					if (imageIdList == null) { //* all entries will be deleted
 						// console.log("TCL: delete all existingActorHasImageEntries: ", existingActorHasImageEntries);
 						actor.model.profileImages = [];
-						actor.model = await TIMAAT.ActorService.updateActor(actor.model);        
+						actor.model = await TIMAAT.ActorService.updateActor(actor.model);
 					} else if (existingActorHasImageEntries.length == 0) { //* all entries will be added
 						// console.log("TCL: add all imageIdList: ", imageIdList);
 						var i = 0;
@@ -4153,7 +4155,7 @@
 							actor.model.profileImages.push(imageIdList[i]);
 						}
 						// console.log("TCL: actor.model.profileImages", actor.model.profileImages);
-						actor.model = await TIMAAT.ActorService.updateActor(actor.model);          
+						actor.model = await TIMAAT.ActorService.updateActor(actor.model);
 					} else { //* add/remove entries
 						// delete removed entries
 						var actorHasImageEntriesToDelete = [];
@@ -4176,7 +4178,7 @@
 								i--; // so the next list item is not jumped over due to the splicing
 							}
 						}
-						
+
 						// console.log("TCL: actorHasImageEntriesToDelete", actorHasImageEntriesToDelete);
 						if (actorHasImageEntriesToDelete.length > 0) { // anything to delete?
 							var i = 0;
@@ -4187,7 +4189,7 @@
 							// console.log("TCL: actor.model.profileImages", actor.model.profileImages);
 							await TIMAAT.ActorService.updateActor(actor.model);
 						}
-	
+
 						// create new entries
 						var idsToCreate = [];
 						i = 0;
@@ -4344,11 +4346,11 @@
         if (roleIdList == null) { //* all entries will be deleted
           // console.log("TCL: delete all existingActorHasRoleEntries: ", existingActorHasRoleEntries);
 					actorModel.roles = [];
-					await TIMAAT.ActorService.updateActor(actorModel);        
+					await TIMAAT.ActorService.updateActor(actorModel);
         } else if (existingActorHasRoleEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add all roleIdList: ", roleIdList);
 					actorModel.roles = roleIdList;
-					await TIMAAT.ActorService.updateActor(actorModel);          
+					await TIMAAT.ActorService.updateActor(actorModel);
         } else { //* add/remove entries
           // delete removed entries
           var actorHasRoleEntriesToDelete = [];
@@ -4371,7 +4373,7 @@
               i--; // so the next list item is not jumped over due to the splicing
             }
 					}
-					
+
           // console.log("TCL: actorHasRoleEntriesToDelete", actorHasRoleEntriesToDelete);
           if (actorHasRoleEntriesToDelete.length > 0) { // anything to delete?
 						var i = 0;
@@ -4415,7 +4417,7 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-      
+
 			await TIMAAT.UI.refreshDataTable(actorModel.actorType.actorTypeTranslations[0].type);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(actorModel.actorType.actorTypeTranslations[0].type, actorModel.id);
 		},
@@ -4461,7 +4463,7 @@
 							i--; // so the next list item is not jumped over due to the splicing
 						}
 					}
-					
+
 					// console.log("TCL: entriesToDelete", entriesToDelete);
 					if (entriesToDelete.length > 0) { // anything to delete?
 						var i = 0;
@@ -4752,7 +4754,7 @@
 			updatedModel.address.streetNumber = data.streetNumber;
 			updatedModel.address.streetAddition = data.streetAddition;
 			return updatedModel;
-		},		
+		},
 
 		createActorHasEmailAddressModel: async function(data, actorId, emailAddressId) {
     	// console.log("TCL: data, actorId, emailAddressId", data, actorId, emailAddressId);
@@ -4855,7 +4857,7 @@
 							<div class="form-row">
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">Street name</label>
-									<input type="text" 
+									<input type="text"
 												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname"
 												 name="streetName"
 												 data-role="streetName"
@@ -4969,7 +4971,7 @@
 		},
 
 		appendNewEmailAddressField: function() {
-			var emailAddressToAppend = 
+			var emailAddressToAppend =
 				`<div class="form-group" data-role="emailaddress-entry">
 					<div class="form-row">
 						<div class="col-md-2 text-center">
@@ -5004,7 +5006,7 @@
 		},
 
 		appendNewPhoneNumberField: function() {
-			var phoneNumberToAppend = 
+			var phoneNumberToAppend =
 				`<div class="form-group" data-role="phonenumber-entry">
 					<div class="form-row">
 						<div class="col-md-2 text-center">
@@ -5041,7 +5043,7 @@
 
 		appendMemberOfCollectiveDataset: function(i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode) {
 			// console.log("TCL: appendMemberOfCollectiveDataset -> i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode", i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode);
-			var memberOfCollectiveFormData = 
+			var memberOfCollectiveFormData =
 			`<div class="form-group" data-role="personismemberofcollective-entry" data-id=`+i+` data-actor-id=`+actorId+`>
 				<div class="form-row">
 					<div class="col-md-11">
@@ -5072,14 +5074,14 @@
 			for (; j < memberOfCollectiveData.length; j++) {
 				memberOfCollectiveFormData +=	this.appendMemberOfCollectiveDetailFields(i, j, actorId, memberOfCollectiveData[j], labelClassString);
 			}
-			memberOfCollectiveFormData +=	
+			memberOfCollectiveFormData +=
 									`</div>
 									<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">`;
 			if (editMode) {
 				memberOfCollectiveFormData += this.appendMemberOfCollectiveNewDetailFields();
 			}
 			memberOfCollectiveFormData +=
-										`<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the memberofcollective --> 
+										`<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the memberofcollective -->
 									</div>
 								</div>
 							</div>
@@ -5121,7 +5123,7 @@
 											 data-role="new-personismemberofcollective-details-fields"
 											 data-details-id="0">`;
 			memberOfCollectiveToAppend += this.appendMemberOfCollectiveNewDetailFields();
-			memberOfCollectiveToAppend += 
+			memberOfCollectiveToAppend +=
 									`</div>
 								</div>
 							</div>
@@ -5264,7 +5266,7 @@
 			$('#timaat-actordatasets-metadata-person-dayofdeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-collective-founded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			$('#timaat-actordatasets-metadata-collective-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#actor-metadata-form :input').prop('disabled', false);		
+			$('#actor-metadata-form :input').prop('disabled', false);
 			this.hideFormButtons();
 			$('#actor-metadata-form-submit-button').show();
 			$('#actor-metadata-form-dismiss-button').show();
@@ -5303,7 +5305,7 @@
 				$container.find('.select2-result-repository__title').text(data.text);
 				return $container;
 			};
-			
+
 			function formatSelection(data) {
 				return data.text;
 			}
@@ -5401,7 +5403,7 @@
 						return {
 							search: params.term,
 							page: params.page
-						};          
+						};
 					},
 					processResults: function(data, params) {
 						// console.log("TCL: processResults: data", data);
@@ -5455,7 +5457,7 @@
 						// console.log("TCL: TIMAAT.ActorDatasets.actor (last)", TIMAAT.ActorDatasets.actor);
 						// setup model
 						var actorArray = Array();
-						data.data.forEach(function(actor) { 
+						data.data.forEach(function(actor) {
 							if ( actor.id > 0 ) {
 								actorArray.push(new TIMAAT.Actor(actor, 'actor'));
 							}
@@ -5490,10 +5492,10 @@
 						let displayActorTypeIcon = '';
 						let actorType = actor.actorType.actorTypeTranslations[0].type;
 						switch (actorType) {
-							case 'person': 
+							case 'person':
 								displayActorTypeIcon = '  <i class="far fa-address-card"></i>';
 							break;
-							case 'collective': 
+							case 'collective':
 								displayActorTypeIcon = '  <i class="fas fa-users"></i>';
 							break;
 						}
@@ -5528,11 +5530,11 @@
 						"next"    : ">",
 						"last"    : ">>"
 					},
-				},				
-			});				
+				},
+			});
 		},
 
-		setupPersonDataTable: function() {			
+		setupPersonDataTable: function() {
 			// console.log("TCL: setupPersonDataTable");
 			// setup dataTable
 			this.dataTablePerson = $('#timaat-actordatasets-person-table').DataTable({
@@ -5572,7 +5574,7 @@
 						// console.log("TCL: TIMAAT.ActorDatasets.persons (last)", TIMAAT.ActorDatasets.persons);
 						// setup model
 						var personArray = Array();
-						data.data.forEach(function(actor) { 
+						data.data.forEach(function(actor) {
 							if ( actor.id > 0 ) {
 								personArray.push(new TIMAAT.Actor(actor, 'person'));
 							}
@@ -5603,7 +5605,7 @@
 						TIMAAT.ActorDatasets.setDataTableOnItemSelect('person', actor.id);
 					});
 				},
-				"columns": [{ 
+				"columns": [{
 					data: 'id', name: 'name', className: 'name', render: function(data, type, actor, meta) {
 						// console.log("TCL: actor", actor);
 						let nameDisplay = `<p>` + actor.displayName.name +`</p>`;
@@ -5633,11 +5635,11 @@
 						"next"    : ">",
 						"last"    : ">>"
 					},
-				},				
-			});				
+				},
+			});
 		},
 
-		setupCollectiveDataTable: function() {			
+		setupCollectiveDataTable: function() {
 			// console.log("TCL: setupCollectiveDataTable");
 			// setup dataTable
 			this.dataTableCollective = $('#timaat-actordatasets-collective-table').DataTable({
@@ -5677,7 +5679,7 @@
 						// console.log("TCL: TIMAAT.ActorDatasets.collectives (last)", TIMAAT.ActorDatasets.collectives);
 						// setup model
 						var collectiveArray = Array();
-						data.data.forEach(function(actor) { 
+						data.data.forEach(function(actor) {
 							if ( actor.id > 0 ) {
 								collectiveArray.push(new TIMAAT.Actor(actor, 'collective'));
 							}
@@ -5708,7 +5710,7 @@
 						TIMAAT.ActorDatasets.setDataTableOnItemSelect('collective', actor.id);
 					});
 				},
-				"columns": [{ 
+				"columns": [{
 					data: 'id', name: 'name', className: 'name', render: function(data, type, actor, meta) {
 						// console.log("TCL: actor", actor);
 						let nameDisplay = `<p>` + actor.displayName.name +`</p>`;
@@ -5738,8 +5740,8 @@
 						"next"    : ">",
 						"last"    : ">>"
 					}
-				}			
-			});				
+				}
+			});
 		},
 
 		setDataTableOnItemSelect: function(type, selectedItemId) {
@@ -5811,5 +5813,5 @@
 		},
 
 	}
-	
+
 }, window));

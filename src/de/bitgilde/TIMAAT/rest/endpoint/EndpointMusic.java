@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jvnet.hk2.annotations.Service;
@@ -30,6 +32,8 @@ import de.bitgilde.TIMAAT.model.FIPOP.JinsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic;
@@ -441,6 +445,21 @@ public class EndpointMusic {
 		}
 
 		return Response.ok().entity(roleList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{musicId}/musicMediumHasMusicList")
+	public Response getMediumHasMusicList(@PathParam("musicId") Integer musicId)
+	{
+		// System.out.println("EndpointMusic: getActorHasRoleList");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		Music music = entityManager.find(Music.class, musicId);
+		List<MediumHasMusic> mediumHasMusicList = music.getMediumHasMusicList();
+
+		return Response.ok().entity(mediumHasMusicList).build();
 	}
 
 	@GET
@@ -1723,6 +1742,239 @@ public class EndpointMusic {
 		}
 
 		System.out.println("EndpointMusic: deleteMusicHasActorWithRolesItem - delete complete");
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("{musicId}/mediumHasMusic/{mediumId}")
+	@Secured
+	public Response addMediumHasMusic(@PathParam("musicId") int musicId,
+																		@PathParam("mediumId") int mediumId) throws IOException {
+		System.out.println("EndpointMusic: addMediumHasMusic");
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Music music = entityManager.find(Music.class, musicId);
+		if (music == null) return Response.status(Status.NOT_FOUND).build();
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if (medium == null) return Response.status(Status.NOT_FOUND).build();
+		MediumHasMusic mhm = new MediumHasMusic(medium, music);
+
+		// create actor_has_address-table entries
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		music.getMediumHasMusicList().add(mhm);
+		medium.getMediumHasMusicList().add(mhm);
+		entityManager.merge(medium);
+		entityManager.merge(music);
+		entityManager.persist(music);
+		entityManager.persist(medium);
+		entityTransaction.commit();
+		entityManager.refresh(music);
+		entityManager.refresh(medium);
+
+		// System.out.println("EndpointMusic: addMediumHasMusic: add log entry");
+		// // add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 														UserLogManager.LogEvents.MEMBERSHIPCREATED);
+
+		// System.out.println("EndpointMusic: addPersonIsMemberOfCollective: created");
+
+		return Response.ok().entity(mhm).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{musicId}/mediumHasMusic/{mediumId}")
+	@Secured
+	public Response updateMediumHasMusic(@PathParam("musicId") int musicId,
+																			 @PathParam("mediumId") int mediumId,
+																			 String jsonData) {
+
+		System.out.println("EndpointMusic: updateMediumHasMusic - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
+    mapper.setSerializationInclusion(Include.NON_NULL);
+		MediumHasMusic updatedMediumHasMusic = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Music music = entityManager.find(Music.class, musicId);
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		if ( music == null || medium == null) return Response.status(Status.NOT_FOUND).build();
+
+		MediumHasMusic mhmKey = new MediumHasMusic(medium, music);
+		MediumHasMusic mhm = entityManager.find(MediumHasMusic.class, mhmKey.getId());
+		// System.out.println("EndpointMusic: updateMediumHasMusic - parse json data");
+		// parse JSON data
+		try {
+			updatedMediumHasMusic = mapper.readValue(jsonData, MediumHasMusic.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedMediumHasMusic == null ) return Response.notModified().build();
+
+		// System.out.println("EndpointMusic: updateMediumHasMusic - update data");
+		// update actorPersonIsMemberOfActorCollective
+		mhm.setMedium(medium);
+
+		// System.out.println("EndpointMusic: updateMediumHasMusic - persist");
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(mhm);
+		entityManager.persist(mhm);
+		entityTransaction.commit();
+		entityManager.refresh(mhm);
+
+		// System.out.println("EndpointMusic: updateMediumHasMusic - only logging remains");
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																	UserLogManager.LogEvents.MEMBERSHIPEDITED);
+		// System.out.println("EndpointMusic: updateMediumHasMusic - update complete");
+		return Response.ok().entity(mhm).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{musicId}/mediumHasMusic/{mediumId}")
+	@Secured
+	public Response deleteMediumHasMusic(@PathParam("musicId") int musicId,
+																			 @PathParam("mediumId") int mediumId) {
+		System.out.println("EndpointMusic: deleteMediumHasMusic");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		Music music = entityManager.find(Music.class, musicId);
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		MediumHasMusic mhmKey = new MediumHasMusic(medium, music);
+		MediumHasMusic mhm = entityManager.find(MediumHasMusic.class, mhmKey.getId());
+
+		if ( music == null || medium == null) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(mhm);
+		entityTransaction.commit();
+		entityManager.refresh(music);
+		entityManager.refresh(medium);
+
+		// add log entry
+		// UserLogManager.getLogger()
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 														UserLogManager.LogEvents.MEMBERSHIPDELETED);
+		System.out.println("EndpointMusic: deleteMediumHasMusic - delete complete");
+		return Response.ok().build();
+	}
+
+	@POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+	@Path("{musicId}/{mediumId}/mediumHasMusicDetails/{id}")
+	@Secured
+	public Response addMediumHasMusicDetail(@PathParam("musicId") int musicId,
+																					 @PathParam("mediumId") int mediumId,
+																					 @PathParam("id") int id,
+																					 String jsonData) {
+
+		System.out.println("EndpointMusic: addMediumHasMusicDetail: jsonData: "+jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		MediumHasMusicDetail newMediumHasMusicDetail = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		// parse JSON data
+		try {
+			newMediumHasMusicDetail = mapper.readValue(jsonData, MediumHasMusicDetail.class);
+		} catch (IOException e) {
+			System.out.println("EndpointMusic: addMediumHasMusicDetail: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( newMediumHasMusicDetail == null ) {
+			System.out.println("EndpointMusic: addMediumHasMusicDetail: newMediumHasMusicDetail == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		// sanitize object data
+		newMediumHasMusicDetail.setId(0);
+		Music music = entityManager.find(Music.class, musicId);
+		Medium medium = entityManager.find(Medium.class, mediumId);
+		MediumHasMusic mhmKey = new MediumHasMusic(medium, music);
+		MediumHasMusic mhm = entityManager.find(MediumHasMusic.class, mhmKey.getId());
+		newMediumHasMusicDetail.setMediumHasMusic(mhm);
+
+		System.out.println("EndpointMusic: addMediumHasMusicDetail: persist mediumHasMusicDetail");
+
+		// persist membership
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(mhm);
+		entityManager.persist(newMediumHasMusicDetail);
+		entityManager.flush();
+		newMediumHasMusicDetail.setMediumHasMusic(mhm);
+		entityTransaction.commit();
+		entityManager.refresh(newMediumHasMusicDetail);
+		entityManager.refresh(mhm);
+
+		System.out.println("EndpointMusic: addMediumHasMusicDetail: mediumHasMusicDetail added with id "+newMediumHasMusicDetail.getId());
+
+		return Response.ok().entity(newMediumHasMusicDetail).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("mediumHasMusicDetails/{id}")
+	@Secured
+	public Response updateMediumHasMusicDetail(@PathParam("id") int id,
+																	 String jsonData) {
+		System.out.println("EndpointMusic: updateMediumHasMusicDetail - jsonData: " + jsonData);
+		ObjectMapper mapper = new ObjectMapper();
+		MediumHasMusicDetail updatedMediumHasMusicDetail = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MediumHasMusicDetail mediumHasMusicDetail = entityManager.find(MediumHasMusicDetail.class, id);
+		if ( mediumHasMusicDetail == null ) return Response.status(Status.NOT_FOUND).build();
+		// parse JSON data
+		try {
+			updatedMediumHasMusicDetail = mapper.readValue(jsonData, MediumHasMusicDetail.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedMediumHasMusicDetail == null ) return Response.notModified().build();
+		// update membership
+		mediumHasMusicDetail.setStartTime(updatedMediumHasMusicDetail.getStartTime());
+		mediumHasMusicDetail.setEndTime(updatedMediumHasMusicDetail.getEndTime());
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(mediumHasMusicDetail);
+		entityManager.persist(mediumHasMusicDetail);
+		entityTransaction.commit();
+		entityManager.refresh(mediumHasMusicDetail);
+
+		System.out.println("EndpointMusic: updateMediumHasMusicDetail - update complete");
+		return Response.ok().entity(mediumHasMusicDetail).build();
+	}
+
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("mediumHasMusicDetails/{id}")
+	@Secured
+	public Response deleteMediumHasMusicDetail(@PathParam("id") int id) {
+		System.out.println("EndpointMusic: deleteMediumHasMusicDetail");
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		MediumHasMusicDetail mediumHasMusicDetail = entityManager.find(MediumHasMusicDetail.class, id);
+		if ( mediumHasMusicDetail == null ) return Response.status(Status.NOT_FOUND).build();
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(mediumHasMusicDetail);
+		entityTransaction.commit();
+
+		System.out.println("EndpointMusic: deleteMediumHasMusicDetail - delete complete");
 		return Response.ok().build();
 	}
 

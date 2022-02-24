@@ -31,6 +31,7 @@
       this.initMusic();
 			this.initTitles();
 			this.initActorRoles();
+			this.initMediumHasMusicList();
 		},
 
     initMusicComponent: function() {
@@ -57,9 +58,9 @@
 				TIMAAT.URLHistory.setURL(null, 'Anashid Datasets', '#music/nashid/list');
 			});
 
-			$('#church-music-tab').on('click', function(event) {
+			$('#churchMusic-tab').on('click', function(event) {
 				TIMAAT.MusicDatasets.loadMusicSubtype('churchMusic');
-				TIMAAT.UI.displayComponent('music', 'church-music-tab', 'church-music-datatable');
+				TIMAAT.UI.displayComponent('music', 'churchMusic-tab', 'churchMusic-datatable');
 				TIMAAT.URLHistory.setURL(null, 'Church Music Datasets', '#music/churchMusic/list');
 			});
 
@@ -1332,6 +1333,377 @@
 
 		},
 
+		initMediumHasMusicList: function() {
+			$('#music-tab-mediumhasmusiclist').on('click', function(event) {
+				let music = $('#music-metadata-form').data('music');
+				// let type = $('#music-metadata-form').data('type');
+				let type = music.model.musicType.musicTypeTranslations[0].type;
+				let name = music.model.displayTitle.name;
+				let id = music.model.id;
+				TIMAAT.UI.displayDataSetContentArea('music-mediumhasmusiclist-form');
+				TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
+				if ( type == 'music') {
+					TIMAAT.URLHistory.setURL(null, name + ' · Media containing this Music · ' + type[0].toUpperCase() + type.slice(1), '#music/' + id + '/mediumHasMusicList');
+				} else {
+					TIMAAT.URLHistory.setURL(null, name + ' · Media containing this Music · ' + type[0].toUpperCase() + type.slice(1), '#music/' + type + '/' + id + '/mediumHasMusicList');
+				}
+			});
+
+			// add mediumhasmusiclist button click
+			$(document).on('click','[data-role="music-new-mediumhasmusic-fields"] > .form-group [data-role="add"]', async function(event) {
+				// console.log("TCL: add new medium with music(s)");
+				event.preventDefault();
+				var listEntry = $(this).closest('[data-role="music-new-mediumhasmusic-fields"]');
+				var newFormEntry = [];
+				var newEntryId = null;
+				if (listEntry.find('select').each(function(){
+					newEntryId = Number($(this).val());
+				}));
+				if (listEntry.find('input').each(function(){
+					newFormEntry.push($(this).val());
+				}));
+
+				if (!$('#music-mediumhasmusiclist-form').valid()) {
+					return false;
+				}
+
+				var music = $('#music-metadata-form').data('music');
+
+				$('.timaat-musicdatasets-music-mediumhasmusic-medium-id').prop('disabled', false);
+				$('.disable-on-submit').prop('disabled', true);
+				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', false);
+				var existingEntriesInForm = $('#music-mediumhasmusiclist-form').serializeArray();
+				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', true);
+				$('.disable-on-submit').prop('disabled', false);
+
+				// create list of mediumIds that the music is already connected with
+				var existingEntriesIdList = [];
+				var i = 0;
+				for (; i < existingEntriesInForm.length; i++) {
+					if (existingEntriesInForm[i].name == "mediumId") {
+						existingEntriesIdList.push(Number(existingEntriesInForm[i].value));
+					}
+				}
+				existingEntriesIdList.pop(); // remove new medium id
+				// check for duplicate music-medium relation. only one allowed
+				var duplicate = false;
+				i = 0;
+				while (i < existingEntriesIdList.length) {
+					if (newFormEntry[0] == existingEntriesIdList[i]) {
+						duplicate = true;
+						break;
+					}
+					i++;
+				}
+
+				if (!duplicate) {
+					// var newMediumSelectData = $('#mediumhasmusic-mediumid').select2('data');
+					var newEntryDetails = [];
+					i = 0;
+					var j = 0;
+					for (; j < newFormEntry.length -3; i++) { // -3 for empty fields of new entry that is not added yet
+						newEntryDetails[i] = {
+							mediumHasMusicMusicId: music.model.id,
+							mediumHasMusicMediumId: newEntryId,
+							id: Number(newFormEntry[j]), // == 0
+							startTime: newFormEntry[j+1],
+							endTime: newFormEntry[j+2]
+						};
+            // console.log("TCL: newEntryDetails[i]", newEntryDetails[i]);
+						j += 3;
+					}
+					// console.log("TCL: newEntryDetails", newEntryDetails);
+					// var newMediumId = newMediumSelectData[0].id;
+					let mediumName = await TIMAAT.MediumService.getMediumDisplayTitle(newEntryId);
+          // console.log("TCL: $ -> mediumName", mediumName);
+					var appendNewFormDataEntry = TIMAAT.MusicDatasets.appendMediumHasMusicDataset(existingEntriesIdList.length, newEntryId, mediumName, newEntryDetails, 'sr-only', true);
+					$('#music-dynamic-mediumhasmusic-fields').append(appendNewFormDataEntry);
+					$('.timaat-musicdatasets-music-mediumhasmusic-medium-id').prop('disabled', true);
+
+					$('[data-role="new-mediumhasmusic-fields"]').find('[data-role="mediumhasmusic-details-entry"]').remove();
+					if (listEntry.find('input').each(function(){
+						$(this).val('');
+					}));
+					if (listEntry.find('select').each(function(){
+						$(this).val('');
+					}));
+					// $('.timaat-musicdatasets-music-mediumhasmusic-starttime').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					// $('.timaat-musicdatasets-music-mediumhasmusic-endtime').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				}
+				else { // duplicate medium
+					$('#timaat-musicdatasets-mediumhasmusic-duplicate').modal('show');
+				}
+			});
+
+			// add medium has music detail button click
+			$(document).on('click', '.form-group [data-role="addMediumHasMusicDetails"]', async function(event) {
+				// console.log("TCL: MediumHasMusic form: add details to mediumHasMusic");
+				event.preventDefault();
+				var listEntry = $(this).closest('[data-role="new-musicisinmedium-details-fields"]');
+				var newMusicInMediumData = [];
+				var mediumId = $(this).closest(('[data-role="musicisinmedium-entry"]')).attr("data-medium-id");
+				if (listEntry.find('input').each(function(){
+					newMusicInMediumData.push($(this).val());
+				}));
+				// if (newMusicInMediumData[1] == "" && newMusicInMediumData[2] == "") { // [0] is hidden id field
+				// 	// console.log("no data entered");
+				// 	return false; // don't add if all add fields were empty
+				// }
+				var newMediumHasMusicDetailsEntry = {
+					id: 0,
+					startTime: newMusicInMediumData[1],
+					endTime: newMusicInMediumData[2]
+				};
+        // console.log("TCL: $ -> newMediumHasMusicDetailsEntry", newMediumHasMusicDetailsEntry);
+				var dataId = $(this).closest('[data-role="musicisinmedium-entry"]').attr('data-id');
+				var dataDetailsId = $(this).closest('[data-role="new-musicisinmedium-details-fields"]').attr("data-details-id");
+				$(this).closest('[data-role="new-musicisinmedium-details-fields"]').before(TIMAAT.MusicDatasets.appendMediumHasMusicDetailFields(dataId, dataDetailsId, mediumId, newMediumHasMusicDetailsEntry, 'sr-only'));
+
+				$('[data-role="mediumId['+mediumId+']"]').find('option[value='+mediumId+']').attr('selected', true);
+				if (listEntry.find('input').each(function(){
+					$(this).val('');
+				}));
+				if (listEntry.find('select').each(function(){
+					$(this).val('');
+				}));
+				// $('.timaat-musicdatasets-music-mediumhasmusic-starttime').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				// $('.timaat-musicdatasets-music-mediumhasmusic-endtime').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			});
+
+			// remove mediumhasmusiclist button click
+			$(document).on('click','[data-role="music-dynamic-mediumhasmusic-fields"] > .form-group [data-role="remove"]', async function(event) {
+				event.preventDefault();
+				$(this).closest('.form-group').remove();
+			});
+
+			// remove mediumhasmusic detail button click
+			$(document).on('click','.form-group [data-role="removeMediumHasMusicDetails"]', async function(event) {
+				event.preventDefault();
+				$(this).closest('.form-group').remove();
+			});
+
+			// submit mediumhasmusiclist button functionality
+			$('#music-mediumhasmusiclist-form-submit').on('click', async function(event) {
+				// console.log("TCL: MediumHasMusic form: submit");
+				// add rules to dynamically added form fields
+				event.preventDefault();
+				var node = document.getElementById("music-new-mediumhasmusic-fields");
+				while (node.lastChild) {
+					node.removeChild(node.lastChild);
+				}
+
+				// test if form is valid
+				if (!$('#music-mediumhasmusiclist-form').valid()) {
+					$('[data-role="music-new-mediumhasmusic-fields"]').append(this.appendNewMediumHasMusicListField());
+					$('#medium-select-dropdown').select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/medium/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								// console.log("TCL: data: params", params);
+								return {
+									search: params.term,
+									page: params.page
+								};
+							},
+							processResults: function(data, params) {
+								// console.log("TCL: processResults: data", data);
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: false
+						},
+						minimumInputLength: 0,
+					});
+					return false;
+				}
+
+				let music = $('#music-metadata-form').data('music');
+				let type = music.model.musicType.musicTypeTranslations[0].type;
+
+				// Create/Edit medium window submitted data
+				$('.timaat-musicdatasets-music-mediumhasmusic-medium-id').prop('disabled', false);
+				$('.disable-on-submit').prop('disabled', true);
+				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', false);
+				var formData = $('#music-mediumhasmusiclist-form').serializeArray();
+				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', true);
+				$('.disable-on-submit').prop('disabled', false);
+				// console.log("TCL: formData", formData);
+				var formEntries = [];
+				var formEntryIds = []; // List of all media containing detail data for this music
+				var formEntriesIdIndexes = []; // Index list of all mediumIds and number of detail sets
+				var i = 0;
+				for (; i < formData.length; i++) {
+					if (formData[i].name == 'mediumId') {
+						formEntriesIdIndexes.push({entryIndex: i, numDetailSets: 0});
+					}
+				}
+				var numDetailElements = 3; // hidden detailId, startTime, EndTime
+				i = 0;
+				for (; i < formEntriesIdIndexes.length; i++) {
+					if (i < formEntriesIdIndexes.length -1) {
+						formEntriesIdIndexes[i].numDetailSets = (formEntriesIdIndexes[i+1].entryIndex - formEntriesIdIndexes[i].entryIndex - 2) / numDetailElements;
+					} else { // last entry has to be calculated differently
+						formEntriesIdIndexes[i].numDetailSets = (formData.length - formEntriesIdIndexes[i].entryIndex - 2) / numDetailElements;
+					}
+				}
+				i = 0;
+				for (; i < formEntriesIdIndexes.length; i++) {
+						var element = {
+							musicId: music.model.id ,
+							mediumId: Number(formData[formEntriesIdIndexes[i].entryIndex].value),
+							mediumHasMusicDetails: []
+						};
+						formEntryIds.push(Number(formData[formEntriesIdIndexes[i].entryIndex].value));
+					var j = 0;
+					for (; j < formEntriesIdIndexes[i].numDetailSets; j++) {
+						var details = {
+							id: Number(formData[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+2].value),
+							startTime: TIMAAT.Util.parseTime(formData[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+3].value),
+							endTime: TIMAAT.Util.parseTime(formData[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+4].value),
+						};
+						element.mediumHasMusicDetails.push(details);
+            // console.log("TCL: details", details);
+					}
+					formEntries.push(element);
+				}
+				// create medium id list for all already existing mediumHasMusicDetail entries
+				i = 0;
+				var existingEntriesIdList = [];
+				// console.log("TCL: $ -> music.model", music.model);
+				for (; i < music.model.mediumHasMusicList.length; i++) {
+					existingEntriesIdList.push(music.model.mediumHasMusicList[i].id.mediumId); //?
+				}
+				// DELETE mediumHasMusic data if id is in existingEntriesIdList but not in formEntryIds
+				i = 0;
+				for (; i < existingEntriesIdList.length; i++) {
+					// console.log("TCL: check for DELETE MEDIUM: ", existingEntriesIdList[i]);
+					var j = 0;
+					var deleteDataset = true;
+					for (; j < formEntryIds.length; j ++) {
+						if (existingEntriesIdList[i] == formEntryIds[j]) {
+							deleteDataset = false;
+							break; // no need to check further if match was found
+						}
+					}
+					if (deleteDataset) {
+						await TIMAAT.MusicService.removeMediumHasMusic(music.model.mediumHasMusicList[i]);
+						music.model.mediumHasMusicList.splice(i,1); // TODO should be moved to MusicDatasets.removeMediumHasMusic(..)
+						existingEntriesIdList.splice(i,1);
+						i--; // so the next list item is not jumped over due to the splicing
+					}
+				}
+				// ADD mediumHasMusic data if id is not in existingEntriesIdList but in formEntryIds
+				i = 0;
+				for (; i < formEntryIds.length; i++) {
+					var j = 0;
+					var datasetExists = false;
+					for (; j < existingEntriesIdList.length; j++) {
+						if (formEntryIds[i] == existingEntriesIdList[j]) {
+							datasetExists = true;
+							break; // no need to check further if match was found
+						}
+					}
+					if (!datasetExists) {
+						await TIMAAT.MusicDatasets.addMediumHasMusic(music, formEntries[i]);
+						formEntryIds.splice(i,1);
+						formEntries.splice(i,1);
+						i--; // so the next list item is not jumped over due to the splicing
+					}
+				}
+				//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
+				// UPDATE mediumHasMusic data if id is in existingEntriesIdList and in formEntryIds
+				i = 0;
+				for (; i < existingEntriesIdList.length; i++) {
+					// console.log("TCL: check for UPDATE COLLECTIVE: ", existingEntriesIdList[i]);
+					// find corresponding mediumHasMusic id/index
+					var currentMediumHasMusicIndex = -1;
+					var j = 0;
+					for (; j < music.model.mediumHasMusicList.length; j++) {
+						if (existingEntriesIdList[i] == music.model.mediumHasMusicList[j].id.mediumId) { //?
+							currentMediumHasMusicIndex = j;
+							break; // no need to check further if index was found
+						}
+					}
+					var currentMediumHasMusic = music.model.mediumHasMusicList[currentMediumHasMusicIndex];
+					// var currentMediumHasMusicId = music.model.mediumHasMusicList[currentMediumHasMusicIndex].id.mediumId; //?
+
+					// go through all mediumHasMusicDetails and update/delete/add entries
+					// create mediumHasMusicDetail id list for all already existing mediumHasMusic with this medium
+					var existingMediumHasMusicDetailIdList = [];
+					j = 0;
+					for (; j < currentMediumHasMusic.mediumHasMusicDetails.length; j++) {
+						existingMediumHasMusicDetailIdList.push(currentMediumHasMusic.mediumHasMusicDetails[j].id);
+					}
+					// create mediumHasMusicDetail id list for all form mediumHasMusic for this medium
+					var formMediumHasMusicDetailIdList = [];
+					j = 0;
+					for (; j < formEntries[i].mediumHasMusicDetails.length; j++ ) {
+						formMediumHasMusicDetailIdList.push(formEntries[i].mediumHasMusicDetails[j].id);
+					}
+					// DELETE mediumHasMusicDetail data if id is in existingMediumHasMusicDetailIdList but not in mediumHasMusicDetails of formEntries
+					j = 0;
+					for (; j < existingMediumHasMusicDetailIdList.length; j++) {
+						var k = 0;
+						var deleteDataset = true;
+						for (; k < formMediumHasMusicDetailIdList.length; k++) { // 'j' since both mediumHasMusic id lists match after delete and add mediumHasMusic operations
+							if (existingMediumHasMusicDetailIdList[j] == formMediumHasMusicDetailIdList[k]) {
+								deleteDataset = false;
+								break; // no need to check further if match was found
+							}
+						}
+						if (deleteDataset) {
+							await TIMAAT.MusicService.removeMediumHasMusicDetails(music.model.mediumHasMusicList[i].mediumHasMusicDetails[j]);
+							music.model.mediumHasMusicList[i].mediumHasMusicDetails.splice(j,1); // TODO should be moved to MusicDatasets.removeMediumHasMusicDetail(..)
+							existingMediumHasMusicDetailIdList.splice(j,1);
+							j--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					// console.log("TCL: DELETE mediumHasMusicDetail (end)");
+					// ADD mediumHasMusicDetail data if id is not in existingMediumHasMusicDetailIdList but in mediumHasMusicDetails of formEntries
+					j = 0;
+					var newMediumHasMusicDetails;
+					for (; j < formMediumHasMusicDetailIdList.length; j++) {
+						if (formMediumHasMusicDetailIdList[j] == 0) {
+							newMediumHasMusicDetails = await TIMAAT.MusicService.addMediumHasMusicDetails(music.model.id, formEntries[i].mediumId, formEntries[i].mediumHasMusicDetails[j]);
+							music.model.mediumHasMusicList[i].mediumHasMusicDetails.push(newMediumHasMusicDetails);
+							formMediumHasMusicDetailIdList.splice(j,1);
+							j--; // so the next list item is not jumped over due to the splicing
+						}
+					}
+					//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
+					// UPDATE mediumHasMusicDetail data if id is in existingMediumHasMusicDetailIdList and in mediumHasMusicDetails of formEntries
+					j = 0;
+					for (; j < existingMediumHasMusicDetailIdList.length; j++) {
+						await TIMAAT.MusicService.updateMediumHasMusicDetails(formEntries[i].mediumHasMusicDetails[j]);
+						music.model.mediumHasMusicList[i].mediumHasMusicDetails[j] = formEntries[i].mediumHasMusicDetails[j];
+					}
+				}
+				await TIMAAT.UI.refreshDataTable(type);
+				// music.updateUI();
+				TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
+			});
+
+			// cancel add/edit button in titles form functionality
+			$('#music-mediumhasmusiclist-form-dismiss').on('click', function(event) {
+				let music = $('#music-metadata-form').data('music');
+				TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
+			});
+
+		},
+
 		load: function() {
       this.loadMusicList();
 		},
@@ -1892,6 +2264,125 @@
 			}
 		},
 
+		musicFormMediumHasMusicList: async function(action, music) {
+			// console.log("TCL: musicFormMediumHasMusicList: action, music", action, music);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(music.model.musicType.musicTypeTranslations[0].type, music.model.id);
+			var node = document.getElementById("music-dynamic-mediumhasmusic-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild);
+			};
+			var node = document.getElementById("music-new-mediumhasmusic-fields");
+			while (node.lastChild) {
+				node.removeChild(node.lastChild);
+			};
+			$('#music-mediumhasmusiclist-form').trigger('reset');
+			musicFormMediumHasMusicListValidator.resetForm();
+			// $('#musicVideoPreview').get(0).pause(); // TODO check if needed
+
+			// setup UI
+			let i = 0;
+			let numMediumHasMusicItems = music.model.mediumHasMusicList.length;
+			let mhm;
+			let mediumId;
+			let numMediumHasMusicDetails;
+			let mediumTitle;
+			let editMode = (action == 'edit') ? true : false;
+			let mediumHasMusicFormData;
+			let mhmd;
+			for (; i < numMediumHasMusicItems; i++) {
+				mhm = music.model.mediumHasMusicList[i];
+				mediumId = mhm.id.mediumId;
+				if (mhm.mediumHasMusicDetails == null) {
+					numMediumHasMusicDetails = 0;
+				} else {
+					numMediumHasMusicDetails = mhm.mediumHasMusicDetails.length;
+				}
+				mediumTitle = await TIMAAT.MediumService.getMediumDisplayTitle(mediumId);
+        // console.log("TCL: musicFormMediumHasMusicList:function -> mhm", mhm);
+				mediumHasMusicFormData = this.appendMediumHasMusicDataset(i, mediumId, mediumTitle, mhm.mediumHasMusicDetails, 'sr-only', editMode);
+				$('#music-dynamic-mediumhasmusic-fields').append(mediumHasMusicFormData);
+				var j = 0;
+				for (; j < numMediumHasMusicDetails; j++) {
+					mhmd = mhm.mediumHasMusicDetails[j];
+          // console.log("TCL: musicFormMediumHasMusicList:function -> mhmd", mhmd);
+					if (mhmd.startTime != null && !(isNaN(mhmd.startTime)))
+						$('[data-role="startTime['+mediumId+']['+j+']"]').val(TIMAAT.Util.formatTime(mhmd.startTime, true));
+						else $('[data-role="startTime['+mediumId+']['+j+']"]').val('00:00:00.000');
+					if (mhmd.endTime != null && !(isNaN(mhmd.endTime)))
+						$('[data-role="endTime['+mediumId+']['+j+']"]').val(TIMAAT.Util.formatTime(mhmd.endTime, true));
+						else $('[data-role="endTime['+mediumId+']['+j+']"]').val('00:00:00.000');
+				}
+			}
+
+			if ( action == 'show') {
+				$('#music-mediumhasmusiclist-form :input').prop('disabled', true);
+				this.initFormForShow(music.model);
+				$('#music-mediumhasmusiclist-form-submit').hide();
+				$('#music-mediumhasmusiclist-form-dismiss').hide();
+				$('[data-role="music-new-mediumhasmusic-fields"]').hide();
+				$('.mediumhasmusiclist-form-divider').hide();
+				$('[data-role="remove"]').hide();
+				$('[data-role="removeMediumHasMusicDetails"]').hide();
+				$('[data-role="add"]').hide();
+				$('[data-role="addMediumHasMusicDetails"]').hide();
+				$('[data-role="save"]').hide();
+				$('#musicMediumHasMusicListLabel').html("Music medium music");
+			}
+			else if (action == 'edit') {
+				$('#music-mediumhasmusiclist-form :input').prop('disabled', false);
+				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', true);
+				this.hideFormButtons();
+				// $('#music-mediumhasmusiclist-form-submit').html("Save");
+				$('#music-mediumhasmusiclist-form-submit').show();
+				$('#music-mediumhasmusiclist-form-dismiss').show();
+				$('.timaat-musicdatasets-music-mediumhasmusic-medium-id').prop('disabled', true);
+				$('#musicMediumHasMusicListLabel').html("Edit music medium music");
+				$('[data-role="music-new-mediumhasmusic-fields"]').show();
+				$('.mediumhasmusiclist-form-divider').show();
+				// $('#timaat-musicdatasets-metadata-music-mediumhasmusic').focus();
+				$('#medium-select-dropdown').focus();
+
+				// fields for new title entry
+				$('[data-role="music-new-mediumhasmusic-fields"]').append(this.appendNewMediumHasMusicFields());
+
+				// provide list of media that already have a music_has_medium_with_music entry, filter by music_group
+				$('#medium-select-dropdown').select2({
+					closeOnSelect: true,
+					scrollAfterSelect: true,
+					allowClear: true,
+					ajax: {
+						url: 'api/medium/selectList/', // TODO limit list to media that already have music associations
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: false
+					},
+					minimumInputLength: 0,
+				});
+
+				$('#music-mediumhasmusiclist-form').data('music', music);
+			}
+		},
+
     musicFormActorRoles: async function(action, music) {
 			// console.log("TCL: musicFormActorRoles: action, music", action, music);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(music.model.musicType.musicTypeTranslations[0].type, music.model.id);
@@ -1942,7 +2433,7 @@
 					});
 				});
 
-				// url for role fetch needs to chance on actor change
+				// url for role fetch needs to change on actor change
 				// provide roles list for new selected actor
 				this.getMusicHasActorWithRolesDropdownData(actorIdList[i]);
 
@@ -1993,7 +2484,7 @@
 				// $('#timaat-musicdatasets-metadata-music-actorwithrole').focus();
 
 				// fields for new title entry
-				$('[data-role="musicnew-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
+				$('[data-role="music-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
 
 				// provide list of actors that already have a music_has_actor_with_role entry, filter by role_group
 				$('#musichasactorwithrole-actorid').select2({
@@ -2029,7 +2520,7 @@
 					minimumInputLength: 0,
 				});
 
-				// url for role fetch needs to chance on actor change
+				// url for role fetch needs to change on actor change
 				$('#musichasactorwithrole-actorid').on('change', function (event) {
 					// console.log("TCL: actor selection changed");
 					// console.log("TCL: selected Actor Id", $(this).val());
@@ -2473,6 +2964,25 @@
 			return musicModel;
 		},
 
+		addMediumHasMusic: async function(music, mediumHasMusicData) {
+      // console.log("TCL: addMediumHasMusic:function -> musicModel, mediumHasMusicData", music, mediumHasMusicData);
+			try {
+				// create mediumHasMusic
+				// TODO create and add mediumHasMusicDetails
+				//? create model?
+				var newMediumHasMusic = await TIMAAT.MusicService.addMediumHasMusic(mediumHasMusicData.musicId, mediumHasMusicData.mediumId);
+				var i = 0;
+				for (; i < mediumHasMusicData.mediumHasMusicDetails.length; i++) {
+					var newDetails = await TIMAAT.MusicService.addMediumHasMusicDetails(mediumHasMusicData.musicId, mediumHasMusicData.mediumId, mediumHasMusicData.mediumHasMusicDetails[i]);
+          // console.log("TCL: newDetails", newDetails);
+					newMediumHasMusic.mediumHasMusicDetails.push(newDetails);
+				}
+				music.model.mediumHasMusicList.push(newMediumHasMusic);
+			} catch(error) {
+				console.error("ERROR: ", error);
+			}
+		},
+
 		_musicRemoved: async function(music) {
     	// console.log("TCL: _musicRemoved", music);
 			// sync to server
@@ -2786,6 +3296,187 @@
 					</div>
 				</div>`;
 			return entryToAppend;
+		},
+
+		appendMediumHasMusicDataset: function(i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode) {
+			// console.log("TCL: musicFormActorRoles:function -> i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode", i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode);
+			var mediumHasMusicListFormData =
+			`<div class="form-group" data-role="musicisinmedium-entry" data-id=`+i+` data-actor-id=`+mediumId+`>
+				<div class="form-row">
+					<div class="col-md-11">
+						<fieldset>
+							<legend>Medium `+(i+1)+`</legend>
+							<div class="form-row">
+								<div class="hidden" aria-hidden="true">
+									<input type="hidden"
+												class="form-control form-control-sm"
+												name="mediumId"
+												value="`+mediumId+`">
+								</div>
+								<div class="col-md-6">
+									<label class="sr-only">Exists in medium</label>
+									<input type="text" class="form-control form-control-sm timaat-musicdatasets-music-mediumhasmusic-medium-id"
+													id="mediumTitle`+mediumId+`"
+													name="mediumTitle"
+													value="`+mediumTitle.name+`"
+													data-role="mediumId[`+mediumId+`]"
+													placeholder="Select medium"
+													aria-describedby="Medium name"
+													required>
+								</div>
+								<div class="col-md-6 music-mediumhasmusiclist-details-container">
+									<div data-role="music-mediumhasmusiclist-details-entries">`;
+			// append list of time details
+			var j = 0;
+			for (; j < mediumHasMusicListData.length; j++) {
+				mediumHasMusicListFormData +=	this.appendMediumHasMusicDetailFields(i, j, mediumId, mediumHasMusicListData[j], labelClassString);
+			}
+			mediumHasMusicListFormData +=
+									`</div>
+									<div class="form-group" data-role="new-musicisinmedium-details-fields" data-details-id="`+j+`">`;
+			if (editMode) {
+				mediumHasMusicListFormData += this.appendMediumHasMusicNewDetailFields();
+			}
+			mediumHasMusicListFormData +=
+										`<!-- form sheet: one row for new mediumhasmusiclist detail information that shall be added to the mediumhasmusiclist -->
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="col-md-1 vertical-aligned">
+						<button type="button" class="btn btn-danger" data-role="remove">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+					</div>
+				</div>
+			</div>`;
+			return mediumHasMusicListFormData;
+		},
+
+		/** adds empty fields for new mediumHasMusic dataset */
+		appendNewMediumHasMusicFields: function() {
+    	// console.log("TCL: appendNewMediumHasMusicFields");
+			var mediumHasMusicToAppend =
+			`<div class="form-group" data-role="musicisinmedium-entry" data-id=-1>
+				<div class="form-row">
+					<div class="col-md-11">
+						<fieldset>
+							<legend>Add new medium:</legend>
+							<div class="form-row">
+								<div class="col-md-6">
+									<label class="sr-only">Appears in medium</label>
+									<select class="form-control form-control-sm"
+													id="medium-select-dropdown"
+													name="mediumId"
+													data-role="mediumId"
+													data-placeholder="Select medium"
+													required>
+									</select>
+								</div>
+								<div class="col-md-6 music-mediumhasmusiclist-details-container">
+									<div class="form-group"
+											 data-role="new-musicisinmedium-details-fields"
+											 data-details-id="0">`;
+			mediumHasMusicToAppend += this.appendMediumHasMusicNewDetailFields();
+			mediumHasMusicToAppend +=
+									`</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="col-md-1 vertical-aligned">
+						<button type="button" class="btn btn-primary" data-role="add">
+							<i class="fas fa-plus"></i>
+						</button>
+					</div>
+				</div>
+			</div>`;
+			return mediumHasMusicToAppend;
+		},
+
+		/** adds fields for details of mediumHasMusic data */
+		appendMediumHasMusicDetailFields: function(i, j, mediumId, mediumHasMusicData, labelClassString) {
+			// console.log("TCL: musicFormActorRoles:function -> i, j, mediumId, mediumHasMusicData, labelClassString", i, j, mediumId, mediumHasMusicData, labelClassString);
+			var mediumHasMusicDetails =
+				`<div class="form-group" data-role="mediumhasmusic-details-entry" data-details-id="`+j+`">
+					<div class="form-row">
+						<div class="hidden" aria-hidden="true">
+							<input type="hidden"
+										 class="form-control form-control-sm"
+										 name="appearsInDetailId"
+										 value="`+mediumHasMusicData.id+`">
+						</div>
+						<div class="col-md-5">
+							<label class="`+labelClassString+`">Starts at</label>
+							<input type="text"
+										 class="form-control form-control-sm timaat-musicdatasets-music-mediumhasmusiclist-starttime"
+										 name="startTime[`+mediumId+`][`+j+`]"
+										 data-role="startTime[`+mediumId+`][`+j+`]"`;
+				if (mediumHasMusicData != null) { mediumHasMusicDetails += `value="`+mediumHasMusicData.startTime+`"`; }
+				mediumHasMusicDetails +=
+										`placeholder="00:00:00.000"
+										aria-describedby="Music starts at">
+						</div>
+						<div class="col-md-5">
+							<label class="`+labelClassString+`">Ends at</label>
+							<input type="text"
+										 class="form-control form-control-sm timaat-musicdatasets-music-mediumhasmusiclist-endtime"
+										 name="endTime[`+mediumId+`][`+j+`]"
+										 data-role="endTime[`+mediumId+`][`+j+`]"`;
+				if (mediumHasMusicData != null) { mediumHasMusicDetails += `value="`+mediumHasMusicData.endTime+`"`; }
+				mediumHasMusicDetails +=
+										`placeholder="00:00:00.000"
+										aria-describedby="Music ends at">
+						</div>
+						<div class="col-md-2 vertical-aligned">
+							<button type="button" class="btn btn-danger" data-role="removeMediumHasMusicDetails">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						</div>
+					</div>
+				</div>`;
+			return mediumHasMusicDetails;
+		},
+
+		/** adds new fields for details of mediumHasMusic data */
+		appendMediumHasMusicNewDetailFields: function() {
+			// console.log("TCL: appendMediumHasMusicNewDetailFields");
+			var newMediumHasMusicDetails =
+			`<div class="form-row">
+				<div class="hidden" aria-hidden="true">
+					<input type="hidden"
+									class="form-control form-control-sm disable-on-submit disable-on-add"
+									name="appearsInDetailId"
+									value="0">
+				</div>
+				<div class="col-md-5">
+					<label class="sr-only">Starts at</label>
+					<input type="text"
+								class="form-control disable-on-submit form-control-sm timaat-musicdatasets-music-mediumhasmusiclist-starttime"
+								name="startTime"
+								data-role="startTime"
+								placeholder="00:00:00.000"
+								value="00:00:00.000"
+								aria-describedby="Music starts at">
+				</div>
+				<div class="col-md-5">
+					<label class="sr-only">Ends at</label>
+					<input type="text"
+								class="form-control disable-on-submit form-control-sm timaat-musicdatasets-music-mediumhasmusiclist-endtime"
+								name="endTime"
+								data-role="endTime"
+								placeholder="00:00:00.000"
+								value="00:00:00.000"
+								aria-describedby="Music ends at">
+				</div>
+				<div class="col-md-2 vertical-aligned">
+					<button type="button" class="btn btn-primary" data-role="addMediumHasMusicDetails">
+						<i class="fas fa-plus"></i>
+					</button>
+				</div>
+			</div>`;
+			return newMediumHasMusicDetails;
 		},
 
 		appendMusicHasVoiceLeadingPatternsDataset: function() {
@@ -3380,6 +4071,77 @@
 			});
 		},
 
+		getMediumHasMusicListData: function(id) {
+    	// console.log("TCL: getMediumHasMusicListData: function -> id", id);
+			$('#mediumhasmusiclist-actorid-'+id).select2({
+				closeOnSelect: true,
+				scrollAfterSelect: true,
+				allowClear: false,
+				ajax: {
+					url: 'api/medium/'+id+'/select',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							// search: params.term,
+							// page: params.page
+						};
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+						};
+					},
+					cache: false
+				},
+				minimumInputLength: 0,
+			});
+		},
+
+		getMediumHasMusicListDropdownData: function(id) {
+			$('#music-mediumhasmusiclist-select-dropdown-'+id).select2({
+				closeOnSelect: false,
+				scrollAfterSelect: true,
+				allowClear: true,
+				ajax: {
+					url: 'api/music/medium/'+id+'/hasMusicList/selectList',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+						};
+					},
+					cache: false
+				},
+				minimumInputLength: 0,
+			});
+		},
+
     replaceSpecialCharacters: function(unsafe) {
 			return unsafe
 			.replace(/</g, "&lt;")
@@ -3777,11 +4539,11 @@
 				case 'titles':
 					TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-titles-form', 'music');
 				break;
-				// case 'languageTracks':
-				// 	TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-languagetracks-form', 'music');
-				// break;
 				case 'actorWithRoles':
 					TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-actorwithroles-form', 'music');
+				break;
+				case 'mediumHasMusicList':
+					TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-mediumhasmusiclist-form', 'music');
 				break;
 			}
 			TIMAAT.UI.clearLastSelection(type);

@@ -434,6 +434,10 @@
                   TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-actorwithroles', 'music-actorwithroles-form');
                   TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
                 break;
+                case 'mediumHasMusicList': //* #music/:id/mediumHasMusicList
+                  TIMAAT.UI.displayComponent('music', 'music-tab', 'music-datatable', 'music-tab-mediumhasmusiclist', 'music-mediumhasmusiclist-form');
+                  TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
+                break;
                 default:
                   this.redirectToDefaultView();
                 break;
@@ -474,6 +478,10 @@
                       case 'actorsWithRoles': //* #music/:type/:id/actorsWithRoles
                         TIMAAT.UI.displayComponent('music', type+'-tab', type+'-datatable', 'music-tab-actorwithroles', 'music-actorwithroles-form');
                         TIMAAT.UI.displayDataSetContent('actorWithRoles', music, 'music');
+                      break;
+                      case 'mediumHasMusicList': //* #music/:type/:id/mediumHasMusicList
+                        TIMAAT.UI.displayComponent('music', type+'-tab', type+'-datatable', 'music-tab-mediumhasmusiclist', 'music-mediumhasmusiclist-form');
+                        TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
                       break;
                       default:
                         this.redirectToDefaultView();

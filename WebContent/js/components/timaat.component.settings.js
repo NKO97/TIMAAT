@@ -18,9 +18,9 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Settings = {
-		
+
 		init: function() {
       this.initSettings();
       TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
@@ -63,7 +63,7 @@
           TIMAAT.Settings.fixKeyframeTimes();
         }
       });
-    },    
+    },
 
     loadSettings: function() {
 			TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
@@ -209,7 +209,7 @@
         console.error("ERROR: ", error);
       });
     },
-		
+
 	}
-	
+
 }, window));

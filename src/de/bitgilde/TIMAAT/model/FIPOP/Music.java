@@ -213,6 +213,10 @@ public class Music implements Serializable {
 	@JsonManagedReference(value = "Music-MusicChangeInTempoElement")
 	private List<MusicChangeInTempoElement> musicChangeInTempoElementList;
 
+	//bi-directional many-to-one association to MediumHasMusic
+	@OneToMany(mappedBy="music")
+	@JsonManagedReference(value = "Music-MediumHasMusic")
+	private List<MediumHasMusic> mediumHasMusicList;
 
 	public Music() {
 	}
@@ -507,6 +511,28 @@ public class Music implements Serializable {
 		musicChangeInTempoElement.setMusic(null);
 
 		return musicChangeInTempoElement;
+	}
+
+	public List<MediumHasMusic> getMediumHasMusicList() {
+		return this.mediumHasMusicList;
+	}
+
+	public void setMediumHasMusicList(List<MediumHasMusic> mediumHasMusicList) {
+		this.mediumHasMusicList = mediumHasMusicList;
+	}
+
+	public MediumHasMusic addMediumHasMusic(MediumHasMusic mediumHasMusic) {
+		getMediumHasMusicList().add(mediumHasMusic);
+		mediumHasMusic.setMusic(this);
+
+		return mediumHasMusic;
+	}
+
+	public MediumHasMusic removeMediumHasMusic(MediumHasMusic mediumHasMusic) {
+		getMediumHasMusicList().remove(mediumHasMusic);
+		mediumHasMusic.setMusic(null);
+
+		return mediumHasMusic;
 	}
 
 }

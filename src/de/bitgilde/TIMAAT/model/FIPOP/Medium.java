@@ -271,6 +271,11 @@ public class Medium implements Serializable {
 	// @JsonBackReference(value="Medium-Music")
 	private Music music;
 
+	//bi-directional many-to-one association to MediumHasMusic
+	@OneToMany(mappedBy="medium")
+	@JsonIgnore
+	private List<MediumHasMusic> mediumHasMusicList;
+
 	@Transient
 	private String fileStatus;
 
@@ -777,6 +782,28 @@ public class Medium implements Serializable {
 
 	public void setMusic(Music music) {
 		this.music = music;
+	}
+
+	public List<MediumHasMusic> getMediumHasMusicList() {
+		return this.mediumHasMusicList;
+	}
+
+	public void setMediumHasMusicList(List<MediumHasMusic> mediumHasMusicList) {
+		this.mediumHasMusicList = mediumHasMusicList;
+	}
+
+	public MediumHasMusic addMediumHasMusic(MediumHasMusic mediumHasMusic) {
+		getMediumHasMusicList().add(mediumHasMusic);
+		mediumHasMusic.setMedium(this);
+
+		return mediumHasMusic;
+	}
+
+	public MediumHasMusic removeMediumHasMusic(MediumHasMusic mediumHasMusic) {
+		getMediumHasMusicList().remove(mediumHasMusic);
+		mediumHasMusic.setMedium(null);
+
+		return mediumHasMusic;
 	}
 
 	public String getFileStatus() {

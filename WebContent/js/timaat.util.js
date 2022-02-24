@@ -23,6 +23,7 @@
 		serverprefix: "",
 
 		formatTime: function(timeInMilliseconds, withFraction = false) {
+    	// console.log("TCL: timeInMilliseconds, withFraction ", timeInMilliseconds, withFraction );
 			let timeInSeconds = timeInMilliseconds / 1000;
 			var hours         = Math.floor(timeInSeconds / 3600);
 			var minutes       = Math.floor((timeInSeconds - (hours * 3600)) / 60);
@@ -39,6 +40,7 @@
 			time += seconds;
 			if ( withFraction ) time += fraction.toFixed(3).substring(1);
 
+      // console.log("TCL: time", time);
 			return time;
 		},
 

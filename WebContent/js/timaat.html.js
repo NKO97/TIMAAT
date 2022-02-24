@@ -689,6 +689,23 @@ var musicFormActorRolesValidator = $('#music-actorwithroles-form').validate({
     musicFormLanguageTracks.submit();
   },
 });
+var musicFormMediumHasMusicList = $('#music-mediumhasmusiclist-form');
+var musicFormMediumHasMusicListValidator = $('#music-mediumhasmusiclist-form').validate({
+  ignore: [],
+  rules: {
+    mediumId: {
+      required: true,
+    },
+  },
+  messages: {
+    mediumId: {
+      required: 'Please select a medium.'
+    },
+  },
+  submitHandler: function(musicFormLanguageTracks) {
+    musicFormLanguageTracks.submit();
+  },
+});
 
 
 function allocateArray(strOrArr) {

@@ -184,6 +184,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguagePK</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicPK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumImage</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageTypeTranslation</class>

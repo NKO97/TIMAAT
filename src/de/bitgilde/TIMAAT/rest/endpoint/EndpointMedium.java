@@ -247,6 +247,26 @@ public class EndpointMedium {
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("{id}/select")
+	public Response getMediumSelect(@PathParam("id") int id,
+																	@QueryParam("start") Integer start,
+																	@QueryParam("length") Integer length,
+																	@QueryParam("orderby") String orderby,
+																	@QueryParam("search") String search)
+	{
+		// System.out.println("EndpointMedium: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, id);
+		List<SelectElement> mediumSelectList = new ArrayList<>();
+		mediumSelectList.add(new SelectElement(id, medium.getDisplayTitle().getName()));
+
+		return Response.ok().entity(mediumSelectList).build();
+	}
+
+	@GET
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("image/selectList")
 	public Response getImageSelectList(
 			@QueryParam("start") Integer start,
@@ -1184,6 +1204,17 @@ public class EndpointMedium {
 		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		return Response.ok().entity(medium).build();
+	}
+
+	@GET
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{id}/title")
+	public Response getMediumtitle(@PathParam("id") int id) {
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Medium medium = entityManager.find(Medium.class, id);
+		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
+		return Response.ok().entity(medium.getDisplayTitle()).build();
 	}
 
 	@GET
