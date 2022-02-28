@@ -28,6 +28,8 @@
 		curCategorySet              : null,
 		curMusic                    : null,
 		curMusicChangeInTempoElement: null,
+		curMusicArticulationElement : null,
+		curMusicTextSettingElement  : null,
 		curMusicFormElement         : null,
 		curScene                    : null,
 		curSegment                  : null,
@@ -935,6 +937,36 @@
 				}
 				TIMAAT.VideoPlayer.inspector.setItem(null);
 				TIMAAT.VideoPlayer.curMusicChangeInTempoElement = null;
+				modal.modal('hide');
+			});
+
+			$('#timaat-music-articulation-element-delete-commit-submit-button').on('click', async function(ev) {
+				var modal = $('#timaat-videoplayer-music-articulation-element-delete');
+				var model = $('#timaat-videoplayer-music-articulation-element-delete').data('model');
+        // console.log("TCL: $ -> model", model);
+				if ( model ) {
+					await TIMAAT.MusicService.removeMusicArticulationElement(model.id);
+					if (TIMAAT.VideoPlayer.curMusic) {
+						TIMAAT.VideoPlayer.refreshTimelineElementsStructure();
+					}
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curMusicArticulationElement = null;
+				modal.modal('hide');
+			});
+
+			$('#timaat-music-text-setting-element-delete-commit-submit-button').on('click', async function(ev) {
+				var modal = $('#timaat-videoplayer-music-text-setting-element-delete');
+				var model = $('#timaat-videoplayer-music-text-setting-element-delete').data('model');
+        // console.log("TCL: $ -> model", model);
+				if ( model ) {
+					await TIMAAT.MusicService.removeMusicTextSettingElement(model.id);
+					if (TIMAAT.VideoPlayer.curMusic) {
+						TIMAAT.VideoPlayer.refreshTimelineElementsStructure();
+					}
+				}
+				TIMAAT.VideoPlayer.inspector.setItem(null);
+				TIMAAT.VideoPlayer.curMusicTextSettingElement = null;
 				modal.modal('hide');
 			});
 
@@ -2059,6 +2091,32 @@
 			// this.sortListUI();
 		},
 
+		updateMusicArticulationElement: async function(musicArticulationElement) {
+			// console.log("TCL: updateMusicArticulationElement:function -> musicArticulationElement: ", musicArticulationElement);
+			// sync to server
+			musicArticulationElement.model.articulation = await TIMAAT.MusicService.getArticulation(musicArticulationElement.model.articulation.id);
+			await TIMAAT.MusicService.updateMusicArticulationElement(musicArticulationElement.model);
+			await TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI);
+
+			// update UI list view
+			musicArticulationElement.updateUI();
+			this.updateListUI();
+			// this.sortListUI();
+		},
+
+		updateMusicTextSettingElement: async function(musicTextSettingElement) {
+			// console.log("TCL: updateMusicTextSettingElement:function -> musicTextSettingElement: ", musicTextSettingElement);
+			// sync to server
+			musicTextSettingElement.model.musicTextSettingElementType = await TIMAAT.MusicService.getMusicTextSettingElementType(musicTextSettingElement.model.musicTextSettingElementType.id);
+			await TIMAAT.MusicService.updateMusicTextSettingElement(musicTextSettingElement.model);
+			await TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI);
+
+			// update UI list view
+			musicTextSettingElement.updateUI();
+			this.updateListUI();
+			// this.sortListUI();
+		},
+
 		removeMusicFormElement: function(data) {
 			// console.log("TCL: removeMusicFormElement: data", data);
 			if (!data) return;
@@ -2077,6 +2135,26 @@
 			$('#timaat-videoplayer-music-change-in-tempo-element-delete').find('.modal-title').html("Delete music change in tempo element");
 			$('#timaat-videoplayer-music-change-in-tempo-element-delete').find('.modal-body').html("Do you want to delete the selected element?");
 			$('#timaat-videoplayer-music-change-in-tempo-element-delete').modal('show');
+		},
+
+		removeMusicArticulationElement: function(data) {
+			// console.log("TCL: removeMusicArticulationElement: data", data);
+			if (!data) return;
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-music-articulation-element-delete').data('model', data.model);
+			$('#timaat-videoplayer-music-articulation-element-delete').find('.modal-title').html("Delete music articulation element");
+			$('#timaat-videoplayer-music-articulation-element-delete').find('.modal-body').html("Do you want to delete the selected element?");
+			$('#timaat-videoplayer-music-articulation-element-delete').modal('show');
+		},
+
+		removeMusicTextSettingElement: function(data) {
+			// console.log("TCL: removeMusicTextSettingElement: data", data);
+			if (!data) return;
+			TIMAAT.VideoPlayer.pause();
+			$('#timaat-videoplayer-music-text-setting-element-delete').data('model', data.model);
+			$('#timaat-videoplayer-music-text-setting-element-delete').find('.modal-title').html("Delete music text setting element");
+			$('#timaat-videoplayer-music-text-setting-element-delete').find('.modal-body').html("Do you want to delete the selected element?");
+			$('#timaat-videoplayer-music-text-setting-element-delete').modal('show');
 		},
 
 		offLinePublication: function() {
@@ -2196,6 +2274,16 @@
 						musicChangeInTempoElement.updateStatus(TIMAAT.VideoPlayer.medium.currentTime, viaTimeUpdate);
 					});
 				}
+				if ( TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI != null ) {
+					TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI.forEach(function(musicArticulationElement) {
+						musicArticulationElement.updateStatus(TIMAAT.VideoPlayer.medium.currentTime, viaTimeUpdate);
+					});
+				}
+				if ( TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI != null ) {
+					TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI.forEach(function(musicTextSettingElement) {
+						musicTextSettingElement.updateStatus(TIMAAT.VideoPlayer.medium.currentTime, viaTimeUpdate);
+					});
+				}
 			}
 		},
 
@@ -2271,6 +2359,16 @@
 						musicChangeInTempoElement.removeUI();
 					});
 				}
+				if (TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI) {
+					TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI.forEach(function(musicArticulationElement) {
+						musicArticulationElement.removeUI();
+					});
+				}
+				if (TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI) {
+					TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI.forEach(function(musicTextSettingElement) {
+						musicTextSettingElement.removeUI();
+					});
+				}
 			}
 		},
 
@@ -2306,11 +2404,19 @@
 			if (TIMAAT.VideoPlayer.curMusic) {
 				TIMAAT.VideoPlayer.curMusic.musicFormElementsUI = Array();
 				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI = Array();
+				TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI = Array();
+				TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI = Array();
 				TIMAAT.VideoPlayer.curMusic.musicFormElementList.forEach(function(musicFormElement) {
 					TIMAAT.VideoPlayer.curMusic.musicFormElementsUI.push(new TIMAAT.MusicFormElement(musicFormElement));
 				});
 				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementList.forEach(function(musicChangeInTempoElement) {
 					TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI.push(new TIMAAT.MusicChangeInTempoElement(musicChangeInTempoElement));
+				});
+				TIMAAT.VideoPlayer.curMusic.musicArticulationElementList.forEach(function(musicArticulationElement) {
+					TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI.push(new TIMAAT.MusicArticulationElement(musicArticulationElement));
+				});
+				TIMAAT.VideoPlayer.curMusic.musicTextSettingElementList.forEach(function(musicTextSettingElement) {
+					TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI.push(new TIMAAT.MusicTextSettingElement(musicTextSettingElement));
 				});
 			}
 		},
@@ -2327,35 +2433,38 @@
 			if (this.curMusic) {
 				this.sort(this.curMusic.musicFormElementsUI);
 				this.sort(this.curMusic.musicChangeInTempoElementsUI);
+				this.sort(this.curMusic.musicArticulationElementsUI);
+				this.sort(this.curMusic.musicTextSettingElementsUI);
 			}
 		},
 
 		showTimelineElementsStructure: function() {
     	// console.log("TCL: showTimelineElementsStructure:function()");
 			// build annotation list from model
-			if (this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null) {
+			$('.timeline-pane').hide();
+			if (this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null && this.curAnalysisList.analysisSegmentsUI.length > 0) {
 				this.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 					segment.addUI();
 				});
 				$('#timaat-timeline-segment-pane').show();
-				if (this.curAnalysisList.analysisSequencesUI != null) {
+				if (this.curAnalysisList.analysisSequencesUI != null && this.curAnalysisList.analysisSequencesUI.length > 0) {
 					this.curAnalysisList.analysisSequencesUI.forEach(function(sequence) {
 						sequence.addUI();
 					});
 					$('#timaat-timeline-sequence-pane').show();
-					if (this.curAnalysisList.analysisTakesUI != null) {
+					if (this.curAnalysisList.analysisTakesUI != null && this.curAnalysisList.analysisTakesUI.length > 0) {
 						this.curAnalysisList.analysisTakesUI.forEach(function(take) {
 							take.addUI();
 						});
 					$('#timaat-timeline-take-pane').show();
 					}
 				}
-				if (this.curAnalysisList.analysisScenesUI != null) {
+				if (this.curAnalysisList.analysisScenesUI != null && this.curAnalysisList.analysisScenesUI.length > 0) {
 					this.curAnalysisList.analysisScenesUI.forEach(function(scene) {
 						scene.addUI();
 					});
 					$('#timaat-timeline-scene-pane').show();
-					if (this.curAnalysisList.analysisActionsUI != null) {
+					if (this.curAnalysisList.analysisActionsUI != null && this.curAnalysisList.analysisActionsUI.length > 0) {
 						this.curAnalysisList.analysisActionsUI.forEach(function(action) {
 							action.addUI();
 						});
@@ -2375,6 +2484,18 @@
 						musicChangeInTempoElement.addUI();
 					});
 					$('#timaat-timeline-music-change-in-tempo-element-pane').show();
+				}
+				if (this.curMusic.musicArticulationElementsUI != null) {
+					this.curMusic.musicArticulationElementsUI.forEach(function(musicArticulationElement) {
+						musicArticulationElement.addUI();
+					});
+					$('#timaat-timeline-music-articulation-element-pane').show();
+				}
+				if (this.curMusic.musicTextSettingElementsUI != null) {
+					this.curMusic.musicTextSettingElementsUI.forEach(function(musicTextSettingElement) {
+						musicTextSettingElement.addUI();
+					});
+					$('#timaat-timeline-music-text-setting-element-pane').show();
 				}
 			}
 		},
@@ -2859,6 +2980,54 @@
 
 			// update UI
 			$('#timaat-timeline-music-change-in-tempo-element-pane').show();
+			TIMAAT.VideoPlayer.updateListUI();
+			TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_musicArticulationElementAdded: function(musicArticulationElement, openInspector=true) {
+			console.log("TCL: _musicArticulationElementAdded: function(musicArticulationElement): ", musicArticulationElement);
+			// TODO refactor for persistent music form data display independent from analysislist
+			if (!TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI) {
+				TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI = [];
+			}
+			TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI.push(musicArticulationElement);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI);
+			TIMAAT.VideoPlayer.jumpTo(musicArticulationElement.model.startTime);
+			TIMAAT.VideoPlayer.selectedElementType = 'musicArticulationElement';
+			musicArticulationElement.addUI();
+			TIMAAT.VideoPlayer.curMusicArticulationElement = musicArticulationElement;
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.inspector.setItem(musicArticulationElement, 'musicArticulationElement');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			$('#timaat-timeline-music-articulation-element-pane').show();
+			TIMAAT.VideoPlayer.updateListUI();
+			TIMAAT.VideoPlayer.sortListUI();
+		},
+
+		_musicTextSettingElementAdded: function(musicTextSettingElement, openInspector=true) {
+			console.log("TCL: _musicTextSettingElementAdded: function(musicTextSettingElement): ", musicTextSettingElement);
+			// TODO refactor for persistent music form data display independent from analysislist
+			if (!TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI) {
+				TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI = [];
+			}
+			TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI.push(musicTextSettingElement);
+			TIMAAT.VideoPlayer.sort(TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI);
+			TIMAAT.VideoPlayer.jumpTo(musicTextSettingElement.model.startTime);
+			TIMAAT.VideoPlayer.selectedElementType = 'musicTextSettingElement';
+			musicTextSettingElement.addUI();
+			TIMAAT.VideoPlayer.curMusicTextSettingElement = musicTextSettingElement;
+
+			if ( openInspector ) {
+				TIMAAT.VideoPlayer.inspector.setItem(musicTextSettingElement, 'musicTextSettingElement');
+				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+			}
+
+			// update UI
+			$('#timaat-timeline-music-text-setting-element-pane').show();
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
 		},

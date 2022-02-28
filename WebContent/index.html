@@ -869,6 +869,76 @@
                 </div>
               </div>
             </div>
+            <div class="modal fade" id="timaat-videoplayer-music-articulation-element-modal" tabindex="-1" role="dialog" aria-labelledby="musicArticulationElementModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-articulation-element-delete" tabindex="-1" role="dialog" aria-labelledby="musicArticulationElementDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="musicArticulationElementDeleteLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				            <button type="button" class="btn btn-danger" id="timaat-music-articulation-element-delete-commit-submit-button">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-text-setting-element-modal" tabindex="-1" role="dialog" aria-labelledby="musicTextSettingElementModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-text-setting-element-delete" tabindex="-1" role="dialog" aria-labelledby="musicTextSettingElementDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="musicTextSettingElementDeleteLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				            <button type="button" class="btn btn-danger" id="timaat-music-text-setting-element-delete-commit-submit-button">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="modal fade" id="analysisListNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="analysisListNoPermissionLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -944,10 +1014,28 @@
                   <div id="timaat-inspector-meta-music-change-in-tempo-element-type-group" class="input-group input-group-sm mb-1">
                     <select class="form-control form-control-sm"
                             style="width:100%"
-                            id="music-change-in-tempo-element-type-select-dropdown"
-                            name="musicChangeInTempoElementTypeId"
-                            data-role="musicChangeInTempoElementType"
+                            id="music-change-in-tempo-element-select-dropdown"
+                            name="musicChangeInTempoElementId"
+                            data-role="musicChangeInTempoElement"
                             data-placeholder="Select change in tempo element type">
+                    </select>
+                  </div>
+                  <div id="timaat-inspector-meta-music-articulation-element-type-group" class="input-group input-group-sm mb-1">
+                    <select class="form-control form-control-sm"
+                            style="width:100%"
+                            id="music-articulation-element-select-dropdown"
+                            name="musicArticulationElementTypeId"
+                            data-role="musicArticulationElementType"
+                            data-placeholder="Select articulation element type">
+                    </select>
+                  </div>
+                  <div id="timaat-inspector-meta-music-text-setting-element-type-group" class="input-group input-group-sm mb-1">
+                    <select class="form-control form-control-sm"
+                            style="width:100%"
+                            id="music-text-setting-element-select-dropdown"
+                            name="musicTextSettingElementTypeId"
+                            data-role="musicTextSettingElementType"
+                            data-placeholder="Select text setting element type">
                     </select>
                   </div>
                   <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
@@ -1526,7 +1614,9 @@
                         </button>
                         <div class="dropdown-menu">
                           <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-form-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicFormElement')">Add music form element</a>
-                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-changeInTempo-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicChangeInTempoElement')">Add music change in tempo element</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-changeInTempo-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicChangeInTempoElement')">Add change in tempo element</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-Articulation-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicArticulationElement')">Add articulation element</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-textSetting-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicTextSettingElement')">Add text setting element</a>
                         </div>
                       </div>
                     </div>
@@ -1569,10 +1659,10 @@
                             </div>
                             <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
                               <div id="timaat-timeline-segment-pane"></div>
-                              <div id="timaat-timeline-sequence-pane"></div>
-                              <div id="timaat-timeline-take-pane"></div>
-                              <div id="timaat-timeline-scene-pane"></div>
-                              <div id="timaat-timeline-action-pane"></div>
+                              <div class="timeline-pane" id="timaat-timeline-sequence-pane"></div>
+                              <div class="timeline-pane" id="timaat-timeline-take-pane"></div>
+                              <div class="timeline-pane" id="timaat-timeline-scene-pane"></div>
+                              <div class="timeline-pane" id="timaat-timeline-action-pane"></div>
                             </div>
                           </div>
                           <div class="timeline-section timeline-section-music-structure">
@@ -1585,6 +1675,8 @@
                             <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
                               <div id="timaat-timeline-music-form-element-pane"></div>
                               <div id="timaat-timeline-music-change-in-tempo-element-pane"></div>
+                              <div id="timaat-timeline-music-articulation-element-pane"></div>
+                              <div id="timaat-timeline-music-text-setting-element-pane"></div>
                               <!-- TODO: additional panes -->
                             </div>
                           </div>
@@ -5311,17 +5403,7 @@
                             </div>
                             <div class="form-group datasheet-data music-data">
                               <div class="form-row">
-                                <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="music-articulation-select-dropdown">Articulation</label>
-                                  <select class="form-control form-control-sm"
-                                          style="width:100%;"
-                                          id="music-articulation-select-dropdown"
-                                          name="articulationId"
-                                          data-role="articulation"
-                                          data-placeholder="Select articulation">
-                                  </select>
-                                </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                   <label class="col-form-label col-form-label-sm" for="music-dynamic-marking-select-dropdown">Dynamic marking</label>
                                   <select class="form-control form-control-sm"
                                           style="width:100%;"
@@ -5331,7 +5413,7 @@
                                           data-placeholder="Select dynamic marking">
                                   </select>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                   <label class="col-form-label col-form-label-sm" for="music-change-in-dynamics-select-dropdown">Change in dynamics</label>
                                   <select class="form-control form-control-sm"
                                           style="width:100%;"
@@ -5339,16 +5421,6 @@
                                           name="changeInDynamicsId"
                                           data-role="changeInDynamics"
                                           data-placeholder="Select change in dynamics">
-                                  </select>
-                                </div>
-                                <div class="col-md-3">
-                                  <label class="col-form-label col-form-label-sm" for="music-text-setting-select-dropdown">Text setting</label>
-                                  <select class="form-control form-control-sm"
-                                          style="width:100%;"
-                                          id="music-text-setting-select-dropdown"
-                                          name="textSettingId"
-                                          data-role="textSetting"
-                                          data-placeholder="Select text setting">
                                   </select>
                                 </div>
                               </div>

@@ -19,6 +19,7 @@ import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
+import de.bitgilde.TIMAAT.model.FIPOP.Articulation;
 import de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
@@ -35,6 +36,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicArticulationElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElement;
@@ -42,11 +44,13 @@ import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementType;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicNashid;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElement;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementTypeTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation;
-import de.bitgilde.TIMAAT.model.FIPOP.TextSettingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPatternTranslation;
@@ -356,9 +360,9 @@ public class EndpointMusic {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("changeInTempoElementType/selectList")
-	public Response getMusicChangeInTempoElementTypeSelectList(@QueryParam("language") String languageCode) {
-		// System.out.println("EndpointMusic: getMusicChangeInTempoElementTypeSelectList");
+	@Path("changeInTempoElement/selectList")
+	public Response getMusicChangeInTempoElementSelectList(@QueryParam("language") String languageCode) {
+		// System.out.println("EndpointMusic: getMusicChangeInTempoElementSelectList");
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		Query query;
@@ -369,6 +373,41 @@ public class EndpointMusic {
 			selectList.add(new SelectElement(changeInTempoTranslation.getChangeInTempo().getId(), changeInTempoTranslation.getType()));
 		}
 		return Response.ok().entity(selectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("articulationElement/selectList")
+	public Response getMusicArticulationElementSelectList(@QueryParam("language") String languageCode) {
+		// System.out.println("EndpointMusic: getMusicArticulationElementSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
+		Query query;
+		query = TIMAATApp.emf.createEntityManager().createQuery("SELECT at FROM ArticulationTranslation at WHERE at.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')");
+		List<ArticulationTranslation> articulationTranslationList = castList(ArticulationTranslation.class, query.getResultList());
+		List<SelectElement> selectList = new ArrayList<>();
+		for (ArticulationTranslation articulationTranslation : articulationTranslationList) {
+			selectList.add(new SelectElement(articulationTranslation.getArticulation().getId(), articulationTranslation.getType()));
+		}
+		return Response.ok().entity(selectList).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("textSettingElementType/selectList")
+	public Response getMusicTextSettingElementTypeSelectList(@QueryParam("language") String languageCode) {
+		// System.out.println("EndpointMusic: getMusicTextSettingElementTypeSelectList");
+
+		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
+		Query query;
+		query = TIMAATApp.emf.createEntityManager().createQuery("SELECT tsett FROM TextSettingElementTypeTranslation tsett WHERE tsett.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')");
+		List<MusicTextSettingElementTypeTranslation> musicTextSettingElementTypeTranslationList = castList(MusicTextSettingElementTypeTranslation.class, query.getResultList());
+		List<SelectElement> musicTextSettingElementTypeSelectList = new ArrayList<>();
+		for (MusicTextSettingElementTypeTranslation textSettingElementTypeTranslation : musicTextSettingElementTypeTranslationList) {
+			musicTextSettingElementTypeSelectList.add(new SelectElement(textSettingElementTypeTranslation.getMusicTextSettingElementType().getId(), textSettingElementTypeTranslation.getType()));		}
+		return Response.ok().entity(musicTextSettingElementTypeSelectList).build();
 	}
 
 	@GET
@@ -937,7 +976,7 @@ public class EndpointMusic {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("/textSetting/selectList")
+	@Path("/musicTextSettingElementType/selectList")
 	public Response getTextSettingSelectList(@PathParam("id") Integer id,
 																					 @QueryParam("start") Integer start,
 																					 @QueryParam("length") Integer length,
@@ -951,13 +990,13 @@ public class EndpointMusic {
 		List<SelectElementWithChildren> selectElementWithChildrenList = new ArrayList<>();
 		Query query;
 		query = TIMAATApp.emf.createEntityManager().createQuery(
-			"SELECT tst FROM TextSettingTranslation tst WHERE tst.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY tst.type ASC");
-		List<TextSettingTranslation> textSettingTranslationList = castList(TextSettingTranslation.class, query.getResultList());
-		List<SelectElement> textSettingSelectList = new ArrayList<>();
-		for (TextSettingTranslation textSettingTranslation : textSettingTranslationList) {
-			textSettingSelectList.add(new SelectElement(textSettingTranslation.getTextSetting().getId(), textSettingTranslation.getType()));
+			"SELECT mtstt FROM MusicTextSettingElementTypeTranslation mtstt WHERE mtstt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY mtstt.type ASC");
+		List<MusicTextSettingElementTypeTranslation> musicTextSettingElementTypeTranslationList = castList(MusicTextSettingElementTypeTranslation.class, query.getResultList());
+		List<SelectElement> musicTextSettingElementTypeSelectList = new ArrayList<>();
+		for (MusicTextSettingElementTypeTranslation musicTextSettingElementTypeTranslation : musicTextSettingElementTypeTranslationList) {
+			musicTextSettingElementTypeSelectList.add(new SelectElement(musicTextSettingElementTypeTranslation.getMusicTextSettingElementType().getId(), musicTextSettingElementTypeTranslation.getType()));
 		}
-		selectElementList = textSettingSelectList;
+		selectElementList = musicTextSettingElementTypeSelectList;
 
 		if (selectElementList.size() > 0)
 			return Response.ok().entity(selectElementList).build();
@@ -1080,16 +1119,16 @@ public class EndpointMusic {
 		//! Don't change music type. MusicSubtype won't match anymore
 		if ( updatedMusic.getRemark() != null ) music.setRemark(updatedMusic.getRemark());
 		if ( updatedMusic.getInstrumentation() != null ) music.setInstrumentation(updatedMusic.getInstrumentation());
-		music.setArticulation(updatedMusic.getArticulation());
 		music.setBeat(updatedMusic.getBeat());
 		music.setDynamicMarking(updatedMusic.getDynamicMarking());
 		music.setChangeInDynamics(updatedMusic.getChangeInDynamics());
 		music.setMusicalKey(updatedMusic.getMusicalKey());
 		music.setTempo(updatedMusic.getTempo());
 		music.setTempoMarking(updatedMusic.getTempoMarking());
-		music.setTextSetting(updatedMusic.getTextSetting());
 		music.setVoiceLeadingPatternList(updatedMusic.getVoiceLeadingPatternList());
 		music.setMusicChangeInTempoElementList(updatedMusic.getMusicChangeInTempoElementList());
+		music.setMusicArticulationElementList(updatedMusic.getMusicArticulationElementList());
+		music.setMusicTextSettingElementList(updatedMusic.getMusicTextSettingElementList());
 		if ( updatedMusic.getDisplayTitle() != null ) music.setDisplayTitle(updatedMusic.getDisplayTitle());
 		music.setOriginalTitle(updatedMusic.getOriginalTitle()); // originalTitle can be set to null
 		List<CategorySet> oldCategorySets = music.getCategorySets();
@@ -1873,7 +1912,7 @@ public class EndpointMusic {
 	@POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{musicId}/{mediumId}/mediumHasMusicDetails/{id}")
+	@Path("{musicId}/{mediumId}/mediumHasMusicDetail/{id}")
 	@Secured
 	public Response addMediumHasMusicDetail(@PathParam("musicId") int musicId,
 																					 @PathParam("mediumId") int mediumId,
@@ -1925,7 +1964,7 @@ public class EndpointMusic {
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("mediumHasMusicDetails/{id}")
+	@Path("mediumHasMusicDetail/{id}")
 	@Secured
 	public Response updateMediumHasMusicDetail(@PathParam("id") int id,
 																	 String jsonData) {
@@ -1960,7 +1999,7 @@ public class EndpointMusic {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("mediumHasMusicDetails/{id}")
+	@Path("mediumHasMusicDetail/{id}")
 	@Secured
 	public Response deleteMediumHasMusicDetail(@PathParam("id") int id) {
 		System.out.println("EndpointMusic: deleteMediumHasMusicDetail");
@@ -2429,6 +2468,267 @@ public class EndpointMusic {
     ChangeInTempo changeInTempo = entityManager.find(ChangeInTempo.class, id);
     if (changeInTempo == null) return Response.status(Status.NOT_FOUND).build();
     return Response.ok().entity(changeInTempo).build();
+  }
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{musicId}/musicArticulationElement/{articulationId}") // TODO change so that ids are part of jsonData?
+	public Response createMusicArticulationElement(@PathParam("musicId") int musicId,
+																			   					@PathParam("articulationId") int articulationId,
+																									String jsonData) {
+
+		System.out.println("createMusicArticulationElement - jsonData: "+ jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+
+		Music music = entityManager.find(Music.class, musicId);
+		Articulation	articulation = entityManager.find(Articulation.class, articulationId);
+		if ( music == null || articulation == null ) return Response.status(Status.BAD_REQUEST).build();
+		MusicArticulationElement musicArticulationElement = null;
+		try {
+			musicArticulationElement = mapper.readValue(jsonData, MusicArticulationElement.class);
+		} catch (IOException e) {
+			System.out.println("createMusicArticulationElement: IOException e !");
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( musicArticulationElement == null ) {
+			System.out.println("createMusicArticulationElement: musicArticulationElement == null !");
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+
+		// sanitize object data
+		musicArticulationElement.setId(0);
+		musicArticulationElement.setMusic(music);
+		musicArticulationElement.setArticulation(articulation);
+		System.out.println("createMusicArticulationElement - startTime: "+ musicArticulationElement.getStartTime());
+		// articulation.addMusicArticulationElement(musicArticulationElement);
+
+		// persist musicArticulationElement and list
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.persist(musicArticulationElement);
+		entityManager.flush();
+		music.addMusicArticulationElement(musicArticulationElement);
+		entityManager.persist(music);
+		entityTransaction.commit();
+		entityManager.refresh(musicArticulationElement);
+		entityManager.refresh(music);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTCREATED);
+		System.out.println("createMusicArticulationElement - startTime: "+ musicArticulationElement.getStartTime());
+		return Response.ok().entity(musicArticulationElement).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("musicArticulationElement/{id}")
+	@Secured
+	public Response updateMusicArticulationElement(@PathParam("id") int musicArticulationElementId,
+																					 				String jsonData) {
+		// System.out.println("EndpointAnalysisList: updateMusicArticulationElement "+ jsonData);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MusicArticulationElement musicArticulationElement = entityManager.find(MusicArticulationElement.class, musicArticulationElementId);
+		if ( musicArticulationElement == null ) return Response.status(Status.NOT_FOUND).build();
+
+		ObjectMapper mapper = new ObjectMapper();
+		MusicArticulationElement updatedMusicArticulationElement = null;
+		// parse JSON data
+		try {
+			updatedMusicArticulationElement = mapper.readValue(jsonData, MusicArticulationElement.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedMusicArticulationElement == null ) return Response.notModified().build();
+
+		// update musicArticulationElement
+		musicArticulationElement.setStartTime(updatedMusicArticulationElement.getStartTime());
+		musicArticulationElement.setEndTime(updatedMusicArticulationElement.getEndTime());
+		if (updatedMusicArticulationElement.getArticulation() != null) musicArticulationElement.setArticulation(updatedMusicArticulationElement.getArticulation());
+		//* music relation won't be changed
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(musicArticulationElement);
+		entityManager.persist(musicArticulationElement);
+		entityTransaction.commit();
+		entityManager.refresh(musicArticulationElement);
+		entityManager.refresh(musicArticulationElement.getMusic());
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTEDITED);
+
+		return Response.ok().entity(musicArticulationElement).build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("musicArticulationElement/{id}")
+	@Secured
+	public Response deleteMusicArticulationElement(@PathParam("id") int musicArticulationElementId) {
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MusicArticulationElement musicArticulationElement = entityManager.find(MusicArticulationElement.class, musicArticulationElementId);
+		if ( musicArticulationElement == null ) return Response.status(Status.NOT_FOUND).build();
+
+		Music music = musicArticulationElement.getMusic();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(musicArticulationElement);
+		entityTransaction.commit();
+		entityManager.refresh(music);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTDELETED);
+
+		return Response.ok().build();
+	}
+
+	@GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("articulation/{id}")
+  public Response getArticulation(@PathParam("id") int id) {
+    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    Articulation articulation = entityManager.find(Articulation.class, id);
+    if (articulation == null) return Response.status(Status.NOT_FOUND).build();
+    return Response.ok().entity(articulation).build();
+  }
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{musicId}/musicTextSettingElement")
+	public Response createMusicTextSettingElement(@PathParam("musicId") int musicId,
+																			   String jsonData) {
+
+		System.out.println("createMusicTextSettingElement - jsonData: "+ jsonData);
+
+		ObjectMapper mapper = new ObjectMapper();
+		MusicTextSettingElement musicTextSettingElement = null;
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Music music = entityManager.find(Music.class, musicId);
+		if ( music == null ) return Response.status(Status.NOT_FOUND).build();
+		// parse JSON data
+		try {
+			musicTextSettingElement = mapper.readValue(jsonData, MusicTextSettingElement.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( musicTextSettingElement == null ) return Response.status(Status.BAD_REQUEST).build();
+
+		// sanitize object data
+		musicTextSettingElement.setId(0);
+		music.addMusicTextSettingElement(musicTextSettingElement);
+		// musicTextSettingElement.getMusicTextSettingElementType().getMusicTextSettingElementTypeTranslations().get(0).setId(0);
+		// musicTextSettingElement.getMusicTextSettingElementType().getMusicTextSettingElementTypeTranslations().get(0).setMusicTextSettingElement(musicTextSettingElement);
+		// musicTextSettingElement.getMusicTextSettingElementType().getMusicTextSettingElementTypeTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
+
+		// persist musicTextSettingElement and list
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		// entityManager.persist(musicTextSettingElement.getMusicTextSettingElementType().getMusicTextSettingElementTranslations().get(0));
+		entityManager.persist(musicTextSettingElement);
+		entityManager.flush();
+		musicTextSettingElement.setMusic(music);
+		entityManager.persist(music);
+		entityTransaction.commit();
+		entityManager.refresh(musicTextSettingElement);
+		entityManager.refresh(music);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTCREATED);
+
+		return Response.ok().entity(musicTextSettingElement).build();
+	}
+
+	@PATCH
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("musicTextSettingElement/{id}")
+	@Secured
+	public Response updateMusicTextSettingElement(@PathParam("id") int musicTextSettingElementId,
+																					 String jsonData) {
+		// System.out.println("EndpointAnalysisList: updateMusicTextSettingElement "+ jsonData);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MusicTextSettingElement musicTextSettingElement = entityManager.find(MusicTextSettingElement.class, musicTextSettingElementId);
+		if ( musicTextSettingElement == null ) return Response.status(Status.NOT_FOUND).build();
+
+		ObjectMapper mapper = new ObjectMapper();
+		MusicTextSettingElement updatedMusicTextSettingElement = null;
+
+		// parse JSON data
+		try {
+			updatedMusicTextSettingElement = mapper.readValue(jsonData, MusicTextSettingElement.class);
+		} catch (IOException e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		if ( updatedMusicTextSettingElement == null ) return Response.notModified().build();
+
+		// update text setting element
+		// if ( updatedMusicTextSettingElement.getMusicTextSettingElementTranslations().get(0).getText() != null ) musicTextSettingElement.getMusicTextSettingElementTranslations().get(0).setText(updatedMusicTextSettingElement.getMusicTextSettingElementTranslations().get(0).getText());
+		musicTextSettingElement.setMusicTextSettingElementType(updatedMusicTextSettingElement.getMusicTextSettingElementType());
+		musicTextSettingElement.setStartTime(updatedMusicTextSettingElement.getStartTime());
+		musicTextSettingElement.setEndTime(updatedMusicTextSettingElement.getEndTime());
+
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(musicTextSettingElement);
+		entityManager.persist(musicTextSettingElement);
+		entityTransaction.commit();
+		entityManager.refresh(musicTextSettingElement);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTEDITED);
+
+		return Response.ok().entity(musicTextSettingElement).build();
+	}
+
+	@DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+	@Path("musicTextSettingElement/{id}")
+	@Secured
+	public Response deleteMusicTextSettingElement(@PathParam("id") int musicTextSettingElementId) {
+
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		MusicTextSettingElement musicTextSettingElement = entityManager.find(MusicTextSettingElement.class, musicTextSettingElementId);
+		if ( musicTextSettingElement == null ) return Response.status(Status.NOT_FOUND).build();
+
+		Music music = musicTextSettingElement.getMusic();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.remove(musicTextSettingElement);
+		entityTransaction.commit();
+		entityManager.refresh(music);
+
+		// add log entry
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+		// 																			 UserLogManager.LogEvents.MUSICFORMELEMENTDELETED);
+
+		return Response.ok().build();
+	}
+
+	@GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("musicTextSettingElementType/{id}")
+  public Response getMusicTextSettingElementType(@PathParam("id") int id) {
+    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    MusicTextSettingElementType musicTextSettingElementType = entityManager.find(MusicTextSettingElementType.class, id);
+    if (musicTextSettingElementType == null) return Response.status(Status.NOT_FOUND).build();
+    return Response.ok().entity(musicTextSettingElementType).build();
   }
 
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {

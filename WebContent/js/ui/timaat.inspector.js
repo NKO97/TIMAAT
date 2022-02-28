@@ -1012,7 +1012,7 @@
 					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
 					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
 					let i = 0;
-					let changeInTempoId = $('#music-change-in-tempo-element-type-select-dropdown').val();
+					let changeInTempoId = $('#music-change-in-tempo-element-select-dropdown').val();
 
 					// early out: musicChangeInTempoElement has no time range
 					if (startTime == endTime) {
@@ -1066,6 +1066,132 @@
 						}
 						var tempMusic = await TIMAAT.MusicService.getMusic(TIMAAT.VideoPlayer.curMusic.id);
 						TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementList = tempMusic.musicChangeInTempoElementList;
+					}
+				}
+				// music articulation elements
+				if ( inspector.state.type == 'musicArticulationElement' ) {
+					var musicArticulationElement = inspector.state.item;
+          // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					let i = 0;
+					let articulationId = $('#music-articulation-element-select-dropdown').val();
+
+					// early out: musicArticulationElement has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-title').html('Music Articulation Element has no time range');
+						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-body').html("Music Articulation Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-music-articulation-element-modal').modal('show');
+						return;
+					}
+					// musicArticulationElement has a time range and still encompasses its sub elements. Now check for overlap with other musicArticulationElementList
+					var overlapping = false;
+					i = 0;
+					var musicArticulationElementList = [];
+					if (TIMAAT.VideoPlayer.curMusic) musicArticulationElementList = TIMAAT.VideoPlayer.curMusic.musicArticulationElementList;
+					if (musicArticulationElement) {
+						let index = musicArticulationElementList.findIndex(({id}) => id === musicArticulationElement.model.id);
+						musicArticulationElementList.splice(index,1);
+					}
+					for (; i < musicArticulationElementList.length; i++) {
+						if (!(endTime <= musicArticulationElementList[i].startTime || startTime >= musicArticulationElementList[i].endTime) ) {
+							overlapping = true;
+							break;
+						}
+					}
+					// early out: musicArticulationElement overlaps with other musicArticulationElementList
+					if (overlapping) {
+						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-title').html('Music Articulation Element is overlapping');
+						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-body').html("Music Articulation Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-music-articulation-element-modal').modal('show');
+					} else {
+						if (musicArticulationElement) {
+							musicArticulationElement.model.startTime = startTime;
+							musicArticulationElement.model.endTime = endTime;
+							musicArticulationElement.model.articulation = {};
+							musicArticulationElement.model.articulation.id = articulationId;
+
+							// update musicArticulationElement UI
+							await TIMAAT.VideoPlayer.updateMusicArticulationElement(musicArticulationElement);
+						} else {
+							var model = {
+								id: 0,
+								articulation: {
+									id: articulationId,
+								},
+								startTime: startTime,
+								endTime: endTime,
+							};
+							// let musicId = TIMAAT.MusicService.getMusicIdByMediumId(TIMAAT.VideoPlayer.model.medium.id);
+							musicArticulationElement = await TIMAAT.MusicService.createMusicArticulationElement(model, TIMAAT.VideoPlayer.model.medium.music.id);
+							musicArticulationElement = new TIMAAT.MusicArticulationElement(musicArticulationElement);
+							TIMAAT.VideoPlayer._musicArticulationElementAdded(musicArticulationElement, true);
+						}
+						var tempMusic = await TIMAAT.MusicService.getMusic(TIMAAT.VideoPlayer.curMusic.id);
+						TIMAAT.VideoPlayer.curMusic.musicArticulationElementList = tempMusic.musicArticulationElementList;
+					}
+				}
+				// music textSetting elements
+				if ( inspector.state.type == 'musicTextSettingElement' ) {
+					var musicTextSettingElement = inspector.state.item;
+          // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
+					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
+					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					let i = 0;
+					let typeId = $('#music-text-setting-element-select-dropdown').val();
+
+					// early out: musicTextSettingElement has no time range
+					if (startTime == endTime) {
+						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-title').html('Music Text Setting Element has no time range');
+						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-body').html("Music Text Setting Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#timaat-videoplayer-music-text-setting-element-modal').modal('show');
+						return;
+					}
+					// musicTextSettingElement has a time range and still encompasses its sub elements. Now check for overlap with other musicTextSettingElementList
+					var overlapping = false;
+					i = 0;
+					var musicTextSettingElementList = [];
+					if (TIMAAT.VideoPlayer.curMusic) musicTextSettingElementList = TIMAAT.VideoPlayer.curMusic.musicTextSettingElementList;
+					if (musicTextSettingElement) {
+						let index = musicTextSettingElementList.findIndex(({id}) => id === musicTextSettingElement.model.id);
+						musicTextSettingElementList.splice(index,1);
+					}
+					for (; i < musicTextSettingElementList.length; i++) {
+						if (!(endTime <= musicTextSettingElementList[i].startTime || startTime >= musicTextSettingElementList[i].endTime) ) {
+							overlapping = true;
+							break;
+						}
+					}
+					// early out: musicTextSettingElement overlaps with other musicTextSettingElementList
+					if (overlapping) {
+						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-title').html('Music Text Setting Element is overlapping');
+						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-body').html("Music Text Setting Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#timaat-videoplayer-music-text-setting-element-modal').modal('show');
+					} else {
+						if (musicTextSettingElement) {
+							musicTextSettingElement.model.startTime = startTime;
+							musicTextSettingElement.model.endTime = endTime;
+							musicTextSettingElement.model.musicTextSettingElementType = {};
+							musicTextSettingElement.model.musicTextSettingElementType.id = typeId;
+
+							// update musicTextSettingElement UI
+							await TIMAAT.VideoPlayer.updateMusicTextSettingElement(musicTextSettingElement);
+						} else {
+							var model = {
+								id: 0,
+								musicTextSettingElementType: {
+									id: typeId,
+								},
+								startTime: startTime,
+								endTime: endTime,
+							};
+							// let musicId = TIMAAT.MusicService.getMusicIdByMediumId(TIMAAT.VideoPlayer.model.medium.id);
+							musicTextSettingElement = await TIMAAT.MusicService.createMusicTextSettingElement(model, TIMAAT.VideoPlayer.model.medium.music.id);
+							musicTextSettingElement = new TIMAAT.MusicTextSettingElement(musicTextSettingElement);
+							TIMAAT.VideoPlayer._musicTextSettingElementAdded(musicTextSettingElement, true);
+						}
+						var tempMusic = await TIMAAT.MusicService.getMusic(TIMAAT.VideoPlayer.curMusic.id);
+						TIMAAT.VideoPlayer.curMusic.musicTextSettingElementList = tempMusic.musicTextSettingElementList;
 					}
 				}
 			});
@@ -1136,6 +1262,14 @@
 				if (inspector.state.type == 'musicChangeInTempoElement') {
 					TIMAAT.VideoPlayer.removeMusicChangeInTempoElement(TIMAAT.VideoPlayer.curMusicChangeInTempoElement);
 				}
+				//* musicArticulationElement is not part of an analysisList and therefore modifying is not restricted to certain users
+				if (inspector.state.type == 'musicArticulationElement') {
+					TIMAAT.VideoPlayer.removeMusicArticulationElement(TIMAAT.VideoPlayer.curMusicArticulationElement);
+				}
+				//* musicTextSettingElement is not part of an analysisList and therefore modifying is not restricted to certain users
+				if (inspector.state.type == 'musicTextSettingElement') {
+					TIMAAT.VideoPlayer.removeMusicTextSettingElement(TIMAAT.VideoPlayer.curMusicTextSettingElement);
+				}
 				//* check if user has enough permission to change analysisList content
 				if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
 					$('#analysisListNoPermissionModal').modal('show');
@@ -1195,8 +1329,28 @@
 				}
 			});
 
-			$('#music-change-in-tempo-element-type-select-dropdown').on('change', function(ev) {
-				if ( $('#music-change-in-tempo-element-type-select-dropdown').val() > 0 ) {
+			$('#music-change-in-tempo-element-select-dropdown').on('change', function(ev) {
+				if ( $('#music-change-in-tempo-element-select-dropdown').val() > 0 ) {
+					$('#timaat-inspector-meta-submit').prop('disabled', false);
+					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+				} else {
+					$('#timaat-inspector-meta-submit').prop('disabled', true);
+					$('#timaat-inspector-meta-submit').attr('disabled');
+				}
+			});
+
+			$('#music-articulation-element-select-dropdown').on('change', function(ev) {
+				if ( $('#music-articulation-element-select-dropdown').val() > 0 ) {
+					$('#timaat-inspector-meta-submit').prop('disabled', false);
+					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+				} else {
+					$('#timaat-inspector-meta-submit').prop('disabled', true);
+					$('#timaat-inspector-meta-submit').attr('disabled');
+				}
+			});
+
+			$('#music-text-setting-element-select-dropdown').on('change', function(ev) {
+				if ( $('#music-text-setting-element-select-dropdown').val() > 0 ) {
 					$('#timaat-inspector-meta-submit').prop('disabled', false);
 					$('#timaat-inspector-meta-submit').removeAttr('disabled');
 				} else {
@@ -2011,7 +2165,7 @@
 
 					// setup UI from Video Player state
 					model = {
-						heading: '<i class="fas fa-indent"></i> Add music form',
+						heading: '<i class="fas fa-indent"></i> Add form element',
 						submit: (item) ? "Save" : "Add",
 						type: null,
 						text: '',
@@ -2021,7 +2175,7 @@
 					};
 
 					if (item) {
-						model.heading       = '<i class="fas fa-indent"></i> Edit form element';
+						model.heading       = '<i class="fas fa-indent"></i> Edit music form element';
 						model.repeatLastRow = item.model.repeatLastRow;
 						model.text          = item.model.musicFormElementTranslations[0].text;
 						model.type          = item.model.musicFormElementType.id;
@@ -2077,7 +2231,7 @@
 
 					// setup UI from Video Player state
 					model = {
-						heading: '<i class="fas fa-indent"></i> Add music form',
+						heading: '<i class="fas fa-indent"></i> Add change in tempo element',
 						submit: (item) ? "Save" : "Add",
 						type: null,
 						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
@@ -2085,18 +2239,18 @@
 					};
 
 					if (item) {
-						model.heading       = '<i class="fas fa-indent"></i> Edit form element';
+						model.heading       = '<i class="fas fa-indent"></i> Edit change in tempo element';
 						model.type          = item.model.changeInTempo.id;
 					}
 					this.fillInspectorMetadataMusicChangeInTempoElements(model);
 					// category panel
-					// $('#music-change-in-tempo-element-type-select-dropdown').empty().trigger('change');
-					$('#music-change-in-tempo-element-type-select-dropdown').select2({
+					// $('#music-change-in-tempo-element-select-dropdown').empty().trigger('change');
+					$('#music-change-in-tempo-element-select-dropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
 						ajax: {
-							url: 'api/music/changeInTempoElementType/selectList/',
+							url: 'api/music/changeInTempoElement/selectList/',
 							type: 'GET',
 							dataType: 'json',
 							delay: 250,
@@ -2122,11 +2276,133 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.changeInTempo) {
-						var changeInTempoSelect = $('#music-change-in-tempo-element-type-select-dropdown');
+						var changeInTempoSelect = $('#music-change-in-tempo-element-select-dropdown');
 						var option = new Option(item.model.changeInTempo.changeInTempoTranslations[0].type, item.model.changeInTempo.id, true, true);
 						changeInTempoSelect.append(option).trigger('change');
 					} else {
-						$('#music-change-in-tempo-element-type-select-dropdown').empty().trigger('change');
+						$('#music-change-in-tempo-element-select-dropdown').empty().trigger('change');
+					}
+					TIMAAT.VideoPlayer.updateListUI();
+				break;
+				case 'musicArticulationElement':
+					// metadata panel
+					this.enablePanel('timaat-inspector-metadata');
+					this.initInspectorMetadataMusicArticulationElements();
+					if (!item) this.open('timaat-inspector-metadata');
+
+					// setup UI from Video Player state
+					model = {
+						heading: '<i class="fas fa-indent"></i> Add articulation element',
+						submit: (item) ? "Save" : "Add",
+						type: null,
+						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+					};
+
+					if (item) {
+						model.heading       = '<i class="fas fa-indent"></i> Edit articulation element';
+						model.type          = item.model.articulation.id;
+					}
+					this.fillInspectorMetadataMusicArticulationElements(model);
+					// category panel
+					// $('#music-articulation-element-select-dropdown').empty().trigger('change');
+					$('#music-articulation-element-select-dropdown').select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/music/articulationElement/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								return {
+									search: params.term,
+									page: params.page
+								};
+							},
+							processResults: function(data, params) {
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: false
+						},
+						minimumInputLength: 0,
+					});
+					if (item && item.model.articulation) {
+						var articulationSelect = $('#music-articulation-element-select-dropdown');
+						var option = new Option(item.model.articulation.articulationTranslations[0].type, item.model.articulation.id, true, true);
+						articulationSelect.append(option).trigger('change');
+					} else {
+						$('#music-articulation-element-select-dropdown').empty().trigger('change');
+					}
+					TIMAAT.VideoPlayer.updateListUI();
+				break;
+				case 'musicTextSettingElement':
+					// metadata panel
+					this.enablePanel('timaat-inspector-metadata');
+					this.initInspectorMetadataMusicTextSettingElements();
+					if (!item) this.open('timaat-inspector-metadata');
+
+					// setup UI from Video Player state
+					model = {
+						heading: '<i class="fas fa-indent"></i> Add text setting element',
+						submit: (item) ? "Save" : "Add",
+						type: null,
+						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+					};
+
+					if (item) {
+						model.heading       = '<i class="fas fa-indent"></i> Edit text setting element';
+						model.type          = item.model.musicTextSettingElementType.id;
+					}
+					this.fillInspectorMetadataMusicTextSettingElements(model);
+					// category panel
+					// $('#music-text-setting-element-select-dropdown').empty().trigger('change');
+					$('#music-text-setting-element-select-dropdown').select2({
+						closeOnSelect: true,
+						scrollAfterSelect: true,
+						allowClear: true,
+						ajax: {
+							url: 'api/music/musicTextSettingElementType/selectList/',
+							type: 'GET',
+							dataType: 'json',
+							delay: 250,
+							headers: {
+								"Authorization": "Bearer "+TIMAAT.Service.token,
+								"Content-Type": "application/json",
+							},
+							// additional parameters
+							data: function(params) {
+								return {
+									search: params.term,
+									page: params.page
+								};
+							},
+							processResults: function(data, params) {
+								params.page = params.page || 1;
+								return {
+									results: data
+								};
+							},
+							cache: false
+						},
+						minimumInputLength: 0,
+					});
+					if (item && item.model.musicTextSettingElementType) {
+						var textSettingSelect = $('#music-text-setting-element-select-dropdown');
+						var option = new Option(item.model.musicTextSettingElementType.musicTextSettingElementTypeTranslations[0].type, item.model.musicTextSettingElementType.id, true, true);
+						textSettingSelect.append(option).trigger('change');
+					} else {
+						$('#music-text-setting-element-select-dropdown').empty().trigger('change');
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
@@ -2144,6 +2420,8 @@
 			$('#timaat-inspector-meta-transcript-group').show();
 			$('#timaat-inspector-meta-music-form-element-type-group').hide();
 			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
+			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
+			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
 			$('#timaat-inspector-meta-lyrics-group').hide();
 			$('#timaat-inspector-meta-repeat-last-row-group').hide();
 		}
@@ -2159,6 +2437,8 @@
 			$('#timaat-inspector-meta-transcript-group').hide();
 			$('#timaat-inspector-meta-music-form-element-type-group').show();
 			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
+			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
+			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
 			$('#timaat-inspector-meta-lyrics-group').show();
 			$('#timaat-inspector-meta-repeat-last-row-group').show();
 		}
@@ -2174,6 +2454,42 @@
 			$('#timaat-inspector-meta-transcript-group').hide();
 			$('#timaat-inspector-meta-music-form-element-type-group').hide();
 			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').show();
+			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
+			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
+			$('#timaat-inspector-meta-lyrics-group').hide();
+			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		}
+
+		initInspectorMetadataMusicArticulationElements() {
+			$('#timaat-inspector-meta-name').hide();
+			$('#timaat-inspector-meta-color-group').hide();
+			$('#timaat-inspector-meta-opacity-group').hide();
+			$('#timaat-inspector-meta-type-group').hide();
+			$('#timaat-inspector-meta-timecode-group').show();
+			$('#timaat-inspector-meta-shortDescription-group').hide();
+			$('#timaat-inspector-meta-comment-group').hide();
+			$('#timaat-inspector-meta-transcript-group').hide();
+			$('#timaat-inspector-meta-music-form-element-type-group').hide();
+			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
+			$('#timaat-inspector-meta-music-articulation-element-type-group').show();
+			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
+			$('#timaat-inspector-meta-lyrics-group').hide();
+			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		}
+
+		initInspectorMetadataMusicTextSettingElements() {
+			$('#timaat-inspector-meta-name').hide();
+			$('#timaat-inspector-meta-color-group').hide();
+			$('#timaat-inspector-meta-opacity-group').hide();
+			$('#timaat-inspector-meta-type-group').hide();
+			$('#timaat-inspector-meta-timecode-group').show();
+			$('#timaat-inspector-meta-shortDescription-group').hide();
+			$('#timaat-inspector-meta-comment-group').hide();
+			$('#timaat-inspector-meta-transcript-group').hide();
+			$('#timaat-inspector-meta-music-form-element-type-group').hide();
+			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
+			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
+			$('#timaat-inspector-meta-music-text-setting-element-type-group').show();
 			$('#timaat-inspector-meta-lyrics-group').hide();
 			$('#timaat-inspector-meta-repeat-last-row-group').hide();
 		}
@@ -2207,6 +2523,28 @@
 
 		fillInspectorMetadataMusicChangeInTempoElements(model) {
       // console.log("TCL: Inspector -> fillInspectorMetadataMusicChangeInTempoElements -> model", model);
+			model.start = TIMAAT.Util.formatTime(model.start, true);
+			model.end = TIMAAT.Util.formatTime(model.end, true);
+			$('#timaat-inspector-metadata-title').html(model.heading);
+			$('#timaat-inspector-meta-submit').html(model.submit);
+			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
+			$('#timaat-inspector-meta-start').val(model.start);
+			$('#timaat-inspector-meta-end').val(model.end);
+		}
+
+		fillInspectorMetadataMusicArticulationElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMetadataMusicArticulationElements -> model", model);
+			model.start = TIMAAT.Util.formatTime(model.start, true);
+			model.end = TIMAAT.Util.formatTime(model.end, true);
+			$('#timaat-inspector-metadata-title').html(model.heading);
+			$('#timaat-inspector-meta-submit').html(model.submit);
+			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
+			$('#timaat-inspector-meta-start').val(model.start);
+			$('#timaat-inspector-meta-end').val(model.end);
+		}
+
+		fillInspectorMetadataMusicTextSettingElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMetadataMusicTextSettingElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
 			$('#timaat-inspector-metadata-title').html(model.heading);

@@ -207,6 +207,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKey</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicalNotation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicArticulationElement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement</class>
@@ -215,6 +216,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTypeTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElement</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicNashid</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTypeTranslation</class>
@@ -264,8 +268,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Territory</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.TerritoryTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.TextSetting</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.TextSettingTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Timbre</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Title</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.UserAccount</class>

@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the articulation database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Articulation.findAll", query="SELECT a FROM Articulation a")
@@ -29,11 +29,6 @@ public class Articulation implements Serializable {
 	//bi-directional many-to-one association to ArticulationTranslation
 	@OneToMany(mappedBy="articulation")
 	private List<ArticulationTranslation> articulationTranslations;
-
-	//bi-directional many-to-one association to Music
-	@OneToMany(mappedBy="articulation")
-	@JsonIgnore
-	private List<Music> musicList;
 
 	public Articulation() {
 	}
@@ -88,28 +83,6 @@ public class Articulation implements Serializable {
 		articulationTranslation.setArticulation(null);
 
 		return articulationTranslation;
-	}
-
-	public List<Music> getMusicList() {
-		return this.musicList;
-	}
-
-	public void setMusicList(List<Music> musicList) {
-		this.musicList = musicList;
-	}
-
-	public Music addMusic(Music music) {
-		getMusicList().add(music);
-		music.setArticulation(this);
-
-		return music;
-	}
-
-	public Music removeMusic(Music music) {
-		getMusicList().remove(music);
-		music.setArticulation(null);
-
-		return music;
 	}
 
 }

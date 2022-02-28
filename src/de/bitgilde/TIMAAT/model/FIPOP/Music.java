@@ -76,11 +76,6 @@ public class Music implements Serializable {
 	@JoinColumn(name="audio_post_production_id")
 	private AudioPostProduction audioPostProduction;
 
-	//bi-directional many-to-one association to Articulation
-	@ManyToOne
-	@JoinColumn(name="articulation_id")
-	private Articulation articulation;
-
 	//bi-directional many-to-one association to ChangeInDynamics
 	@ManyToOne
 	@JoinColumn(name="change_in_dynamics_id")
@@ -198,11 +193,6 @@ public class Music implements Serializable {
 	@JoinColumn(name="tempo_marking_id")
 	private TempoMarking tempoMarking;
 
-	//bi-directional many-to-one association to TextSetting
-	@ManyToOne
-	@JoinColumn(name="text_setting_id")
-	private TextSetting textSetting;
-
 	//bi-directional many-to-one association to MusicFormElement
 	@OneToMany(mappedBy="music")
   @JsonManagedReference(value = "Music-MusicFormElement")
@@ -212,6 +202,16 @@ public class Music implements Serializable {
 	@OneToMany(mappedBy="music")
 	@JsonManagedReference(value = "Music-MusicChangeInTempoElement")
 	private List<MusicChangeInTempoElement> musicChangeInTempoElementList;
+
+	//bi-directional many-to-one association to MusicArticulationElement
+	@OneToMany(mappedBy="music")
+	@JsonManagedReference(value = "Music-MusicArticulationElement")
+	private List<MusicArticulationElement> musicArticulationElementList;
+
+	//bi-directional many-to-one association to MusicTextSettingElement
+	@OneToMany(mappedBy="music")
+	@JsonManagedReference(value = "Music-MusicTextSettingElement")
+	private List<MusicTextSettingElement> musicTextSettingElementList;
 
 	//bi-directional many-to-one association to MediumHasMusic
 	@OneToMany(mappedBy="music")
@@ -324,14 +324,6 @@ public class Music implements Serializable {
 
 	public void setAudioPostProduction(AudioPostProduction audioPostProduction) {
 		this.audioPostProduction = audioPostProduction;
-	}
-
-	public Articulation getArticulation() {
-		return this.articulation;
-	}
-
-	public void setArticulation(Articulation articulation) {
-		this.articulation = articulation;
 	}
 
 	public ChangeInDynamics getChangeInDynamics() {
@@ -454,14 +446,6 @@ public class Music implements Serializable {
 		this.tempoMarking = tempoMarking;
 	}
 
-	public TextSetting getTextSetting() {
-		return this.textSetting;
-	}
-
-	public void setTextSetting(TextSetting textSetting) {
-		this.textSetting = textSetting;
-	}
-
 	public List<VoiceLeadingPattern> getVoiceLeadingPatternList() {
 		return this.voiceLeadingPatternList;
 	}
@@ -511,6 +495,50 @@ public class Music implements Serializable {
 		musicChangeInTempoElement.setMusic(null);
 
 		return musicChangeInTempoElement;
+	}
+
+	public List<MusicArticulationElement> getMusicArticulationElementList() {
+		return this.musicArticulationElementList;
+	}
+
+	public void setMusicArticulationElementList(List<MusicArticulationElement> musicArticulationElementList) {
+		this.musicArticulationElementList = musicArticulationElementList;
+	}
+
+	public MusicArticulationElement addMusicArticulationElement(MusicArticulationElement musicArticulationElement) {
+		getMusicArticulationElementList().add(musicArticulationElement);
+		musicArticulationElement.setMusic(this);
+
+		return musicArticulationElement;
+	}
+
+	public MusicArticulationElement removeMusicArticulationElement(MusicArticulationElement musicArticulationElement) {
+		getMusicArticulationElementList().remove(musicArticulationElement);
+		musicArticulationElement.setMusic(null);
+
+		return musicArticulationElement;
+	}
+
+	public List<MusicTextSettingElement> getMusicTextSettingElementList() {
+		return this.musicTextSettingElementList;
+	}
+
+	public void setMusicTextSettingElementList(List<MusicTextSettingElement> musicTextSettingElementList) {
+		this.musicTextSettingElementList = musicTextSettingElementList;
+	}
+
+	public MusicTextSettingElement addMusicTextSettingElement(MusicTextSettingElement musicTextSettingElement) {
+		getMusicTextSettingElementList().add(musicTextSettingElement);
+		musicTextSettingElement.setMusic(this);
+
+		return musicTextSettingElement;
+	}
+
+	public MusicTextSettingElement removeMusicTextSettingElement(MusicTextSettingElement musicTextSettingElement) {
+		getMusicTextSettingElementList().remove(musicTextSettingElement);
+		musicTextSettingElement.setMusic(null);
+
+		return musicTextSettingElement;
 	}
 
 	public List<MediumHasMusic> getMediumHasMusicList() {

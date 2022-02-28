@@ -34,7 +34,7 @@ public class MediumHasMusic implements Serializable {
 
 	//bi-directional many-to-one association to MediumHasMusicDetail
 	@OneToMany(mappedBy="mediumHasMusic")
-	private List<MediumHasMusicDetail> mediumHasMusicDetails;
+	private List<MediumHasMusicDetail> mediumHasMusicDetailList;
 
 
 	public MediumHasMusic() {
@@ -70,23 +70,23 @@ public class MediumHasMusic implements Serializable {
 		this.music = music;
 	}
 
-	public List<MediumHasMusicDetail> getMediumHasMusicDetails() {
-		return this.mediumHasMusicDetails;
+	public List<MediumHasMusicDetail> getMediumHasMusicDetailList() {
+		return this.mediumHasMusicDetailList;
 	}
 
-	public void setMediumHasMusicDetails(List<MediumHasMusicDetail> mediumHasMusicDetails) {
-		this.mediumHasMusicDetails = mediumHasMusicDetails;
+	public void setMediumHasMusicDetailList(List<MediumHasMusicDetail> mediumHasMusicDetailList) {
+		this.mediumHasMusicDetailList = mediumHasMusicDetailList;
 	}
 
 	public MediumHasMusicDetail addMediumHasMusicDetail(MediumHasMusicDetail mediumHasMusicDetail) {
-		getMediumHasMusicDetails().add(mediumHasMusicDetail);
+		getMediumHasMusicDetailList().add(mediumHasMusicDetail);
 		mediumHasMusicDetail.setMediumHasMusic(this);
 
 		return mediumHasMusicDetail;
 	}
 
 	public MediumHasMusicDetail removeMediumHasMusicDetail(MediumHasMusicDetail mediumHasMusicDetail) {
-		getMediumHasMusicDetails().remove(mediumHasMusicDetail);
+		getMediumHasMusicDetailList().remove(mediumHasMusicDetail);
 		mediumHasMusicDetail.setMediumHasMusic(null);
 
 		return mediumHasMusicDetail;

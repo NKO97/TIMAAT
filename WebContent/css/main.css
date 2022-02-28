@@ -443,7 +443,13 @@ a.dropdown-item {
 	z-index: 100;
 }
 
-#timaat-timeline-music-form-element-pane,
+#timaat-timeline-music-form-element-pane {
+	width: 100%;
+	height: 15px;
+	display: none;
+	margin-bottom: 57px;
+}
+
 #timaat-timeline-segment-pane,
 #timaat-timeline-take-pane,
 #timaat-timeline-action-pane {
@@ -462,12 +468,13 @@ a.dropdown-item {
 	margin-bottom: 2px;
 }
 
-#timaat-timeline-music-change-in-tempo-element-pane {
+#timaat-timeline-music-change-in-tempo-element-pane,
+#timaat-timeline-music-articulation-element-pane,
+#timaat-timeline-music-text-setting-element-pane{
 	width: 100%;
 	height: 15px;
 	display: none;
 	margin-bottom: 2px;
-	margin-top: 57px;
 }
 
 #timaat-timeline-keyframe-pane {
@@ -508,7 +515,9 @@ a.dropdown-item {
 .timaat-timeline-take,
 .timaat-timeline-scene,
 .timaat-timeline-action,
-.timaat-timeline-music-change-in-tempo-element {
+.timaat-timeline-music-change-in-tempo-element,
+.timaat-timeline-music-articulation-element,
+.timaat-timeline-music-text-setting-element {
 	position: absolute;
 	border-left: 1px solid #aeb8c1;
 	/* border-right: 1px solid #aeb8c1; */
@@ -532,7 +541,9 @@ a.dropdown-item {
 .timaat-timeline-take-name,
 .timaat-timeline-scene-name,
 .timaat-timeline-action-name,
-.timaat-timeline-music-change-in-tempo-element-type {
+.timaat-timeline-music-change-in-tempo-element-type,
+.timaat-timeline-music-articulation-element-type,
+.timaat-timeline-music-text-setting-element-type {
 	padding-left: 3px;
 	font-size: 0.70rem;
 	overflow: hidden;
@@ -1174,10 +1185,12 @@ Tooltip container
 	box-shadow: 2px 0px 2px black;
 /* 	transition: width 0.6s; */
 }
+
 .timeline-section-segment-structure,
 .timeline-section-music-structure {
-	height: 98px;
+	height: fit-content;
 }
+
 .timeline-section-segment-structure .timeline-section-content,
 .timeline-section-music-structure .timeline-section-content {
 	overflow: hidden;
@@ -1190,5 +1203,9 @@ Tooltip container
 	height: 31px !important;
 }
 .timeline-section-annotation.collapsed .timeline-section-header .badge-secondary {
+	display: none;
+}
+
+.timeline-pane {
 	display: none;
 }

@@ -23,20 +23,20 @@ CREATE INDEX `fk_medium_has_music_medium1_idx` ON `FIPOP`.`medium_has_music` (`m
 
 
 -- -----------------------------------------------------
--- Table `FIPOP`.`medium_has_music_details`
+-- Table `FIPOP`.`medium_has_music_detail`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_has_music_details` (
+CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_has_music_detail` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `medium_has_music_medium_id` INT NOT NULL,
   `medium_has_music_music_id` INT NOT NULL,
   `start_time` INT(11) NULL,
   `end_time` INT(11) NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_medium_has_music_details_medium_has_music1`
+  CONSTRAINT `fk_medium_has_music_detail_medium_has_music1`
     FOREIGN KEY (`medium_has_music_medium_id` , `medium_has_music_music_id`)
     REFERENCES `FIPOP`.`medium_has_music` (`medium_id` , `music_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_medium_has_music_details_medium_has_music1_idx` ON `FIPOP`.`medium_has_music_details` (`medium_has_music_medium_id` ASC, `medium_has_music_music_id` ASC);
+CREATE INDEX `fk_medium_has_music_detail_medium_has_music1_idx` ON `FIPOP`.`medium_has_music_detail` (`medium_has_music_medium_id` ASC, `medium_has_music_music_id` ASC);

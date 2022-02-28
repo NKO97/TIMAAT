@@ -8,11 +8,11 @@ import jakarta.persistence.*;
 
 
 /**
- * The persistent class for the medium_has_music_details database table.
+ * The persistent class for the medium_has_music_detail database table.
  *
  */
 @Entity
-@Table(name="medium_has_music_details")
+@Table(name="medium_has_music_detail")
 @NamedQuery(name="MediumHasMusicDetail.findAll", query="SELECT m FROM MediumHasMusicDetail m")
 public class MediumHasMusicDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
