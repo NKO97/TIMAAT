@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the change_in_dynamics database table.
- * 
+ *
  */
 @Entity
 @Table(name="change_in_dynamics")
@@ -30,11 +30,6 @@ public class ChangeInDynamics implements Serializable {
 	//bi-directional many-to-one association to ChangeInDynamicsTranslation
 	@OneToMany(mappedBy="changeInDynamics")
 	private List<ChangeInDynamicsTranslation> changeInDynamicsTranslations;
-
-	//bi-directional many-to-one association to Music
-	@OneToMany(mappedBy="changeInDynamics")
-	@JsonIgnore
-	private List<Music> musicList;
 
 	public ChangeInDynamics() {
 	}
@@ -89,28 +84,6 @@ public class ChangeInDynamics implements Serializable {
 		changeInDynamicsTranslation.setChangeInDynamics(null);
 
 		return changeInDynamicsTranslation;
-	}
-
-	public List<Music> getMusicList() {
-		return this.musicList;
-	}
-
-	public void setMusicList(List<Music> musicList) {
-		this.musicList = musicList;
-	}
-
-	public Music addMusic(Music music) {
-		getMusicList().add(music);
-		music.setChangeInDynamics(this);
-
-		return music;
-	}
-
-	public Music removeMusic(Music music) {
-		getMusicList().remove(music);
-		music.setChangeInDynamics(null);
-
-		return music;
 	}
 
 }

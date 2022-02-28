@@ -24,7 +24,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
-import de.bitgilde.TIMAAT.model.FIPOP.ChangeInDynamicsTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempo;
 import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ChurchMusicalKeyTranslation;
@@ -726,37 +725,6 @@ public class EndpointMusic {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("/changeInDynamics/selectList")
-	public Response getChangeInDynamicsSelectList(@PathParam("id") Integer id,
-																						@QueryParam("start") Integer start,
-																						@QueryParam("length") Integer length,
-																						@QueryParam("language") String languageCode)
-	{
-		// System.out.println("EndpointMusic: getChangeInDynamicsSelectList - Id: "+ id);
-
-		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
-
-		List<SelectElement> selectElementList = new ArrayList<>();
-		List<SelectElementWithChildren> selectElementWithChildrenList = new ArrayList<>();
-		Query query;
-		query = TIMAATApp.emf.createEntityManager().createQuery(
-			"SELECT cidt FROM ChangeInDynamicsTranslation cidt WHERE cidt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cidt.type ASC");
-		List<ChangeInDynamicsTranslation> changeInDynamicsTranslationList = castList(ChangeInDynamicsTranslation.class, query.getResultList());
-		List<SelectElement> changeInDynamicsSelectList = new ArrayList<>();
-		for (ChangeInDynamicsTranslation changeInDynamicsTranslation : changeInDynamicsTranslationList) {
-			changeInDynamicsSelectList.add(new SelectElement(changeInDynamicsTranslation.getChangeInDynamics().getId(), changeInDynamicsTranslation.getType()));
-		}
-		selectElementList = changeInDynamicsSelectList;
-
-		if (selectElementList.size() > 0)
-			return Response.ok().entity(selectElementList).build();
-		else
-			return Response.ok().entity(selectElementWithChildrenList).build();
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
 	@Path("/dynamicMarking/selectList")
 	public Response getDynamicMarkingSelectList(@PathParam("id") Integer id,
 																						@QueryParam("start") Integer start,
@@ -1104,7 +1072,6 @@ public class EndpointMusic {
 		if ( updatedMusic.getInstrumentation() != null ) music.setInstrumentation(updatedMusic.getInstrumentation());
 		music.setBeat(updatedMusic.getBeat());
 		music.setDynamicMarking(updatedMusic.getDynamicMarking());
-		music.setChangeInDynamics(updatedMusic.getChangeInDynamics());
 		music.setMusicalKey(updatedMusic.getMusicalKey());
 		music.setTempo(updatedMusic.getTempo());
 		music.setTempoMarking(updatedMusic.getTempoMarking());

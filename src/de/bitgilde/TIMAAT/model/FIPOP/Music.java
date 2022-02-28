@@ -76,11 +76,6 @@ public class Music implements Serializable {
 	@JoinColumn(name="audio_post_production_id")
 	private AudioPostProduction audioPostProduction;
 
-	//bi-directional many-to-one association to ChangeInDynamics
-	@ManyToOne
-	@JoinColumn(name="change_in_dynamics_id")
-	private ChangeInDynamics changeInDynamics;
-
 	//bi-directional many-to-one association to DynamicMarking
 	@ManyToOne
 	@JoinColumn(name="dynamic_marking_id")
@@ -329,14 +324,6 @@ public class Music implements Serializable {
 
 	public void setAudioPostProduction(AudioPostProduction audioPostProduction) {
 		this.audioPostProduction = audioPostProduction;
-	}
-
-	public ChangeInDynamics getChangeInDynamics() {
-		return this.changeInDynamics;
-	}
-
-	public void setChangeInDynamics(ChangeInDynamics changeInDynamics) {
-		this.changeInDynamics = changeInDynamics;
 	}
 
 	public DynamicMarking getDynamicMarking() {

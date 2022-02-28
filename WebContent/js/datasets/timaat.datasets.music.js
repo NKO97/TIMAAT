@@ -163,7 +163,6 @@
 				// console.log("TCL: voiceLeadingPatternIdList: ", voiceLeadingPatternIdList);
 				// sanitize form data
 				var formDataSanitized = formDataObject;
-				formDataSanitized.changeInDynamicsId            = Number(formDataObject.changeInDynamicsId);
 				formDataSanitized.churchMusicalKeyId            = Number(formDataObject.churchMusicalKeyId);
 				formDataSanitized.dynamicMarkingId              = Number(formDataObject.dynamicMarkingId);
 				formDataSanitized.displayTitleLanguageId        = Number(formDataObject.displayTitleLanguageId);
@@ -1792,7 +1791,6 @@
 			$('.add-music-button :input').prop('disabled', true);
 			$('#music-metadata-form').data('type', type);
 			$('#music-metadata-form').data('music', null);
-			$('#music-change-in-dynamics-select-dropdown').empty().trigger('change');
 			$('#music-church-music-musical-key-select-dropdown').empty().trigger('change');
 			$('#music-displayTitle-language-select-dropdown').empty().trigger('change');
 			$('#music-dynamic-marking-select-dropdown').empty().trigger('change');
@@ -1816,7 +1814,6 @@
 
 			// setup form
 			this.initFormDataSheetData(type);
-			this.getMusicFormChangeInDynamicsDropdownData();
 			this.getMusicFormChurchMusicalKeyDropdownData();
 			this.getMusicFormDynamicMarkingDropdownData();
 			this.getMusicFormJinsDropdownData();
@@ -1877,7 +1874,6 @@
 			musicFormMetadataValidator.resetForm();
 			// $('#musicVideoPreview').get(0).pause(); // TODO check if needed
 
-			this.getMusicFormChangeInDynamicsDropdownData();
 			this.getMusicFormChurchMusicalKeyDropdownData();
 			this.getMusicFormDynamicMarkingDropdownData();
 			this.getMusicFormJinsDropdownData();
@@ -1902,7 +1898,6 @@
 				$('#music-metadata-form-submit-button').hide();
 				$('#music-metadata-form-dismiss-button').hide();
 				$('#musicFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
-				$('#music-change-in-dynamics-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-displayTitle-language-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-dynamic-marking-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-musical-key-select-dropdown').select2('destroy').attr("readonly", true);
@@ -1935,13 +1930,6 @@
 			$('#music-beat').val(data.model.beat);
 			$('#music-remark').val(data.model.remark);
 			$('#music-instrumentation').val(data.model.instrumentation);
-			if (data.model.changeInDynamics) {
-				var changeInDynamicsSelect = $('#music-change-in-dynamics-select-dropdown');
-				var option = new Option(data.model.changeInDynamics.changeInDynamicsTranslations[0].type, data.model.changeInDynamics.id, true, true);
-				changeInDynamicsSelect.append(option).trigger('change');
-			} else {
-				$('#music-change-in-dynamics-select-dropdown').empty().trigger('change');
-			}
 			if (data.model.dynamicMarking) {
 				var dynamicMarkingSelect = $('#music-dynamic-marking-select-dropdown');
 				var option = new Option(data.model.dynamicMarking.dynamicMarkingTranslations[0].type, data.model.dynamicMarking.id, true, true);
@@ -2994,14 +2982,6 @@
     updateMusicModelData: async function(model, formDataObject) {
     	console.log("TCL: model, formDataObject", model, formDataObject);
 			// music data
-			if (!isNaN(formDataObject.changeInDynamicsId)) {
-				if (model.changeInDynamics) {
-					model.changeInDynamics.id = formDataObject.changeInDynamicsId;
-				} else {
-					model.changeInDynamics = {};
-					model.changeInDynamics.id = formDataObject.changeInDynamicsId;
-				}
-			} else model.changeInDynamics = null;
 			if (!isNaN(formDataObject.dynamicMarkingId)) {
 				if (model.dynamicMarking) {
 					model.dynamicMarking.id = formDataObject.dynamicMarkingId;
@@ -3085,10 +3065,6 @@
 					name: formDataObject.displayTitle,
 				}],
 			};
-			if (formDataObject.changeInDynamicsId > 0) {
-				model.changeInDynamics = {};
-				model.changeInDynamics.id = formDataObject.changeInDynamicsId;
-			}
 			if (formDataObject.dynamicMarkingId > 0) {
 				model.dynamicMarking = {};
 				model.dynamicMarking.id = formDataObject.dynamicMarkingId;
@@ -3525,41 +3501,6 @@
 				allowClear: true,
 				ajax: {
 					url: 'api/language/selectList/',
-					type: 'GET',
-					dataType: 'json',
-					delay: 250,
-					headers: {
-						"Authorization": "Bearer "+TIMAAT.Service.token,
-						"Content-Type": "application/json",
-					},
-					// additional parameters
-					data: function(params) {
-						// console.log("TCL: data: params", params);
-						return {
-							search: params.term,
-							page: params.page
-						};
-					},
-					processResults: function(data, params) {
-						// console.log("TCL: processResults: data", data);
-						params.page = params.page || 1;
-						return {
-							results: data
-						};
-					},
-					cache: false
-				},
-				minimumInputLength: 0,
-			});
-		},
-
-		getMusicFormChangeInDynamicsDropdownData: function() {
-			$('#music-change-in-dynamics-select-dropdown').select2({
-				closeOnSelect: true,
-				scrollAfterSelect: true,
-				allowClear: true,
-				ajax: {
-					url: 'api/music/changeInDynamics/selectList/',
 					type: 'GET',
 					dataType: 'json',
 					delay: 250,
