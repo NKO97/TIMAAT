@@ -213,6 +213,11 @@ public class Music implements Serializable {
 	@JsonManagedReference(value = "Music-MusicTextSettingElement")
 	private List<MusicTextSettingElement> musicTextSettingElementList;
 
+	//bi-directional many-to-one association to MusicDynamicsElement
+	@OneToMany(mappedBy="music")
+	@JsonManagedReference(value = "Music-MusicDynamicsElement")
+	private List<MusicDynamicsElement> musicDynamicsElementList;
+
 	//bi-directional many-to-one association to MediumHasMusic
 	@OneToMany(mappedBy="music")
 	@JsonManagedReference(value = "Music-MediumHasMusic")
@@ -517,6 +522,28 @@ public class Music implements Serializable {
 		musicArticulationElement.setMusic(null);
 
 		return musicArticulationElement;
+	}
+
+	public List<MusicDynamicsElement> getMusicDynamicsElementList() {
+		return this.musicDynamicsElementList;
+	}
+
+	public void setMusicDynamicsElementList(List<MusicDynamicsElement> musicDynamicsElementList) {
+		this.musicDynamicsElementList = musicDynamicsElementList;
+	}
+
+	public MusicDynamicsElement addMusicDynamicsElement(MusicDynamicsElement musicDynamicsElement) {
+		getMusicDynamicsElementList().add(musicDynamicsElement);
+		musicDynamicsElement.setMusic(this);
+
+		return musicDynamicsElement;
+	}
+
+	public MusicDynamicsElement removeMusicDynamicsElement(MusicDynamicsElement musicDynamicsElement) {
+		getMusicDynamicsElementList().remove(musicDynamicsElement);
+		musicDynamicsElement.setMusic(null);
+
+		return musicDynamicsElement;
 	}
 
 	public List<MusicTextSettingElement> getMusicTextSettingElementList() {

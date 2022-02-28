@@ -939,6 +939,41 @@
                 </div>
               </div>
             </div>
+            <div class="modal fade" id="timaat-videoplayer-music-dynamics-element-modal" tabindex="-1" role="dialog" aria-labelledby="musicDynamicsElementModal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="timaat-videoplayer-music-dynamics-element-delete" tabindex="-1" role="dialog" aria-labelledby="musicDynamicsElementDeleteLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="musicDynamicsElementDeleteLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+				            <button type="button" class="btn btn-danger" id="timaat-music-dynamics-element-delete-commit-submit-button">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="modal fade" id="analysisListNoPermissionModal" tabindex="-1" role="dialog" aria-labelledby="analysisListNoPermissionLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -1036,6 +1071,15 @@
                             name="musicTextSettingElementTypeId"
                             data-role="musicTextSettingElementType"
                             data-placeholder="Select text setting element type">
+                    </select>
+                  </div>
+                  <div id="timaat-inspector-meta-music-dynamics-element-type-group" class="input-group input-group-sm mb-1">
+                    <select class="form-control form-control-sm"
+                            style="width:100%"
+                            id="music-dynamics-element-select-dropdown"
+                            name="musicDynamicsElementTypeId"
+                            data-role="musicDynamicsElementType"
+                            data-placeholder="Select dynamics element type">
                     </select>
                   </div>
                   <div id="timaat-inspector-meta-opacity-group" class="input-group input-group-sm mb-1">
@@ -1615,8 +1659,9 @@
                         <div class="dropdown-menu">
                           <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-form-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicFormElement')">Add music form element</a>
                           <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-changeInTempo-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicChangeInTempoElement')">Add change in tempo element</a>
-                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-Articulation-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicArticulationElement')">Add articulation element</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-articulation-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicArticulationElement')">Add articulation element</a>
                           <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-textSetting-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicTextSettingElement')">Add text setting element</a>
+                          <a class="dropdown-item timaat-music-structure-add timaat-analysismusic-dynamics-add" onclick="TIMAAT.VideoPlayer.addMusicElement('musicDynamicsElement')">Add dynamics element</a>
                         </div>
                       </div>
                     </div>
@@ -1677,6 +1722,7 @@
                               <div id="timaat-timeline-music-change-in-tempo-element-pane"></div>
                               <div id="timaat-timeline-music-articulation-element-pane"></div>
                               <div id="timaat-timeline-music-text-setting-element-pane"></div>
+                              <div id="timaat-timeline-music-dynamics-element-pane"></div>
                               <!-- TODO: additional panes -->
                             </div>
                           </div>

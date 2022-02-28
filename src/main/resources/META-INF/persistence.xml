@@ -212,6 +212,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRolePK</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicDynamicsElement</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicDynamicsElementType</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicDynamicsElementTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementType</class>
