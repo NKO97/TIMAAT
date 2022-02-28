@@ -2398,9 +2398,9 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.musicTextSettingElementType) {
-						var textSettingSelect = $('#music-text-setting-element-select-dropdown');
+						var musicTextSettingElementTypeSelect = $('#music-text-setting-element-select-dropdown');
 						var option = new Option(item.model.musicTextSettingElementType.musicTextSettingElementTypeTranslations[0].type, item.model.musicTextSettingElementType.id, true, true);
-						textSettingSelect.append(option).trigger('change');
+						musicTextSettingElementTypeSelect.append(option).trigger('change');
 					} else {
 						$('#music-text-setting-element-select-dropdown').empty().trigger('change');
 					}

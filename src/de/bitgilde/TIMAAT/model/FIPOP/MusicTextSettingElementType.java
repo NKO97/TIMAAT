@@ -33,6 +33,11 @@ public class MusicTextSettingElementType implements Serializable {
 	@JsonIgnore
 	private List<MusicTextSettingElement> musicTextSettingElementList;
 
+	//bi-directional many-to-one association to Music
+	@OneToMany(mappedBy="musicTextSettingElementType")
+	@JsonIgnore
+	private List<Music> musicList;
+
 	//bi-directional many-to-one association to MusicTextSettingElementTypeTranslation
 	@OneToMany(mappedBy="musicTextSettingElementType")
 	private List<MusicTextSettingElementTypeTranslation> musicTextSettingElementTypeTranslationList;
@@ -90,6 +95,14 @@ public class MusicTextSettingElementType implements Serializable {
 		musicTextSettingElementTypeTranslation.setMusicTextSettingElementType(null);
 
 		return musicTextSettingElementTypeTranslation;
+	}
+
+	public List<Music> getMusicList() {
+		return this.musicList;
+	}
+
+	public void setMusicList(List<Music> musicList) {
+		this.musicList = musicList;
 	}
 
 }

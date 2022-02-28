@@ -193,6 +193,11 @@ public class Music implements Serializable {
 	@JoinColumn(name="tempo_marking_id")
 	private TempoMarking tempoMarking;
 
+	//bi-directional many-to-one association to MusicTextSettingElementType
+	@ManyToOne
+	@JoinColumn(name="music_text_setting_element_type_id")
+	private MusicTextSettingElementType musicTextSettingElementType;
+
 	//bi-directional many-to-one association to MusicFormElement
 	@OneToMany(mappedBy="music")
   @JsonManagedReference(value = "Music-MusicFormElement")
@@ -444,6 +449,14 @@ public class Music implements Serializable {
 
 	public void setTempoMarking(TempoMarking tempoMarking) {
 		this.tempoMarking = tempoMarking;
+	}
+
+	public MusicTextSettingElementType getMusicTextSettingElementType() {
+		return this.musicTextSettingElementType;
+	}
+
+	public void setTextSetting(MusicTextSettingElementType musicTextSettingElementType) {
+		this.musicTextSettingElementType = musicTextSettingElementType;
 	}
 
 	public List<VoiceLeadingPattern> getVoiceLeadingPatternList() {

@@ -396,23 +396,6 @@ public class EndpointMusic {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("textSettingElementType/selectList")
-	public Response getMusicTextSettingElementTypeSelectList(@QueryParam("language") String languageCode) {
-		// System.out.println("EndpointMusic: getMusicTextSettingElementTypeSelectList");
-
-		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
-		Query query;
-		query = TIMAATApp.emf.createEntityManager().createQuery("SELECT tsett FROM TextSettingElementTypeTranslation tsett WHERE tsett.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')");
-		List<MusicTextSettingElementTypeTranslation> musicTextSettingElementTypeTranslationList = castList(MusicTextSettingElementTypeTranslation.class, query.getResultList());
-		List<SelectElement> musicTextSettingElementTypeSelectList = new ArrayList<>();
-		for (MusicTextSettingElementTypeTranslation textSettingElementTypeTranslation : musicTextSettingElementTypeTranslationList) {
-			musicTextSettingElementTypeSelectList.add(new SelectElement(textSettingElementTypeTranslation.getMusicTextSettingElementType().getId(), textSettingElementTypeTranslation.getType()));		}
-		return Response.ok().entity(musicTextSettingElementTypeSelectList).build();
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
 	@Path("hasActor/{actorId}/withRoles/selectList")
 	public Response getRoleSelectList(@PathParam("actorId") int actorId,
 																		@QueryParam("search") String search,
@@ -976,13 +959,13 @@ public class EndpointMusic {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("/musicTextSettingElementType/selectList")
-	public Response getTextSettingSelectList(@PathParam("id") Integer id,
-																					 @QueryParam("start") Integer start,
-																					 @QueryParam("length") Integer length,
-																					 @QueryParam("language") String languageCode)
+	@Path("musicTextSettingElementType/selectList")
+	public Response getMusicTextSettingElementTypeSelectList(@PathParam("id") Integer id,
+																												 	 @QueryParam("start") Integer start,
+																													 @QueryParam("length") Integer length,
+																													 @QueryParam("language") String languageCode)
 	{
-		// System.out.println("EndpointMusic: getTextSettingSelectList - Id: "+ id);
+		// System.out.println("EndpointMusic: getMusicTextSettingElementTypeSelectList - Id: "+ id);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
@@ -1125,6 +1108,7 @@ public class EndpointMusic {
 		music.setMusicalKey(updatedMusic.getMusicalKey());
 		music.setTempo(updatedMusic.getTempo());
 		music.setTempoMarking(updatedMusic.getTempoMarking());
+		music.setTextSetting(updatedMusic.getMusicTextSettingElementType());
 		music.setVoiceLeadingPatternList(updatedMusic.getVoiceLeadingPatternList());
 		music.setMusicChangeInTempoElementList(updatedMusic.getMusicChangeInTempoElementList());
 		music.setMusicArticulationElementList(updatedMusic.getMusicArticulationElementList());

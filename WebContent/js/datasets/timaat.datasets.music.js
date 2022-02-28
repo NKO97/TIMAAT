@@ -163,17 +163,18 @@
 				// console.log("TCL: voiceLeadingPatternIdList: ", voiceLeadingPatternIdList);
 				// sanitize form data
 				var formDataSanitized = formDataObject;
-				formDataSanitized.changeInDynamicsId        = Number(formDataObject.changeInDynamicsId);
-				formDataSanitized.churchMusicalKeyId        = Number(formDataObject.churchMusicalKeyId);
-				formDataSanitized.dynamicMarkingId          = Number(formDataObject.dynamicMarkingId);
-				formDataSanitized.displayTitleLanguageId    = Number(formDataObject.displayTitleLanguageId);
-				formDataSanitized.jinsId                    = Number(formDataObject.jinsId);
-				formDataSanitized.maqamId                   = Number(formDataObject.maqamId);
-				formDataSanitized.musicalKeyId              = Number(formDataObject.musicalKeyId);
-				formDataSanitized.mediumId									= Number(formDataObject.mediumId);
-				formDataSanitized.tempoMarkingId            = Number(formDataObject.tempoMarkingId);
-				formDataSanitized.voiceLeadingPatternList = voiceLeadingPatternIdList;
-        // console.log("TCL: formDataSanitized", formDataSanitized);
+				formDataSanitized.changeInDynamicsId            = Number(formDataObject.changeInDynamicsId);
+				formDataSanitized.churchMusicalKeyId            = Number(formDataObject.churchMusicalKeyId);
+				formDataSanitized.dynamicMarkingId              = Number(formDataObject.dynamicMarkingId);
+				formDataSanitized.displayTitleLanguageId        = Number(formDataObject.displayTitleLanguageId);
+				formDataSanitized.jinsId                        = Number(formDataObject.jinsId);
+				formDataSanitized.maqamId                       = Number(formDataObject.maqamId);
+				formDataSanitized.musicalKeyId                  = Number(formDataObject.musicalKeyId);
+				formDataSanitized.mediumId                      = Number(formDataObject.mediumId);
+				formDataSanitized.tempoMarkingId                = Number(formDataObject.tempoMarkingId);
+				formDataSanitized.musicTextSettingElementTypeId = Number(formDataObject.musicTextSettingElementTypeId);
+				formDataSanitized.voiceLeadingPatternList       = voiceLeadingPatternIdList;
+        console.log("TCL: formDataSanitized", formDataSanitized);
 				if (music) { // update music
 					// music data
 					music.model = await TIMAAT.MusicDatasets.updateMusicModelData(music.model, formDataSanitized);
@@ -1800,6 +1801,7 @@
 			$('#music-nashid-maqam-select-dropdown').empty().trigger('change');
 			$('#music-primary-source-medium-select-dropdown').empty().trigger('change');
 			$('#music-tempo-marking-select-dropdown').empty().trigger('change');
+			$('#music-text-setting-select-dropdown').empty().trigger('change');
 			$('#voice-leading-pattern-multi-select-dropdown').val(null).trigger('change');
 			var node = document.getElementById('music-has-voice-leading-pattern-fields');
       while (node.lastChild) {
@@ -1822,6 +1824,7 @@
 			this.getMusicFormMusicalKeyDropdownData();
 			this.getMusicFormMediumDropdownData();
 			this.getMusicFormTempoMarkingDropdownData();
+			this.getMusicFormTextSettingElementTypeDropdownData();
 			this.getMusicFormTitleLanguageDropdownData();
 			this.initFormDataSheetForEdit();
 			$('#music-metadata-form-submit-button').html('Add');
@@ -1882,6 +1885,7 @@
 			this.getMusicFormMusicalKeyDropdownData();
 			this.getMusicFormMediumDropdownData();
 			this.getMusicFormTempoMarkingDropdownData();
+			this.getMusicFormTextSettingElementTypeDropdownData();
 			this.getMusicFormTitleLanguageDropdownData();
 			var languageSelect = $('#music-displayTitle-language-select-dropdown');
 			var option = new Option(data.model.displayTitle.language.name, data.model.displayTitle.language.id, true, true);
@@ -1904,6 +1908,7 @@
 				$('#music-musical-key-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-primary-source-medium-select-dropdown').select2('destroy').attr("readonly", true);
 				$('#music-tempo-marking-select-dropdown').select2('destroy').attr("readonly", true);
+				$('#music-text-setting-select-dropdown').select2('destroy').attr("readonly", true);
 				switch(type) {
 					case 'nashid':
 						$('#music-nashid-jins-select-dropdown').select2('destroy').attr("readonly", true);
@@ -1965,6 +1970,13 @@
 				tempoMarkingSelect.append(option).trigger('change');
 			} else {
 				$('#music-tempo-marking-select-dropdown').empty().trigger('change');
+			}
+			if (data.model.musicTextSettingElementType) {
+				var musicTextSettingElementTypeSelect = $('#music-text-setting-select-dropdown');
+				var option = new Option(data.model.musicTextSettingElementType.musicTextSettingElementTypeTranslations[0].type, data.model.musicTextSettingElementType.id, true, true);
+				musicTextSettingElementTypeSelect.append(option).trigger('change');
+			} else {
+				$('#music-text-setting-select-dropdown').empty().trigger('change');
 			}
 			var voiceLeadingPatternSelect = $('#voice-leading-pattern-multi-select-dropdown');
       await TIMAAT.MusicService.getMusicHasVoiceLeadingPatternList(data.model.id).then(function (data) {
@@ -3014,6 +3026,14 @@
 					model.tempoMarking.id = formDataObject.tempoMarkingId;
 				}
 			} else model.tempoMarking = null;
+			if (!isNaN(formDataObject.musicTextSettingElementTypeId)) {
+				if (model.musicTextSettingElementType) {
+					model.musicTextSettingElementType.id = formDataObject.musicTextSettingElementTypeId;
+				} else {
+					model.musicTextSettingElementType = {};
+					model.musicTextSettingElementType.id = formDataObject.musicTextSettingElementTypeId;
+				}
+			} else model.musicTextSettingElementType = null;
 			if (formDataObject.voiceLeadingPatternList.length > 0) {
 				model.voiceLeadingPatternList = formDataObject.voiceLeadingPatternList;
 			} else {
@@ -3038,7 +3058,7 @@
 		},
 
 		createMusicModel: async function(formDataObject, type) {
-    	// console.log("TCL: formDataObject, type", formDataObject, type);
+    	console.log("TCL: formDataObject, type", formDataObject, type);
 			let typeId = 0;
 			switch (type) {
 				case 'nashid':
@@ -3080,6 +3100,10 @@
 			if (formDataObject.tempoMarkingId > 0) {
 				model.tempoMarking = {};
 				model.tempoMarking.id = formDataObject.tempoMarkingId;
+			}
+			if (formDataObject.musicTextSettingElementTypeId > 0) {
+				model.musicTextSettingElementType = {};
+				model.musicTextSettingElementType.id = formDataObject.musicTextSettingElementTypeId;
 			}
 			if (formDataObject.voiceLeadingPatternList.length > 0) {
 				model.voiceLeadingPatternList = formDataObject.voiceLeadingPatternList;
@@ -3645,6 +3669,41 @@
 				allowClear: true,
 				ajax: {
 					url: 'api/music/tempoMarking/selectList/',
+					type: 'GET',
+					dataType: 'json',
+					delay: 250,
+					headers: {
+						"Authorization": "Bearer "+TIMAAT.Service.token,
+						"Content-Type": "application/json",
+					},
+					// additional parameters
+					data: function(params) {
+						// console.log("TCL: data: params", params);
+						return {
+							search: params.term,
+							page: params.page
+						};
+					},
+					processResults: function(data, params) {
+						// console.log("TCL: processResults: data", data);
+						params.page = params.page || 1;
+						return {
+							results: data
+						};
+					},
+					cache: false
+				},
+				minimumInputLength: 0,
+			});
+		},
+
+		getMusicFormTextSettingElementTypeDropdownData: function() {
+			$('#music-text-setting-select-dropdown').select2({
+				closeOnSelect: true,
+				scrollAfterSelect: true,
+				allowClear: true,
+				ajax: {
+					url: 'api/music/musicTextSettingElementType/selectList/',
 					type: 'GET',
 					dataType: 'json',
 					delay: 250,

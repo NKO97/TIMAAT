@@ -573,7 +573,7 @@
 		},
 
 		async updateMusic(musicModel) {
-			// console.log("TCL: MusicService: async updateMusic -> musicModel", musicModel);
+			console.log("TCL: MusicService: async updateMusic -> musicModel", musicModel);
 			delete musicModel.ui;
 			return new Promise(resolve => {
 				$.ajax({
