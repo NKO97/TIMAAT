@@ -286,10 +286,11 @@
 				formDataSanitized.isFictional   = (formDataObject.isFictional == "on") ? true : false;
 				formDataSanitized.nameUsedFrom  = moment.utc(formDataObject.nameUsedFrom, "YYYY-MM-DD");
 				formDataSanitized.nameUsedUntil = moment.utc(formDataObject.nameUsedUntil, "YYYY-MM-DD");
-				formDataSanitized.placeOfBirth  = (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth);
-				formDataSanitized.placeOfDeath  = (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath);
+				// formDataSanitized.placeOfBirth  = (formDataObject.placeOfBirth == "") ? null : Number(formDataObject.placeOfBirth);
+				// formDataSanitized.placeOfDeath  = (formDataObject.placeOfDeath == "") ? null : Number(formDataObject.placeOfDeath);
 				formDataSanitized.sexId         = Number(formDataObject.sexId);
 				delete formDataSanitized.imageId;
+        // console.log("TCL: $ -> formDataSanitized", formDataSanitized);
 
 				var formImageIds = [];
 				var i = 0;
@@ -325,6 +326,7 @@
 							actor.model.actorPerson.dayOfDeath = formDataSanitized.dayOfDeath;
 							actor.model.actorPerson.placeOfDeath = formDataSanitized.placeOfDeath;
 							actor.model.actorPerson.sex.id = formDataSanitized.sexId;
+							actor.model.actorPerson.citizenship = formDataSanitized.citizenshipName;
 							// actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].name = formDataSanitized.citizenshipName; // TODO
 							actor.model.actorPerson.actorPersonTranslations[0].specialFeatures = formDataSanitized.specialFeatures;
 						break;
@@ -2881,7 +2883,7 @@
 		},
 
 		actorFormDataSheet: async function(action, type, data) {
-			// console.log("TCL: actorFormDataSheet - action, type, data: ", action, type, data);
+			console.log("TCL: actorFormDataSheet - action, type, data: ", action, type, data);
 			$('.carousel-inner').empty();
 			$('.carousel-indicators').empty();
 			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
@@ -3018,10 +3020,11 @@
 						else $('#timaat-actordatasets-metadata-person-dayofdeath').val('');
 					$('#timaat-actordatasets-metadata-person-placeofdeath').val(data.model.actorPerson.placeOfDeath);
 					// $('#timaat-actordatasets-metadata-person-citizenship-name').val(data.actorPerson.citizenships[0].citizenshipTranslations[0].name);
+					$('#timaat-actordatasets-metadata-person-citizenship-name').val(data.model.actorPerson.citizenship);
 					$('#timaat-actordatasets-metadata-person-specialfeatures').val(data.model.actorPerson.actorPersonTranslations[0].specialFeatures);
 					// TODO remove once location is properly connected
-					$('#timaat-actordatasets-metadata-person-placeofbirth').prop('disabled', true);
-					$('#timaat-actordatasets-metadata-person-placeofdeath').prop('disabled', true);
+					// $('#timaat-actordatasets-metadata-person-placeofbirth').prop('disabled', true);
+					// $('#timaat-actordatasets-metadata-person-placeofdeath').prop('disabled', true);
 				break;
 				case 'collective':
 					if (data.model.actorCollective.founded != null && !(isNaN(data.model.actorCollective.founded)))
@@ -3890,8 +3893,8 @@
 				// create actorSubtype with actor id
 				actorSubtypeModel.actorId = newActorModel.id;
 				if (actorType == 'person') {
-					actorSubtypeModel.placeOfBirth = null; // TODO implement
-					actorSubtypeModel.placeOfDeath = null; // TODO implement
+					// actorSubtypeModel.placeOfBirth = null; // TODO implement
+					// actorSubtypeModel.placeOfDeath = null; // TODO implement
 				}
 				actorSubtypeModel = await TIMAAT.ActorService.createActorSubtype(actorType, newActorModel, actorSubtypeModel);
 			} catch(error) {
@@ -4102,8 +4105,8 @@
 						case 'person':
 							tempSubtypeModel = actor.model.actorPerson;
 							// TODO remove deletions once implemented
-							tempSubtypeModel.placeOfBirth = null;
-							tempSubtypeModel.placeOfDeath = null;
+							// tempSubtypeModel.placeOfBirth = null;
+							// tempSubtypeModel.placeOfDeath = null;
 						break;
 						case 'collective':
 							tempSubtypeModel = actor.model.actorCollective;
@@ -4121,9 +4124,10 @@
 							// update data that is part of person translation
 							// TODO: send request for each translation or for all translations
 							var tempActorPersonTranslation = await TIMAAT.ActorService.updateActorPersonTranslation(actor.model.id, actor.model.actorPerson.actorPersonTranslations[0]);
-							if (actor.model.actorPerson.citizenships.length > 0) {
-								var tempActorPersonCitizenshipTranslation = await TIMAAT.ActorService.updateCitizenshipTranslation(actor.model.actorPerson.citizenships[0].citizenshipTranslations[0], actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].language.id);
-							}
+							// TODO
+							// if (actor.model.actorPerson.citizenships.length > 0) {
+							// 	var tempActorPersonCitizenshipTranslation = await TIMAAT.ActorService.updateCitizenshipTranslation(actor.model.actorPerson.citizenships[0].citizenshipTranslations[0], actor.model.actorPerson.citizenships[0].citizenshipTranslations[0].language.id);
+							// }
 						break;
 					}
 				} catch(error) {
@@ -4669,19 +4673,22 @@
 						actorId: 0,
 						title: formDataObject.title,
 						dateOfBirth: formDataObject.dateOfBirth,
-						placeOfBirth: {
-							id: formDataObject.placeOfBirth
-							},
+						placeOfBirth: formDataObject.placeOfBirth,
+						// placeOfBirth: { // TODO
+						// 	id: formDataObject.placeOfBirth
+						// 	},
 						dayOfDeath: formDataObject.dayOfDeath,
-						placeOfDeath: {
-							id: formDataObject.placeOfDeath
-						},
+						placeOfDeath: formDataObject.placeOfDeath,
+						// placeOfDeath: { // TODO
+						// 	id: formDataObject.placeOfDeath
+						// },
 						sex: {
 							id: formDataObject.sexId
 						},
 						actorPersonIsMemberOfActorCollectives: [],
 						actorPersonTranslations: [],
-						citizenships : []
+						// citizenships : []
+						citizenship: formDataObject.citizenship,
 					};
 				break;
 				case 'collective':

@@ -981,10 +981,13 @@ public class EndpointActor {
 		// update person
 		System.out.println("EndpointActor: updatePerson update data");
 		person.setTitle(updatedPerson.getTitle());
+		person.setCitizenship(updatedPerson.getCitizenship());
 		person.setDateOfBirth(updatedPerson.getDateOfBirth());
-		// TODO update place of birth
+		// TODO update place of birth once string is replaced with city object
+		person.setPlaceOfBirth(updatedPerson.getPlaceOfBirth());
 		person.setDayOfDeath(updatedPerson.getDayOfDeath());
-		// TODO update place of death
+		// TODO update place of death once string is replaced with city object
+		person.setPlaceOfDeath(updatedPerson.getPlaceOfDeath());
 		person.setSex(updatedPerson.getSex());
 		// TODO update person is member of collective
 
@@ -2611,7 +2614,7 @@ public class EndpointActor {
 		// persist citizenship
 		// EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		actorPerson.getCitizenships().add(citizenship);
+		// actorPerson.getCitizenships().add(citizenship); // TODO reactivate once citizenship is not a String value anymore
 		citizenship.getPersons().add(actorPerson);
 		entityManager.merge(citizenship);
 		entityManager.merge(actorPerson);

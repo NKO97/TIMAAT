@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the city database table.
- * 
+ *
  */
 @Entity
 @Table(name="city")
@@ -69,14 +69,14 @@ public class City implements Serializable {
 
 	public ActorPerson addActorPersons1(ActorPerson actorPersons1) {
 		getActorPersons1().add(actorPersons1);
-		actorPersons1.setPlaceOfBirth(this);
+		// actorPersons1.setPlaceOfBirth(this); // TODO reactivate once placeOfBirth is not a string value anymore
 
 		return actorPersons1;
 	}
 
 	public ActorPerson removeActorPersons1(ActorPerson actorPersons1) {
 		getActorPersons1().remove(actorPersons1);
-		actorPersons1.setPlaceOfBirth(null);
+		// actorPersons1.setPlaceOfBirth(null); // TODO reactivate once placeOfBirth is not a string value anymore
 
 		return actorPersons1;
 	}
@@ -91,14 +91,14 @@ public class City implements Serializable {
 
 	public ActorPerson addActorPersons2(ActorPerson actorPersons2) {
 		getActorPersons2().add(actorPersons2);
-		actorPersons2.setPlaceOfDeath(this);
+		// actorPersons2.setPlaceOfDeath(this); // TODO reactivate once placeOfDeath is not a string value anymore
 
 		return actorPersons2;
 	}
 
 	public ActorPerson removeActorPersons2(ActorPerson actorPersons2) {
 		getActorPersons2().remove(actorPersons2);
-		actorPersons2.setPlaceOfDeath(null);
+		// actorPersons2.setPlaceOfDeath(null); // TODO reactivate once placeOfDeath is not a string value anymore
 
 		return actorPersons2;
 	}

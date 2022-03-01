@@ -15,13 +15,13 @@ import java.util.Set;
 
 /**
  * The persistent class for the actor_person database table.
- * 
+ *
  */
 @Entity
 @Table(name="actor_person")
 @NamedQuery(name="ActorPerson.findAll", query="SELECT ap FROM ActorPerson ap")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-									property  = "actorId", 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+									property  = "actorId",
 									scope     = ActorPerson.class)
 public class ActorPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,6 +41,14 @@ public class ActorPerson implements Serializable {
 	// private List<LineupMember> lineupMembers;
 
 	private String title;
+
+	private String citizenship;
+
+	@Column(name="place_of_birth")
+	private String placeOfBirth;
+
+	@Column(name="place_of_death")
+	private String placeOfDeath;
 
 	//bi-directional one-to-one association to Actor
 	@OneToOne
@@ -142,6 +150,30 @@ public class ActorPerson implements Serializable {
 		this.title = title;
 	}
 
+	public String getCitizenship() {
+		return this.citizenship;
+	}
+
+	public void setCitizenship(String citizenship) {
+		this.citizenship = citizenship;
+	}
+
+	public String getPlaceOfBirth() {
+		return this.placeOfBirth;
+	}
+
+	public void setPlaceOfBirth(String placeOfBirth) {
+		this.placeOfBirth = placeOfBirth;
+	}
+
+	public String getPlaceOfDeath() {
+		return this.placeOfDeath;
+	}
+
+	public void setPlaceOfDeath(String placeOfDeath) {
+		this.placeOfDeath = placeOfDeath;
+	}
+
 	public Actor getActor() {
 		return this.actor;
 	}
@@ -150,21 +182,22 @@ public class ActorPerson implements Serializable {
 		this.actor = actor;
 	}
 
-	public City getPlaceOfBirth() {
-		return this.placeOfBirthCityLocation;
-	}
+	// TODO currently replaced by string inputs until location data structure is implemented
+	// public City getPlaceOfBirth() {
+	// 	return this.placeOfBirthCityLocation;
+	// }
 
-	public void setPlaceOfBirth(City placeOfBirthCityLocation) {
-		this.placeOfBirthCityLocation = placeOfBirthCityLocation;
-	}
+	// public void setPlaceOfBirth(City placeOfBirthCityLocation) {
+	// 	this.placeOfBirthCityLocation = placeOfBirthCityLocation;
+	// }
 
-	public City getPlaceOfDeath() {
-		return this.placeOfDeathCityLocation;
-	}
+	// public City getPlaceOfDeath() {
+	// 	return this.placeOfDeathCityLocation;
+	// }
 
-	public void setPlaceOfDeath(City placeOfDeathCityLocation) {
-		this.placeOfDeathCityLocation = placeOfDeathCityLocation;
-	}
+	// public void setPlaceOfDeath(City placeOfDeathCityLocation) {
+	// 	this.placeOfDeathCityLocation = placeOfDeathCityLocation;
+	// }
 
 	public Sex getSex() {
 		return this.sex;
@@ -174,13 +207,14 @@ public class ActorPerson implements Serializable {
 		this.sex = sex;
 	}
 
-	public Set<Citizenship> getCitizenships() {
-		return this.citizenships;
-	}
+	// TODO currently replaced by string input until location and citizenship data structure is implemented
+	// public Set<Citizenship> getCitizenships() {
+	// 	return this.citizenships;
+	// }
 
-	public void setCitizenships(Set<Citizenship> citizenships) {
-		this.citizenships = citizenships;
-	}
+	// public void setCitizenships(Set<Citizenship> citizenships) {
+	// 	this.citizenships = citizenships;
+	// }
 
 	public List<ActorPersonIsMemberOfActorCollective> getActorPersonIsMemberOfActorCollectives() {
 		return this.actorPersonIsMemberOfActorCollectives;
