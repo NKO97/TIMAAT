@@ -271,8 +271,9 @@
 				if (!$('#medium-metadata-form').valid()) return false;
 
 				var medium = $('#medium-metadata-form').data('medium');
+        // console.log("TCL: $ -> medium", medium);
 				var type = $('#medium-metadata-form').data('type');
-        console.log("TCL: $ -> type", type);
+        // console.log("TCL: $ -> type", type);
 
 				// create/edit medium window submitted data
 				TIMAAT.MediumDatasets.disableReadOnlyDataFields(false);
@@ -349,7 +350,7 @@
 							medium.model.mediumVideogame.isEpisode = formDataSanitized.isEpisode;
 						break;
 					}
-					await TIMAAT.MediumDatasets.updateMedium(type, medium);
+					medium.model = await TIMAAT.MediumDatasets.updateMedium(type, medium);
 					// medium.updateUI();
 				} else { // create new medium
 					// console.log("TCL: $ -> type", type);
@@ -1515,7 +1516,7 @@
 
 				// test if form is valid
 				if (!$('#medium-actorwithroles-form').valid()) {
-					$('[data-role="mediumnew-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
+					$('[data-role="medium-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
 					return false;
 				}
 
@@ -2459,7 +2460,7 @@
 			// set up form content structure
 			i = 0;
 			for (; i < actorIdList.length; i++) {
-        console.log("TCL: mediumFormActorRoles:function -> actorIdList", actorIdList);
+        // console.log("TCL: mediumFormActorRoles:function -> actorIdList", actorIdList);
 				$('[data-role="medium-dynamic-actorwithrole-fields"]').append(this.appendActorWithRolesDataset(i, actorIdList[i]));
 
 				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
@@ -2467,7 +2468,7 @@
 				// select actor for each entry
 				// await TIMAAT.MediumService.getActorList(medium.model.id).then(function (data) {
 				await TIMAAT.ActorService.getActor(actorIdList[i]).then(function (data) {
-          console.log("TCL: actorIdList[i]", actorIdList[i]);
+          // console.log("TCL: actorIdList[i]", actorIdList[i]);
 					var actorSelect = $('#mediumhasactorwithrole-actorid-'+actorIdList[i]);
 					// console.log("TCL: actorSelect", actorSelect);
 					// console.log("TCL: then: data", data);
@@ -2827,6 +2828,7 @@
 
 			try { // update medium
 				var tempMediumModel = await TIMAAT.MediumService.updateMedium(medium.model);
+        // console.log("TCL: updateMedium:function -> tempMediumModel", tempMediumModel);
 			} catch(error) {
 				console.error("ERROR: ", error);
 			};
@@ -2836,7 +2838,7 @@
 			// } catch(error) {
 			// 	console.error("ERROR: ", error);
 			// };
-
+			return tempMediumModel;
 			// medium.updateUI();
 		},
 

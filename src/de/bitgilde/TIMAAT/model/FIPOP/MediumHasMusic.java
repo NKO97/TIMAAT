@@ -23,6 +23,7 @@ public class MediumHasMusic implements Serializable {
 
 	//bi-directional many-to-one association to Medium
 	@ManyToOne
+	@JsonBackReference(value = "Medium-MediumHasMusic")
   @JoinColumn(name="medium_id")
 	private Medium medium;
 

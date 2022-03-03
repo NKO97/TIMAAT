@@ -4324,23 +4324,6 @@
 			}
 		},
 
-		//? not in use
-		// updatePersonIsMemberOfCollective: async function(actor, actorId, personIsMemberOfCollectiveData) {
-		// 	console.log("TCL: updatePersonIsMemberOfCollective: async function -> personIsMemberOfCollective at beginning of update process: ", actor, actorId, personIsMemberOfCollectiveData);
-		// 	try {
-		// 		// update memberofcollective
-		// 		var updatedPersonIsMemberOfCollective = await TIMAAT.ActorService.updatePersonIsMemberOfCollective(actor.model.id, actorId, personIsMemberOfCollectiveData);
-		// 		var i = 0;
-		// 		for (; i < actor.model.actorPerson.actorPersonIsMemberOfActorCollectives.length; i++) {
-		// 			if (actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i].id.memberOfActorCollectiveActorId == personIsMemberOfCollectiveData.id.memberOfActorCollectiveActorId) {
-		// 				actor.model.actorPerson.actorPersonIsMemberOfActorCollectives[i] = updatedPersonIsMemberOfCollective;
-		// 			}
-		// 		}
-		// 	} catch(error) {
-		// 		console.error("ERROR: ", error);
-		// 	}
-		// },
-
 		updateActorHasRole: async function(actorModel, roleIdList) {
     // console.log("TCL: actorModel, roleIdList", actorModel, roleIdList);
 			try { // update actor_has_role table entries

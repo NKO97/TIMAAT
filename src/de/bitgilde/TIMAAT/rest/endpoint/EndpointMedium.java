@@ -66,7 +66,6 @@ import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
-import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
@@ -960,11 +959,11 @@ public class EndpointMedium {
 		// System.out.println("EndpointMedium: getActorList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
-		List<ActorHasRole> actorHasRoleList = medium.getActorHasRoles();
+		List<MediumHasActorWithRole> mediumHasActorWithRoleList = medium.getMediumHasActorWithRoles();
 		List<Actor> actorList = new ArrayList<>();
-		for (ActorHasRole actorHasRole : actorHasRoleList) {
-			if (!actorList.contains(entityManager.find(Actor.class, actorHasRole.getId().getActorId()))) {
-				actorList.add(entityManager.find(Actor.class, actorHasRole.getId().getActorId()));
+		for (MediumHasActorWithRole mediumHasActorWithRole : mediumHasActorWithRoleList) {
+			if (!actorList.contains(mediumHasActorWithRole.getActor())) {
+				actorList.add(mediumHasActorWithRole.getActor());
 			}
 		}
 		return Response.ok().entity(actorList).build();
@@ -981,11 +980,11 @@ public class EndpointMedium {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Medium medium = entityManager.find(Medium.class, mediumId);
-		List<ActorHasRole> actorHasRoleList = medium.getActorHasRoles();
+		List<MediumHasActorWithRole> mediumHasActorWithRoleList = medium.getMediumHasActorWithRoles();
 		List<Role> roleList = new ArrayList<>();
-		for (ActorHasRole actorHasRole : actorHasRoleList) {
-			if (actorHasRole.getId().getActorId() == actorId) {
-				roleList.add(entityManager.find(Role.class, actorHasRole.getId().getRoleId()));
+		for (MediumHasActorWithRole mediumHasActorWithRole : mediumHasActorWithRoleList) {
+			if (mediumHasActorWithRole.getActor().getId() == actorId) {
+				roleList.add(entityManager.find(Role.class, mediumHasActorWithRole.getRole().getId()));
 			}
 		}
 
@@ -1210,7 +1209,7 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}/title")
-	public Response getMediumtitle(@PathParam("id") int id) {
+	public Response getMediumTitle(@PathParam("id") int id) {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1248,6 +1247,7 @@ public class EndpointMedium {
 			updatedMedium = mapper.readValue(jsonData, Medium.class);
 		} catch (IOException e) {
 			System.out.println("EndpointMedium: update medium - IOException");
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedMedium == null ) return Response.notModified().build();
@@ -2546,16 +2546,16 @@ public class EndpointMedium {
 		System.out.println("EndpointMedium: addMediumHasActorWithRoles");
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		System.out.println("EndpointMedium: addMediumHasActorWithRoles - entityManager created");
+		// System.out.println("EndpointMedium: addMediumHasActorWithRoles - entityManager created");
 		Medium medium = entityManager.find(Medium.class, mediumId);
 		if (medium == null) return Response.status(Status.NOT_FOUND).build();
-		System.out.println("EndpointMedium: addMediumHasActorWithRoles - medium found");
+		// System.out.println("EndpointMedium: addMediumHasActorWithRoles - medium found");
 		Actor actor = entityManager.find(Actor.class, actorId);
 		if (actor == null) return Response.status(Status.NOT_FOUND).build();
-		System.out.println("EndpointMedium: addMediumHasActorWithRoles - actor found");
+		// System.out.println("EndpointMedium: addMediumHasActorWithRoles - actor found");
 		Role role = entityManager.find(Role.class, roleId);
 		if (role == null) return Response.status(Status.NOT_FOUND).build();
-		System.out.println("EndpointMedium: addMediumHasActorWithRoles - role found");
+		// System.out.println("EndpointMedium: addMediumHasActorWithRoles - role found");
 
 		System.out.println("EndpointMedium: addMediumHasActorWithRoles - check if medium-actor-role combination already exists");
 		MediumHasActorWithRole mhawr = null;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -103,6 +104,7 @@ public class Music implements Serializable {
 			@JoinColumn(name="actor_has_role_role_id", referencedColumnName="role_id")
 			}
 		)
+	@JsonIgnore
 	private List<ActorHasRole> actorHasRoles;
 
 	//bi-directional many-to-one association to MusicHasActorWithRole
@@ -222,6 +224,12 @@ public class Music implements Serializable {
 	@OneToMany(mappedBy="music")
 	@JsonManagedReference(value = "Music-MediumHasMusic")
 	private List<MediumHasMusic> mediumHasMusicList;
+
+	// bi-directional one-to-one association to Medium
+	// @Transient
+	@OneToOne(mappedBy="music")
+	// @JsonManagedReference(value="Medium-Music")
+	private Medium medium;
 
 	public Music() {
 	}
@@ -369,6 +377,20 @@ public class Music implements Serializable {
 
 	public void setMusicHasActorWithRoles(List<MusicHasActorWithRole> musicHasActorWithRoles) {
 		this.musicHasActorWithRoles = musicHasActorWithRoles;
+	}
+
+	public MusicHasActorWithRole addMusicHasActorWithRole(MusicHasActorWithRole musicHasActorWithRole) {
+		getMusicHasActorWithRoles().add(musicHasActorWithRole);
+		musicHasActorWithRole.setMusic(this);
+
+		return musicHasActorWithRole;
+	}
+
+	public MusicHasActorWithRole removeMusicHasActorWithRole(MusicHasActorWithRole musicHasActorWithRole) {
+		getMusicHasActorWithRoles().remove(musicHasActorWithRole);
+		musicHasActorWithRole.setMusic(null);
+
+		return musicHasActorWithRole;
 	}
 
 	public List<Title> getTitles() {

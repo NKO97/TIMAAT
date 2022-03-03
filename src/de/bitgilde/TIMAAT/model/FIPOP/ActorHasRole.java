@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the actor_has_role database table.
- * 
+ *
  */
 @Entity
 @Table(name="actor_has_role")

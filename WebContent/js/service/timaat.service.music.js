@@ -469,7 +469,6 @@
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/mediumHasMusic/"+mediumId,
 					type:"POST",
-					// data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
@@ -481,27 +480,6 @@
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
 					console.log( "ajax call fail - error: ", error.responseText );
-				});
-			}).catch((error) => {
-				console.error("ERROR: ", error);
-			});
-		},
-
-		async removeMediumHasMusic(mediumHasMusic) {
-      // console.log("TCL: removeMediumHasMusic -> mediumHaSMusic", mediumHasMusic);
-			return new Promise(resolve => {
-				$.ajax({
-					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+mediumHasMusic.id.musicId+"/mediumHasMusic/"+mediumHasMusic.id.mediumId,
-					type:"DELETE",
-					contentType:"application/json; charset=utf-8",
-					beforeSend: function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(data) {
-					resolve(data);
-				}).fail(function(error) {
-					console.error("ERROR: ", error);
-					console.error("ERROR responseText:", error.responseText);
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -555,6 +533,28 @@
 			});
 		},
 
+		async removeMediumHasMusic(mediumHasMusic) {
+      // console.log("TCL: removeMediumHasMusic -> mediumHaSMusic", mediumHasMusic);
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+mediumHasMusic.id.musicId+"/mediumHasMusic/"+mediumHasMusic.id.mediumId,
+					type:"DELETE",
+					contentType:"application/json; charset=utf-8",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+
 		async removeMediumHasMusicDetail(mediumHasMusicDetail) {
       // console.log("TCL: removeMediumHasMusicDetail -> mediumHasMusicDetail", mediumHasMusicDetail);
 			$.ajax({
@@ -574,12 +574,14 @@
 
 		async updateMusic(musicModel) {
 			console.log("TCL: MusicService: async updateMusic -> musicModel", musicModel);
-			delete musicModel.ui;
+			var model = musicModel;
+			delete model.ui;
+			delete model.mediumHasMusicList;
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicModel.id,
 					type:"PATCH",
-					data: JSON.stringify(musicModel),
+					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {

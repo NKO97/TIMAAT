@@ -25,6 +25,7 @@
 		churchMusicList: null,
 		titles: null,
     // container: 'music',
+		mediumHasMusicList: null,
     musicLoaded: false,
 
 		init: function() {
@@ -1339,6 +1340,7 @@
 				let name = music.model.displayTitle.name;
 				let id = music.model.id;
 				TIMAAT.UI.displayDataSetContentArea('music-mediumhasmusiclist-form');
+				TIMAAT.MusicDatasets.setMediumHasMusicList(music);
 				TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
 				if ( type == 'music') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Media containing this Music · ' + type[0].toUpperCase() + type.slice(1), '#music/' + id + '/mediumHasMusicList');
@@ -1369,9 +1371,7 @@
 
 				$('.timaat-musicdatasets-music-mediumhasmusic-medium-id').prop('disabled', false);
 				$('.disable-on-submit').prop('disabled', true);
-				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', false);
 				var existingEntriesInForm = $('#music-mediumhasmusiclist-form').serializeArray();
-				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', true);
 				$('.disable-on-submit').prop('disabled', false);
 
 				// create list of mediumIds that the music is already connected with
@@ -1489,6 +1489,9 @@
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
+				// the original music model (in case of editing an existing music dataset)
+				let music = $('#music-metadata-form').data('music');
+				let type = music.model.musicType.musicTypeTranslations[0].type;
 
 				// test if form is valid
 				if (!$('#music-mediumhasmusiclist-form').valid()) {
@@ -1528,15 +1531,10 @@
 					return false;
 				}
 
-				let music = $('#music-metadata-form').data('music');
-				let type = music.model.musicType.musicTypeTranslations[0].type;
-
 				// Create/Edit medium window submitted data
 				$('.timaat-musicdatasets-music-mediumhasmusic-medium-id').prop('disabled', false);
 				$('.disable-on-submit').prop('disabled', true);
-				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', false);
 				var formData = $('#music-mediumhasmusiclist-form').serializeArray();
-				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', true);
 				$('.disable-on-submit').prop('disabled', false);
 				// console.log("TCL: formData", formData);
 				var formEntries = [];
@@ -1562,7 +1560,7 @@
 						var element = {
 							musicId: music.model.id ,
 							mediumId: Number(formData[formEntriesIdIndexes[i].entryIndex].value),
-							mediumHasMusicDetail: []
+							mediumHasMusicDetailList: []
 						};
 						formEntryIds.push(Number(formData[formEntriesIdIndexes[i].entryIndex].value));
 					var j = 0;
@@ -1572,12 +1570,12 @@
 							startTime: TIMAAT.Util.parseTime(formData[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+3].value),
 							endTime: TIMAAT.Util.parseTime(formData[formEntriesIdIndexes[i].entryIndex+numDetailElements*j+4].value),
 						};
-						element.mediumHasMusicDetail.push(detail);
+						element.mediumHasMusicDetailList.push(detail);
             // console.log("TCL: detail", detail);
 					}
 					formEntries.push(element);
 				}
-				// create medium id list for all already existing mediumHasMusicDetail entries
+				// create medium id list for all already existing mediumHasMusicDetailList entries
 				i = 0;
 				var existingEntriesIdList = [];
 				// console.log("TCL: $ -> music.model", music.model);
@@ -1638,20 +1636,20 @@
 					var currentMediumHasMusic = music.model.mediumHasMusicList[currentMediumHasMusicIndex];
 					// var currentMediumHasMusicId = music.model.mediumHasMusicList[currentMediumHasMusicIndex].id.mediumId; //?
 
-					// go through all mediumHasMusicDetail and update/delete/add entries
-					// create mediumHasMusicDetail id list for all already existing mediumHasMusic with this medium
+					// go through all mediumHasMusicDetailList and update/delete/add entries
+					// create mediumHasMusicDetailList id list for all already existing mediumHasMusic with this medium
 					var existingMediumHasMusicDetailIdList = [];
 					j = 0;
-					for (; j < currentMediumHasMusic.mediumHasMusicDetail.length; j++) {
-						existingMediumHasMusicDetailIdList.push(currentMediumHasMusic.mediumHasMusicDetail[j].id);
+					for (; j < currentMediumHasMusic.mediumHasMusicDetailList.length; j++) {
+						existingMediumHasMusicDetailIdList.push(currentMediumHasMusic.mediumHasMusicDetailList[j].id);
 					}
-					// create mediumHasMusicDetail id list for all form mediumHasMusic for this medium
+					// create mediumHasMusicDetailList id list for all form mediumHasMusic for this medium
 					var formMediumHasMusicDetailIdList = [];
 					j = 0;
-					for (; j < formEntries[i].mediumHasMusicDetail.length; j++ ) {
-						formMediumHasMusicDetailIdList.push(formEntries[i].mediumHasMusicDetail[j].id);
+					for (; j < formEntries[i].mediumHasMusicDetailList.length; j++ ) {
+						formMediumHasMusicDetailIdList.push(formEntries[i].mediumHasMusicDetailList[j].id);
 					}
-					// DELETE mediumHasMusicDetail data if id is in existingMediumHasMusicDetailIdList but not in mediumHasMusicDetail of formEntries
+					// DELETE mediumHasMusicDetailList data if id is in existingMediumHasMusicDetailIdList but not in mediumHasMusicDetailList of formEntries
 					j = 0;
 					for (; j < existingMediumHasMusicDetailIdList.length; j++) {
 						var k = 0;
@@ -1663,30 +1661,30 @@
 							}
 						}
 						if (deleteDataset) {
-							await TIMAAT.MusicService.removeMediumHasMusicDetail(music.model.mediumHasMusicList[i].mediumHasMusicDetail[j]);
-							music.model.mediumHasMusicList[i].mediumHasMusicDetail.splice(j,1); // TODO should be moved to MusicDatasets.removeMediumHasMusicDetail(..)
+							await TIMAAT.MusicService.removeMediumHasMusicDetail(music.model.mediumHasMusicList[i].mediumHasMusicDetailList[j]);
+							music.model.mediumHasMusicList[i].mediumHasMusicDetailList.splice(j,1); // TODO should be moved to MusicDatasets.removeMediumHasMusicDetail(..)
 							existingMediumHasMusicDetailIdList.splice(j,1);
 							j--; // so the next list item is not jumped over due to the splicing
 						}
 					}
-					// console.log("TCL: DELETE mediumHasMusicDetail (end)");
-					// ADD mediumHasMusicDetail data if id is not in existingMediumHasMusicDetailIdList but in mediumHasMusicDetail of formEntries
+					// console.log("TCL: DELETE mediumHasMusicDetailList (end)");
+					// ADD mediumHasMusicDetailList data if id is not in existingMediumHasMusicDetailIdList but in mediumHasMusicDetailList of formEntries
 					j = 0;
 					var newMediumHasMusicDetail;
 					for (; j < formMediumHasMusicDetailIdList.length; j++) {
 						if (formMediumHasMusicDetailIdList[j] == 0) {
-							newMediumHasMusicDetail = await TIMAAT.MusicService.addMediumHasMusicDetail(music.model.id, formEntries[i].mediumId, formEntries[i].mediumHasMusicDetail[j]);
-							music.model.mediumHasMusicList[i].mediumHasMusicDetail.push(newMediumHasMusicDetail);
+							newMediumHasMusicDetail = await TIMAAT.MusicService.addMediumHasMusicDetail(music.model.id, formEntries[i].mediumId, formEntries[i].mediumHasMusicDetailList[j]);
+							music.model.mediumHasMusicList[i].mediumHasMusicDetailList.push(newMediumHasMusicDetail);
 							formMediumHasMusicDetailIdList.splice(j,1);
 							j--; // so the next list item is not jumped over due to the splicing
 						}
 					}
 					//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
-					// UPDATE mediumHasMusicDetail data if id is in existingMediumHasMusicDetailIdList and in mediumHasMusicDetail of formEntries
+					// UPDATE mediumHasMusicDetailList data if id is in existingMediumHasMusicDetailIdList and in mediumHasMusicDetailList of formEntries
 					j = 0;
 					for (; j < existingMediumHasMusicDetailIdList.length; j++) {
-						await TIMAAT.MusicService.updateMediumHasMusicDetail(formEntries[i].mediumHasMusicDetail[j]);
-						music.model.mediumHasMusicList[i].mediumHasMusicDetail[j] = formEntries[i].mediumHasMusicDetail[j];
+						await TIMAAT.MusicService.updateMediumHasMusicDetail(formEntries[i].mediumHasMusicDetailList[j]);
+						music.model.mediumHasMusicList[i].mediumHasMusicDetailList[j] = formEntries[i].mediumHasMusicDetailList[j];
 					}
 				}
 				await TIMAAT.UI.refreshDataTable(type);
@@ -1781,6 +1779,17 @@
 					musicTitles.push(title);
 			});
 			this.titles = musicTitles;
+		},
+
+		setMediumHasMusicList: function(music) {
+			if ( !music ) return;
+			// setup model
+			var mediumHasMusicList = Array();
+			music.model.mediumHasMusicList.forEach(function(mediumHasMusic) {
+				if ( mediumHasMusic.id.musicId > 0 && mediumHasMusic.id.mediumId > 0 )
+				mediumHasMusicList.push(mediumHasMusic);
+			});
+			this.mediumHasMusicList = mediumHasMusicList;
 		},
 
     addMusic: function(type) {
@@ -1894,7 +1903,7 @@
 				$('.form-buttons').prop('disabled', false);
 				$('.form-buttons :input').prop('disabled', false);
 				$('.form-buttons').show();
-				this.initFormForShow(data.model);
+				this.initFormForShow(data.model.id);
 				$('#music-metadata-form-submit-button').hide();
 				$('#music-metadata-form-dismiss-button').hide();
 				$('#musicFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
@@ -2208,7 +2217,7 @@
 
 			if ( action == 'show') {
 				$('#music-titles-form :input').prop('disabled', true);
-				this.initFormForShow(music.model);
+				this.initFormForShow(music.model.id);
 				$('#music-titles-form-submit').hide();
 				$('#music-titles-form-dismiss').hide();
 				$('[data-role="music-new-title-fields"').hide();
@@ -2264,35 +2273,35 @@
 			let mediumTitle;
 			let editMode = (action == 'edit') ? true : false;
 			let mediumHasMusicFormData;
-			let mhmd;
+			let mhmDetail;
 			for (; i < numMediumHasMusicItems; i++) {
 				mhm = music.model.mediumHasMusicList[i];
 				mediumId = mhm.id.mediumId;
-				if (mhm.mediumHasMusicDetail == null) {
+				if (mhm.mediumHasMusicDetailList == null) {
 					numMediumHasMusicDetail = 0;
 				} else {
-					numMediumHasMusicDetail = mhm.mediumHasMusicDetail.length;
+					numMediumHasMusicDetail = mhm.mediumHasMusicDetailList.length;
 				}
 				mediumTitle = await TIMAAT.MediumService.getMediumDisplayTitle(mediumId);
         // console.log("TCL: musicFormMediumHasMusicList:function -> mhm", mhm);
-				mediumHasMusicFormData = this.appendMediumHasMusicDataset(i, mediumId, mediumTitle, mhm.mediumHasMusicDetail, 'sr-only', editMode);
+				mediumHasMusicFormData = this.appendMediumHasMusicDataset(i, mediumId, mediumTitle, mhm.mediumHasMusicDetailList, 'sr-only', editMode);
 				$('#music-dynamic-mediumhasmusic-fields').append(mediumHasMusicFormData);
 				var j = 0;
 				for (; j < numMediumHasMusicDetail; j++) {
-					mhmd = mhm.mediumHasMusicDetail[j];
-          // console.log("TCL: musicFormMediumHasMusicList:function -> mhmd", mhmd);
-					if (mhmd.startTime != null && !(isNaN(mhmd.startTime)))
-						$('[data-role="startTime['+mediumId+']['+j+']"]').val(TIMAAT.Util.formatTime(mhmd.startTime, true));
+					mhmDetail = mhm.mediumHasMusicDetailList[j];
+          // console.log("TCL: musicFormMediumHasMusicList:function -> mhmDetail", mhmDetail);
+					if (mhmDetail.startTime != null && !(isNaN(mhmDetail.startTime)))
+						$('[data-role="startTime['+mediumId+']['+j+']"]').val(TIMAAT.Util.formatTime(mhmDetail.startTime, true));
 						else $('[data-role="startTime['+mediumId+']['+j+']"]').val('00:00:00.000');
-					if (mhmd.endTime != null && !(isNaN(mhmd.endTime)))
-						$('[data-role="endTime['+mediumId+']['+j+']"]').val(TIMAAT.Util.formatTime(mhmd.endTime, true));
+					if (mhmDetail.endTime != null && !(isNaN(mhmDetail.endTime)))
+						$('[data-role="endTime['+mediumId+']['+j+']"]').val(TIMAAT.Util.formatTime(mhmDetail.endTime, true));
 						else $('[data-role="endTime['+mediumId+']['+j+']"]').val('00:00:00.000');
 				}
 			}
 
 			if ( action == 'show') {
 				$('#music-mediumhasmusiclist-form :input').prop('disabled', true);
-				this.initFormForShow(music.model);
+				this.initFormForShow(music.model.id);
 				$('#music-mediumhasmusiclist-form-submit').hide();
 				$('#music-mediumhasmusiclist-form-dismiss').hide();
 				$('[data-role="music-new-mediumhasmusic-fields"]').hide();
@@ -2306,7 +2315,6 @@
 			}
 			else if (action == 'edit') {
 				$('#music-mediumhasmusiclist-form :input').prop('disabled', false);
-				// $('[id^="mediumhasmusic-mediumid-"').prop('disabled', true);
 				this.hideFormButtons();
 				// $('#music-mediumhasmusiclist-form-submit').html("Save");
 				$('#music-mediumhasmusiclist-form-submit').show();
@@ -2379,8 +2387,8 @@
 			var actorIdList = [];
 			var i = 0;
 			for (; i < music.model.musicHasActorWithRoles.length; i++) {
-				if (actorIdList[actorIdList.length-1] != music.model.musicHasActorWithRoles[i].actor.id) {
-					actorIdList.push(music.model.musicHasActorWithRoles[i].actor.id);
+				if (actorIdList[actorIdList.length-1] != music.model.musicHasActorWithRoles[i].id.actorId) {
+					actorIdList.push(music.model.musicHasActorWithRoles[i].id.actorId);
 				}
 			}
 			// console.log("TCL: actorIdList", actorIdList);
@@ -2438,7 +2446,7 @@
 
 			if ( action == 'show') {
 				$('#music-actorwithroles-form :input').prop('disabled', true);
-				this.initFormForShow(music.model);
+				this.initFormForShow(music.model.id);
 				$('#music-actorwithroles-form-submit').hide();
 				$('#music-actorwithroles-form-dismiss').hide();
 				$('[data-role="music-new-actorwithrole-fields"]').hide();
@@ -2944,14 +2952,14 @@
       // console.log("TCL: addMediumHasMusic:function -> musicModel, mediumHasMusicData", music, mediumHasMusicData);
 			try {
 				// create mediumHasMusic
-				// TODO create and add mediumHasMusicDetail
+				// TODO create and add mediumHasMusicDetailList
 				//? create model?
 				var newMediumHasMusic = await TIMAAT.MusicService.addMediumHasMusic(mediumHasMusicData.musicId, mediumHasMusicData.mediumId);
 				var i = 0;
-				for (; i < mediumHasMusicData.mediumHasMusicDetail.length; i++) {
-					var newDetails = await TIMAAT.MusicService.addMediumHasMusicDetail(mediumHasMusicData.musicId, mediumHasMusicData.mediumId, mediumHasMusicData.mediumHasMusicDetail[i]);
+				for (; i < mediumHasMusicData.mediumHasMusicDetailList.length; i++) {
+					var newDetail = await TIMAAT.MusicService.addMediumHasMusicDetail(mediumHasMusicData.musicId, mediumHasMusicData.mediumId, mediumHasMusicData.mediumHasMusicDetailList[i]);
           // console.log("TCL: newDetails", newDetails);
-					newMediumHasMusic.mediumHasMusicDetail.push(newDetails);
+					newMediumHasMusic.mediumHasMusicDetailList.push(newDetail);
 				}
 				music.model.mediumHasMusicList.push(newMediumHasMusic);
 			} catch(error) {
@@ -3251,9 +3259,9 @@
 		},
 
 		appendMediumHasMusicDataset: function(i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode) {
-			// console.log("TCL: musicFormActorRoles:function -> i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode", i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode);
+			// console.log("TCL: appendMediumHasMusicDataset:function -> i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode", i, mediumId, mediumTitle, mediumHasMusicListData, labelClassString, editMode);
 			var mediumHasMusicListFormData =
-			`<div class="form-group" data-role="musicisinmedium-entry" data-id=`+i+` data-actor-id=`+mediumId+`>
+			`<div class="form-group" data-role="musicisinmedium-entry" data-id=`+i+` data-medium-id=`+mediumId+`>
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>
@@ -3349,8 +3357,8 @@
 
 		/** adds fields for details of mediumHasMusic data */
 		appendMediumHasMusicDetailFields: function(i, j, mediumId, mediumHasMusicData, labelClassString) {
-			// console.log("TCL: musicFormActorRoles:function -> i, j, mediumId, mediumHasMusicData, labelClassString", i, j, mediumId, mediumHasMusicData, labelClassString);
-			var mediumHasMusicDetail =
+			// console.log("TCL: appendMediumHasMusicDetailFields:function -> i, j, mediumId, mediumHasMusicData, labelClassString", i, j, mediumId, mediumHasMusicData, labelClassString);
+			var mediumHasMusicDetailList =
 				`<div class="form-group" data-role="mediumhasmusic-detail-entry" data-detail-id="`+j+`">
 					<div class="form-row">
 						<div class="hidden" aria-hidden="true">
@@ -3365,8 +3373,8 @@
 										 class="form-control form-control-sm timaat-musicdatasets-music-mediumhasmusiclist-starttime"
 										 name="startTime[`+mediumId+`][`+j+`]"
 										 data-role="startTime[`+mediumId+`][`+j+`]"`;
-				if (mediumHasMusicData != null) { mediumHasMusicDetail += `value="`+mediumHasMusicData.startTime+`"`; }
-				mediumHasMusicDetail +=
+				if (mediumHasMusicData != null) { mediumHasMusicDetailList += `value="`+mediumHasMusicData.startTime+`"`; }
+				mediumHasMusicDetailList +=
 										`placeholder="00:00:00.000"
 										aria-describedby="Music starts at">
 						</div>
@@ -3376,8 +3384,8 @@
 										 class="form-control form-control-sm timaat-musicdatasets-music-mediumhasmusiclist-endtime"
 										 name="endTime[`+mediumId+`][`+j+`]"
 										 data-role="endTime[`+mediumId+`][`+j+`]"`;
-				if (mediumHasMusicData != null) { mediumHasMusicDetail += `value="`+mediumHasMusicData.endTime+`"`; }
-				mediumHasMusicDetail +=
+				if (mediumHasMusicData != null) { mediumHasMusicDetailList += `value="`+mediumHasMusicData.endTime+`"`; }
+				mediumHasMusicDetailList +=
 										`placeholder="00:00:00.000"
 										aria-describedby="Music ends at">
 						</div>
@@ -3388,7 +3396,7 @@
 						</div>
 					</div>
 				</div>`;
-			return mediumHasMusicDetail;
+			return mediumHasMusicDetailList;
 		},
 
 		/** adds new fields for details of mediumHasMusic data */
@@ -3458,11 +3466,11 @@
 			$('#timaat-musicdatasets-metadata-music-title').focus();
 		},
 
-		initFormForShow: async function (model) {
+		initFormForShow: async function (musicId) {
 			$('.musicdatasheet-form-edit-button').prop('disabled', false);
 			$('.musicdatasheet-form-edit-button :input').prop('disabled', false);
 			$('.musicdatasheet-form-edit-button').show();
-			let medium = await TIMAAT.MusicService.getMediumByMusicId(model.id);
+			let medium = await TIMAAT.MusicService.getMediumByMusicId(musicId);
 			if (medium &&
 				  medium.fileStatus &&
 					medium.fileStatus != 'noFile' &&
@@ -4245,7 +4253,6 @@
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, music, meta)
 					{
-						// console.log("TCL: musicFormActorRoles:function -> data", data);
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
 						let commentIcon = ' ';
@@ -4364,7 +4371,6 @@
 				"columns": [
 				{ data: 'id', name: 'title', className: 'title', render: function(data, type, music, meta)
 					{
-						// console.log("TCL: musicFormActorRoles:function -> data", data);
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
 						let commentIcon = ' ';
@@ -4437,7 +4443,6 @@
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#music/' + selectedItem.model.id + '/' + TIMAAT.UI.subNavTab);
 				}
 				type = selectedItem.model.musicType.musicTypeTranslations[0].type;
-        // console.log("TCL: musicFormActorRoles:function -> type", type);
 			} else {
 				if (TIMAAT.UI.subNavTab == 'dataSheet') {
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#music/' + type + '/' + selectedItem.model.id);

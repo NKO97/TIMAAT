@@ -18,7 +18,6 @@ import de.bitgilde.TIMAAT.SelectElementWithChildren;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
-import de.bitgilde.TIMAAT.model.FIPOP.ActorHasRole;
 import de.bitgilde.TIMAAT.model.FIPOP.Articulation;
 import de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
@@ -501,11 +500,11 @@ public class EndpointMusic {
 		// System.out.println("EndpointMusic: getActorList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Music music = entityManager.find(Music.class, musicId);
-		List<ActorHasRole> actorHasRoleList = music.getActorHasRoles();
+		List<MusicHasActorWithRole> musicHasActorWithRoleList = music.getMusicHasActorWithRoles();
 		List<Actor> actorList = new ArrayList<>();
-		for (ActorHasRole actorHasRole : actorHasRoleList) {
-			if (!actorList.contains(entityManager.find(Actor.class, actorHasRole.getId().getActorId()))) {
-				actorList.add(entityManager.find(Actor.class, actorHasRole.getId().getActorId()));
+		for (MusicHasActorWithRole musicHasActorWithRole : musicHasActorWithRoleList) {
+			if (!actorList.contains(musicHasActorWithRole.getActor())) {
+				actorList.add(musicHasActorWithRole.getActor());
 			}
 		}
 		return Response.ok().entity(actorList).build();
@@ -522,11 +521,11 @@ public class EndpointMusic {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Music music = entityManager.find(Music.class, musicId);
-		List<ActorHasRole> actorHasRoleList = music.getActorHasRoles();
+		List<MusicHasActorWithRole> musicHasActorWithRoleList = music.getMusicHasActorWithRoles();
 		List<Role> roleList = new ArrayList<>();
-		for (ActorHasRole actorHasRole : actorHasRoleList) {
-			if (actorHasRole.getId().getActorId() == actorId) {
-				roleList.add(entityManager.find(Role.class, actorHasRole.getId().getRoleId()));
+		for (MusicHasActorWithRole musicHasActorWithRole : musicHasActorWithRoleList) {
+			if (musicHasActorWithRole.getActor().getId() == actorId) {
+				roleList.add(entityManager.find(Role.class, musicHasActorWithRole.getRole().getId()));
 			}
 		}
 
@@ -536,10 +535,10 @@ public class EndpointMusic {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
-	@Path("{musicId}/musicMediumHasMusicList")
+	@Path("{musicId}/mediumHasMusicList")
 	public Response getMediumHasMusicList(@PathParam("musicId") Integer musicId)
 	{
-		// System.out.println("EndpointMusic: getActorHasRoleList");
+		// System.out.println("EndpointMusic: getMediumHasMusicList");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Music music = entityManager.find(Music.class, musicId);
@@ -1096,6 +1095,7 @@ public class EndpointMusic {
 			updatedMusic = mapper.readValue(jsonData, Music.class);
 		} catch (IOException e) {
 			System.out.println("EndpointMusic: update music - IOException");
+			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedMusic == null ) return Response.notModified().build();
@@ -1637,16 +1637,16 @@ public class EndpointMusic {
 		System.out.println("EndpointMusic: addMusicHasActorWithRoles");
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		System.out.println("EndpointMusic: addMusicHasActorWithRoles - entityManager created");
+		// System.out.println("EndpointMusic: addMusicHasActorWithRoles - entityManager created");
 		Music music = entityManager.find(Music.class, musicId);
 		if (music == null) return Response.status(Status.NOT_FOUND).build();
-		System.out.println("EndpointMusic: addMusicHasActorWithRoles - music found");
+		// System.out.println("EndpointMusic: addMusicHasActorWithRoles - music found");
 		Actor actor = entityManager.find(Actor.class, actorId);
 		if (actor == null) return Response.status(Status.NOT_FOUND).build();
-		System.out.println("EndpointMusic: addMusicHasActorWithRoles - actor found");
+		// System.out.println("EndpointMusic: addMusicHasActorWithRoles - actor found");
 		Role role = entityManager.find(Role.class, roleId);
 		if (role == null) return Response.status(Status.NOT_FOUND).build();
-		System.out.println("EndpointMusic: addMusicHasActorWithRoles - role found");
+		// System.out.println("EndpointMusic: addMusicHasActorWithRoles - role found");
 
 		System.out.println("EndpointMusic: addMusicHasActorWithRoles - check if music-actor-role combination already exists");
 		MusicHasActorWithRole mhawr = null;
@@ -1844,7 +1844,6 @@ public class EndpointMusic {
 		if ( updatedMediumHasMusic == null ) return Response.notModified().build();
 
 		// System.out.println("EndpointMusic: updateMediumHasMusic - update data");
-		// update actorPersonIsMemberOfActorCollective
 		mhm.setMedium(medium);
 
 		// System.out.println("EndpointMusic: updateMediumHasMusic - persist");

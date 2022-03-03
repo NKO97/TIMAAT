@@ -137,7 +137,6 @@ public class Medium implements Serializable {
 	private MediumVideogame mediumVideogame;
 
 	//bi-directional many-to-many association to ActorHasRole
-	// @JsonIdentityReference(alwaysAsId = true)
 	@ManyToMany
 	@JoinTable(
 		name="medium_has_actor_with_role"
@@ -149,7 +148,7 @@ public class Medium implements Serializable {
 			@JoinColumn(name="actor_has_role_role_id", referencedColumnName="role_id")
 			}
 		)
-	// @JsonIgnore
+	@JsonIgnore
 	private List<ActorHasRole> actorHasRoles;
 
 	//bi-directional many-to-many association to CategorySet
@@ -267,13 +266,14 @@ public class Medium implements Serializable {
 
 	// bi-directional one-to-one association to Music
 	@OneToOne
-	// @JoinColumn(name="music_id")
+	@JoinColumn(name="music_id")
 	// @JsonBackReference(value="Medium-Music")
 	private Music music;
 
 	//bi-directional many-to-one association to MediumHasMusic
 	@OneToMany(mappedBy="medium")
-	@JsonIgnore
+	// @JsonIgnore
+	@JsonManagedReference(value="Medium-MediumHasMusic")
 	private List<MediumHasMusic> mediumHasMusicList;
 
 	@Transient

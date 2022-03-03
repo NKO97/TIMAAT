@@ -605,32 +605,21 @@
 
 		async updateMedium(mediumModel) {
 			console.log("TCL: MediumService: async updateMedium -> mediumModel", mediumModel);
-			var tempMediumModel = {};
-			tempMediumModel.releaseDate = mediumModel.releaseDate;
-			tempMediumModel.recordingStartDate = mediumModel.recordingStartDate;
-			tempMediumModel.recordingEndDate = mediumModel.recordingEndDate;
-			tempMediumModel.remark = mediumModel.remark;
-			tempMediumModel.copyright = mediumModel.copyright;
-			tempMediumModel.displayTitle = mediumModel.displayTitle;
-			tempMediumModel.originalTitle = mediumModel.originalTitle;
-			tempMediumModel.titles = mediumModel.titles;
-			tempMediumModel.tags = mediumModel.tags;
-			tempMediumModel.categorySets = mediumModel.categorySets;
-			tempMediumModel.categories = mediumModel.categories;
-			tempMediumModel.music = mediumModel.music;
+			let model = mediumModel;
+			delete model.ui;
       // console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumModel.id,
 					type:"PATCH",
-					data: JSON.stringify(tempMediumModel),
+					data: JSON.stringify(model),
 					contentType:"application/json; charset=utf-8",
 					dataType:"json",
 					beforeSend: function (xhr) {
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					// console.log("TCL: async updateMedium -> returning updateData", updateData);
+					console.log("TCL: async updateMedium -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
