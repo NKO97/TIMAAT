@@ -170,7 +170,7 @@
 				formDataSanitized.jinsId                        = Number(formDataObject.jinsId);
 				formDataSanitized.maqamId                       = Number(formDataObject.maqamId);
 				formDataSanitized.musicalKeyId                  = Number(formDataObject.musicalKeyId);
-				formDataSanitized.mediumId                      = Number(formDataObject.mediumId);
+				formDataSanitized.mediumId                      = (isNaN(formDataObject.mediumId)) ? 0 : Number(formDataObject.mediumId);
 				formDataSanitized.tempoMarkingId                = Number(formDataObject.tempoMarkingId);
 				formDataSanitized.musicTextSettingElementTypeId = Number(formDataObject.musicTextSettingElementTypeId);
 				formDataSanitized.voiceLeadingPatternList       = voiceLeadingPatternIdList;
@@ -2660,11 +2660,11 @@
 			let musicModel = await TIMAAT.MusicService.updateMusic(music.model);
 			let medium = await TIMAAT.MusicService.getMediumByMusicId(musicModel.id);
 			// update medium if music.id has changed (null -> x || x -> y || x -> null)
-			if (medium && isNaN(mediumId)) { // source medium removed -> null
+			if (medium && mediumId == 0) { // source medium removed -> null
 				medium.music = null;
 				TIMAAT.VideoPlayer.curMusic = null;
 				await TIMAAT.MediumService.updateMedium(medium);
-			} else if (!medium && !isNaN(mediumId)) { // source medium set from null -> x
+			} else if (!medium && mediumId > 0) { // source medium set from null -> x
 				medium = await TIMAAT.MediumService.getMedium(mediumId);
 				medium.music = {};
 				medium.music.id = musicModel.id;
@@ -2988,7 +2988,7 @@
 		},
 
     updateMusicModelData: async function(model, formDataObject) {
-    	console.log("TCL: model, formDataObject", model, formDataObject);
+    	// console.log("TCL: model, formDataObject", model, formDataObject);
 			// music data
 			if (!isNaN(formDataObject.dynamicMarkingId)) {
 				if (model.dynamicMarking) {
@@ -3595,7 +3595,7 @@
 						};
 					},
 					processResults: function(data, params) {
-						console.log("TCL: processResults: data", data);
+						// console.log("TCL: processResults: data", data);
 						params.page = params.page || 1;
 						return {
 							results: data

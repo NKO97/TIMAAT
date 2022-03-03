@@ -1184,6 +1184,7 @@ Tooltip container
 	margin-left: 150px;
 	width: 5000px;
 	height: 100%;
+	min-height: 25px;
 	overflow: visible;
 	box-shadow: 2px 0px 2px black;
 /* 	transition: width 0.6s; */

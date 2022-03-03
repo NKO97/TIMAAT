@@ -554,7 +554,6 @@
 			});
 		},
 
-
 		async removeMediumHasMusicDetail(mediumHasMusicDetail) {
       // console.log("TCL: removeMediumHasMusicDetail -> mediumHasMusicDetail", mediumHasMusicDetail);
 			$.ajax({

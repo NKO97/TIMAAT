@@ -999,10 +999,10 @@ public class EndpointMusic {
 		Music newMusic = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, mediumId);
-		if ( medium == null ) {
-			System.out.println("EndpointMusic: createMusic - medium == null");
-			return Response.status(Status.BAD_REQUEST).build();
-		}
+		// if ( medium == null ) { //* mediumId == 0 is ok, this means that no medium is connected to this music dataset, yet.
+		// 	System.out.println("EndpointMusic: createMusic - medium == null");
+		// 	return Response.status(Status.BAD_REQUEST).build();
+		// }
 
 		// parse JSON data
 		try {
@@ -1060,13 +1060,15 @@ public class EndpointMusic {
 		entityManager.refresh(newMusic);
 		entityManager.refresh(displayTitle);
 
-		medium.setMusic(newMusic);
-		// persist medium
-		entityTransaction.begin();
-		entityManager.merge(medium);
-		entityManager.persist(medium);
-		entityTransaction.commit();
-		entityManager.refresh(medium);
+		if (medium != null) {
+			medium.setMusic(newMusic);
+			// persist medium
+			entityTransaction.begin();
+			entityManager.merge(medium);
+			entityManager.persist(medium);
+			entityTransaction.commit();
+			entityManager.refresh(medium);
+		}
 
 		// add log entry
 		UserLogManager.getLogger()
