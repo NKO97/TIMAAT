@@ -328,7 +328,7 @@
 						case "image":
 							medium.model.mediumImage.width = formDataSanitized.width;
 							medium.model.mediumImage.height = formDataSanitized.height;
-							medium.model.mediumImage.bitDepth = formDataSanitized.bitDepth;
+							// medium.model.mediumImage.bitDepth = formDataSanitized.bitDepth;
 						break;
 						case "software":
 							medium.model.mediumSoftware.version = formDataSanitized.version;
@@ -338,12 +338,12 @@
 						break;
 						case "video":
 							medium.model.mediumVideo.length = formDataSanitized.length;
-							medium.model.mediumVideo.videoCodec = formDataSanitized.videoCodec;
+							// medium.model.mediumVideo.videoCodec = formDataSanitized.videoCodec;
 							medium.model.mediumVideo.width = formDataSanitized.width;
 							medium.model.mediumVideo.height = formDataSanitized.height;
 							medium.model.mediumVideo.frameRate = formDataSanitized.frameRate;
-							medium.model.mediumVideo.dataRate = formDataSanitized.dataRate;
-							medium.model.mediumVideo.totalBitrate = formDataSanitized.totalBitrate;
+							// medium.model.mediumVideo.dataRate = formDataSanitized.dataRate;
+							// medium.model.mediumVideo.totalBitrate = formDataSanitized.totalBitrate;
 							medium.model.mediumVideo.isEpisode = formDataSanitized.isEpisode;
 						break;
 						case "videogame":
@@ -1976,7 +1976,7 @@
 				case 'image':
 					$('#timaat-mediadatasets-metadata-image-width').val(data.model.mediumImage.width);
 					$('#timaat-mediadatasets-metadata-image-height').val(data.model.mediumImage.height);
-					$('#timaat-mediadatasets-metadata-image-bitdepth').val(data.model.mediumImage.bitDepth);
+					// $('#timaat-mediadatasets-metadata-image-bitdepth').val(data.model.mediumImage.bitDepth);
 				break;
 				case 'software':
 					$('#timaat-mediadatasets-metadata-software-version').val(data.model.mediumSoftware.version);
@@ -1986,12 +1986,12 @@
 				break;
 				case 'video':
 					$('#timaat-mediadatasets-metadata-video-length').val(TIMAAT.Util.formatTime(data.model.mediumVideo.length));
-					$('#timaat-mediadatasets-metadata-video-videocodec').val(data.model.mediumVideo.videoCodec);
+					// $('#timaat-mediadatasets-metadata-video-videocodec').val(data.model.mediumVideo.videoCodec);
 					$('#timaat-mediadatasets-metadata-video-width').val(data.model.mediumVideo.width);
 					$('#timaat-mediadatasets-metadata-video-height').val(data.model.mediumVideo.height);
 					$('#timaat-mediadatasets-metadata-video-framerate').val(data.model.mediumVideo.frameRate);
-					$('#timaat-mediadatasets-metadata-video-datarate').val(data.model.mediumVideo.dataRate);
-					$('#timaat-mediadatasets-metadata-video-totalbitrate').val(data.model.mediumVideo.totalBitrate);
+					// $('#timaat-mediadatasets-metadata-video-datarate').val(data.model.mediumVideo.dataRate);
+					// $('#timaat-mediadatasets-metadata-video-totalbitrate').val(data.model.mediumVideo.totalBitrate);
 					if (data.model.mediumVideo.isEpisode)
 						$('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', true);
 					else $('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', false);
@@ -3231,7 +3231,7 @@
 						mediumId: 0,
 						width: formDataObject.width,
 						height: formDataObject.height,
-						bitDepth: formDataObject.bitDepth,
+						// bitDepth: formDataObject.bitDepth,
 					};
 				break;
 				case 'software':
@@ -3253,12 +3253,12 @@
 							id: 1,
 						},
 						length: formDataObject.length,
-						videoCodec: formDataObject.videoCodec,
+						// videoCodec: formDataObject.videoCodec,
 						width: formDataObject.width,
 						height: formDataObject.height,
 						frameRate: formDataObject.frameRate,
-						dataRate: formDataObject.dataRate,
-						totalBitrate: formDataObject.totalBitrate,
+						// dataRate: formDataObject.dataRate,
+						// totalBitrate: formDataObject.totalBitrate,
 						isEpisode: formDataObject.isEpisode,
 					};
 				break;
@@ -3499,14 +3499,14 @@
 				$('#timaat-mediadatasets-metadata-audio-audiocodec').prop('disabled', disabled);
 				$('#timaat-mediadatasets-metadata-image-width').prop('disabled', disabled);
 				$('#timaat-mediadatasets-metadata-image-height').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-image-bitdepth').prop('disabled', disabled);
+				// $('#timaat-mediadatasets-metadata-image-bitdepth').prop('disabled', disabled);
 				$('#timaat-mediadatasets-metadata-video-length').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-videocodec').prop('disabled', disabled);
+				// $('#timaat-mediadatasets-metadata-video-videocodec').prop('disabled', disabled);
 				$('#timaat-mediadatasets-metadata-video-width').prop('disabled', disabled);
 				$('#timaat-mediadatasets-metadata-video-height').prop('disabled', disabled);
 				$('#timaat-mediadatasets-metadata-video-framerate').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-datarate').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-totalbitrate').prop('disabled', disabled);
+				// $('#timaat-mediadatasets-metadata-video-datarate').prop('disabled', disabled);
+				// $('#timaat-mediadatasets-metadata-video-totalbitrate').prop('disabled', disabled);
 		},
 
 		showAddMediumButton: function() {
