@@ -2828,17 +2828,18 @@
 		},
 
 		_annotationAdded: function(annotation, openInspector=true) {
-			// console.log("TCL: _annotationAdded: function(annotation)");
+			// console.log("TCL: _annotationAdded: function(annotation): ", annotation);
 			// console.log("TCL: annotation", annotation);
 			TIMAAT.VideoPlayer.annotationList.push(annotation);
 			TIMAAT.VideoPlayer.curAnalysisList.annotations.push(annotation.model);
 			annotation.updateUI();
-			// console.log("TCL: annotation.updateUI()");
 			if ( TIMAAT.VideoPlayer.duration > 0 ) annotation.updateStatus(TIMAAT.VideoPlayer.medium.currentTime);
-			// console.log("TCL: $ -> TIMAAT.VideoPlayer.updateListUI()");
 			TIMAAT.VideoPlayer.updateListUI();
 			TIMAAT.VideoPlayer.sortListUI();
-			if ( openInspector ) TIMAAT.VideoPlayer.selectAnnotation(annotation);
+			// if ( openInspector ) TIMAAT.VideoPlayer.selectAnnotation(annotation);
+			TIMAAT.VideoPlayer.selectAnnotation(annotation);
+			annotation.setActive(true);
+			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled(true);
 		},
 
 		_annotationRemoved: function(annotation) {
