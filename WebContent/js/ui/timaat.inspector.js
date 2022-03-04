@@ -1901,17 +1901,7 @@
 				break;
 				case 'analysisList':
 					this.enablePanel('timaat-inspector-metadata');
-					$('#timaat-inspector-meta-name').show();
-					$('#timaat-inspector-meta-color-group').hide();
-					$('#timaat-inspector-meta-opacity-group').hide();
-					$('#timaat-inspector-meta-type-group').hide();
-					$('#timaat-inspector-meta-timecode-group').hide();
-					$('#timaat-inspector-meta-shortDescription-group').hide();
-					$('#timaat-inspector-meta-comment-group').show();
-					$('#timaat-inspector-meta-transcript-group').hide();
-					$('#timaat-inspector-meta-music-form-element-type-group').hide();
-					$('#timaat-inspector-meta-lyrics-group').hide();
-					$('#timaat-inspector-meta-repeat-last-row-group').hide();
+					this.initInspectorMetadataAnalysisListElements();
 					var list = item;
 					if ( !list ) this.open('timaat-inspector-metadata');
 					var heading = (list) ? '<i class="fas fa-list-alt"></i> Edit analysis' : '<i class="fas fa-list-alt"></i> Add analysis';
@@ -2545,6 +2535,25 @@
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 			}
+		}
+
+
+		initInspectorMetadataAnalysisListElements() {
+			$('#timaat-inspector-meta-name').show();
+			$('#timaat-inspector-meta-color-group').hide();
+			$('#timaat-inspector-meta-opacity-group').hide();
+			$('#timaat-inspector-meta-type-group').hide();
+			$('#timaat-inspector-meta-timecode-group').hide();
+			$('#timaat-inspector-meta-shortDescription-group').hide();
+			$('#timaat-inspector-meta-comment-group').show();
+			$('#timaat-inspector-meta-transcript-group').hide();
+			$('#timaat-inspector-meta-music-form-element-type-group').hide();
+			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
+			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
+			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
+			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
+			$('#timaat-inspector-meta-lyrics-group').hide();
+			$('#timaat-inspector-meta-repeat-last-row-group').hide();
 		}
 
 		initInspectorMetadataSegmentElements() {
