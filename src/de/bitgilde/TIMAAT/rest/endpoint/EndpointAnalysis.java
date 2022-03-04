@@ -45,6 +45,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfActionTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.CameraDepthOfFocusTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraDistanceTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraElevationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.CameraHandlingTranslation;
@@ -396,6 +397,11 @@ public class EndpointAnalysis {
 					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPhysicalExpressionIntensity().getPhysicalExpressionIntensityTranslations().get(0).getName()));
 				}
 			break;
+			case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
+				for (AnalysisMethod analysisMethod : analysisMethodList) {
+					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraDepthOfFocus().getCameraDepthOfFocusTranslations().get(0).getType()));
+				}
+			break;
 
 		}
 
@@ -505,6 +511,16 @@ public class EndpointAnalysis {
 							cameraElevationSelectList.add(new SelectElement(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
 						}
 						selectElementList = cameraElevationSelectList;
+					break;
+					case "cameraDepthOfFocus":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cet FROM CameraDepthOfFocusTranslation cet WHERE cet.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cet.id ASC");
+						List<CameraDepthOfFocusTranslation> cameraDepthOfFocusTranslationList = castList(CameraDepthOfFocusTranslation.class, query.getResultList());
+						List<SelectElement> cameraDepthOfFocusSelectList = new ArrayList<>();
+						for (CameraDepthOfFocusTranslation cameraDepthOfFocusTranslation : cameraDepthOfFocusTranslationList) {
+							cameraDepthOfFocusSelectList.add(new SelectElement(cameraDepthOfFocusTranslation.getCameraDepthOfFocus().getAnalysisMethodId(), cameraDepthOfFocusTranslation.getType()));
+						}
+						selectElementList = cameraDepthOfFocusSelectList;
 					break;
 				}
 			break;
@@ -623,6 +639,16 @@ public class EndpointAnalysis {
 							cameraElevationSelectList.add(new SelectElement(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
 						}
 						selectElementList = cameraElevationSelectList;
+					break;
+					case "cameraDepthOfFocus":
+						query = TIMAATApp.emf.createEntityManager().createQuery(
+							"SELECT cet FROM CameraDepthOfFocusTranslation cet WHERE cet.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY cet.id ASC");
+						List<CameraDepthOfFocusTranslation> cameraDepthOfFocusTranslationList = castList(CameraDepthOfFocusTranslation.class, query.getResultList());
+						List<SelectElement> cameraDepthOfFocusSelectList = new ArrayList<>();
+						for (CameraDepthOfFocusTranslation cameraDepthOfFocusTranslation : cameraDepthOfFocusTranslationList) {
+							cameraDepthOfFocusSelectList.add(new SelectElement(cameraDepthOfFocusTranslation.getCameraDepthOfFocus().getAnalysisMethodId(), cameraDepthOfFocusTranslation.getType()));
+						}
+						selectElementList = cameraDepthOfFocusSelectList;
 					break;
 				}
 			break;
@@ -1029,6 +1055,8 @@ public class EndpointAnalysis {
 			case 50: // Physical Expression - Part of 44: Analysis Actor
 			break;
 			case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
+			break;
+			case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
 			break;
 		}
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the editing_montage database table.
- * 
+ *
  */
 @Entity
 @Table(name="concept_camera_position_and_perspective")
@@ -45,7 +45,7 @@ public class ConceptCameraPositionAndPerspective implements Serializable {
 	@OneToOne
 	@JoinColumn(name="camera_horizontal_angle_analysis_method_id")
 	private CameraHorizontalAngle cameraHorizontalAngle;
-	
+
 	//bi-directional one-to-one association to CameraAxisOfAction
 	@OneToOne
 	@JoinColumn(name="camera_axis_of_action_analysis_method_id")
@@ -55,6 +55,11 @@ public class ConceptCameraPositionAndPerspective implements Serializable {
 	@OneToOne
 	@JoinColumn(name="camera_elevation_analysis_method_id")
 	private CameraElevation cameraElevation;
+
+	//bi-directional one-to-one association to CameraDepthOfFocus
+	@OneToOne
+	@JoinColumn(name="camera_depth_of_focus_analysis_method_id")
+	private CameraDepthOfFocus cameraDepthOfFocus;
 
 	public ConceptCameraPositionAndPerspective() {
 	}
@@ -121,6 +126,14 @@ public class ConceptCameraPositionAndPerspective implements Serializable {
 
 	public void setCameraElevation(CameraElevation cameraElevation) {
 		this.cameraElevation = cameraElevation;
+	}
+
+	public CameraDepthOfFocus getCameraDepthOfFocus() {
+		return this.cameraDepthOfFocus;
+	}
+
+	public void setCameraDepthOfFocus(CameraDepthOfFocus cameraDepthOfFocus) {
+		this.cameraDepthOfFocus = cameraDepthOfFocus;
 	}
 
 }

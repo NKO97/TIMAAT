@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * The persistent class for the analysis_method database table.
- * 
+ *
  */
 @Entity
 @Table(name="analysis_method")
@@ -55,6 +55,10 @@ public class AnalysisMethod implements Serializable {
 	//bi-directional one-to-one association to CameraAxisOfAction
 	@OneToOne(mappedBy="analysisMethod")
 	private CameraAxisOfAction cameraAxisOfAction;
+
+	//bi-directional one-to-one association to CameraDepthOfFocus
+	@OneToOne(mappedBy="analysisMethod")
+	private CameraDepthOfFocus cameraDepthOfFocus;
 
 	//bi-directional one-to-one association to CameraDistance
 	@OneToOne(mappedBy="analysisMethod")
@@ -151,7 +155,7 @@ public class AnalysisMethod implements Serializable {
 	//bi-directional one-to-one association to MontageFigureMicro
 	@OneToOne(mappedBy="analysisMethod")
 	private MontageFigureMicro montageFigureMicro;
-	
+
 	//bi-directional one-to-one association to TakeJunction
 	@OneToOne(mappedBy="analysisMethod")
 	private TakeJunction takeJunction;
@@ -171,7 +175,7 @@ public class AnalysisMethod implements Serializable {
 	//bi-directional one-to-one association to PlaybackSpeed
 	@OneToOne(mappedBy="analysisMethod")
 	private PlaybackSpeed playbackSpeed;
-	
+
 	//bi-directional one-to-one association to ImageCadreEditing
 	@OneToOne(mappedBy="analysisMethod")
 	private ImageCadreEditing imageCadreEditing;
@@ -187,7 +191,7 @@ public class AnalysisMethod implements Serializable {
 	//bi-directional one-to-one association to AnalysisMusic
 	@OneToOne(mappedBy="analysisMethod")
 	private FacialExpression facialExpression;
-	
+
 	//bi-directional one-to-one association to AnalysisMusic
 	@OneToOne(mappedBy="analysisMethod")
 	private FacialExpressionIntensity facialExpressionIntensity;
@@ -206,7 +210,7 @@ public class AnalysisMethod implements Serializable {
 
 	//bi-directional one-to-one association to AnalysisMusic
 	@OneToOne(mappedBy="analysisMethod")
-	private PhysicalExpressionIntensity physicalExpressionIntensity;	
+	private PhysicalExpressionIntensity physicalExpressionIntensity;
 
 	public AnalysisMethod() {
 	}
@@ -295,6 +299,14 @@ public class AnalysisMethod implements Serializable {
 
 	public void setCameraAxisOfAction(CameraAxisOfAction cameraAxisOfAction) {
 		this.cameraAxisOfAction = cameraAxisOfAction;
+	}
+
+	public CameraDepthOfFocus getCameraDepthOfFocus() {
+		return this.cameraDepthOfFocus;
+	}
+
+	public void setCameraDepthOfFocus(CameraDepthOfFocus cameraDepthOfFocus) {
+		this.cameraDepthOfFocus = cameraDepthOfFocus;
 	}
 
 	public CameraDistance getCameraDistance() {

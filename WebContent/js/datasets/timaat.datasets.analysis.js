@@ -28,9 +28,9 @@
       $('#timaat-analysis-add-submit').on('click', async function(event) {
         event.preventDefault();
         var modal = $('#timaat-videoplayer-analysis-add');
-        if (!$('#newAnalysisMethodModalForm').valid()) 
+        if (!$('#newAnalysisMethodModalForm').valid())
 					return false;
-        var analysisMethodTypeId = modal.data('analysisMethodTypeId'); 
+        var analysisMethodTypeId = modal.data('analysisMethodTypeId');
         var annotationId = modal.data('annotationId');
         let remark = $('#analysis-remark').val();
         let analysisModel = {
@@ -56,7 +56,7 @@
         switch(analysisMethodTypeId) {
           case 1: // Martinez Scheffel Unreliable Narration
             analysisMethodId = Number($('#martinez-scheffel-unreliable-narration-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 2: // Greimas Actantial Model //* won't be implemented
@@ -71,7 +71,7 @@
           break;
           case 7: // Color Temperature
             analysisMethodId = Number($('#color-temperature-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 8: // Concept Camera Position and Perspective
@@ -82,7 +82,8 @@
               cameraVerticalAngle: null,
               cameraHorizontalAngle: null,
               cameraAxisOfAction: null,
-              cameraElevation: null
+              cameraElevation: null,
+              cameraDepthOfFocus: null,
             };
             (Number($('#camera-distance-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraDistance = { analysisMethodId: Number($('#camera-distance-select-dropdown').val()) };
             (Number($('#camera-shot-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraShotType = { analysisMethodId: Number($('#camera-shot-type-select-dropdown').val()) };
@@ -90,6 +91,7 @@
             (Number($('#camera-horizontal-angle-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraHorizontalAngle = { analysisMethodId: Number($('#camera-horizontal-angle-select-dropdown').val()) };
             (Number($('#camera-axis-of-action-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraAxisOfAction = { analysisMethodId: Number($('#camera-axis-of-action-select-dropdown').val()) };
             (Number($('#camera-elevation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraElevation = { analysisMethodId: Number($('#camera-elevation-select-dropdown').val()) };
+            (Number($('#camera-depth-of-focus-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraDepthOfFocus = { analysisMethodId: Number($('#camera-depth-of-focus-select-dropdown').val()) };
 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
@@ -97,32 +99,32 @@
           break;
           case 9: // Camera Elevation
             analysisMethodId = Number($('#camera-elevation-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 10: // Camera Axis of Action
             analysisMethodId = Number($('#camera-axis-of-action-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 11: // Camera Horizontal Angle
             analysisMethodId = Number($('#camera-horizontal-angle-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 12: // Camera Vertical Angle
             analysisMethodId = Number($('#camera-vertical-angle-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 13: // Camera Shot Type
             analysisMethodId = Number($('#camera-shot-type-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 14: // Camera Distance
             analysisMethodId = Number($('#camera-distance-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 15: // Concept Camera Movement and Handling //* won't be implemented
@@ -139,7 +141,7 @@
             },
             endConceptCameraPositionAndPerspective: {
               analysisMethodId: 0
-            },           
+            },
           };
           let startConceptCameraPositionAndPerspectiveModel = {
             analysisMethodId: 0,
@@ -148,7 +150,8 @@
             cameraVerticalAngle: null,
             cameraHorizontalAngle: null,
             cameraAxisOfAction: null,
-            cameraElevation: null
+            cameraElevation: null,
+            cameraDepthOfFocus: null
           };
           let endConceptCameraPositionAndPerspectiveModel = {
             analysisMethodId: 0,
@@ -157,7 +160,8 @@
             cameraVerticalAngle: null,
             cameraHorizontalAngle: null,
             cameraAxisOfAction: null,
-            cameraElevation: null
+            cameraElevation: null,
+            cameraDepthOfFocus: null
           };
           (Number($('#camera-movement-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementType = { analysisMethodId: Number($('#camera-movement-type-select-dropdown').val()) };
           (Number($('#camera-movement-characteristic-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementCharacteristic = { analysisMethodId: Number($('#camera-movement-characteristic-select-dropdown').val()) };
@@ -169,12 +173,14 @@
           (Number($('#start-camera-horizontal-angle-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#start-camera-horizontal-angle-select-dropdown').val()) };
           (Number($('#start-camera-axis-of-action-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#start-camera-axis-of-action-select-dropdown').val()) };
           (Number($('#start-camera-elevation-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#start-camera-elevation-select-dropdown').val()) };
+          (Number($('#start-camera-depth-of-focus-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDepthOfFocus = { analysisMethodId: Number($('#start-camera-depth-of-focus-select-dropdown').val()) };
           (Number($('#end-camera-distance-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#end-camera-distance-select-dropdown').val()) };
           (Number($('#end-camera-shot-type-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#end-camera-shot-type-select-dropdown').val()) };
           (Number($('#end-camera-vertical-angle-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#end-camera-vertical-angle-select-dropdown').val()) };
           (Number($('#end-camera-horizontal-angle-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#end-camera-horizontal-angle-select-dropdown').val()) };
           (Number($('#end-camera-axis-of-action-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#end-camera-axis-of-action-select-dropdown').val()) };
           (Number($('#end-camera-elevation-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#end-camera-elevation-select-dropdown').val()) };
+          (Number($('#end-camera-depth-of-focus-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDepthOfFocus = { analysisMethodId: Number($('#end-camera-depth-of-focus-select-dropdown').val()) };
           let startConceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(startConceptCameraPositionAndPerspectiveModel, 'conceptCameraPositionAndPerspective');
           analysisMethodVariantModel.startConceptCameraPositionAndPerspective.analysisMethodId = startConceptCameraPositionAndPerspective.analysisMethodId;
           let endConceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(endConceptCameraPositionAndPerspectiveModel, 'conceptCameraPositionAndPerspective');
@@ -185,7 +191,7 @@
           break;
           case 17: // Camera Handling
             analysisMethodId = Number($('#camera-handling-select-dropdown').val());
-            analysisModel.analysisMethod.id = analysisMethodId; 
+            analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
@@ -234,7 +240,7 @@
               songStructure: null,
               lineupMembers: null,
               musicalNotations: null,
-            };            
+            };
             (Number($('#analysis-music-articulation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.articulation = { id: Number($('#analysis-music-articulation-select-dropdown').val()) };
             (Number($('#analysis-music-dynamicMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.dynamicMarking = { id:  Number($('#analysis-music-dynamicMarking-select-dropdown').val())};
             (Number($('#analysis-music-changeInDynamics-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInDynamics = { id:  Number($('#analysis-music-changeInDynamics-select-dropdown').val())};
@@ -452,6 +458,11 @@
           break;
           case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
           break;
+          case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
+            analysisMethodId = Number($('#camera-depth-of-focus-select-dropdown').val());
+            analysisModel.analysisMethod.id = analysisMethodId;
+            analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
+          break;
         }
         modal.modal('hide');
         TIMAAT.VideoPlayer.curAnnotation.model.analysis.push(analysis);
@@ -518,7 +529,7 @@
             tdi.first().addClass('fa-minus-square');
         }
       });
-      
+
       // event listener to show tooltip for expand/collapse details
       $('#analysis-annotation-table').on('mouseenter', 'tbody tr', function () {
         var tr = $(this).closest('tr');
@@ -529,7 +540,7 @@
         }
         else if (tdi.length > 0) {
           $('td:first-child').attr('title', 'expand');
-        } 
+        }
         else {
           $('td:first-child').attr('title', null);
         }
@@ -564,7 +575,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             params.page = params.page || 1;
@@ -654,7 +665,7 @@
                     placeholder="Remark"></textarea>
         </div>
       </div>`;
-    
+
       switch (analysisMethodType.id) {
         case 1: // Martinez Scheffel Unreliable Narration
           $('#analysisAddLabel').text('Choose unreliable Narration (Martinez & Scheffel)');
@@ -783,6 +794,18 @@
                         data-placeholder="Select camera elevation">
                 </select>
               </div>
+            </div>
+            <div class="form-group">
+            <label for="camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="camera-depth-of-focus-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera depth of focus">
+                </select>
+              </div>
             </div>`+
             remarkHtml +
           `</form>`);
@@ -798,6 +821,8 @@
         $('#camera-axis-of-action-select-dropdown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
         $('#camera-elevation-select-dropdown').select2(select2Options);
+        select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDepthOfFocus/selectList/';
+        $('#camera-depth-of-focus-select-dropdown').select2(select2Options);
         break;
         case 9: // Camera Elevation
           $('#analysisAddLabel').text('Choose camera elevation');
@@ -1051,6 +1076,18 @@
                 </select>
               </div>
             </div>
+            <div class="form-group">
+            <label for="start-camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="start-camera-depth-of-focus-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera depth of focus">
+                </select>
+              </div>
+            </div>
             <h5 class="modal-title">End camera position and perspective</h5>
             <div class="form-group">
             <label for="end-camera-distance-select-dropdown">Camera distance</label>
@@ -1122,6 +1159,18 @@
                         data-placeholder="Select camera elevation">
                 </select>
               </div>
+            </div>
+            <div class="form-group">
+            <label for="end-camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+              <div class="col-md-12">
+                <select class="form-control form-control-md select-dropdown"
+                        style="width:100%;"
+                        id="end-camera-depth-of-focus-select-dropdown"
+                        name="analysisMethodId"
+                        data-role="analysisMethodId"
+                        data-placeholder="Select camera depth of focus">
+                </select>
+              </div>
             </div>`+
             remarkHtml +
           `</form>`);
@@ -1145,6 +1194,8 @@
           $('#start-camera-axis-of-action-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
           $('#start-camera-elevation-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDepthOfFocus/selectList/';
+          $('#start-camera-depth-of-focus-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
           $('#end-camera-distance-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
@@ -1157,6 +1208,8 @@
           $('#end-camera-axis-of-action-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
           $('#end-camera-elevation-select-dropdown').select2(select2Options);
+          select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDepthOfFocus/selectList/';
+          $('#end-camera-depth-of-focus-select-dropdown').select2(select2Options);
         break;
         case 17: // Camera Handling
           $('#analysisAddLabel').text('Choose camera handling');
@@ -1489,7 +1542,7 @@
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lineupMembers/selectList/';
           $('#analysis-music-lineupMembers-select-dropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/musicalNotations/selectList/';
-          $('#analysis-music-musicalNotations-select-dropdown').select2(select2Options);          
+          $('#analysis-music-musicalNotations-select-dropdown').select2(select2Options);
         break;
         case 23: // Analysis Speech
         $('#analysisAddLabel').text('Describe speech');
@@ -1958,6 +2011,27 @@
         break;
         case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
         break;
+        case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
+          $('#analysisAddLabel').text('Choose camera depth of focus');
+          modal.find('.modal-body').html(`
+            <form role="form" id="newAnalysisMethodModalForm">
+              <div class="form-group">
+                <label for="camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+                <div class="col-md-12">
+                  <select class="form-control form-control-md select-dropdown"
+                          style="width:100%;"
+                          id="camera-depth-of-focus-select-dropdown"
+                          name="analysisMethodId"
+                          data-role="analysisMethodId"
+                          data-placeholder="Select camera depth of focus"
+                          required>
+                  </select>
+                </div>
+              </div>`+
+              remarkHtml +
+            `</form>`);
+          $('#camera-depth-of-focus-select-dropdown').select2(select2Options);
+        break;
       }
       // $('select[name="analysisMethodId"]').rules('add', { required: true });
       modal.modal('show');
@@ -1982,7 +2056,7 @@
     displayAnalysisDetails: function(data) {
       console.log("TCL: displayAnalysisDetails - data_ ", data);
       let cameraShotType;
-      var details = 
+      var details =
         `<div>
           <table>
             <thead class="thead-dark">
@@ -2023,6 +2097,7 @@
           let cameraHorizontalAngle = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
           let cameraAxisOfAction = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
           let cameraElevation = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
+          let cameraDepthOfFocus = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraDepthOfFocus == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type;
           details +=
           `<tr>
             <td>Camera distance</td>
@@ -2047,6 +2122,10 @@
           <tr>
             <td>Camera elevation</td>
             <td>`+cameraElevation+`</td>
+          </tr>
+          <tr>
+            <td>Camera depth of focus</td>
+            <td>`+cameraDepthOfFocus+`</td>
           </tr>`;
         break;
         case 9: // Camera Elevation
@@ -2108,12 +2187,14 @@
           let startCameraHorizontalAngle = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
           let startCameraAxisOfAction = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
           let startCameraElevation = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
+          let startCameraDepthOfFocus = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDepthOfFocus == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type;
           let endCameraDistance = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraDistance == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraDistance.cameraDistanceTranslations[0].name;
           let endCameraShotType = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraShotType == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraShotType.cameraShotTypeTranslations[0].name;
           let endCameraVerticalAngle = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraVerticalAngle == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name;
           let endCameraHorizontalAngle = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraHorizontalAngle == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name;
           let endCameraAxisOfAction = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraAxisOfAction == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name;
           let endCameraElevation = (data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraElevation == null) ? '' : data.analysisMethod.cameraMovement.endConceptCameraPositionAndPerspective.cameraElevation.cameraElevationTranslations[0].name;
+          let endCameraDepthOfFocus = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDepthOfFocus == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type;
           details +=
                 `<tr>
                   <td>Camera movement type</td>
@@ -2165,6 +2246,10 @@
                   <td>Camera elevation</td>
                   <td>`+startCameraElevation+`</td>
                 </tr>
+                <tr>
+                  <td>Camera depth of focus</td>
+                  <td>`+startCameraDepthOfFocus+`</td>
+                </tr>
               </table>
             </div>
             <div>
@@ -2198,6 +2283,10 @@
                 <tr>
                   <td>Camera elevation</td>
                   <td>`+endCameraElevation+`</td>
+                </tr>
+                <tr>
+                  <td>Camera depth of focus</td>
+                  <td>`+endCameraDepthOfFocus+`</td>
                 </tr>`;
         break;
         case 17: // Camera Handling
@@ -2596,6 +2685,13 @@
         break;
         case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
         break;
+        case 9: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
+          details +=
+            `<tr>
+              <td>Camera depth of focus:</td>
+              <td>`+data.analysisMethod.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type+`</td>
+            </tr>`;
+        break;
       }
       // add analysis table fields
       details += `
@@ -2675,10 +2771,10 @@
 					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, analysisMethodType, meta) {
 						// let displayAnalysisTypeIcon = '';
 						// switch (analysis.analysisMethodType.analysisMethodTypeTranslations[0].name) {
-						// 	case 'person': 
+						// 	case 'person':
 						// 		displayAnalysisTypeIcon = '<i class="far fa-address-card"></i>';
 						// 	break;
-						// 	case 'collective': 
+						// 	case 'collective':
 						// 		displayAnalysisTypeIcon = '<i class="fas fa-users"></i>';
 						// 	break;
 						// }
@@ -2698,7 +2794,7 @@
               }
             }
 						nameDisplay += `</p>`;
-            
+
             return nameDisplay;
 					}
 				}],
@@ -2790,10 +2886,10 @@
 					{	data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, analysis, meta) {
 							// let displayAnalysisTypeIcon = '';
 							// switch (analysis.analysisMethodType.analysisMethodTypeTranslations[0].name) {
-							// 	case 'person': 
+							// 	case 'person':
 							// 		displayAnalysisTypeIcon = '<i class="far fa-address-card"></i>';
 							// 	break;
-							// 	case 'collective': 
+							// 	case 'collective':
 							// 		displayAnalysisTypeIcon = '<i class="fas fa-users"></i>';
 							// 	break;
 							// }

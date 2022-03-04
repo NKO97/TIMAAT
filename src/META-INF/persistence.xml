@@ -60,6 +60,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfAction</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraAxisOfActionTranslation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraDepthOfFocus</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraDepthOfFocusTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraDistance</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraDistanceTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.CameraElevation</class>
