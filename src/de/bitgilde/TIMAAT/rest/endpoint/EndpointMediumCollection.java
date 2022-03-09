@@ -88,7 +88,7 @@ public class EndpointMediumCollection {
 		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
-		
+
 		if ( draw == null ) draw = 0;
 
 		// sanitize user input
@@ -152,6 +152,77 @@ public class EndpointMediumCollection {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("allMediaList")
+	public Response getAllMedia(@QueryParam("draw") Integer draw,
+															@QueryParam("start") Integer start,
+															@QueryParam("length") Integer length,
+															@QueryParam("orderby") String orderby,
+															@QueryParam("dir") String direction,
+															@QueryParam("search") String search ) {
+		// System.out.println("TCL: EndpointMediumCollection: getAllMedia: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "m.displayTitle.name";
+		if ( orderby != null) {
+			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("duration")) column = "";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "m.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
+		}
+
+		// calculate total # of records
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+
+		// search
+		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
+		if (search != null && search.length() > 0 ) {
+			// find all matching media
+			sql = "SELECT m FROM Title t, Medium m WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			mediumList = castList(Medium.class, query.getResultList());
+			// find all media
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			if ( length == -1 ) { // display all results
+				length = mediumList.size();
+				query.setMaxResults(length);
+			}
+			recordsFiltered = mediumList.size();
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+		} else {
+			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			mediumList = castList(Medium.class, query.getResultList());
+		}
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("{id}/mediaList")
 	public Response getMediaCollectionItems(@PathParam("id") Integer id,
 																					@QueryParam("draw") Integer draw,
@@ -182,7 +253,7 @@ public class EndpointMediumCollection {
 		String sql;
 		List<Medium> mediumList = new ArrayList<>();
 		if (search != null && search.length() > 0 ) {
-			// find all matching media			
+			// find all matching media
 			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
@@ -272,7 +343,7 @@ public class EndpointMediumCollection {
 			collectionMedia.add(mediaCollectionHasMedium.getMedium());
 		}
 		if (search != null && search.length() > 0 ) {
-			// find all matching media			
+			// find all matching media
 			sql = "SELECT m FROM Title t, Medium m WHERE m IN ("+mediumCollectionListQuery+") AND t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY mchm.sortOrder "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search);
@@ -402,7 +473,7 @@ public class EndpointMediumCollection {
 		}
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// TODO get all mediaCollections no matter the type, display type in frontend instead
 		// String sql = "SELECT mc from MediaCollection mc WHERE mc.mediaCollectionType=:type ORDER BY mc.title ASC";
 		String sql;
@@ -418,7 +489,7 @@ public class EndpointMediumCollection {
 		// query = entityManager.createQuery(sql);
 										// .setParameter("type", entityManager.find(MediaCollectionType.class, 2)); // TODO refactor type
 		List<MediaCollection> mediaCollectionList = castList(MediaCollection.class, query.getResultList());
-		
+
 		// strip analysisLists
 		for ( MediaCollection mediaCollection : mediaCollectionList ) {
 			if ( noContents != null ) mediaCollection.getMediaCollectionHasMediums().clear();
@@ -428,7 +499,7 @@ public class EndpointMediumCollection {
 				mchm.getMedium().getViewToken();
 			}
 		}
-		
+
 		return Response.ok().entity(mediaCollectionList).build();
 	}
 
@@ -436,9 +507,9 @@ public class EndpointMediumCollection {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("{id}")
-	public Response getMediumCollection(@PathParam("id") int id) {    	
+	public Response getMediumCollection(@PathParam("id") int id) {
 		MediaCollection mediumCollection = TIMAATApp.emf.createEntityManager().find(MediaCollection.class, id);
-		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();    	    	
+		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
 		return Response.ok().entity(mediumCollection).build();
 	}
 
@@ -451,11 +522,11 @@ public class EndpointMediumCollection {
 	// 		@QueryParam("noContents") String noContents
 	// 		) {
 	// 	EntityManager em = TIMAATApp.emf.createEntityManager();
-		
+
 	// 	MediaCollection col = em.find(MediaCollection.class, id);
-		
+
 	// 	if ( col == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 	// 	if ( noContents != null ) col.getMediaCollectionHasMediums().clear();
 	// 	// strip analysisLists
 	// 	for ( MediaCollectionHasMedium m : col.getMediaCollectionHasMediums() ) {
@@ -464,7 +535,7 @@ public class EndpointMediumCollection {
 	// 		m.getMedium().getViewToken();
 
 	// 	}
-	
+
 	// 	return Response.ok().entity(col).build();
 	// }
 
@@ -482,9 +553,9 @@ public class EndpointMediumCollection {
 																		 @QueryParam("search") String search)
   {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		
+
 		if ( draw == null ) draw = 0;
-		
+
 		MediaCollection col = em.find(MediaCollection.class, id);
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
 
@@ -498,7 +569,7 @@ public class EndpointMediumCollection {
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mchm.medium.releaseDate";
 			// TODO producer, seems way to complex to put in DB query
 			// - dependencies  --> actor --> actorNames --> actorName.isdisplayname
-			// + --> role == 5 --> producer 
+			// + --> role == 5 --> producer
 		}
 
 		String subtype = "";
@@ -541,10 +612,10 @@ public class EndpointMediumCollection {
 			m.getFileStatus();
 			m.getViewToken();
 		}
-	
+
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, media)).build();
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -591,7 +662,7 @@ public class EndpointMediumCollection {
 		System.out.println("EndpointMediumCollection: createMediaCollection OLD : " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		MediaCollection newCol = null;    	
+		MediaCollection newCol = null;
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	// parse JSON data
 		try {
@@ -620,19 +691,19 @@ public class EndpointMediumCollection {
 		em.flush();
 		tx.commit();
 		em.refresh(newCol);
-		
+
 		// add log entry
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			UserLogManager.getLogger().addLogEntry((int)containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONCREATED);
 
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error		
+			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
-		
+
 		return Response.ok().entity(newCol).build();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -642,7 +713,7 @@ public class EndpointMediumCollection {
 		System.out.println("EndpointMediumCollection: createMediaCollection: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		MediaCollection newCol = null;    	
+		MediaCollection newCol = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		// parse JSON data
 		try {
@@ -664,10 +735,10 @@ public class EndpointMediumCollection {
 			newCol.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newCol.setLastEditedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error		
+			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
-		
+
 		// persist mediaCollection
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -691,19 +762,19 @@ public class EndpointMediumCollection {
 		entityTransaction.commit();
 		entityManager.refresh(userAccount);
 		entityManager.refresh(newCol);
-		
+
 		// add log entry
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			UserLogManager.getLogger().addLogEntry((int)containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONCREATED);
 
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error		
+			// DEBUG do nothing - production system should abort with internal server error
 			return Response.serverError().build();
 		}
-		
+
 		return Response.ok().entity(newCol).build();
 	}
-	
+
 	@PATCH
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -741,7 +812,7 @@ public class EndpointMediumCollection {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( updatedCollection == null ) return Response.notModified().build();
-		    	
+
 		// update medium collection data
 		if ( updatedCollection.getIsSystemic() != null) collection.setIsSystemic(updatedCollection.getIsSystemic());
 		if ( updatedCollection.getTitle() != null ) collection.setTitle(updatedCollection.getTitle());
@@ -777,7 +848,7 @@ public class EndpointMediumCollection {
 
 		return Response.ok().entity(collection).build();
 	}
-	
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
@@ -797,7 +868,7 @@ public class EndpointMediumCollection {
 		if (EndpointUserAccount.getPermissionLevelForMediumCollection(userId, id) < 4 && userId != 1) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-    	
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection col = entityManager.find(MediaCollection.class, id);
 		if ( col == null ) return Response.status(Status.NOT_FOUND).build();
@@ -809,12 +880,12 @@ public class EndpointMediumCollection {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
-		System.out.println("EndpointMediumCollection: deleteMediumCollection - delete complete");	
+		System.out.println("EndpointMediumCollection: deleteMediumCollection - delete complete");
 		return Response.ok().build();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -868,30 +939,30 @@ public class EndpointMediumCollection {
 		System.out.println("EndpointMediumCollection: updateAlbum - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
-		MediaCollectionAlbum updatedAlbum = null;    	
+		MediaCollectionAlbum updatedAlbum = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollectionAlbum album = entityManager.find(MediaCollectionAlbum.class, id);
-		
-		if ( album == null ) return Response.status(Status.NOT_FOUND).build();		
+
+		if ( album == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedAlbum = mapper.readValue(jsonData, MediaCollectionAlbum.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedAlbum == null ) return Response.notModified().build();    	
-		
+		if ( updatedAlbum == null ) return Response.notModified().build();
+
 		// update album
 		// System.out.println("EndpointMediumCollection: updateAlbum - album.id:"+album.getMediaCollectionId());
 		if ( updatedAlbum.getTracks() > 0) album.setTracks(updatedAlbum.getTracks());
-		
+
 		// update log metadata
 		// album.getMediaCollection().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 		// 	album.getMediaCollection().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
-		// 	// DEBUG do nothing - production system should abort with internal server error			
-		// }		
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// }
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(album);
@@ -900,9 +971,9 @@ public class EndpointMediumCollection {
 		entityManager.refresh(album);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.ALBUMEDITED);
-		System.out.println("EndpointMediumCollection: updateAlbum - update complete");	
+		System.out.println("EndpointMediumCollection: updateAlbum - update complete");
 		return Response.ok().entity(album).build();
 	}
 
@@ -910,13 +981,13 @@ public class EndpointMediumCollection {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("Album/{id}")
 	@Secured
-	public Response deleteAlbum(@PathParam("id") int id) {  
+	public Response deleteAlbum(@PathParam("id") int id) {
 		System.out.println("EndpointMediumCollection: deleteAlbum with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection MediumCollection = entityManager.find(MediaCollection.class, id);
 		if ( MediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
 		MediaCollectionAlbum album = entityManager.find(MediaCollectionAlbum.class, id);
-		if ( album == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( album == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(album);
@@ -924,9 +995,9 @@ public class EndpointMediumCollection {
 		entityTransaction.commit();
 		// add log entry
 		// UserLogManager.getLogger()
-		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.ALBUMDELETED);
-		System.out.println("EndpointMediumCollection: deleteAlbum - album deleted");  
+		System.out.println("EndpointMediumCollection: deleteAlbum - album deleted");
 		return Response.ok().build();
 	}
 
@@ -983,32 +1054,32 @@ public class EndpointMediumCollection {
 		System.out.println("EndpointMediumCollection: updateSeries - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
-		MediaCollectionSeries updatedSeries = null;    	
+		MediaCollectionSeries updatedSeries = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollectionSeries series = entityManager.find(MediaCollectionSeries.class, id);
-		
-		if ( series == null ) return Response.status(Status.NOT_FOUND).build();		
+
+		if ( series == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedSeries = mapper.readValue(jsonData, MediaCollectionSeries.class);
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedSeries == null ) return Response.notModified().build();    	
-		
+		if ( updatedSeries == null ) return Response.notModified().build();
+
 		// update series
 		// System.out.println("EndpointMediumCollection: updateSeries - series.id:"+series.getMediaCollectionId());
 		if ( updatedSeries.getSeasons() > 0) series.setSeasons(updatedSeries.getSeasons());
 		if ( updatedSeries.getStarted() != null) series.setStarted(updatedSeries.getStarted());
 		if ( updatedSeries.getEnded() != null) series.setEnded(updatedSeries.getEnded());
-		
+
 		// update log metadata
 		// series.getMediaCollection().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 		// 	series.getMediaCollection().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
-		// 	// DEBUG do nothing - production system should abort with internal server error			
-		// }		
+		// 	// DEBUG do nothing - production system should abort with internal server error
+		// }
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(series);
@@ -1017,9 +1088,9 @@ public class EndpointMediumCollection {
 		entityManager.refresh(series);
 
 		// add log entry
-		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.SERIESEDITED);
-		System.out.println("EndpointMediumCollection: updateSeries - update complete");	
+		System.out.println("EndpointMediumCollection: updateSeries - update complete");
 		return Response.ok().entity(series).build();
 	}
 
@@ -1027,13 +1098,13 @@ public class EndpointMediumCollection {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("Series/{id}")
 	@Secured
-	public Response deleteSeries(@PathParam("id") int id) {  
+	public Response deleteSeries(@PathParam("id") int id) {
 		System.out.println("EndpointMediumCollection: deleteSeries with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection MediumCollection = entityManager.find(MediaCollection.class, id);
 		if ( MediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
 		MediaCollectionSeries series = entityManager.find(MediaCollectionSeries.class, id);
-		if ( series == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( series == null ) return Response.status(Status.NOT_FOUND).build();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.remove(series);
@@ -1041,9 +1112,9 @@ public class EndpointMediumCollection {
 		entityTransaction.commit();
 		// add log entry
 		// UserLogManager.getLogger()
-		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.SERIESDELETED);
-		System.out.println("EndpointMediumCollection: deleteSeries - series deleted");  
+		System.out.println("EndpointMediumCollection: deleteSeries - series deleted");
 		return Response.ok().build();
 	}
 
@@ -1072,7 +1143,7 @@ public class EndpointMediumCollection {
 		if (EndpointUserAccount.getPermissionLevelForMediumCollection(userId, mediaCollection.getId()) < 2 && userId != 1) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
+
 		MediaCollectionHasMedium mchm = null;
 		try {
 			mchm = (MediaCollectionHasMedium) entityManager.createQuery(
@@ -1083,7 +1154,7 @@ public class EndpointMediumCollection {
 		} catch (Exception e) {
 			// doesn't matter
 		}
-		
+
 		if ( mchm == null ) {
 			mchm = new MediaCollectionHasMedium();
 			mchm.setMediaCollection(mediaCollection);
@@ -1101,7 +1172,7 @@ public class EndpointMediumCollection {
 					return Response.notModified().build();
 				}
 		}
-    	    	
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEDIACOLLECTIONEDITED);
 
@@ -1215,10 +1286,10 @@ public class EndpointMediumCollection {
 			entityManager.refresh(mediaCollection);
 		} catch (Error e) {
 		}
-		
+
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.MEDIACOLLECTIONDELETED);
 
 		return Response.ok().build();
@@ -1231,7 +1302,7 @@ public class EndpointMediumCollection {
 	public Response getDisplayNamesAndPermissions(@PathParam("id") Integer mediaCollectionId,
 																							  @QueryParam("authToken") String authToken) {
 		// System.out.println("EndpointMediumCollection: getDisplayNames - ID: "+ mediaCollectionId);
-		
+
 		// verify auth token
 		int userId = 0;
 		if (AuthenticationFilter.isTokenValid(authToken)) {
@@ -1259,7 +1330,7 @@ public class EndpointMediumCollection {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{mediumCollectionId}/userAccount/{userAccountId}/withPermission/{permissionId}")
 	@Secured
-	public Response addUserAccountHasMediumCollectionWithPermission(@PathParam("mediumCollectionId") int mediumCollectionId, 
+	public Response addUserAccountHasMediumCollectionWithPermission(@PathParam("mediumCollectionId") int mediumCollectionId,
 																																	@PathParam("userAccountId") int userAccountId,
 																																	@PathParam("permissionId") int permissionTypeId,
 																																	@QueryParam("authToken") String authToken) {
@@ -1279,10 +1350,10 @@ public class EndpointMediumCollection {
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
 		if ((userId != 1) && (
-				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) ||
 				(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
-		} // else user has permission for requested change 
+		} // else user has permission for requested change
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
@@ -1344,7 +1415,7 @@ public class EndpointMediumCollection {
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{mediumCollectionId}/userAccount/{userAccountId}/withPermission/{permissionId}")
 	@Secured
-	public Response updateUserAccountHasMediumCollectionWithPermission(@PathParam("mediumCollectionId") int mediumCollectionId, 
+	public Response updateUserAccountHasMediumCollectionWithPermission(@PathParam("mediumCollectionId") int mediumCollectionId,
 																																		 @PathParam("userAccountId") int userAccountId,
 																																		 @PathParam("permissionId") int permissionTypeId,
 																																		 @QueryParam("authToken") String authToken) {
@@ -1364,10 +1435,10 @@ public class EndpointMediumCollection {
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
 		if ((userId != 1) && (
-				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) || 
+				(permissionLevel != 4 && (permissionTypeId == 3 || permissionTypeId == 4)) ||
 				(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
-		} // else user has permission for requested change 
+		} // else user has permission for requested change
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
@@ -1392,7 +1463,7 @@ public class EndpointMediumCollection {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().entity(uahmc).build();
@@ -1402,7 +1473,7 @@ public class EndpointMediumCollection {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{mediumCollectionId}/userAccount/{userAccountId}")
 	@Secured
-	public Response deleteUserAccountHasMediumCollectionWithPermission(@PathParam("mediumCollectionId") int mediumCollectionId, 
+	public Response deleteUserAccountHasMediumCollectionWithPermission(@PathParam("mediumCollectionId") int mediumCollectionId,
 																																		 @PathParam("userAccountId") int userAccountId,
 																																		 @QueryParam("authToken") String authToken) {
 		// verify auth token
@@ -1431,10 +1502,10 @@ public class EndpointMediumCollection {
 		// user is without high enough permission level to set others to moderate or administrate
 		// OR user is without high enough permission level to set any permission levels)
 		if ((userId != 1) &&
-				((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) || 
+				((permissionLevel != 4 && (userToBeRemoved.getPermissionType().getId() == 3 || userToBeRemoved.getPermissionType().getId() == 4)) ||
 				(permissionLevel != 3 && permissionLevel != 4))) {
 			return Response.status(Status.FORBIDDEN).build();
-		} // else user has permission for requested change 
+		} // else user has permission for requested change
 
 		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
 		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
@@ -1442,7 +1513,7 @@ public class EndpointMediumCollection {
 		if ( userAccount == null ) return Response.status(Status.NOT_FOUND).build();
 		UserAccountHasMediaCollection uahmcKey = new UserAccountHasMediaCollection(userAccount, mediumCollection);
 		UserAccountHasMediaCollection uahmc = entityManager.find(UserAccountHasMediaCollection.class, uahmcKey.getId());
-			
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
     entityManager.remove(uahmc);
@@ -1452,7 +1523,7 @@ public class EndpointMediumCollection {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ANALYSISLISTEDITED);
 
 		return Response.ok().build();
@@ -1465,7 +1536,7 @@ public class EndpointMediumCollection {
 	public Response addExistingTag(@PathParam("mediumCollectionId") int mediumCollectionId,
 																 @PathParam("tagId") int tagId,
 																 @QueryParam("authToken") String authToken) {
-	
+
 		// verify auth token
 		int userId = 0;
 		if (AuthenticationFilter.isTokenValid(authToken)) {
@@ -1477,14 +1548,14 @@ public class EndpointMediumCollection {
 		if (EndpointUserAccount.getPermissionLevelForMediumCollection(userId, mediumCollectionId) < 2 && userId != 1) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
 		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
-			
-		// attach tag to annotation and vice versa    	
+
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		mediumCollection.getTags().add(tag);
@@ -1495,7 +1566,7 @@ public class EndpointMediumCollection {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(mediumCollection);
- 	
+
 		return Response.ok().entity(tag).build();
 	}
 
@@ -1506,7 +1577,7 @@ public class EndpointMediumCollection {
 	public Response removeTag(@PathParam("mediumCollectionId") int mediumCollectionId,
 														@PathParam("tagId") int tagId,
 														@QueryParam("authToken") String authToken) {
-		
+
 		// verify auth token
 		int userId = 0;
 		if (AuthenticationFilter.isTokenValid(authToken)) {
@@ -1518,14 +1589,14 @@ public class EndpointMediumCollection {
 		if (EndpointUserAccount.getPermissionLevelForMediumCollection(userId, mediumCollectionId) < 2 && userId != 1) {
 			return Response.status(Status.FORBIDDEN).build();
 		}
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediaCollection mediumCollection = entityManager.find(MediaCollection.class, mediumCollectionId);
 		if ( mediumCollection == null ) return Response.status(Status.NOT_FOUND).build();
 		Tag tag = entityManager.find(Tag.class, tagId);
 		if ( tag == null ) return Response.status(Status.NOT_FOUND).build();
 
-		// attach tag to annotation and vice versa    	
+		// attach tag to annotation and vice versa
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		mediumCollection.getTags().remove(tag);
@@ -1536,7 +1607,7 @@ public class EndpointMediumCollection {
 		entityManager.persist(tag);
 		entityTransaction.commit();
 		entityManager.refresh(mediumCollection);
- 	
+
 		return Response.ok().build();
 	}
 
@@ -1546,5 +1617,5 @@ public class EndpointMediumCollection {
 			r.add(clazz.cast(o));
 		return r;
     }
-	
+
 }

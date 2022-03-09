@@ -4091,7 +4091,7 @@
 						});
 						TIMAAT.MusicDatasets.musicList = musicList;
 						TIMAAT.MusicDatasets.musicList.model = data.data;
-						return data.data; // data.map(music => new TIMAAT.Music(music));;
+						return data.data; // data.map(music => new TIMAAT.Music(music));
 					}
 				},
 				"rowCallback": function( row, data ) {

@@ -56,7 +56,7 @@
 				// if ($('#event-metadata-form').data('type') == 'event') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + id);
 				// } else {
-				// 	TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + type + '/' + id);					
+				// 	TIMAAT.URLHistory.setURL(null, name + ' · Datasets', '#event/' + type + '/' + id);
 				// }
 			});
 
@@ -106,7 +106,7 @@
 				}
 				// event.listView.find('.timaat-eventdatasets-event-list-tags').popover('show');
 			});
-			
+
 			// event form handlers
 			// submit event metadata button functionality
 			$('#event-metadata-form-submit-button').on('click', async function(ev) {
@@ -115,7 +115,7 @@
 				if (!$('#event-metadata-form').valid()) return false;
 
 				// the event model (in case of editing an existing event)
-				var event = $('#event-metadata-form').data('event');				
+				var event = $('#event-metadata-form').data('event');
 				// console.log("TCL: event", event);
 
 				// create/Edit event window submitted data
@@ -127,9 +127,9 @@
 				var formDataSanitized = formDataObject;
 				formDataSanitized.beganAt = moment.utc(formDataObject.beganAt, "YYYY-MM-DD");
 				formDataSanitized.endedAt = moment.utc(formDataObject.endedAt, "YYYY-MM-DD");
-				
+
         // console.log("TCL: formDataSanitized", formDataSanitized);
-				
+
 				if (event) { // update event
 					// event data
 					event.model = await TIMAAT.EventDatasets.updateEventModelData(event.model, formDataSanitized);
@@ -202,7 +202,7 @@
 							return {
 								search: params.term,
 								page: params.page
-							};          
+							};
 						},
 						processResults: function(data, params) {
 							params.page = params.page || 1;
@@ -240,7 +240,7 @@
 			$('#timaat-eventdatasets-modal-tag-submit').on('click', async function(ev) {
 				ev.preventDefault();
 				var modal = $('#timaat-eventdatasets-event-tags');
-				if (!$('#eventTagsModalForm').valid()) 
+				if (!$('#eventTagsModalForm').valid())
 					return false;
 				var event = modal.data('event');
         // console.log("TCL: event", event);
@@ -285,7 +285,7 @@
 					$('#event-metadata-form-dismiss-button').trigger('click');
 				}
 			});
-			
+
 		},
 
 		load: function() {
@@ -300,7 +300,7 @@
 		loadEventDataTables: async function() {
 			this.setupEventDataTable();
 		},
-		
+
 		setEventList: function() {
     	// console.log("TCL: events", events);
 			if ( this.events == null ) return;
@@ -314,7 +314,7 @@
 			this.eventsLoaded = true;
 		},
 
-		addEvent: function() {	
+		addEvent: function() {
     	// console.log("TCL: addEvent: function()");
 			TIMAAT.UI.displayDataSetContentContainer('event-tab-metadata', 'event-metadata-form');
 			$('.add-event-button').hide();
@@ -608,7 +608,7 @@
 						// console.log("TCL: TIMAAT.EventDatasets.event (last)", TIMAAT.EventDatasets.event);
 						// setup model
 						var acts = Array();
-						data.data.forEach(function(event) { 
+						data.data.forEach(function(event) {
 							if ( event.id > 0 ) {
 								acts.push(new TIMAAT.Event(event, 'event'));
 							}
@@ -616,7 +616,7 @@
 						TIMAAT.EventDatasets.events = acts;
 						TIMAAT.EventDatasets.events.model = data.data;
 						// console.log("TCL: TIMAAT.EventDatasets.event (current)", TIMAAT.EventDatasets.event);
-						return data.data; // data.map(event => new TIMAAT.Event(event));;
+						return data.data; // data.map(event => new TIMAAT.Event(event));
 					}
 				},
 				"rowCallback": function( row, data ) {
@@ -660,8 +660,8 @@
 						"next"    : ">",
 						"last"    : ">>"
 					},
-				},				
-			});				
+				},
+			});
 		},
 
 		setDataTableOnItemSelect(type, previousEventId) {

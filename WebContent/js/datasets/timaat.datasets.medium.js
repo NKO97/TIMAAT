@@ -20,18 +20,18 @@
 }(function (TIMAAT) {
 
 	TIMAAT.MediumDatasets = {
-		media: null,
-		mediaTypes: null,
-		audios: null,
-		documents: null,
-		images: null,
-		softwares: null,
-		texts: null,
-		videos: null,
-		videogames: null,
-		titles: null,
+		audios     : null,
+		container  : 'media',
+		documents  : null,
+		images     : null,
+		media      : null,
 		mediaLoaded: false,
-		container: 'media',
+		mediaTypes : null,
+		softwares  : null,
+		texts      : null,
+		titles     : null,
+		videogames : null,
+		videos     : null,
 
 		init: function() {
 			this.initMedia();
@@ -3707,15 +3707,15 @@
 					"dataSrc": function(data) {
           	// console.log("TCL: data", data);
 						// setup model
-						var meds = Array();
+						var allMediaList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'medium'));
+								allMediaList.push(new TIMAAT.Medium(medium, 'medium'));
 							}
 						});
-						TIMAAT.MediumDatasets.media = meds;
+						TIMAAT.MediumDatasets.media = allMediaList;
 						TIMAAT.MediumDatasets.media.model = data.data;
-						return data.data; // data.map(medium => new TIMAAT.Medium(medium));;
+						return data.data; // data.map(medium => new TIMAAT.Medium(medium));
 					}
 				},
 				"rowCallback": function( row, data ) {
@@ -4664,7 +4664,7 @@
 		},
 
 		setDataTableOnItemSelect: function(type, selectedItem) {
-    	console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
+    	// console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));

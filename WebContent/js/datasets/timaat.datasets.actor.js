@@ -5455,7 +5455,7 @@
 						TIMAAT.ActorDatasets.actors = actorArray;
 						TIMAAT.ActorDatasets.actors.model = data.data;
 						// console.log("TCL: TIMAAT.ActorDatasets.actor (current)", TIMAAT.ActorDatasets.actor);
-						return data.data; // data.map(actor => new TIMAAT.Actor(actor));;
+						return data.data; // data.map(actor => new TIMAAT.Actor(actor));
 					}
 				},
 				"rowCallback": function( row, data ) {

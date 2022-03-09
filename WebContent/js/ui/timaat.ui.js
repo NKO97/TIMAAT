@@ -336,12 +336,11 @@
 						TIMAAT.Lists.load();
 						TIMAAT.Lists.loadDataTables();
 
-						// After login show media library
-						// console.log("TCL: window.location.hash: ", window.location.hash);
+						// define landing page
 						if (window.location.hash) {
 							await TIMAAT.URLHistory.setupView(window.location.hash);
 						} else {
-							TIMAAT.VideoChooser.initVideoChooserComponent();
+							TIMAAT.MediumCollectionDatasets.initMediaCollectionComponent()
 						}
 					}).fail(function(error) {
 						TIMAAT.UI.setLoginEnabled(true);
@@ -561,6 +560,10 @@
               this.setDataSetContentActiveNavTab('mediumcollection-tab-publication');
               TIMAAT.MediumCollectionDatasets.mediumCollectionFormPublication(data);
             break;
+						case 'allMedia':
+							// this.setDataSetContentActiveNavTab('');
+							// TIMAAT.MediumCollectionDatasets.mediumCollectionFormAllMedia();
+						break;
           }
         break;
 				case 'music':

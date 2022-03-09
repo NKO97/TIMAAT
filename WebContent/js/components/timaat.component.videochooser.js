@@ -925,7 +925,7 @@
 			video.mediumHasActorWithRoles.forEach(function(role) {
 				if ( role.role.id == 5 ) actors.push(role.actor); // 5 == Producer, according to TIMAAT DB definition
 			});
-			if ( actors.length == 0 ) return "no data available";
+			if ( actors.length == 0 ) return "-";
 			var producer = "";
 			var i = 0;
 			for (; i < actors.length; i++) {

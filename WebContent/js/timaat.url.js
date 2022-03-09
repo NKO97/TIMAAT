@@ -228,6 +228,17 @@
                 TIMAAT.MediumCollectionDatasets.loadMediaCollections();
                 TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
               break;
+              case 'allMediaList':
+                if (!TIMAAT.MediumCollectionDatasets.dataTableAllMediaList) {
+                  await TIMAAT.MediumCollectionDatasets.setupAllMediaDataTable();
+                }
+                TIMAAT.MediumCollectionDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/mediumCollection/allMediaList')
+                TIMAAT.MediumCollectionDatasets.dataTableAllMediaList.ajax.reload();
+                TIMAAT.UI.displayComponent('mediumCollection', null, 'mediumcollection-datatable');
+                $('#mediumcollection-tab').addClass('active');
+                TIMAAT.UI.displayDataSetContentArea('mediumcollection-allMedia');
+                $('#timaat-mediumcollectiondatasets-all-media').addClass('active');
+              break;
               default:
                 this.redirectToDefaultView();
               break;
@@ -718,46 +729,46 @@
             TIMAAT.UI.showComponent('settings');
             TIMAAT.Settings.loadSettings();
           break;
-          case 'mediaLibrary': // #mediaLibrary...
-            // make sure videochooser collection list is loaded
-            // if (!TIMAAT.VideoChooser.videoChooserLoaded) {
-            //   TIMAAT.VideoChooser.loadCollections();
-            //   TIMAAT.VideoChooser.videoChooserLoaded = true;
-            // }
-            TIMAAT.UI.showComponent('videochooser');
-            // show corresponding videochooser collection list
-            if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current videochooser collection item
-              $('#timaat-videochooser-collection-'+pathSegments[1]).trigger('click');
-              let collection = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
-              TIMAAT.UI.clearLastSelection('videochooser');
-              if (pathSegments.length == 2) { //* #mediaLibrary/:id (default view, show datatable)
-                TIMAAT.VideoChooser.setCollection(collection);
-                TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
-                // TIMAAT.UI.displayDataSetContent('dataSheet', collection, 'videochooser');
-              }
-              else { // other videochooser form than datatable
-                switch (pathSegments[2]) {
-                  //* no further data tabs currently available
-                  default:
-                    this.redirectToDefaultView();
-                  break;
-                }
-              }
-            }
-            else {
-              // TIMAAT.UI.clearLastSelection('videochooser');
-              switch (pathSegments[1]) {
-                case 'list': //* #mediaLibrary/list
-                  // $('#timaat-videochooser-collectionlibrary').trigger('click');
-                  TIMAAT.VideoChooser.setCollection(null);
-				          TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
-                break;
-                default:
-                  this.redirectToDefaultView();
-                break;
-              }
-            }
-          break;
+          // case 'mediaLibrary': // #mediaLibrary...
+          //   // make sure videochooser collection list is loaded
+          //   // if (!TIMAAT.VideoChooser.videoChooserLoaded) {
+          //   //   TIMAAT.VideoChooser.loadCollections();
+          //   //   TIMAAT.VideoChooser.videoChooserLoaded = true;
+          //   // }
+          //   TIMAAT.UI.showComponent('videochooser');
+          //   // show corresponding videochooser collection list
+          //   if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current videochooser collection item
+          //     $('#timaat-videochooser-collection-'+pathSegments[1]).trigger('click');
+          //     let collection = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
+          //     TIMAAT.UI.clearLastSelection('videochooser');
+          //     if (pathSegments.length == 2) { //* #mediaLibrary/:id (default view, show datatable)
+          //       TIMAAT.VideoChooser.setCollection(collection);
+          //       TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
+          //       // TIMAAT.UI.displayDataSetContent('dataSheet', collection, 'videochooser');
+          //     }
+          //     else { // other videochooser form than datatable
+          //       switch (pathSegments[2]) {
+          //         //* no further data tabs currently available
+          //         default:
+          //           this.redirectToDefaultView();
+          //         break;
+          //       }
+          //     }
+          //   }
+          //   else {
+          //     // TIMAAT.UI.clearLastSelection('videochooser');
+          //     switch (pathSegments[1]) {
+          //       case 'list': //* #mediaLibrary/list
+          //         // $('#timaat-videochooser-collectionlibrary').trigger('click');
+          //         TIMAAT.VideoChooser.setCollection(null);
+				  //         TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
+          //       break;
+          //       default:
+          //         this.redirectToDefaultView();
+          //       break;
+          //     }
+          //   }
+          // break;
           case 'analysis': // #analysis...
             // make sure analysis list is loaded
             // if (!TIMAAT.VideoPlayer.curAnalysisList) {
@@ -819,8 +830,8 @@
 
     redirectToDefaultView: function() {
       // redirect if invalid url path is entered
-      TIMAAT.URLHistory.setupView('#mediaLibrary/list');
-      TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediaLibrary/list');
+      TIMAAT.URLHistory.setupView('#mediumCollection/allMediaList');
+      TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediumCollection/allMediaList');
     },
 
   }
