@@ -1022,6 +1022,12 @@ fieldset legend {
 	display: none;
 }
 
+.table.dataTable tbody tr.selected td,
+.table.dataTable.table-striped tbody tr.selected td {
+	background-color: #007bff;
+}
+
+
 .hidden-icon {
 	display: none;
 }
