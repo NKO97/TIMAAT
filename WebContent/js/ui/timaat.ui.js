@@ -340,7 +340,7 @@
 						if (window.location.hash) {
 							await TIMAAT.URLHistory.setupView(window.location.hash);
 						} else {
-							TIMAAT.MediumCollectionDatasets.initMediaCollectionComponent()
+							TIMAAT.MediumDatasets.initMediaComponent()
 						}
 					}).fail(function(error) {
 						TIMAAT.UI.setLoginEnabled(true);
