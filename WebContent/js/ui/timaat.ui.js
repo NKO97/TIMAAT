@@ -467,10 +467,10 @@
 		},
 
 		// display dataset content data
-		displayDataSetContentArea: function(contentId) {
+		displayDataSetContentArea: function(contentHash) {
 			$('.dataset-content').hide();
-			if (contentId) {
-				$('#'+contentId).show();
+			if (contentHash) {
+				$('#'+contentHash).show();
 			}
 		},
 

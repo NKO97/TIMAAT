@@ -115,6 +115,17 @@
             else {
               TIMAAT.UI.clearLastSelection(pathSegments[1]);
               switch (pathSegments[1]) {
+                case 'allMediaList':
+                if (!TIMAAT.MediumDatasets.dataTableAllMediaList) {
+                  await TIMAAT.MediumDatasets.setupAllMediaDataTable();
+                }
+                TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/allMediaList')
+                TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload();
+                TIMAAT.UI.displayComponent('medium', null, 'medium-datatable');
+                $('#medium-tab').addClass('active');
+                TIMAAT.UI.displayDataSetContentArea('medium-allMedia');
+                $('#timaat-mediumdatasets-all-media').addClass('active');
+              break;
                 case 'list': //* #medium/list
                   TIMAAT.MediumDatasets.loadMedia();
                   TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
@@ -227,17 +238,6 @@
               case 'list': //* #mediumCollection/list
                 TIMAAT.MediumCollectionDatasets.loadMediaCollections();
                 TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
-              break;
-              case 'allMediaList':
-                if (!TIMAAT.MediumCollectionDatasets.dataTableAllMediaList) {
-                  await TIMAAT.MediumCollectionDatasets.setupAllMediaDataTable();
-                }
-                TIMAAT.MediumCollectionDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/mediumCollection/allMediaList')
-                TIMAAT.MediumCollectionDatasets.dataTableAllMediaList.ajax.reload();
-                TIMAAT.UI.displayComponent('mediumCollection', null, 'mediumcollection-datatable');
-                $('#mediumcollection-tab').addClass('active');
-                TIMAAT.UI.displayDataSetContentArea('mediumcollection-allMedia');
-                $('#timaat-mediumcollectiondatasets-all-media').addClass('active');
               break;
               default:
                 this.redirectToDefaultView();
@@ -829,9 +829,10 @@
     },
 
     redirectToDefaultView: function() {
+      console.log("TCL: redirectToDefaultView", );
       // redirect if invalid url path is entered
-      TIMAAT.URLHistory.setupView('#mediumCollection/allMediaList');
-      TIMAAT.URLHistory.setURL(null, 'Media Library', '#mediumCollection/allMediaList');
+      TIMAAT.URLHistory.setupView('#medium/allMediaList');
+      TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/allMediaList');
     },
 
   }

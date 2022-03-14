@@ -2597,11 +2597,6 @@
                           </button>
                         </div>
                         <div class="card-body">
-                          <ul class="list-group">
-                            <li id="timaat-mediumcollectiondatasets-all-media" class="list-group-item list-group-item-action font-weight-bold">
-                              <i class="fas fa-inbox"></i> All media
-                            </li>
-                          </ul>
                           <table id="timaat-mediumcollectiondatasets-mediumcollection-list-table" class="table table-striped table-bordered table-hover mediadataset-table">
                             <thead class="thead-dark">
                               <tr>
@@ -2614,7 +2609,13 @@
                         </div>
                       </div>
                       <div class="card datatables" id="medium-datatable">
-                        <div class="card-header">All Media
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-media" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All media
+                          </li>
+                        </ul>
+                        <br>
+                        <div class="card-header">Media datasets
                            <!-- <button type="button" id="timaat-mediadatasets-medium-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button> <!~~ TODO When re-added: open dialogue to ask which medium type to add, then open corresponding form ~~> -->
@@ -2800,11 +2801,11 @@
                       <div id="media-dataset-content"> -->
                         <!-- Data tab content -->
                         <!-- all media -->
-                        <div class="card dataset-content" id="mediumcollection-allMedia"> <!-- Medium collection all media -->
+                        <div class="card dataset-content" id="medium-allMedia"> <!-- Medium all media -->
                           <div class="card-header">All media
                           </div>
                           <div class="card-body">
-                            <table id="timaat-mediumcollectiondatasets-mediumcollection-all-media-table" class="table table-striped table-bordered table-hover">
+                            <table id="timaat-mediumdatasets-medium-all-media-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
                                   <th>Preview</th>
@@ -2816,7 +2817,7 @@
                                   <th>Actions</th>
                                 </tr>
                               </thead>
-                              <tbody id="timaat-mediumcollectiondatasets-mediumcollection-all-media">
+                              <tbody id="timaat-mediumdatasets-medium-all-media">
                               </tbody>
                             </table>
                           </div>

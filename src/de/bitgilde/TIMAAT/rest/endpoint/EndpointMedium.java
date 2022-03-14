@@ -206,6 +206,77 @@ public class EndpointMedium {
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
+	@Path("allMediaList")
+	public Response getAllMedia(@QueryParam("draw") Integer draw,
+															@QueryParam("start") Integer start,
+															@QueryParam("length") Integer length,
+															@QueryParam("orderby") String orderby,
+															@QueryParam("dir") String direction,
+															@QueryParam("search") String search ) {
+		// System.out.println("TCL: EndpointMediumCollection: getAllMedia: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		if ( draw == null ) draw = 0;
+
+		// sanitize user input
+		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		String column = "m.displayTitle.name";
+		if ( orderby != null) {
+			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("duration")) column = "";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "m.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
+		}
+
+		// calculate total # of records
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
+		long recordsTotal = (long) countQuery.getSingleResult();
+		long recordsFiltered = recordsTotal;
+
+		// search
+		Query query;
+		String sql;
+		List<Medium> mediumList = new ArrayList<>();
+		if (search != null && search.length() > 0 ) {
+			// find all matching media
+			sql = "SELECT m FROM Title t, Medium m WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
+			query = entityManager.createQuery(sql)
+													 .setParameter("search", search);
+			mediumList = castList(Medium.class, query.getResultList());
+			// find all media
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			if ( length == -1 ) { // display all results
+				length = mediumList.size();
+				query.setMaxResults(length);
+			}
+			recordsFiltered = mediumList.size();
+			List<Medium> filteredMediumList = new ArrayList<>();
+			int i = start;
+			int end;
+			if ((recordsFiltered - start) < length) {
+				end = (int)recordsFiltered;
+			}
+			else {
+				end = start + length;
+			}
+			for(; i < end; i++) {
+				filteredMediumList.add(mediumList.get(i));
+			}
+			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
+		} else {
+			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
+			query = entityManager.createQuery(sql);
+			if ( start != null && start > 0 ) query.setFirstResult(start);
+			if ( length != null && length > 0 ) query.setMaxResults(length);
+			mediumList = castList(Medium.class, query.getResultList());
+		}
+		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
+	}
+
+	@GET
+	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+	@Secured
 	@Path("selectList")
 	public Response getMediumSelectList(@QueryParam("start") Integer start,
 																			@QueryParam("length") Integer length,
