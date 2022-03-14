@@ -3,10 +3,8 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.util.Date;
 import java.util.List;
@@ -20,9 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name="actor_person")
 @NamedQuery(name="ActorPerson.findAll", query="SELECT ap FROM ActorPerson ap")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-									property  = "actorId",
-									scope     = ActorPerson.class)
 public class ActorPerson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
