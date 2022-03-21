@@ -363,7 +363,7 @@
 
 			$(document).on('change', '[data-role="changeUserPermissionMediumCollection"] > [data-role="select"]', async function(event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
+				let userId = $(this).closest('.permissionContainer').data('userid');
 				let permissionId = $(this).closest('.custom-select').val();
 
 				// prevent removal of the last admin. One admin has to exist at any time
@@ -394,7 +394,7 @@
 
 			$(document).on('click','[data-role="removeUserPermissionMediumCollection"] > [data-role="remove"]', async function (event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
+				let userId = $(this).closest('.permissionContainer').data('userid');
 				let index = TIMAAT.MediumCollectionDatasets.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
 				let userPermissionId = TIMAAT.MediumCollectionDatasets.userPermissionList[index].permissionId;
 				if (!userPermissionId) return;
