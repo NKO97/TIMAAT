@@ -1144,7 +1144,7 @@
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
-				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
+				let frameTime = 1000 / TIMAAT.VideoPlayer.curFrameRate;
 				TIMAAT.VideoPlayer.jumpTo( Math.max(0, (Math.round(TIMAAT.VideoPlayer.medium.currentTime * 1000 / frameTime) * frameTime) - frameTime));
 			});
 
@@ -1152,7 +1152,7 @@
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
-				let frameTime = 1 / TIMAAT.VideoPlayer.curFrameRate;
+				let frameTime = 1000 / TIMAAT.VideoPlayer.curFrameRate;
 				TIMAAT.VideoPlayer.jumpTo( Math.min(TIMAAT.VideoPlayer.medium.duration * 1000, (Math.round(TIMAAT.VideoPlayer.medium.currentTime * 1000 / frameTime) * frameTime) + frameTime) );
 			});
 
