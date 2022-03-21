@@ -400,7 +400,6 @@
 				TIMAAT.MediumDatasets.showAddMediumButton();
 				await TIMAAT.UI.refreshDataTable(type);
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id);
-				TIMAAT.MediumDatasets.scrollToSelectedItem(medium.model.id, type);
 				TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
 			});
 
@@ -3278,7 +3277,7 @@
 							id: 1,
 						},
 						length: formDataObject.length,
-						// videoCodec: formDataObject.videoCodec,
+						videoCodec: "", // TODO video codec neither implemented nor displayed in UI
 						width: formDataObject.width,
 						height: formDataObject.height,
 						frameRate: formDataObject.frameRate,
@@ -3692,33 +3691,6 @@
 				// .replace(/>/g, "&gt;")
 				// .replace(/"/g, "&quot;")
 				// .replace(/'/g, "&#039;");
-		},
-
-		scrollToSelectedItem: function(id, type) {
-			this.dataTableMedia.row(id).scrollTo();
-			switch (type) {
-				case 'audio':
-					this.dataTableAudio.row(id).scrollTo();
-				break;
-				case 'document':
-					this.dataTableDocument.row(id).scrollTo();
-				break;
-				case 'image':
-					this.dataTableImage.row(id).scrollTo();
-				break;
-				case 'software':
-					this.dataTableSoftware.row(id).scrollTo();
-				break;
-				case 'text':
-					this.dataTableText.row(id).scrollTo();
-				break;
-				case 'video':
-					this.dataTableVideo.row(id).scrollTo();
-				break;
-				case 'videogame':
-					this.dataTableVideogame.row(id).scrollTo();
-				break;
-			}
 		},
 
 		setupAllMediaDataTable: async function() {
