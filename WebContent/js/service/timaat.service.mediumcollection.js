@@ -56,10 +56,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getTagList(mediumCollectionId) {
@@ -80,10 +80,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		createMediaCollection(title, comment, callback) {
@@ -109,7 +109,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		async createMediumCollection(mediumCollectionModel) {
@@ -193,7 +193,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: updateCollectionItem -> data", data);
+        	// console.log("TCL: updateCollectionItem -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -206,7 +206,7 @@
 		},
 
 		async addUserAccountHasMediumCollectionWithPermission(userAccountId, mediumCollectionId, permissionId) {
-			console.log("TCL: addUserAccountHasMediumCollectionWithPermission -> userAccountId, mediumCollectionId, permission", userAccountId, mediumCollectionId, permissionId);
+			// console.log("TCL: addUserAccountHasMediumCollectionWithPermission -> userAccountId, mediumCollectionId, permission", userAccountId, mediumCollectionId, permissionId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
@@ -229,7 +229,7 @@
 		},
 
 		async updateUserAccountHasMediumCollectionWithPermission(userAccountId, mediumCollectionId, permissionId) {
-			console.log("TCL: updateUserAccountHasMediumCollectionWithPermission -> userAccountId, mediumCollectionId, permission", userAccountId, mediumCollectionId, permissionId);
+			// console.log("TCL: updateUserAccountHasMediumCollectionWithPermission -> userAccountId, mediumCollectionId, permission", userAccountId, mediumCollectionId, permissionId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/userAccount/"+userAccountId+"/withPermission/"+permissionId+"/"+'?authToken='+TIMAAT.Service.session.token,
@@ -252,7 +252,7 @@
 		},
 
 		async removeUserAccountHasMediumCollection(userAccountId, mediumCollectionId) {
-      console.log("TCL: removeUserAccountHasMediumCollection -> userAccountId, mediumCollectionId", userAccountId, mediumCollectionId);
+      // console.log("TCL: removeUserAccountHasMediumCollection -> userAccountId, mediumCollectionId", userAccountId, mediumCollectionId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/mediumCollection/"+mediumCollectionId+"/userAccount/"+userAccountId+"/"+'?authToken='+TIMAAT.Service.session.token,
@@ -267,10 +267,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getMediumCollectionPermissionLevel(mediaCollectionId) {
@@ -295,10 +295,10 @@
 						console.error("ERROR: ", error);
 						console.error("ERROR responseText: ", error.responseText);
 					}
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getDisplayNamesAndPermissions(mediaCollectionId) {
@@ -319,10 +319,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addTag(mediumCollectionId, tagId) {
@@ -345,7 +345,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-		});		
+		});
 		},
 
 		async updateMediaCollection(collectionModel) {
@@ -470,10 +470,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 	}

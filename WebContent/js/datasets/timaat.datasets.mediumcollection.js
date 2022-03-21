@@ -1016,6 +1016,7 @@
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
+				"dom"           : '<l<t>ip>',
 				"processing"    : true,
 				"stateSave"     : true,
 				"scrollX"				: true,
@@ -1184,11 +1185,11 @@
 
 				},
 				"columns": [
-					{ data: 'sortOrder', className: 'sortOrder', width: '5%', render: function(data, type, collectionItem, meta) {
-						// console.log(`TCL: sortOrder:function -> data, type, collectionItem, meta`, data, type, collectionItem, meta);
+					{ data: 'sortOrder', className: 'sortOrder', width: '5%', render: function(data, type, collection, meta) {
+						// console.log(`TCL: sortOrder:function -> data, type, collection, meta`, data, type, collection, meta);
 						let order =
 							`<div class="row">
-								<div class="col-md-6" style="text-align: right; padding-right: 1px; padding-left: 0px;">`+(collectionItem.sortOrder+1)+`</div>
+								<div class="col-md-6" style="text-align: right; padding-right: 1px; padding-left: 0px;">`+(collection.sortOrder+1)+`</div>
 								<div class="col-md-6">`;
 						if (meta.row > 0) {
 							order += `<button type="button" title="Sort up" class="btn btn-outline-secondary btn-sm timaat-mediumcollectiondatasets-collectionitem-moveup"><i class="fas fa-sort-up"></i></button>`;
@@ -1280,7 +1281,8 @@
 						}
 					},
 					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '10%', render: function(data, type, collectionItem, meta) {
-							return TIMAAT.VideoChooser._getProducer(collectionItem.medium);
+						// console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
+						return TIMAAT.VideoChooser._getProducer(collectionItem.medium);
 						}
 					},
 					{ data: 'medium.releaseDate', name: 'releaseDate', className: 'date', orderable: false, width: '10%', render: function(data, type, collectionItem, meta) {
