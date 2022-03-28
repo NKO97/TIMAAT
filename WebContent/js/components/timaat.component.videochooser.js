@@ -554,7 +554,7 @@
 						} else if (medium.mediumImage) {
 							ui = `<div>
 								<form action="/TIMAAT/api/medium/image/`+medium.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" accept=".png" class="timaat-medium-upload-file d-none" type="file" />
+									<input name="file" accept=".png,.jpg" class="timaat-medium-upload-file d-none" type="file" />
 									<button type="submit" title="Upload image" class="btn btn-outline-primary btn-sm btn-block timaat-medium-upload"><i class="fas fa-upload"></i></button>
 								</form>
 								<button type="button" title="Annotate image" class="btn btn-outline-success btn-sm btn-block videochooser-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
