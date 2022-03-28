@@ -43,7 +43,7 @@
 					break;
 					case 'image':
 						// displayMediumTypeIcon = '  <i class="far fa-file-image"></i> ';
-						fileTypesAccepted = '.png';
+						fileTypesAccepted = '.png,.jpg';
 					break;
 					case 'software':
 						// displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i> ';

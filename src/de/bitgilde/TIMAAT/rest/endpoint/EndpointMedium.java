@@ -3072,7 +3072,7 @@ public class EndpointMedium {
 
 		if ( mediumAudio.getMedium().getFileStatus().compareTo("noFile") != 0 )
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Audio file already exists").build();
-
+		
 		try {
 			// TODO assume MP3 upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
@@ -3148,9 +3148,15 @@ public class EndpointMedium {
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Image file already exists").build();
 
 		try {
-			// TODO assume png upload only
+			boolean isJPG = fileDetail.getFileName().toLowerCase().endsWith(".jpg");
+
+			String tempExtension = ".png";
+			if ( isJPG ) tempExtension = ".jpg";
+			System.out.println("file is jpeg: "+isJPG);
+			System.out.println("file has extension "+tempExtension);
+			
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
-					+ "-upload.png";
+					+ "-upload"+tempExtension;
 			File uploadTempFile = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + tempName);
@@ -3175,14 +3181,15 @@ public class EndpointMedium {
 			// mediumImage.setBitDepth(info.getBitdepth());
 			// mediumImage.getMedium().setFileExtension(info.getFileExtension());
 			// rename file with medium
-			String fileExtension = "png"; // TODO check for input file extension type
+			String fileExtension = "png";
+			// convert and store jpeg image previews as png
 			int mediumId = mediumImage.getMediumId();
 			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/image/" + tempName);
 			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+				+ "medium/image/" + mediumId + "-image-original" + tempExtension));
 			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumId + "-image-original." + fileExtension);
+				+ "medium/image/" + mediumId + "-image-original" + tempExtension);
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
@@ -3217,13 +3224,13 @@ public class EndpointMedium {
 			}
 			if (targetHeight > 0 && targetWidth > 0) {
 				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
 				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
 				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
 			} else { // original image is smaller than thumbnail dimensions
 				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
 				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
 			}
@@ -3241,13 +3248,13 @@ public class EndpointMedium {
 			}
 			if (targetHeight > 0 && targetWidth > 0) {
 				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
 				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
 				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
 			} else { // original image is smaller than 480p dimensions
 				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original." + fileExtension));
+					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
 				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
 			}
@@ -3612,7 +3619,7 @@ public class EndpointMedium {
 
 	@HEAD
 	@Path("image/{id}/download")
-	@Produces("image/png")
+	@Produces({"image/png","image/jpeg"})
 	public Response getImageFileInfo(@PathParam("id") int id,
 																	 @QueryParam("token") String fileToken) {
 
@@ -3639,7 +3646,7 @@ public class EndpointMedium {
 
 	@GET
 	@Path("image/{id}/download")
-	@Produces("image/png")
+	@Produces({"image/png","image/jpeg"})
 	public Response getImageFile(@Context HttpHeaders headers,
 															 @PathParam("id") int id,
 															 @QueryParam("token") String fileToken,
@@ -3664,9 +3671,14 @@ public class EndpointMedium {
 
 		if ( mediumFileStatus(id, "image").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
 
-		if ( mediumFileStatus(id, "image").compareTo("ready") != 0 )
-			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + id + "-image-original.png", headers, id+".png");
+		if ( mediumFileStatus(id, "image").compareTo("ready") != 0 ) {
+			if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + id + "-image-original.png").exists() ) return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + id + "-image-original.png", headers, id+".png");
+			else return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
+					+ "medium/image/" + id + "-image-original.jpg", headers, id+".jpg");
+			
+		}
 
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/image/" + id + "/" + id + "-image-scaled.png", headers, id+".png");
@@ -4047,6 +4059,11 @@ public class EndpointMedium {
 		File file = new File(fileName);
 
 		if (file.exists()) {
+			String fileExtension = file.getName().substring(file.getName().lastIndexOf('.')+1);
+			String fileType = "video";
+			if ( fileExtension.equalsIgnoreCase("png") || fileExtension.equalsIgnoreCase("jpg") ) fileType = "image";
+			if ( fileExtension.equalsIgnoreCase("mp3") ) fileType = "audio";
+			
 			ResponseBuilder builder = Response.ok();
 			if ( asFile != null ) builder.header("Content-Disposition", "attachment; filename=\""+asFile+"\"");
 
@@ -4060,13 +4077,13 @@ public class EndpointMedium {
 			int from,to=0;
 			if (!headers.getRequestHeaders().containsKey("Range")) {
 				builder.header("Content-Length", file.length());
-				builder.header("Content-Type", "video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
+				builder.header("Content-Type", fileType+"/"+fileExtension);
 				from = 0;
 				to = (int)file.length();
 			} else {
 				String rangeHeader = headers.getHeaderString("Range");
 				builder.status(Status.PARTIAL_CONTENT);
-				builder.header("Content-Type", "video/"+file.getName().substring(file.getName().lastIndexOf('.')+1));
+				builder.header("Content-Type", fileType+"/"+fileExtension);
 
 				String[] acceptRanges = rangeHeader.split("=");
 				String[] bounds = acceptRanges[1].split("-");
@@ -4118,7 +4135,7 @@ public class EndpointMedium {
 				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
 			break;
 			case "image":
-				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "uploaded";
+				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() || new File(mediumDir + "-" + type + "-original." + "jpg" ).exists() ) fileStatus = "uploaded";
 				if ( new File(mediumDir + "/" + id + "-" + type + "-thumb." + fileExtension ).exists() ) fileStatus = "thumbCreated";
 				if ( new File(mediumDir + "/" + id + "-" + type + "-scaled." + fileExtension ).exists() ) fileStatus = "ready";
 			break;
