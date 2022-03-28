@@ -225,8 +225,9 @@
 				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/allMediaList')
 				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload();
 				// TIMAAT.UI.displayDataSetContent('allMedia', null, 'mediumCollection');
-
-				TIMAAT.UI.clearLastSelection('medium');
+				if (!TIMAAT.UI.selectedMediumId) {
+					TIMAAT.UI.clearLastSelection('medium');
+				}
 				$('#mediumcollection-metadata-form').data('medium', null);
 				$('#mediumcollection-metadata-form').data('type', null);
 				$('#timaat-mediumdatasets-all-media').addClass('active');
@@ -266,7 +267,11 @@
 						console.error("ERROR: ", error);
 					}
 					try {
-						await TIMAAT.UI.refreshDataTable(type);
+						if ($('#medium-tab').hasClass('active')) {
+							await TIMAAT.UI.refreshDataTable('medium');
+						} else {
+							await TIMAAT.UI.refreshDataTable(type);
+						}
 					} catch(error) {
 						console.error("ERROR: ", error);
 					}
@@ -398,8 +403,12 @@
 					$('#medium-tab-metadata').trigger('click');
 				}
 				TIMAAT.MediumDatasets.showAddMediumButton();
-				await TIMAAT.UI.refreshDataTable(type);
-				TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id);
+				if ($('#medium-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('medium');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
+				// TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id); // is done in displayDataSetContent
 				TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
 			});
 
@@ -764,20 +773,32 @@
 					switch (type) {
 						case 'audio':
 							medium.model.mediumAudio.length = uploadedMedium.mediumAudio.length;
-							await TIMAAT.UI.refreshDataTable('audio');
+							if ($('#medium-tab').hasClass('active')) {
+								await TIMAAT.UI.refreshDataTable('medium');
+							} else {
+								await TIMAAT.UI.refreshDataTable('audio');
+							}
 						break;
 						case 'image':
 							medium.model.mediumImage.width = uploadedMedium.mediumImage.width;
 							medium.model.mediumImage.height = uploadedMedium.mediumImage.height;
 							// medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth; // TODO
-							await TIMAAT.UI.refreshDataTable('image');
+							if ($('#medium-tab').hasClass('active')) {
+								await TIMAAT.UI.refreshDataTable('medium');
+							} else {
+								await TIMAAT.UI.refreshDataTable('image');
+							}
 						break;
 						case 'video':
 							medium.model.mediumVideo.width = uploadedMedium.mediumVideo.width;
 							medium.model.mediumVideo.height = uploadedMedium.mediumVideo.height;
 							medium.model.mediumVideo.length = uploadedMedium.mediumVideo.length;
 							medium.model.mediumVideo.frameRate = uploadedMedium.mediumVideo.frameRate;
-							await TIMAAT.UI.refreshDataTable('video');
+							if ($('#medium-tab').hasClass('active')) {
+								await TIMAAT.UI.refreshDataTable('medium');
+							} else {
+								await TIMAAT.UI.refreshDataTable('video');
+							}
 						break;
 					}
 				}
@@ -1204,8 +1225,12 @@
 					}
 				}
 				// console.log("TCL: show medium title form");
-				await TIMAAT.UI.refreshDataTable(type);
-				TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id);
+				if ($('#medium-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('medium');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
+				// TIMAAT.UI.addSelectedClassToSelectedItem(type, medium.model.id); // is done in displayDataSetContent
 				TIMAAT.UI.displayDataSetContent('titles', medium, 'medium');
 			});
 
@@ -2107,7 +2132,7 @@
 		},
 
 		mediumFormTitles: function(action, medium) {
-			console.log("TCL: mediumFormTitles: (action, medium): ", action, medium);
+			// console.log("TCL: mediumFormTitles: (action, medium): ", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
 			var node = document.getElementById("medium-dynamic-title-fields");
 			while (node.lastChild) {
@@ -3154,7 +3179,7 @@
 		},
 
 		updateMediumModelData: async function(model, formDataObject) {
-    	console.log("TCL: model, formDataObject", model, formDataObject);
+    	// console.log("TCL: updateMediumModelData: model, formDataObject", model, formDataObject);
 			// medium data
 			model.releaseDate = formDataObject.releaseDate;
 			model.recordingStartDate = formDataObject.recordingStartDate;
@@ -3939,7 +3964,7 @@
 		},
 
 		setupMediaDataTable: function() {
-			// console.log("TCL: setupDataTable");
+			// console.log("TCL: setupMediaDataTable");
 			// setup dataTable
 			this.dataTableMedia = $('#timaat-mediadatasets-media-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -3987,11 +4012,30 @@
 						return data.data; // data.map(medium => new TIMAAT.Medium(medium));
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.MediumDatasets.dataTableMedia.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('medium');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4001,7 +4045,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4136,11 +4179,29 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.MediumDatasets.dataTableAudio.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('audio');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4149,8 +4210,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4257,11 +4316,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+        	// console.log("TCL: setupDocumentDataTable:function -> settings, json", settings, json);
+					TIMAAT.MediumDatasets.dataTableDocument.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					// console.log("TCL_ DataTables has redrawn the table");
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('document');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4270,8 +4349,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4378,11 +4455,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+        	// console.log("TCL: setupImageDataTable:function -> settings, json", settings, json);
+					TIMAAT.MediumDatasets.dataTableImage.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					// console.log("TCL_ DataTables has redrawn the table");
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('image');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4391,8 +4488,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4499,11 +4594,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+        	// console.log("TCL: setupSoftwareDataTable:function -> settings, json", settings, json);
+					TIMAAT.MediumDatasets.dataTableSoftware.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					// console.log("TCL_ DataTables has redrawn the table");
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('software');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4512,8 +4627,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4620,11 +4733,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+        	// console.log("TCL: setupTextDataTable:function -> settings, json", settings, json);
+					TIMAAT.MediumDatasets.dataTableText.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					// console.log("TCL_ DataTables has redrawn the table");
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('text');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4633,8 +4766,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4739,11 +4870,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+        	// console.log("TCL: setupVideoDataTable:function -> settings, json", settings, json);
+					TIMAAT.MediumDatasets.dataTableVideo.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					// console.log("TCL_ DataTables has redrawn the table");
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('video');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4752,8 +4903,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4863,11 +5012,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+        	// console.log("TCL: setupVideogameDataTable:function -> settings, json", settings, json);
+					TIMAAT.MediumDatasets.dataTableVideogame.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					// console.log("TCL_ DataTables has redrawn the table");
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let position = $('table tbody > tr:nth-child('+i+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMediumId) {
 						TIMAAT.UI.clearLastSelection('videogame');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMediumId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4876,8 +5045,6 @@
 					let medium = data;
 					medium.ui = mediumElement;
 					mediumElement.data('medium', medium);
-
-					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
@@ -4959,7 +5126,7 @@
 				break;
 			}
 			TIMAAT.UI.clearLastSelection(type);
-			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItem.model.id);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItem.model.id); // is done in displayDataSetContent
 			if (type == 'medium') {
 				if (TIMAAT.UI.subNavTab == 'dataSheet') {
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + selectedItem.model.id);

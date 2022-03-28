@@ -1463,7 +1463,7 @@
 			TIMAAT.VideoPlayer.inspector.reset();
 
 			// setup medium data sheet
-			TIMAAT.UI.clearLastSelection('medium');
+			// TIMAAT.UI.clearLastSelection('medium');
 			$('#medium-metadata-form').data('medium', medium);
 			$('#mediumPreviewTab').addClass('annotationView');
 			$('#timaat-mediadatasets-medium-tabs').show();

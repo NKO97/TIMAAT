@@ -22,7 +22,7 @@
 	TIMAAT.CategoryLists = {
 		categorySets: null,
     categories: null,
-		
+
 		init: function() {
 			this.initCategories();
 			this.initCategorySets();
@@ -50,7 +50,7 @@
 				if (!$('#category-metadata-form').valid()) return false;
 
 				// the original category or category set model (in case of editing an existing category or category set)
-				var category = $('#category-metadata-form').data('category');				
+				var category = $('#category-metadata-form').data('category');
 
 				// create/edit category or category set window submitted data
 				var formDataRaw = $('#category-metadata-form').serializeArray();
@@ -83,7 +83,7 @@
           delete categoryData.ui;
           await TIMAAT.CategoryLists.updateCategory(categoryData, categorySetIdList);
           // category.updateUI();
-        } 
+        }
         else { // create new category
           var categoryModel = await TIMAAT.CategoryLists.createCategoryModel(formDataObject);
           var newCategory = await TIMAAT.CategoryService.createCategory(categoryModel);
@@ -99,7 +99,7 @@
             newCategory.categorySetHasCategories.push(newCategorySetHasCategory);
           }
           category = new TIMAAT.Category(newCategory);
-          $('#category-metadata-form').data('category', category); 
+          $('#category-metadata-form').data('category', category);
           $('#list-tab-metadata').data('type', 'category');
           $('#list-tab-metadata').trigger('click');
         }
@@ -124,14 +124,14 @@
         var category = modal.data('category');
         // console.log("TCL: $ -> category", category);
         if (category) {
-          try {	
+          try {
             await TIMAAT.CategoryService.deleteCategory(category.model.id);
             category.remove();
           } catch(error) {
             console.error("ERROR: ", error);
           }
           try {
-            await TIMAAT.UI.refreshDataTable('categorySet');
+            // await TIMAAT.UI.refreshDataTable('categorySet');
             await TIMAAT.UI.refreshDataTable('category');
           } catch(error) {
             console.error("ERROR: ", error);
@@ -164,7 +164,7 @@
         }
         // console.log("TCL: Submit Categories for analysis list");
         // var modal = $('#timaat-annotationdatasets-annotation-categories');
-        if (!$('#annotationCategoriesForm').valid()) 
+        if (!$('#annotationCategoriesForm').valid())
           return false;
         var annotation = TIMAAT.VideoPlayer.curAnnotation;
         // console.log("TCL: Inspector -> constructor -> annotation", annotation);
@@ -186,7 +186,7 @@
         $('#annotation-categories-multi-select-dropdown').val(null).trigger('change');
         $('#annotation-categories-multi-select-dropdown').select2('destroy');
         $('#annotation-categories-multi-select-dropdown').find('option').remove();
-        
+
         $('#annotation-categories-multi-select-dropdown').select2({
           closeOnSelect: false,
           scrollAfterSelect: true,
@@ -205,7 +205,7 @@
               return {
                 search: params.term,
                 page: params.page
-              };          
+              };
             },
             processResults: function(data, params) {
               params.page = params.page || 1;
@@ -306,7 +306,7 @@
             segmentElementId = TIMAAT.VideoPlayer.curAction.model.id
           break;
         }
-        
+
         $('#segment-element-categories-multi-select-dropdown').select2({
           closeOnSelect: false,
           scrollAfterSelect: true,
@@ -325,7 +325,7 @@
               return {
                 search: params.term,
                 page: params.page
-              };          
+              };
             },
             processResults: function(data, params) {
               params.page = params.page || 1;
@@ -383,7 +383,7 @@
 				if (!$('#categoryset-metadata-form').valid()) return false;
 
 				// the original category or category set model (in case of editing an existing category or category set)
-				var categorySet = $('#categoryset-metadata-form').data('categorySet');				
+				var categorySet = $('#categoryset-metadata-form').data('categorySet');
 
 				// create/edit category or category set window submitted data
 				var formDataRaw = $('#categoryset-metadata-form').serializeArray();
@@ -396,7 +396,7 @@
         var duplicate = await TIMAAT.CategorySetService.checkForDuplicate(formDataObject.name);
         if (duplicate && categorySet && categorySet.model.name != formDataObject.name || duplicate && !categorySet) { // duplicate category set name entered
           $('#timaat-categorylists-categoryset-duplicate').modal('show');
-        } 
+        }
         else {
           delete formDataObject.categoryId;
           // console.log("TCL: formDataObject", formDataObject);
@@ -435,11 +435,11 @@
             $('#list-tab-metadata').data('type', 'categorySet');
             $('#list-tab-metadata').trigger('click');
           }
-          TIMAAT.CategoryLists.showAddCategorySetButton();
-          await TIMAAT.UI.refreshDataTable('categorySet');
-          TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', categorySet.model.id);
-          TIMAAT.UI.displayDataSetContent('dataSheet', categorySet, 'categorySet');
         }
+        TIMAAT.CategoryLists.showAddCategorySetButton();
+        await TIMAAT.UI.refreshDataTable('categorySet');
+        TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', categorySet.model.id);
+        TIMAAT.UI.displayDataSetContent('dataSheet', categorySet, 'categorySet');
 			});
 
       // delete button (in form) handler
@@ -455,7 +455,7 @@
         var modal = $('#timaat-categorylists-categoryset-delete');
         var categorySet = modal.data('categorySet');
         if (categorySet) {
-          try {	
+          try {
             // await TIMAAT.CategoryLists._categorySetRemoved(categorySet.model.id);
             await TIMAAT.CategorySetService.deleteCategorySet(categorySet.model.id);
             categorySet.remove();
@@ -464,7 +464,7 @@
           }
           try {
             await TIMAAT.UI.refreshDataTable('categorySet');
-            await TIMAAT.UI.refreshDataTable('category');
+            // await TIMAAT.UI.refreshDataTable('category');
           } catch(error) {
             console.error("ERROR: ", error);
           }
@@ -495,7 +495,7 @@
           return;
         }
         // console.log("TCL: Submit category sets for analysis list");
-        if (!$('#mediumAnalysisListCategorySetsForm').valid()) 
+        if (!$('#mediumAnalysisListCategorySetsForm').valid())
           return false;
         var mediumAnalysisList = TIMAAT.VideoPlayer.curAnalysisList;
         // console.log("TCL: Inspector -> constructor -> mediumAnalysisList", mediumAnalysisList);
@@ -538,7 +538,7 @@
           $('#timaat-mediumAnalysisList-categorySet-in-use').data('mediumAnalysisList', mediumAnalysisList);
           $('#timaat-mediumAnalysisList-categorySet-in-use').data('categorySetIdList', categorySetIdList);
           $('#timaat-mediumAnalysisList-categorySet-in-use').modal('show');
-        } else 
+        } else
         mediumAnalysisList = await TIMAAT.CategoryLists.updateMediumAnalysisListHasCategorySetsList(mediumAnalysisList, categorySetIdList);
       });
 
@@ -557,7 +557,7 @@
         $('#mediumAnalysisList-categorySets-multi-select-dropdown').val(null).trigger('change');
         $('#mediumAnalysisList-categorySets-multi-select-dropdown').select2('destroy');
         $('#mediumAnalysisList-categorySets-multi-select-dropdown').find('option').remove();
-        
+
         $('#mediumAnalysisList-categorySets-multi-select-dropdown').select2({
           closeOnSelect: false,
           scrollAfterSelect: true,
@@ -576,7 +576,7 @@
               return {
                 search: params.term,
                 page: params.page
-              };          
+              };
             },
             processResults: function(data, params) {
               params.page = params.page || 1;
@@ -616,7 +616,7 @@
       this.loadCategories();
       this.loadCategorySets();
 		},
-		
+
 		loadCategories: function() {
       $('#list-tab-metadata').data('type', 'category');
       TIMAAT.UI.addSelectedClassToSelectedItem('category', null);
@@ -624,7 +624,7 @@
       this.showAddCategoryButton();
       this.setCategoriesList();
 		},
-		
+
 		loadCategorySets: function() {
       $('#list-tab-metadata').data('type', 'categorySet');
       TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', null);
@@ -645,7 +645,7 @@
 	      TIMAAT.UI.clearLastSelection('category');
 		}
 		},
-		
+
 		setCategorySetsList: function() {
 			if ( this.categorySets == null ) return;
 			if ( this.dataTableCategorySets ) {
@@ -654,7 +654,7 @@
 			}
 		},
 
-		setupCategoryDataTable: function() {			
+		setupCategoryDataTable: function() {
       // console.log("TCL: setupCategoryDataTable");
       // setup dataTable
       this.dataTableCategories = $('#timaat-categorylists-category-table').DataTable({
@@ -691,7 +691,7 @@
           "dataSrc": function(data) {
             // setup model
             var categoryArray = Array();
-            data.data.forEach(function(category) { 
+            data.data.forEach(function(category) {
               if ( category.id > 0 ) {
                 categoryArray.push(new TIMAAT.Category(category));
               }
@@ -701,11 +701,30 @@
             return data.data;
           }
         },
+        "initComplete": async function( settings, json ) {
+					TIMAAT.CategoryLists.dataTableCategories.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
         "rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedCategoryId) {
 						TIMAAT.UI.clearLastSelection('category');
 						$(row).addClass('selected');
+            TIMAAT.UI.selectedCategoryId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
         "createdRow": function(row, data, dataIndex) {
@@ -725,7 +744,7 @@
             let nameDisplay = `<p>`+ category.name +`</p>`;
             return nameDisplay;
             }
-          },			
+          },
         ],
         "language": {
           "decimal"     : ",",
@@ -742,11 +761,11 @@
             "next"    : ">",
             "last"    : ">>"
           },
-        },				
-      });				
+        },
+      });
     },
 
-    setupCategorySetDataTable: function() {			
+    setupCategorySetDataTable: function() {
       // console.log("TCL: setupCategorySetDataTable");
       // setup dataTable
       this.dataTableCategorySets = $('#timaat-categorylists-categoryset-table').DataTable({
@@ -783,7 +802,7 @@
           "dataSrc": function(data) {
             // setup model
             var categorySetArray = Array();
-            data.data.forEach(function(categorySet) { 
+            data.data.forEach(function(categorySet) {
               if ( categorySet.id > 0 ) {
                 categorySetArray.push(new TIMAAT.CategorySet(categorySet));
               }
@@ -793,11 +812,30 @@
             return data.data;
           }
         },
+        "initComplete": async function( settings, json ) {
+					TIMAAT.CategoryLists.dataTableCategorySets.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
         "rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedCategorySetId) {
 						TIMAAT.UI.clearLastSelection('categorySet');
 						$(row).addClass('selected');
+            TIMAAT.UI.selectedCategorySetId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
         "createdRow": function(row, data, dataIndex) {
@@ -817,7 +855,7 @@
             let nameDisplay = `<p>`+ categorySet.name +`</p>`;
             return nameDisplay;
             }
-          },			
+          },
         ],
         "language": {
           "decimal"     : ",",
@@ -874,7 +912,7 @@
 			TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, type);
 		},
 
-		addCategory: function() {	
+		addCategory: function() {
 			// console.log("TCL: addCategory()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'category-metadata-form');
 			$('#list-tab-metadata').data('type', 'category');
@@ -885,7 +923,7 @@
         node.removeChild(node.lastChild);
       }
       categoryOrCategorySetFormMetadataValidator.resetForm();
-      
+
       TIMAAT.UI.addSelectedClassToSelectedItem('category', null);
 
       // setup form
@@ -915,7 +953,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -930,7 +968,7 @@
       });
 		},
 
-    addCategorySet: function() {	
+    addCategorySet: function() {
 			// console.log("TCL: addCategorySet()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'categoryset-metadata-form');
 			$('#list-tab-metadata').data('type', 'categorySet');
@@ -941,7 +979,7 @@
 				node.removeChild(node.lastChild);
       }
       categoryOrCategorySetFormMetadataValidator.resetForm();
-      
+
       TIMAAT.UI.addSelectedClassToSelectedItem('categorySet', null);
 
       // setup form
@@ -971,7 +1009,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -985,7 +1023,7 @@
         minimumInputLength: 0,
       });
 		},
-		
+
 		categoryFormDataSheet: async function(action, data) {
       // console.log("TCL: action, data: ", action, data);
       var node = document.getElementById('dynamic-category-ispartof-categoryset-fields');
@@ -1019,7 +1057,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -1102,7 +1140,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -1114,7 +1152,7 @@
           cache: false
         },
         minimumInputLength: 0,
-      });          
+      });
       var categorySelect = $('#categories-multi-select-dropdown');
       await TIMAAT.CategorySetService.getCategorySetHasCategoryList(data.model.id).then(function (data) {
         // console.log("TCL: then: data", data);
@@ -1192,7 +1230,7 @@
           var i = 0;
           for (; i < existingEntries.length; i++) {
             await TIMAAT.CategorySetService.deleteCategorySetHasCategory(existingEntries[i].id, category.id);
-          }       
+          }
         } else if (existingEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add all categoryIdList: ", categoryIdList);
           //* find all categorySets this category shall be connected to and add the connection
@@ -1288,9 +1326,9 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-      
+
       await TIMAAT.UI.refreshDataTable('category');
-      await TIMAAT.UI.refreshDataTable('categorySet');
+      // await TIMAAT.UI.refreshDataTable('categorySet');
     },
 
     updateCategorySet: async function(categorySet, categorySetIdList) {
@@ -1312,7 +1350,7 @@
           for (; i < existingEntries.length; i++) {
             await TIMAAT.CategorySetService.deleteCategorySetHasCategory(categorySet.id, existingEntries[i].id);
           }
-        } 
+        }
         else if (existingEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add all categorySetIdList: ", categorySetIdList);
           let i = 0;
@@ -1327,7 +1365,7 @@
             categorySet.categorySetHasCategories.push({id: {categorySetId: categorySet.id, categoryId: categorySetIdList[i]}});
 
           }
-        } 
+        }
         else { //* add/remove entries
           // DELETE removed entries
           var entriesToDelete = [];
@@ -1408,8 +1446,8 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-      
-      await TIMAAT.UI.refreshDataTable('category');
+
+      // await TIMAAT.UI.refreshDataTable('category');
       await TIMAAT.UI.refreshDataTable('categorySet');
     },
 
@@ -1555,7 +1593,7 @@
       TIMAAT.VideoPlayer.inspector.setItem(this.curAnalysisList, 'analysisList');
 			return mediumAnalysisListModel;
     },
-    
+
     updateElementHasCategoriesList: async function(model, categoryIdList, type) {
     	// console.log("TCL: model, categoryIdList, type", model, categoryIdList, type);
       var existingEntries;
@@ -1572,7 +1610,7 @@
             existingEntries = await TIMAAT.AnalysisListService.getSelectedCategories(model.id, type);
           break;
         }
-				
+
         // console.log("TCL: existingEntries", existingEntries);
         if (categoryIdList == null) { //* all entries will be deleted
           // console.log("TCL: delete all categories");
@@ -1816,5 +1854,5 @@
     },
 
 	}
-	
+
 }, window));

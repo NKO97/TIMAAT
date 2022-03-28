@@ -194,7 +194,11 @@
 						console.error("ERROR: ", error);
 					}
 					try {
-						await TIMAAT.UI.refreshDataTable(type);
+						if ($('#actor-tab').hasClass('active')) {
+							await TIMAAT.UI.refreshDataTable('actor');
+						} else {
+							await TIMAAT.UI.refreshDataTable(type);
+						}
 					} catch (error) {
 						console.error("ERROR: ", error);
 					}
@@ -355,8 +359,12 @@
 					$('#actor-tab-metadata').trigger('click');
 				}
 				TIMAAT.ActorDatasets.showAddActorButton();
-				await TIMAAT.UI.refreshDataTable(type);
-				TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
+				if ($('#actor-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('actor');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
+				// TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
 			});
 
@@ -878,8 +886,12 @@
 					}
 				}
 				// console.log("TCL: show actor name form");
-				await TIMAAT.UI.refreshDataTable(type);
-				TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
+				if ($('#actor-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('actor');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
+				// TIMAAT.UI.addSelectedClassToSelectedItem(type, actor.model.id);
 				TIMAAT.UI.displayDataSetContent('names', actor, 'actor');
 			});
 
@@ -2500,7 +2512,11 @@
 					}
 				}
 				// actor.updateUI();
-				await TIMAAT.UI.refreshDataTable(type);
+				if ($('#actor-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('actor');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
 				// console.log("TCL: show actor memberOfCollective form");
 				TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
 			});
@@ -2883,7 +2899,7 @@
 		},
 
 		actorFormDataSheet: async function(action, type, data) {
-			console.log("TCL: actorFormDataSheet - action, type, data: ", action, type, data);
+			// console.log("TCL: actorFormDataSheet - action, type, data: ", action, type, data);
 			$('.carousel-inner').empty();
 			$('.carousel-indicators').empty();
 			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
@@ -4404,8 +4420,11 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-
-			await TIMAAT.UI.refreshDataTable(actorModel.actorType.actorTypeTranslations[0].type);
+			if ($('#actor-tab').hasClass('active')) {
+				await TIMAAT.UI.refreshDataTable('actor');
+			} else {
+				await TIMAAT.UI.refreshDataTable(actorModel.actorType.actorTypeTranslations[0].type);
+			}
 			// TIMAAT.UI.addSelectedClassToSelectedItem(actorModel.actorType.actorTypeTranslations[0].type, actorModel.id);
 		},
 
@@ -4491,7 +4510,7 @@
 			} catch(error) {
 				console.error("ERROR: ", error);
 			};
-			await TIMAAT.UI.refreshDataTable('video');
+			// await TIMAAT.UI.refreshDataTable('video'); // TODO still needed?
 		},
 
 		updateActorHasTagsList: async function(actorModel, tagIdList) {
@@ -5458,11 +5477,30 @@
 						return data.data; // data.map(actor => new TIMAAT.Actor(actor));
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.ActorDatasets.dataTableActor.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: rowCallback(actor) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						TIMAAT.UI.clearLastSelection('actor');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedActorId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -5575,12 +5613,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.ActorDatasets.dataTablePerson.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: rowCallback(person) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						// console.log("TCL: clear last selection 'person'");
 						TIMAAT.UI.clearLastSelection('person');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedActorId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -5680,12 +5737,31 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.ActorDatasets.dataTableCollective.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: rowCallback(collective) -  row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						// console.log("TCL: clear last selection 'collective'");
 						TIMAAT.UI.clearLastSelection('collective');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedActorId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -5781,7 +5857,7 @@
 					selectedItem = this.collectives[index];
 				break;
 			}
-			TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
+			// TIMAAT.UI.addSelectedClassToSelectedItem(type, selectedItemId);
 			if (type == 'actor') {
 				if (TIMAAT.UI.subNavTab == 'dataSheet') {
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + selectedItem.model.id);

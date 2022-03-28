@@ -115,7 +115,11 @@
 						console.error("ERROR: ", error);
 					}
 					try {
-						await TIMAAT.UI.refreshDataTable(type);
+						if ($('#music-tab').hasClass('active')) {
+							await TIMAAT.UI.refreshDataTable('music');
+						} else {
+							await TIMAAT.UI.refreshDataTable(type);
+						}
 					} catch(error) {
 						console.error("ERROR: ", error);
 					}
@@ -174,7 +178,7 @@
 				formDataSanitized.tempoMarkingId                = Number(formDataObject.tempoMarkingId);
 				formDataSanitized.musicTextSettingElementTypeId = Number(formDataObject.musicTextSettingElementTypeId);
 				formDataSanitized.voiceLeadingPatternList       = voiceLeadingPatternIdList;
-        console.log("TCL: formDataSanitized", formDataSanitized);
+        // console.log("TCL: formDataSanitized", formDataSanitized);
 				if (music) { // update music
 					// music data
 					music.model = await TIMAAT.MusicDatasets.updateMusicModelData(music.model, formDataSanitized);
@@ -225,7 +229,11 @@
 					$('#music-tab-metadata').trigger('click');
 				}
 				TIMAAT.MusicDatasets.showAddMusicButton();
-				await TIMAAT.UI.refreshDataTable(type);
+				if ($('#music-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('music');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
 				TIMAAT.UI.addSelectedClassToSelectedItem(type, music.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', music, 'music');
 			});
@@ -990,8 +998,12 @@
 					}
 				}
 				// console.log("TCL: show music title form");
-				await TIMAAT.UI.refreshDataTable(type);
-				TIMAAT.UI.addSelectedClassToSelectedItem(type, music.model.id);
+				if ($('#music-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('music');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
+				// TIMAAT.UI.addSelectedClassToSelectedItem(type, music.model.id);
 				TIMAAT.UI.displayDataSetContent('titles', music, 'music');
 			});
 
@@ -1687,7 +1699,11 @@
 						music.model.mediumHasMusicList[i].mediumHasMusicDetailList[j] = formEntries[i].mediumHasMusicDetailList[j];
 					}
 				}
-				await TIMAAT.UI.refreshDataTable(type);
+				if ($('#music-tab').hasClass('active')) {
+					await TIMAAT.UI.refreshDataTable('music');
+				} else {
+					await TIMAAT.UI.refreshDataTable(type);
+				}
 				// music.updateUI();
 				TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
 			});
@@ -4094,11 +4110,30 @@
 						return data.data; // data.map(music => new TIMAAT.Music(music));
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.MusicDatasets.dataTableMusic.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMusicId) {
 						TIMAAT.UI.clearLastSelection('music');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMusicId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4224,11 +4259,30 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.MusicDatasets.dataTableNashid.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMusicId) {
 						TIMAAT.UI.clearLastSelection('nashid');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMusicId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -4342,11 +4396,30 @@
 						return data.data;
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.MusicDatasets.dataTableChurchMusic.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedMusicId) {
 						TIMAAT.UI.clearLastSelection('churchMusic');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedMusicId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {

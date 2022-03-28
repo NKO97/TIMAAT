@@ -146,7 +146,7 @@
 				$('.add-event-button :input').prop('disabled', false);
 				$('.add-event-button').show();
 				await TIMAAT.UI.refreshDataTable('event');
-				TIMAAT.UI.addSelectedClassToSelectedItem('event', event.model.id);
+				// TIMAAT.UI.addSelectedClassToSelectedItem('event', event.model.id);
 				TIMAAT.UI.displayDataSetContent('dataSheet', event, 'event');
 			});
 
@@ -619,11 +619,30 @@
 						return data.data; // data.map(event => new TIMAAT.Event(event));
 					}
 				},
+				"initComplete": async function( settings, json ) {
+					TIMAAT.EventDatasets.dataTableEvent.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top // + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
 				"rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedEventId) {
 						TIMAAT.UI.clearLastSelection('event');
 						$(row).addClass('selected');
+						TIMAAT.UI.selectedEventId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
 				"createdRow": function(row, data, dataIndex) {
@@ -681,7 +700,7 @@
 					selectedEvent = this.events[index];
 				break;
 			}
-			TIMAAT.UI.addSelectedClassToSelectedItem('event', previousEventId);
+			// TIMAAT.UI.addSelectedClassToSelectedItem('event', previousEventId);
 			$('#event-metadata-form').data('event', selectedEvent);
 			$('#event-metadata-form').data('type', 'event');
 			// if (type == 'event') {

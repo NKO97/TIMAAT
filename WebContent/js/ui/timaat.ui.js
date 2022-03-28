@@ -661,8 +661,8 @@
           // add selection to new row
           if (id) {
             $(table.row('#'+id).node()).addClass('selected');
+						this.selectedCategoryId = id;
           }
-          this.selectedCategoryId = id;
 				break;
 				case 'categorySet':
 					table = TIMAAT.CategoryLists.dataTableCategorySets;
@@ -673,8 +673,8 @@
           // add selection to new row
           if (id) {
             $(table.row('#'+id).node()).addClass('selected');
+						this.selectedCategorySetId = id;
           }
-          this.selectedCategorySetId = id;
 				break;
         case 'role':
 					table = TIMAAT.RoleLists.dataTableRoles;
@@ -685,8 +685,8 @@
           // add selection to new row
           if (id) {
             $(table.row('#'+id).node()).addClass('selected');
+						this.selectedRoleId = id;
           }
-          this.selectedRoleId = id;
 				break;
 				case 'roleGroup':
 					table = TIMAAT.RoleLists.dataTableRoleGroups;
@@ -697,8 +697,8 @@
           // add selection to new row
           if (id) {
             $(table.row('#'+id).node()).addClass('selected');
+						this.selectedRoleGroupId = id;
           }
-          this.selectedRoleGroupId = id;
 				break;
         case 'language':
 					table = TIMAAT.LanguageLists.dataTableLanguages;
@@ -709,8 +709,8 @@
           // add selection to new row
           if (id) {
             $(table.row('#'+id).node()).addClass('selected');
+						this.selectedLanguageId = id;
           }
-          this.selectedLanguageId = id;
 				break;
 				case 'actor':
 					table = TIMAAT.ActorDatasets.dataTableActor;
@@ -720,8 +720,8 @@
 					// add selection to new row
 					if (id) {
 						$(table.row('#'+id).node()).addClass('selected');
+						this.selectedActorId = id;
 					}
-					this.selectedActorId = id;
 				break;
 				case 'person':
 					table = TIMAAT.ActorDatasets.dataTablePerson;
@@ -731,8 +731,8 @@
 					// add selection to new row
 					if (id) {
 						$(table.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('actor', id);
 					}
-					this.addSelectedClassToSelectedItem('actor', id);
 				break;
 				case 'collective':
 					table = TIMAAT.ActorDatasets.dataTableCollective;
@@ -742,8 +742,8 @@
 					// add selection to new row
 					if (id) {
 						$(table.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('actor', id);
 					}
-					this.addSelectedClassToSelectedItem('actor', id);
 				break;
 				case 'event':
 					if (this.selectedEventId && this.selectedEventId != id) {
@@ -752,8 +752,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.EventDatasets.dataTableEvent.row('#'+id).node()).addClass('selected');
+						this.selectedEventId = id;
 					}
-					this.selectedEventId = id;
 				break;
 				case 'music':
 					if (this.selectedMusicId && this.selectedMusicId != id) {
@@ -762,8 +762,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MusicDatasets.dataTableMusic.row('#'+id).node()).addClass('selected');
+						this.selectedMusicId = id;
 					}
-					this.selectedMusicId = id;
 				break;
 				case 'nashid':
 					if (this.selectedMusicId && this.selectedMusicId != id) {
@@ -772,8 +772,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('music', id);
 					}
-					this.addSelectedClassToSelectedItem('music', id);
 				break;
 				case 'churchMusic':
 					if (this.selectedMusicId && this.selectedMusicId != id) {
@@ -782,8 +782,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('music', id);
 					}
-					this.addSelectedClassToSelectedItem('music', id);
 				break;
 				case 'medium':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -791,6 +791,7 @@
 					}
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableMedia.row('#'+id).node()).addClass('selected');
+						this.selectedMediumId = id;
 					}
 					// if (this.selectedMediumId && this.selectedMediumId != id) {
 					// 	$(TIMAAT.VideoChooser.dt.row('#'+this.selectedMediumId).node()).removeClass('selected');
@@ -799,8 +800,7 @@
 					// if (id) {
 					// 	$(TIMAAT.VideoChooser.dt.row('#'+id).node()).addClass('selected');
 					// }
-					this.selectedMediumId = id;
-				break;
+					break;
 				case 'audio':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
 						$(TIMAAT.MediumDatasets.dataTableAudio.row('#'+this.selectedMediumId).node()).removeClass('selected');
@@ -808,8 +808,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableAudio.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'document':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -818,8 +818,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableDocument.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'image':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -828,8 +828,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableImage.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'software':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -838,8 +838,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableSoftware.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'text':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -848,8 +848,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableText.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'video':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -858,8 +858,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableVideo.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'videogame':
 					if (this.selectedMediumId && this.selectedMediumId != id) {
@@ -868,8 +868,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumDatasets.dataTableVideogame.row('#'+id).node()).addClass('selected');
+						this.addSelectedClassToSelectedItem('medium', id);
 					}
-					this.addSelectedClassToSelectedItem('medium', id);
 				break;
 				case 'mediumCollection':
 					if (this.selectedMediumCollectionId && this.selectedMediumCollectionId != id) {
@@ -878,8 +878,8 @@
 					// add selection to new row
 					if (id) {
 						$(TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionList.row('#'+id).node()).addClass('selected');
+						this.selectedMediumCollectionId = id;
 					}
-					this.selectedMediumCollectionId = id;
 				break;
 			}
 		},
@@ -943,6 +943,7 @@
 					}
 					$(TIMAAT.ActorDatasets.dataTablePerson.row('#'+this.selectedActorId).node()).removeClass('selected');
 					// this.clearLastSelection('actor');
+					this.selectedActorId = null;
 				break;
 				case 'collective':
 					if (!TIMAAT.ActorDatasets.collectives) return;
@@ -951,6 +952,7 @@
 					}
 					$(TIMAAT.ActorDatasets.dataTableCollective.row('#'+this.selectedActorId).node()).removeClass('selected');
 					// this.clearLastSelection('actor');
+					this.selectedActorId = null;
 				break;
 				case 'event':
 					if (!TIMAAT.EventDatasets.events) return;
@@ -974,7 +976,8 @@
 						$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+TIMAAT.MusicDatasets.nashidList[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MusicDatasets.dataTableNashid.row('#'+this.selectedMusicId).node()).removeClass('selected');
-					this.clearLastSelection('music');
+					// this.clearLastSelection('music');
+					this.selectedMusicId = null;
 				break;
 				case 'churchMusic':
 					if (!TIMAAT.MusicDatasets.churchMusicList) return;
@@ -982,7 +985,8 @@
 						$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+TIMAAT.MusicDatasets.churchMusicList[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MusicDatasets.dataTableChurchMusic.row('#'+this.selectedMusicId).node()).removeClass('selected');
-					this.clearLastSelection('music');
+					// this.clearLastSelection('music');
+					this.selectedMusicId = null;
 				break;
 				case 'mediumCollection':
 					if (!TIMAAT.MediumCollectionDatasets.mediaCollectionList) return;
@@ -1008,7 +1012,8 @@
 						$(TIMAAT.MediumDatasets.dataTableAudio.row('#'+TIMAAT.MediumDatasets.audios[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableAudio.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 				case 'document':
 					if (!TIMAAT.MediumDatasets.documents) return;
@@ -1016,7 +1021,8 @@
 						$(TIMAAT.MediumDatasets.dataTableDocument.row('#'+TIMAAT.MediumDatasets.documents[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableDocument.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 				case 'image':
 					if (!TIMAAT.MediumDatasets.images) return;
@@ -1024,7 +1030,8 @@
 						$(TIMAAT.MediumDatasets.dataTableImage.row('#'+TIMAAT.MediumDatasets.images[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableImage.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 				case 'software':
 					if (!TIMAAT.MediumDatasets.softwares) return;
@@ -1032,7 +1039,8 @@
 						$(TIMAAT.MediumDatasets.dataTableSoftware.row('#'+TIMAAT.MediumDatasets.softwares[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableSoftware.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 				case 'text':
 					if (!TIMAAT.MediumDatasets.texts) return;
@@ -1040,7 +1048,8 @@
 						$(TIMAAT.MediumDatasets.dataTableText.row('#'+TIMAAT.MediumDatasets.texts[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableText.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 				case 'video':
 					if (!TIMAAT.MediumDatasets.videos) return;
@@ -1049,7 +1058,8 @@
 						$(TIMAAT.MediumDatasets.dataTableVideo.row('#'+TIMAAT.MediumDatasets.videos[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableVideo.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 				case 'videogame':
 					if (!TIMAAT.MediumDatasets.videogames) return;
@@ -1057,7 +1067,8 @@
 						$(TIMAAT.MediumDatasets.dataTableVideogame.row('#'+TIMAAT.MediumDatasets.videogames[i].model.id).node()).removeClass('selected');
 					}
 					$(TIMAAT.MediumDatasets.dataTableVideogame.row('#'+this.selectedMediumId).node()).removeClass('selected');
-					this.clearLastSelection('medium');
+					// this.clearLastSelection('medium');
+					this.selectedMediumId = null;
 				break;
 			}
 		},
@@ -1083,43 +1094,43 @@
 					if (TIMAAT.MediumDatasets.dataTableAudio) {
 						TIMAAT.MediumDatasets.dataTableAudio.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'document':
 					if (TIMAAT.MediumDatasets.dataTableDocument) {
 						TIMAAT.MediumDatasets.dataTableDocument.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'image':
 					if (TIMAAT.MediumDatasets.dataTableImage) {
 						TIMAAT.MediumDatasets.dataTableImage.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'software':
 					if (TIMAAT.MediumDatasets.dataTableSoftware) {
 						TIMAAT.MediumDatasets.dataTableSoftware.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'text':
 					if (TIMAAT.MediumDatasets.dataTableText) {
 						TIMAAT.MediumDatasets.dataTableText.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'video':
 					if (TIMAAT.MediumDatasets.dataTableVideo) {
 						TIMAAT.MediumDatasets.dataTableVideo.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'videogame':
 					if (TIMAAT.MediumDatasets.dataTableVideogame) {
 						TIMAAT.MediumDatasets.dataTableVideogame.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('medium');
+					// await this.refreshDataTable('medium');
 				break;
 				case 'language':
 					if (TIMAAT.LanguageLists.dataTableLanguages) {
@@ -1140,13 +1151,13 @@
 					if (TIMAAT.MusicDatasets.dataTableNashid) {
 						TIMAAT.MusicDatasets.dataTableNashid.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('music');
+					// await this.refreshDataTable('music');
 				break;
 				case 'churchMusic':
 					if (TIMAAT.MusicDatasets.dataTableChurchMusic) {
 						TIMAAT.MusicDatasets.dataTableChurchMusic.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('music');
+					// await this.refreshDataTable('music');
 				break;
 				case 'category':
           if (TIMAAT.CategoryLists.dataTableCategories) {
@@ -1177,13 +1188,13 @@
 					if (TIMAAT.ActorDatasets.dataTablePerson) {
 						TIMAAT.ActorDatasets.dataTablePerson.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('actor');
+					// await this.refreshDataTable('actor');
 				break;
 				case 'collective':
 					if (TIMAAT.ActorDatasets.dataTableCollective) {
 						TIMAAT.ActorDatasets.dataTableCollective.ajax.reload(null, false);
 					}
-					await this.refreshDataTable('actor');
+					// await this.refreshDataTable('actor');
 				break;
 				case 'tag':
 					if (TIMAAT.TagLists.dataTableTags) {

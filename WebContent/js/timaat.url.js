@@ -81,7 +81,7 @@
               let medium = {};
               medium.model = await TIMAAT.MediumService.getMedium(pathSegments[1]);
               let type = medium.model.mediaType.mediaTypeTranslations[0].type;
-              TIMAAT.UI.clearLastSelection('medium');
+              TIMAAT.UI.selectedMediumId = pathSegments[1];
               $('#medium-metadata-form').data('type', type);
 			        $('#medium-metadata-form').data('medium', medium);
               if ( pathSegments.length == 2 ) { //* #medium/:id     (default view, show datasheet)
@@ -113,7 +113,6 @@
               }
             }
             else {
-              TIMAAT.UI.clearLastSelection(pathSegments[1]);
               switch (pathSegments[1]) {
                 case 'allMediaList':
                 if (!TIMAAT.MediumDatasets.dataTableAllMediaList) {
@@ -126,10 +125,10 @@
                 TIMAAT.UI.displayDataSetContentArea('medium-allMedia');
                 $('#timaat-mediumdatasets-all-media').addClass('active');
               break;
-                case 'list': //* #medium/list
-                  TIMAAT.MediumDatasets.loadMedia();
-                  TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
-                break;
+                // case 'list': //* #medium/list
+                //   TIMAAT.MediumDatasets.loadMedia();
+                //   TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
+                // break;
                 case 'audio': // #medium/audio ...
                 case 'document': // #medium/document ...
                 case 'image': // #medium/image ...
@@ -142,7 +141,7 @@
                     let medium = {};
                     medium.model = await TIMAAT.MediumService.getMedium(pathSegments[2]);
                     let type = medium.model.mediaType.mediaTypeTranslations[0].type;
-                    TIMAAT.UI.clearLastSelection(type);
+                    TIMAAT.UI.selectedMediumId = pathSegments[2];
                     $('#medium-metadata-form').data('type', type);
 			              $('#medium-metadata-form').data('medium', medium);
                     if ( pathSegments.length == 3 ) { //* #medium/:type/:id     (default view, show datasheet)
@@ -200,7 +199,7 @@
               mediumCollection.model = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
               // console.log("TCL: setupView:function -> mediumCollection", mediumCollection);
               TIMAAT.MediumCollectionDatasets.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.model.id);
-              TIMAAT.UI.clearLastSelection('mediumCollection');
+              TIMAAT.UI.selectedMediumCollectionId = pathSegments[1];
               $('#mediumcollection-metadata-form').data('mediumCollection', mediumCollection);
               let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
               $('#mediumcollection-metadata-form').data('type', type);
@@ -233,7 +232,6 @@
               }
             }
             else {
-              // TIMAAT.UI.clearLastSelection('mediumCollection');
               switch (pathSegments[1]) {
               case 'list': //* #mediumCollection/list
                 TIMAAT.MediumCollectionDatasets.loadMediaCollections();
@@ -258,7 +256,7 @@
               let actor = {};
               actor.model = await TIMAAT.ActorService.getActor(pathSegments[1]);
               let type = actor.model.actorType.actorTypeTranslations[0].type;
-              TIMAAT.UI.clearLastSelection('actor');
+              TIMAAT.UI.selectedActorId = pathSegments[1];
               $('#actor-metadata-form').data('type', type);
 			        $('#actor-metadata-form').data('actor', actor);
               if ( pathSegments.length == 2 ) { //* #actor/:id     (default view, show datasheet)
@@ -317,7 +315,7 @@
                     let type = actor.model.actorType.actorTypeTranslations[0].type;
                     $('#actor-metadata-form').data('actor', actor);
                     $('#actor-metadata-form').data('type', type);
-                    TIMAAT.UI.clearLastSelection(type);
+                    TIMAAT.UI.selectedActorId = pathSegments[2];
                     if ( pathSegments.length == 3 ) { //* #actor/:type/:id     (default view, show datasheet)
                       TIMAAT.UI.displayComponent('actor', type+'-tab', type+'-datatable', 'actor-tab-metadata', 'actor-metadata-form');
                       TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
@@ -386,7 +384,7 @@
             let event = {};
             event.model = await TIMAAT.EventService.getEvent(pathSegments[1]);
             let type = event.model.eventType.eventTypeTranslations[0].type;
-            TIMAAT.UI.clearLastSelection('event');
+            TIMAAT.UI.selecteEventId = pathSegments[1];
             $('#event-metadata-form').data('type', type);
             $('#event-metadata-form').data('event', event);
             if ( pathSegments.length == 2 ) { //* #event/:id     (default view, show datasheet)
@@ -403,7 +401,6 @@
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection('event');
             switch (pathSegments[1]) {
               case 'list': //* #event/list
                 TIMAAT.EventDatasets.loadEvents();
@@ -424,7 +421,7 @@
             let music = {};
             music.model = await TIMAAT.MusicService.getMusic(pathSegments[1]);
             let type = music.model.musicType.musicTypeTranslations[0].type;
-            TIMAAT.UI.clearLastSelection('music');
+            TIMAAT.UI.selectedMusicId = pathSegments[1];
             $('#music-metadata-form').data('type', type);
             $('#music-metadata-form').data('music', music);
             if ( pathSegments.length == 2 ) { //* #music/:id (default view, show datasheet)
@@ -456,7 +453,6 @@
             }
           }
           else {
-            TIMAAT.UI.clearLastSelection(pathSegments[1]);
             switch (pathSegments[1]) {
               case 'list': //* #music/list
                 TIMAAT.MusicDatasets.loadMusicList();
@@ -469,7 +465,7 @@
                   let music = {};
                   music.model = await TIMAAT.MusicService.getMusic(pathSegments[2]);
                   let type = music.model.musicType.musicTypeTranslations[0].type;
-                  TIMAAT.UI.clearLastSelection(type);
+                  TIMAAT.UI.selectedMusicId = pathSegments[2];
                   $('#music-metadata-form').data('type', type);
                   $('#music-metadata-form').data('music', music);
                   if ( pathSegments.length == 3 ) { //* #music/:type/:id     (default view, show datasheet)
@@ -527,7 +523,7 @@
             $('#timaat-categorylists-category-list tr[id='+pathSegments[1]+']').trigger('click');
             let category = {};
             category.model = await TIMAAT.CategoryService.getCategory(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('category');
+            TIMAAT.UI.selectedCategoryId = pathSegments[1];
             $('#list-tab-metadata').data('type', 'category');
             $('#category-metadata-form').data('category', category);
             if ( pathSegments.length == 2 ) { //* #category/:id     (default view, show datasheet)
@@ -544,7 +540,6 @@
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection(pathSegments[0]);
             switch (pathSegments[1]) {
               case 'list': //* #category/list
                 TIMAAT.CategoryLists.loadCategories();
@@ -569,7 +564,7 @@
             $('#timaat-categorylists-categoryset-list tr[id='+pathSegments[1]+']').trigger('click');
             let categorySet = {};
             categorySet.model = await TIMAAT.CategorySetService.getCategorySet(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('categorySet');
+            TIMAAT.UI.selectedCategorySetId = pathSegments[1];
             $('#list-tab-metadata').data('type', 'categorySet');
             $('#categoryset-metadata-form').data('categorySet', categorySet);
             if ( pathSegments.length == 2 ) { //* #categorySet/:id     (default view, show datasheet)
@@ -586,7 +581,6 @@
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection(pathSegments[0]);
             switch (pathSegments[1]) {
               case 'list': //* #categorySet/list
                 TIMAAT.CategoryLists.loadCategorySets();
@@ -611,7 +605,7 @@
             $('#timaat-rolelists-role-list tr[id='+pathSegments[1]+']').trigger('click');
             let role = {};
             role.model = await TIMAAT.RoleService.getRole(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('role');
+            TIMAAT.UI.selectedRoleId = pathSegments[1];
             $('#list-tab-metadata').data('type', 'role');
             $('#role-metadata-form').data('role', role);
             if ( pathSegments.length == 2 ) { //* #role/:id     (default view, show datasheet)
@@ -628,7 +622,6 @@
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection(pathSegments[0]);
             switch (pathSegments[1]) {
               case 'list': //* #role/list
                 TIMAAT.RoleLists.loadRoles();
@@ -653,7 +646,7 @@
             $('#timaat-rolelists-rolegroup-list tr[id='+pathSegments[1]+']').trigger('click');
             let roleGroup = {};
             roleGroup.model = await TIMAAT.RoleService.getRoleGroup(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('roleGroup');
+            TIMAAT.UI.selectedRoleGroupId = pathSegments[1];
             $('#list-tab-metadata').data('type', 'roleGroup');
             $('#rolegroup-metadata-form').data('roleGroup', roleGroup);
             if ( pathSegments.length == 2 ) { //* #roleGroup/:id     (default view, show datasheet)
@@ -670,7 +663,6 @@
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection(pathSegments[0]);
             switch (pathSegments[1]) {
               case 'list': //* #roleGroup/list
                 TIMAAT.RoleLists.loadRoleGroups();
@@ -695,7 +687,7 @@
             $('#timaat-languagelists-language-list tr[id='+pathSegments[1]+']').trigger('click');
             let language = {};
             language.model = await TIMAAT.LanguageService.getLanguage(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('language');
+            TIMAAT.UI.selectedLanguageId = pathSegments[1];
             $('#list-tab-metadata').data('type', 'language');
             $('#language-metadata-form').data('language', language);
             if ( pathSegments.length == 2 ) { //* #language/:id     (default view, show datasheet)
@@ -710,7 +702,6 @@
             }
           }
           else {
-            // TIMAAT.UI.clearLastSelection(pathSegments[0]);
             switch (pathSegments[1]) {
               case 'list': //* #language/list
                 TIMAAT.LanguageLists.loadLanguages();
@@ -740,7 +731,7 @@
           //   if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current videochooser collection item
           //     $('#timaat-videochooser-collection-'+pathSegments[1]).trigger('click');
           //     let collection = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
-          //     TIMAAT.UI.clearLastSelection('videochooser');
+          //     // TIMAAT.UI.clearLastSelection('videochooser');
           //     if (pathSegments.length == 2) { //* #mediaLibrary/:id (default view, show datatable)
           //       TIMAAT.VideoChooser.setCollection(collection);
           //       TIMAAT.UI.displayComponent('videochooser', null, 'videochooser-datatable');
@@ -756,7 +747,6 @@
           //     }
           //   }
           //   else {
-          //     // TIMAAT.UI.clearLastSelection('videochooser');
           //     switch (pathSegments[1]) {
           //       case 'list': //* #mediaLibrary/list
           //         // $('#timaat-videochooser-collectionlibrary').trigger('click');

@@ -604,7 +604,7 @@
 		},
 
 		async updateMedium(mediumModel) {
-			console.log("TCL: MediumService: async updateMedium -> mediumModel", mediumModel);
+			// console.log("TCL: MediumService: async updateMedium -> mediumModel", mediumModel);
 			let model = mediumModel;
 			delete model.ui;
       // console.log("TCL: updateMedium -> tempMediumModel", tempMediumModel);
@@ -619,7 +619,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateMedium -> returning updateData", updateData);
+					// console.log("TCL: async updateMedium -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
@@ -660,7 +660,7 @@
 		// },
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
-			console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
+			// console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumSubtype+"/"+subtypeModel.mediumId,

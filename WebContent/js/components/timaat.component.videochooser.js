@@ -436,7 +436,7 @@
 						TIMAAT.UI.hidePopups();
 						TIMAAT.UI.showComponent('media');
 						TIMAAT.MediumDatasets.load();
-						TIMAAT.UI.clearLastSelection(type);
+						// TIMAAT.UI.clearLastSelection(type); // TODO?
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');

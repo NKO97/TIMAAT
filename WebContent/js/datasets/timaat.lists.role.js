@@ -49,7 +49,7 @@
 				if (!$('#role-metadata-form').valid()) return false;
 
 				// the original role or role group model (in case of editing an existing role or role group)
-				var role = $('#role-metadata-form').data('role');				
+				var role = $('#role-metadata-form').data('role');
 
 				// create/edit role or role group window submitted data
 				var formDataRaw = $('#role-metadata-form').serializeArray();
@@ -76,7 +76,7 @@
           let roleData = role.model;
           delete roleData.ui;
           await TIMAAT.RoleLists.updateRole(roleData, roleGroupIdList, roleActorIdList);
-        } 
+        }
         else { // create new role
 					var roleModel = await TIMAAT.RoleLists.createRoleModel(formDataObject);
           var newRole = await TIMAAT.RoleService.createRole(roleModel);
@@ -116,14 +116,14 @@
         var modal = $('#timaat-rolelists-role-delete');
         var role = modal.data('role');
         if (role) {
-          try {	
+          try {
             await TIMAAT.RoleService.deleteRole(role.model.id);
             role.remove();
           } catch(error) {
             console.error("ERROR: ", error);
           }
           try {
-            await TIMAAT.UI.refreshDataTable('roleGroup');
+            // await TIMAAT.UI.refreshDataTable('roleGroup');
             await TIMAAT.UI.refreshDataTable('role');
           } catch(error) {
             console.error("ERROR: ", error);
@@ -195,7 +195,7 @@
           let roleGroupData = roleGroup.model;
           delete roleGroupData.ui;
           await TIMAAT.RoleLists.updateRoleGroup(roleGroupData, roleIdList);
-        } 
+        }
         else { // create new role group
 					var roleGroupModel = await TIMAAT.RoleLists.createRoleGroupModel(formDataObject);
           roleGroupModel.roles = roleIdList;
@@ -225,7 +225,7 @@
         var roleGroup = modal.data('roleGroup');
         // console.log("TCL: $ -> roleGroup", roleGroup);
         if (roleGroup) {
-          try {	
+          try {
             await TIMAAT.RoleService.deleteRoleGroup(roleGroup.model.id);
             roleGroup.remove();
           } catch(error) {
@@ -233,7 +233,7 @@
           }
           try {
             await TIMAAT.UI.refreshDataTable('roleGroup');
-            await TIMAAT.UI.refreshDataTable('role');
+            // await TIMAAT.UI.refreshDataTable('role');
           } catch(error) {
             console.error("ERROR: ", error);
           }
@@ -244,7 +244,7 @@
         // TIMAAT.RoleLists.loadRoleGroups();
         $('#rolegroup-tab').trigger('click');
       });
-      
+
       // cancel add/edit button in content form functionality
 			$('#rolegroup-metadata-form-dismiss-button').on('click', async function(event) {
         TIMAAT.RoleLists.showAddRoleGroupButton();
@@ -301,7 +301,7 @@
       }
     },
 
-    setupRoleDataTable: function() {			
+    setupRoleDataTable: function() {
       // console.log("TCL: setupRoleDataTable");
       // setup dataTable
       this.dataTableRoles = $('#timaat-rolelists-role-table').DataTable({
@@ -338,7 +338,7 @@
           "dataSrc": function(data) {
             // setup model
             var roleArray = Array();
-            data.data.forEach(function(role) { 
+            data.data.forEach(function(role) {
               if ( role.id > 0 ) {
                 roleArray.push(new TIMAAT.Role(role));
               }
@@ -348,11 +348,30 @@
             return data.data;
           }
         },
+        "initComplete": async function( settings, json ) {
+					TIMAAT.RoleLists.dataTableRoles.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
         "rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedRoleId) {
 						TIMAAT.UI.clearLastSelection('role');
 						$(row).addClass('selected');
+            TIMAAT.UI.selectedRoleId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
         "createdRow": function(row, data, dataIndex) {
@@ -373,7 +392,7 @@
             let nameDisplay = `<p>`+ role.roleTranslations[0].name +`</p>`;
             return nameDisplay;
             }
-          },			
+          },
         ],
         "language": {
           "decimal"     : ",",
@@ -390,11 +409,11 @@
             "next"    : ">",
             "last"    : ">>"
           },
-        },				
-      });				
+        },
+      });
     },
 
-    setupRoleGroupDataTable: function() {			
+    setupRoleGroupDataTable: function() {
       // console.log("TCL: setupRoleGroupDataTable");
       // setup dataTable
       this.dataTableRoleGroups = $('#timaat-rolelists-rolegroup-table').DataTable({
@@ -431,7 +450,7 @@
           "dataSrc": function(data) {
             // setup model
             var roleGroupArray = Array();
-            data.data.forEach(function(roleGroup) { 
+            data.data.forEach(function(roleGroup) {
               if ( roleGroup.id > 0 ) {
                 roleGroupArray.push(new TIMAAT.RoleGroup(roleGroup));
               }
@@ -441,11 +460,30 @@
             return data.data;
           }
         },
+        "initComplete": async function( settings, json ) {
+					TIMAAT.RoleLists.dataTableRoleGroups.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
         "rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedRoleGroupId) {
 						TIMAAT.UI.clearLastSelection('roleGroup');
 						$(row).addClass('selected');
+            TIMAAT.UI.selectedRoleGroupId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
         "createdRow": function(row, data, dataIndex) {
@@ -465,7 +503,7 @@
             let nameDisplay = `<p>`+ roleGroup.roleGroupTranslations[0].name +`</p>`;
             return nameDisplay;
             }
-          },			
+          },
         ],
         "language": {
           "decimal"     : ",",
@@ -482,8 +520,8 @@
             "next"    : ">",
             "last"    : ">>"
           },
-        },				
-      });				
+        },
+      });
     },
 
     setRoleDataTableOnItemSelect: function(selectedItemId) {
@@ -528,7 +566,7 @@
       TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, 'roleGroup');
     },
 
-    addRole: function() {	
+    addRole: function() {
 			// console.log("TCL: addRole: function()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'role-metadata-form');
       $('#list-tab-metadata').data('type', 'role');
@@ -574,7 +612,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -607,7 +645,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -620,10 +658,10 @@
         },
         minimumInputLength: 0,
       });
-      
+
     },
 
-    addRoleGroup: function() {	
+    addRoleGroup: function() {
 			// console.log("TCL: addRoleGroup: function()");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'rolegroup-metadata-form');
       $('#list-tab-metadata').data('type', 'roleGroup');
@@ -634,7 +672,7 @@
 				node.removeChild(node.lastChild);
       }
       roleGroupFormMetadataValidator.resetForm();
-      
+
       TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', null);
 
       // setup form
@@ -664,7 +702,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -676,7 +714,7 @@
           cache: false
         },
         minimumInputLength: 0,
-      }); 
+      });
     },
 
     roleFormDataSheet: async function(action, data) {
@@ -690,7 +728,7 @@
 				node.removeChild(node.lastChild);
       }
 
-      TIMAAT.UI.addSelectedClassToSelectedItem('role', data.model.id);
+      // TIMAAT.UI.addSelectedClassToSelectedItem('role', data.model.id);
       $('#role-metadata-form').trigger('reset');
       $('#list-tab-metadata').data('type', 'role');
       this.initFormDataSheetData('role');
@@ -716,7 +754,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -769,7 +807,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -825,7 +863,7 @@
 				node.removeChild(node.lastChild);
       }
 
-      TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', data.model.id);
+      // TIMAAT.UI.addSelectedClassToSelectedItem('roleGroup', data.model.id);
       $('#rolegroup-metadata-form').trigger('reset');
       // $('#list-tab-metadata').data('type', 'roleGroup');
       this.initFormDataSheetData('roleGroup');
@@ -851,7 +889,7 @@
             return {
               search: params.term,
               page: params.page
-            };          
+            };
           },
           processResults: function(data, params) {
             // console.log("TCL: processResults: data", data);
@@ -863,7 +901,7 @@
           cache: false
         },
         minimumInputLength: 0,
-      });          
+      });
       var roleSelect = $('#roles-multi-select-dropdown');
       await TIMAAT.RoleService.getRoleGroupHasRoleList(data.model.id).then(function (data) {
         // console.log("TCL: then: data", data);
@@ -957,7 +995,7 @@
             var index = existingRoleGroupEntries.findIndex( ({roleGroup}) => roleGroup.model.roles.id === role.id)
             existingRoleGroupEntries[i].model.roles.splice(index,1);
             await TIMAAT.RoleService.updateRoleGroup(existingRoleGroupEntries[i]);
-          }         
+          }
         } else if (existingRoleGroupEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add all roleGroupIdList: ", roleGroupIdList);
           var i = 0;
@@ -1045,7 +1083,7 @@
             var index = existingActorHasRolesEntries.findIndex( ({actor}) => actor.model.roles.id === role.id)
             existingActorHasRolesEntries[i].model.roles.splice(index,1);
             await TIMAAT.ActorService.updateActor(existingActorHasRolesEntries[i]);
-          }       
+          }
         } else if (existingActorHasRolesEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add all roleActorIdList: ", roleActorIdList);
           var i = 0;
@@ -1121,12 +1159,12 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-      
+
       await TIMAAT.UI.refreshDataTable('role');
-      await TIMAAT.UI.refreshDataTable('roleGroup');
+      // await TIMAAT.UI.refreshDataTable('roleGroup');
       // await TIMAAT.UI.refreshDataTable('actor');
-      await TIMAAT.UI.refreshDataTable('person');
-      await TIMAAT.UI.refreshDataTable('collective');
+      // await TIMAAT.UI.refreshDataTable('person');
+      // await TIMAAT.UI.refreshDataTable('collective');
     },
 
     updateRoleGroup: async function(roleGroup, roleIdList) {
@@ -1145,11 +1183,11 @@
         if (roleIdList == null) { //* all entries will be deleted
           // console.log("TCL: delete all existingRoleEntries: ", existingRoleEntries);
           roleGroup.roles = [];
-          await TIMAAT.RoleService.updateRoleGroup(roleGroup);       
+          await TIMAAT.RoleService.updateRoleGroup(roleGroup);
         } else if (existingRoleEntries.length == 0) { //* all entries will be added
           // console.log("TCL: add all roleIdList: ", roleIdList);
           roleGroup.roles = roleIdList;
-          await TIMAAT.RoleService.updateRoleGroup(roleGroup);          
+          await TIMAAT.RoleService.updateRoleGroup(roleGroup);
         } else { //* add/remove entries
           // delete removed entries
           var roleEntriesToDelete = [];
@@ -1212,8 +1250,8 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-      
-      await TIMAAT.UI.refreshDataTable('role');
+
+      // await TIMAAT.UI.refreshDataTable('role');
       await TIMAAT.UI.refreshDataTable('roleGroup');
     },
 

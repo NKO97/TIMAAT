@@ -21,7 +21,7 @@
 
 	TIMAAT.LanguageLists = {
     languages: null,
-		
+
 		init: function() {
 			this.initLanguages();
     },
@@ -40,7 +40,7 @@
         var modal = $('#timaat-languagelists-language-delete');
         var language = modal.data('language');
         if (language) {
-          try {	
+          try {
             await TIMAAT.LanguageService.deleteLanguage(language.model.id);
             language.remove();
           } catch(error) {
@@ -65,7 +65,7 @@
         $('#timaat-languagelists-language-delete').data('language', $('#language-metadata-form').data('language'));
         $('#timaat-languagelists-language-delete').modal('show');
 			});
-			
+
 			// edit content form button handler
       $('#language-metadata-form-edit-button').on('click', function(event) {
         event.stopPropagation();
@@ -76,11 +76,11 @@
       // submit content form button functionality
 			$('#language-metadata-form-submit-button').on('click', async function(event) {
 				// continue only if client side validation has passed
-        event.preventDefault();        
+        event.preventDefault();
 				if (!$('#language-metadata-form').valid()) return false;
 
 				// the original language model (in case of editing an existing language)
-				var language = $('#language-metadata-form').data('language');				
+				var language = $('#language-metadata-form').data('language');
         // console.log("TCL: language", language);
 
 				// create/edit language window submitted data
@@ -95,7 +95,7 @@
         var duplicateCode;
         if (duplicateName || duplicateCode) {
           $('#timaat-languagelists-language-duplicate').modal('show');
-        } 
+        }
         if (language) { // update language
           if (language.model.id != 1) { //* Do not change 'default' entry
             duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name, language.model.id);
@@ -112,8 +112,8 @@
               await TIMAAT.LanguageLists.updateLanguage(languageData);
             }
           }
-        } 
-        else { // create new language 
+        }
+        else { // create new language
           duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name, 0);
           duplicateCode = await TIMAAT.LanguageService.checkForDuplicateCode(formDataObject.code, 0);
           if (duplicateName || duplicateCode) {
@@ -133,7 +133,7 @@
         TIMAAT.UI.addSelectedClassToSelectedItem('language', language.model.id);
         TIMAAT.UI.displayDataSetContent('dataSheet', language, 'language');
 			});
-			
+
 			// cancel add/edit button in content form functionality
 			$('#language-metadata-form-dismiss-button').on('click', async function(event) {
         TIMAAT.LanguageLists.showAddLanguageButton();
@@ -151,7 +151,7 @@
 		load: function() {
       this.loadLanguages();
 		},
-		
+
 		loadLanguages: function() {
 			$('#list-tab-metadata').data('type', 'language');
 			TIMAAT.UI.addSelectedClassToSelectedItem('language', null);
@@ -172,7 +172,7 @@
 			}
     },
 
-		setupLanguageDataTable: function() {			
+		setupLanguageDataTable: function() {
       // console.log("TCL: setupLanguageDataTable");
       // setup dataTable
       this.dataTableLanguages = $('#timaat-languagelists-language-table').DataTable({
@@ -210,7 +210,7 @@
             // console.log("TCL: data", data);
             // setup model
             var langs = Array();
-            data.data.forEach(function(language) { 
+            data.data.forEach(function(language) {
               if ( language.id > 0 ) {
                 langs.push(new TIMAAT.Language(language));
               }
@@ -220,11 +220,30 @@
             return data.data;
           }
         },
+        "initComplete": async function( settings, json ) {
+					TIMAAT.LanguageLists.dataTableLanguages.draw(); //* to scroll to selected row
+				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if ($(api.context[0].aoData[i].nTr).hasClass('selected')) {
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+								},100);
+							}
+						}
+					}
+				},
         "rowCallback": function( row, data ) {
 					// console.log("TCL: row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedLanguageId) {
 						TIMAAT.UI.clearLastSelection('language');
 						$(row).addClass('selected');
+            TIMAAT.UI.selectedLanguageId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
         "createdRow": function(row, data, dataIndex) {
@@ -245,7 +264,7 @@
             let nameDisplay = `<p>`+ language.name +`</p>`;
             return nameDisplay;
             }
-          },			
+          },
         ],
         "language": {
           "decimal"     : ",",
@@ -262,8 +281,8 @@
             "next"    : ">",
             "last"    : ">>"
           },
-        },				
-      });				
+        },
+      });
     },
 
     setDataTableOnItemSelect: function(selectedItemId) {
@@ -287,13 +306,13 @@
 			TIMAAT.UI.displayDataSetContent('dataSheet', selectedItem, 'language');
     },
 
-		addLanguage: function() {	
+		addLanguage: function() {
 			// console.log("TCL: addLanguage");
       TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'language-metadata-form');
       $('#list-tab-metadata').data('type', 'language');
 			$('#language-metadata-form').data('language', null);
       languageFormMetadataValidator.resetForm();
-      
+
       TIMAAT.UI.addSelectedClassToSelectedItem('language', null);
       // setup form
 			$('#language-metadata-form').trigger('reset');
@@ -302,10 +321,10 @@
       $('#language-metadata-form-submit-button').html("Add");
       $('#languageFormHeader').html("Add language");
 		},
-		
+
 		languageFormDataSheet: async function(action, data) {
       // console.log("TCL: action, data: ", action, data);
-      TIMAAT.UI.addSelectedClassToSelectedItem('language', data.model.id);
+      // TIMAAT.UI.addSelectedClassToSelectedItem('language', data.model.id);
       $('#language-metadata-form').trigger('reset');
       $('#list-tab-metadata').data('type', 'language');
       this.initFormDataSheetData();
@@ -381,14 +400,14 @@
       };
       return model;
     },
-  
+
     createLanguage: async function(model) {
       // console.log("TCL: createLanguage: model: ", model);
-      try {				
+      try {
         // create language
         var newModel = await TIMAAT.LanguageService.createLanguage(model);
         // console.log("TCL: newModel", newModel);
-        model.id = newModel.id;		
+        model.id = newModel.id;
       } catch(error) {
         console.error("ERROR: ", error);
       };
@@ -408,6 +427,6 @@
 
       await TIMAAT.UI.refreshDataTable('language');
     },
-		
-	}	
+
+	}
 }, window));
