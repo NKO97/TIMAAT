@@ -3280,7 +3280,7 @@
 						mediumId: 0,
 						width: formDataObject.width,
 						height: formDataObject.height,
-						// bitDepth: formDataObject.bitDepth,
+						bitDepth: 0, // TODO bit depth neither implemented nor displayed in UI
 					};
 				break;
 				case 'software':

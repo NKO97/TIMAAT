@@ -79,10 +79,10 @@ var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
       number: true,
       max: 65535
     },
-    bitDepth: {
-      number: true,
-      max: 65535
-    },
+    // bitDepth: {
+    //   number: true,
+    //   max: 65535
+    // },
     frameRate: {
       number: true,
       max: 65535
@@ -119,10 +119,10 @@ var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
       number: "Please provide a valid number",
       max: "Please provide a value not greater 65535"
     },
-    bitDepth: {
-      number: "Please provide a valid number",
-      max: "Please provide a value not greater 65535"
-    },
+    // bitDepth: {
+    //   number: "Please provide a valid number",
+    //   max: "Please provide a value not greater 65535"
+    // },
     frameRate: {
       number: "Please provide a valid number",
       max: "Please provide a value not greater 65535"

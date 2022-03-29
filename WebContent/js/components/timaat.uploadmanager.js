@@ -32,16 +32,16 @@
 							</div>
 						</li>
 			`);
-			
+
 			this.attachListeners();
-			
+
 			let fileList = $(form).find('.timaat-medium-upload-file')[0].files;
 			if ( fileList && fileList.length > 0 ) {
 				this.filename = fileList[0].name;
 				this.fileSize = fileList[0].size;
 				this.ui.find('.filename').text(this.filename);
 			}
-			
+
 			let xhr = new XMLHttpRequest();
 			this.xhr = xhr;
 			$(form).off('submit'); $(form).off();
@@ -84,7 +84,7 @@
 									var newImage = JSON.parse(event.target.responseText);
 									uploadItem.medium.mediumImage.width = newImage.width;
 									uploadItem.medium.mediumImage.height = newImage.height;
-									uploadItem.medium.mediumImage.bitDepth = newImage.bitDepth;
+									// uploadItem.medium.mediumImage.bitDepth = newImage.bitDepth;
 								break;
 								case 'video':
 									var newVideo = JSON.parse(event.target.responseText);
@@ -96,9 +96,9 @@
 									// $(document).trigger('success.upload.TIMAAT', uploadItem.medium);
 								break;
 							}
-							// send event										
+							// send event
 							$(document).trigger('success.upload.medium.TIMAAT', uploadItem.medium);
-							
+
 							// remove this item from upload manager
 							TIMAAT.UploadManager.removeUpload(uploadItem);
 						} else {
@@ -113,24 +113,24 @@
 				xhr.open(this.getAttribute('method'), this.getAttribute('action'), true);
 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				xhr.send(new FormData(this));
-				
+
 				this.reset();
 			});
-			
+
 			// start upload immediately for now --> this can later be used to queue video uploads
 			this.startUpload();
 		}
-		
+
 		attachListeners() {
 			this.ui.find('button.upload-cancel').off('click').on('click', this, this._handleAbort);
 		}
-		
+
 		startUpload() {
 			if ( !this.state == 'init' ) return;
 			this.state = 'upload';
 			$(this.form).trigger('submit');
 		}
-		
+
 		_handleAbort(event) {
 			let uploadItem = event.data;
 			console.info('UPLOAD::Canceled by user request', uploadItem);
@@ -138,23 +138,23 @@
 			uploadItem.xhr.abort(); // cancel transfer if active
 			TIMAAT.UploadManager.removeUpload(uploadItem);
 		}
-		
-		
+
+
 	},
 
 	// ----------------------------------------------------------------------------------------------------
-	
+
 	TIMAAT.UploadManager = {
-			
+
 		uploads : [],
-		
+
 		init: function() {
-			
+
 			TIMAAT.UploadManager.ui = $(`<div>
 					<span class="timaat-uploads-message">keine aktiven Uploads</span>
 					<ul class="timaat-upload-list list-group list-group-flush"></ul>
 			</div>`);
-			
+
 			// init upload manager popover functionality
 			$('#timaat-upload-manager').popover({
 				placement: 'bottom',
@@ -173,12 +173,12 @@
 				for (let uploadItem of TIMAAT.UploadManager.uploads) uploadItem.attachListeners();
 			});
 		},
-		
+
 		isUploading: function(medium) {
 			for (let item of TIMAAT.UploadManager.uploads) if ( item.medium.id == medium.id ) return true;
 			return false;
 		},
-		
+
 		queueUpload: function(medium, form) {
 			if ( !medium || !form ) return;
 			for (let uploadItem of TIMAAT.UploadManager.uploads) if (uploadItem.medium.id == medium.id) return;
@@ -188,27 +188,27 @@
 			TIMAAT.UploadManager.ui.find('ul.timaat-upload-list').append(uploadItem.ui);
 			TIMAAT.UploadManager.ui.find('.timaat-uploads-message').hide();
 			$('#timaat-upload-manager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-info');
-						
+
 			// send event
 			$(document).trigger('added.upload.TIMAAT', medium);
 		},
-		
+
 		removeUpload: function(item) {
 			if ( !item ) return;
 			if ( TIMAAT.UploadManager.uploads.indexOf(item) < 0 ) return;
 			item.ui.remove(); // remove UI;
 			TIMAAT.UploadManager.uploads.splice(TIMAAT.UploadManager.uploads.indexOf(item),1);
-			
+
 			if ( TIMAAT.UploadManager.uploads.length == 0 ) {
 				TIMAAT.UploadManager.ui.find('.timaat-uploads-message').show();
 				$('#timaat-upload-manager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-secondary');
 			}
-			
+
 			// send event
 			$(document).trigger('removed.upload.TIMAAT', item.medium);
 
 		}
-		
+
 	}
-	
+
 }, window));
