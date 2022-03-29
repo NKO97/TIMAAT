@@ -1,0 +1,2 @@
+ALTER TABLE `FIPOP`.`tag` CHANGE `name` `name` VARCHAR(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `FIPOP`.`category_set` CHANGE `name` `name` VARCHAR(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;

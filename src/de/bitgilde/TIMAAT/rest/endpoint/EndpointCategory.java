@@ -55,8 +55,8 @@ public class EndpointCategory {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-  ServletContext servletContext;	
-  
+  ServletContext servletContext;
+
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -68,9 +68,9 @@ public class EndpointCategory {
 																	@QueryParam("dir") String direction,
 																	@QueryParam("search") String search)
 	{
-		// System.out.println("EndpointCategorySet: getCategoryList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
+		// System.out.println("EndpointCategory: getCategoryList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 		String column = "c.id";
@@ -135,7 +135,7 @@ public class EndpointCategory {
 
 		return Response.ok().entity(category).build();
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -183,7 +183,6 @@ public class EndpointCategory {
 		for (Category category : categoryList) {
 			categorySelectList.add(new SelectElement(category.getId(), category.getName()));
 		}
-
 		return Response.ok().entity(categorySelectList).build();
 	}
 
@@ -255,7 +254,7 @@ public class EndpointCategory {
 		System.out.println("EndpointCategorySet: updateCategory - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		Category updatedCategory = null;    	
+		Category updatedCategory = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Category category = entityManager.find(Category.class, id);
 		if ( category == null ) {
@@ -284,16 +283,16 @@ public class EndpointCategory {
 		entityTransaction.commit();
 		entityManager.refresh(category);
 
-		System.out.println("EndpointCategorySet: updateCategory - only logging remains");	
+		System.out.println("EndpointCategorySet: updateCategory - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYEDITED);
 		System.out.println("EndpointCategorySet: updateCategory - update complete");
-	
+
 		return Response.ok().entity(category).build();
-	}	
-	
+	}
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
@@ -316,12 +315,12 @@ public class EndpointCategory {
 		for (CategorySet categorySet : categorySetList) {
 			entityManager.refresh(categorySet);
 		}
-				
+
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYDELETED);
-		System.out.println("EndpointCategorySet: deleteCategory - delete complete");	
+		System.out.println("EndpointCategorySet: deleteCategory - delete complete");
 		return Response.ok().build();
 	}
 

@@ -64,11 +64,11 @@ public class EndpointCategorySet {
 	@Secured
 	@Path("list")
 	public Response getCategorySetList(@QueryParam("draw") Integer draw,
-																	 	 @QueryParam("start") Integer start,
-																	 	 @QueryParam("length") Integer length,
-																	 	 @QueryParam("orderby") String orderby,
-																	 	 @QueryParam("dir") String direction,
-																	 	 @QueryParam("search") String search)
+																		 @QueryParam("start") Integer start,
+																		 @QueryParam("length") Integer length,
+																		 @QueryParam("orderby") String orderby,
+																		 @QueryParam("dir") String direction,
+																		 @QueryParam("search") String search)
 	{
 		// System.out.println("EndpointCategorySet: getCategorySetList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
@@ -169,8 +169,7 @@ public class EndpointCategorySet {
 		List<CategorySet> categorySetList = castList(CategorySet.class, query.getResultList());
 		Collections.sort(categorySetList, (Comparator<CategorySet>) (CategorySet c1, CategorySet c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 		for (CategorySet categorySet : categorySetList) {
-			categorySetSelectList.add(new SelectElement(categorySet.getId(),
-																								categorySet.getName()));
+			categorySetSelectList.add(new SelectElement(categorySet.getId(), categorySet.getName()));
 		}
 		return Response.ok().entity(categorySetSelectList).build();
 	}

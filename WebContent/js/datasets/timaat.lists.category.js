@@ -712,8 +712,8 @@
 							let index = i+1;
 							let position = $('table tbody > tr:nth-child('+index+')').position();
 							if (position) {
-								$('.dataTables_scrollBody').animate({
-									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+                $('.dataTables_scrollBody').animate({
+									scrollTop: api.context[0].aoData[i].nTr.offsetTop
 								},100);
 							}
 						}
@@ -824,7 +824,7 @@
 							let position = $('table tbody > tr:nth-child('+index+')').position();
 							if (position) {
 								$('.dataTables_scrollBody').animate({
-									scrollTop: position.top + api.context[0].aoData[i].nTr.offsetTop
+									scrollTop: api.context[0].aoData[i].nTr.offsetTop
 								},100);
 							}
 						}
