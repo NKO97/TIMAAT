@@ -3926,27 +3926,27 @@
 					},
 					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllMediaDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-						let ui = `<div>`;
+						let ui = `<div class="btn-group" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm btn-block mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm btn-block mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm btn-block mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm btn-block mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm btn-block mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm btn-block mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},

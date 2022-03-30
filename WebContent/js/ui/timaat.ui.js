@@ -31,6 +31,7 @@
 		selectedEventId: null,
 		selectedMediumId: null,
 		selectedMediumCollectionId: null,
+		selectedMediumCollectionItemId: null,
 		selectedMusicId: null,
 
 		init: function() {
@@ -881,6 +882,16 @@
 						this.selectedMediumCollectionId = id;
 					}
 				break;
+				case 'mediumCollectionItem':
+					// if (this.selectedMediumCollectionItemId && this.selectedMediumCollectionItemId != id) {
+					// 	$(TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.row('#'+this.selectedMediumCollectionItemId).node()).removeClass('selected');
+					// }
+					// add selection to new row
+					if (id) {
+						// $(TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionList.row('#'+id).node()).addClass('selected');
+						this.selectedMediumCollectionItemId = id;
+					}
+				break;
 			}
 		},
 
@@ -995,6 +1006,14 @@
 					}
 					$(TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionList.row('#'+this.selectedMediumCollectionId).node()).removeClass('selected');
 					this.selectedMediumCollectionId = null;
+				break;
+				case 'mediumCollectionItem':
+					// if (!TIMAAT.MediumCollectionDatasets.mediaCollectionItemList) return;
+					// for (; i < TIMAAT.MediumCollectionDatasets.mediaCollectionItemList.length; i++) {
+					// 	$(TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.row('#'+TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[i].model.id).node()).removeClass('selected');
+					// }
+					// $(TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.row('#'+this.selectedMediumCollectionItemId).node()).removeClass('selected');
+					this.selectedMediumCollectionItemId = null;
 				break;
 				case 'medium':
 					if (!TIMAAT.MediumDatasets.media) return;

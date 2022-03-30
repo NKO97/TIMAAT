@@ -25,7 +25,6 @@
     mediaCollectionList           : null,
     mediaCollectionPublication    : null,
 		mediaLoaded										: false,
-    selectedMediumCollectionItemId: null,
     userPermissionList            : null,
 
 		init: function() {
@@ -1052,6 +1051,29 @@
 						return data.data;
 					}
 				},
+				"drawCallback": function( settings ) {
+					let api = this.api();
+					let i = 0;
+					for (; i < api.context[0].aoData.length; i++) {
+						if (api.context[0].aoData[i]._aData.medium.id == TIMAAT.UI.selectedMediumCollectionItemId) { //* no test for selected class as we don't want list entry to show as selected
+							let index = i+1;
+							let position = $('table tbody > tr:nth-child('+index+')').position();
+							if (position) {
+								$('.dataTables_scrollBody').animate({
+									scrollTop: api.context[0].aoData[i].nTr.offsetTop
+								},0);
+							}
+						}
+					}
+				},
+				"rowCallback": function( row, data ) {
+					// console.log("TCL: rowCallback: row, data", row, data);
+					if (data.id == TIMAAT.UI.selectedMediumCollectionItemId) {
+					TIMAAT.UI.clearLastSelection('mediumCollectionItem');
+						// $(row).addClass('selected');
+						TIMAAT.UI.selectedMediumCollectionItemId = data.id; //* as it is set to null in clearLastSelection
+					}
+				},
 				"createdRow": function(row, data, dataIndex) {
         	// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
 					let mediumCollectionElement = $(row);
@@ -1070,7 +1092,7 @@
 
 					// set up events
 					mediumCollectionElement.on('click', function(event) {
-						TIMAAT.MediumCollectionDatasets.selectedMediumCollectionItemId = medium.id;
+						TIMAAT.UI.selectedMediumCollectionItemId = medium.id;
 					});
 
 					mediumCollectionElement.on('click', '.collectionItem-upload-button', async function(event) {
@@ -1119,6 +1141,7 @@
 						let mediumToMoveUp = $(row).data('medium');
 						let collectionId = collection.model.id;
 						let mediumId = mediumToMoveUp.id;
+						TIMAAT.UI.selectedMediumCollectionItemId = mediumId;
 						let index = -1;
 						//! This does only work if item list is sorted by sort order. TODO refactor if sorting by title is possible, too
 						index = TIMAAT.MediumCollectionDatasets.mediaCollectionItemList.findIndex(({id}) => id.mediumId === mediumId);
@@ -1131,7 +1154,8 @@
 																																			 TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index-1].id.mediumId,
 																																			 sortOrder);
 						}
-						await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
+						// await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
+						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(); //* to scroll to selected row
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-movedown', async function(event) {
@@ -1144,6 +1168,7 @@
 						let mediumToMoveDown = $(row).data('medium');
 						let collectionId = collection.model.id;
 						let mediumId = mediumToMoveDown.id;
+						TIMAAT.UI.selectedMediumCollectionItemId = mediumId;
 						let index = -1;
 						//! This does only work if item list is sorted by sort order. TODO refactor if sorting by title is possible, too
 						index = TIMAAT.MediumCollectionDatasets.mediaCollectionItemList.findIndex(({id}) => id.mediumId === mediumId);
@@ -1156,7 +1181,8 @@
 																																			  TIMAAT.MediumCollectionDatasets.mediaCollectionItemList[index+1].id.mediumId,
 																																			  sortOrder);
 						}
-						await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
+						// await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
+						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(); //* to scroll to selected row
 					});
 
 					// mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
@@ -1308,28 +1334,28 @@
 				},
 					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, collectionItem, meta) {
 						// console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
-						let ui = `<div>`;
+						let ui = `<div class="btn-group" role="group">`;
 						if ( collectionItem.medium.mediumVideo ){
 							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm btn-block collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( collectionItem.medium.mediumAudio ){
 							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm btn-block collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (collectionItem.medium.mediumImage) {
 							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm btn-block collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm btn-block collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm collectionItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm btn-block timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
-									 <button type="button" title="Remove from collection"class="btn btn-outline-secondary btn-sm btn-block timaat-mediumcollectiondatasets-collectionitem-remove"><i class="fas fa-folder-minus"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									 <button type="button" title="Remove from collection"class="btn btn-outline-secondary btn-sm timaat-mediumcollectiondatasets-collectionitem-remove"><i class="fas fa-folder-minus"></i></button>
 								 </div>`;
 						return ui;
 						},
