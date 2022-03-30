@@ -823,7 +823,7 @@
 					};
 					if (formData[i].name == 'isDisplayTitle' && formData[i].value == 'on' ) {
 						element.isDisplayTitle = true;
-						if (formData[i+1].name == 'isOriginalTitle' && formData[i+1].value == 'on' ) {
+						if (formData[i+1].name == 'isOriginalTitleMusic' && formData[i+1].value == 'on' ) {
 							// display title set, original title set
 							element.isOriginalTitle = true;
 							element.title = TIMAAT.MusicDatasets.replaceSpecialCharacters(formData[i+2].value);
@@ -837,7 +837,7 @@
 						}
 					} else { // display title not set, original title set
 						element.isDisplayTitle = false;
-						if (formData[i].name == 'isOriginalTitle' && formData[i].value == 'on' ) {
+						if (formData[i].name == 'isOriginalTitleMusic' && formData[i].value == 'on' ) {
 							element.isOriginalTitle = true;
 							element.title = TIMAAT.MusicDatasets.replaceSpecialCharacters(formData[i+1].value);
 							element.titleLanguageId = formData[i+2].value;

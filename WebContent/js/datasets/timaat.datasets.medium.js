@@ -1041,6 +1041,7 @@
 
 				// Create/Edit medium window submitted data
 				var formData = $('#medium-titles-form').serializeArray();
+        console.log("TCL: $ -> formData", formData);
 				var formTitleList = [];
 				var i = 0;
 				while ( i < formData.length) {
@@ -1052,7 +1053,7 @@
 					};
 					if (formData[i].name == 'isDisplayTitle' && formData[i].value == 'on' ) {
 						element.isDisplayTitle = true;
-						if (formData[i+1].name == 'isOriginalTitle' && formData[i+1].value == 'on' ) {
+						if (formData[i+1].name == 'isOriginalTitleMedium' && formData[i+1].value == 'on' ) {
 							// display title set, original title set
 							element.isOriginalTitle = true;
 							element.title = TIMAAT.MediumDatasets.replaceSpecialCharacters(formData[i+2].value);
@@ -1066,7 +1067,7 @@
 						}
 					} else { // display title not set, original title set
 						element.isDisplayTitle = false;
-						if (formData[i].name == 'isOriginalTitle' && formData[i].value == 'on' ) {
+						if (formData[i].name == 'isOriginalTitleMedium' && formData[i].value == 'on' ) {
 							element.isOriginalTitle = true;
 							element.title = TIMAAT.MediumDatasets.replaceSpecialCharacters(formData[i+1].value);
 							element.titleLanguageId = formData[i+2].value;
