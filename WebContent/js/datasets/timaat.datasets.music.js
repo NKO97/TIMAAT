@@ -636,15 +636,13 @@
 				}
 			});
 
-			$(document).on('click', '.isOriginalTitle', function(event) {
-        if ($(this).data('wasChecked') == true)
-        {
+			$(document).on('click', '.isOriginalTitleMusic', function(event) {
+        if ($(this).data('wasChecked') == true) {
           $(this).prop('checked', false);
-					// $(this).data('wasChecked', false);
-					$('input[name="isOriginalTitle"]').data('wasChecked', false);
+					$('input[name="isOriginalTitleMusic"]').data('wasChecked', false);
         }
         else {
-					$('input[name="isOriginalTitle"]').data('wasChecked', false);
+					$('input[name="isOriginalTitleMusic"]').data('wasChecked', false);
 					$(this).data('wasChecked', true);
 				}
 			});
@@ -680,13 +678,20 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayTitle"></label>
-									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" data-role="displayTitle" placeholder="Is Display Title">
+									<input class="form-check-input isDisplayTitle"
+												 type="radio" name="isDisplayTitle"
+												 data-role="displayTitle"
+												 placeholder="Is Display Title">
 								</div>
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" data-wasChecked="false" placeholder="Is Original Title">
+									<label class="sr-only" for="isOriginalTitleMusic"></label>
+									<input class="form-check-input isOriginalTitleMusic"
+												 type="radio" name="isOriginalTitleMusic"
+												 data-role="originalTitle"
+												 data-wasChecked="false"
+												 placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
@@ -2146,10 +2151,10 @@
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle"
+									<label class="sr-only" for="isOriginalTitleMusic"></label>
+									<input class="form-check-input isOriginalTitleMusic"
 												 type="radio"
-												 name="isOriginalTitle"
+												 name="isOriginalTitleMusic"
 												 data-role="originalTitle[`+music.model.titles[i].id+`]"
 												 data-wasChecked="true"
 												 placeholder="Is Original Title">

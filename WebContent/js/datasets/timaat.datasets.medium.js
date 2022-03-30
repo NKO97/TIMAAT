@@ -863,15 +863,13 @@
 				}
 			});
 
-			$(document).on('click', '.isOriginalTitle', function(event) {
-        if ($(this).data('wasChecked') == true)
-        {
+			$(document).on('click', '.isOriginalTitleMedium', function(event) {
+				if ($(this).data('wasChecked') == true) {
           $(this).prop('checked', false);
-					// $(this).data('wasChecked', false);
-					$('input[name="isOriginalTitle"]').data('wasChecked', false);
+					$('input[name="isOriginalTitleMedium"]').data('wasChecked', false);
         }
         else {
-					$('input[name="isOriginalTitle"]').data('wasChecked', false);
+					$('input[name="isOriginalTitleMedium"]').data('wasChecked', false);
 					$(this).data('wasChecked', true);
 				}
 			});
@@ -907,13 +905,22 @@
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayTitle"></label>
-									<input class="form-check-input isDisplayTitle" type="radio" name="isDisplayTitle" data-role="displayTitle" placeholder="Is Display Title">
+									<input class="form-check-input isDisplayTitle"
+												 type="radio"
+												 name="isDisplayTitle"
+												 data-role="displayTitle"
+												 placeholder="Is Display Title">
 								</div>
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle" type="radio" name="isOriginalTitle" data-role="originalTitle" data-wasChecked="false" placeholder="Is Original Title">
+									<label class="sr-only" for="isOriginalTitleMedium"></label>
+									<input class="form-check-input isOriginalTitleMedium"
+												 type="radio"
+												 name="isOriginalTitleMedium"
+												 data-role="originalTitle"
+												 data-wasChecked="false"
+												 placeholder="Is Original Title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
@@ -2152,7 +2159,7 @@
 			var numTitles = medium.model.titles.length;
       // console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i < numTitles; i++) {
-				console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
+				// console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
 				$('[data-role="medium-dynamic-title-fields"]').append(
 					`<div class="form-group" data-role="title-entry">
 						<div class="form-row">
@@ -2163,24 +2170,25 @@
 												 type="radio"
 												 name="isDisplayTitle"
 												 data-role="displayTitle[`+medium.model.titles[i].id+`]"
-												 placeholder="Is Display Title">
+												 placeholder="Is display title">
 								</div>
 							</div>
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
-									<label class="sr-only" for="isOriginalTitle"></label>
-									<input class="form-check-input isOriginalTitle"
+									<label class="sr-only" for="isOriginalTitleMedium"></label>
+									<input class="form-check-input isOriginalTitleMedium"
 												 type="radio"
-												 name="isOriginalTitle"
+												 name="isOriginalTitleMedium"
 												 data-role="originalTitle[`+medium.model.titles[i].id+`]"
 												 data-wasChecked="true"
-												 placeholder="Is Original Title">
+												 placeholder="Is original title">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
 								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name"
-											 name="title[`+i+`]" data-role="title[`+medium.model.titles[i].id+`]"
+											 name="title[`+i+`]"
+											 data-role="title[`+medium.model.titles[i].id+`]"
 											 placeholder="[Enter title]"
 											 aria-describedby="Title"
 											 minlength="3"
@@ -2239,18 +2247,18 @@
 						},
 						minimumInputLength: 0,
 					});
-					var languageSelect = $('#medium-title-language-select-dropdown_'+medium.model.titles[i].id);
-					var option = new Option(medium.model.titles[i].language.name, medium.model.titles[i].language.id, true, true);
+					let title = medium.model.titles[i];
+					var languageSelect = $('#medium-title-language-select-dropdown_'+title.id);
+					var option = new Option(title.language.name, title.language.id, true, true);
 					languageSelect.append(option).trigger('change');
-
-					if (medium.model.titles[i].id == medium.model.displayTitle.id) {
-						$('[data-role="displayTitle['+medium.model.titles[i].id+']"]').prop('checked', true);
+					if (medium.model.displayTitle.id == title.id) {
+						$('[data-role="displayTitle['+title.id+']"]').prop('checked', true);
 					}
-					if (medium.model.originalTitle && medium.model.titles[i].id == medium.model.originalTitle.id) {
-						$('[data-role="originalTitle['+medium.model.titles[i].id+']"]').prop('checked', true);
+					if (medium.model.originalTitle && medium.model.originalTitle.id == title.id) {
+						$('[data-role="originalTitle['+title.id+']"]').prop('checked', true);
 					}
 					$('input[name="title['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200, });
-					$('input[data-role="title['+medium.model.titles[i].id+']"]').attr("value", TIMAAT.MediumDatasets.replaceSpecialCharacters(medium.model.titles[i].name));
+					$('input[data-role="title['+title.id+']"]').attr('value', TIMAAT.MediumDatasets.replaceSpecialCharacters(title.name));
 			};
 
 			if ( action == 'show') {

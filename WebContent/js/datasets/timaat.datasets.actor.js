@@ -535,10 +535,8 @@
 			});
 
 			$(document).on('click', '.isBirthName', function(event) {
-        if ($(this).data('wasChecked') == true)
-        {
+        if ($(this).data('wasChecked') == true) {
           $(this).prop('checked', false);
-					// $(this).data('wasChecked', false);
 					$('input[name="isBirthName"]').data('wasChecked', false);
         }
         else {
@@ -575,26 +573,55 @@
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayName"></label>
-									<input class="form-check-input isDisplayName" type="radio" name="isDisplayName" data-role="displayName" placeholder="Is Display Name">
+									<input class="form-check-input isDisplayName"
+												 type="radio"
+												 name="isDisplayName"
+												 data-role="displayName"
+												 placeholder="Is Display Name">
 								</div>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName" data-wasChecked="false" placeholder="Is birth Name">
+									<input class="form-check-input isBirthName"
+												 type="radio"
+												 name="isBirthName"
+												 data-role="birthName"
+												 data-wasChecked="false"
+												 placeholder="Is birth Name">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
 								<label class="sr-only">Name</label>
-								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="newActorName[`+i+`]" data-role="newActorName[`+i+`]" value="`+newName[0]+`" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name"
+											 name="newActorName[`+i+`]"
+											 data-role="newActorName[`+i+`]"
+											 value="`+newName[0]+`"
+											 placeholder="[Enter name]"
+											 aria-describedby="Name" minlength="3"
+											 maxlength="200"
+											 rows="1"
+											 required>
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" name="newNameUsedFrom[`+i+`]" data-role="newNameUsedFrom[`+i+`]" value="`+newName[1]+`" placeholder="[Enter name used from]" aria-describedby="Name used from">
+								<input type="text"
+											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom"
+											 name="newNameUsedFrom[`+i+`]"
+											 data-role="newNameUsedFrom[`+i+`]"
+											 value="`+newName[1]+`"
+											 placeholder="[Enter name used from]"
+											 aria-describedby="Name used from">
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" name="newNameUsedUntil[`+i+`]" data-role="newNameUsedUntil[`+i+`]" value="`+newName[2]+`" placeholder="[Enter name used until]" aria-describedby="Name used until">
+								<input type="text"
+											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil"
+											 name="newNameUsedUntil[`+i+`]"
+											 data-role="newNameUsedUntil[`+i+`]"
+											 value="`+newName[2]+`"
+											 placeholder="[Enter name used until]"
+											 aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
@@ -3072,33 +3099,62 @@
 			var i = 0;
 			var numNames = actor.model.actorNames.length;
       // console.log("TCL: actor.model.actorNames", actor.model.actorNames);
-			for (; i< numNames; i++) {
+			for (; i < numNames; i++) {
 				$('[data-role="dynamic-name-fields"]').append(
 					`<div class="form-group" data-role="name-entry">
 						<div class="form-row">
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isDisplayName"></label>
-									<input class="form-check-input isDisplayName" type="radio" name="isDisplayName" data-role="displayName[`+actor.model.actorNames[i].id+`]" placeholder="Is Display Name">
+									<input class="form-check-input isDisplayName"
+												 type="radio"
+												 name="isDisplayName"
+												 data-role="displayName[`+actor.model.actorNames[i].id+`]"
+												 placeholder="Is display name">
 								</div>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<div class="form-check">
 									<label class="sr-only" for="isBirthName"></label>
-									<input class="form-check-input isBirthName" type="radio" name="isBirthName" data-role="birthName[`+actor.model.actorNames[i].id+`]" data-wasChecked="true" placeholder="Is birth Name"">
+									<input class="form-check-input isBirthName"
+												 type="radio"
+												 name="isBirthName"
+												 data-role="birthName[`+actor.model.actorNames[i].id+`]"
+												 data-wasChecked="true"
+												 placeholder="Is birth name"">
 								</div>
 							</div>
 							<div class="col-sm-5 col-md-5">
 								<label class="sr-only">Name</label>
-								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="actorName[`+i+`]" data-role="actorName[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" required>
+								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name"
+											 name="actorName[`+i+`]"
+											 data-role="actorName[`+actor.model.actorNames[i].id+`]"
+											 placeholder="[Enter name]"
+											 aria-describedby="Name"
+											 minlength="3"
+											 maxlength="200"
+											 rows="1"
+											 required>
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" id="nameUsedFrom[`+i+`]" name="nameUsedFrom[`+i+`]" data-role="nameUsedFrom[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used from]" aria-describedby="Name used from">
+								<input type="text"
+											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom"
+											 id="nameUsedFrom[`+i+`]"
+											 name="nameUsedFrom[`+i+`]"
+											 data-role="nameUsedFrom[`+actor.model.actorNames[i].id+`]"
+											 placeholder="[Enter name used from]"
+											 aria-describedby="Name used from">
 							</div>
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
-								<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" id="nameUsedUntil[`+i+`]" name="nameUsedUntil[`+i+`]" data-role="nameUsedUntil[`+actor.model.actorNames[i].id+`]" placeholder="[Enter name used until]" aria-describedby="Name used until">
+								<input type="text"
+											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil"
+											 id="nameUsedUntil[`+i+`]"
+											 name="nameUsedUntil[`+i+`]"
+											 data-role="nameUsedUntil[`+actor.model.actorNames[i].id+`]"
+											 placeholder="[Enter name used until]"
+											 aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
 								<button class="btn btn-danger" data-role="remove">
@@ -3315,13 +3371,11 @@
 				);
 				var address = actor.model.actorHasAddresses[i];
 				if (actor.model.primaryAddress && actor.model.primaryAddress.id == address.id.addressId) {
-					$('[data-role="primaryAddress['+address.id.addressId+']"]')
-						.prop('checked', true);
+					$('[data-role="primaryAddress['+address.id.addressId+']"]').prop('checked', true);
 				}
 				// $('input[name="name['+i+']"]').rules("add", { required: true, minlength: 3, maxlength: 200});
-				$('[data-role="addressTypeId['+address.id.addressId+']"]')
-				.find('option[value='+address.addressType.id+']')
-				.attr('selected', true);
+				$('[data-role="addressTypeId['+address.id.addressId+']"]').find('option[value='+address.addressType.id+']')
+																																	.attr('selected', true);
 				if (address.usedFrom != null && !(isNaN(address.usedFrom)))
 					$('[data-role="addressUsedFrom['+address.id.addressId+']"]').val(moment.utc(address.usedFrom).format('YYYY-MM-DD'));
 					else $('[data-role="addressUsedFrom['+address.id.addressId+']"]').val('');
@@ -3503,12 +3557,10 @@
 				);
 				var phoneNumber = actor.model.actorHasPhoneNumbers[i];
 				if (actor.model.primaryPhoneNumber && actor.model.primaryPhoneNumber.id == phoneNumber.id.phoneNumberId) {
-					$('[data-role="primaryPhoneNumber['+phoneNumber.id.phoneNumberId+']"]')
-						.prop('checked', true);
+					$('[data-role="primaryPhoneNumber['+phoneNumber.id.phoneNumberId+']"]').prop('checked', true);
 				}
-				$('[data-role="phoneNumberTypeId['+phoneNumber.id.phoneNumberId+']"]')
-					.find('option[value='+phoneNumber.phoneNumberType.id+']')
-					.attr('selected', true);
+				$('[data-role="phoneNumberTypeId['+phoneNumber.id.phoneNumberId+']"]').find('option[value='+phoneNumber.phoneNumberType.id+']')
+																																							.attr('selected', true);
 				$('input[name="phoneNumber['+i+']"]').rules("add", { required: true, maxlength: 30});
 			}
 			if ( action == 'show') {
