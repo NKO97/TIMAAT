@@ -817,9 +817,9 @@
 				TIMAAT.UI.hidePopups();
 				var medium = $('#medium-metadata-form').data('medium');
 				TIMAAT.UI.showComponent('videoplayer');
-				// setup video in player
+				// setup medium in player
 				TIMAAT.VideoPlayer.setupMedium(medium.model);
-				// load video annotations from server
+				// load medium annotations from server
 				let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.model.id);
 				await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
 				TIMAAT.VideoPlayer.loadAnalysisList(0);

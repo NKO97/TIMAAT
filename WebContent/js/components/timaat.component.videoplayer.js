@@ -51,7 +51,9 @@
 		init: function() {
 			// init UI
 			$('.timaat-videoplayer-noMedium').show();
-			$('.timaat-videoplayer-ui').hide();
+			$('.timaat-videoplayer-analysislist-area').hide();
+			$('.timaat-videoplayer-timeline-area').hide();
+			$('.timaat-videoplayer-medium-dataset-area').hide();
 
 			this.viewer = L.map('timaat-videoplayer-viewer', {
 				attributionControl: false,
@@ -273,7 +275,7 @@
 			$('#timaat-analysislist-chooser').on('change', async function(ev) {
 				TIMAAT.VideoPlayer.inspector.reset();
 				var list = TIMAAT.VideoPlayer.model.analysisLists.find(x => x.id === parseInt($(this).val()));
-				if ( list && TIMAAT.VideoPlayer.curAnalysisList && list.id != TIMAAT.VideoPlayer.curAnalysisList.id )  {
+				if ( list && TIMAAT.VideoPlayer.curAnalysisList && list.id != TIMAAT.VideoPlayer.curAnalysisList.id || list && !TIMAAT.VideoPlayer.curAnalysisList)  {
 					await TIMAAT.VideoPlayer.loadAnalysisList(list.id);
 					TIMAAT.URLHistory.setURL(null, 'Analysis · '+ list.mediumAnalysisListTranslations[0].title, '#analysis/'+list.id);
 				}
@@ -541,13 +543,13 @@
 			// bookmark / add / remove annotation control
 			L.control.custom({
 					position: 'topleft',
-					content : `<button id="timaat-videoplayer-annotation-quickadd-button" title="Annotation schnell anlegen" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button" class="btn btn-light">
+					content : `<button id="timaat-videoplayer-annotation-quickadd-button" title="Quick annotate" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button" class="btn btn-light">
 									<i class="fas fa-bookmark"></i>
 								</button>
-								<button id="timaat-videoplayer-annotation-add-button" title="Neue Annotation anlegen" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button" class="ml-0 btn btn-light">
+								<button id="timaat-videoplayer-annotation-add-button" title="Create new annotation" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button" class="ml-0 btn btn-light">
 									<i class="fa fa-plus"></i>
 								</button>
-								<button id="timaat-videoplayer-annotation-remove-button" title="Annotation löschen" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="ml-0 btn btn-light">
+								<button id="timaat-videoplayer-annotation-remove-button" title="Delete annotation" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="ml-0 btn btn-light">
 									<i class="fa fa-trash-alt"></i>
 								</button>`,
 					classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
@@ -1312,7 +1314,6 @@
 			if ( this.overlay ) TIMAAT.VideoPlayer.viewer.removeLayer(this.overlay);
 
 			// setup annotation UI
-			$('#timaat-annotation-list-loader').show();
 			$('#timaat-videoplayer-annotation-add-button').prop('disabled', true);
 			$('#timaat-videoplayer-annotation-add-button').attr('disabled');
 			switch (this.mediaType) {
@@ -1336,6 +1337,8 @@
 				case 'video':
 					// setup timeline UI
 					$('.timaat-videoplayer-timeline-area').show();
+					$('.timaat-videoplayer-analysislist-area').show();
+					$('.timaat-videoplayer-medium-dataset-area').show();
 					switch (this.mediaType) {
 						case 'audio':
 							$('#timeline-layer-buttons').hide();
@@ -1361,9 +1364,8 @@
 					TIMAAT.VideoPlayer.viewer.invalidateSize();
 					$('.timaat-videoplayer-noMedium').hide();
 					$('.timaat-sidebar-tab-videoplayer').removeClass('isDisabled');
-					$('.timaat-videoplayer-ui').show();
 					$('.timaat-videoplayer-video-controls').show();
-					var newMedium = new TIMAAT.Medium(medium, 'audio');
+					var newMedium = new TIMAAT.Medium(medium, this.mediaType);
 					TIMAAT.VideoPlayer.selectedMedium = newMedium;
 					$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedMedium.model);');
 					$('.timaat-sidebar-tab-videoplayer a').attr('title', 'Annotate '+this.mediaType);
@@ -1406,6 +1408,7 @@
 					$(TIMAAT.VideoPlayer.zoomCtrl.getContainer()).hide();
 					$(TIMAAT.VideoPlayer.savePolygonCtrl.getContainer()).show();
 					$(TIMAAT.VideoPlayer.editShapesCtrl.getContainer()).show();
+					$(TIMAAT.VideoPlayer.animCtrl.getContainer()).show();
 					$('#timaat-volume-slider').change();
 
 					// setup music form element model
@@ -1417,6 +1420,8 @@
 				break;
 				case 'image':
 					// disable timeline UI
+					$('.timaat-videoplayer-analysislist-area').show();
+					$('.timaat-videoplayer-medium-dataset-area').show();
 					$('.timaat-videoplayer-timeline-area').hide();
 					$('.timaat-videoplayer-video-controls').hide();
 
@@ -1426,7 +1431,6 @@
 					TIMAAT.VideoPlayer.viewer.invalidateSize();
 					$('.timaat-videoplayer-noMedium').hide();
 					$('.timaat-sidebar-tab-videoplayer').removeClass('isDisabled');
-					$('.timaat-videoplayer-ui').show();
 					var newMedium = new TIMAAT.Medium(medium, 'image');
 					TIMAAT.VideoPlayer.selectedMedium = newMedium;
 					$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedMedium.model);');
@@ -1446,7 +1450,7 @@
 					TIMAAT.VideoPlayer.viewer.fitBounds(this.mediumBounds);
 					TIMAAT.VideoPlayer.viewer.setMaxZoom( 1 );
 					this.overlay = L.imageOverlay(mediumUrl, this.mediumBounds, { interactive: false} ).addTo(TIMAAT.VideoPlayer.viewer);
-					this.medium = null; //? TODO: why null?
+					this.medium = this.overlay.getElement();
 
 					// setup viewer controls
 					TIMAAT.VideoPlayer.viewer.dragging.enable();
@@ -1456,6 +1460,7 @@
 					$(TIMAAT.VideoPlayer.zoomCtrl.getContainer()).show();
 					$(TIMAAT.VideoPlayer.savePolygonCtrl.getContainer()).show();
 					$(TIMAAT.VideoPlayer.editShapesCtrl.getContainer()).show();
+					$(TIMAAT.VideoPlayer.animCtrl.getContainer()).hide();
 				break;
 			}
 
@@ -1555,9 +1560,11 @@
 
 		loadAnalysisList: async function(listId) {
       // console.log("TCL: loadAnalysisList:function -> listId", listId);
+			$('#timaat-annotation-list-loader').show();
 			if ( TIMAAT.VideoPlayer.model.analysisLists.length == 0 ) { // no analysis lists available
 				await TIMAAT.VideoPlayer.setupAnalysisList(null);
 				TIMAAT.VideoPlayer.initEmptyAnalysisListMenu();
+				$('#timaat-annotation-list-loader').hide();
 			}	else { // load specific analysis list if possible, else load first available analysis list
 				let index = TIMAAT.VideoPlayer.model.analysisLists.findIndex(({id}) => id === listId);
 				if (index > 0) {
@@ -1567,10 +1574,12 @@
 					await TIMAAT.VideoPlayer.setupAnalysisList(TIMAAT.VideoPlayer.model.analysisLists[0]);
 				}
 				TIMAAT.VideoPlayer.initAnalysisListMenu();
+				$('#timaat-annotation-list-loader').hide();
 			}
 		},
 
 		setupAnalysisList: async function(analysisList) {
+      // console.log("TCL: setupAnalysisList:function -> analysisList", analysisList);
 			if (analysisList) this.currentPermissionLevel = await TIMAAT.AnalysisListService.getMediumAnalysisListPermissionLevel(analysisList.id);
 			else this.currentPermissionLevel = null;
 
@@ -2625,6 +2634,7 @@
 		},
 
 		initAnalysisListMenu: function() {
+			// console.log("initAnalysisListMenu");
 			if (this.currentPermissionLevel && this.currentPermissionLevel >= 2) {
 				$('#timaat-analysislist-chooser').removeClass("timaat-item-disabled");
 				$('.timaat-analysissegment-add').removeClass("timaat-item-disabled");
@@ -2788,7 +2798,6 @@
 
 		_analysisListAdded: function(analysisList) {
 			// console.log("TCL: _analysisListAdded: function(analysisList) - analysisList", analysisList);
-			// console.log("TCL ~ TIMAAT.VideoPlayer.model", TIMAAT.VideoPlayer.model);
 			var wasEmpty = TIMAAT.VideoPlayer.model.analysisLists.length == 0;
 			TIMAAT.VideoPlayer.model.analysisLists.push(analysisList);
 
@@ -2799,7 +2808,7 @@
 			if ( wasEmpty ) $('#timaat-analysislist-chooser').empty();
 			$('#timaat-analysislist-chooser').append(analysisList.ui);
 			$('#timaat-analysislist-chooser').val(analysisList.id);
-
+			TIMAAT.VideoPlayer.currentPermissionLevel = 4; //* creator is admin of new list
 			$('#timaat-analysislist-chooser').trigger('change');
 			// TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
 			TIMAAT.VideoPlayer.inspector.close();
@@ -2807,15 +2816,13 @@
 		},
 
 		_analysisListRemoved: async function(analysisList) {
-			// console.log("TCL: _analysisListRemoved: function(analysisList)");
-			// console.log("TCL: analysisList", analysisList);
+			// console.log("TCL: _analysisListRemoved:function -> analysisList", analysisList);
 			// sync to server
 			TIMAAT.AnalysisListService.removeAnalysisList(analysisList);
 
 			// remove from model lists
-			var index = TIMAAT.VideoPlayer.model.analysisLists.indexOf(analysisList);
+			var index = TIMAAT.VideoPlayer.model.analysisLists.findIndex(({id}) => id === analysisList.id);
 			if (index > -1) TIMAAT.VideoPlayer.model.analysisLists.splice(index, 1);
-
 			// update UI list view
 			$('#timaat-analysislist-chooser').find('[value="'+analysisList.id+'"]').remove();
 			$('#timaat-analysislist-chooser').trigger('change');
