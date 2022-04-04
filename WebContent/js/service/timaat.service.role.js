@@ -36,7 +36,7 @@
       }).fail(function(error) {
         console.error("ERROR responseText: ", error.responseText);
         console.error("ERROR: ", error);
-      });			
+      });
     },
 
     listRoleGroups(callback) {
@@ -54,7 +54,7 @@
       }).fail(function(error) {
         console.error("ERROR responseText: ", error.responseText);
         console.error("ERROR: ", error);
-      });			
+      });
     },
 
     async createRole(model) {
@@ -102,7 +102,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-		
+
 		async getRoleHasRoleGroupList(id) {
 			// console.log("TCL: getRoleHasRoleGroupList -> id: ", id);
 			return new Promise(resolve => {
@@ -121,10 +121,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getRoleGroupHasRoleList(id) {
@@ -145,10 +145,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getRole(id) {
@@ -169,10 +169,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getRoleGroup(id) {
@@ -193,10 +193,32 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
+		},
+
+		async getRoleId(roleName) {
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/role/roleId/"+roleName,
+					type:"GET",
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+          // console.log("TCL ~ getProducerId ~ data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR responseText: ", error.responseText);
+					console.error("ERROR: ", error);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
 		},
 
     async addRoleTranslation(model) {
@@ -357,7 +379,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-		
+
     async deleteRole(id) {
 			// console.log("TCL: deleteRole -> id", id);
 			return new Promise(resolve => {

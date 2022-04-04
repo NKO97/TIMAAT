@@ -332,6 +332,7 @@
 						$('#timaat-user-info').html(e.displayName);
 
 						// TIMAAT.VideoChooser.loadCollections();
+						TIMAAT.MediumDatasets.loadRequiredRoleIds();
 						TIMAAT.Datasets.load();
 						TIMAAT.Datasets.loadDataTables();
 						TIMAAT.Lists.load();

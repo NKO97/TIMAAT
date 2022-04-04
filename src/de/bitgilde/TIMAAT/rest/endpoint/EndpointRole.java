@@ -49,8 +49,8 @@ public class EndpointRole {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-  ServletContext servletContext;	
-  
+  ServletContext servletContext;
+
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -65,10 +65,10 @@ public class EndpointRole {
 	{
 		// System.out.println("EndpointRole: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		String languageQuery = "SELECT rt.name FROM RoleTranslation rt WHERE rt.role.id = r.id AND rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 		String column = "r.id";
@@ -119,7 +119,7 @@ public class EndpointRole {
 			if ( start != null && start > 0 ) query.setFirstResult(start);
 			if ( length != null && length > 0 ) query.setMaxResults(length);
 			roleList = castList(Role.class, query.getResultList());
-		}	
+		}
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, roleList)).build();
   }
 
@@ -133,6 +133,21 @@ public class EndpointRole {
 		Role role = entityManager.find(Role.class, id);
 
 		return Response.ok().entity(role).build();
+  }
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("roleId/{roleName}")
+	public Response getRoleIdByName(@PathParam("roleName") String roleName) {
+		// System.out.println("EndpointRole: getRoleIdByName for: "+ roleName);
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+		Query query = entityManager.createQuery("SELECT r FROM Role r, RoleTranslation rt WHERE rt.name = :role AND rt.role.id = r.id")
+															 .setParameter("role", roleName);
+		List<Role> roleList = castList(Role.class, query.getResultList()); // TODO edge case: two roles named identically
+		if (roleList.size() > 0) return Response.ok().entity(roleList.get(0).getId()).build();
+		else return Response.ok().entity(0).build(); // it's ok if no entry was found, as frontend covers cases where role does not exist or is not assigned together
   }
 
 	@GET
@@ -196,7 +211,7 @@ public class EndpointRole {
 		ObjectMapper mapper = new ObjectMapper();
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Role role = new Role();
-		
+
 		// parse JSON data
 		role.setId(0);
 
@@ -231,7 +246,7 @@ public class EndpointRole {
 
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ROLECREATED);
 		System.out.println("EndpointRole: createRole - done");
 		return Response.ok().entity(role).build();
@@ -257,16 +272,16 @@ public class EndpointRole {
 		entityTransaction.commit();
 		for (RoleGroup roleGroup : roleGroupList) {
 			entityManager.refresh(roleGroup);
-		}	
+		}
 		for (Actor actor : actorList) {
 			entityManager.refresh(actor);
 		}
-		
+
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
-		System.out.println("EndpointRole: deleteRole - delete complete");	
+		System.out.println("EndpointRole: deleteRole - delete complete");
 		return Response.ok().build();
 	}
 
@@ -283,7 +298,7 @@ public class EndpointRole {
 		ObjectMapper mapper = new ObjectMapper();
 		RoleTranslation newRoleTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newRoleTranslation = mapper.readValue(jsonData, RoleTranslation.class);
@@ -321,12 +336,12 @@ public class EndpointRole {
 		entityManager.refresh(language);
 		entityManager.refresh(role);
 
-		// System.out.println("EndpointRole: createRoleTranslation: add log entry");	
+		// System.out.println("EndpointRole: createRoleTranslation: add log entry");
 		// add log entry
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext
 		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLECREATED);
-		
+
 		System.out.println("EndpointRole: create translation: translation created with id "+newRoleTranslation.getId());
 		System.out.println("EndpointRole: create translation: translation created with language id "+newRoleTranslation.getLanguage().getId());
 
@@ -339,11 +354,11 @@ public class EndpointRole {
 	@Path("translation/{id}")
 	@Secured
 	public Response updateRoleTranslation(@PathParam("id") int id,
-																				String jsonData) {																					
+																				String jsonData) {
 		System.out.println("EndpointRole: update translation - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
-		RoleTranslation updatedRoleTranslation = null;    	
+		RoleTranslation updatedRoleTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleTranslation roleTranslation = entityManager.find(RoleTranslation.class, id);
 
@@ -364,11 +379,11 @@ public class EndpointRole {
 		}
 
 		// update translation
-		System.out.println("EndpointRole: update translation - language id:"+updatedRoleTranslation.getLanguage().getId());	
+		System.out.println("EndpointRole: update translation - language id:"+updatedRoleTranslation.getLanguage().getId());
 		if ( updatedRoleTranslation.getName() != null ) roleTranslation.setName(updatedRoleTranslation.getName());
 		if ( updatedRoleTranslation.getLanguage() != null ) roleTranslation.setLanguage(updatedRoleTranslation.getLanguage());
 
-		System.out.println("EndpointRole: update translation - start transaction");	
+		System.out.println("EndpointRole: update translation - start transaction");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		// update Role translation
 		entityTransaction.begin();
@@ -377,12 +392,12 @@ public class EndpointRole {
 		entityTransaction.commit();
 		entityManager.refresh(roleTranslation);
 
-		System.out.println("EndpointRole: update translation - only logging remains");	
+		System.out.println("EndpointRole: update translation - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ROLEEDITED);
-		System.out.println("EndpointRole: update translation - update complete");	
+		System.out.println("EndpointRole: update translation - update complete");
 		return Response.ok().entity(roleTranslation).build();
 	}
 

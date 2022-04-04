@@ -116,21 +116,17 @@
             }
             else {
               switch (pathSegments[1]) {
-                case 'allMediaList':
-                if (!TIMAAT.MediumDatasets.dataTableAllMediaList) {
-                  await TIMAAT.MediumDatasets.setupAllMediaDataTable();
-                }
-                TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/allMediaList')
-                TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload();
-                TIMAAT.UI.displayComponent('medium', null, 'medium-datatable');
-                $('#medium-tab').addClass('active');
-                TIMAAT.UI.displayDataSetContentArea('medium-allMedia');
-                $('#timaat-mediumdatasets-all-media').addClass('active');
-              break;
-                // case 'list': //* #medium/list
-                //   TIMAAT.MediumDatasets.loadMedia();
-                //   TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
-                // break;
+                case 'list':
+                  if (!TIMAAT.MediumDatasets.dataTableAllMediaList) {
+                    await TIMAAT.MediumDatasets.setupAllMediaDataTable();
+                  }
+                  TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/list')
+                  TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload();
+                  TIMAAT.UI.displayComponent('medium', null, 'medium-datatable');
+                  $('#medium-tab').addClass('active');
+                  TIMAAT.UI.displayDataSetContentArea('medium-allMedia');
+                  $('#timaat-mediumdatasets-all-media').addClass('active');
+                break;
                 case 'audio': // #medium/audio ...
                 case 'document': // #medium/document ...
                 case 'image': // #medium/image ...
@@ -151,6 +147,7 @@
                     if ( pathSegments.length == 3 ) { //* #medium/:type/:id     (default view, show datasheet)
                       TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
                       TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
+                      $('#timaat-mediumdatasets-all-'+type+'s').addClass('active');
                     }
                     else { // other medium form than datasheet
                       switch (pathSegments[3]) {
@@ -177,11 +174,87 @@
                     }
                   }
                   else if (pathSegments.length >= 3 && pathSegments[2] == 'list') { //* .../list
-                    TIMAAT.UI.clearLastSelection(pathSegments[1]);
-                    TIMAAT.MediumDatasets.loadMediumSubtype(pathSegments[1]);
-                    TIMAAT.UI.displayComponent('medium', pathSegments[1]+'-tab', pathSegments[1]+'-datatable');
+                    switch (pathSegments[1]) {
+                      case 'audio': // #medium/audio ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllAudiosList) {
+                          await TIMAAT.MediumDatasets.setupAllAudiosDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllAudiosList.ajax.url('/TIMAAT/api/medium/audio/list')
+                        TIMAAT.MediumDatasets.dataTableAllAudiosList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'audio-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allAudios');
+                        $('#timaat-mediumdatasets-all-audios').addClass('active');
+                      break;
+                      case 'document': // #medium/document ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllDocumentsList) {
+                          await TIMAAT.MediumDatasets.setupAllDocumentsDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllDocumentsList.ajax.url('/TIMAAT/api/medium/document/list')
+                        TIMAAT.MediumDatasets.dataTableAllDocumentsList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'document-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allDocuments');
+                        $('#timaat-mediumdatasets-all-documents').addClass('active');
+                      break;
+                      case 'image': // #medium/image ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllImagesList) {
+                          await TIMAAT.MediumDatasets.setupAllImagesDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllImagesList.ajax.url('/TIMAAT/api/medium/image/list')
+                        TIMAAT.MediumDatasets.dataTableAllImagesList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'image-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allImages');
+                        $('#timaat-mediumdatasets-all-images').addClass('active');
+                      break;
+                      case 'software': // #medium/software ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllSoftwaresList) {
+                          await TIMAAT.MediumDatasets.setupAllSoftwaresDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllSoftwaresList.ajax.url('/TIMAAT/api/medium/software/lList')
+                        TIMAAT.MediumDatasets.dataTableAllSoftwaresList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'software-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allSoftwares');
+                        $('#timaat-mediumdatasets-all-softwares').addClass('active');
+                      break;
+                      case 'text': // #medium/text ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllTextsList) {
+                          await TIMAAT.MediumDatasets.setupAllTextsDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllTextsList.ajax.url('/TIMAAT/api/medium/text/list')
+                        TIMAAT.MediumDatasets.dataTableAllTextsList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'text-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allTexts');
+                        $('#timaat-mediumdatasets-all-texts').addClass('active');
+                      break;
+                      case 'video': // #medium/video ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllVideosList) {
+                          await TIMAAT.MediumDatasets.setupAllVideosDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllVideosList.ajax.url('/TIMAAT/api/medium/video/list')
+                        TIMAAT.MediumDatasets.dataTableAllVideosList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'video-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allVideos');
+                        $('#timaat-mediumdatasets-all-videos').addClass('active');
+                      break;
+                      case 'videogame': // #medium/videogame ...
+                        if (!TIMAAT.MediumDatasets.dataTableAllVideogamesList) {
+                          await TIMAAT.MediumDatasets.setupAllVideogamesDataTable();
+                        }
+                        TIMAAT.MediumDatasets.dataTableAllVideogamesList.ajax.url('/TIMAAT/api/medium/videogame/list')
+                        TIMAAT.MediumDatasets.dataTableAllVideogamesList.ajax.reload();
+                        TIMAAT.UI.displayComponent('medium', null, 'videogame-datatable');
+                        $('#'+pathSegments[1]+'-tab').addClass('active');
+                        TIMAAT.UI.displayDataSetContentArea('medium-allVideogames');
+                        $('#timaat-mediumdatasets-all-videogames').addClass('active');
+                      break;
+                    }
                   } else {
-                      this.redirectToDefaultView();
+                    this.redirectToDefaultView();
                   }
                 break;
                 default:
@@ -846,8 +919,8 @@
     redirectToDefaultView: function() {
       console.log("TCL: redirectToDefaultView", );
       // redirect if invalid url path is entered
-      TIMAAT.URLHistory.setupView('#medium/allMediaList');
-      TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/allMediaList');
+      TIMAAT.URLHistory.setupView('#medium/list');
+      TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/list');
     },
 
   }

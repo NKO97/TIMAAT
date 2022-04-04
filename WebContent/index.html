@@ -2633,6 +2633,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="audio-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-audios" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All audios
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Audios
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('audio')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Audio">
                             <i class="fas fa-plus"></i>
@@ -2652,6 +2658,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="document-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-documents" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All documents
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Documents
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('document')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Document">
                             <i class="fas fa-plus"></i>
@@ -2671,6 +2683,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="image-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-images" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All images
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Images
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('image')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Image">
                             <i class="fas fa-plus"></i>
@@ -2690,6 +2708,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="software-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-softwares" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All softwares
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Software
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('software')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Software">
                             <i class="fas fa-plus"></i>
@@ -2709,6 +2733,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="text-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-texts" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All texts
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Texts
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('text')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Text">
                             <i class="fas fa-plus"></i>
@@ -2728,6 +2758,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="video-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-videos" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All videos
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Videos
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('video')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Video">
                             <i class="fas fa-plus"></i>
@@ -2747,6 +2783,12 @@
                         </div>
                       </div>
                       <div class="card datatables" id="videogame-datatable">
+                        <ul class="list-group">
+                          <li id="timaat-mediumdatasets-all-videogames" class="list-group-item list-group-item-action font-weight-bold">
+                            <i class="fas fa-inbox"></i> All videogames
+                          </li>
+                        </ul>
+                        <br>
                         <div class="card-header">Videogames
                           <button type="button" onclick="TIMAAT.MediumDatasets.addMedium('videogame')" class="btn btn-outline btn-success btn-sm float-right add-medium-button" title="Add Videogame">
                             <i class="fas fa-plus"></i>
@@ -2818,6 +2860,152 @@
                                 </tr>
                               </thead>
                               <tbody id="timaat-mediumdatasets-medium-all-media">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all audios -->
+                        <div class="card dataset-content" id="medium-allAudios"> <!-- Medium all audios -->
+                          <div class="card-header">All audios
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-audios-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Title</th>
+                                  <th>Running time</th>
+                                  <th>Producer</th>
+                                  <th>Release date</th>
+                                  <th>Language</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-audios">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all documents -->
+                        <div class="card dataset-content" id="medium-allDocuments"> <!-- Medium all documents -->
+                          <div class="card-header">All documents
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-documents-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Author</th>
+                                  <th>Publication date</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-documents">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all images -->
+                        <div class="card dataset-content" id="medium-allImages"> <!-- Medium all images -->
+                          <div class="card-header">All images
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-images-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Producer</th>
+                                  <th>Publication date</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-images">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all softwares -->
+                        <div class="card dataset-content" id="medium-allSoftwares"> <!-- Medium all softwares -->
+                          <div class="card-header">All softwares
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-softwares-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Producer</th>
+                                  <th>Release date</th>
+                                  <th>Language</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-softwares">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all texts -->
+                        <div class="card dataset-content" id="medium-allTexts"> <!-- Medium all texts -->
+                          <div class="card-header">All texts
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-texts-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Author</th>
+                                  <th>Publication date</th>
+                                  <th>Language</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-texts">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all videos -->
+                        <div class="card dataset-content" id="medium-allVideos"> <!-- Medium all videos -->
+                          <div class="card-header">All videos
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-videos-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Running time</th>
+                                  <th>Producer</th>
+                                  <th>Release date</th>
+                                  <th>Language</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-videos">
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- all videogames -->
+                        <div class="card dataset-content" id="medium-allVideogames"> <!-- Medium all videogames -->
+                          <div class="card-header">All videogames
+                          </div>
+                          <div class="card-body">
+                            <table id="timaat-mediumdatasets-medium-all-videogames-table" class="table table-striped table-bordered table-hover">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th>Preview</th>
+                                  <th>Title</th>
+                                  <th>Producer</th>
+                                  <th>Release date</th>
+                                  <th>Language</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody id="timaat-mediumdatasets-medium-all-videogames">
                               </tbody>
                             </table>
                           </div>

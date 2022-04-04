@@ -33,6 +33,8 @@
 		titles      : null,
 		videogames  : null,
 		videos      : null,
+		producerId	: 0,
+		authorId		: 0,
 
 		init: function() {
 			this.initMedia();
@@ -147,43 +149,43 @@
 			$('#audio-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('audio');
 				TIMAAT.UI.displayComponent('medium', 'audio-tab', 'audio-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Audio Datasets', '#medium/audio/list');
+				$('#timaat-mediumdatasets-all-audios').trigger('click');
 			});
 
 			$('#document-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('document');
 				TIMAAT.UI.displayComponent('medium', 'document-tab', 'document-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Document Datasets', '#medium/document/list');
+				$('#timaat-mediumdatasets-all-documents').trigger('click');
 			});
 
 			$('#image-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('image');
 				TIMAAT.UI.displayComponent('medium', 'image-tab', 'image-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Image Datasets', '#medium/image/list');
+				$('#timaat-mediumdatasets-all-images').trigger('click');
 			});
 
 			$('#software-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('software');
 				TIMAAT.UI.displayComponent('medium', 'software-tab', 'software-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Software Datasets', '#medium/software/list');
+				$('#timaat-mediumdatasets-all-softwares').trigger('click');
 			});
 
 			$('#text-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('text');
 				TIMAAT.UI.displayComponent('medium', 'text-tab', 'text-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Text Datasets', '#medium/text/list');
+				$('#timaat-mediumdatasets-all-texts').trigger('click');
 			});
 
 			$('#video-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('video');
 				TIMAAT.UI.displayComponent('medium', 'video-tab', 'video-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Video Datasets', '#medium/video/list');
+				$('#timaat-mediumdatasets-all-videos').trigger('click');
 			});
 
 			$('#videogame-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('videogame');
 				TIMAAT.UI.displayComponent('medium', 'videogame-tab', 'videogame-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Videogame Datasets', '#medium/videogame/list');
+				$('#timaat-mediumdatasets-all-videogames').trigger('click');
 			});
 
 			$('#medium-tab-metadata').on('click', function(event) {
@@ -217,24 +219,121 @@
 			$('#timaat-mediumdatasets-all-media').on('click', async function(event) {
 				TIMAAT.UI.displayDataSetContentArea('medium-allMedia');
 				$('#medium-nav-tabs').hide();
-
-				// TIMAAT.MediumDatasets.setMediumList();
 				if (!TIMAAT.MediumDatasets.dataTableAllMediaList) {
 					await TIMAAT.MediumDatasets.setupAllMediaDataTable();
 				}
-				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/allMediaList')
-				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload();
-				// TIMAAT.UI.displayDataSetContent('allMedia', null, 'mediumCollection');
-				if (!TIMAAT.UI.selectedMediumId) {
-					TIMAAT.UI.clearLastSelection('medium');
-				}
-				$('#mediumcollection-metadata-form').data('medium', null);
-				$('#mediumcollection-metadata-form').data('type', null);
+				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/list')
+				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('medium');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
 				$('#timaat-mediumdatasets-all-media').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/list');
+			});
 
-				// TIMAAT.MediumDatasets.loadMedia();
-				// TIMAAT.UI.displayComponent('medium', 'mediumc-tab', 'medium-datatable');
-				TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/allMediaList');
+			$('#timaat-mediumdatasets-all-audios').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allAudios');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllAudiosList) {
+					await TIMAAT.MediumDatasets.setupAllAudiosDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllAudiosList.ajax.url('/TIMAAT/api/medium/audio/list')
+				TIMAAT.MediumDatasets.dataTableAllAudiosList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('audio');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-audios').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Audio Library', '#medium/audio/list');
+			});
+
+			$('#timaat-mediumdatasets-all-documents').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allDocuments');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllDocumentsList) {
+					await TIMAAT.MediumDatasets.setupAllDocumentsDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllDocumentsList.ajax.url('/TIMAAT/api/medium/document/list')
+				TIMAAT.MediumDatasets.dataTableAllDocumentsList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('document');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-documents').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Document Library', '#medium/document/list');
+			});
+
+			$('#timaat-mediumdatasets-all-images').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allImages');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllImagesList) {
+					await TIMAAT.MediumDatasets.setupAllImagesDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllImagesList.ajax.url('/TIMAAT/api/medium/image/list')
+				TIMAAT.MediumDatasets.dataTableAllImagesList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('image');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-images').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Image Library', '#medium/image/list');
+			});
+
+			$('#timaat-mediumdatasets-all-softwares').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allSoftwares');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllSoftwaresList) {
+					await TIMAAT.MediumDatasets.setupAllSoftwaresDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllSoftwaresList.ajax.url('/TIMAAT/api/medium/software/list')
+				TIMAAT.MediumDatasets.dataTableAllSoftwaresList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('software');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-softwares').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Software Library', '#medium/software/list');
+			});
+
+			$('#timaat-mediumdatasets-all-texts').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allTexts');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllTextsList) {
+					await TIMAAT.MediumDatasets.setupAllTextsDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllTextsList.ajax.url('/TIMAAT/api/medium/text/list')
+				TIMAAT.MediumDatasets.dataTableAllTextsList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('text');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-texts').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Text Library', '#medium/text/list');
+			});
+
+			$('#timaat-mediumdatasets-all-videos').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allVideos');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllVideosList) {
+					await TIMAAT.MediumDatasets.setupAllVideosDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllVideosList.ajax.url('/TIMAAT/api/medium/video/list')
+				TIMAAT.MediumDatasets.dataTableAllVideosList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('video');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-videos').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Video Library', '#medium/video/list');
+			});
+
+			$('#timaat-mediumdatasets-all-videogames').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('medium-allVideogames');
+				$('#medium-nav-tabs').hide();
+				if (!TIMAAT.MediumDatasets.dataTableAllVideogamesList) {
+					await TIMAAT.MediumDatasets.setupAllVideogamesDataTable();
+				}
+				TIMAAT.MediumDatasets.dataTableAllVideogamesList.ajax.url('/TIMAAT/api/medium/videogame/list')
+				TIMAAT.MediumDatasets.dataTableAllVideogamesList.ajax.reload().draw();
+				TIMAAT.UI.clearLastSelection('videogame');
+				$('#medium-metadata-form').data('medium', null);
+				$('#medium-metadata-form').data('type', null);
+				$('#timaat-mediumdatasets-all-videogames').addClass('active');
+				TIMAAT.URLHistory.setURL(null, 'Videogame Library', '#medium/videogame/list');
 			});
 
 			// add medium button functionality (in medium list - opens datasheet form)
@@ -1802,6 +1901,11 @@
 					this.setVideogameList();
 				break;
 			};
+		},
+
+		loadRequiredRoleIds: async function() {
+			this.producerId = await TIMAAT.RoleService.getRoleId('Producer');
+			this.authorId = await TIMAAT.RoleService.getRoleId('Author');
 		},
 
 		setMediumTypeList: function(mediaTypes) {
@@ -3714,6 +3818,32 @@
 			});
 		},
 
+		getMediumDatasetRoleFieldData: function(medium, roleId) {
+			if ( !medium || !medium.mediumHasActorWithRoles ) return "-";
+			var actorList = [];
+			medium.mediumHasActorWithRoles.forEach(function(actorWithRole) {
+				if ( actorWithRole.role.id == roleId ) actorList.push(actorWithRole.actor);
+			});
+			if ( actorList.length == 0 ) return "-";
+			var roleFieldData = "";
+			var i = 0;
+			for (; i < actorList.length; i++) {
+				if (roleFieldData.length == 0) {
+					roleFieldData += actorList[i].displayName.name;
+					if (actorList[i].birthName && actorList[i].birthName.name != actorList[i].displayName.name) {
+						roleFieldData += " <i>("+ actorList[i].birthName.name+")<i>";
+					}
+				} else {
+					roleFieldData += ",<br>"+actorList[i].displayName.name;
+					if (actorList[i].birthName && actorList[i].birthName.name != actorList[i].displayName.name) {
+						roleFieldData += " <i>("+ actorList[i].birthName.name+")<i>";
+					}
+				}
+			}
+      // console.log("TCL: producer", producer);
+			return roleFieldData;
+		},
+
 		replaceSpecialCharacters: function(unsafe) {
 			return unsafe
 			.replace(/</g, "&lt;")
@@ -3741,7 +3871,7 @@
 				"rowId"					: 'id',
 				"serverSide"		: true,
 				"ajax": {
-					"url"        : "api/medium/allMediaList",
+					"url"        : "api/medium/list",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
 					"data"       : function(data) {
@@ -3894,7 +4024,7 @@
 					},
 					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '10%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllMediaDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
-						return TIMAAT.VideoChooser._getProducer(mediumItem);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
 						}
 					},
 					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '10%', render: function(data, type, mediumItem, meta) {
@@ -3958,7 +4088,1437 @@
 					"thousands"   : ".",
 					"search"      : "Search",
 					"lengthMenu"  : "Show _MENU_ entries",
-					"zeroRecords" : "This collection is empty.",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllAudiosDataTable: async function() {
+			// console.log("TCL: setupAllAudiosDataTable");
+			this.dataTableAllAudiosList = $('#timaat-mediumdatasets-medium-all-audios-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/audio/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allAudiosList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: 'id', name: 'title', className: 'title', width:'35%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllAudiosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in audios library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: null, name: 'duration', className: 'duration', width: '15%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta - ", data, type, mediumItem, meta);
+							if (mediumItem.mediumVideo && mediumItem.mediumVideo.length > 0) {
+								return TIMAAT.Util.formatTime(mediumItem.mediumVideo.length);
+							} else if (mediumItem.mediumAudio && mediumItem.mediumAudio.length > 0) {
+								return TIMAAT.Util.formatTime(mediumItem.mediumAudio.length);
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllAudiosDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'mediumHasLanguages', name: 'language', className: 'language', orderable: false, width: '10%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.mediumHasLanguages && mediumItem.mediumHasLanguages.length > 0) {
+								let i = 0;
+								let languageDisplay = '';
+								data.sort((a,b) => a.mediumLanguageType.id > b.mediumLanguageType.id ? 1 : ((b.mediumLanguageType.id > a.mediumLanguageType.id) ? -1 : 0));
+								for (; i < data.length; i++) {
+									if (data[i].mediumLanguageType.id == 1) {
+										languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
+									} else if (data[i].mediumLanguageType.id == 2) {
+										languageDisplay += `<p>` + data[i].language.name + ` (STT)</p>`;
+									}
+								}
+								return languageDisplay;
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllAudiosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllDocumentsDataTable: async function() {
+			// console.log("TCL: setupAllDocumentsDataTable");
+			this.dataTableAllDocumentsList = $('#timaat-mediumdatasets-medium-all-documents-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/document/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allDocumentsList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui;
+						if (mediumItem.mediumVideo) {
+							ui = `<div class="timaat-medium-status">
+											<i class="fas fa-cog fa-spin"></i>
+											</div>
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+						}
+						else if (mediumItem.mediumImage) {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+										</div>`;
+						} else if (mediumItem.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
+						} else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+										</div>`;
+						}
+						return ui;
+						}
+					},
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in documents library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'author', className: 'author', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.authorId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllImagesDataTable: async function() {
+			// console.log("TCL: setupAllImagesDataTable");
+			this.dataTableAllImagesList = $('#timaat-mediumdatasets-medium-all-images-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/image/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allImagesList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					// rowItem.on('click', function(event) {
+					// });
+
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui;
+						if (mediumItem.mediumVideo) {
+							ui = `<div class="timaat-medium-status">
+											<i class="fas fa-cog fa-spin"></i>
+											</div>
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+						}
+						else if (mediumItem.mediumImage) {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+										</div>`;
+						} else if (mediumItem.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
+						} else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+										</div>`;
+						}
+						return ui;
+						}
+					},
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in images library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllSoftwaresDataTable: async function() {
+			// console.log("TCL: setupAllSoftwaresDataTable");
+			this.dataTableAllSoftwaresList = $('#timaat-mediumdatasets-medium-all-softwares-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/software/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allSoftwaresList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					// rowItem.on('click', function(event) {
+					// });
+
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui;
+						if (mediumItem.mediumVideo) {
+							ui = `<div class="timaat-medium-status">
+											<i class="fas fa-cog fa-spin"></i>
+											</div>
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+						}
+						else if (mediumItem.mediumImage) {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+										</div>`;
+						} else if (mediumItem.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
+						} else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+										</div>`;
+						}
+						return ui;
+						}
+					},
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in softwares library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'mediumHasLanguages', name: 'language', className: 'language', orderable: false, width: '15%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.mediumHasLanguages && mediumItem.mediumHasLanguages.length > 0) {
+								let i = 0;
+								let languageDisplay = '';
+								data.sort((a,b) => a.mediumLanguageType.id > b.mediumLanguageType.id ? 1 : ((b.mediumLanguageType.id > a.mediumLanguageType.id) ? -1 : 0));
+								for (; i < data.length; i++) {
+									if (data[i].mediumLanguageType.id == 1) {
+										languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
+									} else if (data[i].mediumLanguageType.id == 2) {
+										languageDisplay += `<p>` + data[i].language.name + ` (STT)</p>`;
+									}
+								}
+								return languageDisplay;
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllTextsDataTable: async function() {
+			// console.log("TCL: setupAllTextsDataTable");
+			this.dataTableAllTextsList = $('#timaat-mediumdatasets-medium-all-texts-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/text/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allTextsList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					// rowItem.on('click', function(event) {
+					// });
+
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui;
+						if (mediumItem.mediumVideo) {
+							ui = `<div class="timaat-medium-status">
+											<i class="fas fa-cog fa-spin"></i>
+											</div>
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+						}
+						else if (mediumItem.mediumImage) {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+										</div>`;
+						} else if (mediumItem.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
+						} else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+										</div>`;
+						}
+						return ui;
+						}
+					},
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in texts library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'author', className: 'author', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'mediumHasLanguages', name: 'language', className: 'language', orderable: false, width: '15%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.mediumHasLanguages && mediumItem.mediumHasLanguages.length > 0) {
+								let i = 0;
+								let languageDisplay = '';
+								data.sort((a,b) => a.mediumLanguageType.id > b.mediumLanguageType.id ? 1 : ((b.mediumLanguageType.id > a.mediumLanguageType.id) ? -1 : 0));
+								for (; i < data.length; i++) {
+									if (data[i].mediumLanguageType.id == 1) {
+										languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
+									} else if (data[i].mediumLanguageType.id == 2) {
+										languageDisplay += `<p>` + data[i].language.name + ` (STT)</p>`;
+									}
+								}
+								return languageDisplay;
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllVideosDataTable: async function() {
+			// console.log("TCL: setupAllVideosDataTable");
+			this.dataTableAllVideosList = $('#timaat-mediumdatasets-medium-all-videos-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/video/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allVideosList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					// rowItem.on('click', function(event) {
+					// });
+
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui;
+						if (mediumItem.mediumVideo) {
+							ui = `<div class="timaat-medium-status">
+											<i class="fas fa-cog fa-spin"></i>
+											</div>
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+						}
+						else if (mediumItem.mediumImage) {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+										</div>`;
+						} else if (mediumItem.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
+						} else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+										</div>`;
+						}
+						return ui;
+						}
+					},
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in videos library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: null, name: 'duration', className: 'duration', width: '10%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta - ", data, type, mediumItem, meta);
+							if (mediumItem.mediumVideo && mediumItem.mediumVideo.length > 0) {
+								return TIMAAT.Util.formatTime(mediumItem.mediumVideo.length);
+							} else if (mediumItem.mediumAudio && mediumItem.mediumAudio.length > 0) {
+								return TIMAAT.Util.formatTime(mediumItem.mediumAudio.length);
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '10%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '10%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'mediumHasLanguages', name: 'language', className: 'language', orderable: false, width: '10%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.mediumHasLanguages && mediumItem.mediumHasLanguages.length > 0) {
+								let i = 0;
+								let languageDisplay = '';
+								data.sort((a,b) => a.mediumLanguageType.id > b.mediumLanguageType.id ? 1 : ((b.mediumLanguageType.id > a.mediumLanguageType.id) ? -1 : 0));
+								for (; i < data.length; i++) {
+									if (data[i].mediumLanguageType.id == 1) {
+										languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
+									} else if (data[i].mediumLanguageType.id == 2) {
+										languageDisplay += `<p>` + data[i].language.name + ` (STT)</p>`;
+									}
+								}
+								return languageDisplay;
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
+					"infoEmpty"   : "No items available.",
+					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
+					"paginate"    : {
+						"first"   : "<<",
+						"previous": "<",
+						"next"    : ">",
+						"last"    : ">>"
+					},
+				},
+			});
+		},
+
+		setupAllVideogamesDataTable: async function() {
+			// console.log("TCL: setupAllVideogamesDataTable");
+			this.dataTableAllVideogamesList = $('#timaat-mediumdatasets-medium-all-videogames-table').DataTable({
+				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+				"order"         : [[ 1, 'asc' ]],
+				"pagingType"    : "full", // "simple_numbers",
+				"processing"    : true,
+				"stateSave"     : true,
+				"scrollX"				: true,
+				"scrollY"       : "60vh",
+				"scrollCollapse": true,
+				"rowId"					: 'id',
+				"serverSide"		: true,
+				"ajax": {
+					"url"        : "api/medium/videogame/list",
+					"contentType": "application/json; charset=utf-8",
+					"dataType"   : "json",
+					"data"       : function(data) {
+						// console.log("TCL: data", data);
+						let serverData = {
+							draw   : data.draw,
+							start  : data.start,
+							length : data.length,
+							orderby: data.columns[data.order[0].column].name,
+							dir    : data.order[0].dir,
+						}
+						if ( data.search && data.search.value && data.search.value.length > 0 )
+							serverData.search = data.search.value;
+						return serverData;
+					},
+					"beforeSend": function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+					"dataSrc": function(data) {
+						// console.log("TCL: dataSrc - data", data);
+						// setup model
+						TIMAAT.MediumDatasets.allVideogamesList = data.data;
+						return data.data;
+					}
+				},
+				"createdRow": function(row, data, dataIndex) {
+					// console.log("TCL: row, data, dataIndex", row, data, dataIndex);
+					let rowItem = $(row);
+					let medium = data;
+					let type = medium.mediaType.mediaTypeTranslations[0].type;
+					medium.ui = rowItem;
+					rowItem.data('medium', medium);
+
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
+					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					TIMAAT.MediumDatasets.setMediumStatus(medium);
+
+					// set up events
+					// rowItem.on('click', function(event) {
+					// });
+
+					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						let item = new TIMAAT.Medium(medium, type);
+						item.listView.find('.timaat-medium-upload-file').click();
+					});
+
+					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+						event.stopPropagation();
+						TIMAAT.UI.hidePopups();
+						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
+						if ( medium.fileStatus && medium.fileStatus != 'ready' && medium.fileStatus != 'transcoding' && medium.fileStatus != 'waiting' ) return;
+						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
+					});
+
+					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+						event.stopPropagation();
+						let mediumModel = {};
+						mediumModel.model = medium;
+						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
+						TIMAAT.VideoChooser.updateVideoStatus(medium);
+
+				},
+				"columns": [
+					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui;
+						if (mediumItem.mediumVideo) {
+							ui = `<div class="timaat-medium-status">
+											<i class="fas fa-cog fa-spin"></i>
+											</div>
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+						}
+						else if (mediumItem.mediumImage) {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+										</div>`;
+						} else if (mediumItem.mediumAudio) {
+							ui = `<div style="display:flex">
+											<i class="center fas fa-file-audio fa-5x"></i>
+										</div>`;
+						} else {
+							ui = `<div style="display:flex">
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+										</div>`;
+						}
+						return ui;
+						}
+					},
+					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let displayMediumTypeIcon = '';
+						let analysisListIcon = ' ';
+							if ( mediumItem.mediumAnalysisLists.length > 0) {
+								analysisListIcon = '<i class="far fa-eye" title="Analysis available"></i> ';
+							}
+
+						let titleDisplay = `<p>` + displayMediumTypeIcon + analysisListIcon + mediumItem.displayTitle.name + `</p>`;
+							if (mediumItem.originalTitle != null && mediumItem.displayTitle.id != mediumItem.originalTitle.id) {
+								titleDisplay += `<p><i>(OT: `+mediumItem.originalTitle.name+`)</i></p>`;
+							}
+							// TODO not working anymore due to server side dataTable data search
+							mediumItem.titles.forEach(function(title) { // make additional titles searchable in videogames library
+								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
+									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								}
+							});
+							return titleDisplay;
+						}
+					},
+					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, met", data, type, mediumItem, met);
+						return TIMAAT.MediumDatasets.getMediumDatasetRoleFieldData(mediumItem, TIMAAT.MediumDatasets.producerId);
+						}
+					},
+					{ data: 'releaseDate', name: 'releaseDate', className: 'date', width: '15%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.releaseDate) {
+								return moment.utc(mediumItem.releaseDate).format('YYYY-MM-DD');
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: 'mediumHasLanguages', name: 'language', className: 'language', orderable: false, width: '15%', render: function(data, type, mediumItem, meta) {
+							// console.log("TCL: data, type, mediumItem, meta", data, type, mediumItem, meta);
+							if (mediumItem.mediumHasLanguages && mediumItem.mediumHasLanguages.length > 0) {
+								let i = 0;
+								let languageDisplay = '';
+								data.sort((a,b) => a.mediumLanguageType.id > b.mediumLanguageType.id ? 1 : ((b.mediumLanguageType.id > a.mediumLanguageType.id) ? -1 : 0));
+								for (; i < data.length; i++) {
+									if (data[i].mediumLanguageType.id == 1) {
+										languageDisplay += `<p>` + data[i].language.name + ` (AT)</p>`;
+									} else if (data[i].mediumLanguageType.id == 2) {
+										languageDisplay += `<p>` + data[i].language.name + ` (STT)</p>`;
+									}
+								}
+								return languageDisplay;
+							} else {
+								return "-";
+							}
+						}
+					},
+					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+						let ui = `<div class="btn-group" role="group">`;
+						if ( mediumItem.mediumVideo ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if ( mediumItem.mediumAudio ){
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						} else if (mediumItem.mediumImage) {
+							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+							} else {
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+							}
+						}
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+									</div>`;
+						return ui;
+						},
+					}
+				],
+				"language": {
+					"decimal"     : ",",
+					"thousands"   : ".",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ entries",
+					"zeroRecords" : "No records found.",
 					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ items total)",
 					"infoEmpty"   : "No items available.",
 					"infoFiltered": "(&mdash; _TOTAL_ of _MAX_ items)",
@@ -4222,6 +5782,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-audios').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('audio', mediumModel);
@@ -4361,6 +5922,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-documents').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('document', mediumModel);
@@ -4500,6 +6062,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-images').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('image', mediumModel);
@@ -4639,6 +6202,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-softwares').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('software', mediumModel);
@@ -4778,6 +6342,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-texts').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('text', mediumModel);
@@ -4915,6 +6480,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-videos').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('video', mediumModel);
@@ -5057,6 +6623,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
+						$('#timaat-mediumdatasets-all-videogames').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('videogame', mediumModel);

@@ -128,13 +128,17 @@ public class EndpointMedium {
 
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "m.id";
+		String column = "m.displayTitle.name";
 		if ( orderby != null) {
 			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("duration")) column = "";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "m.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		// calculate total # of records
+		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
@@ -201,77 +205,6 @@ public class EndpointMedium {
 
 			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 		}
-	}
-
-	@GET
-	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("allMediaList")
-	public Response getAllMedia(@QueryParam("draw") Integer draw,
-															@QueryParam("start") Integer start,
-															@QueryParam("length") Integer length,
-															@QueryParam("orderby") String orderby,
-															@QueryParam("dir") String direction,
-															@QueryParam("search") String search ) {
-		// System.out.println("TCL: EndpointMediumCollection: getAllMedia: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
-		if ( draw == null ) draw = 0;
-
-		// sanitize user input
-		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
-		String column = "m.displayTitle.name";
-		if ( orderby != null) {
-			if (orderby.equalsIgnoreCase("title")) column = "m.displayTitle.name";
-			// if (orderby.equalsIgnoreCase("duration")) column = "";
-			// if (orderby.equalsIgnoreCase("producer")) column = "";
-			if (orderby.equalsIgnoreCase("releaseDate")) column = "m.releaseDate";
-			// if (orderby.equalsIgnoreCase("language")) column = "";
-		}
-
-		// calculate total # of records
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Medium m");
-		long recordsTotal = (long) countQuery.getSingleResult();
-		long recordsFiltered = recordsTotal;
-
-		// search
-		Query query;
-		String sql;
-		List<Medium> mediumList = new ArrayList<>();
-		if (search != null && search.length() > 0 ) {
-			// find all matching media
-			sql = "SELECT m FROM Title t, Medium m WHERE t IN (m.titles) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY m.displayTitle.name "+direction;
-			query = entityManager.createQuery(sql)
-													 .setParameter("search", search);
-			mediumList = castList(Medium.class, query.getResultList());
-			// find all media
-			if ( start != null && start > 0 ) query.setFirstResult(start);
-			if ( length != null && length > 0 ) query.setMaxResults(length);
-			if ( length == -1 ) { // display all results
-				length = mediumList.size();
-				query.setMaxResults(length);
-			}
-			recordsFiltered = mediumList.size();
-			List<Medium> filteredMediumList = new ArrayList<>();
-			int i = start;
-			int end;
-			if ((recordsFiltered - start) < length) {
-				end = (int)recordsFiltered;
-			}
-			else {
-				end = start + length;
-			}
-			for(; i < end; i++) {
-				filteredMediumList.add(mediumList.get(i));
-			}
-			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMediumList)).build();
-		} else {
-			sql = "SELECT m FROM Medium m ORDER BY "+column+" "+direction;
-			query = entityManager.createQuery(sql);
-			if ( start != null && start > 0 ) query.setFirstResult(start);
-			if ( length != null && length > 0 ) query.setMaxResults(length);
-			mediumList = castList(Medium.class, query.getResultList());
-		}
-		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 	}
 
 	@GET
@@ -475,9 +408,13 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "ma.mediumId";
+		String column = "ma.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "ma.medium.displayTitle.name";
+			if (orderby.equalsIgnoreCase("duration")) column = "ma.length";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "ma.medium.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -549,9 +486,12 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "md.mediumId";
+		String column = "md.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "md.medium.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "md.medium.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -623,9 +563,12 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "mi.mediumId";
+		String column = "mi.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "mi.medium.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "mi.medium.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -697,9 +640,12 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "ms.mediumId";
+		String column = "ms.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "ms.medium.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "ms.medium.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -771,9 +717,12 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "mt.mediumId";
+		String column = "mt.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "mt.medium.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "mt.medium.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -846,14 +795,13 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "mv.mediumId";
+		String column = "mv.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.displayTitle.name";
 			if (orderby.equalsIgnoreCase("duration")) column = "mv.length";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
 			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
-			// TODO producer, seems way to complex to put in DB query // should be ordered in front end instead
-			// - dependencies  --> actor --> actorNames --> actorName.isdisplayname
-			// + --> role == 5 --> producer
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -928,9 +876,12 @@ public class EndpointMedium {
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 
-		String column = "mv.mediumId";
+		String column = "mv.medium.displayTitle.name";
 		if ( orderby != null ) {
 			if (orderby.equalsIgnoreCase("title")) column = "mv.medium.displayTitle.name";
+			// if (orderby.equalsIgnoreCase("producer")) column = "";
+			if (orderby.equalsIgnoreCase("releaseDate")) column = "mv.medium.releaseDate";
+			// if (orderby.equalsIgnoreCase("language")) column = "";
 		}
 
 		// calculate total # of records
@@ -3072,7 +3023,7 @@ public class EndpointMedium {
 
 		if ( mediumAudio.getMedium().getFileStatus().compareTo("noFile") != 0 )
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Audio file already exists").build();
-		
+
 		try {
 			// TODO assume MP3 upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
@@ -3154,7 +3105,7 @@ public class EndpointMedium {
 			if ( isJPG ) tempExtension = ".jpg";
 			System.out.println("file is jpeg: "+isJPG);
 			System.out.println("file has extension "+tempExtension);
-			
+
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
 					+ "-upload"+tempExtension;
 			File uploadTempFile = new File(
@@ -3677,7 +3628,7 @@ public class EndpointMedium {
 					+ "medium/image/" + id + "-image-original.png", headers, id+".png");
 			else return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/image/" + id + "-image-original.jpg", headers, id+".jpg");
-			
+
 		}
 
 		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
@@ -4063,7 +4014,7 @@ public class EndpointMedium {
 			String fileType = "video";
 			if ( fileExtension.equalsIgnoreCase("png") || fileExtension.equalsIgnoreCase("jpg") ) fileType = "image";
 			if ( fileExtension.equalsIgnoreCase("mp3") ) fileType = "audio";
-			
+
 			ResponseBuilder builder = Response.ok();
 			if ( asFile != null ) builder.header("Content-Disposition", "attachment; filename=\""+asFile+"\"");
 
