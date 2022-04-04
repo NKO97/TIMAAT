@@ -220,55 +220,55 @@
 				case 'subscribe-list':
 					color = 'badge-primary';
 					action = 'fa-eye';
-					message = 'aktuelle Analyse geöffnet'
+					message = 'current analysis opened'
 					break;
 				case 'unsubscribe-list':
 					color = 'badge-secondary';
 					action = 'fa-eye';
-					message = 'aktuelle Analyse geschlossen'
+					message = 'current analysis closed'
 					break;
 				case 'add-segment':
 					color = 'badge-success';
 					action = 'fa-plus';
-					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> hinzugefügt';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> added';
 					break;
 				case 'edit-segment':
 					color = 'badge-warning';
 					action = 'fa-edit';
-					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> bearbeitet';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> edited';
 					break;
 				case 'remove-segment':
 					color = 'badge-danger';
 					action = 'fa-trash-alt';
-					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> gelöscht';
+					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> deleted';
 					break;
 				case 'add-annotation':
 					color = 'badge-success';
 					action = 'fa-plus';
-					message = 'Annotation <strong>"'+notification.data.title+'"</strong> hinzugefügt';
+					message = 'Annotation <strong>"'+notification.data.title+'"</strong> added';
 					break;
 				case 'edit-annotation':
 					color = 'badge-warning';
 					action = 'fa-edit';
-					message = 'Annotation <strong>"'+notification.data.title+'"</strong> bearbeitet';
+					message = 'Annotation <strong>"'+notification.data.title+'"</strong> edited';
 					break;
 				case 'remove-annotation':
 					color = 'badge-danger';
 					action = 'fa-trash-alt';
-					message = 'Annotation <strong>"'+notification.data.title+'"</strong> gelöscht';
+					message = 'Annotation <strong>"'+notification.data.title+'"</strong> deleted';
 					break;
 				case 'list-subscribers':
 					color = 'badge-primary';
 					action = 'fa-user-friends';
-					user = 'Bearbeiter/-innen';
+					user = 'Editors';
 					message = '';
 					for (let subscriber of notification.data) message += ', '+subscriber;
 					message = '<strong>'+message.substring(2)+'</strong> ';
-					message += (notification.data.length == 1) ? 'bearbeitet ' : 'bearbeiten ';
-					message += 'die Analyse ebenfalls';
+					message += (notification.data.length == 1) ? 'edited ' : 'edits ';
+					message += 'the analysis, too';
 					break;
 				default:
-					message = 'unbekannte Aktion: '+notification.message;
+					message = 'unknown action: '+notification.message;
 					break;
 			}
 			ui.find('.notification-action-color').addClass(color);

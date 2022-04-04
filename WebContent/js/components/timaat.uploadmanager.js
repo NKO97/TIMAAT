@@ -28,7 +28,7 @@
 							<button type="button" class="upload-cancel btn float-right btn-outline-danger ml-2"><i class="fas fa-times-circle"></i></button>
 							<span class="filename text-dark">[FILENAME]</span><br>
 							<div class="progress">
-								<div class="progress-bar bg-secondary" role="progressbar" style="width: 100%;">In der Warteschlange...</div>
+								<div class="progress-bar bg-secondary" role="progressbar" style="width: 100%;">In queue...</div>
 							</div>
 						</li>
 			`);
@@ -72,7 +72,7 @@
 					if ( uploadItem.state == 'abort' ) return;
 					if (event.target.readyState == 4) {
 						if (event.target.status == 200) {
-							uploadItem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload erfolgreich');
+							uploadItem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload successful');
 							uploadItem.state = 'done';
 							console.info('UPLOAD::SUCCESS');
 							switch (type) {
@@ -104,7 +104,7 @@
 						} else {
 							uploadItem.state = 'fail';
 								console.error('UPLOAD FAILED: Error in the response.', event);
-							uploadItem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload fehlgeschlagen');
+							uploadItem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload failed');
 						}
 					} else console.info('STATE CHANGE: ', event);
 				}, false);
@@ -151,7 +151,7 @@
 		init: function() {
 
 			TIMAAT.UploadManager.ui = $(`<div>
-					<span class="timaat-uploads-message">keine aktiven Uploads</span>
+					<span class="timaat-uploads-message">no active Uploads</span>
 					<ul class="timaat-upload-list list-group list-group-flush"></ul>
 			</div>`);
 

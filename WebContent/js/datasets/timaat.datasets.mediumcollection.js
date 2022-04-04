@@ -533,11 +533,11 @@
 			if ( enabled ) {
 				sheet.find('.publicationtitle').val(title);
 				if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>';
-				else url = '- Publikationslink nach dem Speichern verfügbar -';
+				else url = '- Save to make publication link available -';
 				sheet.find('.publicationurl').html(url);
 			} else {
 				sheet.find('.publicationtitle').val('');
-				sheet.find('.publicationurl').html('- Collection nicht publiziert -');
+				sheet.find('.publicationurl').html('- Collection not published -');
 			}
 		},
 

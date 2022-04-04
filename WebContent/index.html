@@ -618,34 +618,34 @@
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="downloadPublicationLabel"><i class="fas fa-chalkboard-teacher"></i> Offline-Publikation herunterladen</h5>
+                    <h5 class="modal-title" id="downloadPublicationLabel"><i class="fas fa-chalkboard-teacher"></i> Download offline-publication</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    <p class="card-text mb-3" style="font-size: 85%">Die Offline-Publikation ist für eine Präsentation ohne Internetverbindung gedacht. Beide Dateien müssen im selben Verzeichnis liegen. Für ein Update des Bearbeitungsstands genügt es, den Player erneut herunterzuladen. Die Videodatei bleibt gleich.</p>
+                    <p class="card-text mb-3" style="font-size: 85%">Offline-publication serves as a mode of presentation when no internet connection is available. Both files have to be in the same folder. To update the presentation it is only necessary to download the player again. The video file remains the same.</p>
                     <div class="d-flex justify-content-between">
                       <div class="card mr-1">
                     <div class="card-body">
-                      <h5 class="card-title text-center"> Abspielumgebung</h5>
-                      <h6 class="card-subtitle text-muted text-center mb-0">mit aktuellem Bearbeitungsstand</h6>
+                      <h5 class="card-title text-center"> Playback environment</h5>
+                      <h6 class="card-subtitle text-muted text-center mb-0">with current status</h6>
                       <p class="card-text text-center" style="font-size: 400%;"><i class="far fa-file-code"></i></p>
-                      <a href="#" download class="download-player-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Player herunterladen</button></a>
+                      <a href="#" download class="download-player-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Download player</button></a>
                     </div>
                   </div>
                   <div class="card ml-1">
                     <div class="card-body">
-                      <h5 class="card-title text-center">Mediumdatei</h5>
-                      <h6 class="card-subtitle mb-0 text-center text-muted">Hinweis: darf nicht umbenannt werden</h6>
+                      <h5 class="card-title text-center">Medium file</h5>
+                      <h6 class="card-subtitle mb-0 text-center text-muted">Note: may not be renamed to work</h6>
                       <p style="font-size: 400%" class="card-text text-center"><i class="far fa-file-video"></i></p>
-                      <a href="#" download class="download-medium-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Medium herunterladen</button></a>
+                      <a href="#" download class="download-medium-link card-link d-flex justify-content-center"><button type="button" class="btn btn-sm btn-primary"><i class="fas fa-download"></i> Download medium file</button></a>
                     </div>
                   </div>
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fertig</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
                   </div>
                 </div>
               </div>
@@ -654,7 +654,7 @@
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="analysislistDeleteLabel">Analyse löschen</h5>
+                    <h5 class="modal-title" id="analysislistDeleteLabel">Delete analysis</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -663,8 +663,8 @@
                     Möchten Sie die ausgewählte Analyseliste mitsamt Annotationen löschen?
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
-                    <button type="button" class="btn btn-danger" id="timaat-analysislist-delete-submit-button">Analyse löschen</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="timaat-analysislist-delete-submit-button">Delete analysis</button>
                   </div>
                 </div>
               </div>
@@ -1502,7 +1502,7 @@
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.addAnalysisList()" id="timaat-analysislist-add">Create new Analysis</a>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.editAnalysisList()" id="timaat-analysislist-edit">Edit analysis</a>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.manageAnalysisList()" id="timaat-analysislist-manage">Manage analysis</a>
-                        <!-- <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysisList()" id="timaat-analysislist-delete">Analyse löschen</a> -->
+                        <!-- <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.removeAnalysisList()" id="timaat-analysislist-delete">Delete analysis</a> -->
                         <div role="separator" class="dropdown-divider"></div>
                         <a class="dropdown-item" onclick="TIMAAT.VideoPlayer.managePublication()" id="timaat-medium-publication">
                           <i class="fas fa-chalkboard"></i> Publication settings
@@ -1562,14 +1562,14 @@
                     <div class="col-sm-7">
                       <div class="row">
                         <div class="btn-group btn-group-sm ml-3 mr-1">
-                          <button title="Ein Bild zurück [&larr;]" class="stepBackButton btn btn-secondary">
+                          <button title="One frame back [&larr;]" class="stepBackButton btn btn-secondary">
                             <i class="fas fa-step-backward"></i>
                           </button>
-                          <button title="Abspielen / Pause [Leertaste]" class="playbutton btn btn-secondary">
+                          <button title="Play / Pause [Space]" class="playbutton btn btn-secondary">
                             <i class="play fas fa-play fa-fw"></i>
                             <i class="pause fa fa-pause fa-fw"></i>
                           </button>
-                          <button title="Ein Bild vorwärts [&rarr;]" class="stepForwardButton btn btn-secondary">
+                          <button title="One frame forward [&rarr;]" class="stepForwardButton btn btn-secondary">
                             <i class="fas fa-step-forward"></i>
                           </button>
                         </div>
@@ -1580,7 +1580,7 @@
                           </button>
                         </div>
                         <!-- Volume Control -->
-                        <a title="Lautstärke einstellen [M = Stumm an/aus]" class="timaat-volumecontrol mr-1">
+                        <a title="Adjust volume [M = toggle mute]" class="timaat-volumecontrol mr-1">
                           <span id="timaat-volumeicon">
                             <i class="volume fas fa-volume-up"></i>
                             <i class="mute fas fa-volume-mute"></i>
@@ -2443,7 +2443,7 @@
                     </div>
                     <!-- <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
-                      <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Ereignis löschen</button>
+                      <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Delete event</button>
                     </div> -->
                   </div>
                 </div>
@@ -3152,21 +3152,21 @@
                           <div class="card-body mediumcollection-publication-wrapper">
                             <div class="custom-control custom-switch mt-3">
                               <input type="checkbox" class="custom-control-input" id="timaat-publish-mediacollection-switch">
-                              <label class="custom-control-label" for="timaat-publish-mediacollection-switch">Collection publizieren</label>
+                              <label class="custom-control-label" for="timaat-publish-mediacollection-switch">Publish collection</label>
                             </div>
                             <div class="input-group input-group-sm mt-2">
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-external-link-alt"></i></span>
                               </div>
-                              <div class="text-muted form-control publicationurl">- Collection nicht publiziert -</div>
+                              <div class="text-muted form-control publicationurl">- Collection not published -</div>
                             </div>
                             <hr>
                             <div class="input-group input-group-sm">
-                              <input type="text" class="form-control publicationtitle" placeholder="Publikationstitel" aria-label="Publikationstitel">
+                              <input type="text" class="form-control publicationtitle" placeholder="Publication title" aria-label="Publication title">
                             </div>
                             <div class="custom-control custom-switch mt-2 mr-2">
                               <input type="checkbox" class="custom-control-input" id="timaat-publication-mediacollection-protected-switch">
-                              <label class="custom-control-label" for="timaat-publication-mediacollection-protected-switch">Zugriff beschränken</label>
+                              <label class="custom-control-label" for="timaat-publication-mediacollection-protected-switch">Restrict access</label>
                             </div>
                             <div class="input-group input-group-sm mt-2">
                               <div class="input-group-prepend">
@@ -3178,7 +3178,7 @@
                               <span class="input-group-text btn reveal"><i class="fas fa-eye"></i></span>
                             </div>
                           </div>
-                            <button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediumcollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Änderungen Speichern</button>
+                            <button type="button" class="btn btn-sm btn-success mt-3" id="timaat-mediumcollection-publication-settings-submit"><i class="login-spinner d-none fas fa-spinner fa-spin fa-fw"></i> Save changes</button>
                           </div>
                         </div>         -->
                         <!-- preview form -->
@@ -3692,13 +3692,13 @@
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="actorDeleteLabel">Akteur löschen</h5>
+                    <h5 class="modal-title" id="actorDeleteLabel">Delete actor</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
                   <div class="modal-body">
-                    Möchten Sie den ausgewählten Akteur löschen?
+                    Do you want to delete the selected actor?
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -4543,7 +4543,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    Möchten Sie den ausgewählten Ort löschen?
+                    Do you want to delete the selected location?
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -4667,17 +4667,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="provinceDeleteLabel">Provinz löschen</h5>
+                  <h5 class="modal-title" id="provinceDeleteLabel">Delete province</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  Möchten Sie die ausgewählte Provinz löschen?
+                  Do you want to delete the selected province?
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-danger" id="timaat-province-delete-submit">Provinz löschen</button>
+                  <button type="button" class="btn btn-danger" id="timaat-province-delete-submit">Delete province</button>
                 </div>
               </div>
             </div>
@@ -4687,7 +4687,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="provinceMetaLabel">Provinz hinzufügen</h5>
+                  <h5 class="modal-title" id="provinceMetaLabel">Add province</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -4712,17 +4712,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="countyDeleteLabel">Landkreis löschen</h5>
+                  <h5 class="modal-title" id="countyDeleteLabel">Delete county</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  Möchten Sie den ausgewählten Landkreis löschen?
+                  Do you want to delete the selected county?
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-danger" id="timaat-county-delete-submit">Landkreis löschen</button>
+                  <button type="button" class="btn btn-danger" id="timaat-county-delete-submit">Delete County</button>
                 </div>
               </div>
             </div>
@@ -4732,7 +4732,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="countyMetaLabel">Provinz hinzufügen</h5>
+                  <h5 class="modal-title" id="countyMetaLabel">Add county</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -4757,17 +4757,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="cityDeleteLabel">Stadt löschen</h5>
+                  <h5 class="modal-title" id="cityDeleteLabel">Delete city</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  Möchten Sie die ausgewählte Stadt löschen?
+                  Do you want to delete the selected city?
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-danger" id="timaat-city-delete-submit">Stadt löschen</button>
+                  <button type="button" class="btn btn-danger" id="timaat-city-delete-submit">Delete city</button>
                 </div>
               </div>
             </div>
@@ -4777,7 +4777,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="cityMetaLabel">Stadt hinzufügen</h5>
+                  <h5 class="modal-title" id="cityMetaLabel">Add city</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -4802,17 +4802,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="streetDeleteLabel">Straße löschen</h5>
+                  <h5 class="modal-title" id="streetDeleteLabel">Delete street</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  Möchten Sie die ausgewählte Straße löschen?
+                  Do you want to delete the selected street?
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-danger" id="timaat-street-delete-submit">Straße löschen</button>
+                  <button type="button" class="btn btn-danger" id="timaat-street-delete-submit">Delete street</button>
                 </div>
               </div>
             </div>
@@ -4865,7 +4865,7 @@
                   <a class="nav-link" id="street-tab"  onclick="TIMAAT.LocationDatasets.loadLocationSubtype('street')" data-toggle="tab" href="#streets" role="tab" aria-controls="streets" aria-selected="false"><i class="fas fa-road"></i> Streets</a>
                 </li>
                 <!-- <li class="nav-item">
-                  <a class="nav-link" href="#territories"><i class="fas fa-object-group"></i> Territorien</a>
+                  <a class="nav-link" href="#territories"><i class="fas fa-object-group"></i> Territories</a>
                 </li> -->
               </ul>
               <div class="tab-content" id="locationsTabContent">
@@ -4891,7 +4891,7 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
-                        <div class="card-header">Länder
+                        <div class="card-header">Countries
                           <button type="button" id="timaat-country-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -4908,7 +4908,7 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
-                        <div class="card-header">Länder
+                        <div class="card-header">Provinces
                           <button type="button" id="timaat-province-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -4925,7 +4925,7 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
-                        <div class="card-header">Länder
+                        <div class="card-header">Counties
                           <button type="button" id="timaat-county-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -4942,7 +4942,7 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
-                        <div class="card-header">Länder
+                        <div class="card-header">Cities
                           <button type="button" id="timaat-city-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -4959,7 +4959,7 @@
                   <div class="row ui" style="padding-top: 1em;">
                     <div class="col-lg-6">
                       <div class="card">
-                        <div class="card-header">Länder
+                        <div class="card-header">Streets
                           <button type="button" id="timaat-street-add" class="btn btn-outline btn-success btn-sm float-right">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -4984,17 +4984,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="eventDeleteLabel">Ereignis löschen</h5>
+                  <h5 class="modal-title" id="eventDeleteLabel">Delete Event</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  Möchten Sie das ausgewählte Ereignis löschen?
+                  Do you want to delete the selected event?
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-danger" id="timaat-eventdatasets-modal-delete-submit-button">Ereignis löschen</button>
+                  <button type="button" class="btn btn-danger" id="timaat-eventdatasets-modal-delete-submit-button">Delete event</button>
                 </div>
               </div>
             </div>
@@ -5272,7 +5272,7 @@
                     </div>
                     <!~~ <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
-                      <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Ereignis löschen</button>
+                      <button type="button" class="btn btn-danger" id="timaat-event-delete-submit">Delete event</button>
                     </div> ~~>
                   </div>
                 </div>
@@ -5958,7 +5958,7 @@
               <ul class="nav nav-pills" id="settings-tabs" role="tablist">
                 <li class="nav-item active">
                   <a class="nav-link top-nav-bar-link active"  id="settings-general-tab" data-toggle="tab" role="tab" aria-controls="settings-general-tab" aria-selected="false">
-                    <i class="fas fa-cogs"></i> Allgemein
+                    <i class="fas fa-cogs"></i> General
                   </a>
                   <button type="button" class="btn btn-sm btn-primary" id="length-fix-button">Fix length
                   </button>

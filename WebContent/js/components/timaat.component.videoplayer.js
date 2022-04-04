@@ -250,11 +250,11 @@
 
 			$('#timaat-user-log-analysislist').on('inserted.bs.popover', function () {
 				if ( ! TIMAAT.VideoPlayer.curAnalysisList ) {
-					$('.timaat-user-log-details').html("Keine Analyse ausgewählt");
+					$('.timaat-user-log-details').html("No analysis selected");
 					return;
 				}
 				$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+TIMAAT.VideoPlayer.curAnalysisList.createdByUserAccountId+'">[ID '+TIMAAT.VideoPlayer.curAnalysisList.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+TIMAAT.VideoPlayer.curAnalysisList.createdByUserAccountId+'">[ID '+TIMAAT.VideoPlayer.curAnalysisList.createdByUserAccountId+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(TIMAAT.VideoPlayer.curAnalysisList.createdAt)+'<br>'
 				);
 				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"mir")});
@@ -263,8 +263,8 @@
 			// $('#timaat-videoplayer-video-user-log').popover({
 			// 	container: 'body',
 			// 	html: true,
-			// 	title: '<i class="fas fa-user"></i> Bearbeitungslog',
-			// 	content: '<div class="timaat-user-log-details">Keine Daten erfasst</div>',
+			// 	title: '<i class="fas fa-user"></i> Maintenance log',
+			// 	content: '<div class="timaat-user-log-details">No data logged</div>',
 			// 	placement: 'left',
 			// 	trigger: 'click',
 			// });
@@ -451,19 +451,19 @@
 					content : `<div class="text-center bg-light border-bottom" onclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">Keyframes</div>
 								<div class="keyframe-controls">
 									<div class="btn-group btn-group-sm">
-										<button title="vorheriges Keyframe auswählen" id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
+										<button title="select previous keyframe" id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
 											<i class="fas fa-arrow-left"></i>
 										</button>
-									<div title="aktuelles Keyframe" class="btn btn-light active" ondblclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">
+									<div title="current keyframe" class="btn btn-light active" ondblclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">
 										<i class="fas fa-fw keyframeinfo">2</i>
 									</div>
-									<button title="nächstes Keyframe auswählen" id="timaat-videoplayer-keyframe-next-button" onclick="void(0)" type="button" class="btn btn-light" disabled="">
+									<button title="select next keyframe" id="timaat-videoplayer-keyframe-next-button" onclick="void(0)" type="button" class="btn btn-light" disabled="">
 										<i class="fas fa-arrow-right"></i>
 										</button>
 									</div>
 								</div>
-								<button title="neues Keyframe an diesem Timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
-								<button title="aktuelles Keyframe entfernen" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Löschen&nbsp;<i class="fas fa-trash-alt fa-fw"></i></button>`,
+								<button title="new keyframe at this timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
+								<button title="remove current keyframe" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Löschen&nbsp;<i class="fas fa-trash-alt fa-fw"></i></button>`,
 					classes : 'leaflet-bar',
 					id: 'timaat-animation-controlwidget',
 					style   : { margin: '10px', padding: '0px 0 0 0', },
@@ -562,7 +562,7 @@
 			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
 				enabled: false,
 					position: 'topleft',
-					content : '<button disabled title="Änderungen der Annotation speichern" id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-light">'+
+					content : '<button disabled title="Save changes to annotation" id="timaat-videoplayer-save-polygons-button" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-light">'+
 										'    <i class="fa fa-save"></i>' +
 										'</button>',
 					classes : 'btn-group-vertical btn-group-sm leaflet-bar',
@@ -586,16 +586,16 @@
 			TIMAAT.VideoPlayer.editShapesCtrl = L.control.custom({
 					position: 'topleft',
 					enabled: true,
-					content : `<button data-type="rectangle" type="button" title="Rechteck-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('rectangle')" class="rectangle btn btn-sm btn-light">
+					content : `<button data-type="rectangle" type="button" title="Create rectangle annotation" onclick="TIMAAT.VideoPlayer.createShape('rectangle')" class="rectangle btn btn-sm btn-light">
 									<i class="fas fa-vector-square"></i>
 								</button>
-								<button data-type="polygon" type="button" title="Polygon-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('polygon')" class="polygon ml-0 btn btn-sm btn-light">
+								<button data-type="polygon" type="button" title="Create polygon annotation" onclick="TIMAAT.VideoPlayer.createShape('polygon')" class="polygon ml-0 btn btn-sm btn-light">
 									<i class="fas fa-draw-polygon"></i>
 								</button>
-								<button data-type="line" type="button" title="Linien-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('line')" class="line ml-0 btn btn-sm btn-light">
+								<button data-type="line" type="button" title="Create line annotation" onclick="TIMAAT.VideoPlayer.createShape('line')" class="line ml-0 btn btn-sm btn-light">
 									<i class="fas fa-slash"></i>
 								</button>
-								<button data-type="circle" type="button" title="Kreis-Annotation erstellen" onclick="TIMAAT.VideoPlayer.createShape('circle')" class="circle ml-0 btn btn-sm btn-light">
+								<button data-type="circle" type="button" title="Create circle annotation" onclick="TIMAAT.VideoPlayer.createShape('circle')" class="circle ml-0 btn btn-sm btn-light">
 									<i class="far fa-circle"></i>
 								</button>`,
 					classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
@@ -784,11 +784,11 @@
 			L.Control.zoomHome = L.Control.extend({ options: {
 				position: 'topleft',
 			        zoomInText: '<i class="fas fa-search-plus" style="line-height:1.9;font-size:16px;"></i>',
-			        zoomInTitle: 'Heranzoomen',
+			        zoomInTitle: 'Zoom in',
 			        zoomOutText: '<i class="fas fa-search-minus" style="line-height:1.65;font-size:16px;"></i>',
-			        zoomOutTitle: 'Herauszoomen',
+			        zoomOutTitle: 'zoom out',
 			        zoomHomeText: '<i class="fas fa-image" style="line-height:1.9;font-size:16px;"></i>',
-			        zoomHomeTitle: 'Ganzes Bild anzeigen'
+			        zoomHomeTitle: 'Display whole image'
 			}, onAdd: function (map) {
 			        var controlName = 'leaflet-control-zoom', container = L.DomUtil.create('div', controlName + ' leaflet-bar'), options = this.options;
 			        this._zoomInButton = this._createButton(options.zoomInText, options.zoomInTitle, controlName + '-in-ctrl', container, this._zoomIn);
