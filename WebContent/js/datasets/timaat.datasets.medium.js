@@ -143,7 +143,6 @@
 				TIMAAT.MediumDatasets.loadMedia();
 				TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
 				$('#timaat-mediumdatasets-all-media').trigger('click');
-				// TIMAAT.URLHistory.setURL(null, 'Medium Datasets', '#medium/list');
 			});
 
 			$('#audio-tab').on('click', function(event) {
