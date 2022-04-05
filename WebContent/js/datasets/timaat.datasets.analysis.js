@@ -545,6 +545,11 @@
           $('td:first-child').attr('title', null);
         }
       });
+
+      // event listener to close select2 dropdowns when modal is closed
+      $('#timaat-videoplayer-analysis-add').on('hidden.bs.modal', function() {
+        $('.select-dropdown').select2('close');
+      });
     },
 
     loadAnalysisDataTables: async function() {
@@ -2054,7 +2059,7 @@
     },
 
     displayAnalysisDetails: function(data) {
-      console.log("TCL: displayAnalysisDetails - data_ ", data);
+      console.log("TCL: displayAnalysisDetails - data: ", data);
       let cameraShotType;
       var details =
         `<div>
