@@ -1155,7 +1155,7 @@
 																																			 sortOrder);
 						}
 						// await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
-						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(); //* to scroll to selected row
+						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(false); //* to scroll to selected row
 					});
 
 					mediumCollectionElement.on('click', '.timaat-mediumcollectiondatasets-collectionitem-movedown', async function(event) {
@@ -1182,7 +1182,7 @@
 																																			  sortOrder);
 						}
 						// await TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload(null, false);
-						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(); //* to scroll to selected row
+						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(false); //* to scroll to selected row
 					});
 
 					// mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
