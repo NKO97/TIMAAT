@@ -1658,10 +1658,13 @@
 		updateAnalysisList: async function(analysisList) {
 			// console.log("TCL: updateAnalysisList - analysisList", analysisList);
 			// sync to server
-			await TIMAAT.AnalysisListService.updateMediumAnalysisList(analysisList);
-			// console.log("TCL: updateAnalysisList - analysisList", analysisList);
-			// TODO update UI list view
-			TIMAAT.VideoPlayer.curAnalysisList.ui.html(TIMAAT.Util.getDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title'));
+			TIMAAT.VideoPlayer.curAnalysisList = await TIMAAT.AnalysisListService.updateMediumAnalysisList(analysisList);
+			analysisList.ui = $('<option value="'+analysisList.id+'">'+TIMAAT.Util.getDefaultTranslation(analysisList, 'mediumAnalysisListTranslations', 'title')+'</option>');
+			analysisList.ui.data('list', analysisList);
+
+			let index = TIMAAT.VideoPlayer.model.analysisLists.findIndex(({id}) => id === analysisList.id);
+			TIMAAT.VideoPlayer.model.analysisLists[index] = analysisList;
+			$('#timaat-analysislist-chooser').find('[value="'+analysisList.id+'"]').html(TIMAAT.Util.getDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title'));
 		},
 
 		editAnalysisList: function() {
