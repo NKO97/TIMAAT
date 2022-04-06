@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.EmailAddressType = class EmailAddressType {
 		constructor(model) {
 			// console.log("TCL: EmailAddressType -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-actordatasets-emailaddresstype-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var EmailAddressType = this; // save EmailAddressType for system EmailAddressTypes
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (emailAddressType.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(emailAddressType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(emailAddressType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+emailAddressType.model.lastEditedByUserAccountId+'">[ID '+emailAddressType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+emailAddressType.model.lastEditedByUserAccountId+'">[ID '+emailAddressType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(emailAddressType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -83,16 +83,16 @@
 			// attach EmailAddressType handlers
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-actordatasets-emailaddresstype-meta').data('EmailAddressType', EmailAddressType);
-				$('#timaat-actordatasets-emailaddresstype-meta').modal('show');			
+				$('#timaat-actordatasets-emailaddresstype-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-emailaddresstype-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-actordatasets-emailaddresstype-delete').data('EmailAddressType', EmailAddressType);
 				$('#timaat-actordatasets-emailaddresstype-delete').modal('show');
 			});
@@ -102,7 +102,7 @@
 			// console.log("TCL: EmailAddressType -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var type = this.model.emailAddressTypeTranslations[0].type;
-			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) type = "[not assigned]";
 			this.listView.find('.timaat-emailaddresstype-list-name').text(type);
 		}
 
@@ -118,5 +118,5 @@
 			if (index > -1) TIMAAT.ActorDatasets.emailAddressTypes.model.splice(index, 1);
 		}
 	}
-	
+
 }, window));

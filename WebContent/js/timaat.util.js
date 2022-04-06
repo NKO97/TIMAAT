@@ -62,28 +62,28 @@
 			// var display = '['+type+']';
 			switch (type) {
 			case 'login':
-				type = 'Anmeldung API';
+				type = 'Login API';
 				break;
 			case 'mediumCreated':
-				type = 'Video Upload';
+				type = 'Video upload';
 				break;
 			case 'analysisListCreated':
-				type = 'Analyseliste angelegt';
+				type = 'Analysis created';
 				break;
 			case 'analysisListEdited':
-				type = 'Analyseliste bearbeitet';
+				type = 'Analysis edited';
 				break;
 			case 'analysisListDeleted':
-				type = 'Analyseliste gelöscht';
+				type = 'Analysis deleted';
 				break;
 			case 'annotationCreated':
-				type = 'Annotation angelegt';
+				type = 'Annotation created';
 				break;
 			case 'annotationEdited':
-				type = 'Annotation bearbeitet';
+				type = 'Annotation edited';
 				break;
 			case 'annotationDeleted':
-				type = 'Annotation gelöscht';
+				type = 'Annotation deleted';
 				break;
 			}
 
@@ -103,7 +103,7 @@
 
 		resolveUserID: function(idElement, myself) {
 			// console.log("TCL: resolveUserID: idElement, myself ", idElement, myself);
-			if ( !myself ) myself = "mir";
+			if ( !myself ) myself = "me";
 
 			var id = $(idElement).data('userid');
 			if (TIMAAT.Service.session.id == id) $(idElement).text(myself);
@@ -192,14 +192,14 @@
 			let months  = Math.floor(days / 30);
 			let years   = Math.floor(days / 365);
 
-			if ( years > 0 ) fuzzyDate = (years == 1) ? 'vor einem Jahr' : 'vor '+years+' Jahren';
-			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'vor einem Monat' : 'vor '+months+' Monaten';
-			else if ( weeks > 0 ) fuzzyDate = (weeks == 1) ? 'letzte Woche' : 'vor '+weeks+' Wochen';
-			else if ( days > 0 ) fuzzyDate = (days == 1) ? 'Gestern' : 'vor '+days+' Tagen';
-			else if ( hours > 0 ) fuzzyDate = (hours == 1) ? 'vor einer Stunde' : 'vor '+hours+' Stunden';
-			else if ( minutes > 0 ) fuzzyDate = (minutes == 1) ? 'vor einer Minute' : 'vor '+minutes+' Minuten';
-			else if ( seconds > 4 ) fuzzyDate = 'vor '+seconds+' Sekunden';
-			else fuzzyDate = 'jetzt';
+			if ( years > 0 ) fuzzyDate = (years == 1) ? 'a year ago' : years+' years ago';
+			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'a month ago' : months+' months ago';
+			else if ( weeks > 0 ) fuzzyDate = (weeks == 1) ? 'last week' : weeks+' weeks ago';
+			else if ( days > 0 ) fuzzyDate = (days == 1) ? 'yesterday' : days+' days ago';
+			else if ( hours > 0 ) fuzzyDate = (hours == 1) ? 'an hour ago' : hours+' hours ago';
+			else if ( minutes > 0 ) fuzzyDate = (minutes == 1) ? 'a minute ago' : minutes+' minutes ago';
+			else if ( seconds > 4 ) fuzzyDate = seconds+' seconds ago';
+			else fuzzyDate = 'now';
 
 			return fuzzyDate;
 		},

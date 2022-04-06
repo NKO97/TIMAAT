@@ -18,13 +18,13 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.MediumCollection = class MediumCollection {
 		constructor(model) {
       // console.log("TCL: Medium -> constructor -> model, mediumType", model, mediumType);
 			// setup model
 			this.model = model;
-			
+
 			// create and style list view element
 			this.listView = $(
 				`<li class="list-group-item">
@@ -36,7 +36,7 @@
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
-									<i class="fas fa-user"></i>							
+									<i class="fas fa-user"></i>
 								</div>
 						  </div>
 						</div>
@@ -45,20 +45,20 @@
 			);
 
 			// console.log("TCL: append me to list:", mediumType);
-			// $('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);     
+			// $('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);
 			var medium = this; // save medium for system events
 
-			this.updateUI(); 
+			this.updateUI();
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -68,18 +68,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (medium.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+medium.model.lastEditedByUserAccountId+'">[ID '+medium.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+medium.model.lastEditedByUserAccountId+'">[ID '+medium.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(medium.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -94,7 +94,7 @@
 			// console.log("TCL: Medium -> updateUI -> updateUI()");
 			// title
 			var name = this.model.title;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-mediadatasets-mediumcollection-list-name').html(name);
 		}
 
@@ -106,5 +106,5 @@
 		}
 
 	}
-	
+
 }, window));

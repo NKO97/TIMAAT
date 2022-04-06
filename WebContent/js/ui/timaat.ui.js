@@ -93,10 +93,10 @@
 			// init user log popover functionality
 			$('#timaat-user-log-list').popover({
 				placement: 'bottom',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
@@ -104,7 +104,7 @@
 			$('#timaat-user-log-list').on('inserted.bs.popover', function () {
 				TIMAAT.Service.getUserLog(TIMAAT.Service.session.id, 12, function(log) {
 					var html = '';
-					if ( log.length == 0 ) html = "Keine Daten vorhanden";
+					if ( log.length == 0 ) html = "No data available";
 				$(log).each(function(index, entry) {
 					var icon = 'fas fa-info';
 					switch (entry.userLogEventType.type) {

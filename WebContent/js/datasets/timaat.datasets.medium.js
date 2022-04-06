@@ -73,8 +73,8 @@
 				// Create/Edit mediaType window setup
 				var modal = $(this);
 				var mediaType = modal.data('mediaType');
-				var heading = (mediaType) ? "MediumType bearbeiten" : "MediumType hinzufügen";
-				var submit = (mediaType) ? "Speichern" : "Hinzufügen";
+				var heading = (mediaType) ? "Edit medium type" : "Add medium type";
+				var submit = (mediaType) ? "Save" : "Add";
 				var type = (mediaType) ? mediaType.model.type : 0;
 				var hasVisual = (mediaType) ? mediaType.model.hasVisual : false;
 				var hasAudio = (mediaType) ? mediaType.model.hasAudio : false;
@@ -2899,7 +2899,7 @@
 				window.clearInterval(medium.poll);
 
 			if ( medium.fileStatus == 'unavailable' ) {
-				medium.ui.find('.timaat-medium-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+				medium.ui.find('.timaat-medium-transcoding').html('<i class="fas fa-eye-slash"></i> not available');
 				medium.ui.find('.timaat-medium-transcoding').show();
 			}
 

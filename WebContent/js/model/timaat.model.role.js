@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-  
+
   TIMAAT.Role = class Role {
     constructor(model) {
       // console.log("TCL: Role -> constructor -> model", model);
@@ -36,7 +36,7 @@
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
-									<i class="fas fa-user"></i>							
+									<i class="fas fa-user"></i>
 								</div>
 						  </div>
 						</div>
@@ -45,10 +45,10 @@
 			);
 
 			// $('#timaat-rolelists-role-list').append(this.listView);
-			// console.log("TCL: Role -> constructor -> this.updateUI()");    
+			// console.log("TCL: Role -> constructor -> this.updateUI()");
 			var role = this; // save role for system events
 
-			this.updateUI();  
+			this.updateUI();
 
 			// attach role handlers
 			$(this.listView).on('click', this, function(ev) {
@@ -67,10 +67,10 @@
 
 		updateUI() {
 			// console.log("TCL: Role -> updateUI -> this.model", this.model);
-			var name = this.model.roleTranslations[0].name;		
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			var name = this.model.roleTranslations[0].name;
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-rolelists-role-list-name').text(name);
-	
+
 		}
 
 		remove() {
@@ -104,5 +104,5 @@
       }
 		}
   }
-	
+
 }, window));

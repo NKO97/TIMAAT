@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.MediumType = class MediumType {
 		constructor(model) {
 			// console.log("TCL: MediumType -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-mediadatasets-mediumtype-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var MediumType = this; // save MediumType for system MediumTypes
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (mediaType.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+mediaType.model.lastEditedByUserAccountId+'">[ID '+mediaType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+mediaType.model.lastEditedByUserAccountId+'">[ID '+mediaType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediaType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -83,16 +83,16 @@
 			// attach MediumType handlers
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-mediadatasets-mediumtype-meta').data('MediumType', MediumType);
-				$('#timaat-mediadatasets-mediumtype-meta').modal('show');			
+				$('#timaat-mediadatasets-mediumtype-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-mediatype-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-mediadatasets-mediumtype-delete').data('MediumType', MediumType);
 				$('#timaat-mediadatasets-mediumtype-delete').modal('show');
 			});
@@ -102,7 +102,7 @@
 			// console.log("TCL: MediumType -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var type = this.model.mediaTypeTranslations[0].type;
-			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) type = "[not assigned]";
 			this.listView.find('.timaat-mediatype-list-name').text(type);
 		}
 
@@ -118,5 +118,5 @@
 			if (index > -1) TIMAAT.MediumDatasets.mediaTypes.model.splice(index, 1);
 		}
 	}
-	
+
 }, window));

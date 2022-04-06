@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Country = class Country {
 		constructor(model) {
 			// console.log("TCL: Country -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-country-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var country = this; // save country for system events
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -60,18 +60,18 @@
 				// console.log("TCL: Country -> constructor -> country", country);
 				if (country.model.location.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccountId+'">[ID '+country.model.location.location.location.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccountId+'">[ID '+country.model.location.location.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(country.model.location.location.location.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccountId+'">[ID '+country.model.location.location.location.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+country.model.location.location.location.createdByUserAccountId+'">[ID '+country.model.location.location.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.location.location.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+country.model.location.location.location.lastEditedByUserAccountId+'">[ID '+country.model.location.location.location.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+country.model.location.location.location.lastEditedByUserAccountId+'">[ID '+country.model.location.location.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(country.model.location.location.location.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -85,22 +85,22 @@
 			$(this.listView).on('click', this, function(ev) {
 				ev.stopPropagation();
 				// show tag editor - trigger popup
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// country.listView.find('.timaat-country-list-tags').popover('show');
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-locationdatasets-country-meta').data('country', country);
-				$('#timaat-locationdatasets-country-meta').modal('show');			
+				$('#timaat-locationdatasets-country-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-country-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-locationdatasets-country-delete').data('country', country);
 				$('#timaat-locationdatasets-country-delete').modal('show');
 			});
@@ -111,7 +111,7 @@
 			// title
 			// console.log("TCL: Country -> updateUI -> this", this);
 			var name = this.model.locationTranslations[0].name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-country-list-name').text(name);
 		}
 
@@ -128,5 +128,5 @@
 		}
 
 	}
-	
+
 }, window));

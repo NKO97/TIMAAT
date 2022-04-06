@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Street = class Street {
 		constructor(model) {
 			// console.log("TCL: Street -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-street-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var street = this; // save street for system events
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (street.model.location.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(street.model.location.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(street.model.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+street.model.location.lastEditedByUserAccountId+'">[ID '+street.model.location.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+street.model.location.lastEditedByUserAccountId+'">[ID '+street.model.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(street.model.location.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -84,22 +84,22 @@
 			$(this.listView).on('click', this, function(ev) {
 				ev.stopPropagation();
 				// show tag editor - trigger popup
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// street.listView.find('.timaat-street-list-tags').popover('show');
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-locationdatasets-street-meta').data('street', street);
-				$('#timaat-locationdatasets-street-meta').modal('show');			
+				$('#timaat-locationdatasets-street-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-street-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-locationdatasets-street-delete').data('street', street);
 				$('#timaat-locationdatasets-street-delete').modal('show');
 			});
@@ -109,7 +109,7 @@
 			// console.log("TCL: Street -> updateUI -> updateUI()");
 			// title
 			// var name = this.model.location.locationTranslations[0].name; // TODO reenable once working again
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-street-list-name').text(name);
 		}
 
@@ -126,5 +126,5 @@
 		}
 
 	}
-	
+
 }, window));

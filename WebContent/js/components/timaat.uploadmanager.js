@@ -151,14 +151,14 @@
 		init: function() {
 
 			TIMAAT.UploadManager.ui = $(`<div>
-					<span class="timaat-uploads-message">no active Uploads</span>
+					<span class="timaat-uploads-message">no active uploads</span>
 					<ul class="timaat-upload-list list-group list-group-flush"></ul>
 			</div>`);
 
 			// init upload manager popover functionality
 			$('#timaat-upload-manager').popover({
 				placement: 'bottom',
-				title: '<i class="fas fa-cloud-upload-alt"></i> Video Uploads',
+				title: '<i class="fas fa-cloud-upload-alt"></i> Video uploads',
 				trigger: 'click',
 				html: true,
 				template: '<div class="popover timaat-upload-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',

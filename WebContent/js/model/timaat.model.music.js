@@ -18,13 +18,13 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.Music = class Music {
 		constructor(model, musicType) {
       // console.log("TCL: Music -> constructor -> model, musicType", model, musicType);
 			// setup model
 			this.model = model;
-			
+
 			// create and style list view element
 			var displayMusicTypeIcon = '';
 			if (musicType == 'music') { // Necessary to fix upload button functionality
@@ -52,7 +52,7 @@
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
-									<i class="fas fa-user"></i>							
+									<i class="fas fa-user"></i>
 								</div>
 								<button type="button" title="Annotate `+musicType+`" class="btn btn-outline-success btn-sm btn-block timaat-musicdatasets-music-annotate"><i class="fas fa-draw-polygon"></i></button>
 						  </div>
@@ -62,20 +62,20 @@
 			);
 
 			// console.log("TCL: append me to list:", musicType);
-			// $('#timaat-musicdatasets-'+musicType+'-list').append(this.listView);     
+			// $('#timaat-musicdatasets-'+musicType+'-list').append(this.listView);
 			var music = this; // save music for system events
 
-			this.updateUI(); 
+			this.updateUI();
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -85,18 +85,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (music.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(music.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(music.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+music.model.lastEditedByUserAccountId+'">[ID '+music.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+music.model.lastEditedByUserAccountId+'">[ID '+music.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(music.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -112,7 +112,7 @@
 			// title
 			var type = $('#music-metadata-form').data('type');
 			var name = this.model.displayTitle.name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-musicdatasets-'+type+'-list-name').html(name);
 			if (type == 'music') {
 				this.listView.find('.timaat-musicdatasets-music-list-musictype').html(type);
@@ -133,5 +133,5 @@
 		}
 
 	}
-	
+
 }, window));

@@ -55,13 +55,13 @@
 			this.ui.actorLang = {
 				"decimal"          : ",",
 				"thousands"        : ".",
-				"search"           : "",
-				"searchPlaceholder": "Suche Actors",
-				"processing"       : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
-				"lengthMenu"       : "Zeige _MENU_ Einträge",
-				"zeroRecords"      : "Keine Actors gefunden.",
-				"info"             : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
-				"infoEmpty"        : "Keine Actors gefunden.",
+				"search"           : "Search",
+				"searchPlaceholder": "Search actors",
+				"processing"       : '<i class="fas fa-spinner fa-spin"></i> Loading data...',
+				"lengthMenu"       : "Show _MENU_ entries",
+				"zeroRecords"      : "No Actors found.",
+				"info"             : "Page _PAGE_ / _PAGES_ &middot; (_MAX_ total)",
+				"infoEmpty"        : "No actors available.",
 				"infoFiltered"     : '&mdash; <i class="fas fa-search"></i> _TOTAL_',
 				"paginate"         : {
 					"first"   : "<<",
@@ -249,13 +249,13 @@
 			this.ui.eventLang = {
 				"decimal"          : ",",
 				"thousands"        : ".",
-				"search"           : "",
-				"searchPlaceholder": "Suche Events",
-				"processing"       : '<i class="fas fa-spinner fa-spin"></i> Lade Daten...',
-				"lengthMenu"       : "Zeige _MENU_ Einträge",
-				"zeroRecords"      : "Keine Events gefunden.",
-				"info"             : "Seite _PAGE_ / _PAGES_ &middot; (_MAX_ gesamt)",
-				"infoEmpty"        : "Keine Events gefunden.",
+				"search"           : "Search",
+				"searchPlaceholder": "Search events",
+				"processing"       : '<i class="fas fa-spinner fa-spin"></i> Load data...',
+				"lengthMenu"       : "Show _MENU_ entries",
+				"zeroRecords"      : "No events found.",
+				"info"             : "Page _PAGE_ / _PAGES_ &middot; (_MAX_ total)",
+				"infoEmpty"        : "No events available.",
 				"infoFiltered"     : '&mdash; <i class="fas fa-search"></i> _TOTAL_',
 				"paginate"         : {
 					"first"   : "<<",
@@ -1656,7 +1656,7 @@
 				case null:
 					if ( this.isOpen ) this.open('timaat-inspector-metadata');
 					this.disablePanel('timaat-inspector-metadata');
-					$('#timaat-inspector-metadata-title').html('Kein Element ausgewählt');
+					$('#timaat-inspector-metadata-title').html('No element selected');
 				break;
 				case 'annotation':
 					if (!item) {
@@ -1913,7 +1913,7 @@
 					$('#timaat-inspector-meta-submit').html(submit);
 					$('#timaat-inspector-meta-name').val(title).trigger('input');
 					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					$('#timaat-inspector-categories-and-tags-title').html('Kategorien-Sets und Tags');
+					$('#timaat-inspector-categories-and-tags-title').html('Category sets and tags');
 					if ( item != null ) {
 						$('#mediumAnalysisList-categorySets-multi-select-dropdown').val(null).trigger('change');
 						if ($('#mediumAnalysisList-categorySets-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
@@ -2055,7 +2055,7 @@
 					// categories panel
 					if (item != null) {
 						this.enablePanel('timaat-inspector-categories-and-tags');
-						$('#timaat-inspector-categories-and-tags-title').html('Kategorien');
+						$('#timaat-inspector-categories-and-tags-title').html('Categories');
 					}
 
 					// setup UI from Video Player state

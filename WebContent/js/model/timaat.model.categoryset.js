@@ -36,7 +36,7 @@
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
-									<i class="fas fa-user"></i>							
+									<i class="fas fa-user"></i>
 								</div>
 						  </div>
 						</div>
@@ -45,10 +45,10 @@
 			);
 
 			// $('#timaat-categorylists-categoryset-list').append(this.listView);
-			// console.log("TCL: CategorySet -> constructor -> this.updateUI()");    
+			// console.log("TCL: CategorySet -> constructor -> this.updateUI()");
 			var categorySet = this; // save categoryset for system events
 
-			this.updateUI();  
+			this.updateUI();
 
 			// attach categoryset handlers
 			$(this.listView).on('click', this, function(ev) {
@@ -68,9 +68,9 @@
 
 		updateUI() {
 			var name = this.model.name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-categorylists-categoryset-list-name').text(name);
-	
+
 		}
 
 		remove() {
@@ -104,14 +104,14 @@
       }
 		}
 	}
-	
+
 	// TIMAAT.CategorySet = class CategorySet {
 	// 	constructor(model) {
 	// 	      // console.log("TCL: CategorySet -> constructor -> model", model);
 	// 				// setup model
 	// 				this.model = model;
 	// 				// model.ui = this;
-					
+
 	// 				// create and style list view element
 	// 				var delcategorySet = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-categoryset-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 	// 				if ( model.id < 0 ) delcategorySet = '';
@@ -126,31 +126,31 @@
 
 	// 				// $('#timaat-categoryset-list').append(this.listView);
 	// 				// console.log("TCL: CategorySet -> constructor -> this.updateUI()");
-	// 				this.updateUI();      
-					
+	// 				this.updateUI();
+
 	// 				var categorySet = this; // save categoryset for events
-					
+
 	// 				// attach user log info
 	// 				// this.listView.find('.timaat-user-log').popover({
 	// 				// 	placement: 'right',
-	// 				// 	title: '<i class="fas fa-user"></i> Bearbeitungslog',
+	// 				// 	title: '<i class="fas fa-user"></i> editing log',
 	// 				// 	trigger: 'click',
 	// 				// 	html: true,
-	// 				// 	content: '<div class="timaat-user-log-details">Lade...</div>',
+	// 				// 	content: '<div class="timaat-user-log-details">Loading ...</div>',
 	// 				// 	container: 'body',
-	// 				// 	boundary: 'viewport',				
+	// 				// 	boundary: 'viewport',
 	// 				// });
 	// 				// this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
 	// 				// 	TIMAAT.UI.hidePopups();
 	// 				// });
 	// 				// this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 	// 				// 	$('.timaat-user-log-details').html(
-	// 				// 			'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+categorySet.model.createdByUserAccountId+'">[ID '+categorySet.model.createdByUserAccountId+']</span></b><br>\
+	// 				// 			'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+categorySet.model.createdByUserAccountId+'">[ID '+categorySet.model.createdByUserAccountId+']</span></b><br>\
 	// 				// 			 '+TIMAAT.Util.formatDate(categorySet.model.createdAt)+'<br>\
-	// 				// 			 <b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+categorySet.model.lastEditedByUserAccountId+'">[ID '+categorySet.model.lastEditedByUserAccountId+']</span></b><br>\
+	// 				// 			 <b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+categorySet.model.lastEditedByUserAccountId+'">[ID '+categorySet.model.lastEditedByUserAccountId+']</span></b><br>\
 	// 				// 			 '+TIMAAT.Util.formatDate(categorySet.model.lastEditedAt)+'<br>'
 	// 				// 	);
-	// 				// 	$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+	// 				// 	$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 	// 				// });
 	// 				// attach category editor
 	// 				// console.log("TCL: CategorySet -> constructor -> categorySet.updateUI()");
@@ -162,7 +162,7 @@
 	// 				// 	ev.preventDefault();
 	// 				// 	ev.stopPropagation();
 	// 				// });
-					
+
 	// 				// attach event handlers
 	// 				var _set = this;
 	// 				$(this.listView).on('click', this, function(ev) {
@@ -173,49 +173,49 @@
 	// 				});
 	// 				$(this.listView).on('dblclick', this, function(ev) {
 	// 					ev.stopPropagation();
-	// 					TIMAAT.UI.hidePopups();				
+	// 					TIMAAT.UI.hidePopups();
 	// 					// show metadata editor
 	// 					$('#timaat-categorylists-categoryset-meta').data('categorySet', categorySet);
-	// 					$('#timaat-categorylists-categoryset-meta').modal('show');			
+	// 					$('#timaat-categorylists-categoryset-meta').modal('show');
 	// 				});
-					
+
 	// 				// remove handler
 	// 				this.listView.find('.timaat-categoryset-remove').on('click', this, function(ev) {
 	// 					ev.stopPropagation();
-	// 					TIMAAT.UI.hidePopups();				
+	// 					TIMAAT.UI.hidePopups();
 	// 					$('#timaat-categorylists-categoryset-delete').data('categorySet', categorySet);
 	// 					$('#timaat-categorylists-categoryset-delete').modal('show');
 	// 				});
 
 	// 			}
-				
+
 	// 			updateUI() {
 	// 	      // console.log("TCL: CategorySet -> updateUI -> updateUI()");
 	// 				// title
 	// 				var name = this.model.name;
-	// 				if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+	// 				if ( this.model.id < 0 ) name = "[not assigned]";
 	// 				this.listView.find('.timaat-categoryset-list-title').text(name);
 	// 				// category count
 	// 				/*
-	// 				var count = this.model.categorySetHasCategories.length + " Kategorien";
-	// 				if ( this.model.categorySetHasCategories.length == 0 ) count = "keine Kategorien";
-	// 				if ( this.model.categorySetHasCategories.length == 1 ) count = "eine Kategorie";
+	// 				var count = this.model.categorySetHasCategories.length + " categories";
+	// 				if ( this.model.categorySetHasCategories.length == 0 ) count = "No categories";
+	// 				if ( this.model.categorySetHasCategories.length == 1 ) count = "One category";
 	// 				this.listView.find('.timaat-categoryset-list-count').text(count);
 	// 				*/
 	// 				// tags
 	// 				/*
-	// 				this.listView.find('.timaat-categoryset-list-tags i').attr('title', this.model.tags.length+" Tags");			
+	// 				this.listView.find('.timaat-categoryset-list-tags i').attr('title', this.model.tags.length+" Tags");
 	// 				if (this.model.tags.length == 0) this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tag timaat-no-tags');
-	// 				else if (this.model.tags.length == 1) this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "ein Tag");
+	// 				else if (this.model.tags.length == 1) this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "one tag");
 	// 				else this.listView.find('.timaat-categoryset-list-tags i').attr('class','fas fa-tags text-dark');
 	// 				*/
 	// 			}
-				
+
 	// 			remove() {
 	// 	      console.log("TCL: CategorySet -> remove -> remove()");
 	// 				// remove annotation from UI
 	// 				this.listView.remove();
-					
+
 	// 				// remove from categoryset list
 	// 				var index = TIMAAT.CategoryLists.categorySets.indexOf(this);
 	// 				if (index > -1) TIMAAT.CategoryLists.categorySets.splice(index, 1);
@@ -225,7 +225,7 @@
 	// 				if (index > -1) TIMAAT.CategoryLists.categorySets.model.splice(index, 1);
 
 	// 			}
-				
+
 	// 		}
-	
+
 }, window));

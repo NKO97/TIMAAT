@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.ActorType = class ActorType {
 		constructor(model) {
 			// console.log("TCL: ActorType -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-actordatasets-mediumtype-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var ActorType = this; // save ActorType for system ActorTypes
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (actorType.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(actorType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actorType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+actorType.model.lastEditedByUserAccountId+'">[ID '+actorType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+actorType.model.lastEditedByUserAccountId+'">[ID '+actorType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actorType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -83,16 +83,16 @@
 			// attach ActorType handlers
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-actordatasets-mediumtype-meta').data('ActorType', ActorType);
-				$('#timaat-actordatasets-mediumtype-meta').modal('show');			
+				$('#timaat-actordatasets-mediumtype-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-actortype-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-actordatasets-mediumtype-delete').data('ActorType', ActorType);
 				$('#timaat-actordatasets-mediumtype-delete').modal('show');
 			});
@@ -102,7 +102,7 @@
 			// console.log("TCL: ActorType -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var type = this.model.actorTypeTranslations[0].type;
-			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) type = "[not assigned]";
 			this.listView.find('.timaat-actortype-list-name').text(type);
 		}
 
@@ -118,5 +118,5 @@
 			if (index > -1) TIMAAT.ActorDatasets.actorTypes.model.splice(index, 1);
 		}
 	}
-	
+
 }, window));

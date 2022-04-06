@@ -242,8 +242,8 @@
 			$('#timaat-user-log-analysislist').popover({
 				container: 'body',
 				html: true,
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
-				content: '<div class="timaat-user-log-details">Laden...</div>',
+				title: '<i class="fas fa-user"></i> Editing log',
+				content: '<div class="timaat-user-log-details">Loading...</div>',
 				placement: 'bottom',
 				trigger: 'manual',
 			});
@@ -257,7 +257,7 @@
 						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+TIMAAT.VideoPlayer.curAnalysisList.createdByUserAccountId+'">[ID '+TIMAAT.VideoPlayer.curAnalysisList.createdByUserAccountId+']</span></b><br>\
 						 '+TIMAAT.Util.formatDate(TIMAAT.VideoPlayer.curAnalysisList.createdAt)+'<br>'
 				);
-				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"mir")});
+				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"me")});
 			});
 
 			// $('#timaat-videoplayer-video-user-log').popover({
@@ -463,7 +463,7 @@
 									</div>
 								</div>
 								<button title="new keyframe at this timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
-								<button title="remove current keyframe" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Löschen&nbsp;<i class="fas fa-trash-alt fa-fw"></i></button>`,
+								<button title="remove current keyframe" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Delete <i class="fas fa-trash-alt fa-fw"></i></button>`,
 					classes : 'leaflet-bar',
 					id: 'timaat-animation-controlwidget',
 					style   : { margin: '10px', padding: '0px 0 0 0', },

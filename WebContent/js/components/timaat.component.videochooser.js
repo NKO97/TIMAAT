@@ -65,8 +65,8 @@
 			$('#timaat-videochooser-mediacollection-meta').on('show.bs.modal', function (ev) {
 				var modal = $(this);
 				var col = modal.data('mediacollection');
-				var heading = (col) ? "Mediensammlung bearbeiten" : "Mediensammlung hinzufügen";
-				var submit = (col) ? "Speichern" : "Hinzufügen";
+				var heading = (col) ? "Edit media collection" : "Add media collection";
+				var submit = (col) ? "Save" : "Add";
 				var title = (col) ? col.title : "";
 				var comment = (col) ? col.remark : "";
 				// setup UI from Video Player state
@@ -571,17 +571,17 @@
 				"language": {
 					"decimal"     : ",",
 					"thousands"   : ".",
-					"search"      : "Suche",
-					"lengthMenu"  : "Zeige _MENU_ Videos pro Seite",
-					"zeroRecords" : "Keine Videos gefunden.",
-					"info"        : "Seite _PAGE_ von _PAGES_ &middot; (_MAX_ Videos gesamt)",
-					"infoEmpty"   : "Keine Videos verf&uuml;gbar.",
-					"infoFiltered": " &mdash; _TOTAL_ von _MAX_ Videos angezeigt",
+					"search"      : "Search",
+					"lengthMenu"  : "Show _MENU_ videos per page",
+					"zeroRecords" : "No videos found.",
+					"info"        : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ videos total)",
+					"infoEmpty"   : "No videos available.",
+					"infoFiltered": " &mdash; _TOTAL_ of _MAX_ videos displayed",
 					"paginate"    : {
-						"first"   : "Erste",
-						"previous": "Vorherige",
-						"next"    : "N&auml;chste",
-						"last"    : "Letzte"
+						"first"   : "First",
+						"previous": "Previous",
+						"next"    : "Next",
+						"last"    : "Last"
 					},
 				},
 			});
@@ -625,7 +625,7 @@
 				.fail(function(error) {
 					// TODO handle error
 					window.clearInterval(video.poll);
-					video.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+					video.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> not available');
 					console.error("ERROR: ", error);
 				});
 
@@ -646,7 +646,7 @@
 				window.clearInterval(video.poll);
 
 			if ( video.fileStatus == 'unavailable' ) {
-				video.ui.find('.timaat-medium-transcoding').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+				video.ui.find('.timaat-medium-transcoding').html('<i class="fas fa-eye-slash"></i> not available');
 				video.ui.find('.timaat-medium-transcoding').show();
 			}
 

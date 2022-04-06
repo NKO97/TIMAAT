@@ -709,7 +709,7 @@
 					}).fail(function(error) {
 						// TODO handle error
 						// window.clearInterval(medium.poll);
-						// medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> nicht verfügbar');
+						// medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> not available');
 						console.error("ERROR: ", error);
 						console.error("ERROR responseText: ", error.responseText);
 					});

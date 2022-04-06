@@ -88,10 +88,10 @@
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
@@ -99,14 +99,14 @@
 				TIMAAT.UI.hidePopups();
 			});
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-				// console.log("TCL: Annotation -> constructor -> Display Bearbeitungslog");
+				// console.log("TCL: Annotation -> constructor -> Display editing log");
 				$('.timaat-user-log-details').html(
-					`<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccountId+'">[ID '+anno.model.createdByUserAccountId+']</span></b><br>\
+					`<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccountId+'">[ID '+anno.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
-					<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccountId+'">[ID '+anno.model.lastEditedByUserAccountId+']</span></b><br>\
+					<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccountId+'">[ID '+anno.model.lastEditedByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
 				);
-				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 			});
 			this.listView.find('.timaat-user-log').on('click', function(ev) {
 				ev.preventDefault();
@@ -384,7 +384,7 @@
 			// categories
 			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");
 			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
-			else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "eine Kategorie");
+			else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "one category");
 			else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
 			// type
 			this._updateAnnotationType();

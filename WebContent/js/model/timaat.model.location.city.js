@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.City = class City {
 		constructor(model) {
 			// console.log("TCL: City -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-city-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var city = this; // save city for system events
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (city.model.location.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(city.model.location.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(city.model.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+city.model.location.lastEditedByUserAccountId+'">[ID '+city.model.location.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+city.model.location.lastEditedByUserAccountId+'">[ID '+city.model.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(city.model.location.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -84,22 +84,22 @@
 			$(this.listView).on('click', this, function(ev) {
 				ev.stopPropagation();
 				// show tag editor - trigger popup
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// city.listView.find('.timaat-city-list-tags').popover('show');
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-locationdatasets-city-meta').data('city', city);
-				$('#timaat-locationdatasets-city-meta').modal('show');			
+				$('#timaat-locationdatasets-city-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-city-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-locationdatasets-city-delete').data('city', city);
 				$('#timaat-locationdatasets-city-delete').modal('show');
 			});
@@ -109,7 +109,7 @@
 			// console.log("TCL: City -> updateUI -> updateUI()");
 			// title
 			var name = this.model.location.locationTranslations[0].name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-city-list-name').text(name);
 		}
 
@@ -126,5 +126,5 @@
 		}
 
 	}
-	
+
 }, window));

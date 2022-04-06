@@ -36,7 +36,7 @@
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
 								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
-									<i class="fas fa-user"></i>							
+									<i class="fas fa-user"></i>
 								</div>
 						  </div>
 						</div>
@@ -45,10 +45,10 @@
 			);
 
 			// $('#timaat-languagelists-language-list').append(this.listView);
-			// console.log("TCL: Language -> constructor -> this.updateUI()");    
+			// console.log("TCL: Language -> constructor -> this.updateUI()");
 			var language = this; // save language for system events
 
-			this.updateUI();  
+			this.updateUI();
 
 			// attach language handlers
 			$(this.listView).on('click', this, function(ev) {
@@ -67,9 +67,9 @@
 
 		updateUI() {
 			var name = this.model.name;
-			if ( this.model.id < 0 ) name = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) name = "[not assigned]";
 			this.listView.find('.timaat-languagelists-language-list-name').text(name);
-	
+
 		}
 
 		remove() {
@@ -91,5 +91,5 @@
 			}
 		}
 	}
-	
+
 }, window));

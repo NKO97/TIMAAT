@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.LocationType = class LocationType {
 		constructor(model) {
 		      // console.log("TCL: LocationType -> constructor -> model", model)
@@ -38,18 +38,18 @@
 					);
 
 					$('#timaat-locationtype-list').append(this.listView);
-					this.updateUI();      
+					this.updateUI();
 					var locationType = this; // save locationType for system locationTypes
 
 					// attach user log info
 					this.listView.find('.timaat-user-log').popover({
 						placement: 'right',
-						title: '<i class="fas fa-user"></i> Bearbeitungslog',
+						title: '<i class="fas fa-user"></i> editing log',
 						trigger: 'click',
 						html: true,
-						content: '<div class="timaat-user-log-details">Lade...</div>',
+						content: '<div class="timaat-user-log-details">Loading ...</div>',
 						container: 'body',
-						boundary: 'viewport',				
+						boundary: 'viewport',
 					});
 
 					this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -57,21 +57,21 @@
 					});
 
 					this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-						// console.log("TCL: Locationtype -> constructor -> Display Bearbeitungslog");
+						// console.log("TCL: Locationtype -> constructor -> Display editing log");
 						if (locationtype.model.lastEditedAt == null) {
 							$('.timaat-user-log-details').html(
-								'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
+								'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
 								'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>'
 							);
-							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 						} else {
 							$('.timaat-user-log-details').html(
-									'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
+									'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
 									'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>\
-									<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+locationtype.model.lastEditedByUserAccountId+'">[ID '+locationtype.model.lastEditedByUserAccountId+']</span></b><br>\
+									<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+locationtype.model.lastEditedByUserAccountId+'">[ID '+locationtype.model.lastEditedByUserAccountId+']</span></b><br>\
 									'+TIMAAT.Util.formatDate(locationtype.model.lastEditedAt)+'<br>'
 							);
-							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 						}
 					});
 
@@ -84,16 +84,16 @@
 					// attach locationType handlers
 					$(this.listView).on('dblclick', this, function(ev) {
 						ev.stopPropagation();
-						TIMAAT.UI.hidePopups();				
+						TIMAAT.UI.hidePopups();
 						// show metadata editor
 						$('#timaat-locationdatasets-locationtype-meta').data('locationType', locationType);
-						$('#timaat-locationdatasets-locationtype-meta').modal('show');			
+						$('#timaat-locationdatasets-locationtype-meta').modal('show');
 					});
 
 					// remove handler
 					this.listView.find('.timaat-locationtype-remove').on('click', this, function(ev) {
 						ev.stopPropagation();
-						TIMAAT.UI.hidePopups();				
+						TIMAAT.UI.hidePopups();
 						$('#timaat-locationdatasets-locationtype-delete').data('locationType', locationType);
 						$('#timaat-locationdatasets-locationtype-delete').modal('show');
 					});
@@ -103,7 +103,7 @@
 					// console.log("TCL: Locationtype -> updateUI -> updateUI() -> model", this.model);
 					// title
 					var type = this.model.locationTypeTranslations[0].type;
-					if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+					if ( this.model.id < 0 ) type = "[not assigned]";
 					this.listView.find('.timaat-locationtype-list-name').text(type);
 				}
 
@@ -119,5 +119,5 @@
 					if (index > -1) TIMAAT.LocationDatasets.locationTypes.model.splice(index, 1);
 				}
 			}
-	
+
 }, window));

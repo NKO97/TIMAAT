@@ -18,7 +18,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.PhoneNumberType = class PhoneNumberType {
 		constructor(model) {
 			// console.log("TCL: PhoneNumberType -> constructor -> model", model)
@@ -38,18 +38,18 @@
 			);
 
 			$('#timaat-actordatasets-phonenumbertype-list').append(this.listView);
-			this.updateUI();      
+			this.updateUI();
 			var PhoneNumberType = this; // save PhoneNumberType for system PhoneNumberTypes
 
 			// attach user log info
 			this.listView.find('.timaat-user-log').popover({
 				placement: 'right',
-				title: '<i class="fas fa-user"></i> Bearbeitungslog',
+				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Lade...</div>',
+				content: '<div class="timaat-user-log-details">Loading ...</div>',
 				container: 'body',
-				boundary: 'viewport',				
+				boundary: 'viewport',
 			});
 
 			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
@@ -59,18 +59,18 @@
 			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
 				if (phoneNumberType.model.lastEditedAt == null) {
 					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(phoneNumberType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
 					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Erstellt von <span class="timaat-userId" data-userId="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(phoneNumberType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Bearbeitet von <span class="timaat-userId" data-userId="'+phoneNumberType.model.lastEditedByUserAccountId+'">[ID '+phoneNumberType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+phoneNumberType.model.lastEditedByUserAccountId+'">[ID '+phoneNumberType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(phoneNumberType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "mir")});
+					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
@@ -83,16 +83,16 @@
 			// attach PhoneNumberType handlers
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				// show metadata editor
 				$('#timaat-actordatasets-phonenumbertype-meta').data('PhoneNumberType', PhoneNumberType);
-				$('#timaat-actordatasets-phonenumbertype-meta').modal('show');			
+				$('#timaat-actordatasets-phonenumbertype-meta').modal('show');
 			});
 
 			// remove handler
 			this.listView.find('.timaat-phonenumbertype-remove').on('click', this, function(ev) {
 				ev.stopPropagation();
-				TIMAAT.UI.hidePopups();				
+				TIMAAT.UI.hidePopups();
 				$('#timaat-actordatasets-phonenumbertype-delete').data('PhoneNumberType', PhoneNumberType);
 				$('#timaat-actordatasets-phonenumbertype-delete').modal('show');
 			});
@@ -102,7 +102,7 @@
 			// console.log("TCL: PhoneNumberType -> updateUI -> updateUI() -> model", this.model);
 			// title
 			var type = this.model.phoneNumberTypeTranslations[0].type;
-			if ( this.model.id < 0 ) type = "[nicht zugeordnet]";
+			if ( this.model.id < 0 ) type = "[not assigned]";
 			this.listView.find('.timaat-phonenumbertype-list-name').text(type);
 		}
 
@@ -118,5 +118,5 @@
 			if (index > -1) TIMAAT.ActorDatasets.phoneNumberTypes.model.splice(index, 1);
 		}
 	}
-	
+
 }, window));

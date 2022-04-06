@@ -73,8 +73,8 @@
 				// Create/Edit actorType window setup
 				var modal = $(this);
 				var actorType = modal.data('actorType');
-				var heading = (actorType) ? "ActorType bearbeiten" : "ActorType hinzufügen";
-				var submit = (actorType) ? "Speichern" : "Hinzufügen";
+				var heading = (actorType) ? "Edit actor type" : "Add actor type";
+				var submit = (actorType) ? "Save" : "Add";
 				var type = (actorType) ? actorType.model.type : 0;
 				// setup UI
 				$('#actorTypeMetaLabel').html(heading);
@@ -1369,8 +1369,8 @@
 				// Create/Edit addressType window setup
 				var modal = $(this);
 				var addressType = modal.data('addressType');
-				var heading = (addressType) ? "AddressType bearbeiten" : "AddressType hinzufügen";
-				var submit = (addressType) ? "Speichern" : "Hinzufügen";
+				var heading = (addressType) ? "Edit address type" : "Add address type";
+				var submit = (addressType) ? "Save" : "Add";
 				var type = (addressType) ? addressType.model.type : 0;
 				// setup UI
 				$('#addressTypeMetaLabel').html(heading);
@@ -1720,8 +1720,8 @@
 				// Create/Edit emailAddressType window setup
 				var modal = $(this);
 				var emailAddressType = modal.data('emailAddressType');
-				var heading = (emailAddressType) ? "EmailAddressType bearbeiten" : "EmailAddressType hinzufügen";
-				var submit = (emailAddressType) ? "Speichern" : "Hinzufügen";
+				var heading = (emailAddressType) ? "Edit email-address type" : "Add email-address type";
+				var submit = (emailAddressType) ? "Save" : "Add";
 				var type = (emailAddressType) ? emailAddressType.model.type : 0;
 				// setup UI
 				$('#emailAddressTypeMetaLabel').html(heading);
@@ -1872,7 +1872,7 @@
 
 			// Submit actor phonenumbers button functionality
 			$('#actor-phonenumbers-form-submit').on('click', async function(event) {
-				// console.log("TCL: Phone numberes form: submit");
+				// console.log("TCL: Phone numbers form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
 				var node = document.getElementById("new-actorhasphonenumber-fields");
@@ -2072,8 +2072,8 @@
 				// Create/Edit phoneNumberType window setup
 				var modal = $(this);
 				var phoneNumberType = modal.data('phoneNumberType');
-				var heading = (phoneNumberType) ? "PhoneNumberType bearbeiten" : "PhoneNumberType hinzufügen";
-				var submit = (phoneNumberType) ? "Speichern" : "Hinzufügen";
+				var heading = (phoneNumberType) ? "Edit phone number type" : "Add phone number type";
+				var submit = (phoneNumberType) ? "Save" : "Add";
 				var type = (phoneNumberType) ? phoneNumberType.model.type : 0;
 				// setup UI
 				$('#phoneNumberTypeMetaLabel').html(heading);

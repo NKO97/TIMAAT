@@ -1246,7 +1246,7 @@
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q1">1.) Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</label>
+                <label for="sound-effect-descriptive-answer-q1">1.) What does the sound sound like (z.B. wooden, metallic, soft, fast)?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q1"
@@ -1256,7 +1256,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q2">2.) Ist das Geräusch realistisch oder künstlich erzeugt?</label>
+                <label for="sound-effect-descriptive-answer-q2">2.) Is the sound realistic oder artificial?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q2"
@@ -1266,7 +1266,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q3">3.) Von wo klingt das Geräusch?</label>
+                <label for="sound-effect-descriptive-answer-q3">3.) From where does the sound sound?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q3"
@@ -1276,7 +1276,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q4">4.) Bewegt sich das Geräusch oder ist es statisch?</label>
+                <label for="sound-effect-descriptive-answer-q4">4.) Does the sound move or is it stationary?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q4"
@@ -1286,7 +1286,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q5">5.) Ist das Geräusch Teil der dargestellten / erzählten Welt oder nicht?</label>
+                <label for="sound-effect-descriptive-answer-q5">5.) Is the sound part of the narrated scene or not?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q5"
@@ -1296,7 +1296,7 @@
                   </div>
               </div>
               <div class="form-group">
-                <label ="sound-effect-descriptive-answer-q6">6.) Wodurch ist das Auftreten des Geräusches motiviert (z.B. aus der Erzählung heraus, künstlerisch motiviert, es soll die Szene verfremden, es soll die Szene realistischer machen)?</label>
+                <label ="sound-effect-descriptive-answer-q6">6.) What motivates the sound (e.g., does it originate in the narration, is it artistically motivated, does it make the scene more or less realistic)?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="sound-effect-descriptive-answer-q6"
@@ -2308,27 +2308,27 @@
         case 20: // Sound Effect Descriptive
           details +=
             `<tr>
-              <td>Wie klingt das Geräusch (z.B. hölzern, metallisch, sanft, schnell)?</td>
+              <td>What does the sound sound like (e.g., wooden, metallic, soft, fast)?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ1+`</td>
             </tr>
             <tr>
-              <td>Ist das Geräusch realistisch oder künstlich erzeugt?</td>
+              <td>Is the sound realistic oder artificial?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ2+`</td>
             </tr>
             <tr>
-              <td>Von wo klingt das Geräusch?</td>
+              <td>VFrom where does the sound sound?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ3+`</td>
             </tr>
             <tr>
-              <td>Bewegt sich das Geräusch oder ist es statisch?</td>
+              <td>Does the sound move or is it stationary?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ4+`</td>
             </tr>
             <tr>
-              <td>Ist das Geräusch Teil der dargestellten / erzählten Welt oder nicht?</td>
+              <td>Is the sound part of the narrated scene or not?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ5+`</td>
             </tr>
             <tr>
-              <td>Wodurch ist das Auftreten des Geräusches motiviert?</td>
+              <td>What motivates the sound?</td>
               <td>`+data.analysisMethod.soundEffectDescriptive.answerQ6+`</td>
             </tr>`;
         break;
@@ -2808,7 +2808,7 @@
           "thousands"        : ".",
           "search"           : "Search",
           "searchPlaceholder": "Search analysis guidelines",
-          "processing"       : '<i class="fas fa-spinner fa-spin"></i> Loading Data...',
+          "processing"       : '<i class="fas fa-spinner fa-spin"></i> Loading data...',
           "lengthMenu"       : "Show _MENU_ entries",
           "zeroRecords"      : "No analysis guidelines found.",
           "info"             : "Page _PAGE_ of _PAGES_ &middot; (_MAX_ analysis guidelines total)",
