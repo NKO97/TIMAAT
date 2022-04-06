@@ -73,7 +73,7 @@
 
 			this.ui.dataTableActors = $('#timaat-inspector-actors-pane .actors-available').DataTable({
 				lengthChange	: false,
-				dom						: 'rt<"row"<"col-sm-10"i><"col-sm-2"p>>',
+				dom						: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				pageLength		: 3,
 				deferLoading	: 0,
@@ -267,7 +267,7 @@
 
 			this.ui.dataTableEvents = $('#timaat-inspector-events-pane .events-available').DataTable({
 				lengthChange	: false,
-				dom				: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
+				dom						: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 				pageLength		: 3,
 				deferLoading	: 0,
