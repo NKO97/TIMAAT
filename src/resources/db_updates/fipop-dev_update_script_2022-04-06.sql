@@ -1,6 +1,6 @@
-UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Martinez&Scheffel: Unreliable Narration' WHERE `analysis_method_type_translation`.`id` = 1;
+UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Martinez & Scheffel: Unreliable Narration' WHERE `analysis_method_type_translation`.`id` = 1;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Color Temperature' WHERE `analysis_method_type_translation`.`id` = 7;
-UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Concept: Camera Position and Perspective' WHERE `analysis_method_type_translation`.`id` = 8;
+UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Position and Perspective' WHERE `analysis_method_type_translation`.`id` = 8;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Elevation' WHERE `analysis_method_type_translation`.`id` = 9;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Axis of Action' WHERE `analysis_method_type_translation`.`id` = 10;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Horizontal Angle' WHERE `analysis_method_type_translation`.`id` = 11;
@@ -23,8 +23,8 @@ UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Take Length' WHE
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Take Type Progression' WHERE `analysis_method_type_translation`.`id` = 31;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Playback Speed' WHERE `analysis_method_type_translation`.`id` = 32;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Image Cadre Editing' WHERE `analysis_method_type_translation`.`id` = 33;
-UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Editing Montage' WHERE `analysis_method_type_translation`.`id` = 34;
-UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Concept: Direction' WHERE `analysis_method_type_translation`.`id` = 35;
+UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Editing and Montage' WHERE `analysis_method_type_translation`.`id` = 34;
+UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Direction' WHERE `analysis_method_type_translation`.`id` = 35;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Movement Characteristic' WHERE `analysis_method_type_translation`.`id` = 36;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Camera Movement Type' WHERE `analysis_method_type_translation`.`id` = 37;
 UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Light Position: General' WHERE `analysis_method_type_translation`.`id` = 38;
