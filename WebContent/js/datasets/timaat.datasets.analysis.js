@@ -673,7 +673,7 @@
 
       switch (analysisMethodType.id) {
         case 1: // Martinez Scheffel Unreliable Narration
-          $('#analysisAddLabel').text('Choose unreliable Narration (Martinez & Scheffel)');
+          $('#analysisAddLabel').text('Choose Unreliable Narration (Martinez & Scheffel)');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
@@ -708,7 +708,7 @@
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="color-temperature-select-dropdown">Color temperature</label>
+                <label for="color-temperature-select-dropdown">Color Temperature</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -725,12 +725,12 @@
           $('#color-temperature-select-dropdown').select2(select2Options);
         break;
         case 8: // Concept Camera Position and Perspective
-        $('#analysisAddLabel').text('Describe camera position and perspective');
+        $('#analysisAddLabel').text('Describe Camera Position and Perspective');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
-            <h5 class="modal-title">Camera position and perspective</h5>
+            <h5 class="modal-title">Camera Position and Perspective</h5>
             <div class="form-group">
-            <label for="camera-distance-select-dropdown">Camera distance</label>
+            <label for="camera-distance-select-dropdown">Camera Distance</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -742,7 +742,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-shot-type-select-dropdown">Camera shot type</label>
+            <label for="camera-shot-type-select-dropdown">Camera Shot Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -753,7 +753,7 @@
                 </select>
               </div>
             </div><div class="form-group">
-            <label for="camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+            <label for="camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -765,7 +765,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+            <label for="camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -777,7 +777,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-axis-of-action-select-dropdown">Camera axis of action</label>
+            <label for="camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -789,7 +789,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-elevation-select-dropdown">Camera elevation</label>
+            <label for="camera-elevation-select-dropdown">Camera Elevation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -801,7 +801,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+            <label for="camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -830,11 +830,11 @@
         $('#camera-depth-of-focus-select-dropdown').select2(select2Options);
         break;
         case 9: // Camera Elevation
-          $('#analysisAddLabel').text('Choose camera elevation');
+          $('#analysisAddLabel').text('Choose Camera Elevation');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="camera-elevation-select-dropdown">Camera elevation</label>
+                <label for="camera-elevation-select-dropdown">Camera Elevation</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -851,11 +851,11 @@
           $('#camera-elevation-select-dropdown').select2(select2Options);
         break;
         case 10: // Camera Axis of Action
-        $('#analysisAddLabel').text('Choose axis of action');
+        $('#analysisAddLabel').text('Choose Axis of Action');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-              <label for="camera-axis-of-action-select-dropdown">Camera axis of action</label>
+              <label for="camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -872,11 +872,11 @@
         $('#camera-axis-of-action-select-dropdown').select2(select2Options);
         break;
         case 11: // Camera Horizontal Angle
-        $('#analysisAddLabel').text('Choose camera horizontal angle');
+        $('#analysisAddLabel').text('Choose Camera Horizontal Angle');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-            <label for="camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+            <label for="camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -893,11 +893,11 @@
         $('#camera-horizontal-angle-select-dropdown').select2(select2Options);
         break;
         case 12: // Camera Vertical Angle
-          $('#analysisAddLabel').text('Choose camera vertical angle');
+          $('#analysisAddLabel').text('Choose Camera Vertical Angle');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-              <label for="camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+              <label for="camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -914,11 +914,11 @@
           $('#camera-vertical-angle-select-dropdown').select2(select2Options);
         break;
         case 13: // Camera Shot Type - part of 34: Editing / Montage
-          $('#analysisAddLabel').text('Choose camera shot type');
+          $('#analysisAddLabel').text('Choose Camera Shot Type');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-              <label for="camera-shot-type-select-dropdown">Camera shot type</label>
+              <label for="camera-shot-type-select-dropdown">Camera Shot Type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -935,11 +935,11 @@
           $('#camera-shot-type-select-dropdown').select2(select2Options);
         break;
         case 14: // Camera Distance
-          $('#analysisAddLabel').text('Choose camera distance');
+          $('#analysisAddLabel').text('Choose Camera Distance');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="camera-distance-select-dropdown">Camera distance</label>
+                <label for="camera-distance-select-dropdown">Camera Distance</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -958,11 +958,11 @@
         case 15: // Concept Camera Movement and Handling //* won't be implemented
         break;
         case 16: // Camera Movement
-        $('#analysisAddLabel').text('Describe camera movement');
+        $('#analysisAddLabel').text('Describe Camera Movement');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-            <label for="camera-movement-type-select-dropdown">Camera movement type</label>
+            <label for="camera-movement-type-select-dropdown">Camera Movement Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -974,7 +974,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-movement-characteristic-select-dropdown">Camera movement characteristic</label>
+            <label for="camera-movement-characteristic-select-dropdown">Camera Movement Characteristic</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -986,7 +986,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-handling-select-dropdown">Camera handling</label>
+            <label for="camera-handling-select-dropdown">Camera Handling</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -998,7 +998,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="concept-direction-select-dropdown">Concept direction</label>
+            <label for="concept-direction-select-dropdown">Concept Direction</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1009,9 +1009,9 @@
                 </select>
               </div>
             </div>
-            <h5 class="modal-title">Start camera position and perspective</h5>
+            <h5 class="modal-title">Start Camera Position and Perspective</h5>
             <div class="form-group">
-            <label for="start-camera-distance-select-dropdown">Camera distance</label>
+            <label for="start-camera-distance-select-dropdown">Camera Distance</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1023,7 +1023,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-shot-type-select-dropdown">Camera shot type</label>
+            <label for="start-camera-shot-type-select-dropdown">Camera Shot Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1034,7 +1034,7 @@
                 </select>
               </div>
             </div><div class="form-group">
-            <label for="start-camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+            <label for="start-camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1046,7 +1046,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+            <label for="start-camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1058,7 +1058,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-axis-of-action-select-dropdown">Camera axis of action</label>
+            <label for="start-camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1070,7 +1070,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-elevation-select-dropdown">Camera elevation</label>
+            <label for="start-camera-elevation-select-dropdown">Camera Elevation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1082,7 +1082,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+            <label for="start-camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1093,9 +1093,9 @@
                 </select>
               </div>
             </div>
-            <h5 class="modal-title">End camera position and perspective</h5>
+            <h5 class="modal-title">End Camera Position and Perspective</h5>
             <div class="form-group">
-            <label for="end-camera-distance-select-dropdown">Camera distance</label>
+            <label for="end-camera-distance-select-dropdown">Camera Distance</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1107,7 +1107,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-shot-type-select-dropdown">Camera shot type</label>
+            <label for="end-camera-shot-type-select-dropdown">Camera Shot Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1118,7 +1118,7 @@
                 </select>
               </div>
             </div><div class="form-group">
-            <label for="end-camera-vertical-angle-select-dropdown">Camera vertical angle</label>
+            <label for="end-camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1130,7 +1130,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-horizontal-angle-select-dropdown">Camera horizontal angle</label>
+            <label for="end-camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1142,7 +1142,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-axis-of-action-select-dropdown">Camera axis of action</label>
+            <label for="end-camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1154,7 +1154,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-elevation-select-dropdown">Camera elevation</label>
+            <label for="end-camera-elevation-select-dropdown">Camera Elevation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1166,7 +1166,7 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+            <label for="end-camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
@@ -1217,11 +1217,11 @@
           $('#end-camera-depth-of-focus-select-dropdown').select2(select2Options);
         break;
         case 17: // Camera Handling
-          $('#analysisAddLabel').text('Choose camera handling');
+          $('#analysisAddLabel').text('Choose Camera Handling');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-              <label for="camera-handling-select-dropdown">Camera handling</label>
+              <label for="camera-handling-select-dropdown">Camera Handling</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1242,7 +1242,7 @@
         case 19: // Barthes Rhetoric of the Image //* won't be implemented
         break;
         case 20: // Sound Effect Descriptive
-          $('#analysisAddLabel').text('Describe sound effect');
+          $('#analysisAddLabel').text('Describe Sound Effect');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
@@ -1311,7 +1311,7 @@
         case 21: // Analysis Ambient Sound
         break;
         case 22: // Analysis Music
-          $('#analysisAddLabel').text('Describe music');
+          $('#analysisAddLabel').text('Describe Music');
           modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <h5 class="modal-title">Analysis Music</h5>
@@ -1550,7 +1550,7 @@
           $('#analysis-music-musicalNotations-select-dropdown').select2(select2Options);
         break;
         case 23: // Analysis Speech
-        $('#analysisAddLabel').text('Describe speech');
+        $('#analysisAddLabel').text('Describe Speech');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <h5 class="modal-title">Analysis Speech</h5>
@@ -1637,17 +1637,17 @@
         case 29: // Editing Rhythm - Part of 34: Editing / Montage
         break;
         case 30: // Take Length - Part of 34: Editing / Montage
-        $('#analysisAddLabel').text('Describe take length');
+        $('#analysisAddLabel').text('Describe Take Length');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-              <label for="takeLength">Take length</label>
+              <label for="takeLength">Take Length</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
                           id="takeLength"
                           aria-label="Take length"
                           name="takeLength"
-                          placeholder="Describe take length"></textarea>
+                          placeholder="Describe Take Length"></textarea>
               </div>
             </div>`+
             remarkHtml +
@@ -1660,12 +1660,12 @@
         case 33: // Image Cadre Editing - Part of 34: Editing / Montage
         break;
         case 34: // Editing / Montage
-          $('#analysisAddLabel').text('Describe editing/montage');
+          $('#analysisAddLabel').text('Describe Editing/Montage');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
-              <h5 class="modal-title">Editing / Montage</h5>
+              <h5 class="modal-title">Editing/Montage</h5>
               <div class="form-group">
-              <label for="montage-figure-macro-select-dropdown">Montage figure macro</label>
+              <label for="montage-figure-macro-select-dropdown">Montage Figure Macro</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1677,7 +1677,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="montage-figure-macro-select-dropdown">Montage figure micro</label>
+              <label for="montage-figure-macro-select-dropdown">Montage Figure Micro</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1688,7 +1688,7 @@
                   </select>
                 </div>
               </div><div class="form-group">
-              <label for="take-junction-select-dropdown">Take junction</label>
+              <label for="take-junction-select-dropdown">Take Junction</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1700,7 +1700,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="editing-rhythm-select-dropdown">Editing rhythm</label>
+              <label for="editing-rhythm-select-dropdown">Editing Rhythm</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1712,7 +1712,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="take-length">Take length</label>
+                <label for="take-length">Take Length</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
                             id="takeLength"
@@ -1722,7 +1722,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="take-type-progression-select-dropdown">Take type progression</label>
+              <label for="take-type-progression-select-dropdown">Take Type Progression</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1734,7 +1734,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="camera-shot-type-select-dropdown">Camera shot type</label>
+              <label for="camera-shot-type-select-dropdown">Camera Shot Type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1746,7 +1746,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="playback-speed-select-dropdown">Playback speed</label>
+              <label for="playback-speed-select-dropdown">Playback Speed</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1758,7 +1758,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="image-cadre-editing-select-dropdown">Image cadre editing</label>
+              <label for="image-cadre-editing-select-dropdown">Image Cadre Editing</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1805,12 +1805,12 @@
         case 42: // Lighting Duration - Part of 43: Lighting
         break;
         case 43: // Lighting
-          $('#analysisAddLabel').text('Describe lighting');
+          $('#analysisAddLabel').text('Describe Lighting');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <h5 class="modal-title">Lighting</h5>
               <div class="form-group">
-                <label for="lighting-type-select-dropdown">Lighting type</label>
+                <label for="lighting-type-select-dropdown">Lighting Type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1822,7 +1822,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-position-select-dropdown">Light position</label>
+                <label for="light-position-select-dropdown">Light Position</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1834,7 +1834,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-position-angle-horizontal-select-dropdown">Light position horizontal angle</label>
+                <label for="light-position-angle-horizontal-select-dropdown">Light Position Horizontal Angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1846,7 +1846,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-position-angle-vertical-select-dropdown">Light position vertical angle</label>
+                <label for="light-position-angle-vertical-select-dropdown">Light Position Vertical Angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1858,7 +1858,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-modifier-select-dropdown">Light modifier</label>
+                <label for="light-modifier-select-dropdown">Light Modifier</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1870,7 +1870,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="lighting-duration-select-dropdown">Lighting duration</label>
+                <label for="lighting-duration-select-dropdown">Lighting Duration</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -1897,7 +1897,7 @@
           $('#lighting-duration-select-dropdown').select2(select2Options);
         break;
         case 44:
-          $('#analysisAddLabel').text('Describe actor');
+          $('#analysisAddLabel').text('Describe Actor');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <h5 class="modal-title">Analysis Actor</h5>
@@ -2017,11 +2017,11 @@
         case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
         break;
         case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
-          $('#analysisAddLabel').text('Choose camera depth of focus');
+          $('#analysisAddLabel').text('Choose Camera Depth of Focus');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="camera-depth-of-focus-select-dropdown">Camera depth of focus</label>
+                <label for="camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
@@ -2091,7 +2091,7 @@
         case 7: // Color Temperature
           details +=
             `<tr>
-              <td>Color temperature:</td>
+              <td>Color Temperature:</td>
               <td>`+data.analysisMethod.colorTemperature.colorTemperatureTranslations[0].name+`</td>
             </tr>`;
         break;
@@ -2105,59 +2105,59 @@
           let cameraDepthOfFocus = (data.analysisMethod.conceptCameraPositionAndPerspective.cameraDepthOfFocus == null) ? '' : data.analysisMethod.conceptCameraPositionAndPerspective.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type;
           details +=
           `<tr>
-            <td>Camera distance</td>
+            <td>Camera Distance</td>
             <td>`+cameraDistance+`</td>
           </tr>
           <tr>
-            <td>Camera shot type</td>
+            <td>Camera Shot Type</td>
             <td>`+cameraShotType+`</td>
           </tr>
           <tr>
-            <td>Camera vertical angle</td>
+            <td>Camera Vertical Angle</td>
             <td>`+cameraVerticalAngle+`</td>
           </tr>
           <tr>
-            <td>Camera horizontal angle</td>
+            <td>Camera Horizontal Angle</td>
             <td>`+cameraHorizontalAngle+`</td>
           </tr>
           <tr>
-            <td>Camera axis of action</td>
+            <td>Camera Axis of Action</td>
             <td>`+cameraAxisOfAction+`</td>
           </tr>
           <tr>
-            <td>Camera elevation</td>
+            <td>Camera Elevation</td>
             <td>`+cameraElevation+`</td>
           </tr>
           <tr>
-            <td>Camera depth of focus</td>
+            <td>Camera Depth of Focus</td>
             <td>`+cameraDepthOfFocus+`</td>
           </tr>`;
         break;
         case 9: // Camera Elevation
           details +=
             `<tr>
-              <td>Camera elevation:</td>
+              <td>Camera Elevation:</td>
               <td>`+data.analysisMethod.cameraElevation.cameraElevationTranslations[0].name+`</td>
             </tr>`;
         break;
         case 10: // Camera Axis of Action
           details +=
             `<tr>
-              <td>Camera axis of action:</td>
+              <td>Camera Axis of Action:</td>
               <td>`+data.analysisMethod.cameraAxisOfAction.cameraAxisOfActionTranslations[0].name+`</td>
             </tr>`;
         break;
         case 11: // Camera Horizontal Angle
           details +=
             `<tr>
-              <td>Camera horizontal angle:</td>
+              <td>Camera Horizontal Angle:</td>
               <td>`+data.analysisMethod.cameraHorizontalAngle.cameraHorizontalAngleTranslations[0].name+`</td>
             </tr>`;
         break;
         case 12: // Camera Vertical Angle
           details +=
             `<tr>
-              <td>Camera vertical angle:</td>
+              <td>Camera Vertical Angle:</td>
               <td>`+data.analysisMethod.cameraVerticalAngle.cameraVerticalAngleTranslations[0].name+`</td>
             </tr>
             <tr>
@@ -2168,14 +2168,14 @@
         case 13: // Camera Shot Type
           details +=
             `<tr>
-              <td>Camera shot type:</td>
+              <td>Camera Shot Type:</td>
               <td>`+data.analysisMethod.cameraShotType.cameraShotTypeTranslations[0].type+`</td>
             </tr>`;
         break;
         case 14: // Camera Distance
           details +=
             `<tr>
-              <td>Camera distance:</td>
+              <td>Camera Distance:</td>
               <td>`+data.analysisMethod.cameraDistance.cameraDistanceTranslations[0].name+`</td>
             </tr>`;
         break;
@@ -2202,19 +2202,19 @@
           let endCameraDepthOfFocus = (data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDepthOfFocus == null) ? '' : data.analysisMethod.cameraMovement.startConceptCameraPositionAndPerspective.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type;
           details +=
                 `<tr>
-                  <td>Camera movement type</td>
+                  <td>Camera Movement Type</td>
                   <td>`+cameraMovementType+`</td>
                 </tr>
                 <tr>
-                  <td>Camera movement characteristic</td>
+                  <td>Camera Movement Characteristic</td>
                   <td>`+cameraMovementCharacteristic+`</td>
                 </tr>
                 <tr>
-                  <td>Camera handling</td>
+                  <td>Camera Handling</td>
                   <td>`+cameraHandling+`</td>
                 </tr>
                 <tr>
-                  <td>Concept direction</td>
+                  <td>Concept Direction</td>
                   <td>`+conceptDirection+`</td>
                 </tr>
               </table>
@@ -2228,31 +2228,31 @@
                   </tr>
                 </thead>
                 <tr>
-                  <td>Camera distance</td>
+                  <td>Camera Distance</td>
                   <td>`+startCameraDistance+`</td>
                 </tr>
                 <tr>
-                  <td>Camera shot type</td>
+                  <td>Camera Shot Type</td>
                   <td>`+startCameraShotType+`</td>
                 </tr>
                 <tr>
-                  <td>Camera vertical angle</td>
+                  <td>Camera Vertical Angle</td>
                   <td>`+startCameraVerticalAngle+`</td>
                 </tr>
                 <tr>
-                  <td>Camera horizontal angle</td>
+                  <td>Camera Horizontal Angle</td>
                   <td>`+startCameraHorizontalAngle+`</td>
                 </tr>
                 <tr>
-                  <td>Camera axis of action</td>
+                  <td>Camera Axis of Action</td>
                   <td>`+startCameraAxisOfAction+`</td>
                 </tr>
                 <tr>
-                  <td>Camera elevation</td>
+                  <td>Camera Elevation</td>
                   <td>`+startCameraElevation+`</td>
                 </tr>
                 <tr>
-                  <td>Camera depth of focus</td>
+                  <td>Camera Depth of Focus</td>
                   <td>`+startCameraDepthOfFocus+`</td>
                 </tr>
               </table>
@@ -2266,38 +2266,38 @@
                   </tr>
                 </thead>
                 <tr>
-                  <td>Camera distance</td>
+                  <td>Camera Distance</td>
                   <td>`+endCameraDistance+`</td>
                 </tr>
                 <tr>
-                  <td>Camera shot type</td>
+                  <td>Camera Shot Type</td>
                   <td>`+endCameraShotType+`</td>
                 </tr>
                 <tr>
-                  <td>Camera vertical angle</td>
+                  <td>Camera Vertical Angle</td>
                   <td>`+endCameraVerticalAngle+`</td>
                 </tr>
                 <tr>
-                  <td>Camera horizontal angle</td>
+                  <td>Camera Horizontal Angle</td>
                   <td>`+endCameraHorizontalAngle+`</td>
                 </tr>
                 <tr>
-                  <td>Camera axis of action</td>
+                  <td>Camera Axis of Action</td>
                   <td>`+endCameraAxisOfAction+`</td>
                 </tr>
                 <tr>
-                  <td>Camera elevation</td>
+                  <td>Camera Elevation</td>
                   <td>`+endCameraElevation+`</td>
                 </tr>
                 <tr>
-                  <td>Camera depth of focus</td>
+                  <td>Camera Depth of Focus</td>
                   <td>`+endCameraDepthOfFocus+`</td>
                 </tr>`;
         break;
         case 17: // Camera Handling
           details +=
             `<tr>
-              <td>Camera handling:</td>
+              <td>Camera Handling:</td>
               <td>`+data.analysisMethod.cameraHandling.cameraHandlingTranslations[0].type+`</td>
             </tr>`;
         break;
@@ -2470,7 +2470,7 @@
               <td>`+data.analysisMethod.analysisSpeech.volume+`</td>
             </tr>
             <tr>
-              <td>Speech tempo</td>
+              <td>Speech Tempo</td>
               <td>`+data.analysisMethod.analysisSpeech.tempo+`</td>
             </tr>
             <tr>
@@ -2531,7 +2531,7 @@
         case 30: // Take Length - Part of 34: Editing / Montage
         details +=
             `<tr>
-              <td>Take length</td>
+              <td>Take Length</td>
               <td>`+data.analysisMethod.takeLength.text+`</td>
             </tr>`;
         break;
@@ -2553,15 +2553,15 @@
           let imageCadreEditing = (data.analysisMethod.editingMontage.imageCadreEditing == null) ? '' : data.analysisMethod.editingMontage.imageCadreEditing.imageCadreEditingTranslations[0].name;
           details +=
           `<tr>
-            <td>Montage figure macro</td>
+            <td>Montage Figure Macro</td>
             <td>`+montageFigureMacro+`</td>
           </tr>
           <tr>
-            <td>Montage figure micro</td>
+            <td>Montage Figure Micro</td>
             <td>`+montageFigureMicro+`</td>
           </tr>
           <tr>
-            <td>Take junction</td>
+            <td>Take Junction</td>
             <td>`+takeJunction+`</td>
           </tr>
           <tr>
@@ -2569,23 +2569,23 @@
             <td>`+editingRhythm+`</td>
           </tr>
           <tr>
-            <td>Take length</td>
+            <td>Take Length</td>
             <td>`+takeLength+`</td>
           </tr>
           <tr>
-            <td>Take type progression</td>
+            <td>Take Type Progression</td>
             <td>`+takeTypeProgression+`</td>
           </tr>
           <tr>
-            <td>Camera shot type:</td>
+            <td>Camera Shot Type:</td>
             <td>`+cameraShotType+`</td>
           </tr>
           <tr>
-            <td>Playback speed</td>
+            <td>Playback Speed</td>
             <td>`+playbackSpeed+`</td>
           </tr>
           <tr>
-            <td>Image cadre editing</td>
+            <td>Image Cadre Editing</td>
             <td>`+imageCadreEditing+`</td>
           </tr>`;
         break;
@@ -2614,27 +2614,27 @@
           let lightingDuration = (data.analysisMethod.lighting.lightingDuration == null) ? '' : data.analysisMethod.lighting.lightingDuration.lightingDurationTranslations[0].name;
           details +=
           `<tr>
-            <td>Lighting type</td>
+            <td>Lighting Type</td>
             <td>`+lightingType+`</td>
           </tr>
           <tr>
-            <td>Lighting position</td>
+            <td>Lighting Position</td>
             <td>`+lightPosition+`</td>
           </tr>
           <tr>
-            <td>Light position horizontal angle</td>
+            <td>Light Position Horizontal Angle</td>
             <td>`+lightPositionAngleHorizontal+`</td>
           </tr>
           <tr>
-            <td>Light position vertical angle</td>
+            <td>Light Position Vertical Angle</td>
             <td>`+lightPositionAngleVertical+`</td>
           </tr>
           <tr>
-            <td>Light modifier</td>
+            <td>Light Modifier</td>
             <td>`+lightModifier+`</td>
           </tr>
           <tr>
-            <td>Lighting duration</td>
+            <td>Lighting Duration</td>
             <td>`+lightingDuration+`</td>
           </tr>`;
         break;
@@ -2693,7 +2693,7 @@
         case 9: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
           details +=
             `<tr>
-              <td>Camera depth of focus:</td>
+              <td>Camera depth of Focus</td>
               <td>`+data.analysisMethod.cameraDepthOfFocus.cameraDepthOfFocusTranslations[0].type+`</td>
             </tr>`;
         break;
