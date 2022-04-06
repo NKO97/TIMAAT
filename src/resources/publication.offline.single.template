@@ -825,7 +825,7 @@ body {
 	height: 100%;
 	right: 0;
 	left: 0;
-	
+
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 }
@@ -910,7 +910,7 @@ body {
 	background-color: rgba(0,0,0,0.4);
 	transition: opacity 0.5s;
 	transition: all ease 0.5s;
-	
+
 	text-shadow: 0 0 2px rgba(0,0,0,0.5);
 	color: white;
 }
@@ -922,8 +922,8 @@ body {
 	opacity: 0.8;
 	top: -1.5em;
 	font-size: 70%;
-	width: 60px;	
-	z-index: 9000;	
+	width: 60px;
+	z-index: 9000;
 }
 #timaat-video-controls .time-info.show {
 	display: block !important;
@@ -989,7 +989,7 @@ body {
 
 #timaat-video-controls .video-volume-control {
   width: 100px;
-}	
+}
 
 #timaat-video-controls:hover {
 }
@@ -2814,7 +2814,7 @@ class TIMAATPublication {
     </div>
     <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
       <div class="alert alert-dark mb-0 text-center">
-        <span class="badge">Metadaten</span>
+        <span class="badge">Metadata</span>
       </div>
       <a
         href="javascript:void(0)"
@@ -2850,11 +2850,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-draw-polygon"></i> Titel
+                <i class="fas fa-draw-polygon"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -2869,11 +2869,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -2888,11 +2888,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -2911,7 +2911,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -2930,7 +2930,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -2949,7 +2949,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -2957,7 +2957,7 @@ class TIMAATPublication {
             <!--
 						<div class="metadata-field annotation-places">
 						<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
-						<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
+						<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- not specified -</div><span class="contents"></span></div>
 						</div>
 						-->
           </div>
@@ -2987,11 +2987,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-indent"></i> Titel
+                <i class="fas fa-indent"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3006,11 +3006,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-quote-right"></i> Kurzbeschreibung
+                <i class="fas fa-quote-right"></i> Short description
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3025,11 +3025,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3044,11 +3044,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3066,7 +3066,7 @@ class TIMAATPublication {
                 pr-2
               "
             >
-              Analyse
+              Analysis
             </div>
           </div>
           <div class="metadata-section list-metadata">
@@ -3080,11 +3080,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-list-alt"></i> Titel
+                <i class="fas fa-list-alt"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3099,11 +3099,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3118,11 +3118,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien-Sets
+                <i class="fas fa-tags"></i> Category sets
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3141,7 +3141,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3173,11 +3173,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-video"></i> Titel
+                <i class="fas fa-video"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3196,7 +3196,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3215,7 +3215,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3230,11 +3230,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-external-link-alt"></i> Quellen
+                <i class="fas fa-external-link-alt"></i> Sources
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3253,7 +3253,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3268,11 +3268,11 @@ class TIMAATPublication {
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3291,7 +3291,7 @@ class TIMAATPublication {
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -3323,7 +3323,7 @@ class TIMAATPublication {
                 >
                 <hr class="mt-0 mb-2" />
                 <div class="font-weight-bold">
-                  Wiedergabe anhalten bei Annotationen vom Typ:
+                  Stop playback for annotations of type:
                 </div>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
@@ -3335,7 +3335,7 @@ class TIMAATPublication {
                     </div>
                   </div>
                   <div class="form-control">
-                    <i class="fas fa-image"></i> ganzes Bild
+                    <i class="fas fa-image"></i> Full screen
                   </div>
                   <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -3357,11 +3357,11 @@ class TIMAATPublication {
                     </div>
                   </div>
                   <div class="form-control">
-                    <i class="fas fa-headphones"></i> Audiospur
+                    <i class="fas fa-headphones"></i> Audio track
                   </div>
                 </div>
                 <div class="font-weight-bold">
-                  Wiedergabe anhalten bei:
+                  Stop playback for:
                 </div>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
@@ -3384,14 +3384,14 @@ class TIMAATPublication {
           <div class="right-header">
             <button
               id="timaat-toggle-fullscreen"
-              title="Vollbild-Modus"
+              title="Fullscreen mode"
               type="button"
               class="mr-2 btn btn-sm btn-outline-dark"
             >
               <i class="fas fa-expand-alt"></i>
             </button>
             <button
-              title="zum Video"
+              title="go to video"
               type="button"
               onclick="javascript:$('#timaat-main').animate({scrollTop:60}, 100);"
               class="btn btn-sm btn-outline-dark"
@@ -3415,7 +3415,7 @@ class TIMAATPublication {
             <!-- Annotation List Control -->
             <div class="btn-group btn-group-sm ml-1 mr-2">
               <button
-                title="Annotationsliste [a]"
+                title="Annotation list [a]"
                 class="btn btn-outline-secondary text-white toggle-left-sidebar"
               >
                 <i class="fas fa-draw-polygon"></i>
@@ -3423,13 +3423,13 @@ class TIMAATPublication {
             </div>
             <div class="btn-group btn-group-sm playback-controls">
               <button
-                title="Ein Bild zurück [&larr;]"
+                title="Previous frame [&larr;]"
                 class="stepBackButton btn btn-outline-secondary text-white"
               >
                 <i class="fas fa-step-backward"></i>
               </button>
               <button
-                title="Abspielen / Pause [Leertaste]"
+                title="Play/Pause [space-bar]"
                 class="
                   toggle-play-pause
                   play
@@ -3441,7 +3441,7 @@ class TIMAATPublication {
                 ><i class="pause-icon icon fa fa-pause fa-fw"></i>
               </button>
               <button
-                title="Ein Bild vorwärts [&rarr;]"
+                title="Next frame [&rarr;]"
                 class="stepForwardButton btn btn-outline-secondary text-white"
               >
                 <i class="fas fa-step-forward"></i>
@@ -3450,7 +3450,7 @@ class TIMAATPublication {
             <!-- Playback Speed Control -->
             <div class="btn-group btn-group-sm">
               <button
-                title="Abspielgeschwindigkeit [S]"
+                title="Playback speed [s]"
                 class="btn text-white video-speed"
               >
                 <span class="video-speed-info">1&times;</span>
@@ -3459,7 +3459,7 @@ class TIMAATPublication {
             <!-- Volume Control -->
             <div
               class="video-volume-control btn-group btn-group-sm"
-              title="Lautstärke einstellen [M = Stumm an/aus]"
+              title="Set volume  [m = toggle mute]"
             >
               <button class="btn toggle-volume on text-white">
                 <i class="fas fa-volume-up icon volume-on"></i>
@@ -3479,7 +3479,7 @@ class TIMAATPublication {
             <!-- Metadata Info Control -->
             <div class="btn-group btn-group-sm mr-1">
               <button
-                title="Metadaten anzeigen/ausblenden [i]"
+                title="Toggle metadata display [i]"
                 class="
                   btn btn-outline-secondary
                   text-white

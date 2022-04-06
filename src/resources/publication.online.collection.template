@@ -85,7 +85,7 @@
   <body class="bg-light" onload="setupPublication()">
     <div id="timaat-left-sidebar" class="sidebar collapsed">
       <div class="alert alert-dark mb-0">
-        <span class="badge">Analyseliste</span>
+        <span class="badge">Analysisliste</span>
       </div>
       <!-- <a
         href="javascript:void(0)"
@@ -102,7 +102,7 @@
     </div>
     <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
       <div class="alert alert-dark mb-0 text-center">
-        <span class="badge">Metadaten</span>
+        <span class="badge">Metadata</span>
       </div>
       <a
         href="javascript:void(0)"
@@ -138,11 +138,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-draw-polygon"></i> Titel
+                <i class="fas fa-draw-polygon"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -157,11 +157,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -176,11 +176,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -199,7 +199,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -218,7 +218,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -237,7 +237,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -245,7 +245,7 @@
             <!--
 			<div class="metadata-field annotation-places">
 			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
-			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
+			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- not specified -</div><span class="contents"></span></div>
 			</div>
 			-->
           </div>
@@ -275,11 +275,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-video"></i> Titel
+                <i class="fas fa-video"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -298,7 +298,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -317,7 +317,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -332,11 +332,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-external-link-alt"></i> Quellen
+                <i class="fas fa-external-link-alt"></i> Sources
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -355,7 +355,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -370,11 +370,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -393,7 +393,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -425,7 +425,7 @@
                 >
                 <hr class="mt-0 mb-2" />
                 <div class="font-weight-bold">
-                  Wiedergabe anhalten bei Annotationen vom Typ:
+                  Stop playback for annotations of type:
                 </div>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
@@ -437,7 +437,7 @@
                     </div>
                   </div>
                   <div class="form-control">
-                    <i class="fas fa-image"></i> ganzes Bild
+                    <i class="fas fa-image"></i> Full screen
                   </div>
                   <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -459,11 +459,11 @@
                     </div>
                   </div>
                   <div class="form-control">
-                    <i class="fas fa-headphones"></i> Audiospur
+                    <i class="fas fa-headphones"></i> Audio track
                   </div>
                 </div>
                 <div class="font-weight-bold">
-                  Wiedergabe anhalten bei:
+                  Stop playback for:
                 </div>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
@@ -486,7 +486,7 @@
           <div class="right-header">
             <button
               id="timaat-toggle-fullscreen"
-              title="Vollbild-Modus"
+              title="Fullscreen mode"
               type="button"
               class="mr-2 btn btn-sm btn-outline-dark"
             >

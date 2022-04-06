@@ -58,7 +58,7 @@ public class EndpointPublication {
 	@Context
 	ServletContext servletContext;
 
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -67,7 +67,7 @@ public class EndpointPublication {
 		// System.out.println("getPublication");
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
-		
+
 		// find publication
 		Publication pub = null;
 		try {
@@ -82,7 +82,7 @@ public class EndpointPublication {
 		if ( pub.getOwner().getId() != userID )
 			return Response.status(Status.FORBIDDEN).build();
 
-		
+
 		return Response.ok().entity(pub).build();
 	}
 
@@ -104,8 +104,8 @@ public class EndpointPublication {
 		UserAccount userAccount = em.find(UserAccount.class, userId);
 		containerRequestContext.setProperty("TIMAAT.userID", userAccount.getId());
 		containerRequestContext.setProperty("TIMAAT.userName", userAccount.getAccountName());
-		containerRequestContext.setProperty("TIMAAT.user", userAccount);		
-		
+		containerRequestContext.setProperty("TIMAAT.user", userAccount);
+
 		MediumAnalysisList mediumAnalysisList = em.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) return Response.status(Status.NOT_FOUND).build();
 		Medium medium = mediumAnalysisList.getMedium();
@@ -113,11 +113,11 @@ public class EndpointPublication {
 
 		String content = "";
 		try {
-			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.template").toURI())));
+			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.offline.single.template").toURI())));
 		} catch (IOException | URISyntaxException e1) {
 			return Response.serverError().build();
 		}
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		PublicationSettings settings = new PublicationSettings();
 		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false).setOffline(true);
@@ -126,22 +126,22 @@ public class EndpointPublication {
 		try {
 			serMedium = mapper.writeValueAsString(medium);
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			
+
 			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 			content = temp[0]+serMedium+temp[1];
-			
+
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
 
 		String serverMediumAnalysisList = "";
 		try {
 			serverMediumAnalysisList = mapper.writeValueAsString(mediumAnalysisList);
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			
+
 			String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
 			content = temp[0]+serverMediumAnalysisList+temp[1];
-			
+
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
-		
+
 		return Response.ok().header("Content-Disposition", "attachment; filename=\""+mediumAnalysisList.getMediumAnalysisListTranslations().get(0).getTitle()+"-player.html\"").entity(content).build();
 	}
 
@@ -152,7 +152,7 @@ public class EndpointPublication {
 	public Response getPublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId) {
 		// System.out.println("getPublicationByMediumAnalysisList");
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		
+
 		// find publication
 		Query countQuery = em.createQuery("SELECT COUNT(p) FROM Publication p WHERE p.mediaCollectionAnalysisList = NULL AND p.mediumAnalysisList.id = :mediumAnalysisListId")
 												 .setParameter("mediumAnalysisListId", mediumAnalysisListId);
@@ -188,9 +188,9 @@ public class EndpointPublication {
 																												String jsonData) {
 		// System.out.println("createPublicationByMediumAnalysisList");
 
-		
+
 		EntityManager em = TIMAATApp.emf.createEntityManager();
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		Publication publication = null;
 		try {
@@ -230,7 +230,7 @@ public class EndpointPublication {
 		entityTransaction.commit();
 		em.refresh(publication);
 		em.refresh(publication.getMediumAnalysisList());
-		
+
 		return Response.ok().entity(publication).build();
 	}
 
@@ -249,7 +249,7 @@ public class EndpointPublication {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		Publication updatedPublication = null;
 		// int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
-		
+
 		MediumAnalysisList mediumAnalysisList = em.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if (mediumAnalysisList == null) return Response.status(Status.NOT_FOUND).build();
 		Publication publication = mediumAnalysisList.getPublication();
@@ -261,7 +261,7 @@ public class EndpointPublication {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		
+
 		publication.setTitle(updatedPublication.getTitle());
 		publication.setCredentials(updatedPublication.getCredentials());
 		publication.setSettings(updatedPublication.getSettings());
@@ -275,7 +275,7 @@ public class EndpointPublication {
 		em.refresh(publication);
 		em.refresh(publication.getOwner());
 		em.refresh(publication.getMediumAnalysisList());
-		
+
 		return Response.ok().entity(publication).build();
 	}
 
@@ -288,7 +288,7 @@ public class EndpointPublication {
 	public Response deletePublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId) {
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		int userID = (int) containerRequestContext.getProperty("TIMAAT.userID");
-		
+
 		// find publication
 		Publication pub = null;
 		try {

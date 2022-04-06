@@ -17,7 +17,7 @@
       {{CSS-BOOTSTRAP}}
     </style>
 
-    <!-- Custom Fonts -->	
+    <!-- Custom Fonts -->
     <style type="text/css">
       {{CSS-FONTAWESOMEFONTS}}
     </style>
@@ -28,12 +28,12 @@
     </style>
 
 	<!-- ***************************************************************************************************************** -->
-	
+
 	<!-- JQuery -->
     <script type="text/javascript">
 			{{JS-JQUERY}}
 		</script>
-		
+
 	<!-- JQuery UI -->
     <script type="text/javascript">
 			{{JS-JQUERYUI}}
@@ -102,7 +102,7 @@
     </div>
     <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
       <div class="alert alert-dark mb-0 text-center">
-        <span class="badge">Metadaten</span>
+        <span class="badge">Metadata</span>
       </div>
       <a
         href="javascript:void(0)"
@@ -138,11 +138,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-draw-polygon"></i> Titel
+                <i class="fas fa-draw-polygon"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -157,11 +157,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -176,11 +176,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -199,7 +199,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -218,7 +218,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -237,7 +237,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -245,7 +245,7 @@
             <!--
 						<div class="metadata-field annotation-places">
 						<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
-						<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- keine Angabe -</div><span class="contents"></span></div>
+						<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- not specified -</div><span class="contents"></span></div>
 						</div>
 						-->
           </div>
@@ -275,11 +275,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-indent"></i> Titel
+                <i class="fas fa-indent"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -294,11 +294,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-quote-right"></i> Kurzbeschreibung
+                <i class="fas fa-quote-right"></i> Short description
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -313,11 +313,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -332,11 +332,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -354,7 +354,7 @@
                 pr-2
               "
             >
-              Analyse
+              Analysis
             </div>
           </div>
           <div class="metadata-section list-metadata">
@@ -368,11 +368,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-list-alt"></i> Titel
+                <i class="fas fa-list-alt"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -387,11 +387,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-comment"></i> Anmerkung
+                <i class="fas fa-comment"></i> Comment
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -406,11 +406,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien-Sets
+                <i class="fas fa-tags"></i> Category sets
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -429,7 +429,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -461,11 +461,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-video"></i> Titel
+                <i class="fas fa-video"></i> Title
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -484,7 +484,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -503,7 +503,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -518,11 +518,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-external-link-alt"></i> Quellen
+                <i class="fas fa-external-link-alt"></i> Sources
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -541,7 +541,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -556,11 +556,11 @@
                   pr-2
                 "
               >
-                <i class="fas fa-tags"></i> Kategorien
+                <i class="fas fa-tags"></i> Categories
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -579,7 +579,7 @@
               </div>
               <div class="metadata-value mb-2 pl-2 pr-2">
                 <div class="empty-placeholder text-center text-muted">
-                  - keine Angabe -
+                  - not specified -
                 </div>
                 <span class="contents"></span>
               </div>
@@ -611,7 +611,7 @@
                 >
                 <hr class="mt-0 mb-2" />
                 <div class="font-weight-bold">
-                  Wiedergabe anhalten bei Annotationen vom Typ:
+                  Stop playback for annotations of type:
                 </div>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
@@ -623,7 +623,7 @@
                     </div>
                   </div>
                   <div class="form-control">
-                    <i class="fas fa-image"></i> ganzes Bild
+                    <i class="fas fa-image"></i> Full screen
                   </div>
                   <div class="input-group-prepend">
                     <div class="input-group-text">
@@ -645,11 +645,11 @@
                     </div>
                   </div>
                   <div class="form-control">
-                    <i class="fas fa-headphones"></i> Audiospur
+                    <i class="fas fa-headphones"></i> Audio track
                   </div>
                 </div>
                 <div class="font-weight-bold">
-                  Wiedergabe anhalten bei:
+                  Stop playback for:
                 </div>
                 <div class="input-group input-group-sm mb-3">
                   <div class="input-group-prepend">
@@ -672,14 +672,14 @@
           <div class="right-header">
             <button
               id="timaat-toggle-fullscreen"
-              title="Vollbild-Modus"
+              title="Fullscreen mode"
               type="button"
               class="mr-2 btn btn-sm btn-outline-dark"
             >
               <i class="fas fa-expand-alt"></i>
             </button>
             <button
-              title="zum Video"
+              title="go to video"
               type="button"
               onclick="javascript:$('#timaat-main').animate({scrollTop:60}, 100);"
               class="btn btn-sm btn-outline-dark"
@@ -703,7 +703,7 @@
             <!-- Annotation List Control -->
             <div class="btn-group btn-group-sm ml-1 mr-2">
               <button
-                title="Annotationsliste [a]"
+                title="Annotation list [a]"
                 class="btn btn-outline-secondary text-white toggle-left-sidebar"
               >
                 <i class="fas fa-draw-polygon"></i>
@@ -711,13 +711,13 @@
             </div>
             <div class="btn-group btn-group-sm playback-controls">
               <button
-                title="Ein Bild zurück [&larr;]"
+                title="Previous frame [&larr;]"
                 class="stepBackButton btn btn-outline-secondary text-white"
               >
                 <i class="fas fa-step-backward"></i>
               </button>
               <button
-                title="Abspielen / Pause [Leertaste]"
+                title="Play/Pause [space-bar]"
                 class="
                   toggle-play-pause
                   play
@@ -729,7 +729,7 @@
                 ><i class="pause-icon icon fa fa-pause fa-fw"></i>
               </button>
               <button
-                title="Ein Bild vorwärts [&rarr;]"
+                title="Next frame [&rarr;]"
                 class="stepForwardButton btn btn-outline-secondary text-white"
               >
                 <i class="fas fa-step-forward"></i>
@@ -738,7 +738,7 @@
             <!-- Playback Speed Control -->
             <div class="btn-group btn-group-sm">
               <button
-                title="Abspielgeschwindigkeit [S]"
+                title="Playback speed [s]"
                 class="btn text-white video-speed"
               >
                 <span class="video-speed-info">1&times;</span>
@@ -747,7 +747,7 @@
             <!-- Volume Control -->
             <div
               class="video-volume-control btn-group btn-group-sm"
-              title="Lautstärke einstellen [M = Stumm an/aus]"
+              title="Set volume  [m = toggle mute]"
             >
               <button class="btn toggle-volume on text-white">
                 <i class="fas fa-volume-up icon volume-on"></i>
@@ -767,7 +767,7 @@
             <!-- Metadata Info Control -->
             <div class="btn-group btn-group-sm mr-1">
               <button
-                title="Metadaten anzeigen/ausblenden [i]"
+                title="Toggle metadata display [i]"
                 class="
                   btn btn-outline-secondary
                   text-white

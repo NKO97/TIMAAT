@@ -50,8 +50,8 @@ public class PublicationServlet {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-	ServletContext servletContext;	
-	
+	ServletContext servletContext;
+
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response serviceInfo() {
@@ -83,7 +83,7 @@ public class PublicationServlet {
 			try {
 				content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.online.collection.template").toURI())));
 			} catch (IOException | URISyntaxException e1) {return Response.serverError().build();}
-			
+
 			ObjectMapper mapper = new ObjectMapper();
 			PublicationSettings settings = new PublicationSettings();
 			settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false);
@@ -97,32 +97,32 @@ public class PublicationServlet {
 				}
 				serCol = mapper.writeValueAsString(pub.getMediaCollectionAnalysisList().getMediaCollection());
 				content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-				
+
 				String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 				content = temp[0]+serCol+temp[1];
-				
+
 			} catch (JsonProcessingException e) {return Response.serverError().build();}
 
 			String serverMediumAnalysisList = "";
 			try {
 				serverMediumAnalysisList = mapper.writeValueAsString(pub.getMediumAnalysisList());
 				content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-				
+
 				String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
 				content = temp[0]+serverMediumAnalysisList+temp[1];
-				
+
 			} catch (JsonProcessingException e) {return Response.serverError().build();}
-			
+
 			return Response.ok().entity(content).build();
 		}
-		
+
 		// serve single video template
 		// TODO include collection info, if applicable
 		String content = "";
 		try {
 			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.online.single.template").toURI())));
 		} catch (IOException | URISyntaxException e1) {return Response.serverError().build();}
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		PublicationSettings settings = new PublicationSettings();
 		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false);
@@ -131,22 +131,22 @@ public class PublicationServlet {
 		try {
 			serMedium = mapper.writeValueAsString(pub.getMediumAnalysisList().getMedium());
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			
+
 			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 			content = temp[0]+serMedium+temp[1];
-			
+
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
 
 		String serverMediumAnalysisList = "";
 		try {
 			serverMediumAnalysisList = mapper.writeValueAsString(pub.getMediumAnalysisList());
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			
+
 			String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
 			content = temp[0]+serverMediumAnalysisList+temp[1];
-			
+
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
-		
+
 		return Response.ok().entity(content).build();
 	}
 
@@ -166,7 +166,7 @@ public class PublicationServlet {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// find medium
 		Medium medium = null;
 		if ( pub.getMediaCollectionAnalysisList() != null ) {
@@ -175,7 +175,7 @@ public class PublicationServlet {
 		} else {
 			if ( pub.getMediumAnalysisList().getMedium().getId() == id ) medium = pub.getMediumAnalysisList().getMedium();
 		}
-		
+
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// serve single video template
@@ -184,7 +184,7 @@ public class PublicationServlet {
 		try {
 			content = new String(Files.readAllBytes(Paths.get(TIMAATApp.class.getClassLoader().getResource("resources/publication.online.single.template").toURI())));
 		} catch (IOException | URISyntaxException e1) {return Response.serverError().build();}
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		PublicationSettings settings = new PublicationSettings();
 		settings.setDefList(0).setStopImage(false).setStopPolygon(false).setStopAudio(false);
@@ -193,22 +193,22 @@ public class PublicationServlet {
 		try {
 			serMedium = mapper.writeValueAsString(medium);
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			
+
 			String[] temp = content.split("\\{\\{TIMAAT-DATA\\}\\}", 2);
 			content = temp[0]+serMedium+temp[1];
-			
+
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
 
 		String serverMediumAnalysisList = "";
 		try {
 			serverMediumAnalysisList = mapper.writeValueAsString(pub.getMediumAnalysisList());
 			content = content.replaceFirst("\\{\\{TIMAAT-SETTINGS\\}\\}", mapper.writeValueAsString(settings));
-			
+
 			String[] temp = content.split("\\{\\{TIMAAT-ANALYSIS\\}\\}", 2);
 			content = temp[0]+serverMediumAnalysisList+temp[1];
-			
+
 		} catch (JsonProcessingException e) {return Response.serverError().build();}
-		
+
 		return Response.ok().entity(content).build();
 	}
 
@@ -236,7 +236,7 @@ public class PublicationServlet {
 	public Response getVideoFileInfo(
 			@PathParam("slug") String slug,
 			@QueryParam("id") int itemID) {
-		
+
 		EntityManager em = TIMAATApp.emf.createEntityManager();
 		// find publication
 		Publication pub;
@@ -253,12 +253,12 @@ public class PublicationServlet {
 		// find medium
 		Medium medium = null;
 		if ( pub.getMediumAnalysisList().getMedium() != null && pub.getMediumAnalysisList().getMedium().getId() == itemID ) medium = pub.getMediumAnalysisList().getMedium();
-		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null ) 
+		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null )
 			for ( MediaCollectionHasMedium colMed : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
-		if ( medium.getMediumVideo() != null) {		
+		if ( medium.getMediumVideo() != null) {
 			File file = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 													 + "medium/video/" + itemID + "/" + itemID + "-video.mp4");
 			rb.header("Content-Type", "video/mp4");
@@ -300,11 +300,11 @@ public class PublicationServlet {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// find medium
 		Medium medium = null;
 		if ( pub.getMediumAnalysisList() != null && pub.getMediumAnalysisList().getMedium() != null && pub.getMediumAnalysisList().getMedium().getId() == itemID ) medium = pub.getMediumAnalysisList().getMedium();
-		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null ) 
+		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null )
 			for ( MediaCollectionHasMedium colMed : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
@@ -329,7 +329,7 @@ public class PublicationServlet {
 				+ "medium/audio/" + itemID + "/" + itemID + "-audio.mp3", headers, itemID+".mp3");
 		} else return Response.status(Status.NOT_FOUND).build();
 	}
-	
+
 	@GET
 	@Path("/{slug}/item-{id}/preview.jpg")
 	@Produces("image/jpg")
@@ -345,11 +345,11 @@ public class PublicationServlet {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 		if ( pub == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// find medium
 		Medium medium = null;
 		if ( pub.getMediumAnalysisList() != null && pub.getMediumAnalysisList().getMedium() != null && pub.getMediumAnalysisList().getMedium().getId() == itemID ) medium = pub.getMediumAnalysisList().getMedium();
-		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null ) 
+		else if ( pub.getMediaCollectionAnalysisList().getMediaCollection() != null )
 			for ( MediaCollectionHasMedium colMed : pub.getMediaCollectionAnalysisList().getMediaCollection().getMediaCollectionHasMediums() )
 				if ( colMed.getMedium().getId() == itemID ) medium = colMed.getMedium();
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
@@ -357,16 +357,16 @@ public class PublicationServlet {
 		File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + medium.getId() + "/" + medium.getId() + "-thumb.png");
 		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
-		    	
+
 		return Response.ok().entity(thumbnail).build();
 	}
-	
-	private Response downloadFile(String fileName, HttpHeaders headers, String mimeType) {     
+
+	private Response downloadFile(String fileName, HttpHeaders headers, String mimeType) {
 		Response response = null;
 
-		// Retrieve the file 
+		// Retrieve the file
 		File file = new File(fileName);
-		
+
 		if (file.exists()) {
 			ResponseBuilder builder = Response.ok();
 			builder.header("Accept-Ranges", "bytes");
@@ -404,7 +404,7 @@ public class PublicationServlet {
 				builder.header("Pragma", "no-cache"); // HTTP 1.0
 				builder.header("Expires", "0"); // Proxies
  */
-			} 
+			}
 
 			RangedStreamingOutput stream = new RangedStreamingOutput(from, to, file);
 			builder.entity(stream);
@@ -420,6 +420,6 @@ public class PublicationServlet {
 	}
 
 
-	
-	
+
+
 }

@@ -90,7 +90,7 @@ body {
 	height: 100%;
 	right: 0;
 	left: 0;
-	
+
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 }
@@ -175,7 +175,7 @@ body {
 	background-color: rgba(0,0,0,0.4);
 	transition: opacity 0.5s;
 	transition: all ease 0.5s;
-	
+
 	text-shadow: 0 0 2px rgba(0,0,0,0.5);
 	color: white;
 }
@@ -187,8 +187,8 @@ body {
 	opacity: 0.8;
 	top: -1.5em;
 	font-size: 70%;
-	width: 60px;	
-	z-index: 9000;	
+	width: 60px;
+	z-index: 9000;
 }
 #timaat-video-controls .time-info.show {
 	display: block !important;
@@ -254,7 +254,7 @@ body {
 
 #timaat-video-controls .video-volume-control {
   width: 100px;
-}	
+}
 
 #timaat-video-controls:hover {
 }

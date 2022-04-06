@@ -9,21 +9,21 @@ import java.util.regex.Matcher;
 public class TemplateSerializer {
 
 	public static void main(String[] args) {
-		
+
 		String dir = "";
 		if ( args.length < 1 ) {
-			System.out.println("Usage: TemplateSerializer <TIMAAT App Directory>... Assuming current directory");			
+			System.out.println("Usage: TemplateSerializer <TIMAAT App Directory>... Assuming current directory");
 		} else dir = args[0];
-		
-		System.out.print("Serializing Offline Publication Templates (publication.template)...");
+
+		System.out.print("Serializing Offline Publication Templates (publication.offline.single.template)...");
 		String content = "";
 		String cssBootstrap = "", cssFAFonts = "", cssLeaflet = "", jsJQuery = "", jsJQueryUI = "", jsBootstrap = "", jsLeaflet = "";
 		String cssTIMAAT = "", jsTIMAAT = "";
-		
+
 		// load js + css libs and template source file
 		try {
 			content = new String(Files.readAllBytes(Paths.get(dir+"src/resources/publication.template.src")));
-			
+
 			cssBootstrap = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/bootstrap/css/bootstrap.min.css")));
 			cssFAFonts = new String(Files.readAllBytes(Paths.get(dir+"src/resources/template-includes/fontawesome-fonts.css")));
 			cssLeaflet = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/leaflet/leaflet.css")));
@@ -33,13 +33,13 @@ public class TemplateSerializer {
 			jsLeaflet = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/leaflet/leaflet.js")));
 			cssTIMAAT = new String(Files.readAllBytes(Paths.get(dir+"WebContent/css/publication.css")));
 			jsTIMAAT = new String(Files.readAllBytes(Paths.get(dir+"WebContent/js/publication/TIMAATPublication.js")));
-			
+
 		} catch (IOException e1) {
 			System.out.println("FILE ERROR");
 			System.out.println(e1);
 			System.exit(1);
 		}
-		
+
 		// inject libs
 		content = content.replaceFirst("\\{\\{CSS-BOOTSTRAP\\}\\}", Matcher.quoteReplacement(cssBootstrap));
 		content = content.replaceFirst("\\{\\{CSS-FONTAWESOMEFONTS\\}\\}", Matcher.quoteReplacement(cssFAFonts));
@@ -51,11 +51,11 @@ public class TemplateSerializer {
 		// inject publication module
 		content = content.replaceFirst("\\{\\{TIMAAT-PUB-CSS\\}\\}", Matcher.quoteReplacement(cssTIMAAT));
 		content = content.replaceFirst("\\{\\{TIMAAT-PUB-JS\\}\\}", Matcher.quoteReplacement(jsTIMAAT));
-		
-		
+
+
 		// write serialized template file
 		try {
-			Files.write(Paths.get(dir+"src/resources/publication.template"), content.getBytes());
+			Files.write(Paths.get(dir+"src/resources/publication.offline.single.template"), content.getBytes());
 		} catch (IOException e) {
 			System.out.println("FILE WRITE ERROR");
 			System.out.println(e);
