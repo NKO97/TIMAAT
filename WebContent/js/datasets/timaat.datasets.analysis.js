@@ -704,7 +704,7 @@
         case 6: // Stanzel Narrative Situations //* won't be implemented
         break;
         case 7: // Color Temperature
-          $('#analysisAddLabel').text('Choose color temperature');
+          $('#analysisAddLabel').text('Choose Color Temperature');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
@@ -2091,7 +2091,7 @@
         case 7: // Color Temperature
           details +=
             `<tr>
-              <td>Color Temperature:</td>
+              <td>Color Temperature</td>
               <td>`+data.analysisMethod.colorTemperature.colorTemperatureTranslations[0].name+`</td>
             </tr>`;
         break;
