@@ -1625,13 +1625,29 @@
                       </div>
                       <button title="track playback bar in timeline on/off" class="btn btn-sm btn-outline-secondary small timeline-track"><i class="fas fa-map-pin fa-fw"></i></button>
                     </div>
-                    <div id="timeline-layer-buttons" class="btn-group btn-group-sm mr-2" role="group" aria-label="Button group">
-                      <button type="button" class="btn btn-sm btn-primary timaat-button-visual-layer">
-                        <i class="fas fa-video"></i> Video
-                      </button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary timaat-button-audio-layer">
-                        <i class="fas fa-headphones"></i> Audio
-                      </button>
+                    <div id="timeline-layer-checkboxes" class="input-group-sm mb-1 form-inline">
+                      <label class="sr-only">Timeline layer(s):</label>
+                      <div class="input-group-prepend mr-sm-4">
+                        <div class="input-group-text">
+                          Annotation layer(s)
+                        </div>
+                      </div>
+                      <div class="vertical-aligned">
+                        <div class="form-check mr-sm-3">
+                          <input class="form-check-input" type="checkbox" id="timaat-timeline-visual-layer">
+                          <label class="form-check-label" for="timaat-timeline-visual-layer">
+                            <i class="fas fa-video fa-fw mr-1"></i> Visual
+                          </label>
+                        </div>
+                      </div>
+                      <div class="vertical-aligned">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="timaat-timeline-audio-layer">
+                          <label class="form-check-label" for="timaat-timeline-audio-layer">
+                            <i class="fas fa-headphones fa-fw mr-1"></i> Audio
+                          </label>
+                        </div>
+                      </div>
                     </div>
                     <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Button group">
                       <div class="dropdown">

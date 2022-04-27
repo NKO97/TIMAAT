@@ -583,7 +583,7 @@
 					TIMAAT.UI.showComponent('videoplayer');
 					// setup video in player
 					await TIMAAT.VideoPlayer.setupMedium(medium);
-					$('.timaat-button-audio-layer').click();
+					$('#timaat-timeline-audio-layer').prop('checked', true);
 					// load video annotations from server
 					let analysisLists = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.id);
 					await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);

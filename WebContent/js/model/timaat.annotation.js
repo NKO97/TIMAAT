@@ -122,9 +122,9 @@
 				else if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 				else TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 
-				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() ){
+				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() && $('#timaat-timeline-visual-layer').is(':checked') ){
 					$('#timaat-timeline-keyframe-pane').show();
-				}
+				} // else $('#timaat-timeline-keyframe-pane').hide();
 				if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
 					TIMAAT.VideoPlayer.inspector.ui.addAnimButton.prop('disabled', false);
 			 }

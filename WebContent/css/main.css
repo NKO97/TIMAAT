@@ -583,20 +583,9 @@ a.dropdown-item {
 #timaat-timeline-marker-pane .timaat-timeline-marker-anim {
 	background-color: rgba(0, 0, 0, 0.3);
 }
-#timaat-timeline-marker-pane.timaat-timeline-visual-layer .timaat-timeline-marker-visual {
+#timaat-timeline-visual-layer #timaat-timeline-marker-visual {
 	display: block;
 }
-
-/*
-#timaat-timeline-marker-pane.timaat-timeline-audio-layer {
-	padding-bottom: 85px;
-}
-
-#timaat-timeline-marker-pane.timaat-timeline-audio-layer .timaat-timeline-marker-audio {
-	display: block;
-	margin-top: -58px;
-}
-*/
 
 .timaat-audio-layer {
 	transition: height 0.5s;
@@ -607,11 +596,7 @@ a.dropdown-item {
 	border: 1px solid gray;
 	border-top: none;
 }
-/*
-#timaat-timeline-marker-pane.timaat-timeline-audio-layer .timaat-audio-layer {
-	height: 50px;
-}
-*/
+
 .timaat-audio-layer .timaat-audio-baseline {
 	background: linear-gradient(180deg, rgba(0,0,0,0) calc(50% - 0.5px), #395C8D calc(50%), rgba(0,0,0,0) calc(50% + 0.5px) );
 	width: 100%;
@@ -1156,8 +1141,11 @@ Tooltip container
 }
 .timeline-section {
 	position: relative;
-	height: 70px;
 	transition: height 0.2s;
+}
+
+.timeline-section-annotation {
+	min-height: 50px;
 }
 .timeline-section .timeline-section-header .timeline-section-widgets {
 	cursor: pointer;
