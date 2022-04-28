@@ -462,7 +462,7 @@
 										</button>
 									</div>
 								</div>
-								<button title="new keyframe at this timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">Neu&nbsp;<i class="fas fa-plus-circle fa-fw"></i></button>
+								<button title="new keyframe at this timecode" id="timaat-videoplayer-keyframe-add-button" class="btn btn-block btn-sm btn-success d-none" style="padding: 2px;margin: 0;font-size: 12px;">New <i class="fas fa-plus-circle fa-fw"></i></button>
 								<button title="remove current keyframe" id="timaat-videoplayer-keyframe-remove-button" class="btn btn-block btn-sm btn-danger d-none" style="padding: 2px;margin: 0;font-size: 12px;">Delete <i class="fas fa-trash-alt fa-fw"></i></button>`,
 					classes : 'leaflet-bar',
 					id: 'timaat-animation-controlwidget',
