@@ -2989,7 +2989,11 @@
 		},
 
 		_musicRemoved: async function(music) {
-    	// console.log("TCL: _musicRemoved", music);
+			// console.log("TCL: _musicRemoved", music);
+			// to update removed musicId from medium information
+			let mediumModel = {};
+			mediumModel = await TIMAAT.MusicService.getMediumByMusicId(music.model.id);
+			mediumModel.music = null;
 			// sync to server
 			try {
 				await TIMAAT.MusicService.removeMusic(music);
@@ -3006,6 +3010,13 @@
 				}
 			}
 			$('#music-metadata-form').data('music', null);
+
+			try {
+				// TODO: This is a workaround so that musicId is removed from the medium data, which should be possible without an updateMedium call
+				await TIMAAT.MediumService.updateMedium(mediumModel);
+			} catch(error) {
+				console.error("ERROR: ", error);
+			}
 		},
 
     updateMusicModelData: async function(model, formDataObject) {
@@ -3609,7 +3620,7 @@
 					},
 					// additional parameters
 					data: function(params) {
-						console.log("TCL: data: params", params);
+						// console.log("TCL: data: params", params);
 						return {
 							search: params.term,
 							page: params.page

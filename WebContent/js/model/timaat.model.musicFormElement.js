@@ -58,7 +58,7 @@
 			this.listView.attr('data-type', 'musicFormElement');
 			this.timelineView.find('.timaat-timeline-music-form-element-type').html(this.model.musicFormElementType.musicFormElementTypeTranslations[0].type);
 			// if (this.model.repeatLastRow && this.model.musicFormElementTranslations[0].text.length > 11) { // default value when empty, due to summernote, is '<p><br></p>
-			if (this.model.musicFormElementTranslations[0].text.length > 11) { // default value when empty, due to summernote, is '<p><br></p>
+			if (this.model.musicFormElementTranslations[0].text.length > 0) { // default value when empty, due to summernote, is '<p><br></p>
 			// 	this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html('<i class="timaat-timeline-music-form-element-repeatLastRow-icon fas fa-fw fa-redo-alt"></i>' + this.model.musicFormElementTranslations[0].text);
 			// } else {
 			this.timelineView.find('.timaat-timeline-music-form-element-lyrics').html(this.model.musicFormElementTranslations[0].text);

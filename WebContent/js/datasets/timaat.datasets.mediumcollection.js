@@ -1388,7 +1388,6 @@
 
 		setupMediumCollectionListDataTable: function() {
 			// console.log("TCL: setupMediumCollectionListDataTable");
-			console.log("check");
 			this.dataTableMediaCollectionList = $('#timaat-mediumcollectiondatasets-mediumcollection-list-table').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
@@ -1470,7 +1469,6 @@
 					// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					mediumCollectionElement.on('click', '.title', async function(event) {
-						console.log("check");
 						event.stopPropagation();
 						TIMAAT.MediumCollectionDatasets.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.id);
 						// show tag editor - trigger popup

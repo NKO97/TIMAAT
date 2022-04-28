@@ -1305,6 +1305,12 @@
 			this.annotationList.forEach(function(annotation) {annotation.remove()});
 			this.annotationList = [];
 			this.curAnnotation = null;
+			if (this.curMusic) {
+				this.clearTimelineElementsStructure();
+				this.curMusic = null;
+			}
+			$('.timeline-section-music-structure').hide();
+			$('.timaat-analysislist-music-dropdown').hide();
 
 			// remove old medium
 			if ( TIMAAT.VideoPlayer.medium ) {
@@ -1356,6 +1362,8 @@
 
 					if (this.model.medium.music) {
 						this.curMusic = await TIMAAT.MusicService.getMusic(this.model.medium.music.id);
+						$('.timeline-section-music-structure').show();
+						$('.timaat-analysislist-music-dropdown').show();
 					}
 
 					// setup timeline
