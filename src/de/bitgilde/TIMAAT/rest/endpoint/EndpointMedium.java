@@ -4137,7 +4137,9 @@ public class EndpointMedium {
 												+ Double.parseDouble(hms[2]);
 			long lDuration = (long) (dTotalSecs*1000);
 			audioInfo.setDuration(lDuration);
-			audioInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
+			if (json.getJSONArray("streams").length() > 0) {
+				audioInfo.setCodec(json.getJSONArray("streams").getJSONObject(0).getString("codec_name"));
+			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
