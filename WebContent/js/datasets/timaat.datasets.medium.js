@@ -2175,6 +2175,9 @@
 			if (type == 'medium')	type = data.model.mediaType.mediaTypeTranslations[0].type;
 
 			$('#medium-preview-form :input').prop('disabled', true);
+			$('.video-preview').hide();
+			$('.image-preview').hide();
+			$('.audio-preview').hide();
 			if ( data.model.fileStatus == 'noFile' || !data.model.fileStatus) {
 				if (data.model.mediumVideo || data.model.mediumImage || data.model.mediumAudio ) {
 					$('.datasheet-form-upload-button').prop('disabled', false);
@@ -2182,8 +2185,9 @@
 				}
 				$('.medium-datasheet-form-annotate-button').hide();
 				$('.medium-datasheet-form-annotate-button').prop('disabled', true);
-				$('.video-preview').hide();
 				$('.image-preview').show();
+				$('#mediumImagePreview').attr('title', 'placeholder');
+				$('#mediumImagePreview').attr('alt', 'placeholder');
 				switch (type) {
 					case 'image':
 						$('#mediumImagePreview').attr('src' , 'img/image-placeholder.png');
@@ -2204,14 +2208,10 @@
 				}
 				switch (type) {
 					case 'audio': // TODO check audio-preview functionality
-						$('.video-preview').hide();
-						$('.image-preview').hide();
 						$('#mediumAudioPreview').attr('src', '/TIMAAT/api/medium/audio/'+data.model.id+'/download'+'?token='+data.model.viewToken);
 						$('.audio-preview').show();
 					break;
 					case 'image':
-						$('.audio-preview').hide();
-						$('.video-preview').hide();
 						$('#mediumImagePreview').attr('src', '/TIMAAT/api/medium/image/'+data.model.id+'/preview'+'?token='+data.model.viewToken);
 						$('#mediumImagePreview').attr('title', data.model.displayTitle.name);
 						$('#mediumImagePreview').attr('alt', data.model.displayTitle.name);
@@ -2219,20 +2219,20 @@
 					break;
 					case 'video':
 						if ( data.model.fileStatus && data.model.fileStatus != 'ready' && data.model.fileStatus != 'transcoding' && data.model.fileStatus != 'waiting' ) {
-							$('.video-preview').hide();
 							$('#mediumImagePreview').attr('src', 'img/preview-placeholder.png');
 							$('#mediumImagePreview').attr('title', 'placeholder');
 							$('#mediumImagePreview').attr('alt', 'placeholder');
 							$('.image-preview').show();
 						} else {
-							$('.audio-preview').hide();
-							$('.image-preview').hide();
 							$('#mediumVideoPreview').attr('src', '/TIMAAT/api/medium/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
 							$('.video-preview').show();
 						}
 					break;
 					default:
 						$('#mediumImagePreview').attr('src', 'img/preview-placeholder.png');
+						$('#mediumImagePreview').attr('title', 'placeholder');
+						$('#mediumImagePreview').attr('alt', 'placeholder');
+						$('.image-preview').show();
 					break;
 				}
 			}
