@@ -35,10 +35,6 @@ public class EmailAddress implements Serializable {
 	@JsonIgnore
 	private List<ActorHasEmailAddress> actorHasEmailAddresses;
 
-	//bi-directional many-to-one association to SiocUserAccount
-	// @OneToMany(mappedBy="emailAddress")
-	// private List<SiocUserAccount> siocUserAccounts;
-
 	public EmailAddress() {
 	}
 
@@ -79,27 +75,5 @@ public class EmailAddress implements Serializable {
 
 		return actorHasEmailAddress;
 	}
-
-	// public List<SiocUserAccount> getSiocUserAccounts() {
-	// 	return this.siocUserAccounts;
-	// }
-
-	// public void setSiocUserAccounts(List<SiocUserAccount> siocUserAccounts) {
-	// 	this.siocUserAccounts = siocUserAccounts;
-	// }
-
-	// public SiocUserAccount addSiocUserAccount(SiocUserAccount siocUserAccount) {
-	// 	getSiocUserAccounts().add(siocUserAccount);
-	// 	siocUserAccount.setEmailAddress(this);
-
-	// 	return siocUserAccount;
-	// }
-
-	// public SiocUserAccount removeSiocUserAccount(SiocUserAccount siocUserAccount) {
-	// 	getSiocUserAccounts().remove(siocUserAccount);
-	// 	siocUserAccount.setEmailAddress(null);
-
-	// 	return siocUserAccount;
-	// }
 
 }

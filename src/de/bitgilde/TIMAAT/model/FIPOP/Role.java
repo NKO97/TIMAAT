@@ -62,18 +62,6 @@ public class Role implements Serializable {
 	@JsonIgnore
 	private List<MembershipDetail> membershipDetails;
 
-	//bi-directional many-to-one association to SiocContainerHasRoleInArea
-	// @OneToMany(mappedBy="role")
-	// private List<SiocContainerHasRoleInArea> siocContainerHasRoleInAreas;
-
-	//bi-directional many-to-one association to SiocContainerHasSiocUserAccount
-	// @OneToMany(mappedBy="role")
-	// private List<SiocContainerHasSiocUserAccount> siocContainerHasSiocUserAccounts;
-
-	//bi-directional many-to-one association to SiocSiteHasSiocUserAccount
-	// @OneToMany(mappedBy="role")
-	// private List<SiocSiteHasSiocUserAccount> siocSiteHasSiocUserAccounts;
-
 	// tables cannot contain identifier id alone, or a query exception is thrown
 	@Column(columnDefinition = "BOOLEAN")
 	private Boolean dummy;
@@ -176,71 +164,5 @@ public class Role implements Serializable {
 
 		return membershipDetail;
 	}
-
-	// public List<SiocContainerHasRoleInArea> getSiocContainerHasRoleInAreas() {
-	// 	return this.siocContainerHasRoleInAreas;
-	// }
-
-	// public void setSiocContainerHasRoleInAreas(List<SiocContainerHasRoleInArea> siocContainerHasRoleInAreas) {
-	// 	this.siocContainerHasRoleInAreas = siocContainerHasRoleInAreas;
-	// }
-
-	// public SiocContainerHasRoleInArea addSiocContainerHasRoleInArea(SiocContainerHasRoleInArea siocContainerHasRoleInArea) {
-	// 	getSiocContainerHasRoleInAreas().add(siocContainerHasRoleInArea);
-	// 	siocContainerHasRoleInArea.setRole(this);
-
-	// 	return siocContainerHasRoleInArea;
-	// }
-
-	// public SiocContainerHasRoleInArea removeSiocContainerHasRoleInArea(SiocContainerHasRoleInArea siocContainerHasRoleInArea) {
-	// 	getSiocContainerHasRoleInAreas().remove(siocContainerHasRoleInArea);
-	// 	siocContainerHasRoleInArea.setRole(null);
-
-	// 	return siocContainerHasRoleInArea;
-	// }
-
-	// public List<SiocContainerHasSiocUserAccount> getSiocContainerHasSiocUserAccounts() {
-	// 	return this.siocContainerHasSiocUserAccounts;
-	// }
-
-	// public void setSiocContainerHasSiocUserAccounts(List<SiocContainerHasSiocUserAccount> siocContainerHasSiocUserAccounts) {
-	// 	this.siocContainerHasSiocUserAccounts = siocContainerHasSiocUserAccounts;
-	// }
-
-	// public SiocContainerHasSiocUserAccount addSiocContainerHasSiocUserAccount(SiocContainerHasSiocUserAccount siocContainerHasSiocUserAccount) {
-	// 	getSiocContainerHasSiocUserAccounts().add(siocContainerHasSiocUserAccount);
-	// 	siocContainerHasSiocUserAccount.setRole(this);
-
-	// 	return siocContainerHasSiocUserAccount;
-	// }
-
-	// public SiocContainerHasSiocUserAccount removeSiocContainerHasSiocUserAccount(SiocContainerHasSiocUserAccount siocContainerHasSiocUserAccount) {
-	// 	getSiocContainerHasSiocUserAccounts().remove(siocContainerHasSiocUserAccount);
-	// 	siocContainerHasSiocUserAccount.setRole(null);
-
-	// 	return siocContainerHasSiocUserAccount;
-	// }
-
-	// public List<SiocSiteHasSiocUserAccount> getSiocSiteHasSiocUserAccounts() {
-	// 	return this.siocSiteHasSiocUserAccounts;
-	// }
-
-	// public void setSiocSiteHasSiocUserAccounts(List<SiocSiteHasSiocUserAccount> siocSiteHasSiocUserAccounts) {
-	// 	this.siocSiteHasSiocUserAccounts = siocSiteHasSiocUserAccounts;
-	// }
-
-	// public SiocSiteHasSiocUserAccount addSiocSiteHasSiocUserAccount(SiocSiteHasSiocUserAccount siocSiteHasSiocUserAccount) {
-	// 	getSiocSiteHasSiocUserAccounts().add(siocSiteHasSiocUserAccount);
-	// 	siocSiteHasSiocUserAccount.setRole(this);
-
-	// 	return siocSiteHasSiocUserAccount;
-	// }
-
-	// public SiocSiteHasSiocUserAccount removeSiocSiteHasSiocUserAccount(SiocSiteHasSiocUserAccount siocSiteHasSiocUserAccount) {
-	// 	getSiocSiteHasSiocUserAccounts().remove(siocSiteHasSiocUserAccount);
-	// 	siocSiteHasSiocUserAccount.setRole(null);
-
-	// 	return siocSiteHasSiocUserAccount;
-	// }
 
 }

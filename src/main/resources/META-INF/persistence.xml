@@ -128,7 +128,6 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.GesturalEmotionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditing</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageCadreEditingTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.ImageGallery</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Instrument</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentSubtype</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.InstrumentSubtypeTranslation</class>

@@ -168,10 +168,6 @@ public class Actor implements Serializable {
 	@OneToOne(mappedBy="actor")
 	private ActorPerson actorPerson;
 
-	//bi-directional many-to-one association to SiocUserAccount
-	// @OneToMany(mappedBy="actor")
-	// private List<SiocUserAccount> siocUserAccounts;
-
 	//bi-directional many-to-one association to SpatialSemanticsTypeActorPerson
 	// @OneToMany(mappedBy="actor")
 	// private List<SpatialSemanticsTypeActorPerson> spatialSemanticsTypeActorPersons;
@@ -526,28 +522,6 @@ public class Actor implements Serializable {
 	public void setActorPerson(ActorPerson actorPerson) {
 		this.actorPerson = actorPerson;
 	}
-
-	// public List<SiocUserAccount> getSiocUserAccounts() {
-	// 	return this.siocUserAccounts;
-	// }
-
-	// public void setSiocUserAccounts(List<SiocUserAccount> siocUserAccounts) {
-	// 	this.siocUserAccounts = siocUserAccounts;
-	// }
-
-	// public SiocUserAccount addSiocUserAccount(SiocUserAccount siocUserAccount) {
-	// 	getSiocUserAccounts().add(siocUserAccount);
-	// 	siocUserAccount.setActor(this);
-
-	// 	return siocUserAccount;
-	// }
-
-	// public SiocUserAccount removeSiocUserAccount(SiocUserAccount siocUserAccount) {
-	// 	getSiocUserAccounts().remove(siocUserAccount);
-	// 	siocUserAccount.setActor(null);
-
-	// 	return siocUserAccount;
-	// }
 
 	// public List<SpatialSemanticsTypeActorPerson> getSpatialSemanticsTypeActorPersons() {
 	// 	return this.spatialSemanticsTypeActorPersons;

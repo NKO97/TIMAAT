@@ -8,10 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -41,20 +38,6 @@ public class MediumImage implements Serializable {
 
 	private int width;
 
-	//bi-directional many-to-many association to ImageGallery
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(
-		name="image_gallery_has_medium_image"
-		, joinColumns={
-			@JoinColumn(name="medium_image_medium_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="image_gallery_id")
-			}
-		)
-	@JsonIgnore
-	private Set<ImageGallery> imageGalleries;
-
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
@@ -70,26 +53,6 @@ public class MediumImage implements Serializable {
 	@ManyToMany(mappedBy="profileImages")
 	@JsonIgnore
 	private List<Actor> actors;
-
-	// //bi-directional many-to-one association to SiocContainer
-	// @OneToMany(mappedBy="mediumImage1")
-	// private Set<SiocContainer> siocContainers1;
-
-	// //bi-directional many-to-one association to SiocContainer
-	// @OneToMany(mappedBy="mediumImage2")
-	// private Set<SiocContainer> siocContainers2;
-
-	// //bi-directional many-to-one association to SiocItem
-	// @OneToMany(mappedBy="mediumImage")
-	// private Set<SiocItem> siocItems;
-
-	// //bi-directional many-to-one association to SiocUserAccount
-	// @OneToMany(mappedBy="mediumImage1")
-	// private Set<SiocUserAccount> siocUserAccounts1;
-
-	// //bi-directional many-to-one association to SiocUserAccount
-	// @OneToMany(mappedBy="mediumImage2")
-	// private Set<SiocUserAccount> siocUserAccounts2;
 
 	public MediumImage() {
 	}
@@ -124,14 +87,6 @@ public class MediumImage implements Serializable {
 
 	public void setWidth(int width) {
 		this.width = width;
-	}
-
-	public Set<ImageGallery> getImageGalleries() {
-		return this.imageGalleries;
-	}
-
-	public void setImageGalleries(Set<ImageGallery> imageGalleries) {
-		this.imageGalleries = imageGalleries;
 	}
 
 	public Medium getMedium() {
@@ -183,115 +138,5 @@ public class MediumImage implements Serializable {
 
 		return actor;
 	}
-
-	// public Set<SiocContainer> getSiocContainers1() {
-	// 	return this.siocContainers1;
-	// }
-
-	// public void setSiocContainers1(Set<SiocContainer> siocContainers1) {
-	// 	this.siocContainers1 = siocContainers1;
-	// }
-
-	// public SiocContainer addSiocContainers1(SiocContainer siocContainers1) {
-	// 	getSiocContainers1().add(siocContainers1);
-	// 	siocContainers1.setMediumImage1(this);
-
-	// 	return siocContainers1;
-	// }
-
-	// public SiocContainer removeSiocContainers1(SiocContainer siocContainers1) {
-	// 	getSiocContainers1().remove(siocContainers1);
-	// 	siocContainers1.setMediumImage1(null);
-
-	// 	return siocContainers1;
-	// }
-
-	// public Set<SiocContainer> getSiocContainers2() {
-	// 	return this.siocContainers2;
-	// }
-
-	// public void setSiocContainers2(Set<SiocContainer> siocContainers2) {
-	// 	this.siocContainers2 = siocContainers2;
-	// }
-
-	// public SiocContainer addSiocContainers2(SiocContainer siocContainers2) {
-	// 	getSiocContainers2().add(siocContainers2);
-	// 	siocContainers2.setMediumImage2(this);
-
-	// 	return siocContainers2;
-	// }
-
-	// public SiocContainer removeSiocContainers2(SiocContainer siocContainers2) {
-	// 	getSiocContainers2().remove(siocContainers2);
-	// 	siocContainers2.setMediumImage2(null);
-
-	// 	return siocContainers2;
-	// }
-
-	// public Set<SiocItem> getSiocItems() {
-	// 	return this.siocItems;
-	// }
-
-	// public void setSiocItems(Set<SiocItem> siocItems) {
-	// 	this.siocItems = siocItems;
-	// }
-
-	// public SiocItem addSiocItem(SiocItem siocItem) {
-	// 	getSiocItems().add(siocItem);
-	// 	siocItem.setMediumImage(this);
-
-	// 	return siocItem;
-	// }
-
-	// public SiocItem removeSiocItem(SiocItem siocItem) {
-	// 	getSiocItems().remove(siocItem);
-	// 	siocItem.setMediumImage(null);
-
-	// 	return siocItem;
-	// }
-
-	// public Set<SiocUserAccount> getSiocUserAccounts1() {
-	// 	return this.siocUserAccounts1;
-	// }
-
-	// public void setSiocUserAccounts1(Set<SiocUserAccount> siocUserAccounts1) {
-	// 	this.siocUserAccounts1 = siocUserAccounts1;
-	// }
-
-	// public SiocUserAccount addSiocUserAccounts1(SiocUserAccount siocUserAccounts1) {
-	// 	getSiocUserAccounts1().add(siocUserAccounts1);
-	// 	siocUserAccounts1.setMediumImage1(this);
-
-	// 	return siocUserAccounts1;
-	// }
-
-	// public SiocUserAccount removeSiocUserAccounts1(SiocUserAccount siocUserAccounts1) {
-	// 	getSiocUserAccounts1().remove(siocUserAccounts1);
-	// 	siocUserAccounts1.setMediumImage1(null);
-
-	// 	return siocUserAccounts1;
-	// }
-
-	// public Set<SiocUserAccount> getSiocUserAccounts2() {
-	// 	return this.siocUserAccounts2;
-	// }
-
-	// public void setSiocUserAccounts2(Set<SiocUserAccount> siocUserAccounts2) {
-	// 	this.siocUserAccounts2 = siocUserAccounts2;
-	// }
-
-	// public SiocUserAccount addSiocUserAccounts2(SiocUserAccount siocUserAccounts2) {
-	// 	getSiocUserAccounts2().add(siocUserAccounts2);
-	// 	siocUserAccounts2.setMediumImage2(this);
-
-	// 	return siocUserAccounts2;
-	// }
-
-	// public SiocUserAccount removeSiocUserAccounts2(SiocUserAccount siocUserAccounts2) {
-	// 	getSiocUserAccounts2().remove(siocUserAccounts2);
-	// 	siocUserAccounts2.setMediumImage2(null);
-
-	// 	return siocUserAccounts2;
-	// }
 
 }

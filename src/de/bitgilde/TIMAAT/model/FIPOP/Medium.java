@@ -269,10 +269,6 @@ public class Medium implements Serializable {
 	@JsonIgnore
 	private List<MusicalNotation> musicalNotations;
 
-	//bi-directional many-to-many association to SiocItem
-	// @ManyToMany(mappedBy="mediums")
-	// private List<SiocItem> siocItems;
-
 	//bi-directional many-to-one association to Source
 	@OneToMany(mappedBy="medium")
 	@JsonManagedReference(value = "Medium-Source")
@@ -721,14 +717,6 @@ public class Medium implements Serializable {
 
 		return musicalNotation;
 	}
-
-	// public List<SiocItem> getSiocItems() {
-	// 	return this.siocItems;
-	// }
-
-	// public void setSiocItems(List<SiocItem> siocItems) {
-	// 	this.siocItems = siocItems;
-	// }
 
 	public List<Source> getSources() {
 		return this.sources;

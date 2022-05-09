@@ -33,10 +33,6 @@ public class MediumDocument implements Serializable {
 	@JsonIgnore // MediumDocument is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 
-	//bi-directional many-to-one association to SiocItem
-	// @OneToMany(mappedBy="mediumDocument")
-	// private Set<SiocItem> siocItems;
-
 	public MediumDocument() {
 	}
 
@@ -55,27 +51,5 @@ public class MediumDocument implements Serializable {
 	public void setMedium(Medium medium) {
 		this.medium = medium;
 	}
-
-	// public Set<SiocItem> getSiocItems() {
-	// 	return this.siocItems;
-	// }
-
-	// public void setSiocItems(Set<SiocItem> siocItems) {
-	// 	this.siocItems = siocItems;
-	// }
-
-	// public SiocItem addSiocItem(SiocItem siocItem) {
-	// 	getSiocItems().add(siocItem);
-	// 	siocItem.setMediumDocument(this);
-
-	// 	return siocItem;
-	// }
-
-	// public SiocItem removeSiocItem(SiocItem siocItem) {
-	// 	getSiocItems().remove(siocItem);
-	// 	siocItem.setMediumDocument(null);
-
-	// 	return siocItem;
-	// }
 
 }
