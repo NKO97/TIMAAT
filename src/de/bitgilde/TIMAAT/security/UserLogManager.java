@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.UserLog;
 import de.bitgilde.TIMAAT.model.FIPOP.UserLogEventType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
 /**
 *
@@ -148,10 +147,10 @@ public class UserLogManager {
 			MUSICCREATED(125),
 			MUSICEDITED(126),
 			MUSICDELETED(127);
-		
+
 
 	    private final int value;
-		
+
 	    private LogEvents(int value) {
 	        this.value = value;
 	    }
@@ -160,22 +159,22 @@ public class UserLogManager {
 	        return value;
 	    }
 	}
-	
+
 	// ------------------------------------------------------------------------------------------
-	
+
 	public static UserLogManager getLogger() {
 		return new UserLogManager();
 	}
-	
+
 	public List<UserLog> getLogForUser(int id, int limit) {
-		
+
 		List<UserLog> log = null;
-    	
-    	
-    	
+
+
+
     	limit = Math.abs(limit);
     	limit = Math.min(20, Math.max(1, limit)); // TODO refactor
-    	
+
     	limit = 12; // TODO implement
 
     	log = castList(UserLog.class, TIMAATApp.emf.createEntityManager()
@@ -183,12 +182,12 @@ public class UserLogManager {
 				.setParameter("id", id)
 				.setMaxResults(limit)
 				.getResultList());
-				
-		return log;		
+
+		return log;
 	}
 
 	public void addLogEntry(int userID, LogEvents type) {
-    	
+
     	EntityManager em = TIMAATApp.emf.createEntityManager();
     	try {
             EntityTransaction tx = em.getTransaction();
@@ -196,7 +195,7 @@ public class UserLogManager {
     		UserLog log = new UserLog();
     		log.setDateTime(new Timestamp(System.currentTimeMillis()));
     		log.setUserAccount(em.find(UserAccount.class, userID));
-    		log.setUserLogEventType(em.find(UserLogEventType.class, type.getValue()));    		
+    		log.setUserLogEventType(em.find(UserLogEventType.class, type.getValue()));
     		em.persist(log);
     		em.flush();
     		tx.commit();
@@ -213,5 +212,5 @@ public class UserLogManager {
       r.add(clazz.cast(o));
     return r;
 	}
-	
+
 }

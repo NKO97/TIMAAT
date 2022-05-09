@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the category_set_has_category database table.
- * 
+ *
  */
 @Embeddable
 public class CategorySetHasCategoryPK implements Serializable {
@@ -20,7 +22,7 @@ public class CategorySetHasCategoryPK implements Serializable {
 
 	public CategorySetHasCategoryPK() {
 	}
-	
+
 	public CategorySetHasCategoryPK(int categorySetId, int categoryId) {
 		this.categorySetId = categorySetId;
 		this.categoryId = categoryId;
@@ -33,7 +35,7 @@ public class CategorySetHasCategoryPK implements Serializable {
 	public void setCategorySetId(int categorySetId) {
 		this.categorySetId = categorySetId;
 	}
-	
+
 	public int getCategoryId() {
 		return this.categoryId;
 	}
@@ -50,7 +52,7 @@ public class CategorySetHasCategoryPK implements Serializable {
 			return false;
 		}
 		CategorySetHasCategoryPK castOther = (CategorySetHasCategoryPK)other;
-		return 
+		return
 			(this.categorySetId == castOther.categorySetId)
 			&& (this.categoryId == castOther.categoryId);
 	}
@@ -60,7 +62,7 @@ public class CategorySetHasCategoryPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.categorySetId;
 		hash = hash * prime + this.categoryId;
-		
+
 		return hash;
 	}
 }

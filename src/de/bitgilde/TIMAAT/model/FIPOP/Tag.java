@@ -1,16 +1,21 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQuery;
 
 
 /**
  * The persistent class for the tag database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Tag.findAll", query="SELECT t FROM Tag t")

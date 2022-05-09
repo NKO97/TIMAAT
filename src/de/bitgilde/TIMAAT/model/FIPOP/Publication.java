@@ -3,6 +3,9 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,18 +17,15 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * The persistent class for the province database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Publication.findAll", query="SELECT p FROM Publication p")
 public class Publication implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -161,5 +161,5 @@ public class Publication implements Serializable {
 		this.settings = settings;
 	}
 
-	
+
 }

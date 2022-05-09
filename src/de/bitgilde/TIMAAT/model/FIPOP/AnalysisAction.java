@@ -1,17 +1,30 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 
 /**
  * The persistent class for the analysis_action database table.
- * 
+ *
  */
 @Entity
 @Table(name="analysis_action")
@@ -28,7 +41,7 @@ public class AnalysisAction implements Serializable {
 
 	@Column(name="start_time", columnDefinition = "INT")
 	private long startTime;
-	
+
 	//bi-directional many-to-many association to Category
 	@ManyToMany
 	@JoinTable(

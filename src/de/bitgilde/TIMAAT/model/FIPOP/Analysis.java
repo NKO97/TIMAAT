@@ -4,12 +4,19 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 
 
 /**
  * The persistent class for the analysis database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Analysis.findAll", query="SELECT a FROM Analysis a")

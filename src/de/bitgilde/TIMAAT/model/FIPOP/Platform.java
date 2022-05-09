@@ -1,13 +1,21 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.util.Set;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQuery;
+
 
 
 /**
  * The persistent class for the platform database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Platform.findAll", query="SELECT p FROM Platform p")

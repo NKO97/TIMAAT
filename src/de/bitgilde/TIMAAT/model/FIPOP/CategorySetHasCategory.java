@@ -1,16 +1,23 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import java.util.Set;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the category_set_has_category database table.
- * 
+ *
  */
 @Entity
 @Table(name="category_set_has_category")

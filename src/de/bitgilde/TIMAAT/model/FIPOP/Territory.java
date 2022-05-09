@@ -1,15 +1,22 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 
 /**
  * The persistent class for the territory database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Territory.findAll", query="SELECT t FROM Territory t")

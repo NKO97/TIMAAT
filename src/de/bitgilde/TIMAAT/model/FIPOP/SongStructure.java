@@ -1,16 +1,21 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the song_structure database table.
- * 
+ *
  */
 @Entity
 @Table(name="song_structure")

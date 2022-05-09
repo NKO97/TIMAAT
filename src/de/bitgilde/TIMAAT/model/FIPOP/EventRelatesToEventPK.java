@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the event_relates_to_event database table.
- * 
+ *
  */
 @Embeddable
 public class EventRelatesToEventPK implements Serializable {
@@ -50,7 +52,7 @@ public class EventRelatesToEventPK implements Serializable {
 			return false;
 		}
 		EventRelatesToEventPK castOther = (EventRelatesToEventPK)other;
-		return 
+		return
 			(this.eventId == castOther.eventId)
 			&& (this.relatesToEventId == castOther.relatesToEventId)
 			&& (this.eventEventRelationshipTypeId == castOther.eventEventRelationshipTypeId);
@@ -62,7 +64,7 @@ public class EventRelatesToEventPK implements Serializable {
 		hash = hash * prime + this.eventId;
 		hash = hash * prime + this.relatesToEventId;
 		hash = hash * prime + this.eventEventRelationshipTypeId;
-		
+
 		return hash;
 	}
 }

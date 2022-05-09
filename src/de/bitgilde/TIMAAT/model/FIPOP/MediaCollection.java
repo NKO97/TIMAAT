@@ -2,19 +2,31 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-import jakarta.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.Objects;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 
 /**
  * The persistent class for the media_collection database table.
- * 
+ *
  */
 @Entity
 @Table(name="media_collection")
@@ -99,7 +111,7 @@ public class MediaCollection implements Serializable {
 	@OneToMany(mappedBy="mediaCollection")
 	private List<MediaCollectionHasWork> mediaCollectionHasWorks;
 	 */
-	
+
 	//bi-directional one-to-one association to MediaCollectionSeries
 	@OneToOne(mappedBy="mediaCollection")
 	private MediaCollectionSeries mediaCollectionSeries;
@@ -289,7 +301,7 @@ public class MediaCollection implements Serializable {
 		return mediaCollectionHasWork;
 	}
 	 */
-	
+
 	public MediaCollectionSeries getMediaCollectionSeries() {
 		return this.mediaCollectionSeries;
 	}

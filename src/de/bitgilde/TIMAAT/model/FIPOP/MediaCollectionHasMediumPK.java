@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the media_collection_has_medium database table.
- * 
+ *
  */
 @Embeddable
 public class MediaCollectionHasMediumPK implements Serializable {
@@ -45,7 +47,7 @@ public class MediaCollectionHasMediumPK implements Serializable {
 			return false;
 		}
 		MediaCollectionHasMediumPK castOther = (MediaCollectionHasMediumPK)other;
-		return 
+		return
 			(this.mediaCollectionId == castOther.mediaCollectionId)
 			&& (this.mediumId == castOther.mediumId);
 	}
@@ -55,7 +57,7 @@ public class MediaCollectionHasMediumPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.mediaCollectionId;
 		hash = hash * prime + this.mediumId;
-		
+
 		return hash;
 	}
 }

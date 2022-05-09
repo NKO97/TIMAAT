@@ -11,6 +11,16 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.Publication;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
+import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -30,17 +40,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
-
-import org.jvnet.hk2.annotations.Service;
-
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.Medium;
-import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
-import de.bitgilde.TIMAAT.model.FIPOP.Publication;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
-import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 
 /**
 *

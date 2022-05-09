@@ -1,14 +1,22 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the camera_movement database table.
- * 
+ *
  */
 @Entity
 @Table(name="camera_movement")
@@ -75,7 +83,7 @@ public class CameraMovement implements Serializable {
 		this.analysisMethod = analysisMethod;
 	}
 
-	public CameraMovementType getCameraMovementType() 
+	public CameraMovementType getCameraMovementType()
 	{
 		return this.cameraMovementType;
 	}
@@ -84,7 +92,7 @@ public class CameraMovement implements Serializable {
 		this.cameraMovementType = cameraMovementType;
 	}
 
-	public CameraHandling getCameraHandling() 
+	public CameraHandling getCameraHandling()
 	{
 		return this.cameraHandling;
 	}
@@ -93,7 +101,7 @@ public class CameraMovement implements Serializable {
 		this.cameraHandling = cameraHandling;
 	}
 
-	public CameraMovementCharacteristic getCameraMovementCharacteristic() 
+	public CameraMovementCharacteristic getCameraMovementCharacteristic()
 	{
 		return this.cameraMovementCharacteristic;
 	}

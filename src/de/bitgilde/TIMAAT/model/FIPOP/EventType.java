@@ -1,16 +1,23 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
-
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 
 /**
  * The persistent class for the event_type database table.
- * 
+ *
  */
 @Entity
 @Table(name="event_type")
@@ -76,7 +83,7 @@ public class EventType implements Serializable {
 	public EventTypeTranslation removeEventTypeTranslation(EventTypeTranslation eventTypeTranslation) {
 		getEventTypeTranslations().remove(eventTypeTranslation);
 		// eventTypeTranslation.setEventType(null);
-		
+
 		return eventTypeTranslation;
 	}
 

@@ -1,18 +1,10 @@
 /**
- * 
+ *
  */
 package de.bitgilde.TIMAAT.rest.filter;
 
 import java.io.IOException;
 import java.security.Key;
-
-import jakarta.annotation.Priority;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
-import jakarta.ws.rs.Priorities;
 
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
@@ -25,6 +17,13 @@ import io.jsonwebtoken.InvalidClaimException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.Priority;
+import jakarta.ws.rs.Priorities;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 
 /**
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
@@ -56,11 +55,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
       // Validate the token
       String username = validateToken(token);
-      
+
       try {
         // Validate user status
         UserAccount user = validateAccountStatus(username);
-        
+
         // Authentication succeeded, set request context
         requestContext.setProperty("TIMAAT.userID", user.getId());
         requestContext.setProperty("TIMAAT.userName", user.getAccountName());
@@ -69,12 +68,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
       } catch (AccountSuspendedException e) {
         abortWithForbidden(requestContext, "This account has been suspended.");
       }
-        
+
     } catch (Exception e) {
         abortWithUnauthorized(requestContext);
     }
 	}
-	
+
 	private boolean isTokenBasedAuthentication(String authorizationHeader) {
 
     // Check if the Authorization header is valid
@@ -89,7 +88,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     // The WWW-Authenticate header is sent along with the response
     requestContext.abortWith(
               Response.status(Response.Status.UNAUTHORIZED)
-                      .header(HttpHeaders.WWW_AUTHENTICATE, 
+                      .header(HttpHeaders.WWW_AUTHENTICATE,
                               AUTHENTICATION_SCHEME + " realm=\"" + REALM + "\"")
                       .build());
   }
@@ -99,25 +98,25 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     // The WWW-Authenticate header is sent along with the response
     requestContext.abortWith(
               Response.status(Response.Status.FORBIDDEN)
-                      .header(HttpHeaders.WWW_AUTHENTICATE, 
+                      .header(HttpHeaders.WWW_AUTHENTICATE,
                               AUTHENTICATION_SCHEME + " realm=\"" + REALM + "\"")
                       .entity("{\"reason\":\""+reason+"\"}")
                       .build());
   }
-  
+
   public static UserAccount validateAccountStatus(String username) throws Exception {
     // verify user and user status
     if ( username == null ) throw new Exception("provided credentials invalid");
-  
+
     UserAccount user = (UserAccount) TIMAATApp.emf.createEntityManager()
       .createQuery("SELECT ua FROM UserAccount ua WHERE ua.accountName=:username")
       .setParameter("username", username)
       .getSingleResult();
-    
+
     // don't allow suspended accounts
-    if ( user.getUserAccountStatus() == UserAccountStatus.suspended ) 
+    if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
       throw new AccountSuspendedException();
-    
+
     return user;
   }
 
@@ -131,7 +130,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
       } catch (JwtException e) {
         e.printStackTrace();
       } catch (Exception e) {
-        e.printStackTrace();   
+        e.printStackTrace();
       }
   return username;
   }

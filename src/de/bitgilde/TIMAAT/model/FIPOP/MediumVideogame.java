@@ -1,14 +1,21 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the medium_videogame database table.
- * 
+ *
  */
 @Entity
 @Table(name="medium_videogame")
@@ -19,7 +26,7 @@ public class MediumVideogame implements Serializable {
 	@Id
 	@Column(name="medium_id")
 	private int mediumId;
-	
+
 	//bi-directional one-to-one association to Medium
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="medium_id")
@@ -28,7 +35,7 @@ public class MediumVideogame implements Serializable {
 
 	@Column(name="is_episode", columnDefinition = "BOOLEAN")
 	private Boolean isEpisode;
-	
+
 	public MediumVideogame() {
 	}
 

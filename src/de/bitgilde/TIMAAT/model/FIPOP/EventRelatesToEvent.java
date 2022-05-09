@@ -1,14 +1,20 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the event_relates_to_event database table.
- * 
+ *
  */
 @Entity
 @Table(name="event_relates_to_event")

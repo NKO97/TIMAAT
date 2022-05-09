@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the music_has_actor_with_role database table.
- * 
+ *
  */
 @Embeddable
 public class MusicHasActorWithRolePK implements Serializable {
@@ -50,7 +52,7 @@ public class MusicHasActorWithRolePK implements Serializable {
 			return false;
 		}
 		MusicHasActorWithRolePK castOther = (MusicHasActorWithRolePK)other;
-		return 
+		return
 			(this.musicId == castOther.musicId)
 			&& (this.actorHasRoleActorId == castOther.actorHasRoleActorId)
 			&& (this.actorHasRoleRoleId == castOther.actorHasRoleRoleId);
@@ -62,7 +64,7 @@ public class MusicHasActorWithRolePK implements Serializable {
 		hash = hash * prime + this.musicId;
 		hash = hash * prime + this.actorHasRoleActorId;
 		hash = hash * prime + this.actorHasRoleRoleId;
-		
+
 		return hash;
 	}
 }

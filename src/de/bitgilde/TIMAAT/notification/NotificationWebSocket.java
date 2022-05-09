@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
+import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -13,39 +19,32 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-
 @ServerEndpoint("/api/notification")
 public class NotificationWebSocket {
-	
+
     private static Map<String, UserSubscriptions> userSessions = new HashMap<String, UserSubscriptions>();
 
 	@OnOpen
     public void onOpen(Session session) {
         System.out.println("TIMAAT::Notification:new session " + session.getId()+" - "+session.getMaxIdleTimeout());
 	}
-	
+
     @OnClose
     public void onClose(Session session) {
         System.out.println("TIMAAT::Notification:end session " +  session.getId());
         endUserSession(session);
     }
-    
+
     @OnMessage
     public void onMessage(String message, Session session) {
         // System.out.println("onMessage::From=" + session.getId() + " Message=" + message);
-        
+
         try {
         	NotificationRequest req = new ObjectMapper().readValue(message, NotificationRequest.class);
         	String username = validateRequestToken(req.getToken());
-        	
+
         	if ( req.getRequest() == null || !req.getRequest().equalsIgnoreCase("subscribe-list") ) return;
-        	
+
         	if ( username != null ) {
         		// TODO check if user account status has expired or is blocked
         		if ( !userSessions.containsKey(session.getId()) ) createUserSession(username, session);
@@ -57,7 +56,7 @@ public class NotificationWebSocket {
         	System.out.println("TIMAAT::Notification:client message failed to decode");
         }
     }
-    
+
     private void acknowledgeSubscriptionInfo(String subscriber, Session session, int listID) {
     	List <String> subscribers = new ArrayList<String>();
     	for (UserSubscriptions userSub : userSessions.values()) {
@@ -65,7 +64,7 @@ public class NotificationWebSocket {
     	}
     	if ( subscribers.size() > 0 ) sendNotificationTo(session, subscriber, "list-subscribers", listID, subscribers);
     }
-    
+
     private void notifyUserSubscription(String username, int listID, Session session) {
     	UserSubscriptions userSub = userSessions.get(session.getId());
     	if ( userSub == null ) return;
@@ -79,7 +78,7 @@ public class NotificationWebSocket {
 	    	}
 		}
 	}
-    
+
     public static void notifyUserAction(String username, String action, int listID, Object data) {
     	if ( username == null || action == null ) return;
     	for (UserSubscriptions userSub : userSessions.values()) {
@@ -87,7 +86,7 @@ public class NotificationWebSocket {
     			sendNotificationTo(userSub.session, username, action, listID, data);
     	}
     }
-    
+
     private void notifyUserUnsubscribe(String username, int listID) {
     	if ( listID <= 0 ) return;
     	for (UserSubscriptions userSub : userSessions.values()) {
@@ -95,7 +94,7 @@ public class NotificationWebSocket {
     			sendNotificationTo(userSub.session, username, "unsubscribe-list", listID);
     	}
     }
-    
+
     private static void sendNotificationTo(Session session, String username, String message, int dataID) {
     	sendNotificationTo(session, username, message, dataID, null);
     }
@@ -109,7 +108,7 @@ public class NotificationWebSocket {
     		// TODO remove session
     	}
     }
-    
+
     private void endUserSession(Session session) {
     	UserSubscriptions userSub = userSessions.get(session.getId());
     	if ( userSub == null ) return;
@@ -121,17 +120,17 @@ public class NotificationWebSocket {
     		userSessions.remove(session.getId());
     	}
     }
-    
-    
+
+
 	private void createUserSession(String username, Session session) {
     	userSessions.put(session.getId(), new UserSubscriptions(username, session));
     }
-    
+
     @OnError
     public void onError(Throwable t) {
     	// ignore
     }
-    
+
     private String validateRequestToken(String token) {
     	String username = null;
     	try {
@@ -141,7 +140,7 @@ public class NotificationWebSocket {
 				e.printStackTrace();
     		return null;
     	}
-		
+
 		return username;
 
     }

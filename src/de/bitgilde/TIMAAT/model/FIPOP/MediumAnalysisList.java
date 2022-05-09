@@ -1,26 +1,40 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 
 /**
  * The persistent class for the medium_analysis_list database table.
- * 
+ *
  */
 @Entity
 @Table(name="medium_analysis_list")
 @NamedQuery(name="MediumAnalysisList.findAll", query="SELECT m FROM MediumAnalysisList m")
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-// property  = "id", 
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+// property  = "id",
 // scope     = MediumAnalysisList.class)
 public class MediumAnalysisList implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +42,7 @@ public class MediumAnalysisList implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Transient
 	@JsonProperty("mediumID")
 	private int mediumID;
@@ -158,7 +172,7 @@ public class MediumAnalysisList implements Serializable {
 	public void setGlobalPermission(byte globalPermission) {
 		this.globalPermission = globalPermission;
 	}
-	
+
 	public Timestamp getCreatedAt() {
 		return this.createdAt;
 	}

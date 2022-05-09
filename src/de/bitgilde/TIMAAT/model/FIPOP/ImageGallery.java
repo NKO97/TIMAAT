@@ -1,16 +1,20 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Set;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the image_gallery database table.
- * 
+ *
  */
 @Entity
 @Table(name="image_gallery")

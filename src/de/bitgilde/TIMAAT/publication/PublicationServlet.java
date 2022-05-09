@@ -6,6 +6,19 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.Publication;
+import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
+import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
+import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.GET;
@@ -22,20 +35,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
-
-import org.jvnet.hk2.annotations.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import de.bitgilde.TIMAAT.PropertyConstants;
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
-import de.bitgilde.TIMAAT.model.FIPOP.Medium;
-import de.bitgilde.TIMAAT.model.FIPOP.Publication;
-import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
-import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
-import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 
 /**
 *

@@ -1,13 +1,20 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 import java.sql.Time;
+
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+
 
 
 /**
  * The persistent class for the medium_video_has_medium_image database table.
- * 
+ *
  */
 @Entity
 @Table(name="medium_video_has_medium_image")

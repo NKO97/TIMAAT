@@ -5,12 +5,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 
 
 /**
  * The persistent class for the maqam database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Maqam.findAll", query="SELECT m FROM Maqam m")

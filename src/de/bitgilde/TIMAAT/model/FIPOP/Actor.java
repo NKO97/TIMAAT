@@ -2,21 +2,33 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-import jakarta.persistence.*;
+import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-import java.util.Objects;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 
 
 /**
  * The persistent class for the actor database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")
@@ -83,7 +95,7 @@ public class Actor implements Serializable {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="primary_phone_number_id")
 	private PhoneNumber actorHasPhoneNumber;
-	
+
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
 	private List<ActorHasAddress> actorHasAddresses;

@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the medium_has_language database table.
- * 
+ *
  */
 @Embeddable
 public class MediumHasLanguagePK implements Serializable {
@@ -50,7 +52,7 @@ public class MediumHasLanguagePK implements Serializable {
 			return false;
 		}
 		MediumHasLanguagePK castOther = (MediumHasLanguagePK)other;
-		return 
+		return
 			(this.mediumId == castOther.mediumId)
 			&& (this.languageId == castOther.languageId)
 			&& (this.mediumLanguageTypeId == castOther.mediumLanguageTypeId);
@@ -62,7 +64,7 @@ public class MediumHasLanguagePK implements Serializable {
 		hash = hash * prime + this.mediumId;
 		hash = hash * prime + this.languageId;
 		hash = hash * prime + this.mediumLanguageTypeId;
-		
+
 		return hash;
 	}
 }

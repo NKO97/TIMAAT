@@ -5,6 +5,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.SelectElement;
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
+import de.bitgilde.TIMAAT.rest.Secured;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -20,13 +27,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-import org.jvnet.hk2.annotations.Service;
-
-import de.bitgilde.TIMAAT.SelectElement;
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DataTableInfo;
-import de.bitgilde.TIMAAT.model.FIPOP.Tag;
-import de.bitgilde.TIMAAT.rest.Secured;
 
 @Service
 @Path("/tag")
@@ -36,8 +36,8 @@ public class EndpointTag {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-  ServletContext servletContext;	
-  
+  ServletContext servletContext;
+
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -51,7 +51,7 @@ public class EndpointTag {
 	{
 		// System.out.println("EndpointTag: getRoleList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 		String column = "t.id";
@@ -79,12 +79,12 @@ public class EndpointTag {
 		} else {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT t FROM Tag t ORDER BY "+column+" "+direction);
-		}	
+		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		List<Tag> tagList = castList(Tag.class, query.getResultList());
-		
+
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, tagList)).build();
   }
 
@@ -124,24 +124,24 @@ public class EndpointTag {
 	@Path("{name}")
 	@Secured
 	public Response createTag(@PathParam("name") String tagName) {
-		
+
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		// check if tag exists
 		Tag tag = null;
 		List<Tag> tags = null;
 		tagName = tagName.toLowerCase(Locale.ROOT);
-		
-		try {			
+
+		try {
 			String sql = "SELECT t from Tag t WHERE t.name=:name";
 			Query query = entityManager.createQuery(sql)
 																 .setParameter("name", tagName);
 			tags = castList(Tag.class, query.getResultList());
 		} catch(Exception e) {};
-		
+
 		// find tag case sensitive
 		for ( Tag listTag : tags )
 		if ( listTag.getName().compareTo(tagName) == 0 ) tag = listTag;
-		
+
 		// create tag if it doesn't exist yet
 		if ( tag == null ) {
 			tag = new Tag();
@@ -152,10 +152,10 @@ public class EndpointTag {
 			entityTransaction.commit();
 			entityManager.refresh(tag);
 		}
- 	
+
 		return Response.ok().entity(tag).build();
 	}
-	
+
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());
     for(Object o: c)

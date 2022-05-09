@@ -1,21 +1,33 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 
 /**
  * The persistent class for the annotation database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Annotation.findAll", query="SELECT a FROM Annotation a")
@@ -50,7 +62,7 @@ public class Annotation implements Serializable {
 	@OneToMany(mappedBy="annotation")
 	@JsonManagedReference(value= "Annotation-Analysis")
 	private List<Analysis> analysis;
-	
+
 	//bi-directional many-to-one association to SegmentSelectorType
 	@ManyToOne
 	@JoinColumn(name="segment_selector_type_id")
@@ -66,7 +78,7 @@ public class Annotation implements Serializable {
 	// @Transient
 	// @JsonProperty("analysisListId")
 	// private int analysisListId;
-	
+
 	// //bi-directional many-to-one association to MediumAnalysisList
 	// @ManyToOne
 	// @JoinColumn(name="medium_analysis_list_id")
@@ -173,7 +185,7 @@ public class Annotation implements Serializable {
 	// @ManyToMany(mappedBy="annotations")
 	// @JsonIgnore
 	// private List<Location> locations;
-	
+
 
 	//bi-directional many-to-many association to Medium
 	// @ManyToMany

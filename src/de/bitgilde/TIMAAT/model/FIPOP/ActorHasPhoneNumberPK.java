@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the actor_has_phone_number database table.
- * 
+ *
  */
 @Embeddable
 public class ActorHasPhoneNumberPK implements Serializable {
@@ -33,7 +35,7 @@ public class ActorHasPhoneNumberPK implements Serializable {
 	public void setActorId(int actorId) {
 		this.actorId = actorId;
 	}
-	
+
 	public int getPhoneNumberId() {
 		return this.phoneNumberId;
 	}
@@ -50,7 +52,7 @@ public class ActorHasPhoneNumberPK implements Serializable {
 			return false;
 		}
 		ActorHasPhoneNumberPK castOther = (ActorHasPhoneNumberPK)other;
-		return 
+		return
 			(this.actorId == castOther.actorId)
 			&& (this.phoneNumberId == castOther.phoneNumberId);
 	}
@@ -60,7 +62,7 @@ public class ActorHasPhoneNumberPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.actorId;
 		hash = hash * prime + this.phoneNumberId;
-		
+
 		return hash;
 	}
 }

@@ -4,6 +4,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.PermissionType;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollection;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
+import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
@@ -21,18 +32,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-import org.jvnet.hk2.annotations.Service;
-
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.MediaCollection;
-import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
-import de.bitgilde.TIMAAT.model.FIPOP.PermissionType;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediaCollection;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
-import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
-
 /**
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
@@ -41,9 +40,9 @@ import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 @Service
 @Path("/user")
 public class EndpointUserAccount {
-	
+
 	@Context ContainerRequestContext containerRequestContext;
-	
+
 	@GET
   @Produces(MediaType.TEXT_PLAIN)
 	@Path("{id}/displayName")
@@ -59,7 +58,7 @@ public class EndpointUserAccount {
 			return Response.status(Status.NOT_FOUND).entity("User not found!").build();
 		}
 		if ( user == null ) return Response.status(Status.NOT_FOUND).entity("User not found!").build();
-		
+
 		return Response.ok().entity(user.getDisplayName()).build();
 	}
 
@@ -78,7 +77,7 @@ public class EndpointUserAccount {
 			return Response.ok().entity(false).build(); //* it is ok if no result was found
 		}
 		if (user == null) { //? redundant?
-			return Response.ok().entity(false).build(); 
+			return Response.ok().entity(false).build();
 		}
 		return Response.ok().entity(true).build();
 	}
@@ -137,7 +136,7 @@ public class EndpointUserAccount {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 		if (userId != 1) { // only Admin may update file lengths
-			return Response.status(Status.FORBIDDEN).build(); 
+			return Response.status(Status.FORBIDDEN).build();
 		}
 
 		System.out.println("add missing permissions - mediumAnalysisLists");
@@ -220,7 +219,7 @@ public class EndpointUserAccount {
 					.setParameter("userAccountId", userAccountId)
 					.setParameter("mediumAnalysisListId", mediumAnalysisListId)
 					.getSingleResult();
-			} 
+			}
 		} catch (NoResultException nre) {
 			// System.out.println("No entry found. Setting value to 0");
 			nre.printStackTrace();
@@ -299,5 +298,5 @@ public class EndpointUserAccount {
 			r.add(clazz.cast(o));
 		return r;
     }
-	
+
 }

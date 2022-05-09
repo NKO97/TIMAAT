@@ -1,12 +1,12 @@
 /*
  * Copyright 2019, 2020 bitGilde IT Solutions UG (haftungsbeschränkt)
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,15 +20,15 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.ws.rs.core.Application;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-
 /**
 * TIMAAT Main Application
-* 
+*
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
 */
 
@@ -37,27 +37,27 @@ public class TIMAATApp extends Application {
 
     // load TIMAAT application properties
     public final static PropertyManagement timaatProps = new PropertyManagement();
-    
+
     public static EntityManagerFactory emf;
 	public static String systemExt = "";
 
     /**
      * TIMAAT Application
-     * 
+     *
      * @throws java.lang.InstantiationException
      */
     public TIMAATApp() throws InstantiationException {
         super();
         Logger.getGlobal().log(Level.INFO, "[TIMAAT Application Init]");
         initEntityManager();
-        
+
     	if ( System.getProperty("os.name").startsWith("Windows") ) systemExt=".exe";
     	else systemExt = "";
-    	
+
     	if ( timaatProps.getProp(PropertyConstants.SERVER_NAME) == null )
     		timaatProps.setProperty(PropertyConstants.SERVER_NAME.key(), "localhost");
     }
-    
+
     /**
      * Initializes TIMAAT DB persistence layer, database
      *
@@ -71,7 +71,7 @@ public class TIMAATApp extends Application {
         dbProps.put("jakarta.persistence.jdbc.user", timaatProps.getProp(PropertyConstants.DATABASE_USER));
         dbProps.put("jakarta.persistence.jdbc.password", timaatProps.getProp(PropertyConstants.DATABASE_PASSWORD));
 //        dbProps.put("eclipselink.target-database", "MySQL");
-                
+
         try {
             // obtain entity manager factory with provided connection settings
             // emf = Persistence.createEntityManagerFactory("FIPOP-JPA", dbProps);
@@ -83,7 +83,7 @@ public class TIMAATApp extends Application {
             throw new InstantiationException("TIMAAT::DB Error:Could not connect to DB. See server log for details.");
         }
     }
-    
+
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new java.util.HashSet<>();

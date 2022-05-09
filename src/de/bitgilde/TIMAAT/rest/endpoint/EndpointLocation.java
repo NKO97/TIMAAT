@@ -6,6 +6,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.City;
+import de.bitgilde.TIMAAT.model.FIPOP.Country;
+import de.bitgilde.TIMAAT.model.FIPOP.County;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.Location;
+import de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.LocationType;
+import de.bitgilde.TIMAAT.model.FIPOP.Province;
+import de.bitgilde.TIMAAT.model.FIPOP.Street;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.servlet.ServletContext;
@@ -21,26 +38,8 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.core.Response.Status;
-
-import org.jvnet.hk2.annotations.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.City;
-import de.bitgilde.TIMAAT.model.FIPOP.Country;
-import de.bitgilde.TIMAAT.model.FIPOP.County;
-import de.bitgilde.TIMAAT.model.FIPOP.Language;
-import de.bitgilde.TIMAAT.model.FIPOP.Location;
-import de.bitgilde.TIMAAT.model.FIPOP.LocationTranslation;
-import de.bitgilde.TIMAAT.model.FIPOP.LocationType;
-import de.bitgilde.TIMAAT.model.FIPOP.Province;
-import de.bitgilde.TIMAAT.model.FIPOP.Street;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.security.UserLogManager;
+import jakarta.ws.rs.core.UriInfo;
 
 /**
 *
@@ -56,7 +55,7 @@ public class EndpointLocation {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-	ServletContext servletContext;	
+	ServletContext servletContext;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -84,7 +83,7 @@ public class EndpointLocation {
 		List<Country> countryList = castList(Country.class, TIMAATApp.emf.createEntityManager().createNamedQuery("Country.findAll").getResultList());
 		return Response.ok().entity(countryList).build();
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -129,7 +128,7 @@ public class EndpointLocation {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
-		if ( location == null ) return Response.status(Status.NOT_FOUND).build();    	 
+		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 
 		return Response.ok().entity(location).build();
 
@@ -143,7 +142,7 @@ public class EndpointLocation {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Country country = entityManager.find(Country.class, id);
-		if ( country == null ) return Response.status(Status.NOT_FOUND).build();   
+		if ( country == null ) return Response.status(Status.NOT_FOUND).build();
 
 		return Response.ok().entity(country).build();
 
@@ -155,7 +154,7 @@ public class EndpointLocation {
 	@Path("all")
 	public Response getAllLocations() {
 		System.out.println("EndpointLocation: getAllLocations");
-		List<Location> locations = null;    	
+		List<Location> locations = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
 			locations = castList(Location.class, entityManager.createQuery("SELECT l from Location l")
@@ -178,18 +177,18 @@ public class EndpointLocation {
 		} catch(Exception e) {};
 		return Response.ok().entity(locationTypes).build();
 	}
-	
+
 	@GET
   @Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("country/all")
 	public Response getAllCountries() {
-		List<Country> countries = null;    	
+		List<Country> countries = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
 			countries = castList(Country.class, entityManager.createQuery("SELECT c from Country c")
 				.getResultList());
-		} catch(Exception e) {};	 	
+		} catch(Exception e) {};
 		return Response.ok().entity(countries).build();
 	}
 
@@ -202,7 +201,7 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: createLocation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Location newLocation = null;  
+		Location newLocation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		// parse JSON data
@@ -256,11 +255,11 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: UPDATE LOCATION - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Location updatedLocation = null;    	
+		Location updatedLocation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 
-		if ( location == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		// parse JSON data
 		try {
 			updatedLocation = mapper.readValue(jsonData, Location.class);
@@ -268,16 +267,16 @@ public class EndpointLocation {
 			System.out.println("EndpointLocation: UPDATE LOCATION - IOException");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedLocation == null ) return Response.notModified().build();		    	
+		if ( updatedLocation == null ) return Response.notModified().build();
 		// update location
-		
+
 		// update log metadata
 		location.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			location.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
-		}		
+			// DEBUG do nothing - production system should abort with internal server error
+		}
 
 		// persist location
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -288,7 +287,7 @@ public class EndpointLocation {
 		entityManager.refresh(location);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONEDITED);
 		System.out.println("EndpointLocation: UPDATE LOCATION - update complete");
 
@@ -300,9 +299,9 @@ public class EndpointLocation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response deleteLocation(@PathParam("id") int id) {   
+	public Response deleteLocation(@PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteLocation");	
+		System.out.println("EndpointLocation: deleteLocation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
@@ -314,7 +313,7 @@ public class EndpointLocation {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONDELETED);
 		System.out.println("EndpointLocation: deleteLocation - delete complete");
 
@@ -362,9 +361,9 @@ public class EndpointLocation {
 		entityTransaction.commit();
 		entityManager.refresh(newTranslation);
 		entityManager.refresh(location);
-		
+
 		// add log entry (always in conjunction with location creation)
-		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.LOCATIONCREATED);
 		System.out.println("EndpointLocation: location translation created with id "+newTranslation.getId());
 
@@ -381,7 +380,7 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: updateLocationTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		LocationTranslation updatedTranslation = null;    	
+		LocationTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		LocationTranslation locationTranslation = entityManager.find(LocationTranslation.class, id);
 
@@ -392,7 +391,7 @@ public class EndpointLocation {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedTranslation == null ) return Response.notModified().build();	
+		if ( updatedTranslation == null ) return Response.notModified().build();
 
 		// update location translation
 		if ( updatedTranslation.getName() != null ) locationTranslation.setName(updatedTranslation.getName());
@@ -406,7 +405,7 @@ public class EndpointLocation {
 		entityManager.refresh(locationTranslation);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONEDITED);
 		System.out.println("EndpointLocation: updateLocationTranslation - updated");
 
@@ -419,7 +418,7 @@ public class EndpointLocation {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{locationId}/translation/{id}")
 	@Secured
-	public Response deleteLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id) {	
+	public Response deleteLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id) {
 
 		System.out.println("EndpointLocation: deleteLocationTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -438,7 +437,7 @@ public class EndpointLocation {
 		entityManager.refresh(location);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONDELETED);
 		return Response.ok().build();
 
@@ -455,7 +454,7 @@ public class EndpointLocation {
 		ObjectMapper mapper = new ObjectMapper();
 		Country newCountry = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newCountry = mapper.readValue(jsonData, Country.class);
@@ -480,7 +479,7 @@ public class EndpointLocation {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newCountry);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCountry.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.COUNTRYCREATED);
 		System.out.println("EndpointLocation: country created with id "+newCountry.getLocationId());
@@ -498,11 +497,11 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: UPDATE COUNTRY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Country updatedCountry = null;    	
+		Country updatedCountry = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Country country = entityManager.find(Country.class, id);
 
-		if ( country == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( country == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// parse JSON data
 		try {
@@ -510,7 +509,7 @@ public class EndpointLocation {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedCountry == null ) return Response.notModified().build();    
+		if ( updatedCountry == null ) return Response.notModified().build();
 
 		// update country
 		if ( updatedCountry.getInternationalDialingPrefix() != null ) country.setInternationalDialingPrefix(updatedCountry.getInternationalDialingPrefix());
@@ -524,7 +523,7 @@ public class EndpointLocation {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			country.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
+			// DEBUG do nothing - production system should abort with internal server error
 		}
 
 		// persist country
@@ -536,7 +535,7 @@ public class EndpointLocation {
 		entityManager.refresh(country);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTRYEDITED);
 		System.out.println("EndpointLocation: UPDATE COUNTRY - update complete");
 
@@ -557,7 +556,7 @@ public class EndpointLocation {
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		Country country = entityManager.find(Country.class, id);
 		if ( country == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// persist country
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -566,7 +565,7 @@ public class EndpointLocation {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTRYDELETED);
 		System.out.println("EndpointLocation: deleteCountry - country deleted");
 
@@ -585,7 +584,7 @@ public class EndpointLocation {
 		ObjectMapper mapper = new ObjectMapper();
 		Province newProvince = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newProvince = mapper.readValue(jsonData, Province.class);
@@ -610,7 +609,7 @@ public class EndpointLocation {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newProvince);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newProvince.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.PROVINCECREATED);
 		System.out.println("EndpointLocation: province created with id "+newProvince.getLocationId());
@@ -628,11 +627,11 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: UPDATE PROVINCE - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Province updatedProvince = null;    	
+		Province updatedProvince = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Province province = entityManager.find(Province.class, id);
 
-		if ( province == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( province == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// parse JSON data
 		try {
@@ -640,7 +639,7 @@ public class EndpointLocation {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedProvince == null ) return Response.notModified().build();    
+		if ( updatedProvince == null ) return Response.notModified().build();
 
 		// update province
 
@@ -649,7 +648,7 @@ public class EndpointLocation {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			province.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
+			// DEBUG do nothing - production system should abort with internal server error
 		}
 
 		// persist province
@@ -661,7 +660,7 @@ public class EndpointLocation {
 		entityManager.refresh(province);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.PROVINCEEDITED);
 		System.out.println("EndpointLocation: UPDATE PROVINCE - update complete");
 
@@ -674,7 +673,7 @@ public class EndpointLocation {
 	@Path("province/{id}")
 	@Secured
 	public Response deleteProvince(@PathParam("id") int id) {
-		
+
 		System.out.println("EndpointLocation: deleteProvince with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
@@ -682,7 +681,7 @@ public class EndpointLocation {
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		Province province = entityManager.find(Province.class, id);
 		if ( province == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// persist province
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -691,7 +690,7 @@ public class EndpointLocation {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.PROVINCEDELETED);
 		System.out.println("EndpointLocation: deleteProvince - province deleted");
 
@@ -710,7 +709,7 @@ public class EndpointLocation {
 		ObjectMapper mapper = new ObjectMapper();
 		County newCounty = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newCounty = mapper.readValue(jsonData, County.class);
@@ -735,7 +734,7 @@ public class EndpointLocation {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newCounty);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCounty.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.COUNTYCREATED);
 		System.out.println("EndpointLocation: county created with id "+newCounty.getLocationId());
@@ -753,11 +752,11 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: UPDATE COUNTY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		County updatedCounty = null;    	
+		County updatedCounty = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		County county = entityManager.find(County.class, id);
 
-		if ( county == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( county == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// parse JSON data
 		try {
@@ -765,7 +764,7 @@ public class EndpointLocation {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedCounty == null ) return Response.notModified().build();    
+		if ( updatedCounty == null ) return Response.notModified().build();
 
 		// update county
 
@@ -774,7 +773,7 @@ public class EndpointLocation {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			county.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
+			// DEBUG do nothing - production system should abort with internal server error
 		}
 
 		// persist county
@@ -786,7 +785,7 @@ public class EndpointLocation {
 		entityManager.refresh(county);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTYEDITED);
 		System.out.println("EndpointLocation: UPDATE COUNTY - update complete");
 
@@ -799,7 +798,7 @@ public class EndpointLocation {
 	@Path("county/{id}")
 	@Secured
 	public Response deleteCounty(@PathParam("id") int id) {
-		
+
 		System.out.println("EndpointLocation: deleteCounty with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
@@ -807,7 +806,7 @@ public class EndpointLocation {
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		County county = entityManager.find(County.class, id);
 		if ( county == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// persist county
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -816,7 +815,7 @@ public class EndpointLocation {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTYDELETED);
 		System.out.println("EndpointLocation: deleteCounty - county deleted");
 
@@ -835,7 +834,7 @@ public class EndpointLocation {
 		ObjectMapper mapper = new ObjectMapper();
 		City newCity = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newCity = mapper.readValue(jsonData, City.class);
@@ -860,7 +859,7 @@ public class EndpointLocation {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newCity);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCity.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.CITYCREATED);
 		System.out.println("EndpointLocation: city created with id "+newCity.getLocationId());
@@ -878,11 +877,11 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: UPDATE CITY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		City updatedCity = null;    	
+		City updatedCity = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		City city = entityManager.find(City.class, id);
 
-		if ( city == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( city == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// parse JSON data
 		try {
@@ -890,7 +889,7 @@ public class EndpointLocation {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedCity == null ) return Response.notModified().build();    
+		if ( updatedCity == null ) return Response.notModified().build();
 
 		// update city
 
@@ -899,7 +898,7 @@ public class EndpointLocation {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			city.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
+			// DEBUG do nothing - production system should abort with internal server error
 		}
 
 		// persist city
@@ -911,7 +910,7 @@ public class EndpointLocation {
 		entityManager.refresh(city);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.CITYEDITED);
 		System.out.println("EndpointLocation: UPDATE CITY - update complete");
 
@@ -924,7 +923,7 @@ public class EndpointLocation {
 	@Path("city/{id}")
 	@Secured
 	public Response deleteCity(@PathParam("id") int id) {
-		
+
 		System.out.println("EndpointLocation: deleteCity with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
@@ -932,7 +931,7 @@ public class EndpointLocation {
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		City city = entityManager.find(City.class, id);
 		if ( city == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// persist city
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -941,7 +940,7 @@ public class EndpointLocation {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.CITYDELETED);
 		System.out.println("EndpointLocation: deleteCity - city deleted");
 
@@ -960,7 +959,7 @@ public class EndpointLocation {
 		ObjectMapper mapper = new ObjectMapper();
 		Street newStreet = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		
+
 		// parse JSON data
 		try {
 			newStreet = mapper.readValue(jsonData, Street.class);
@@ -985,7 +984,7 @@ public class EndpointLocation {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newStreet);
-		
+
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newStreet.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.STREETCREATED);
 		System.out.println("EndpointLocation: street created with id "+newStreet.getLocationId());
@@ -1003,11 +1002,11 @@ public class EndpointLocation {
 
 		System.out.println("EndpointLocation: UPDATE STREET - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		Street updatedStreet = null;    	
+		Street updatedStreet = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Street street = entityManager.find(Street.class, id);
 
-		if ( street == null ) return Response.status(Status.NOT_FOUND).build();		
+		if ( street == null ) return Response.status(Status.NOT_FOUND).build();
 
 		// parse JSON data
 		try {
@@ -1015,7 +1014,7 @@ public class EndpointLocation {
 		} catch (IOException e) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		if ( updatedStreet == null ) return Response.notModified().build();    
+		if ( updatedStreet == null ) return Response.notModified().build();
 
 		// update street
 
@@ -1024,7 +1023,7 @@ public class EndpointLocation {
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
 			street.getLocation().setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
-			// DEBUG do nothing - production system should abort with internal server error			
+			// DEBUG do nothing - production system should abort with internal server error
 		}
 
 		// persist street
@@ -1036,7 +1035,7 @@ public class EndpointLocation {
 		entityManager.refresh(street);
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.STREETEDITED);
 		System.out.println("EndpointLocation: UPDATE STREET - update complete");
 
@@ -1049,7 +1048,7 @@ public class EndpointLocation {
 	@Path("street/{id}")
 	@Secured
 	public Response deleteStreet(@PathParam("id") int id) {
-		
+
 		System.out.println("EndpointLocation: deleteStreet with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
@@ -1057,7 +1056,7 @@ public class EndpointLocation {
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
 		Street street = entityManager.find(Street.class, id);
 		if ( street == null ) return Response.status(Status.NOT_FOUND).build();
-		
+
 		// persist street
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1066,7 +1065,7 @@ public class EndpointLocation {
 		entityTransaction.commit();
 
 		// add log entry
-		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), 
+		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.STREETDELETED);
 		System.out.println("EndpointLocation: deleteStreet - street deleted");
 

@@ -1,13 +1,17 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
-// import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the audio_codec_information database table.
- * 
+ *
  */
 @Entity
 @Table(name="audio_codec_information")

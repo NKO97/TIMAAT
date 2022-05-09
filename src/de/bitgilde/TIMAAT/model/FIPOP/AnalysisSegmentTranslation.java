@@ -1,14 +1,24 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the analysis_segment_translation database table.
- * 
+ *
  */
 @Entity
 @Table(name="analysis_segment_translation")
@@ -24,7 +34,7 @@ public class AnalysisSegmentTranslation implements Serializable {
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
-	private Language language;	
+	private Language language;
 
 	private String name;
 
@@ -37,7 +47,7 @@ public class AnalysisSegmentTranslation implements Serializable {
 	//bi-directional many-to-one association to AnalysisSegment
 	@ManyToOne
 	@JoinColumn(name="analysis_segment_id")
-	@JsonIgnore	
+	@JsonIgnore
 	private AnalysisSegment analysisSegment;
 
 	public AnalysisSegmentTranslation() {

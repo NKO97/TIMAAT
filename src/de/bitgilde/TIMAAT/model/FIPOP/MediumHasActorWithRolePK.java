@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the medium_has_actor_with_role database table.
- * 
+ *
  */
 @Embeddable
 public class MediumHasActorWithRolePK implements Serializable {
@@ -50,7 +52,7 @@ public class MediumHasActorWithRolePK implements Serializable {
 			return false;
 		}
 		MediumHasActorWithRolePK castOther = (MediumHasActorWithRolePK)other;
-		return 
+		return
 			(this.mediumId == castOther.mediumId)
 			&& (this.actorHasRoleActorId == castOther.actorHasRoleActorId)
 			&& (this.actorHasRoleRoleId == castOther.actorHasRoleRoleId);
@@ -62,7 +64,7 @@ public class MediumHasActorWithRolePK implements Serializable {
 		hash = hash * prime + this.mediumId;
 		hash = hash * prime + this.actorHasRoleActorId;
 		hash = hash * prime + this.actorHasRoleRoleId;
-		
+
 		return hash;
 	}
 }

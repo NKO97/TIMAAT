@@ -3,6 +3,11 @@ package de.bitgilde.TIMAAT.publication;
 import java.io.IOException;
 import java.util.Base64;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.Publication;
+import de.bitgilde.TIMAAT.model.publication.PublicationAuthentication;
 import jakarta.annotation.Priority;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.Priorities;
@@ -12,12 +17,6 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.Publication;
-import de.bitgilde.TIMAAT.model.publication.PublicationAuthentication;
 
 /**
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
@@ -30,7 +29,7 @@ public class PublicationAuthenticationFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		
+
 		String slug = requestContext.getUriInfo().getPath().split("/")[0];
 		// find publication
 		EntityManager em = TIMAATApp.emf.createEntityManager();
@@ -69,7 +68,7 @@ public class PublicationAuthenticationFilter implements ContainerRequestFilter {
 			if ( userAuth.split("\\s+").length > 1 ) userAuth = userAuth.split("\\s+")[1];
 			try {
 				userAuth = new String(Base64.getDecoder().decode(userAuth));
-				
+
 			} catch (Exception e) {
 				requireAuthentication(pub, requestContext);
 				return;
@@ -81,17 +80,17 @@ public class PublicationAuthenticationFilter implements ContainerRequestFilter {
 				if ( user.compareTo(auth.getUser()) != 0 || pass.compareTo(auth.getPassword()) != 0 )
 					requireAuthentication(pub, requestContext);
 			}
-			
 
 
-			
+
+
 		}
-		
+
 	}
-	
+
 	private void requireAuthentication(Publication pub, ContainerRequestContext requestContext) {
 		requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-		        .header(HttpHeaders.WWW_AUTHENTICATE, 
+		        .header(HttpHeaders.WWW_AUTHENTICATE,
 		                "Basic" + " realm=\"" + pub.getTitle() + " (TIMAAT Publication)" + "\"")
 		        .build());
 	}

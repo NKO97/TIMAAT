@@ -1,5 +1,11 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 import jakarta.persistence.NoResultException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -11,13 +17,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-import org.jvnet.hk2.annotations.Service;
-
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
-import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.security.UserLogManager;
-
 /**
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
@@ -28,14 +27,14 @@ import de.bitgilde.TIMAAT.security.UserLogManager;
 public class EndpointUserLog {
 
 	@Context ContainerRequestContext crc;
-	
+
 
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
 	@Path("user/{id}")
 	@Secured
 	public Response getUserLog(@PathParam("id") int id) {
-    	
+
 
 		UserAccount user = null;
 		try {
@@ -47,7 +46,7 @@ public class EndpointUserLog {
 			return Response.status(Status.NOT_FOUND).entity("User not found!").build();
 		}
 		if ( user == null ) return Response.status(Status.NOT_FOUND).entity("User not found!").build();
-		
+
 		return Response.ok().entity(UserLogManager.getLogger().getLogForUser(user.getId(), 20)).build();
 	}
 

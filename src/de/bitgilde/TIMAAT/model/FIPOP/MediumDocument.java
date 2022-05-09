@@ -1,14 +1,21 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 
 /**
  * The persistent class for the medium_document database table.
- * 
+ *
  */
 @Entity
 @Table(name="medium_document")
@@ -22,7 +29,7 @@ public class MediumDocument implements Serializable {
 
 	//bi-directional one-to-one association to Medium
 	@OneToOne
-	@PrimaryKeyJoinColumn(name="medium_id") 
+	@PrimaryKeyJoinColumn(name="medium_id")
 	@JsonIgnore // MediumDocument is accessed through Medium --> avoid reference cycle
 	private Medium medium;
 

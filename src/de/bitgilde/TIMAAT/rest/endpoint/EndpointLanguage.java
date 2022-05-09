@@ -5,6 +5,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jvnet.hk2.annotations.Service;
+
+import de.bitgilde.TIMAAT.SelectElement;
+import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.model.DataTableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.security.UserLogManager;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -22,19 +32,8 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.core.Response.Status;
-
-import org.jvnet.hk2.annotations.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import de.bitgilde.TIMAAT.SelectElement;
-import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.model.DataTableInfo;
-import de.bitgilde.TIMAAT.model.FIPOP.Language;
-import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.security.UserLogManager;
+import jakarta.ws.rs.core.UriInfo;
 
 
 @Service
@@ -45,8 +44,8 @@ public class EndpointLanguage {
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
-  ServletContext servletContext;	
-  
+  ServletContext servletContext;
+
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -61,12 +60,12 @@ public class EndpointLanguage {
 	{
 		// System.out.println("EndpointLanguage: getLanguageList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
-		
+
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 		// String languageQuery = "SELECT l.name FROM Language l"; //  WHERE l.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery = "SELECT rt.name FROM Language rt WHERE rt.Language.id = r.id AND rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"')";
 		// String languageQuery2 = "SELECT rt.name WHERE rt.Language.id = r.id AND rt.language.id = (SELECT l.id from Language l WHERE l.code = '"+languageCode+"')";
-		
+
 		// sanitize user input
 		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
 		String column = "l.id";
@@ -95,12 +94,12 @@ public class EndpointLanguage {
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				// "SELECT r FROM Language r ORDER BY "+column+" "+direction);
 				"SELECT l FROM Language l ORDER BY "+column+" "+direction);
-		}	
+		}
 		if ( start != null && start > 0 ) query.setFirstResult(start);
 		if ( length != null && length > 0 ) query.setMaxResults(length);
 
 		List<Language> languageList = castList(Language.class, query.getResultList());
-		
+
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, languageList)).build();
   }
 
@@ -205,11 +204,11 @@ public class EndpointLanguage {
 	@Path("{id}")
 	@Secured
 	public Response updateLanguage(@PathParam("id") int id,
-																				String jsonData) {																					
+																				String jsonData) {
 		System.out.println("EndpointLanguage: update translation - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
-		Language updatedLanguage = null;    	
+		Language updatedLanguage = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Language Language = entityManager.find(Language.class, id);
 
@@ -230,11 +229,11 @@ public class EndpointLanguage {
 		}
 
 		// update translation
-		System.out.println("EndpointLanguage: update translation - language id: " + updatedLanguage.getId());	
+		System.out.println("EndpointLanguage: update translation - language id: " + updatedLanguage.getId());
 		if ( updatedLanguage.getName() != null ) Language.setName(updatedLanguage.getName());
 		if ( updatedLanguage.getCode() != null ) Language.setCode(updatedLanguage.getCode());
 
-		System.out.println("EndpointLanguage: update translation - start transaction");	
+		System.out.println("EndpointLanguage: update translation - start transaction");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		// update Language translation
 		entityTransaction.begin();
@@ -243,12 +242,12 @@ public class EndpointLanguage {
 		entityTransaction.commit();
 		entityManager.refresh(Language);
 
-		System.out.println("EndpointLanguage: update translation - only logging remains");	
+		System.out.println("EndpointLanguage: update translation - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.LANGUAGEEDITED);
-		System.out.println("EndpointLanguage: update translation - update complete");	
+		System.out.println("EndpointLanguage: update translation - update complete");
 		return Response.ok().entity(Language).build();
 	}
 
@@ -267,12 +266,12 @@ public class EndpointLanguage {
 		entityTransaction.begin();
 		entityManager.remove(Language);
 		entityTransaction.commit();
-		
+
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.LANGUAGEDELETED);
-		System.out.println("EndpointLanguage: deleteLanguage - delete complete");	
+		System.out.println("EndpointLanguage: deleteLanguage - delete complete");
 		return Response.ok().build();
 	}
 

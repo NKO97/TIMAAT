@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the reference_data_field_requirements database table.
- * 
+ *
  */
 @Embeddable
 public class ReferenceDataFieldRequirementPK implements Serializable {
@@ -41,7 +43,7 @@ public class ReferenceDataFieldRequirementPK implements Serializable {
 			return false;
 		}
 		ReferenceDataFieldRequirementPK castOther = (ReferenceDataFieldRequirementPK)other;
-		return 
+		return
 			(this.referenceEntryTypeId == castOther.referenceEntryTypeId)
 			&& (this.referenceId == castOther.referenceId);
 	}
@@ -51,7 +53,7 @@ public class ReferenceDataFieldRequirementPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.referenceEntryTypeId;
 		hash = hash * prime + this.referenceId;
-		
+
 		return hash;
 	}
 }

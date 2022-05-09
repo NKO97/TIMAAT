@@ -1,11 +1,13 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
  * The primary key class for the actor_is_located_in_country database table.
- * 
+ *
  */
 @Embeddable
 public class ActorIsLocatedInCountryPK implements Serializable {
@@ -41,7 +43,7 @@ public class ActorIsLocatedInCountryPK implements Serializable {
 			return false;
 		}
 		ActorIsLocatedInCountryPK castOther = (ActorIsLocatedInCountryPK)other;
-		return 
+		return
 			(this.actorId == castOther.actorId)
 			&& (this.countryLocationId == castOther.countryLocationId);
 	}
@@ -51,7 +53,7 @@ public class ActorIsLocatedInCountryPK implements Serializable {
 		int hash = 17;
 		hash = hash * prime + this.actorId;
 		hash = hash * prime + this.countryLocationId;
-		
+
 		return hash;
 	}
 }

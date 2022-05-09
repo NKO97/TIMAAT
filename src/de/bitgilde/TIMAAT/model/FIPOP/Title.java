@@ -1,15 +1,26 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+
 
 /**
  * The persistent class for the title database table.
- * 
+ *
  */
 @Entity
 @NamedQuery(name="Title.findAll", query="SELECT t FROM Title t")
@@ -32,7 +43,7 @@ public class Title implements Serializable {
 	@JsonIgnore
 	private List<Medium> mediums2;
 
-		
+
 	//bi-directional many-to-one association to Language
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Language language;
