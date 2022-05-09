@@ -1,0 +1,3 @@
+ALTER TABLE `FIPOP`.`medium_audio` CHANGE `audio_codec_information_id` `audio_codec_information_id` INT(11) NULL;
+ALTER TABLE `medium_audio` DROP FOREIGN KEY `fk_medium_audio_audio_post_production1`;
+ALTER TABLE `medium_audio` ADD CONSTRAINT `fk_medium_audio_audio_post_production1` FOREIGN KEY (`audio_codec_information_id`) REFERENCES `audio_codec_information`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
