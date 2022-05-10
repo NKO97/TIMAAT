@@ -97,52 +97,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	bottom: 0.25rem !important;
 }
 
-.timaat-video-card {
-	cursor: pointer;
-	width: 16rem;
-	float: left;
-	margin-right: 2em;
-	margin-bottom: 2em;
-}
-
-.timaat-video-upload-card {
-	border: 2px dashed #bbb;
-}
-#timaat-video-upload {
-	position: absolute;
-	width: 100%;
-	height: 100%
-}
-#timaat-video-upload:hover {
-	background: black;
-	opacity: 0.2;
-}
-
-#timaat-videochooser-table td.videochooser-item-preview {
-	padding:0;
-}
-
-/* #timaat-mediumcollectiondatasets-mediumcollection-items td.actions,
-#timaat-videochooser-list td.actions {
-	padding: 5px 5px;
-} */
-
-#timaat-component-videochooser {
-	max-height: initial !important;
-}
-
-#timaat-videochooser-table_length, #timaat-videochooser-table_info {
-	padding-left: 1em;
-}
-#timaat-videochooser-table_filter, #timaat-videochooser-table_paginate {
-	padding-left: 1em;
-	padding-right: 1em;
-}
-
-#timaat-videochooser-collectionlibrary, #timaat-videochooser-collectionlist li {
-	cursor: pointer;
-}
-
 #timaat-component-videoplayer .timaat-videoplayer-video-footer {
 	padding-top: 0.25rem;
 	padding-bottom: 0.25rem;
@@ -197,20 +151,6 @@ th.timaat-padding.sorting_asc:before, th.timaat-padding.sorting_desc:before, th.
 	height: 133px;
 }
 */
-
-.timaat-video-card .duration {
-	margin-top: -1.7em;
-	margin-right: 0.5em;
-	text-shadow: 0 0 2px black;
-}
-
-.timaat-video-card .title {
-	font-size: 0.75rem;
-	height: 5em;
-	overflow: hidden;
-	text-overflow: ellipsis;
-/*	white-space: nowrap; */
-}
 
 .card-img-top {
 	width: auto;

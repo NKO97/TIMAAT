@@ -1240,6 +1240,33 @@
 			})
 		},
 
+		loadThumbnail: function (medium) {
+			if ( !medium || !medium.ui ) return;
+			var img = $('<img />').appendTo('body').hide();
+			img.data('video', medium );
+			img.on('load', function(ev) {
+				var medium = $(ev.target).data('video');
+				if (medium.mediumVideo) {
+					medium.ui.find('.card-img-top').attr('src', "api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+				}
+				if (medium.mediumImage) {
+					medium.ui.find('.card-img-top').attr('src', "api/medium/image/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+				}
+				$(ev.target).remove();
+			});
+			img.on('error', function(ev) {
+				ev.preventDefault();
+				ev.stopPropagation();
+				$(ev.target).remove();
+			});
+			if (medium.mediumVideo) {
+				img.attr('src', "api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+			}
+			if (medium.mediumImage) {
+				img.attr('src', "api/medium/image/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+			}
+		},
+
 		createShape: function(type) {
 			// console.log("TCL: createShape: function(type)");
 			// console.log("TCL: type", type);

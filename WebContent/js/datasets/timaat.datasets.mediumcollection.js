@@ -1090,10 +1090,8 @@
 					mediumCollectionElement.data('medium', medium);
 					// mediumCollectionElement.find('input:checkbox').prop('checked', false);
 					// mediumCollectionElement.find('input:checkbox').change(function() {
-					// 	$('#timaat-videochooser-list-action-submit-button').prop('disabled', TIMAAT.VideoChooser.dt.$('input:checked').length == 0);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -1206,7 +1204,7 @@
 					// });
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
@@ -1227,7 +1225,7 @@
 						return order;
 						}
 					},
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, collectionItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, collectionItem, meta) {
             // console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
 						let ui;
 						if (collectionItem.medium.mediumVideo) {
@@ -1307,7 +1305,7 @@
 					},
 					{ data: 'medium.mediumHasActorWithRoles', name: 'producer', className: 'producer', orderable: false, width: '10%', render: function(data, type, collectionItem, meta) {
 						// console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
-						return TIMAAT.VideoChooser._getProducer(collectionItem.medium);
+						return TIMAAT.MediumCollectionDatasets._getProducer(collectionItem.medium);
 						}
 					},
 					{ data: 'medium.releaseDate', name: 'releaseDate', className: 'date', orderable: false, width: '10%', render: function(data, type, collectionItem, meta) {
@@ -2026,6 +2024,32 @@
       $('#mediumcollection-metadata-form-dismiss-button').show();
 			$('#mediumcollection-metadata-form :input').prop('disabled', false);
 			$('#timaat-mediumcollectiondatasets-metadata-title').focus();
+		},
+
+		_getProducer: function(video) {
+			if ( !video || !video.mediumHasActorWithRoles ) return "-";
+			var actors = [];
+			video.mediumHasActorWithRoles.forEach(function(role) {
+				if ( role.role.id == 5 ) actors.push(role.actor); // 5 == Producer, according to TIMAAT DB definition
+			});
+			if ( actors.length == 0 ) return "-";
+			var producer = "";
+			var i = 0;
+			for (; i < actors.length; i++) {
+				if (producer.length == 0) {
+					producer += actors[i].displayName.name;
+					if (actors[i].birthName && actors[i].birthName.name != actors[i].displayName.name) {
+						producer += " <i>("+ actors[i].birthName.name+")<i>";
+					}
+				} else {
+					producer += ",<br>"+actors[i].displayName.name;
+					if (actors[i].birthName && actors[i].birthName.name != actors[i].displayName.name) {
+						producer += " <i>("+ actors[i].birthName.name+")<i>";
+					}
+				}
+			}
+      // console.log("TCL: producer", producer);
+			return producer;
 		},
 
 	}

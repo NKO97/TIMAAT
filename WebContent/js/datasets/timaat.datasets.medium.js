@@ -3904,8 +3904,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -3937,11 +3936,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllMediaDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -4149,8 +4148,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -4179,7 +4177,7 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+					TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
@@ -4343,8 +4341,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -4373,11 +4370,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -4532,8 +4529,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -4565,11 +4561,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -4724,8 +4720,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -4757,11 +4752,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -4935,8 +4930,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -4968,11 +4962,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -5146,8 +5140,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -5179,11 +5172,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -5368,8 +5361,7 @@
 					medium.ui = rowItem;
 					rowItem.data('medium', medium);
 
-					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoChooser.loadThumbnail(medium);
-					// TIMAAT.VideoChooser.setVideoStatus(medium);
+					if ( medium.fileStatus != "noFile" ) TIMAAT.VideoPlayer.loadThumbnail(medium);
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
@@ -5401,11 +5393,11 @@
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
-						TIMAAT.VideoChooser.updateVideoStatus(medium);
+						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
 				},
 				"columns": [
-					{ data: null, className: 'videochooser-item-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
@@ -6720,6 +6712,38 @@
 			$('#medium-metadata-form').data('medium', selectedItem);
 			this.showAddMediumButton();
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'medium');
+		},
+
+		updateVideoStatus: function(medium) {
+			// console.log("TCL: updateVideoStatus: function(medium)", medium);
+			medium.poll = window.setInterval(function() {
+				if ( medium.ui && !medium.ui.is(':visible') ) return;
+				jQuery.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+medium.id+'/status',
+					type:"GET",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+        	// console.log("TCL: data", data);
+					if ( medium.fileStatus && medium.fileStatus == data ) return;
+					medium.fileStatus = data;
+
+					this.setMediumStatus(medium);
+
+					if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
+						window.clearInterval(medium.poll);
+						// console.log("TCL: medium.fileStatus", medium.fileStatus);
+				})
+				.fail(function(error) {
+					// TODO handle error
+					window.clearInterval(medium.poll);
+					medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> not available');
+					console.error("ERROR: ", error);
+				});
+
+			}, Math.round(30000+(Math.random()*15000)));
+
 		},
 
 	}

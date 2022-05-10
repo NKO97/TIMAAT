@@ -699,7 +699,6 @@
 						// if ( medium.fileStatus && medium.fileStatus == data ) return;
 						// medium.fileStatus = data;
 
-						// TIMAAT.VideoChooser.setVideoStatus(video);
 						// TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 						// if (medium.fileStatus == 'unavailable' || medium.fileStatus == 'ready')
