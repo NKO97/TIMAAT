@@ -15,6 +15,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 
 
+
 /**
  * The persistent class for the address database table.
  *

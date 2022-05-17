@@ -281,11 +281,6 @@ public class EndpointMedium {
 	{
 		// System.out.println("EndpointMedium: getImageSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
 
-		// String column = "m.id";
-		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema
-		// }
-
 		// TODO search all titles, not displayTitle only
 		// define default query strings
 		String mediumQuery = "SELECT m FROM Medium m ORDER BY m.displayTitle.name";
@@ -332,11 +327,6 @@ public class EndpointMedium {
 			@QueryParam("search") String search)
 	{
 		// System.out.println("EndpointMedium: getVideoSelectList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
-
-		// String column = "m.id";
-		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "m.displayTitle.name"; // TODO change displayTitle access in DB-Schema
-		// }
 
 		// TODO search all titles, not displayTitle only
 		// define default query strings
@@ -2269,8 +2259,10 @@ public class EndpointMedium {
 		// System.out.println("EndpointMedium: addTitle: title: "+newTitle.getName());
 		// sanitize object data
 		newTitle.setId(0);
+
 		Language language = entityManager.find(Language.class, newTitle.getLanguage().getId());
 		newTitle.setLanguage(language);
+
 		Medium medium = entityManager.find(Medium.class, mediumId);
 
 		// update log metadata
@@ -2303,8 +2295,8 @@ public class EndpointMedium {
 		System.out.println("EndpointMedium: addTitle: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.TITLECREATED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.TITLECREATED);
 
 		System.out.println("EndpointMedium: addTitle: title added with id "+newTitle.getId());
 		System.out.println("EndpointMedium: addTitle: title added with language id "+newTitle.getLanguage().getId());

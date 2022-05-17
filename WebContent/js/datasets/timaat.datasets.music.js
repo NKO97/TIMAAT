@@ -648,8 +648,9 @@
 			});
 
 			// Add title button click
-			$(document).on('click','[data-role="music-new-title-fields"] > .form-group [data-role="add"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="music-new-title-fields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.add-title-button', function(event) {
+					event.preventDefault();
 				// console.log("TCL: add title to list");
 				var listEntry = $(this).closest('[data-role="music-new-title-fields"]');
 				var title = '';
@@ -716,7 +717,7 @@
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button remove-title-button btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -774,7 +775,8 @@
 			});
 
 			// Remove title button click
-			$(document).on('click','[data-role="music-dynamic-title-fields"] > .form-group [data-role="remove"]', function(event) {
+			// $(document).on('click','[data-role="music-dynamic-title-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.remove-title-button', function(event) {
 				event.preventDefault();
 				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
 				if (isDisplayTitle == "on") {
@@ -1066,8 +1068,9 @@
 			});
 
 			// add actorwithroles button click
-			$(document).on('click','[data-role="music-new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
-				// console.log("TCL: add new actor with role(s)");
+			// $(document).on('click','[data-role="music-new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','.add-music-has-actor-with-role-button', async function(event) {
+					// console.log("TCL: add new actor with role(s)");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="music-new-actorwithrole-fields"]');
 				var newFormEntry = [];
@@ -1165,7 +1168,8 @@
 			});
 
 			// remove actorwithroles button click
-			$(document).on('click','[data-role="music-dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
+			// $(document).on('click','[data-role="music-dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','.remove-music-has-actor-with-role-button', async function(event) {
 				// console.log("TCL: remove actor with role(s)");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
@@ -1367,8 +1371,9 @@
 			});
 
 			// add mediumhasmusiclist button click
-			$(document).on('click','[data-role="music-new-mediumhasmusic-fields"] > .form-group [data-role="add"]', async function(event) {
-				// console.log("TCL: add new medium with music(s)");
+			// $(document).on('click','[data-role="music-new-mediumhasmusic-fields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','.add-music-is-in-medium-button', async function(event) {
+					// console.log("TCL: add new medium with music(s)");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="music-new-mediumhasmusic-fields"]');
 				var newFormEntry = [];
@@ -1451,8 +1456,9 @@
 			});
 
 			// add medium has music detail button click
-			$(document).on('click', '.form-group [data-role="addMediumHasMusicDetail"]', async function(event) {
-				// console.log("TCL: MediumHasMusic form: add details to mediumHasMusic");
+			// $(document).on('click', '.form-group [data-role="addMediumHasMusicDetail"]', async function(event) {
+			$(document).on('click', '.add-medium-has-music-detail-button', async function(event) {
+					// console.log("TCL: MediumHasMusic form: add details to mediumHasMusic");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-musicisinmedium-detail-fields"]');
 				var newMusicInMediumData = [];
@@ -1486,8 +1492,9 @@
 			});
 
 			// remove mediumhasmusiclist button click
-			$(document).on('click','[data-role="music-dynamic-mediumhasmusic-fields"] > .form-group [data-role="remove"]', async function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="music-dynamic-mediumhasmusic-fields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','.remove-medium-has-music-button', async function(event) {
+					event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
@@ -2182,7 +2189,7 @@
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="btn btn-danger"
+								<button class="form-group__button js-form-group__button remove-title-button btn btn-danger"
 												data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
@@ -2243,8 +2250,9 @@
 				$('#music-titles-form-dismiss').hide();
 				$('[data-role="music-new-title-fields"').hide();
 				$('.title-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="add"]').hide();
+				$('.js-form-group__button').hide();
 				$('#musicTitlesLabel').html("Music titles");
 				let i = 0;
 				for (; i < numTitles; i++) {
@@ -2327,11 +2335,12 @@
 				$('#music-mediumhasmusiclist-form-dismiss').hide();
 				$('[data-role="music-new-mediumhasmusic-fields"]').hide();
 				$('.mediumhasmusiclist-form-divider').hide();
-				$('[data-role="remove"]').hide();
+				// $('[data-role="remove"]').hide();
 				$('[data-role="removeMediumHasMusicDetail"]').hide();
-				$('[data-role="add"]').hide();
-				$('[data-role="addMediumHasMusicDetail"]').hide();
-				$('[data-role="save"]').hide();
+				// $('[data-role="add"]').hide();
+				// $('[data-role="addMediumHasMusicDetail"]').hide();
+				// $('[data-role="save"]').hide();
+				$('.js-form-group__button').hide();
 				$('#musicMediumHasMusicListLabel').html("Music medium music");
 			}
 			else if (action == 'edit') {
@@ -2472,8 +2481,9 @@
 				$('#music-actorwithroles-form-dismiss').hide();
 				$('[data-role="music-new-actorwithrole-fields"]').hide();
 				$('.actorwithrole-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="add"]').hide();
+				$('.js-form-group__button').hide();
 				$('#musicActorRolesLabel').html("Music actor roles");
 			}
 			else if (action == 'edit') {
@@ -3199,7 +3209,7 @@
 						</select>
 					</div>
 					<div class="col-md-1 text-center">
-						<button class="btn btn-primary" data-role="add">
+						<button class="form-group__button form-group__button--add js-form-group__button add-title-button btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -3239,7 +3249,7 @@
 							</div>
 						</div>
 						<div class="col-md-1 text-center">
-							<button class="btn btn-danger" data-role="remove">
+							<button class="form-group__button js-form-group__button remove-music-has-actor-with-role-button btn btn-danger" data-role="remove">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
@@ -3281,7 +3291,7 @@
 							</fieldset>
 						</div>
 						<div class="col-md-1 vertical-aligned">
-							<button type="button" class="btn btn-primary" data-role="add">
+							<button type="button" class="form-group__button js-form-group__button add-music-has-actor-with-role-button btn btn-primary" data-role="add">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -3337,7 +3347,7 @@
 						</fieldset>
 					</div>
 					<div class="col-md-1 vertical-aligned">
-						<button type="button" class="btn btn-danger" data-role="remove">
+						<button type="button" class="form-group__button js-form-group__button remove-medium-has-music-button btn btn-danger" data-role="remove">
 							<i class="fas fa-trash-alt"></i>
 						</button>
 					</div>
@@ -3378,7 +3388,7 @@
 						</fieldset>
 					</div>
 					<div class="col-md-1 vertical-aligned">
-						<button type="button" class="btn btn-primary" data-role="add">
+						<button type="button" class="form-group__button js-form-group__button add-music-is-in-medium-button btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -3463,7 +3473,7 @@
 								aria-describedby="Music ends at">
 				</div>
 				<div class="col-md-2 vertical-aligned">
-					<button type="button" class="btn btn-primary" data-role="addMediumHasMusicDetail">
+					<button type="button" class="form-group__button js-form-group__button add-medium-has-music-detail-button btn btn-primary" data-role="addMediumHasMusicDetail">
 						<i class="fas fa-plus"></i>
 					</button>
 				</div>

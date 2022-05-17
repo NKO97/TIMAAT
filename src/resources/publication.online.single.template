@@ -748,7 +748,7 @@
             </div>
             <!-- Volume Control -->
             <div
-              class="video-volume-control btn-group btn-group-sm"
+              class="video-media-player-volume-control btn-group btn-group-sm"
               title="Set volume  [m = toggle mute]"
             >
               <button class="btn toggle-volume on text-white">

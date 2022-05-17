@@ -1549,7 +1549,7 @@ public class EndpointActor {
 
 		System.out.println("EndpointActor: addAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address address = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -1565,15 +1565,14 @@ public class EndpointActor {
 			System.out.println("EndpointActor: addAddress: address == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addAddress: address: "+address.getAddress());
 		// sanitize object data
 		address.setId(0);
 
 		Street street = entityManager.find(Street.class, address.getStreet().getLocationId());
-		// System.out.println("EndpointActor: addAddress: street: "+address.getStreet().getLocationId());
 		address.setStreet(street);
+		// System.out.println("EndpointActor: addAddress: street id: "+address.getStreet().getLocationId());
+
 		Actor actor = entityManager.find(Actor.class, actorId);
-		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
 		// Not necessary, an address will always be created in conjunction with a actor
@@ -1585,7 +1584,7 @@ public class EndpointActor {
 		entityManager.persist(street);
 		entityManager.persist(address);
 		entityManager.flush();
-		address.setStreet(street);
+		address.setStreet(street); //! TODO already set above
 		entityTransaction.commit();
 		entityManager.refresh(address);
 		entityManager.refresh(street);

@@ -449,7 +449,7 @@
 			TIMAAT.VideoPlayer.animCtrl = L.control.custom({
 					position: 'topleft',
 					content : `<div class="text-center bg-light border-bottom" onclick="TIMAAT.VideoPlayer.inspector.open('timaat-inspector-animation')">Keyframes</div>
-								<div class="keyframe-controls">
+								<div class="animation-keyframe-controls">
 									<div class="btn-group btn-group-sm">
 										<button title="select previous keyframe" id="timaat-videoplayer-keyframe-prev-button" onclick="void(0)" type="button" class="btn btn-light">
 											<i class="fas fa-arrow-left"></i>
@@ -543,15 +543,15 @@
 			// bookmark / add / remove annotation control
 			L.control.custom({
 					position: 'topleft',
-					content : `<button id="timaat-videoplayer-annotation-quickadd-button" title="Quick annotate" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button" class="btn btn-light">
-									<i class="fas fa-bookmark"></i>
-								</button>
-								<button id="timaat-videoplayer-annotation-add-button" title="Create new annotation" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button" class="ml-0 btn btn-light">
-									<i class="fa fa-plus"></i>
-								</button>
-								<button id="timaat-videoplayer-annotation-remove-button" title="Delete annotation" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button" class="ml-0 btn btn-light">
-									<i class="fa fa-trash-alt"></i>
-								</button>`,
+					content : `<button class="annotation-controls__button--disabled btn btn-light" id="timaat-videoplayer-annotation-quickadd-button" title="Quick annotate" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button">
+											<i class="fas fa-bookmark"></i>
+										</button>
+										<button class="annotation-controls__button--disabled btn btn-light ml-0" id="timaat-videoplayer-annotation-add-button" title="Create new annotation" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button">
+											<i class="fa fa-plus"></i>
+										</button>
+										<button class="annotation-controls__button--disabled btn btn-light ml-0" id="timaat-videoplayer-annotation-remove-button" title="Delete annotation" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button">
+											<i class="fa fa-trash-alt"></i>
+										</button>`,
 					classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
 					style   :
 					{ margin: '10px', padding: '0px 0 0 0', },
@@ -1042,14 +1042,14 @@
 			$('#timaat-timeline-audio-layer').on('click', function(ev) {
 				if ($('#timaat-timeline-audio-layer').is(':checked')) {
 					$('.timaat-timeline-marker-audio').show();
-					$('.timeline-section-audio').show();
+					$('.js-timeline__section--audio-waveform').show();
 					if (TIMAAT.VideoPlayer.curMusic) {
-						$('.timeline-section-music-structure').show();
+						$('.js-timeline__section-music-structure').show();
 						$('.timaat-analysislist-music-dropdown').show();
 					}
 				} else {
 					$('.timaat-timeline-marker-audio').hide();
-					$('.timeline-section-music-structure').hide();
+					$('.js-timeline__section-music-structure').hide();
 					$('.timaat-analysislist-music-dropdown').hide();
 					if ($('#timaat-timeline-visual-layer').is(':checked')) {
 						$('.timaat-timeline-marker-visual').show();
@@ -1096,6 +1096,17 @@
 				preview.find('img').attr('src', "/TIMAAT/api/medium/video/"+TIMAAT.VideoPlayer.model.medium.id+"/thumbnail?token="+token+"&time="+time);
 			});
 
+			$('.js-timeline__collapse-widget').on('click', function(event) {
+				console.log("TCL ~ $ ~ $(this)", $(this));
+				if ($(this).closest('.timeline__section').hasClass('timeline__section--collapsed')) {
+					$(this.closest('.timeline__section')).removeClass('timeline__section--collapsed').removeClass('collapsed');
+					$(this).find('.js-timeline__collapse-widget--icon').removeClass('fa-caret-right').addClass('fa-caret-down');
+				} else {
+					$(this.closest('.timeline__section')).addClass('timeline__section--collapsed').addClass('collapsed');
+					$(this).find('.js-timeline__collapse-widget--icon').removeClass('fa-caret-down').addClass('fa-caret-right');
+				}
+			})
+
 		},
 
 		initVideoPlayerControls: function() {
@@ -1112,7 +1123,7 @@
 				switch (key) {
 				case " ":
 					ev.preventDefault();
-					$('.playbutton').click();
+					$('.js-media-player-toggle-play-button').click();
 					break;
 				case "ArrowLeft":
 					ev.preventDefault();
@@ -1128,7 +1139,7 @@
 					break;
 				case "m":
 					ev.preventDefault();
-					$('#timaat-volumeicon').click();
+					$('.js-media-player-volume-control__icon').click();
 					break;
 				case "s":
 					ev.preventDefault();
@@ -1139,7 +1150,7 @@
 
 			// setup video controls UI events
 			// TODO refactor
-			$('.playbutton').on('click', function(ev) {
+			$('.js-media-player-toggle-play-button').on('click', function(ev) {
 				ev.preventDefault();
 				$(this).toggleClass('active');
 				if ( $(this).hasClass('active') ) TIMAAT.VideoPlayer.play(); else TIMAAT.VideoPlayer.pause();
@@ -1169,27 +1180,25 @@
 				if ( TIMAAT.VideoPlayer.repeatSection ) $(this).addClass('btn-primary'); else $(this).addClass('btn-outline-secondary');
 			});
 
-			$('#timaat-volume-slider').on('input change', function() {
+			$('.js-media-player-volume-control__input').on('input change', function() {
 				if ( !TIMAAT.VideoPlayer.medium ) return;
 				TIMAAT.VideoPlayer.medium.volume = $(this).val() / 100;
 				if ( TIMAAT.VideoPlayer.medium.volume > 0 ) {
-					$('#timaat-volumeicon').find('.volume').show();
-					$('#timaat-volumeicon').find('.mute').hide();
+					$('.js-media-player-volume-control__icon').removeClass('fa-volume-mute').addClass('fa-volume-up');
 				} else {
-					$('#timaat-volumeicon').find('.volume').hide();
-					$('#timaat-volumeicon').find('.mute').show();
+					$('.js-media-player-volume-control__icon').removeClass('fa-volume-up').addClass('fa-volume-mute');
 				}
 			});
 
-			$('#timaat-volumeicon').on('click', function() {
+			$('.js-media-player-volume-control__icon').on('click', function() {
 				if ( !TIMAAT.VideoPlayer.medium ) return;
 				if ( TIMAAT.VideoPlayer.medium.volume > 0 ) {
 					TIMAAT.VideoPlayer.volume = TIMAAT.VideoPlayer.medium.volume;
-					$('#timaat-volume-slider').val(0);
+					$('.js-media-player-volume-control__input').val(0);
 				} else {
-					$('#timaat-volume-slider').val(TIMAAT.VideoPlayer.volume * 100);
+					$('.js-media-player-volume-control__input').val(TIMAAT.VideoPlayer.volume * 100);
 				}
-				$('#timaat-volume-slider').change();
+				$('.js-media-player-volume-control__input').change();
 			});
 
 			$('#timaat-videoplayer-video-speed').on('click', function() {
@@ -1336,7 +1345,7 @@
 				this.clearTimelineElementsStructure();
 				this.curMusic = null;
 			}
-			$('.timeline-section-music-structure').hide();
+			$('.js-timeline__section-music-structure').hide();
 			$('.timaat-analysislist-music-dropdown').hide();
 
 			// remove old medium
@@ -1352,15 +1361,18 @@
 			// setup annotation UI
 			$('#timaat-videoplayer-annotation-add-button').prop('disabled', true);
 			$('#timaat-videoplayer-annotation-add-button').attr('disabled');
+			$('#timaat-videoplayer-annotation-add-button').addClass('annotation-controls__button--disabled');
 			switch (this.mediaType) {
 				case 'audio':
 				case 'video':
 					$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
 					$('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
+					$('#timaat-videoplayer-annotation-quickadd-button').removeClass('annotation-controls__button--disabled');
 				break;
 				case 'image':
 					$('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
 					$('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
+					$('#timaat-videoplayer-annotation-quickadd-button').addClass('annotation-controls__button--disabled');
 				break;
 			}
 
@@ -1384,12 +1396,12 @@
 							break;
 					}
 					let token = TIMAAT.VideoPlayer.model.medium.viewToken;
-					$('.timeline-section-audio .timaat-audio-waveform').css('background-image', 'url("img/audio-placeholder.png")');
-					$('.timeline-section-audio .timaat-audio-waveform').css('background-image', 'url("/TIMAAT/api/medium/'+TIMAAT.VideoPlayer.model.medium.id+'/audio/combined?token='+token+'")');
+					$('.timaat-audio-waveform').css('background-image', 'url("img/audio-placeholder.png")');
+					$('.timaat-audio-waveform').css('background-image', 'url("/TIMAAT/api/medium/'+TIMAAT.VideoPlayer.model.medium.id+'/audio/combined?token='+token+'")');
 
 					if (this.model.medium.music) {
 						this.curMusic = await TIMAAT.MusicService.getMusic(this.model.medium.music.id);
-						$('.timeline-section-music-structure').show();
+						$('.js-timeline__section-music-structure').show();
 						$('.timaat-analysislist-music-dropdown').show();
 					}
 
@@ -1397,19 +1409,19 @@
 					TIMAAT.VideoPlayer.timeline.initMedium(medium);
 
 					// setup video overlay and UI
-					$(TIMAAT.VideoPlayer.viewer.getContainer()).removeClass('timaat-videoplayer-medium-viewer')
-																										 .addClass('timaat-videoplayer-medium-viewer');
+					$(TIMAAT.VideoPlayer.viewer.getContainer()).removeClass('media-player')
+																										 .addClass('media-player');
 					TIMAAT.VideoPlayer.viewer.invalidateSize();
 					$('.timaat-videoplayer-noMedium').hide();
-					$('.timaat-sidebar-tab-videoplayer').removeClass('isDisabled');
-					$('.timaat-videoplayer-video-controls').show();
+					$('.timaat-sidebar-tab-videoplayer').removeClass('sidebar__item--isDisabled');
+					$('.timaat-media-player-controls').show();
 					var newMedium = new TIMAAT.Medium(medium, this.mediaType);
 					TIMAAT.VideoPlayer.selectedMedium = newMedium;
 					$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedMedium.model);');
 					$('.timaat-sidebar-tab-videoplayer a').attr('title', 'Annotate '+this.mediaType);
 					$('.timaat-sidebar-tab-videoplayer a').attr('data-original-title', 'Annotate '+ this.mediaType);
 
-					$('#timaat-videoplayer-video-title').html(medium.displayTitle.name);
+					$('.js-media-player__title').html(medium.displayTitle.name);
 					let timeProgressDisplay = "00:00:00.000 / 00:00:00.000";
 					switch (this.mediaType) {
 						case 'audio':
@@ -1447,7 +1459,7 @@
 					$(TIMAAT.VideoPlayer.savePolygonCtrl.getContainer()).show();
 					$(TIMAAT.VideoPlayer.editShapesCtrl.getContainer()).show();
 					$(TIMAAT.VideoPlayer.animCtrl.getContainer()).show();
-					$('#timaat-volume-slider').change();
+					$('.js-media-player-volume-control__input').change();
 
 					// setup music form element model
 					// TODO make sure that timeline elements will be refreshed once even if no analysis list exists
@@ -1461,21 +1473,21 @@
 					$('.timaat-videoplayer-analysislist-area').show();
 					$('.timaat-videoplayer-medium-dataset-area').show();
 					$('.timaat-videoplayer-timeline-area').hide();
-					$('.timaat-videoplayer-video-controls').hide();
+					$('.timaat-media-player-controls').hide();
 
 					// setup image overlay and UI
-					$(TIMAAT.VideoPlayer.viewer.getContainer()).removeClass('timaat-videoplayer-medium-viewer')
-																										 .addClass('timaat-videoplayer-medium-viewer');
+					$(TIMAAT.VideoPlayer.viewer.getContainer()).removeClass('media-player')
+																										 .addClass('media-player');
 					TIMAAT.VideoPlayer.viewer.invalidateSize();
 					$('.timaat-videoplayer-noMedium').hide();
-					$('.timaat-sidebar-tab-videoplayer').removeClass('isDisabled');
+					$('.timaat-sidebar-tab-videoplayer').removeClass('sidebar__item--isDisabled');
 					var newMedium = new TIMAAT.Medium(medium, 'image');
 					TIMAAT.VideoPlayer.selectedMedium = newMedium;
 					$('.timaat-sidebar-tab-videoplayer a').attr('onclick', 'TIMAAT.VideoPlayer.initializeAnnotationMode(TIMAAT.VideoPlayer.selectedMedium.model);');
 					$('.timaat-sidebar-tab-videoplayer a').attr('title', 'Annotate image');
 					$('.timaat-sidebar-tab-videoplayer a').attr('data-original-title', 'Annotate image');
 
-					$('#timaat-videoplayer-video-title').html(medium.displayTitle.name);
+					$('.js-media-player__title').html(medium.displayTitle.name);
 					$('#timaat-timeline-slider-pane').hide();
 					$('.timaat-mediumDuration').html('N/A');
 
@@ -1652,10 +1664,14 @@
 			// setup analysisList UI
 			$('#timaat-annotation-list-loader').hide();
 			$('#timaat-videoplayer-annotation-add-button').prop('disabled', this.curAnalysisList == null);
-			if ( this.curAnalysisList )
+			if ( this.curAnalysisList ) {
 				$('#timaat-videoplayer-annotation-add-button').removeAttr('disabled');
-			else
+				$('#timaat-videoplayer-annotation-add-button').removeClass('annotation-controls__button--disabled');
+			}
+			else {
 				$('#timaat-videoplayer-annotation-add-button').attr('disabled');
+				$('#timaat-videoplayer-annotation-add-button').addClass('annotation-controls__button--disabled');
+			}
 			$('#timaat-user-log-analysislist').prop('disabled', this.curAnalysisList == null);
 			if ( this.curAnalysisList ) {
 				$('#timaat-user-log-analysislist').removeAttr('disabled');
@@ -1890,7 +1906,7 @@
 							<div class="row vertical-aligned" data-role="globalUserPermission">
 								<fieldset>
 									<legend>You can grant all users access to this analysis</legend>
-									<div id="globalPermission" class="radioButtonsHorizontalEvenlySpaced" data-role="select">
+									<div id="globalPermission" class="radio-buttons__horizontal--evenly-spaced" data-role="select">
 										<label>
 											<input id="globalPermission_0" type="radio" name="globalPermissionAnalysisList" value="0"> No global access
 										</label>
@@ -2039,9 +2055,11 @@
 				this.curAnnotation.setSelected(true);
 				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', false);
 				$('#timaat-videoplayer-annotation-remove-button').removeAttr('disabled');
+				$('#timaat-videoplayer-annotation-remove-button').removeClass('annotation-controls__button--disabled');
 			} else {
 				$('#timaat-videoplayer-annotation-remove-button').prop('disabled', true);
 				$('#timaat-videoplayer-annotation-remove-button').attr('disabled');
+				$('#timaat-videoplayer-annotation-remove-button').addClass('annotation-controls__button--disabled');
 				// stop editing in progress
 				if ( TIMAAT.VideoPlayer.viewer.editTools.drawing() ) {
 					try {
@@ -2536,7 +2554,7 @@
 		showTimelineElementsStructure: function() {
     	// console.log("TCL: showTimelineElementsStructure:function()");
 			// build annotation list from model
-			$('.timeline-pane').hide();
+			$('.js-timeline__section-sub-lane').hide();
 			if (this.curAnalysisList != null && this.curAnalysisList.analysisSegmentsUI != null && this.curAnalysisList.analysisSegmentsUI.length > 0) {
 				this.curAnalysisList.analysisSegmentsUI.forEach(function(segment) {
 					segment.addUI();
@@ -2608,21 +2626,23 @@
 		},
 
 		pause: function() {
-			if ( !this.medium || this.mediaType != 'video' && this.mediaType != 'audio') return;
-
+			if ( !this.medium || this.mediaType != 'video' && this.mediaType != 'audio')
+				return;
 			if (this.isPlaying()) {
 				this.medium.pause();
 			}
-			$('.playbutton').removeClass('active');
+			$('.media-player-toggle-play-button__icon').removeClass('fa-pause').addClass('fa-play');
+			$('.js-media-player-toggle-play-button').prop('title', 'Play (space)');
 		},
 
 		play: function() {
-			if ( !this.medium || this.mediaType != 'video' && this.mediaType != 'audio' ) return;
-
+			if ( !this.medium || this.mediaType != 'video' && this.mediaType != 'audio' )
+				return;
 			if (!this.isPlaying()) {
 				this.medium.play();
 			}
-			$('.playbutton').addClass('active');
+			$('.media-player-toggle-play-button__icon').removeClass('fa-play').addClass('fa-pause');
+			$('.js-media-player-toggle-play-button').prop('title', 'Pause (space)');
 		},
 
 		jumpTo: function(timeInMilliseconds) {
@@ -2662,6 +2682,7 @@
 			$('#timaat-medium-offlinepublication').removeAttr('onclick');
 			// $('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', true);
 			// $('#timaat-videoplayer-annotation-quickadd-button').attr('disabled');
+			// $('#timaat-videoplayer-annotation-quickadd-button').addClass('annotation-controls__button--disabled');
 			$('.leaflet-control-container').hide();
 		},
 
@@ -2692,6 +2713,7 @@
 				$('#timaat-medium-offlinepublication').attr('onclick', 'TIMAAT.VideoPlayer.offLinePublication()');
 				// $('#timaat-videoplayer-annotation-quickadd-button').prop('disabled', false);
 				// $('#timaat-videoplayer-annotation-quickadd-button').removeAttr('disabled');
+				// $('#timaat-videoplayer-annotation-quickadd-button').removeClass('annotation-controls__button--disabled');
 			}
 			$('.leaflet-control-container').show();
 		},
@@ -2786,10 +2808,10 @@
 				dialog.find('.publicationtitle').val(title);
 				if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>';
 				else url = '- Publication link will be available after saving -';
-				dialog.find('.publicationurl').html(url);
+				dialog.find('.js-analysis-list-menu__publication--url').html(url);
 			} else {
 				dialog.find('.publicationtitle').val('');
-				dialog.find('.publicationurl').html('- Medium not published -');
+				dialog.find('.js-analysis-list-menu__publication--url').html('- Medium not published -');
 			}
 		},
 

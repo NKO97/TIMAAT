@@ -27,7 +27,7 @@
 
 			// create and style list view element
 			this.listView = $(
-				`<li class="list-group-item">
+				`<li class="list-group__item">
 					<div class="row">
 						<div class="col-lg-10">` +
 							`<span class="timaat-languagelists-language-list-name">

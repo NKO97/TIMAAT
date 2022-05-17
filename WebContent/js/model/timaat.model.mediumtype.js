@@ -29,7 +29,7 @@
 			// create and style list view element
 			var deleteMediumTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediatype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteMediumTypeButton = '';
-			this.listView = $('<li class="list-group-item"> '
+			this.listView = $('<li class="list-group__item"> '
 				+ deleteMediumTypeButton +
 				'<span class="timaat-mediatype-list-type"></span>' +
 				'<br> \

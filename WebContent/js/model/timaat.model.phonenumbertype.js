@@ -29,7 +29,7 @@
 			// create and style list view element
 			var deletePhoneNumberTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-phonenumbertype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deletePhoneNumberTypeButton = '';
-			this.listView = $('<li class="list-group-item"> '
+			this.listView = $('<li class="list-group__item"> '
 				+ deletePhoneNumberTypeButton +
 				'<span class="timaat-phonenumbertype-list-type"></span>' +
 				'<br> \

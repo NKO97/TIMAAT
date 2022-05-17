@@ -28,7 +28,7 @@
 			// create and style list view element
 			var deleteStreetButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-street-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteStreetButton = '';
-			this.listView = $('<li class="list-group-item"> ' +
+			this.listView = $('<li class="list-group__item"> ' +
 				deleteStreetButton +
 				'<span class="timaat-street-list-name"></span>' +
 				'<br>' +

@@ -6,11 +6,11 @@ class AnalysisSegment {
 
 		// create and style list view element
 		this.listView = $(`
-			<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
+			<li class="list-group__item timaat-annotation-list-segment p-0 bg-secondary">
 				<div class="d-flex justify-content-between">
 					<span class="font-weight-bold pt-1 text-light pl-1">
 						<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-						<span class="timaat-annotation-segment-name"></span>
+						<span class="analysis-list-element__title js-analysis-list-element__title"></span>
 					</span>
 				</div>
 			</li>`
@@ -32,7 +32,7 @@ class AnalysisSegment {
 		let comment = this.model.analysisSegmentTranslations[0].comment;
 		let transcript = this.model.analysisSegmentTranslations[0].transcript;
 		if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
-		this.listView.find('.timaat-annotation-segment-name').html(name);
+		this.listView.find('.js-analysis-list-element__title').html(name);
 		this.listView.find('.timaat-annotation-segment-shortDescription').html(desc);
 		this.listView.find('.timaat-annotation-segment-comment').html(comment);
 		this.listView.find('.timaat-annotation-segment-transcript').html(transcript);
@@ -253,7 +253,7 @@ class Keyframe {
 															<div class="timaat-timeline-keyframehead">
 															</div>
 														</div>`,
-				inspectorTemplate : `<div class="list-group-item p-0">
+				inspectorTemplate : `<div class="list-group__item p-0">
 															<div class="input-group input-group-sm">
 																<div class="input-group-prepend">
 																	<span class="input-group-text keyframe-number">01</span>
@@ -485,17 +485,15 @@ class Annotation {
 
 		// create and style list view element
 		this.listView = $(`
-			<li class="list-group-item" style="padding:0">
+			<li class="list-group__item" style="padding:0">
 					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-image fas fa-image" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-draw-polygon" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-animation fas fa-running" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-audio fas fa-headphones" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon js-analysis-list-element__icon--visual-layer fas fa-image" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon js-analysis-list-element__icon--audio-layer fas fa-headphones" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon--comment js-analysis-list-element__icon--comment fas fa-fw fa-comment" aria-hidden="true"></i>
 					<span class="timaat-annotation-list-time"></span>
 					<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
 					<div class="d-flex justify-content-between">
-						<div class="timaat-annotation-list-title text-muted"></div>
+						<div class="analysis-list-element__title js-analysis-list-element__title text-muted"></div>
 					</div>
 				</li>`
 		);
@@ -629,12 +627,12 @@ class Annotation {
 		this.listView.attr('data-endtime', this.model.endTime);
 		this.listView.attr('id', 'annotation-'+this.model.id);
 		this.listView.attr('data-type', 'annotation');
-		this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
+		this.listView.find('.analysis-list-element__icon').css('color', '#'+this.svg.colorHex);
 		var timeString = " "+TIMAATPub.formatTime(this.model.startTime, true);
 		if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAATPub.formatTime(this.model.endTime, true);
 		// if ( TIMAATPub.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
 		this.listView.find('.timaat-annotation-list-time').html(timeString);
-		this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
+		this.listView.find('.js-analysis-list-element__title').html(this.model.annotationTranslations[0].title);
 		// categories
 		this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" categories");
 		if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
@@ -645,9 +643,9 @@ class Annotation {
 
 		// comment
 		if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
-			this.listView.find('.timaat-annotation-list-comment').show();
+			this.listView.find('.js-analysis-list-element__icon--comment').show();
 		else
-			this.listView.find('.timaat-annotation-list-comment').hide();
+			this.listView.find('.js-analysis-list-element__icon--comment').hide();
 
 		// update svg
 		for (let item of this.svg.items) {
@@ -659,28 +657,22 @@ class Annotation {
 	}
 
 	_updateAnnotationType() {
-		let typeImage = this.listView.find('.timaat-annotation-list-type-image');
-		let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
-		let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
-		let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
-		if ( this.model.layerVisual) {
-			if ( this.polygonCount > 0 ) {
-				typePolygon.show();
-				typeImage.hide();
+		let layerVisualIcon = this.listView.find('.js-analysis-list-element__icon--visual-layer');
+		let layerAudioIcon = this.listView.find('.js-analysis-list-element__icon--audio-layer');
+		if ( this.layerVisual) {
+			if ( this.isAnimation() ) {
+				layerVisualIcon.removeClass('fa-image').removeClass('fa-draw-polygon').addClass('fa-running');
+			} else if ( this.svg.items.length > 0 ) {
+				layerVisualIcon.removeClass('fa-image').removeClass('fa-running').addClass('fa-draw-polygon');
+			} else {
+				layerVisualIcon.removeClass('fa-running').removeClass('fa-draw-polygon').addClass('fa-image');
 			}
-			else {
-				typePolygon.hide();
-				typeImage.show();
-			}
+			layerVisualIcon.show();
 		} else {
-			typePolygon.hide();
-			typeImage.hide();
+			layerVisualIcon.hide();
+			layerVisualIcon.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-running');
 		}
-		if ( this.isAnimation() ) {
-			typeAnimation.show();
-			typePolygon.hide()
-		} else typeAnimation.hide();
-		( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
+		( this.layerAudio ) ? layerAudioIcon.show() : layerAudioIcon.hide();
 	};
 
 	remove() {
@@ -1598,7 +1590,7 @@ class TIMAATPublication {
 			$('#timaat-video-controls').show();
 			$('.top-control').hide();
 			$('.playback-controls').hide();
-			$('.video-volume-control').hide();
+			$('.video-media-player-volume-control').hide();
 			$('.video-timings').removeClass('d-inline-flex');
 			$('.video-timings').hide();
 			$('.video-speed-info').closest('div').hide();

@@ -39,7 +39,7 @@
 																<div class="timaat-timeline-keyframehead">
 																</div>
 															</div>`,
-					inspectorTemplate : `<div class="list-group-item p-0">
+					inspectorTemplate : `<div class="list-group__item p-0">
 																<div class="input-group input-group-sm">
 																	<div class="input-group-prepend">
 																		<span class="input-group-text keyframe-number">01</span>

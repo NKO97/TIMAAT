@@ -29,7 +29,7 @@
 			// create and style list view element
 			var deleteEmailAddressTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-emailaddresstype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteEmailAddressTypeButton = '';
-			this.listView = $('<li class="list-group-item"> '
+			this.listView = $('<li class="list-group__item"> '
 				+ deleteEmailAddressTypeButton +
 				'<span class="timaat-emailaddresstype-list-type"></span>' +
 				'<br> \

@@ -6,16 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="bitGilde IT Solutions UG (haftungsbeschr&auml;nkt)">
+    <meta name="author" content="Mirko Scherf">
 
     <title>TIMAAT - Client</title>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 
     <!-- TIMAAT -->
     <script data-main="js/timaat.init.js" src="vendor/requirejs/require.js"></script>
@@ -35,17 +28,13 @@
     <!-- Tinycolorpicker CSS -->
     <link href="vendor/tinycolorpicker/tinycolorpicker.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="vendor/sb-admin-2/css/sb-admin-2.css" rel="stylesheet">
-    <link href="css/sidebar-toggle.css" rel="stylesheet">
-
     <!-- Custom Fonts -->
     <link href="vendor/fontawesome/css/all.css" rel="stylesheet" type="text/css">
 
     <!-- Leaflet CSS -->
     <link href="vendor/leaflet/leaflet.css" rel="stylesheet" type="text/css">
 
-    <!--Select2 CSS -->
+    <!-- Select2 CSS -->
     <link href="vendor/select2/css/select2.min.css" rel="stylesheet" type="text/css">
 
     <!-- Summernote CSS -->
@@ -54,9 +43,14 @@
     <!-- Main CSS -->
     <link href="css/main.css" rel="stylesheet" type="text/css">
 
-    <!-- TIMAAT Inspector CSS -->
-    <link href="css/timaat-inspector.css" rel="stylesheet" type="text/css">
+    <!-- Inspector CSS -->
+    <link href="css/inspector.css" rel="stylesheet" type="text/css">
 
+    <!-- TIMAAT CSS -->
+    <link href="css/timaat.css" rel="stylesheet" type="text/css">
+
+    <!-- Dataset CSS -->
+    <link href="css/dataset.css" rel="stylesheet" type="text/css">
 
     <style type="text/css">
       body { margin:0; padding:0; }
@@ -246,7 +240,7 @@
           <div id="sidebar-wrapper">
             <div class="navbar-default sidebar" role="navigation">
               <ul id="side-menu">
-                <li class="timaat-sidebar-tab timaat-sidebar-tab-videoplayer isDisabled">
+                <li class="timaat-sidebar-tab timaat-sidebar-tab-videoplayer sidebar__item--isDisabled">
                     <a
                       data-toggle="popover"
                       data-trigger="hover"
@@ -310,7 +304,7 @@
                     <i class="fas fa-users fa-fw"></i>
                   </a>
                 </li>
-                <!-- <li class="timaat-sidebar-tab timaat-sidebar-tab-locations isDisabled">
+                <!-- <li class="timaat-sidebar-tab timaat-sidebar-tab-locations sidebar__item--isDisabled">
                     <!~~ <a
                     onclick="TIMAAT.UI.showComponent('locations')"
                     data-toggle="popover"
@@ -448,7 +442,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-external-link-alt"></i></span>
                       </div>
-                      <div class="text-muted form-control publicationurl">- Medium not published yet -</div>
+                      <div class="text-muted form-control analysis-list-menu__publication--url js-analysis-list-menu__publication--url">- Medium not published yet -</div>
                     </div>
                     <hr>
                     <div class="input-group input-group-sm">
@@ -1384,18 +1378,12 @@
                     </div>
                   </div>
                 </div>
-                <div class="timaat-annotation-list-wrapper" style="max-height: 486px;min-height: 486px">
+                <div class="analysis-list js-analysis-list">
                   <div id="timaat-annotation-list-loader" class="text-center card-body bg-info text-white">
                     <i class="fas fa-spinner fa-spin"></i> Loading Data...
                   </div>
                   <ul id="timaat-annotation-list" class="list-group list-group-flush"></ul>
                 </div>
-                <!--
-                <div class="card-footer">
-                  <button onclick="TIMAAT.VideoPlayer.addAnnotation()" id="timaat-videoplayer-annotation-add-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" type="submit"><i class="fas fa-plus fa-fw"></i></button>&nbsp;
-                  <button onclick="TIMAAT.VideoPlayer.removeAnnotation()" id="timaat-videoplayer-annotation-remove-button" class="btn btn-outline-secondary btn-sm" style="padding: .15rem .5rem;font-size: .875rem;" disabled type="submit"><i class="fas fa-minus fa-fw"></i></button>
-                </div>
-                -->
               </div>
             </div>
             <div class="col-lg-9" id="timaat-annotation-metadata" style="max-height: 541px; min-height: 541px">
@@ -1410,17 +1398,17 @@
             <div class="col-lg-9">
               <div class="card">
                 <div class="list-group list-group-flush">
-                  <div id="timaat-videoplayer-viewer" class="timaat-videoplayer-medium-viewer" style="width: 100%;">
+                  <div id="timaat-videoplayer-viewer" class="media-player" style="width: 100%;">
                   </div>
-                  <div id="timaat-videoplayer-viewer-overlay">
+                  <!-- <div class="media-player__overlay">
                     x
-                  </div>
+                  </div> -->
                 </div>
                 <div class="card-footer timaat-videoplayer-video-footer">
                   <div id="timaat-timeline-slider-pane" class="mt-2 mb-2">
                     <input type="range" class="timaat-timeline-slider" id="video-seek-bar" min="0" max="100" step="0.4" value="0">
                   </div>
-                  <div class="timaat-videoplayer-video-controls row"> <!-- Begin Video Controls -->
+                  <div class="timaat-media-player-controls row"> <!-- Begin Video Controls -->
                     <!-- Playback Controls -->
                     <div class="col-sm-7">
                       <div class="row">
@@ -1428,9 +1416,8 @@
                           <button title="One frame back [&larr;]" class="stepBackButton btn btn-secondary">
                             <i class="fas fa-step-backward"></i>
                           </button>
-                          <button title="Play/Pause [space-bar]" class="playbutton btn btn-secondary">
-                            <i class="play fas fa-play fa-fw"></i>
-                            <i class="pause fa fa-pause fa-fw"></i>
+                          <button title="Play (space)" class="media-player-toggle-play-button js-media-player-toggle-play-button btn btn-secondary">
+                            <i class="media-player-toggle-play-button__icon fas fa-play fa-fw"></i>
                           </button>
                           <button title="One frame forward [&rarr;]" class="stepForwardButton btn btn-secondary">
                             <i class="fas fa-step-forward"></i>
@@ -1443,12 +1430,9 @@
                           </button>
                         </div>
                         <!-- Volume Control -->
-                        <a title="Adjust volume [M = toggle mute]" class="timaat-volumecontrol mr-1">
-                          <span id="timaat-volumeicon">
-                            <i class="volume fas fa-volume-up"></i>
-                            <i class="mute fas fa-volume-mute"></i>
-                          </span>
-                          <input id="timaat-volume-slider" type="range" min="0" max="100" value="100" step="1" class="form-range form-control-sm-range">
+                        <a title="Adjust volume [m = toggle mute]" class="media-player-volume-control mr-1">
+                          <i class="media-player-volume-control__icon js-media-player-volume-control__icon fas fa-volume-up"></i>
+                          <input class="media-player-volume-control__input js-media-player-volume-control__input form-control-range" type="range" min="0" max="100" value="100" step="1">
                         </a>
                         <!-- <span class="videotime" style="padding-left:20px">00:00:00.000</span>  -->
                         <!-- Playback Speed Control -->
@@ -1471,7 +1455,7 @@
                     <i class="fas fa-tag"></i>&nbsp;&nbsp;
                   </div>
                   -->
-                  <span id="timaat-videoplayer-video-title">Video title</span>
+                  <span class="media-player__title js-media-player__title" >Video title</span>
                   <!-- <div id="timaat-videoplayer-video-user-log" class="float-right text-muted timaat-user-log">
                     <i class="fas fa-user"></i>
                   </div> -->
@@ -1480,7 +1464,7 @@
             </div>
           </div>
           <div class="row timaat-videoplayer-timeline-area"> <!-- timeline -->
-            <div class="col-lg-12">
+            <div class="col-lg-12 pb-2">
               <div class="card">
                 <div class="card-body m-1">
                 	<div class="d-flex justify-content-between align-items-end mt-2 mb-2">
@@ -1545,77 +1529,101 @@
                       </div>
                     </div>
                 	</div>
-                	<div id="timeline" class="pb-2">
-                    <div id="timaat-timeline-zoomable">
-                      <div class="timeline-layer-pane bg-dark">
-                        <div class="time-indicator bg-warning"></div>
-                        <div class="timeline-section border-top border-dark" style="height: 2em;">
-                          <div class="timeline-section-header timeline-control small border-right border-bottom border-dark float-left pt-0" style="margin-left: 0px;">
-                            <div class="input-group input-group-sm">
-                              <div class="input-group-prepend">
-                                <button class="btn btn-sm btn-dark small" disabled><i class="fas fa-clock fa-fw"></i></button>
-                              </div>
-                              <input type="text" value="00:00:00.000" style="color:black; font-family: 'Courier', monospace;" class="form-control form-control-sm pl-1 pr-1 text-right videotime" disabled>
+                	<div class="timeline bg-dark">
+                    <div class="timeline__layer-pane js-timeline__layer-pane">
+                      <div class="timeline__position-indicator js-timeline__position-indicator bg-warning"></div>
+                      <div class="timeline__section timeline__section--top border-top border-dark"> <!-- timeline scale -->
+                        <div class="timeline__section-header js-timeline__section-header timeline-control small border-right border-bottom border-dark float-left pt-0">
+                          <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                              <button class="btn btn-sm btn-dark small" disabled>
+                                <i class="fas fa-clock fa-fw"></i>
+                              </button>
                             </div>
-                          </div>
-                          <div class="timeline-section-content timeline-info bg-secondary border-bottom border-dark" style="overflow: hidden;">
+                            <input type="text" value="00:00:00.000" style="color:black; font-family: 'Courier', monospace;" class="form-control form-control-sm pl-1 pr-1 text-right videotime" disabled>
                           </div>
                         </div>
-                        <div class="timeline-sortable-sections ui-sortable">
-                          <div class="timeline-section timeline-section-annotation">
-                            <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
-                              <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-draw-polygon fa-fw"></i> Analysis<br><span id="timeline-list-title" class="badge badge-secondary">N/A</span></span>
-                                <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
-                              </div>
-                            </div>
-                            <div class="timeline-section-content bg-light border-bottom border-dark">
-		  	                      <div id="timaat-timeline-keyframe-pane"></div>
-                              <div id="timaat-timeline-marker-pane"></div>
-                            </div>
-                          </div>
-                          <div class="timeline-section timeline-section-segment-structure">
-                            <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
-                              <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-layer-group fa-fw"></i> Segment structure</span>
-                                <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
-                              </div>
-                            </div>
-                            <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
-                              <div id="timaat-timeline-segment-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-sequence-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-take-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-scene-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-action-pane"></div>
+                        <div class="timeline__section-content timeline__section-content--top timeline-info bg-secondary border-bottom border-dark">
+                        </div>
+                      </div>
+                      <div class="timeline-sortable-sections ui-sortable">
+                        <div class="timeline__section"> <!-- annotations -->
+                          <div class="timeline__section-header js-timeline__section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle">
+                            <div class="d-flex justify-content-between">
+                              <span class="timeline__section-title pl-2 text-light">
+                                <i class="fas fa-draw-polygon fa-fw"></i> Annotations
+                              </span>
+                              <span class="timeline__section--widgets pr-1 text-light">
+                                <span  class="timeline__collapse-widget js-timeline__collapse-widget">
+                                  <i class="js-timeline__collapse-widget--icon fas fa-caret-down fa-fw"></i>
+                                </span>
+                              </span>
                             </div>
                           </div>
-                          <div class="timeline-section timeline-section-music-structure">
-                            <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
-                              <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-music fa-fw"></i> Music structure</span>
-                                <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
-                              </div>
-                            </div>
-                            <div class="timeline-section-content bg-light border-bottom border-dark pt-1 pb-1">
-                              <div id="timaat-timeline-music-form-element-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-music-change-in-tempo-element-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-music-articulation-element-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-music-text-setting-element-pane"></div>
-                              <div class="timeline-pane" id="timaat-timeline-music-dynamics-element-pane"></div>
-                              <!-- TODO: additional panes -->
+                          <div class="timeline__section-content bg-light border-bottom border-dark">
+                            <div id="timaat-timeline-keyframe-pane"></div>
+                            <div id="timaat-timeline-marker-pane"></div>
+                          </div>
+                        </div>
+                        <div class="timeline__section"> <!-- segment structure -->
+                          <div class="timeline__section-header js-timeline__section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle">
+                            <div class="d-flex justify-content-between">
+                              <span class="timeline__section-title pl-2 text-light">
+                                <i class="fas fa-layer-group fa-fw"></i> Segment structure
+                              </span>
+                              <span class="timeline__section--widgets pr-1 text-light">
+                                <span class="timeline__collapse-widget js-timeline__collapse-widget">
+                                  <i class="js-timeline__collapse-widget--icon fas fa-caret-down fa-fw"></i>
+                                </span>
+                              </span>
                             </div>
                           </div>
-                          <div class="timeline-section timeline-section-audio" style="height: 70px;">
-                            <div class="timeline-section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle" style="margin-left: 0px;">
-                              <div class="d-flex justify-content-between">
-                                <span class="timeline-section-title pl-2 text-light"><i class="fas fa-wave-square fa-fw"></i> Audio waveform</span>
-                                <span class="timeline-section-widgets pr-1 text-light"><span class="collapse-widget"><i class="fas fa-fw"></i></span></span>
-                              </div>
+                          <div class="timeline__section-content bg-light border-bottom border-dark pt-1 pb-1">
+                            <div id="timaat-timeline-segment-pane"></div>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-sequence-pane"></span>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-take-pane"></span>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-scene-pane"></span>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-action-pane"></span>
+                          </div>
+                        </div>
+                        <div class="timeline__section js-timeline__section-music-structure"> <!-- music structure -->
+                          <div class="timeline__section-header js-timeline__section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle">
+                            <div class="d-flex justify-content-between">
+                              <span class="timeline__section-title pl-2 text-light">
+                                <i class="fas fa-music fa-fw"></i> Music structure
+                              </span>
+                              <span class="timeline__section--widgets pr-1 text-light">
+                                <span class="timeline__collapse-widget js-timeline__collapse-widget">
+                                  <i class="js-timeline__collapse-widget--icon fas fa-caret-down fa-fw"></i>
+                                </span>
+                              </span>
                             </div>
-                            <div class="timeline-section-content bg-light border-bottom border-dark">
-                              <div style="width: 100%; height: 100%;background:linear-gradient(180deg, rgba(0,0,0,0) calc(50% - 0.5px), #395C8D calc(50%), rgba(0,0,0,0) calc(50% + 0.5px) );">
-                                <div class="timaat-audio-waveform" style="width:100%;height:100%;background: url('img/audio-placeholder.png');background-size: 100% 100%; background-repeat: no-repeat;">
-                                </div>
+                          </div>
+                          <div class="timeline__section-content bg-light border-bottom border-dark pt-1 pb-1">
+                            <div id="timaat-timeline-music-form-element-pane"></div>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-music-change-in-tempo-element-pane"></span>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-music-articulation-element-pane"></span>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-music-text-setting-element-pane"></span>
+                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane" id="timaat-timeline-music-dynamics-element-pane"></span>
+                            <!-- TODO: additional panes -->
+                          </div>
+                        </div>
+                        <div class="timeline__section timeline__section--audio-waveform js-timeline__section--audio-waveform"> <!-- audio waveform -->
+                          <div class="timeline__section-header small border-bottom border-right border-dark float-left bg-secondary ui-sortable-handle">
+                            <div class="d-flex justify-content-between">
+                              <span class="timeline__section-title pl-2 text-light">
+                                <i class="fas fa-wave-square fa-fw"></i> Audio waveform
+                              </span>
+                              <span class="timeline__section--widgets pr-1 text-light">
+                                <span class="timeline__collapse-widget js-timeline__collapse-widget">
+                                  <i class="js-timeline__collapse-widget--icon fas fa-caret-down fa-fw"></i>
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="timeline__section-content bg-light border-bottom border-dark">
+                            <div style="width: 100%; height: 100%;background:linear-gradient(180deg, rgba(0,0,0,0) calc(50% - 0.5px), #395C8D calc(50%), rgba(0,0,0,0) calc(50% + 0.5px) );">
+                              <div class="timaat-audio-waveform" style="width:100%;height:100%;background: url('img/audio-placeholder.png');background-size: 100% 100%; background-repeat: no-repeat;">
                               </div>
                             </div>
                           </div>
@@ -1842,13 +1850,6 @@
                             <tbody id="timaat-categorylists-categoryset-list">
                             </tbody>
                           </table>
-                          <!-- <ul class="list-group list-group-flush">
-                            <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-                              <i class="fas fa-th"></i>&nbsp;&nbsp;All categories
-                            </li>
-                          </ul>
-                          <ul id="timaat-categoryset-list" class="list-group list-group-flush">
-                          </ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="category-datatable">
@@ -1869,13 +1870,6 @@
                             <tbody id="timaat-categorylists-category-list">
                             </tbody>
                           </table>
-                          <!-- <ul class="list-group list-group-flush">
-                            <li id="timaat-categorylists-categorylibrary" class="list-group-item list-group-item-action font-weight-bold active">
-                              <i class="fas fa-th"></i>&nbsp;&nbsp;All categories
-                            </li>
-                          </ul>
-                          <ul id="timaat-category-list" class="list-group list-group-flush">
-                          </ul> -->
                         </div>
                       </div>
                       <div class="card datatables" id="rolegroup-datatable">
@@ -1948,7 +1942,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="categoryFormHeader">Category</h5>
+                              <h5 class="form-title capitalize--first-letter" id="categoryFormHeader">Category</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -1996,7 +1990,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="categorySetFormHeader">Category Set</h5>
+                              <h5 class="form-title capitalize--first-letter" id="categorySetFormHeader">Category Set</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -2044,7 +2038,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="roleFormHeader">Role</h5>
+                              <h5 class="form-title capitalize--first-letter" id="roleFormHeader">Role</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -2105,7 +2099,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="roleGroupFormHeader">Role</h5>
+                              <h5 class="form-title capitalize--first-letter" id="roleGroupFormHeader">Role</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -2153,7 +2147,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="languageFormHeader">Language</h5>
+                              <h5 class="form-title capitalize--first-letter" id="languageFormHeader">Language</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -2489,7 +2483,7 @@
                       </div>
                       <div class="card datatables" id="medium-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-media" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-media" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All media
                           </li>
                         </ul>
@@ -2513,7 +2507,7 @@
                       </div>
                       <div class="card datatables" id="audio-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-audios" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-audios" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All audios
                           </li>
                         </ul>
@@ -2538,7 +2532,7 @@
                       </div>
                       <div class="card datatables" id="document-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-documents" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-documents" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All documents
                           </li>
                         </ul>
@@ -2563,7 +2557,7 @@
                       </div>
                       <div class="card datatables" id="image-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-images" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-images" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All images
                           </li>
                         </ul>
@@ -2588,7 +2582,7 @@
                       </div>
                       <div class="card datatables" id="software-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-softwares" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-softwares" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All softwares
                           </li>
                         </ul>
@@ -2613,7 +2607,7 @@
                       </div>
                       <div class="card datatables" id="text-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-texts" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-texts" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All texts
                           </li>
                         </ul>
@@ -2638,7 +2632,7 @@
                       </div>
                       <div class="card datatables" id="video-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-videos" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-videos" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All videos
                           </li>
                         </ul>
@@ -2663,7 +2657,7 @@
                       </div>
                       <div class="card datatables" id="videogame-datatable">
                         <ul class="list-group">
-                          <li id="timaat-mediumdatasets-all-videogames" class="list-group-item list-group-item-action font-weight-bold">
+                          <li id="timaat-mediumdatasets-all-videogames" class="list-group__item list-group__item-action font-weight-bold">
                             <i class="fas fa-inbox"></i> All videogames
                           </li>
                         </ul>
@@ -2894,7 +2888,7 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="mediumCollectionFormHeader">Medium Collection</h5>
+                                <h5 class="form-title capitalize--first-letter" id="mediumCollectionFormHeader">Medium Collection</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -3037,7 +3031,7 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-external-link-alt"></i></span>
                               </div>
-                              <div class="text-muted form-control publicationurl">- Collection not published -</div>
+                              <div class="text-muted form-control analysis-list-menu__publication--url js-analysis-list-menu__publication--url">- Collection not published -</div>
                             </div>
                             <hr>
                             <div class="input-group input-group-sm">
@@ -3065,12 +3059,12 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="mediumPreviewFormHeader">Medium Preview</h5>
+                                <h5 class="form-title capitalize--first-letter" id="mediumPreviewFormHeader">Medium Preview</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-upload-button js-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
@@ -3105,7 +3099,7 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="mediumFormHeader">Medium</h5>
+                                <h5 class="form-title capitalize--first-letter" id="mediumFormHeader">Medium</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -3119,7 +3113,7 @@
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-tag-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-upload-button js-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
@@ -3382,12 +3376,12 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="mediumTitlesLabel">Medium titles</h5>
+                                <h5 class="form-title capitalize--first-letter" id="mediumTitlesLabel">Medium titles</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-upload-button js-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
@@ -3445,12 +3439,12 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="mediumLanguageTracksLabel">Medium language tracks</h5>
+                                <h5 class="form-title capitalize--first-letter" id="mediumLanguageTracksLabel">Medium language tracks</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-upload-button js-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
@@ -3501,12 +3495,12 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="mediumActorRolesLabel">Medium actor roles</h5>
+                                <h5 class="form-title capitalize--first-letter" id="mediumActorRolesLabel">Medium actor roles</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm form-upload-button js-form-upload-button form-buttons" title="Upload file" name="upload">
                                       <i class="fas fa-file-upload"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm medium-datasheet-form-annotate-button form-buttons" title="Annotate medium" name="annotate">
@@ -3747,7 +3741,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorFormHeader">Actor</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorFormHeader">Actor</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -3781,11 +3775,11 @@
                                       <ul class="carousel-indicators">
                                       </ul>
                                       <!-- The slideshow -->
-                                      <div class="carousel-inner carousel-centered" id="profile-image-carousel-inner">
+                                      <div class="carousel-inner carousel--centered" id="profile-image-carousel-inner">
                                       </div>
                                       <!-- Left and right controls -->
                                       <a class="carousel-control-prev" data-slide="prev">
-                                        <span class="carousel-control-prev-icon"></span>
+                                        <span class="carousel-control__icon--previous"></span>
                                       </a>
                                       <a class="carousel-control-next" data-slide="next">
                                         <span class="carousel-control-next-icon"></span>
@@ -4045,7 +4039,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorNamesLabel">Actor names</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorNamesLabel">Actor names</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-names-form-edit" name="edit">
@@ -4101,7 +4095,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorAddressesLabel">Actor addresses</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorAddressesLabel">Actor addresses</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-addresses-form-edit" name="edit">
@@ -4175,7 +4169,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorEmailAddressesLabel">Actor email addresses</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorEmailAddressesLabel">Actor email addresses</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-emailaddresses-form-edit" name="edit">
@@ -4224,7 +4218,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorPhoneNumbersLabel">Actor phone numbers</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorPhoneNumbersLabel">Actor phone numbers</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-phonenumbers-form-edit" name="edit">
@@ -4273,7 +4267,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorMemberOfCollectiveLabel">Person is member of collectives</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorMemberOfCollectiveLabel">Person is member of collectives</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" name="edit">
@@ -4350,7 +4344,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorRolesLabel">Actor has role(s)</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorRolesLabel">Actor has role(s)</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" id="actor-roles-form-edit" name="edit">
@@ -4378,7 +4372,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="actorRoleMediumLabel">Actor has role(s) in medium</h5>
+                              <h5 class="form-title capitalize--first-letter" id="actorRoleMediumLabel">Actor has role(s) in medium</h5>
                             </div>
                             <div class="col-md-2">
                               <button type="button" class="btn btn-outline btn-secondary btn-sm float-right form-buttons actordatasheet-form-edit-button" name="edit">
@@ -4944,7 +4938,7 @@
                         <div class="form-header">
                           <div class="form-row">
                             <div class="col-md-10">
-                              <h5 class="form-title caps-title" id="eventFormHeader">Event</h5>
+                              <h5 class="form-title capitalize--first-letter" id="eventFormHeader">Event</h5>
                             </div>
                             <div class="col-md-2">
                               <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -5373,14 +5367,11 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="musicPreviewFormHeader">Music Preview</h5>
+                                <h5 class="form-title capitalize--first-letter" id="musicPreviewFormHeader">Music Preview</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
-                                      <i class="fas fa-file-upload"></i>
-                                    </button> -->
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
@@ -5413,7 +5404,7 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="musicFormHeader">Music</h5>
+                                <h5 class="form-title capitalize--first-letter" id="musicFormHeader">Music</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
@@ -5648,14 +5639,11 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="musicTitlesLabel">Music titles</h5>
+                                <h5 class="form-title capitalize--first-letter" id="musicTitlesLabel">Music titles</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
-                                      <i class="fas fa-file-upload"></i>
-                                    </button> -->
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
@@ -5711,14 +5699,11 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="musicActorRolesLabel">Music actor roles</h5>
+                                <h5 class="form-title capitalize--first-letter" id="musicActorRolesLabel">Music actor roles</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
-                                    <!-- <button type="button" class="btn btn-outline btn-secondary btn-sm datasheet-form-upload-button form-buttons" title="Upload file" name="upload">
-                                      <i class="fas fa-file-upload"></i>
-                                    </button> -->
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm music-datasheet-form-annotate-button form-buttons" title="Annotate corresponding medium" name="annotate">
                                       <i class="fas fa-draw-polygon"></i>
                                     </button>
@@ -5768,7 +5753,7 @@
                           <div class="form-header">
                             <div class="form-row">
                               <div class="col-md-9">
-                                <h5 class="form-title caps-title" id="musicmediumhasmusiclistLabel">Music exists in the following media</h5>
+                                <h5 class="form-title capitalize--first-letter" id="musicmediumhasmusiclistLabel">Music exists in the following media</h5>
                               </div>
                               <div class="col-md-3">
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">

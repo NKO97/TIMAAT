@@ -24,7 +24,7 @@
 			this.medium = medium;
 			this.form = form;
 			this.state = 'init';
-			this.ui = $(`<li class="list-group-item">
+			this.ui = $(`<li class="list-group__item">
 							<button type="button" class="upload-cancel btn float-right btn-outline-danger ml-2"><i class="fas fa-times-circle"></i></button>
 							<span class="filename text-dark">[FILENAME]</span><br>
 							<div class="progress">

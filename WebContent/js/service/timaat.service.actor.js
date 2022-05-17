@@ -36,7 +36,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		//* not used anymore
@@ -55,7 +55,7 @@
 			}).fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		async getActorDatasetsTotal() {
@@ -74,10 +74,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getActor(id) {
@@ -96,10 +96,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getActorName(id) {
@@ -118,10 +118,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getTagList(actorId) {
@@ -142,10 +142,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		listActorSubtype(actorSubtype, callback) {
@@ -165,7 +165,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		async getActorSubtypeDatasetsTotal(actorSubtype) {
@@ -184,10 +184,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getCollectiveSelectList() {
@@ -208,10 +208,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getActorHasRoleList(id) {
@@ -232,10 +232,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getActorRoleInMediumList(actorId, roleId) {
@@ -256,10 +256,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getActorsWithThisRoleList(roleId) {
@@ -280,10 +280,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getActorHasImageList(id) {
@@ -304,10 +304,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		listAddressTypes(callback) {
@@ -326,7 +326,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		listEmailAddressTypes(callback) {
@@ -345,7 +345,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		listPhoneNumberTypes(callback) {
@@ -364,7 +364,7 @@
 			.fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		async createActor(actorModel) {
@@ -391,7 +391,7 @@
 		},
 
 		async createActorSubtype(actorSubtype, actorModel, subtypeModel) {
-      // console.log("TCL: createActorSubtype -> actorSubtype, actorModel, subtypeModel", actorSubtype, actorModel, subtypeModel);			
+      // console.log("TCL: createActorSubtype -> actorSubtype, actorModel, subtypeModel", actorSubtype, actorModel, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorSubtype+"/"+actorModel.id,
@@ -506,7 +506,7 @@
 		},
 
 		async addAddress(actorId, address) {
-      // console.log("TCL: addAddress -> actorId, address", actorId, address);
+      console.log("TCL: addAddress -> actorId, address", actorId, address);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/address/"+address.id,
@@ -756,7 +756,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-		
+
 		async addCitizenship(actorId, citizenship) {
       // console.log("TCL: addCitizenship -> actorId, citizenship", actorId, citizenship);
 			return new Promise(resolve => {
@@ -800,7 +800,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-		});		
+		});
 		},
 
 		async updateActor(actorModel) {
@@ -1319,11 +1319,11 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
-	}	
+	}
 }, window));

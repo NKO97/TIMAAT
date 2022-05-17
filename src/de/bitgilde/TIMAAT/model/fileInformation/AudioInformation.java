@@ -1,7 +1,10 @@
 package de.bitgilde.TIMAAT.model.fileInformation;
 
+/**
+ * Audio information automatically determined by ffmpeg when uploading a new audio file
+ */
 public class AudioInformation {
-	
+
 	private long duration;
 	private String codec;
 
@@ -17,7 +20,7 @@ public class AudioInformation {
 	public void setDuration(long duration) {
 		this.duration = duration;
 	}
-  
+
 	public String getCodec() {
 		return codec;
 	}

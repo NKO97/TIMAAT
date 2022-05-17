@@ -29,7 +29,7 @@
 			// create and style list view element
 			var deleteActorTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-actortype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteActorTypeButton = '';
-			this.listView = $('<li class="list-group-item"> '
+			this.listView = $('<li class="list-group__item"> '
 				+ deleteActorTypeButton +
 				'<span class="timaat-actortype-list-type"></span>' +
 				'<br> \

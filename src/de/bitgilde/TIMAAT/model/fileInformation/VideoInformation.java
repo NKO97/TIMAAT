@@ -1,7 +1,10 @@
 package de.bitgilde.TIMAAT.model.fileInformation;
 
+/**
+ * Video information automatically determined by ffmpeg when uploading and converting a new video file
+ */
 public class VideoInformation {
-	
+
 	private int width;
 	private int height;
 	private int framerate;
@@ -15,7 +18,7 @@ public class VideoInformation {
 		this.duration = duration;
 		this.codec = codec;
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}

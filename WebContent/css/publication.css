@@ -252,12 +252,12 @@ body {
   display: none;
 }
 
-#timaat-video-controls .video-volume-control {
+#timaat-video-controls .video-media-player-volume-control {
   width: 100px;
 }
 
-#timaat-video-controls:hover {
-}
+/* #timaat-video-controls:hover {
+} */
 
 @media screen and (max-height: 450px) {
   .sidebar a {font-size: 18px;}

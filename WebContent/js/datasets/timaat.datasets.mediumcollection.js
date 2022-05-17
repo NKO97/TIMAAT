@@ -512,126 +512,126 @@
 
 		},
 
-		_setupPublicationSheet: function(enabled, restricted) {
-			$('#timaat-publish-mediacollection-switch').prop('checked', enabled);
-			$('#timaat-publication-mediacollection-protected-switch').prop('checked', restricted);
-			let credentials = {};
-			try {
-				credentials = JSON.parse(this.publication.credentials);
-			} catch (e) { credentials = {}; }
-			let sheet = $('.mediumcollection-publication-wrapper');
-			let title = ( this.publication ) ? this.publication.title : '';
-			let username = ( credentials.user && enabled ) ? credentials.user : '';
-			let password = ( credentials.password && enabled ) ? credentials.password : '';
-			let url = ( this.publication ) ? window.location.protocol+'//'+window.location.host+window.location.pathname+'publication/'+this.publication.slug+'/' : '';
-			sheet.find('.protectedicon').removeClass('fa-lock').removeClass('fa-lock-open');
-			if ( restricted ) sheet.find('.protectedicon').addClass('fa-lock'); else sheet.find('.protectedicon').addClass('fa-lock-open');
+		// _setupPublicationSheet: function(enabled, restricted) {
+		// 	$('#timaat-publish-mediacollection-switch').prop('checked', enabled);
+		// 	$('#timaat-publication-mediacollection-protected-switch').prop('checked', restricted);
+		// 	let credentials = {};
+		// 	try {
+		// 		credentials = JSON.parse(this.publication.credentials);
+		// 	} catch (e) { credentials = {}; }
+		// 	let sheet = $('.mediumcollection-publication-wrapper');
+		// 	let title = ( this.publication ) ? this.publication.title : '';
+		// 	let username = ( credentials.user && enabled ) ? credentials.user : '';
+		// 	let password = ( credentials.password && enabled ) ? credentials.password : '';
+		// 	let url = ( this.publication ) ? window.location.protocol+'//'+window.location.host+window.location.pathname+'publication/'+this.publication.slug+'/' : '';
+		// 	sheet.find('.protectedicon').removeClass('fa-lock').removeClass('fa-lock-open');
+		// 	if ( restricted ) sheet.find('.protectedicon').addClass('fa-lock'); else sheet.find('.protectedicon').addClass('fa-lock-open');
 
-			sheet.find('.publicationtitle').prop('disabled', !enabled);
-			sheet.find('#timaat-publication-protected-switch').prop('disabled', !enabled);
-			sheet.find('.username').prop('disabled', !enabled || !restricted);
-			sheet.find('.username').val(username);
-			sheet.find('.password').prop('disabled', !enabled || !restricted);
-			sheet.find('.password').val(password);
-			sheet.find('.password').attr('type', 'password');
-			$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
+		// 	sheet.find('.publicationtitle').prop('disabled', !enabled);
+		// 	sheet.find('#timaat-publication-protected-switch').prop('disabled', !enabled);
+		// 	sheet.find('.username').prop('disabled', !enabled || !restricted);
+		// 	sheet.find('.username').val(username);
+		// 	sheet.find('.password').prop('disabled', !enabled || !restricted);
+		// 	sheet.find('.password').val(password);
+		// 	sheet.find('.password').attr('type', 'password');
+		// 	$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
 
-			if ( enabled ) {
-				sheet.find('.publicationtitle').val(title);
-				if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>';
-				else url = '- Save to make publication link available -';
-				sheet.find('.publicationurl').html(url);
-			} else {
-				sheet.find('.publicationtitle').val('');
-				sheet.find('.publicationurl').html('- Collection not published -');
-			}
-		},
+		// 	if ( enabled ) {
+		// 		sheet.find('.publicationtitle').val(title);
+		// 		if ( url.length > 0 ) url = '<a href="'+url+'" target="_blank">'+url+'</a>';
+		// 		else url = '- Save to make publication link available -';
+		// 		sheet.find('.js-analysis-list-menu__publication--url').html(url);
+		// 	} else {
+		// 		sheet.find('.publicationtitle').val('');
+		// 		sheet.find('.js-analysis-list-menu__publication--url').html('- Collection not published -');
+		// 	}
+		// },
 
-		_updatePublicationSettings: function() {
-			let sheet = $('.mediumcollection-publication-wrapper');
-			let enabled = $('#timaat-publish-mediacollection-switch').prop('checked');
-			let restricted = $('#timaat-publication-mediacollection-protected-switch').prop('checked');
-			let username = ( sheet.find('.username').val() && restricted ) ? sheet.find('.username').val() : '';
-			let password = ( sheet.find('.password').val() && restricted ) ? sheet.find('.password').val() : '';
-			$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', true);
-			$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').removeClass('d-none');
-			let dataset = this;
-			let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
-			if ( enabled ) {
-				let publication = (this.publication) ? this.publication : { id: 0 };
-				publication.access = (restricted) ? 'protected' : 'public';
-				publication.collectionId = null;
-				publication.ownerId = TIMAAT.Service.session.id;
-				publication.settings = null;
-				publication.slug = TIMAAT.Util.createUUIDv4();
-				publication.collectionId = collection.model.id;
-				publication.startMediumId = null;
-				publication.title = sheet.find('.publicationtitle').val();
-				publication.credentials = JSON.stringify({
-					scheme: 'password',
-					user: username,
-					password: password,
-				});
-				TIMAAT.PublicationService.updateCollectionPublication(publication).then(publication => {
-					dataset.publication = publication;
-					dataset._setupPublicationSheet(publication !=null, publication !=null && publication.access == 'protected');
-					$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
-					$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
-					sheet.find('.saveinfo').show().delay(1000).fadeOut();
-				}).catch( e => {
-					$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
-					$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
-				})
-			} else {
-				TIMAAT.PublicationService.deleteCollectionPublication(collection.model.id).then(status => {
-					dataset.publication = null;
-					dataset._setupPublicationSheet(false, false);
-					$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
-					$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
-					sheet.find('.saveinfo').show().delay(1000).fadeOut();
-				}).catch( e => {
-					$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
-					$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
-				})
-			}
-		},
+		// _updatePublicationSettings: function() {
+		// 	let sheet = $('.mediumcollection-publication-wrapper');
+		// 	let enabled = $('#timaat-publish-mediacollection-switch').prop('checked');
+		// 	let restricted = $('#timaat-publication-mediacollection-protected-switch').prop('checked');
+		// 	let username = ( sheet.find('.username').val() && restricted ) ? sheet.find('.username').val() : '';
+		// 	let password = ( sheet.find('.password').val() && restricted ) ? sheet.find('.password').val() : '';
+		// 	$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', true);
+		// 	$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').removeClass('d-none');
+		// 	let dataset = this;
+		// 	let collection = $('#mediumcollection-metadata-form').data('mediumCollection');
+		// 	if ( enabled ) {
+		// 		let publication = (this.publication) ? this.publication : { id: 0 };
+		// 		publication.access = (restricted) ? 'protected' : 'public';
+		// 		publication.collectionId = null;
+		// 		publication.ownerId = TIMAAT.Service.session.id;
+		// 		publication.settings = null;
+		// 		publication.slug = TIMAAT.Util.createUUIDv4();
+		// 		publication.collectionId = collection.model.id;
+		// 		publication.startMediumId = null;
+		// 		publication.title = sheet.find('.publicationtitle').val();
+		// 		publication.credentials = JSON.stringify({
+		// 			scheme: 'password',
+		// 			user: username,
+		// 			password: password,
+		// 		});
+		// 		TIMAAT.PublicationService.updateCollectionPublication(publication).then(publication => {
+		// 			dataset.publication = publication;
+		// 			dataset._setupPublicationSheet(publication !=null, publication !=null && publication.access == 'protected');
+		// 			$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
+		// 			$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
+		// 			sheet.find('.saveinfo').show().delay(1000).fadeOut();
+		// 		}).catch( e => {
+		// 			$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
+		// 			$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
+		// 		})
+		// 	} else {
+		// 		TIMAAT.PublicationService.deleteCollectionPublication(collection.model.id).then(status => {
+		// 			dataset.publication = null;
+		// 			dataset._setupPublicationSheet(false, false);
+		// 			$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
+		// 			$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
+		// 			sheet.find('.saveinfo').show().delay(1000).fadeOut();
+		// 		}).catch( e => {
+		// 			$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', false);
+		// 			$('#timaat-mediumcollection-publication-settings-submit i.login-spinner').addClass('d-none');
+		// 		})
+		// 	}
+		// },
 
-		initMediaCollectionPublication: function() {
-			let dataset = this;
-			// events
-			$('#timaat-publish-mediacollection-switch, #timaat-publication-mediacollection-protected-switch').on('change', ev => {
-				dataset._setupPublicationSheet($('#timaat-publish-mediacollection-switch').prop('checked'), $('#timaat-publication-mediacollection-protected-switch').prop('checked'));
-			});
+		// initMediaCollectionPublication: function() {
+		// 	let dataset = this;
+		// 	// events
+		// 	$('#timaat-publish-mediacollection-switch, #timaat-publication-mediacollection-protected-switch').on('change', ev => {
+		// 		dataset._setupPublicationSheet($('#timaat-publish-mediacollection-switch').prop('checked'), $('#timaat-publication-mediacollection-protected-switch').prop('checked'));
+		// 	});
 
-			let sheet = $('.mediumcollection-publication-wrapper');
-			sheet.find('.reveal').on('click', ev => {
-				if ( sheet.find('.password').attr('type') === 'password' )
-					sheet.find('.password').attr('type', 'text');
-				else sheet.find('.password').attr('type', 'password');
-			});
-			sheet.find('.username, .password').on('change input', ev => {
-				let enabled = $('#timaat-publish-mediacollection-switch').prop('checked');
-				let restricted = $('#timaat-publication-mediacollection-protected-switch').prop('checked');
-				let username = sheet.find('.username').val();
-				let password = sheet.find('.password').val();
-				$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
-			});
+		// 	let sheet = $('.mediumcollection-publication-wrapper');
+		// 	sheet.find('.reveal').on('click', ev => {
+		// 		if ( sheet.find('.password').attr('type') === 'password' )
+		// 			sheet.find('.password').attr('type', 'text');
+		// 		else sheet.find('.password').attr('type', 'password');
+		// 	});
+		// 	sheet.find('.username, .password').on('change input', ev => {
+		// 		let enabled = $('#timaat-publish-mediacollection-switch').prop('checked');
+		// 		let restricted = $('#timaat-publication-mediacollection-protected-switch').prop('checked');
+		// 		let username = sheet.find('.username').val();
+		// 		let password = sheet.find('.password').val();
+		// 		$('#timaat-mediumcollection-publication-settings-submit').prop('disabled', enabled && restricted && username == '' && password == '');
+		// 	});
 
-			$('#timaat-mediumcollection-publication-settings-submit').on('click', ev => {
-				dataset._updatePublicationSettings();
-			})
+		// 	$('#timaat-mediumcollection-publication-settings-submit').on('click', ev => {
+		// 		dataset._updatePublicationSettings();
+		// 	})
 
-			// nav-bar functionality
-			$('#mediumcollection-tab-publication').on('click', async function(event) {
-				// console.log("TCL: Media Collection Publication Tab clicked");
-				let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
-				let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
-				TIMAAT.UI.displayDataSetContentArea('mediumcollection-publication');
-				TIMAAT.UI.subNavTab = 'publication';
-				TIMAAT.UI.displayDataSetContent('publication', mediumCollection, 'mediumCollection');
-				TIMAAT.URLHistory.setURL(null, mediumCollection.model.title + ' · Collection Publication · ' + type[0].toUpperCase() + type.slice(1), '#mediumCollection/' + mediumCollection.model.id + '/publication');
-			});
-		},
+		// 	// nav-bar functionality
+		// 	$('#mediumcollection-tab-publication').on('click', async function(event) {
+		// 		// console.log("TCL: Media Collection Publication Tab clicked");
+		// 		let mediumCollection = $('#mediumcollection-metadata-form').data('mediumCollection');
+		// 		let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
+		// 		TIMAAT.UI.displayDataSetContentArea('mediumcollection-publication');
+		// 		TIMAAT.UI.subNavTab = 'publication';
+		// 		TIMAAT.UI.displayDataSetContent('publication', mediumCollection, 'mediumCollection');
+		// 		TIMAAT.URLHistory.setURL(null, mediumCollection.model.title + ' · Collection Publication · ' + type[0].toUpperCase() + type.slice(1), '#mediumCollection/' + mediumCollection.model.id + '/publication');
+		// 	});
+		// },
 
 		load: function() {
 			this.loadMediaCollections();
@@ -981,7 +981,7 @@
 							<div class="row vertical-aligned" data-role="globalUserPermission">
 								<fieldset>
 									<legend>You can grant all users access to this medium collection</legend>
-									<div id="globalPermission" class="radioButtonsHorizontalEvenlySpaced" data-role="select">
+									<div id="globalPermission" class="radio-buttons__horizontal--evenly-spaced" data-role="select">
 										<label>
 											<input id="globalPermission_0" type="radio" name="globalPermissionMediumCollection" value="0"> No global access
 										</label>
@@ -1229,14 +1229,14 @@
             // console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
 						let ui;
 						if (collectionItem.medium.mediumVideo) {
-							ui = `<div class="timaat-medium-status">
-											<i class="fas fa-cog fa-spin"></i>
+							ui = `<div class="medium-file-status js-medium-file-status">
+											<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (collectionItem.medium.mediumImage) {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+											<img class="card-img-top center" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (collectionItem.medium.mediumAudio) {
 							ui = `<div style="display:flex">
@@ -1244,7 +1244,7 @@
 										</div>`;
 						} else {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+											<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
 										</div>`;
 						}
 						return ui;

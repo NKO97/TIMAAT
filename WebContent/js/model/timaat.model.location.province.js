@@ -28,7 +28,7 @@
 			// create and style list view element
 			var deleteProvinceButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-province-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteProvinceButton = '';
-			this.listView = $('<li class="list-group-item"> ' +
+			this.listView = $('<li class="list-group__item"> ' +
 				deleteProvinceButton +
 				'<span class="timaat-province-list-name"></span>' +
 				'<br>' +

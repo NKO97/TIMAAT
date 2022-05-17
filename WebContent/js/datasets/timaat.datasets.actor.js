@@ -546,8 +546,9 @@
 			});
 
 			// Add name button click
-			$(document).on('click','[data-role="new-name-fields"] > .form-group [data-role="add"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="new-name-fields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.add-name-button', function(event) {
+					event.preventDefault();
 				// console.log("TCL: add name to list");
 				var listEntry = $(this).closest('[data-role="new-name-fields"]');
 				var newName = [];
@@ -624,7 +625,7 @@
 											 aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button remove-name-button btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -647,8 +648,9 @@
 			});
 
 			// Remove name button click
-			$(document).on('click','[data-role="dynamic-name-fields"] > .form-group [data-role="remove"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="dynamic-name-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.remove-name-button', function(event) {
+					event.preventDefault();
 				var isDisplayName = $(this).closest('.form-group').find('input[name=isDisplayName]:checked').val();
 				if (isDisplayName == "on") {
 					// TODO modal informing that display name entry cannot be deleted
@@ -976,8 +978,9 @@
 			});
 
 			// Add address button click
-			$(document).on('click','[data-role="new-actorhasaddress-fields"] > .form-group [data-role="add"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="new-actorhasaddress-fields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.add-address-button', function(event) {
+					event.preventDefault();
 				// console.log("TCL: add address to list");
 				var listEntry = $(this).closest('[data-role="new-actorhasaddress-fields"]');
 				var newAddress = [];
@@ -1114,7 +1117,7 @@
 									</fieldset>
 								</div>
 								<div class="col-md-1 vertical-aligned">
-									<button class="btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button remove-address-button btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -1140,8 +1143,9 @@
 			});
 
 			// Remove address button click
-			$(document).on('click','[data-role="dynamic-actorhasaddress-fields"] > .form-group [data-role="remove"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="dynamic-actorhasaddress-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.remove-address-button', function(event) {
+					event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
 
@@ -1434,8 +1438,9 @@
 			});
 
 			// Add email address button click
-			$(document).on('click','[data-role="new-actorhasemailaddress-fields"] > .form-group [data-role="add"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="new-actorhasemailaddress-fields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.add-email-address-button', function(event) {
+					event.preventDefault();
 				// console.log("TCL: add email address to list");
 				var listEntry = $(this).closest('[data-role="new-actorhasemailaddress-fields"]');
 				var newEmailAddress = [];
@@ -1489,7 +1494,7 @@
 										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="newEmailAddress[`+i+`]" data-role="newEmailAddress[`+i+`]" value="`+newEmailAddress[0]+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
 									</div>
 								<div class="col-md-1 text-center">
-									<button class="btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button remove-email-address-button btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -1513,8 +1518,9 @@
 			});
 
 			// Remove email address button click
-			$(document).on('click','[data-role="dynamic-actorhasemailaddress-fields"] > .form-group [data-role="remove"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="dynamic-actorhasemailaddress-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.remove-email-address-button', function(event) {
+					event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
 
@@ -1785,8 +1791,9 @@
 			});
 
 			// Add phone number button click
-			$(document).on('click','[data-role="new-actorhasphonenumber-fields"] > .form-group [data-role="add"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="new-actorhasphonenumber-fields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.add-phone-number-button', function(event) {
+					event.preventDefault();
 				// console.log("TCL: add phone number to list");
 				var listEntry = $(this).closest('[data-role="new-actorhasphonenumber-fields"]');
 				var newPhoneNumber = [];
@@ -1841,7 +1848,7 @@
 									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="newPhoneNumber[`+i+`]" data-role="newPhoneNumber[`+i+`]" value="`+newPhoneNumber[0]+`" maxlength="30" placeholder="[Enter phone number] "aria-describedby="Phone number" required>
 								</div>
 								<div class="col-md-1 text-center">
-									<button class="btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button remove-phone-number-button btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -1865,8 +1872,9 @@
 			});
 
 			// Remove phone number button click
-			$(document).on('click','[data-role="dynamic-actorhasphonenumber-fields"] > .form-group [data-role="remove"]', function(event) {
-				event.preventDefault();
+			// $(document).on('click','[data-role="dynamic-actorhasphonenumber-fields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.remove-phone-number-button', function(event) {
+					event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
 
@@ -2137,8 +2145,9 @@
 			});
 
 			// add membership button click
-			$(document).on('click','[data-role="new-personismemberofcollective-fields"] > .form-group [data-role="add"]', async function(event) {
-				// console.log("TCL: MemberOfCollective form: add new membership");
+			// $(document).on('click','[data-role="new-personismemberofcollective-fields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','.add-member-of-collective-button', async function(event) {
+					// console.log("TCL: MemberOfCollective form: add new membership");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-fields"]');
 				var newFormEntry = [];
@@ -2228,9 +2237,9 @@
 			});
 
 			// add membership detail button click
-			// $(document).on('click','[data-role="new-personismemberofcollective-details-fields"] > .form-group [data-role="personismemberofcollective-entry"] > .form-group [data-role="memberofcollective-details-entry"] > .form-group [data-role="addMembershipDetails"]', async function(event) {
-			$(document).on('click', '.form-group [data-role="addMembershipDetails"]', async function(event) {
-				// console.log("TCL: MemberOfCollective form: add details to membership");
+			// $(document).on('click', '.form-group [data-role="addMembershipDetails"]', async function(event) {
+			$(document).on('click', '.add-membership-details-button', async function(event) {
+						// console.log("TCL: MemberOfCollective form: add details to membership");
 				event.preventDefault();
 				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]');
 				var newMemberOfCollectiveData = [];
@@ -2264,15 +2273,17 @@
 			});
 
 			// remove member of collective button click
-			$(document).on('click','[data-role="dynamic-personismemberofcollective-fields"] > .form-group [data-role="remove"]', async function(event) {
-				// console.log("TCL: MemberOfCollective form: remove membership");
+			// $(document).on('click','[data-role="dynamic-personismemberofcollective-fields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','.remove-member-of-collective-button', async function(event) {
+					// console.log("TCL: MemberOfCollective form: remove membership");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
 			// remove membership detail button click
-			$(document).on('click','.form-group [data-role="removeMembershipDetails"]', async function(event) {
-				// console.log("TCL: MemberOfCollective form: remove details");
+			// $(document).on('click','.form-group [data-role="removeMembershipDetails"]', async function(event) {
+			$(document).on('click','.remove-membership-details', async function(event) {
+					// console.log("TCL: MemberOfCollective form: remove details");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
@@ -3157,7 +3168,7 @@
 											 aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button remove-name-button btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -3187,8 +3198,9 @@
 				$('#actor-names-form-dismiss').hide();
 				$('[data-role="new-name-fields"').hide();
 				$('.name-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="add"]').hide();
+				$('.js-form-group__button').hide();
 				$('#actorNamesLabel').html("Actor name list");
 				if (actor.model.actorType.actorTypeTranslations[0].type == "person") {
 					$('#actor-display-name-header').html("Display Name");
@@ -3212,6 +3224,7 @@
 
 				// fields for new name entry
 				$('[data-role="new-name-fields"]').append(this.appendNewNameField());
+				// $('.actor-names-container').find('.js-form-group__button').show(); //* enable after dynamic fields are added
 
 				$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
@@ -3362,7 +3375,7 @@
 								</fieldset>
 							</div>
 							<div class="col-md-1 vertical-aligned">
-								<button class="btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button remove-address-button btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -3390,8 +3403,9 @@
 				$('#actor-addresses-form-dismiss').hide();
 				$('[data-role="new-actorhasaddress-fields"').hide();
 				$('.address-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="add"]').hide();
+				$('.js-form-group__button').hide();
 				$('#actorAddressesLabel').html("Actor address list");
 			}
 			else if (action == 'edit') {
@@ -3460,7 +3474,7 @@
 										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="emailAddress[`+i+`]" data-role="emailAddress[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" value="`+actor.model.actorHasEmailAddresses[i].emailAddress.email+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
 									</div>
 								<div class="col-md-1 text-center">
-									<button class="btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button remove-email-address-button btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -3482,8 +3496,9 @@
 				$('#actor-emailaddresses-form-dismiss').hide();
 				$('[data-role="new-actorhasemailaddress-fields"').hide();
 				$('.emailaddress-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="add"]').hide();
+				$('.js-form-group__button').hide();
 				$('#actorEmailAddressesLabel').html("Actor email list");
 			}
 			else if (action == 'edit') {
@@ -3548,7 +3563,7 @@
 									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" value="`+actor.model.actorHasPhoneNumbers[i].phoneNumber.phoneNumber+`" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
 								</div>
 								<div class="col-md-1 text-center">
-									<button class="btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button remove-phone-number-button btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -3570,8 +3585,9 @@
 				$('#actor-phonenumbers-form-dismiss').hide();
 				$('[data-role="new-actorhasphonenumber-fields"').hide();
 				$('.phonenumber-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="add"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="add"]').hide();
+				$('.js-form-group__button').hide();
 				$('#actorPhoneNumbersLabel').html("Actor phone number list");
 			}
 			else if (action == 'edit') {
@@ -3657,11 +3673,13 @@
 				$('#actor-memberofcollectives-form-dismiss').hide();
 				$('[data-role="new-personismemberofcollective-fields"]').hide();
 				$('.memberofcollective-form-divider').hide();
-				$('[data-role="remove"]').hide();
-				$('[data-role="removeMembershipDetails"]').hide();
+				// $('[data-role="remove"]').hide();
+				// $('[data-role="removeMembershipDetails"]').hide();
 				$('[data-role="add"]').hide();
-				$('[data-role="addMembershipDetails"]').hide();
-				$('[data-role="save"]').hide();
+				// $('[data-role="addMembershipDetails"]').hide();
+				// $('.add-membership-details').hide();
+				$('.js-form-group__button').hide();
+				// $('[data-role="save"]').hide();
 				switch (type) {
 					case 'person':
 						$('#actorMemberOfCollectiveLabel').html("Person is member of collective list");
@@ -3808,7 +3826,7 @@
 				$('#actor-roles-form-submit').hide();
 				$('#actor-roles-form-dismiss').hide();
 				$('.actorroles-form-divider').hide();
-				$('[data-role="save"]').hide();
+				// $('[data-role="save"]').hide();
 				$('#actorRolesLabel').html("Actor has role(s) list");
 			}
 			else if (action == 'edit') {
@@ -3903,7 +3921,7 @@
 					$('#actor-role-in-medium-form-submit').hide();
 					$('#actor-role-in-medium-form-dismiss').hide();
 					$('.actorrolemedium-form-divider').hide();
-					$('[data-role="save"]').hide();
+					// $('[data-role="save"]').hide();
 					$('#actorRoleMediumLabel').html("Actor has role in medium list");
 				}
 				else if (action == 'edit') {
@@ -4899,7 +4917,7 @@
 						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" id="timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil" data-role="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
 					</div>
 					<div class="col-md-1">
-						<button class="btn btn-primary" data-role="add">
+						<button class="form-group__button js-form-group__button add-name-button btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -5022,7 +5040,7 @@
 						</fieldset>
 					</div>
 					<div class="col-md-1 vertical-aligned">
-						<button class="btn btn-primary" data-role="add">
+						<button class="form-group__button js-form-group__button add-address-button btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -5057,7 +5075,7 @@
 							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="emailAddress" data-role="emailAddress" placeholder="[Enter email address]" aria-describedby="Email address" required>
 						</div>
 						<div class="col-md-1">
-							<button class="btn btn-primary" data-role="add">
+							<button class="form-group__button js-form-group__button add-email-address-button btn btn-primary" data-role="add">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -5093,7 +5111,7 @@
 							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber" data-role="phoneNumber" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" rerquired>
 						</div>
 						<div class="col-md-1">
-							<button class="btn btn-primary" data-role="add">
+							<button class="form-group__button js-form-group__button add-phone-number-button btn btn-primary" data-role="add">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -5149,7 +5167,7 @@
 						</fieldset>
 					</div>
 					<div class="col-md-1 vertical-aligned">
-						<button type="button" class="btn btn-danger" data-role="remove">
+						<button type="button" class="form-group__button js-form-group__button remove-member-of-collective-button btn btn-danger" data-role="remove">
 							<i class="fas fa-trash-alt"></i>
 						</button>
 					</div>
@@ -5191,7 +5209,7 @@
 						</fieldset>
 					</div>
 					<div class="col-md-1 vertical-aligned">
-						<button type="button" class="btn btn-primary" data-role="add">
+						<button type="button" class="form-group__button js-form-group__button add-member-of-collective-button btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -5235,7 +5253,7 @@
 										aria-describedby="Collective left at">
 						</div>
 						<div class="col-md-2 vertical-aligned">
-							<button type="button" class="btn btn-danger" data-role="removeMembershipDetails">
+							<button type="button" class="form-group__button js-form-group__button remove-membership-details btn btn-danger" data-role="removeMembershipDetails">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
@@ -5274,7 +5292,7 @@
 								aria-describedby="Collective left at">
 				</div>
 				<div class="col-md-2 vertical-aligned">
-					<button type="button" class="btn btn-primary" data-role="addMembershipDetails">
+					<button type="button" class="form-group__button js-form-group__button add-membership-details-button btn btn-primary" data-role="addMembershipDetails">
 						<i class="fas fa-plus"></i>
 					</button>
 				</div>
@@ -5548,10 +5566,10 @@
 					}
 				},
 				"rowCallback": function( row, data ) {
-					// console.log("TCL: rowCallback(actor) - row, data", row, data);
+					console.log("TCL: rowCallback(actor) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						TIMAAT.UI.clearLastSelection('actor');
-						$(row).addClass('selected');
+						// $(row).addClass('selected');
 						TIMAAT.UI.selectedActorId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
@@ -5563,6 +5581,7 @@
 					actorElement.data('actor', actor);
 
 					actorElement.on('click', '.name', function(event) {
+						console.log("click");
 						event.stopPropagation();
 						TIMAAT.ActorDatasets.setDataTableOnItemSelect('actor', actor.id);
 					});
@@ -5688,7 +5707,8 @@
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						// console.log("TCL: clear last selection 'person'");
 						TIMAAT.UI.clearLastSelection('person');
-						$(row).addClass('selected');
+						// $(row).addClass('selected');
+						// $(row).child().addClass('table__row--selected-td');
 						TIMAAT.UI.selectedActorId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},
@@ -5812,7 +5832,8 @@
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						// console.log("TCL: clear last selection 'collective'");
 						TIMAAT.UI.clearLastSelection('collective');
-						$(row).addClass('selected');
+						// $(row).addClass('selected');
+						// $(row).child().addClass('table__row--selected-td');
 						TIMAAT.UI.selectedActorId = data.id; //* as it is set to null in clearLastSelection
 					}
 				},

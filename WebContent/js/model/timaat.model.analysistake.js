@@ -28,7 +28,7 @@
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group-item timaat-annotation-list-take p-0 bg-secondary">
+				<li class="list-group__item timaat-annotation-list-take p-0 bg-secondary">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold pt-1 text-light pl-1">
 							<i class="timaat-annotation-take-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>

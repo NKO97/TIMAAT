@@ -48,17 +48,15 @@
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group-item" style="padding:0">
+				<li class="list-group__item" style="padding:0">
 					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-image fas fa-image" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-draw-polygon" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-animation fas fa-running" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-audio fas fa-headphones" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon js-analysis-list-element__icon--visual-layer fas fa-image" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon js-analysis-list-element__icon--audio-layer fas fa-headphones" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon--comment js-analysis-list-element__icon--comment fas fa-fw fa-comment" aria-hidden="true"></i>
 					<span class="timaat-annotation-list-time"></span>
 					<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
 					<div class="d-flex justify-content-between">
-						<div class="timaat-annotation-list-title text-muted"></div>
+						<div class="analysis-list-element__title js-analysis-list-element__title text-muted"></div>
 						<div class="text-muted timaat-user-log pr-1"><i class="fas fa-user"></i></div>
 					</div>
 				</li>`
@@ -375,12 +373,12 @@
 			this.listView.attr('data-endtime', this.model.endTime);
 			this.listView.attr('id', 'annotation-'+this.model.id);
 			this.listView.attr('data-type', 'annotation');
-			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
+			this.listView.find('.analysis-list-element__icon').css('color', '#'+this.svg.colorHex);
 			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			if ( TIMAAT.VideoPlayer.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
 			this.listView.find('.timaat-annotation-list-time').html(timeString);
-			this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
+			this.listView.find('.js-analysis-list-element__title').html(this.model.annotationTranslations[0].title);
 			// categories
 			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");
 			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
@@ -391,9 +389,9 @@
 
 			// comment
 			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
-				this.listView.find('.timaat-annotation-list-comment').show();
+				this.listView.find('.js-analysis-list-element__icon--comment').show();
 			else
-				this.listView.find('.timaat-annotation-list-comment').hide();
+				this.listView.find('.js-analysis-list-element__icon--comment').hide();
 
 			// update svg
 			for (let item of this.svg.items) {
@@ -405,28 +403,22 @@
 		}
 
 		_updateAnnotationType() {
-			let typeImage = this.listView.find('.timaat-annotation-list-type-image');
-			let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
-			let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
-			let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
+			let layerVisualIcon = this.listView.find('.js-analysis-list-element__icon--visual-layer');
+			let layerAudioIcon = this.listView.find('.js-analysis-list-element__icon--audio-layer');
 			if ( this.layerVisual) {
-				if ( this.svg.items.length > 0 ) {
-					typePolygon.show();
-					typeImage.hide();
+				if ( this.isAnimation() ) {
+					layerVisualIcon.removeClass('fa-image').removeClass('fa-draw-polygon').addClass('fa-running');
+				} else if ( this.svg.items.length > 0 ) {
+					layerVisualIcon.removeClass('fa-image').removeClass('fa-running').addClass('fa-draw-polygon');
+				} else {
+					layerVisualIcon.removeClass('fa-running').removeClass('fa-draw-polygon').addClass('fa-image');
 				}
-				else {
-					typePolygon.hide();
-					typeImage.show();
-				}
+				layerVisualIcon.show();
 			} else {
-				typePolygon.hide();
-				typeImage.hide();
+				layerVisualIcon.hide();
+				layerVisualIcon.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-running');
 			}
-			if ( this.isAnimation() ) {
-				typeAnimation.show();
-				typePolygon.hide()
-			} else typeAnimation.hide();
-			( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
+			( this.layerAudio ) ? layerAudioIcon.show() : layerAudioIcon.hide();
 		};
 
 		remove() {
@@ -724,14 +716,14 @@
 		}
 
 		_scrollIntoView(listItem) {
-			var listTop = $('.timaat-annotation-list-wrapper').scrollTop();
-			var listHeight = $('.timaat-annotation-list-wrapper').height();
+			var listTop = $('.js-analysis-list').scrollTop();
+			var listHeight = $('.js-analysis-list').height();
 			var elementTop = listItem.position().top;
 			// TODO scroll from bottom if out of view
 			if ( elementTop < 0 )
-				$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
+				$('.js-analysis-list').animate({scrollTop:(listTop+elementTop)}, 100);
 			if ( elementTop > listHeight )
-				$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
+				$('.js-analysis-list').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
 
 		}
 

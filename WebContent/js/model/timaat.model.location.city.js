@@ -28,7 +28,7 @@
 			// create and style list view element
 			var deleteCityButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-city-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteCityButton = '';
-			this.listView = $('<li class="list-group-item"> ' +
+			this.listView = $('<li class="list-group__item"> ' +
 				deleteCityButton +
 				'<span class="timaat-city-list-name"></span>' +
 				'<br>' +

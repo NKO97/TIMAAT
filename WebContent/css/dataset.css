@@ -1,0 +1,70 @@
+.dataset__no-tags {
+	color: #bbbbbb;
+}
+
+.form {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #aeb8c1;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.form-control:disabled {
+	resize: none;
+}
+
+.form-control::placeholder {
+  color: #acacac;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #acacac;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #acacac;
+}
+
+.form-control::-moz-placeholder {
+  color: #acacac;
+  opacity: 1;
+}
+
+.form-group {
+	margin-bottom: 3px;
+}
+
+.form-group__button {
+	line-height: 1;
+}
+
+.form-group__button--add:last-child {
+	display: inline-block;
+}
+
+
+.form-upload-button {
+	display: none;
+}
+
+.medium-file-status {
+	display: none;
+	cursor: default;
+	width: 35px;
+	height: 35px;
+	margin-bottom: -35px;
+	background: rgba(0,0,0,0.8);
+	text-align: center;
+	font-size: 150%;
+	color: white;
+}
+
+.medium-file-status__icon--transcoding {
+	margin-top: 50px;
+}
+
+.radio-buttons__horizontal--evenly-spaced {
+	display: flex;
+	justify-content: space-evenly;
+}

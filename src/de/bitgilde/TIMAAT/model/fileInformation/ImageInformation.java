@@ -1,7 +1,10 @@
 package de.bitgilde.TIMAAT.model.fileInformation;
 
+/**
+ * Image information automatically determined by ffmpeg when uploading a new image file
+ */
 public class ImageInformation {
-	
+
 	private int width;
 	private int height;
 	private String bitDepth;
@@ -13,7 +16,7 @@ public class ImageInformation {
 		this.bitDepth = bitDepth;
 		this.fileExtension = fileExtension;
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}

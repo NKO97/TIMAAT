@@ -29,7 +29,7 @@
 			// create and style list view element
 			var deleteAddressTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-addresstype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteAddressTypeButton = '';
-			this.listView = $('<li class="list-group-item"> '
+			this.listView = $('<li class="list-group__item"> '
 				+ deleteAddressTypeButton +
 				'<span class="timaat-addresstype-list-type"></span>' +
 				'<br> \

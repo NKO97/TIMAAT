@@ -28,11 +28,11 @@
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group-item timaat-annotation-list-segment p-0 bg-secondary">
+				<li class="list-group__item timaat-annotation-list-segment p-0 bg-secondary">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold pt-1 text-light pl-1">
 							<i class="timaat-annotation-segment-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-							<span class="timaat-annotation-segment-name"></span>
+							<span class="analysis-list-element__title js-analysis-list-element__title"></span>
 						</span>
 					</div>
 				</li>`
@@ -57,7 +57,7 @@
 			this.listView.attr('data-type', 'segment');
 			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
-			this.listView.find('.timaat-annotation-segment-name').html(this.model.analysisSegmentTranslations[0].name);
+			this.listView.find('.js-analysis-list-element__title').html(this.model.analysisSegmentTranslations[0].name);
 			this.listView.find('.timaat-annotation-segment-shortDescription').html(this.model.analysisSegmentTranslations[0].shortDescription);
 			this.listView.find('.timaat-annotation-segment-comment').html(this.model.analysisSegmentTranslations[0].comment);
 			this.listView.find('.timaat-annotation-segment-transcript').html(this.model.analysisSegmentTranslations[0].transcript);

@@ -61,7 +61,7 @@
 				}
 			// }
 			this.listView = $(
-				`<li class="list-group-item">
+				`<li class="list-group__item">
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayMediumTypeIcon +

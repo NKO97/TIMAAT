@@ -28,7 +28,7 @@
 			// create and style list view element
 			var displayEventTypeIcon = '  <i class="fas fa-calendar-alt"></i>'; // default event icon
 			this.listView = $(
-				`<li class="list-group-item">
+				`<li class="list-group__item">
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayEventTypeIcon +
@@ -107,7 +107,7 @@
 			// this.listView.find('.timaat-eventdatasets-event-list-count').text(count);
 			// tags
 			// this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('title', this.model.tags.length+" Tags");
-			// if (this.model.tags.length == 0) this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tag timaat-no-tags');
+			// if (this.model.tags.length == 0) this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tag dataset__no-tags');
 			// else if (this.model.tags.length == 1) this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "one tag");
 			// else this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tags text-dark');
 		}

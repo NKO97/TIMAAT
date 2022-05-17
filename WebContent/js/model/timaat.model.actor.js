@@ -39,7 +39,7 @@
 				}
 			}
 			this.listView = $(
-				`<li class="list-group-item">
+				`<li class="list-group__item">
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayActorTypeIcon +
@@ -124,7 +124,7 @@
 			// this.listView.find('.timaat-actordatasets-actor-list-count').text(count);
 			// tags
 			// this.listView.find('.timaat-actordatasets-actor-list-tags i').attr('title', this.model.tags.length+" Tags");
-			// if (this.model.tags.length == 0) this.listView.find('.timaat-actordatasets-actor-list-tags i').attr('class','fas fa-tag timaat-no-tags');
+			// if (this.model.tags.length == 0) this.listView.find('.timaat-actordatasets-actor-list-tags i').attr('class','fas fa-tag dataset__no-tags');
 			// else if (this.model.tags.length == 1) this.listView.find('.timaat-actordatasets-actor-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "one tag");
 			// else this.listView.find('.timaat-actordatasets-actor-list-tags i').attr('class','fas fa-tags text-dark');
 		}
