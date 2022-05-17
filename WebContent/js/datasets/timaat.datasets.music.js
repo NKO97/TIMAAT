@@ -2408,8 +2408,8 @@
 			var actorIdList = [];
 			var i = 0;
 			for (; i < music.model.musicHasActorWithRoles.length; i++) {
-				if (actorIdList[actorIdList.length-1] != music.model.musicHasActorWithRoles[i].id.actorId) {
-					actorIdList.push(music.model.musicHasActorWithRoles[i].id.actorId);
+				if (actorIdList[actorIdList.length-1] != music.model.musicHasActorWithRoles[i].actor.id) {
+					actorIdList.push(music.model.musicHasActorWithRoles[i].actor.id);
 				}
 			}
 			// console.log("TCL: actorIdList", actorIdList);
