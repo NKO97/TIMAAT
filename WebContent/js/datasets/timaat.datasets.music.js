@@ -2094,7 +2094,7 @@
 						}
 					break;
 					default:
-						$('#musicImagePreview').attr('src', 'img/image-placeholder.png');
+						$('#musicImagePreview').attr('src', 'img/preview-placeholder.png');
 						$('#musicVideoPreview').attr('src', '');
 						$('#musicAudioPreview').attr('src', '');
 					break;
@@ -2102,7 +2102,7 @@
 			} else {
 				$('.music-datasheet-form-annotate-button').prop('disabled', true);
 				$('#musicAudioPreview').attr('src', '');
-				$('#musicImagePreview').attr('src', 'img/image-placeholder.png');
+				$('#musicImagePreview').attr('src', 'img/preview-placeholder.png');
 				$('#musicVideoPreview').attr('src', '');
 				$('#musicAudioPreview').hide();
 				$('#musicImagePreview').show();
@@ -4505,7 +4505,7 @@
 			$('#timaat-musicdatasets-music-tabs-container').append($('#timaat-musicdatasets-music-tabs'));
 			$('#timaat-music-modals-container').append($('#timaat-music-modals'));
 			// this.container = 'music';
-			// $('#musicPreviewTab').removeClass('annotationView');
+			// $('#musicPreviewTab').removeClass('annotationMode');
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
 					TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-metadata-form', 'music');

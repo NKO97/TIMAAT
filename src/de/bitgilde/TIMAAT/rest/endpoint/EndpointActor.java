@@ -2767,7 +2767,7 @@ public class EndpointActor {
 		// 	thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 		// 		+ "medium/video/" + id + "/" + id + "-audio-all.png");
 		// }
-		if ( !profileImage.exists() || !profileImage.canRead() ) profileImage = new File(servletContext.getRealPath("img/image-placeholder.png"));
+		if ( !profileImage.exists() || !profileImage.canRead() ) profileImage = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 		return Response.ok().entity(profileImage).build();
 	}

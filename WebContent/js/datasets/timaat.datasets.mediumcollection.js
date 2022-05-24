@@ -1232,11 +1232,11 @@
 							ui = `<div class="timaat-medium-status">
 											<i class="fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (collectionItem.medium.mediumImage) {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (collectionItem.medium.mediumAudio) {
 							ui = `<div style="display:flex">
@@ -1474,7 +1474,7 @@
 						$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 						TIMAAT.MediumDatasets.container = 'media';
-						$('#mediumPreviewTab').removeClass('annotationView');
+						$('#mediumPreviewTab').removeClass('annotationMode');
 						switch (TIMAAT.UI.subNavTab) {
 							case 'dataSheet':
 								TIMAAT.UI.displayDataSetContentContainer('mediumcollection-data-tab', 'mediumcollection-metadata-form', 'mediumCollection');

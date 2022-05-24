@@ -147,43 +147,43 @@
 
 			$('#audio-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('audio');
-				TIMAAT.UI.displayComponent('medium', 'audio-tab', 'audio-datatable');
+				TIMAAT.UI.displayComponent('medium', 'audio-tab', 'audio-datatable', null, null, 'audio');
 				$('#timaat-mediumdatasets-all-audios').trigger('click');
 			});
 
 			$('#document-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('document');
-				TIMAAT.UI.displayComponent('medium', 'document-tab', 'document-datatable');
+				TIMAAT.UI.displayComponent('medium', 'document-tab', 'document-datatable', null, null, 'document');
 				$('#timaat-mediumdatasets-all-documents').trigger('click');
 			});
 
 			$('#image-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('image');
-				TIMAAT.UI.displayComponent('medium', 'image-tab', 'image-datatable');
+				TIMAAT.UI.displayComponent('medium', 'image-tab', 'image-datatable', null, null, 'image');
 				$('#timaat-mediumdatasets-all-images').trigger('click');
 			});
 
 			$('#software-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('software');
-				TIMAAT.UI.displayComponent('medium', 'software-tab', 'software-datatable');
+				TIMAAT.UI.displayComponent('medium', 'software-tab', 'software-datatable', null, null, 'software');
 				$('#timaat-mediumdatasets-all-softwares').trigger('click');
 			});
 
 			$('#text-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('text');
-				TIMAAT.UI.displayComponent('medium', 'text-tab', 'text-datatable');
+				TIMAAT.UI.displayComponent('medium', 'text-tab', 'text-datatable', null, null, 'text');
 				$('#timaat-mediumdatasets-all-texts').trigger('click');
 			});
 
 			$('#video-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('video');
-				TIMAAT.UI.displayComponent('medium', 'video-tab', 'video-datatable');
+				TIMAAT.UI.displayComponent('medium', 'video-tab', 'video-datatable', null, null, 'video');
 				$('#timaat-mediumdatasets-all-videos').trigger('click');
 			});
 
 			$('#videogame-tab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('videogame');
-				TIMAAT.UI.displayComponent('medium', 'videogame-tab', 'videogame-datatable');
+				TIMAAT.UI.displayComponent('medium', 'videogame-tab', 'videogame-datatable', null, null, 'videogame');
 				$('#timaat-mediumdatasets-all-videogames').trigger('click');
 			});
 
@@ -2190,7 +2190,7 @@
 				$('#mediumImagePreview').attr('alt', 'placeholder');
 				switch (type) {
 					case 'image':
-						$('#mediumImagePreview').attr('src' , 'img/image-placeholder.png');
+						$('#mediumImagePreview').attr('src' , 'img/preview-placeholder.png');
 					break;
 					default:
 						$('#mediumImagePreview').attr('src' , 'img/preview-placeholder.png');
@@ -3943,24 +3943,28 @@
 					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllMediaDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
-						if (mediumItem.mediumVideo) {
+						if (mediumItem.mediumVideo || mediumItem.mediumImage || mediumItem.mediumAudio) {
 							ui = `<div class="timaat-medium-status">
 											<i class="fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Medium preview"/>`;
 						}
-						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-										</div>`;
-						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
-											<i class="center fas fa-file-audio fa-5x"></i>
-										</div>`;
-						} else {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-										</div>`;
+						// else if (mediumItem.mediumImage) {
+						// 	ui = `<div style="display:flex">
+						// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+						// 				</div>`;
+						// } else if (mediumItem.mediumAudio) {
+						// 	ui = `<div style="display:flex">
+						// 					<i class="center fas fa-file-audio fa-5x"></i>
+						// 				</div>`;
+						// }
+						// else {
+						// 	ui = `<div style="display:flex">
+						// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+						// 				</div>`;
+						// }
+						else {
+								ui = `<div style="display:flex"></div>`;
 						}
 						return ui;
 						}
@@ -4374,31 +4378,31 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-						let ui;
-						if (mediumItem.mediumVideo) {
-							ui = `<div class="timaat-medium-status">
-											<i class="fas fa-cog fa-spin"></i>
-											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-						}
-						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-										</div>`;
-						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
-											<i class="center fas fa-file-audio fa-5x"></i>
-										</div>`;
-						} else {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-										</div>`;
-						}
-						return ui;
-						}
-					},
+					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					// 	// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+					// 	let ui;
+					// 	if (mediumItem.mediumVideo) {
+					// 		ui = `<div class="timaat-medium-status">
+					// 						<i class="fas fa-cog fa-spin"></i>
+					// 						</div>
+					// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+					// 	}
+					// 	else if (mediumItem.mediumImage) {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+					// 					</div>`;
+					// 	} else if (mediumItem.mediumAudio) {
+					// 		ui = `<div style="display:flex">
+					// 						<i class="center fas fa-file-audio fa-5x"></i>
+					// 					</div>`;
+					// 	} else {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+					// 					</div>`;
+					// 	}
+					// 	return ui;
+					// 	}
+					// },
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -4572,11 +4576,11 @@
 							ui = `<div class="timaat-medium-status">
 											<i class="fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (mediumItem.mediumImage) {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (mediumItem.mediumAudio) {
 							ui = `<div style="display:flex">
@@ -4756,31 +4760,31 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-						let ui;
-						if (mediumItem.mediumVideo) {
-							ui = `<div class="timaat-medium-status">
-											<i class="fas fa-cog fa-spin"></i>
-											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-						}
-						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-										</div>`;
-						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
-											<i class="center fas fa-file-audio fa-5x"></i>
-										</div>`;
-						} else {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-										</div>`;
-						}
-						return ui;
-						}
-					},
+					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					// 	// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+					// 	let ui;
+					// 	if (mediumItem.mediumVideo) {
+					// 		ui = `<div class="timaat-medium-status">
+					// 						<i class="fas fa-cog fa-spin"></i>
+					// 						</div>
+					// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+					// 	}
+					// 	else if (mediumItem.mediumImage) {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+					// 					</div>`;
+					// 	} else if (mediumItem.mediumAudio) {
+					// 		ui = `<div style="display:flex">
+					// 						<i class="center fas fa-file-audio fa-5x"></i>
+					// 					</div>`;
+					// 	} else {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+					// 					</div>`;
+					// 	}
+					// 	return ui;
+					// 	}
+					// },
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -4966,31 +4970,31 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-						let ui;
-						if (mediumItem.mediumVideo) {
-							ui = `<div class="timaat-medium-status">
-											<i class="fas fa-cog fa-spin"></i>
-											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-						}
-						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-										</div>`;
-						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
-											<i class="center fas fa-file-audio fa-5x"></i>
-										</div>`;
-						} else {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-										</div>`;
-						}
-						return ui;
-						}
-					},
+					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					// 	// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+					// 	let ui;
+					// 	if (mediumItem.mediumVideo) {
+					// 		ui = `<div class="timaat-medium-status">
+					// 						<i class="fas fa-cog fa-spin"></i>
+					// 						</div>
+					// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+					// 	}
+					// 	else if (mediumItem.mediumImage) {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+					// 					</div>`;
+					// 	} else if (mediumItem.mediumAudio) {
+					// 		ui = `<div style="display:flex">
+					// 						<i class="center fas fa-file-audio fa-5x"></i>
+					// 					</div>`;
+					// 	} else {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+					// 					</div>`;
+					// 	}
+					// 	return ui;
+					// 	}
+					// },
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -5183,11 +5187,11 @@
 							ui = `<div class="timaat-medium-status">
 											<i class="fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (mediumItem.mediumImage) {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (mediumItem.mediumAudio) {
 							ui = `<div style="display:flex">
@@ -5397,31 +5401,31 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-						let ui;
-						if (mediumItem.mediumVideo) {
-							ui = `<div class="timaat-medium-status">
-											<i class="fas fa-cog fa-spin"></i>
-											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-						}
-						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-										</div>`;
-						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
-											<i class="center fas fa-file-audio fa-5x"></i>
-										</div>`;
-						} else {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-										</div>`;
-						}
-						return ui;
-						}
-					},
+					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					// 	// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
+					// 	let ui;
+					// 	if (mediumItem.mediumVideo) {
+					// 		ui = `<div class="timaat-medium-status">
+					// 						<i class="fas fa-cog fa-spin"></i>
+					// 						</div>
+					// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+					// 	}
+					// 	else if (mediumItem.mediumImage) {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+					// 					</div>`;
+					// 	} else if (mediumItem.mediumAudio) {
+					// 		ui = `<div style="display:flex">
+					// 						<i class="center fas fa-file-audio fa-5x"></i>
+					// 					</div>`;
+					// 	} else {
+					// 		ui = `<div style="display:flex">
+					// 						<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
+					// 					</div>`;
+					// 	}
+					// 	return ui;
+					// 	}
+					// },
 					{ data: 'id', name: 'title', className: 'title', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -5611,7 +5615,8 @@
 						$('#timaat-mediumdatasets-all-media').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.MediumDatasets.setDataTableOnItemSelect('medium', mediumModel);
+						let subtype = mediumModel.model.mediaType.mediaTypeTranslations[0].type;
+						TIMAAT.MediumDatasets.setDataTableOnItemSelect('medium', mediumModel, subtype);
 					});
 
 					// if ( medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
@@ -6667,29 +6672,29 @@
 			});
 		},
 
-		setDataTableOnItemSelect: function(type, selectedItem) {
+		setDataTableOnItemSelect: function(type, selectedItem, subtype=null) {
     	// console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
 			$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 			$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 			this.container = 'media';
-			$('#mediumPreviewTab').removeClass('annotationView');
+			$('#mediumPreviewTab').removeClass('annotationMode');
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
+					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium', subtype);
 				break;
 				case 'preview':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-preview-form', 'medium');
+					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-preview-form', 'medium', subtype);
 				break;
 				case 'titles':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-titles-form', 'medium');
+					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-titles-form', 'medium', subtype);
 				break;
 				case 'languageTracks':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-languagetracks-form', 'medium');
+					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-languagetracks-form', 'medium', subtype);
 				break;
 				case 'actorWithRoles':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-actorwithroles-form', 'medium');
+					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-actorwithroles-form', 'medium', subtype);
 				break;
 			}
 			TIMAAT.UI.clearLastSelection(type);
