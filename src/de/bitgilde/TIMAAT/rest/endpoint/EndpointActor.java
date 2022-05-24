@@ -1655,8 +1655,8 @@ public class EndpointActor {
 		// System.out.println("EndpointActor: updateAddress - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.ADDRESSEDITED);
 		System.out.println("EndpointActor: updateAddress - update complete");
 		return Response.ok().entity(address).build();
 	}

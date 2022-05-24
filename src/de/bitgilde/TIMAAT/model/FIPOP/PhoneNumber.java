@@ -37,6 +37,11 @@ public class PhoneNumber implements Serializable {
 	@JsonIgnore
 	private List<ActorHasPhoneNumber> actorHasPhoneNumbers;
 
+	//bi-directional many-to-one association to Medium
+	@OneToMany(mappedBy="primaryPhoneNumber")
+	@JsonIgnore
+	private List<Actor> actors;
+
 	public PhoneNumber() {
 	}
 
@@ -76,6 +81,28 @@ public class PhoneNumber implements Serializable {
 		actorHasPhoneNumber.setPhoneNumber(null);
 
 		return actorHasPhoneNumber;
+	}
+
+	public List<Actor> getActors() {
+		return this.actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public Actor addActors(Actor actors) {
+		getActors().add(actors);
+		actors.setPrimaryPhoneNumber(this);
+
+		return actors;
+	}
+
+	public Actor removeActors(Actor actors) {
+		getActors().remove(actors);
+		actors.setPrimaryPhoneNumber(null);
+
+		return actors;
 	}
 
 }

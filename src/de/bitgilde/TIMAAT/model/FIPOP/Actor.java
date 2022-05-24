@@ -94,7 +94,7 @@ public class Actor implements Serializable {
 	//bi-directional many-to-one association to PhoneNumber
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="primary_phone_number_id")
-	private PhoneNumber actorHasPhoneNumber;
+	private PhoneNumber primaryPhoneNumber;
 
 	//bi-directional many-to-one association to ActorHasAddress
 	@OneToMany(mappedBy="actor")
@@ -342,11 +342,11 @@ public class Actor implements Serializable {
 	}
 
 	public PhoneNumber getPrimaryPhoneNumber() {
-		return this.actorHasPhoneNumber;
+		return this.primaryPhoneNumber;
 	}
 
 	public void setPrimaryPhoneNumber(PhoneNumber actorHasPhoneNumber) {
-		this.actorHasPhoneNumber = actorHasPhoneNumber;
+		this.primaryPhoneNumber = actorHasPhoneNumber;
 	}
 
 	public List<Role> getRoles() {

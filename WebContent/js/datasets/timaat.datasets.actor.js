@@ -1907,7 +1907,7 @@
 							i = i+3;
 						} else {
 							element.isPrimaryPhoneNumber = false;
-							element.phoneNumberTypeId = formData[i].value;
+							element.phoneNumberTypeId = Number(formData[i].value);
 							element.phoneNumber = formData[i+1].value;
 							i = i+2;
 						}
@@ -1916,7 +1916,7 @@
 				// console.log("TCL: formActorHasPhoneNumbersList", formActorHasPhoneNumbersList);
 
 				// only updates to existing actorHasPhoneNumber entries
-				if (formActorHasPhoneNumbersList.length == actor.model.actorHasPhoneNumbers.length) {
+			if (formActorHasPhoneNumbersList.length == actor.model.actorHasPhoneNumbers.length) {
 					var i = 0;
 					for (; i < actor.model.actorHasPhoneNumbers.length; i++ ) { // update existing actorHasPhoneNumbers
 						var updatedActorHasPhoneNumber = await TIMAAT.ActorDatasets.updateActorHasPhoneNumberModel(actor.model.actorHasPhoneNumbers[i], formActorHasPhoneNumbersList[i]);
@@ -2876,15 +2876,15 @@
 		},
 
 		setPhoneNumberTypeList: function(phoneNumberTypes) {
-			// console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
+			// console.log("TCL: setPhoneNumberTypeList -> phoneNumberTypes", phoneNumberTypes);
 			if ( !phoneNumberTypes ) return;
 			// setup model
-			var phoneNumberTypes = Array();
+			var types = Array();
 			phoneNumberTypes.forEach(function(phoneNumberType) {
 				if ( phoneNumberType.id > 0 )
-					phoneNumberTypes.push(phoneNumberType);
+					types.push(phoneNumberType);
 			});
-			TIMAAT.ActorDatasets.phoneNumberTypes = phoneNumberTypes;
+			TIMAAT.ActorDatasets.phoneNumberTypes = types;
 		},
 
 		addActor: function(type) {
@@ -3471,8 +3471,8 @@
 				if (actor.model.primaryEmailAddress && actor.model.primaryEmailAddress.id == email.id.emailAddressId) {
 					$('[data-role="primaryEmailAddress['+email.id.emailAddressId+']"]').prop('checked', true);
 				}
-				$('[data-role="emailAddressTypeId['+email.id.emailAddressId+']"]')
-					.find('option[value='+email.emailAddressType.id+']').attr('selected', true);
+				$('[data-role="emailAddressTypeId['+email.id.emailAddressId+']"]').find('option[value='+email.emailAddressType.id+']')
+																																					.attr('selected', true);
 				$('input[name="emailAddress['+i+']"]').rules("add", { required: true, email: true});
 			}
 			if ( action == 'show') {
@@ -3520,7 +3520,7 @@
 			var i = 0;
 			var numPhoneNumbers = actor.model.actorHasPhoneNumbers.length;
       // console.log("TCL: actor.model.actorHasPhoneNumbers", actor.model.actorHasPhoneNumbers);
-			for (; i< numPhoneNumbers; i++) {
+			for (; i < numPhoneNumbers; i++) {
 				$('[data-role="dynamic-actorhasphonenumber-fields"]').append(
 					`<div class="form-group" data-role="phonenumber-entry">
 							<div class="form-row">
@@ -4036,7 +4036,7 @@
 		},
 
 		addActorHasAddresses: async function(actor, newActorHasAddresses) {
-			// console.log("TCL: addActorHasAddresses: async function -> actor, newActorHasAddresses", actor, newActorHasAddresses);
+			console.log("TCL: addActorHasAddresses: async function -> actor, newActorHasAddresses", actor, newActorHasAddresses);
 			try {
 				// create address
 				var i = 0;
@@ -4369,7 +4369,7 @@
 		},
 
 		updateActorHasPhoneNumber: async function(actorHasPhoneNumber, actor) {
-			// console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
+			console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
 			try {
 				// update address
 				var tempActorHasPhoneNumber = actorHasPhoneNumber;
@@ -4806,6 +4806,7 @@
 		},
 
 		updateActorHasAddressModel: function(originalModel, data) {
+    // console.log("TCL ~ $ ~ originalModel, data", originalModel, data);
 			var updatedModel = originalModel;
 			updatedModel.usedFrom = data.addressUsedFrom;
 			updatedModel.usedUntil = data.addressUsedUntil;
@@ -4833,6 +4834,7 @@
 		},
 
 		updateActorHasEmailAddressModel: async function(originalModel, data) {
+      // console.log("TCL ~ updateActorHasEmailAddressModel:function ~ originalModel, data", originalModel, data);
 			var updatedModel = originalModel;
 			updatedModel.emailAddressType = this.emailAddressTypes[Number(data.emailAddressTypeId)-1];
 			updatedModel.emailAddress.email = data.email;
@@ -4855,6 +4857,7 @@
 		},
 
 		updateActorHasPhoneNumberModel: async function(originalModel, data) {
+      // console.log("TCL ~ updateActorHasPhoneNumberModel:function ~ originalModel, data", originalModel, data);
 			var updatedModel = originalModel;
 			updatedModel.phoneNumberType = this.phoneNumberTypes[Number(data.phoneNumberTypeId)-1];
 			updatedModel.phoneNumber.phoneNumber = data.phoneNumber;
