@@ -28,9 +28,9 @@ public class Street implements Serializable {
 	private int locationId;
 
 	//bi-directional many-to-one association to Address
-	@OneToMany(mappedBy="street")
-	@JsonIgnore
-	private List<Address> addresses;
+	// @OneToMany(mappedBy="street")
+	// @JsonIgnore
+	// private List<Address> addresses;
 
 	//bi-directional one-to-one association to Location
 	@OneToOne
@@ -49,27 +49,27 @@ public class Street implements Serializable {
 		this.locationId = locationId;
 	}
 
-	public List<Address> getAddresses() {
-		return this.addresses;
-	}
+	// public List<Address> getAddresses() {
+	// 	return this.addresses;
+	// }
 
-	public void setAddresses(List<Address> addresses) {
-		this.addresses = addresses;
-	}
+	// public void setAddresses(List<Address> addresses) {
+	// 	this.addresses = addresses;
+	// }
 
-	public Address addAddress(Address address) {
-		getAddresses().add(address);
-		address.setStreet(this);
+	// public Address addAddress(Address address) {
+	// 	getAddresses().add(address);
+	// 	address.setStreetLocation(this);
 
-		return address;
-	}
+	// 	return address;
+	// }
 
-	public Address removeAddress(Address address) {
-		getAddresses().remove(address);
-		address.setStreet(null);
+	// public Address removeAddress(Address address) {
+	// 	getAddresses().remove(address);
+	// 	address.setStreetLocation(null);
 
-		return address;
-	}
+	// 	return address;
+	// }
 
 	public Location getLocation() {
 		return this.location;

@@ -299,6 +299,12 @@ var actorFormNamesValidator = $('#actor-names-form').validate({
 var actorFormAddresses = $('#actor-addresses-form');
 var actorFormAddressesValidator = $('#actor-addresses-form').validate({
   rules: {
+    city: {
+      maxlength: 100,
+    },
+    street: {
+      maxlength: 100,
+    },
     streetNumber: {
       maxlength: 10,
     },
@@ -316,11 +322,17 @@ var actorFormAddressesValidator = $('#actor-addresses-form').validate({
     }
   },
   messages: {
+    city: {
+      maxlength: "City name is too long: max length is 100"
+    },
+    street: {
+      maxlength: "Street name is too long: max length is 100"
+    },
     streetNumber: {
       maxlength: "Street number is too long: max length is 10"
     },
     streetAddition: {
-      maxlength: "Street addtition is too long: max length is 50"
+      maxlength: "Street addition is too long: max length is 50"
     },
     postalCode: {
       maxlength: "Postal code is too long: max length is 8"
