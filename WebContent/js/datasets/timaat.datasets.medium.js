@@ -3935,6 +3935,23 @@
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
 
+					rowItem.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
+						//* only videos have thumbnail slideshow
+						if (!medium.mediumVideo) return;
+						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+						let length = medium.mediumVideo.length;
+						let timeCode = Math.round((ev.originalEvent.offsetX/254)*length);
+						timeCode = Math.min(Math.max(0, timeCode),length);
+						rowItem.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
+					});
+
+					rowItem.find('.card-img-top').bind("mouseleave", function(ev) {
+						//* only videos have thumbnail slideshow
+						if (!medium.mediumVideo) return;
+						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+						rowItem.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+					});
+
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 						TIMAAT.MediumDatasets.updateVideoStatus(medium);
 
@@ -5173,6 +5190,23 @@
 						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
+					});
+
+					rowItem.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
+						//* only videos have thumbnail slideshow
+						if (!medium.mediumVideo) return;
+						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+						let length = medium.mediumVideo.length;
+						let timeCode = Math.round((ev.originalEvent.offsetX/254)*length);
+						timeCode = Math.min(Math.max(0, timeCode),length);
+						mediumElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
+					});
+
+					rowItem.find('.card-img-top').bind("mouseleave", function(ev) {
+						//* only videos have thumbnail slideshow
+						if (!medium.mediumVideo) return;
+						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+						mediumElement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
 					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
