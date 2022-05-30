@@ -406,13 +406,15 @@
 
 		// display right column (dataset content)
 		displayDataSetContentContainer: function(navTabLinkId=null, contentId=null, type=null, subtype=null) {
-    // console.log("TCL ~ navTabLinkId, contentId, type, subtype: ", navTabLinkId, contentId, type, subtype);
+    	// console.log("TCL ~ navTabLinkId, contentId, type, subtype: ", navTabLinkId, contentId, type, subtype);
 			$('.nav-tabs').hide();
       // $('.data-tabs').hide();
-			this.displayAndSetDataSetContentNavTab(navTabLinkId, type, subtype);
-			if (subtype && (subtype == 'document' || subtype == 'software' || subtype == 'text' || subtype == 'videogame')) {
-				contentId = 'medium-metadata-form'; // when in preview form and switching to medium without preview
-				this.subNavTab = 'dataSheet';
+			if (navTabLinkId) {
+				this.displayAndSetDataSetContentNavTab(navTabLinkId, type, subtype);
+				if (subtype && (subtype == 'document' || subtype == 'software' || subtype == 'text' || subtype == 'videogame')) {
+					contentId = 'medium-metadata-form'; // when in preview form and switching to medium without preview
+					this.subNavTab = 'dataSheet';
+				}
 			}
 			this.displayDataSetContentArea(contentId);
 		},
