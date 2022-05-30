@@ -50,6 +50,7 @@
 				TIMAAT.MediumCollectionDatasets.loadMediaCollections();
 				// TIMAAT.UI.subNavTab = 'dataSheet';
 				TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable');
+				$('#mediumcollection-nav-tabs').hide();
 				TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionList.ajax.url('/TIMAAT/api/mediumCollection/list'+'?authToken='+TIMAAT.Service.session.token)
 				TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('mediumCollection');
