@@ -4813,6 +4813,8 @@
 			updatedModel.address.postalCode = data.postalCode;
 			updatedModel.address.streetNumber = data.streetNumber;
 			updatedModel.address.streetAddition = data.streetAddition;
+			updatedModel.address.street = data.street;
+			updatedModel.address.city = data.city;
 			return updatedModel;
 		},
 
