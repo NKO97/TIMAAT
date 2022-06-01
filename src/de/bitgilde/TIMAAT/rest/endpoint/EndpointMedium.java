@@ -3505,7 +3505,7 @@ public class EndpointMedium {
 			thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/"+type+"/" + id + "/" + id + "-audio-all.png");
 		}
-		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/audio-placeholder.png"));
+		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 		return Response.ok().entity(thumbnail).build();
 	}
@@ -3531,7 +3531,7 @@ public class EndpointMedium {
 
 		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/image/" + id + "/" + id + "-image-scaled.png");
-		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/image-placeholder.png"));
+		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 		return Response.ok().entity(image).build();
 	}
@@ -3557,7 +3557,7 @@ public class EndpointMedium {
 
 		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/image/" + id + "/" + id + "-image-thumb.png");
-		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/image-placeholder.png"));
+		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 		return Response.ok().entity(image).build();
 	}

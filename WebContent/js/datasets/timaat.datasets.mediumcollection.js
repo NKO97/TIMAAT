@@ -481,13 +481,12 @@
 				TIMAAT.UI.subNavTab = 'items';
 				TIMAAT.MediumCollectionDatasets.setMediumCollectionItemList();
 
-				if (TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
-					TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/' + id + '/hasMediaList')
-					TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
-				} else {
+				if (!TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
 					await TIMAAT.MediumCollectionDatasets.setupMediumCollectionItemListDataTable(id);
 					TIMAAT.MediumCollectionDatasets.setMediumCollectionItemList();
 				}
+				TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/' + id + '/hasMediaList')
+				TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload().columns.adjust();
 				TIMAAT.UI.displayDataSetContent('items', mediumCollection, 'mediumCollection');
 				$('#mediumcollection-items-add-button').prop('disabled', false);
 				$('#mediumcollection-items-add-button :input').prop('disabled', false);
@@ -1189,19 +1188,22 @@
 						TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.draw(false); //* to scroll to selected row
 					});
 
-					// mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
-					// 	if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
-					// 	let length = medium.mediumVideo.length;
-					// 	if ( length < 0 ) length += 3600;
-					// 	let timecode = Math.round((ev.originalEvent.offsetX/254)*length);
-					// 	timecode = Math.min(Math.max(0, timecode),length);
-					// 	mediumCollectionElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/"+medium.id+"/thumbnail"+"?time="+timecode+"&token="+medium.viewToken);
-					// });
+					mediumCollectionElement.find('.card-img-top').bind("mouseenter mousemove", function(ev) {
+						//* only videos have thumbnail slideshow
+						if (!medium.mediumVideo) return;
+						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+						let length = medium.mediumVideo.length;
+						let timeCode = Math.round((ev.originalEvent.offsetX/254)*length);
+						timeCode = Math.min(Math.max(0, timeCode),length);
+						mediumCollectionElement.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
+					});
 
-					// mediumCollectionElement.find('.card-img-top').bind("mouseleave", function(ev) {
-					// 	if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
-					// 	mediumCollectionElement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
-					// });
+					mediumCollectionElement.find('.card-img-top').bind("mouseleave", function(ev) {
+						//* only videos have thumbnail slideshow
+						if (!medium.mediumVideo) return;
+						if ( medium.fileStatus && medium.fileStatus == "noFile" ) return;
+						mediumCollectionElement.find('.card-img-top').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?token="+medium.viewToken);
+					});
 
 					if ( type == 'video' && medium.fileStatus != "ready" && medium.fileStatus != "unavailable" && medium.fileStatus != "noFile" )
 						TIMAAT.MediumDatasets.updateVideoStatus(medium);
@@ -1225,18 +1227,18 @@
 						return order;
 						}
 					},
-					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, collectionItem, meta) {
+					{ data: null, className: 'medium-preview', orderable: false, width: '20%', render: function(data, type, collectionItem, meta) {
             // console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
 						let ui;
 						if (collectionItem.medium.mediumVideo) {
 							ui = `<div class="medium-file-status js-medium-file-status">
 											<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (collectionItem.medium.mediumImage) {
 							ui = `<div style="display:flex">
-											<img class="card-img-top center" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
+											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (collectionItem.medium.mediumAudio) {
 							ui = `<div style="display:flex">
@@ -1250,7 +1252,7 @@
 						return ui;
 						}
 					},
-					{ data: 'id', name: 'title', className: 'title', orderable: false, render: function(data, type, collectionItem, meta) {
+					{ data: 'id', name: 'title', className: 'title', orderable: false, width: '30%', render: function(data, type, collectionItem, meta) {
 						// console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
 						let displayMediumTypeIcon = '';
 						switch (collectionItem.medium.mediaType.mediaTypeTranslations[0].type) {
@@ -1338,7 +1340,7 @@
 				},
 					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, collectionItem, meta) {
 						// console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
-						let ui = `<div class="btn-group" role="group">`;
+						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( collectionItem.medium.mediumVideo ){
 							if ( !collectionItem.medium.fileStatus || collectionItem.medium.fileStatus == 'noFile' ) {
 								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm collectionItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
@@ -1474,7 +1476,7 @@
 						$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 						$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 						TIMAAT.MediumDatasets.container = 'media';
-						$('#mediumPreviewTab').removeClass('annotationView');
+						$('#mediumPreviewTab').removeClass('annotationMode');
 						switch (TIMAAT.UI.subNavTab) {
 							case 'dataSheet':
 								TIMAAT.UI.displayDataSetContentContainer('mediumcollection-data-tab', 'mediumcollection-metadata-form', 'mediumCollection');
@@ -1492,7 +1494,7 @@
 						TIMAAT.UI.addSelectedClassToSelectedItem('mediumCollection', mediumCollection.id);
 						if (TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
 							TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/'+mediumCollection.id+'/hasMediaList')
-							TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
+							TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload().columns.adjust();
 						// } else {
 						// 	await TIMAAT.MediumCollectionDatasets.setupMediumCollectionItemListDataTable(id);
 						// 	TIMAAT.MediumCollectionDatasets.setMediumCollectionItemList();

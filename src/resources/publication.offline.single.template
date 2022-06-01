@@ -1639,9 +1639,9 @@ class Annotation {
 		this.listView.find('.analysis-list-element__title').html(this.model.annotationTranslations[0].title);
 		// categories
 		this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" categories");
-		if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag text-light timaat-no-categories');
-		else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tag').attr('title', "one category");
-		else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-tags');
+		if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-archive text-light timaat-no-categories');
+		else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-archive').attr('title', "one category");
+		else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-archive');
 		// type
 		this._updateAnnotationType();
 

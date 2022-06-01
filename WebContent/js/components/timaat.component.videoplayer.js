@@ -1396,7 +1396,7 @@
 							break;
 					}
 					let token = TIMAAT.VideoPlayer.model.medium.viewToken;
-					$('.timaat-audio-waveform').css('background-image', 'url("img/audio-placeholder.png")');
+					$('.timaat-audio-waveform').css('background-image', 'url("img/preview-placeholder.png")');
 					$('.timaat-audio-waveform').css('background-image', 'url("/TIMAAT/api/medium/'+TIMAAT.VideoPlayer.model.medium.id+'/audio/combined?token='+token+'")');
 
 					if (this.model.medium.music) {
@@ -1520,7 +1520,7 @@
 			// setup medium data sheet
 			// TIMAAT.UI.clearLastSelection('medium');
 			$('#medium-metadata-form').data('medium', medium);
-			$('#mediumPreviewTab').addClass('annotationView');
+			$('#mediumPreviewTab').addClass('annotationMode');
 			$('#timaat-mediadatasets-medium-tabs').show();
 			TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
 			let mediumModel = {};

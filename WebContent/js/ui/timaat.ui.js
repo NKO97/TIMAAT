@@ -159,7 +159,7 @@
 			$('.timaat-sidebar-tab a').removeClass('selected');
 			$('#timaat-component-'+component).show();
 			if (component == 'media') {
-				$('#mediumPreviewTab').removeClass('annotationView');
+				$('#mediumPreviewTab').removeClass('annotationMode');
 				$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
 				$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
 				TIMAAT.MediumDatasets.container = 'media';
@@ -352,12 +352,12 @@
 		},
 
     // display all areas of the media component
-		displayComponent: function(type, navBarLinkId, dataTableCardClass, navTabLinkId=null, contentId=null) {
-	    // console.log("TCL: displayComponent - type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId: ", type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId);
+		displayComponent: function(type, navBarLinkId, dataTableCardClass, navTabLinkId=null, contentId=null, subtype=null) {
+	    // console.log("TCL: displayComponent - type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId: , subtype: ", type, navBarLinkId, dataTableCardClass, navTabLinkId, contentId, subtype);
 			this.displayNavBarContainer(type);
 			this.setNavBarActiveLink(navBarLinkId);
 			this.setAndDisplayDataTableActiveActiveCard(dataTableCardClass);
-			this.displayDataSetContentContainer(navTabLinkId, contentId, type);
+			this.displayDataSetContentContainer(navTabLinkId, contentId, type, subtype);
 		},
 
 		// display top nav bar row
@@ -405,11 +405,16 @@
 		},
 
 		// display right column (dataset content)
-		displayDataSetContentContainer: function(navTabLinkId=null, contentId=null, type=null) {
+		displayDataSetContentContainer: function(navTabLinkId=null, contentId=null, type=null, subtype=null) {
+    	// console.log("TCL ~ navTabLinkId, contentId, type, subtype: ", navTabLinkId, contentId, type, subtype);
 			$('.nav-tabs').hide();
       // $('.data-tabs').hide();
 			if (navTabLinkId) {
-				this.displayAndSetDataSetContentNavTab(navTabLinkId, type);
+				this.displayAndSetDataSetContentNavTab(navTabLinkId, type, subtype);
+				if (subtype && (subtype == 'document' || subtype == 'software' || subtype == 'text' || subtype == 'videogame')) {
+					contentId = 'medium-metadata-form'; // when in preview form and switching to medium without preview
+					this.subNavTab = 'dataSheet';
+				}
 			}
 			this.displayDataSetContentArea(contentId);
 		},
@@ -420,7 +425,7 @@
 		},
 
 		// display dataset content tab bar row
-		displayAndSetDataSetContentNavTab: function(navTabLinkId, type=null) {
+		displayAndSetDataSetContentNavTab: function(navTabLinkId, type=null, subtype=null) {
     	// console.log("TCL: navTabLinkId, type=null: ", navTabLinkId, type);
       switch(type) {
 				case 'category':
@@ -439,12 +444,23 @@
 				break;
 				case 'medium':
 					$('#medium-nav-tabs').show();
-					if ($('#mediumPreviewTab').hasClass('annotationView')) {
-						$('.medium-preview-data-tab').hide();
-					} else {
-						$('.medium-preview-data-tab').show();
-						$('#mediumPreviewTab').removeClass('annotationView');
+					switch(subtype) {
+						case 'document':
+						case 'software':
+						case 'text':
+						case 'videogame':
+							$('#mediumPreviewTab').hide();
+						break;
+						case 'audio':
+						case 'image':
+						case 'video':
+							$('#mediumPreviewTab').show();
+						break;
 					}
+					if ($('#mediumPreviewTab').hasClass('annotationMode')) {
+						$('#mediumPreviewTab').hide();
+					}
+
 				break;
 				case 'mediumCollection':
 					$('#mediumcollection-nav-tabs').show();

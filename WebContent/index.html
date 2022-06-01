@@ -352,7 +352,8 @@
                     <i class="fas fa-music fa-fw"></i>
                   </a>
                 </li>
-                <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
+                <!--* uncomment in case data fix buttons are needed again (admin only) -->
+                <!-- <li class="timaat-sidebar-tab timaat-sidebar-tab-settings">
                   <a
                     onclick="TIMAAT.Settings.initSettingsComponent()"
                     data-toggle="popover"
@@ -367,7 +368,7 @@
                     title="Settings">
                     <i class="fa fa-wrench fa-fw"></i>
                   </a>
-              </li>
+              </li> -->
               </ul>
             </div>
             <!-- /.navbar-static-side -->
@@ -1080,7 +1081,7 @@
                 <div id="timaat-inspector-categories-and-tags-pane" class="timaat-inspector-pane">
                   <div id="mediumAnalysisListCategorySetPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .categoryset-analysislist-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Linked category sets
+                      <i class="collapse-icon fas fa-fw"></i><i class="fas fa-sitemap"></i> Linked category sets
                     </button>
                     <div class="categoryset-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <form role="form" id="mediumAnalysisListCategorySetsForm">
@@ -1106,7 +1107,7 @@
                   </div>
                   <div id="mediumAnalysisListCategoryPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .category-analysislist-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Linked categories
+                      <i class="collapse-icon fas fa-fw"></i><i class="fas fa-archive"></i> Linked categories
                     </button>
                     <div class="category-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <div id="annotation-categories" class="mediumAnalysisListCategories">
@@ -1156,7 +1157,7 @@
                   <hr />
                   <div id="mediumAnalysisListTagPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .tag-analysislist-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Linked tags
+                      <i class="collapse-icon fas fa-fw"></i><i class="fas fa-tags"></i> Linked tags
                     </button>
                     <div class="tag-analysislist-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <form role="form" id="mediumAnalysisListTagsForm">
@@ -1182,7 +1183,7 @@
                   </div>
                   <div id="annotationTagPanel" class="categoryAndTagPanel">
                     <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#timaat-inspector-categories-and-tags-pane .tag-annotation-wrapper">
-                      <i class="collapse-icon fas fa-fw"></i> Linked tags
+                      <i class="collapse-icon fas fa-fw"></i><i class="fas fa-tags"></i> Linked tags
                     </button>
                     <div class="tag-annotation-wrapper p-2 border border-light bg-light collapse show" aria-expanded="true">
                       <form role="form" id="annotationTagsForm">
@@ -1623,7 +1624,7 @@
                           </div>
                           <div class="timeline__section-content bg-light border-bottom border-dark">
                             <div style="width: 100%; height: 100%;background:linear-gradient(180deg, rgba(0,0,0,0) calc(50% - 0.5px), #395C8D calc(50%), rgba(0,0,0,0) calc(50% + 0.5px) );">
-                              <div class="timaat-audio-waveform" style="width:100%;height:100%;background: url('img/audio-placeholder.png');background-size: 100% 100%; background-repeat: no-repeat;">
+                              <div class="timaat-audio-waveform" style="width:100%;height:100%;background: url('img/preview-placeholder.png');background-size: 100% 100%; background-repeat: no-repeat;">
                               </div>
                             </div>
                           </div>
@@ -1804,12 +1805,12 @@
               <ul class="nav nav-pills" id="list-tabs" role="tablist"> <!-- Nav bar tabs -->
                 <li class="nav-item">
                   <a class="nav-link top-nav-bar-link" id="categoryset-tab" data-toggle="tab" role="tab" aria-controls="categoryset" aria-selected="false">
-                    <i class="fas fa-tags"></i> Category Sets
+                    <i class="fas fa-sitemap"></i> Category Sets
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link top-nav-bar-link" id="category-tab" data-toggle="tab" role="tab" aria-controls="category" aria-selected="false">
-                    <i class="fas fa-tag"></i> Categories
+                    <i class="fas fa-archive"></i> Categories
                   </a>
                 </li>
                 <li class="nav-item">
@@ -2723,8 +2724,8 @@
                             <table id="timaat-mediumdatasets-medium-all-media-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <th style="min-width: 150px">Preview</th>
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Running time</th>
                                   <th>Producer</th>
                                   <th>Release date</th>
@@ -2766,8 +2767,8 @@
                             <table id="timaat-mediumdatasets-medium-all-documents-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <!-- <th style="min-width: 150px">Preview</th> -->
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Author</th>
                                   <th>Publication date</th>
                                   <th>Actions</th>
@@ -2786,8 +2787,8 @@
                             <table id="timaat-mediumdatasets-medium-all-images-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <th style="min-width: 150px">Preview</th>
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Producer</th>
                                   <th>Publication date</th>
                                   <th>Actions</th>
@@ -2806,8 +2807,8 @@
                             <table id="timaat-mediumdatasets-medium-all-softwares-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <!-- <th style="min-width: 150px">Preview</th> -->
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Producer</th>
                                   <th>Release date</th>
                                   <th>Language</th>
@@ -2827,8 +2828,8 @@
                             <table id="timaat-mediumdatasets-medium-all-texts-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <!-- <th style="min-width: 150px">Preview</th> -->
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Author</th>
                                   <th>Publication date</th>
                                   <th>Language</th>
@@ -2848,8 +2849,8 @@
                             <table id="timaat-mediumdatasets-medium-all-videos-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <th style="min-width: 150px">Preview</th>
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Running time</th>
                                   <th>Producer</th>
                                   <th>Release date</th>
@@ -2870,8 +2871,8 @@
                             <table id="timaat-mediumdatasets-medium-all-videogames-table" class="table table-striped table-bordered table-hover">
                               <thead class="thead-dark">
                                 <tr>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <!-- <th style="min-width: 150px">Preview</th> -->
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Producer</th>
                                   <th>Release date</th>
                                   <th>Language</th>
@@ -3004,8 +3005,8 @@
                               <thead class="thead-dark">
                                 <tr>
                                   <th>Order</th>
-                                  <th>Preview</th>
-                                  <th>Title</th>
+                                  <th style="min-width: 150px">Preview</th>
+                                  <th style="min-width: 200px">Title</th>
                                   <th>Running time</th>
                                   <th>Producer</th>
                                   <th>Release date</th>
@@ -3081,7 +3082,7 @@
                           <div> <!-- Medium data -->
                             <div class="form-group preview-data medium-preview-data">
                               <div class="image-preview">
-                                <img id="mediumImagePreview" class="center" src="img/image-placeholder.png" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                                <img id="mediumImagePreview" class="center" src="img/preview-placeholder.png" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
                               </div>
                               <div class="video-preview">
                                 <video id="mediumVideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
@@ -3105,10 +3106,10 @@
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-categoryset-button" title="Category sets" name="category sets">
-                                      <i class="fas fa-tags"></i>
+                                      <i class="fas fa-sitemap"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-category-button" title="Categories" name="categories">
-                                      <i class="fas fa-tag"></i>
+                                      <i class="fas fa-archive"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="medium-datasheet-form-tag-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>
@@ -3768,7 +3769,7 @@
                                 <div class="col-md-12">
                                   <div class="actor-profile-image-container">
                                     <div id="dynamic-profile-image-fields-placeholder">
-                                      <img src="img/image-placeholder.png" class="center" title="image placeholder" alt="image placeholder"/>
+                                      <img src="img/preview-placeholder.png" class="center" title="image placeholder" alt="image placeholder"/>
                                     </div>
                                     <div data-role="dynamic-profile-image-fields" id="dynamic-profile-image-fields" class="carousel slide" data-interval="false"> <!-- data-ride="carousel"> -->
                                       <!-- Indicators -->
@@ -5386,7 +5387,7 @@
                           <div> <!-- Music data -->
                             <div class="form-group preview-data music-preview-data">
                               <!-- <div class="image-preview"> -->
-                                <img id="musicImagePreview" class="center" src="img/image-placeholder.png" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
+                                <img id="musicImagePreview" class="center" src="img/preview-placeholder.png" title="image placeholder" alt="image placeholder" style="max-height:100%; max-width:100%"/>
                               <!-- </div> -->
                               <!-- <div class="video-preview"> -->
                                 <video id="musicVideoPreview" class="center" src="" controls controlslist="nodownload" style="max-width:100%; max-height:100%">
@@ -5410,10 +5411,10 @@
                                 <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
                                   <div class="btn-group mr-2" role="group" aria-label="Button group">
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-categoryset-button" title="Category sets" name="category sets">
-                                      <i class="fas fa-tags"></i>
+                                      <i class="fas fa-sitemap"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-category-button" title="Categories" name="categories">
-                                      <i class="fas fa-tag"></i>
+                                      <i class="fas fa-archive"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline btn-secondary btn-sm form-buttons" id="music-datasheet-form-tag-button" title="Tags" name="tags">
                                       <i class="fas fa-tags"></i>

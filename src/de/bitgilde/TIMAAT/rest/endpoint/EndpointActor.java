@@ -44,7 +44,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.PhoneNumberType;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Sex;
 import de.bitgilde.TIMAAT.model.FIPOP.SexTranslation;
-import de.bitgilde.TIMAAT.model.FIPOP.Street;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
@@ -1568,10 +1567,8 @@ public class EndpointActor {
 		// sanitize object data
 		address.setId(0);
 
-		Street street = entityManager.find(Street.class, address.getStreet().getLocationId());
-		address.setStreet(street);
-		// System.out.println("EndpointActor: addAddress: street id: "+address.getStreet().getLocationId());
-
+		// Street street = entityManager.find(Street.class, address.getStreetLocation().getLocationId());
+		// address.setStreetLocation(street);
 		Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
@@ -1581,13 +1578,13 @@ public class EndpointActor {
 		// persist address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
-		entityManager.persist(street);
+		// entityManager.persist(street);
 		entityManager.persist(address);
 		entityManager.flush();
-		address.setStreet(street); //! TODO already set above
+		// address.setStreetLocation(street); //! TODO already set above
 		entityTransaction.commit();
 		entityManager.refresh(address);
-		entityManager.refresh(street);
+		// entityManager.refresh(street);
 
 		// System.out.println("EndpointActor: addAddress: persist actorHasAddress");
 		// create actor_has_address-table entries
@@ -1638,11 +1635,14 @@ public class EndpointActor {
 		}
 		if ( updatedAddress == null ) return Response.notModified().build();
 		// update address
-		if ( updatedAddress.getPostOfficeBox() != null ) address.setPostOfficeBox(updatedAddress.getPostOfficeBox());
-		if ( updatedAddress.getPostalCode() != null ) address.setPostalCode(updatedAddress.getPostalCode());
-		if ( updatedAddress.getStreetAddition() != null ) address.setStreetAddition(updatedAddress.getStreetAddition());
-		if ( updatedAddress.getStreetNumber() != null ) address.setStreetNumber(updatedAddress.getStreetNumber());
-		if ( updatedAddress.getStreet() != null ) address.setStreet(updatedAddress.getStreet());
+		address.setCity(updatedAddress.getCity());
+		address.setPostOfficeBox(updatedAddress.getPostOfficeBox());
+		address.setPostalCode(updatedAddress.getPostalCode());
+		address.setStreetAddition(updatedAddress.getStreetAddition());
+		address.setStreetNumber(updatedAddress.getStreetNumber());
+		address.setStreet(updatedAddress.getStreet());
+		// TODO once location system is functionable, relink with street_location_id
+
 
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -1654,8 +1654,8 @@ public class EndpointActor {
 		// System.out.println("EndpointActor: updateAddress - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSEDITED);
+									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
+															 UserLogManager.LogEvents.ADDRESSEDITED);
 		System.out.println("EndpointActor: updateAddress - update complete");
 		return Response.ok().entity(address).build();
 	}
@@ -2766,7 +2766,7 @@ public class EndpointActor {
 		// 	thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 		// 		+ "medium/video/" + id + "/" + id + "-audio-all.png");
 		// }
-		if ( !profileImage.exists() || !profileImage.canRead() ) profileImage = new File(servletContext.getRealPath("img/image-placeholder.png"));
+		if ( !profileImage.exists() || !profileImage.canRead() ) profileImage = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
 		return Response.ok().entity(profileImage).build();
 	}

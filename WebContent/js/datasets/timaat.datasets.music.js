@@ -2101,7 +2101,7 @@
 						}
 					break;
 					default:
-						$('#musicImagePreview').attr('src', 'img/image-placeholder.png');
+						$('#musicImagePreview').attr('src', 'img/preview-placeholder.png');
 						$('#musicVideoPreview').attr('src', '');
 						$('#musicAudioPreview').attr('src', '');
 					break;
@@ -2109,7 +2109,7 @@
 			} else {
 				$('.music-datasheet-form-annotate-button').prop('disabled', true);
 				$('#musicAudioPreview').attr('src', '');
-				$('#musicImagePreview').attr('src', 'img/image-placeholder.png');
+				$('#musicImagePreview').attr('src', 'img/preview-placeholder.png');
 				$('#musicVideoPreview').attr('src', '');
 				$('#musicAudioPreview').hide();
 				$('#musicImagePreview').show();
@@ -2417,8 +2417,8 @@
 			var actorIdList = [];
 			var i = 0;
 			for (; i < music.model.musicHasActorWithRoles.length; i++) {
-				if (actorIdList[actorIdList.length-1] != music.model.musicHasActorWithRoles[i].id.actorId) {
-					actorIdList.push(music.model.musicHasActorWithRoles[i].id.actorId);
+				if (actorIdList[actorIdList.length-1] != music.model.musicHasActorWithRoles[i].actor.id) {
+					actorIdList.push(music.model.musicHasActorWithRoles[i].actor.id);
 				}
 			}
 			// console.log("TCL: actorIdList", actorIdList);
@@ -4515,7 +4515,7 @@
 			$('#timaat-musicdatasets-music-tabs-container').append($('#timaat-musicdatasets-music-tabs'));
 			$('#timaat-music-modals-container').append($('#timaat-music-modals'));
 			// this.container = 'music';
-			// $('#musicPreviewTab').removeClass('annotationView');
+			// $('#musicPreviewTab').removeClass('annotationMode');
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
 					TIMAAT.UI.displayDataSetContentContainer('music-data-tab', 'music-metadata-form', 'music');

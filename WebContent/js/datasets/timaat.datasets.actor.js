@@ -1027,16 +1027,15 @@
 											<div class="col-md-5">
 												<label class="col-form-label col-form-label-sm">Street name</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname"
-															 name="newStreetName[`+i+`]"
-															 data-role="newStreetName[`+i+`]"
+															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-street"
+															 name="newStreet[`+i+`]"
+															 data-role="newStreet[`+i+`]"
 															 value="`+newAddress[0]+`"
 															 placeholder="[Enter street name]"
 															 aria-describedby="Street name"
 															 minlength="3"
-															 maxlength="200"
-															 rows="1"
-															 readonly="true">
+															 maxlength="100"
+															 rows="1">
 											</div>
 											<div class="col-md-2">
 												<label class="col-form-label col-form-label-sm">Street number</label>
@@ -1074,13 +1073,13 @@
 											<div class="col-md-6">
 												<label class="col-form-label col-form-label-sm">City</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-cityname"
-															 name="newCityName[`+i+`]"
-															 data-role="newCityName[`+i+`]"
+															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city"
+															 name="newCity[`+i+`]"
+															 data-role="newCity[`+i+`]"
 															 value="`+newAddress[4]+`"
 															 placeholder="[Enter city]"
 															 aria-describedby="City"
-															 readonly="true">
+															 maxlength="100">
 											</div>
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Post office box</label>
@@ -1175,11 +1174,11 @@
 				while ( i < formData.length) { // fill formActorHasAddressesList with data
 					var element = {
 						isPrimaryAddress: false,
-						streetName: 'TEMP NAME',
+						street: '',
 						streetNumber: '',
 						streetAddition: '',
 						postalCode: '',
-						cityName: 'TEMP NAME',
+						city: '',
 						postOfficeBox: '',
 						addressTypeId: 0,
 						addressUsedFrom: '',
@@ -1188,11 +1187,11 @@
 						// console.log("TCL: formData", formData);
 						if (formData[i].name == 'isPrimaryAddress' && formData[i].value == 'on' ) {
 							element.isPrimaryAddress = true;
-							// element.streetName = formData[i+1].value;
+							element.street = formData[i+1].value;
 							element.streetNumber = formData[i+2].value;
 							element.streetAddition = formData[i+3].value;
 							element.postalCode = formData[i+4].value;
-							// element.cityName = formData[i+5].value;
+							element.city = formData[i+5].value;
 							element.postOfficeBox = formData[i+6].value;
 							element.addressTypeId = formData[i+7].value;
 							element.addressUsedFrom = formData[i+8].value;
@@ -1200,11 +1199,11 @@
 							i = i+10;
 						} else {
 							element.isPrimaryAddress = false;
-							// element.streetName = formData[i].value;
+							element.street = formData[i].value;
 							element.streetNumber = formData[i+1].value;
 							element.streetAddition = formData[i+2].value;
 							element.postalCode = formData[i+3].value;
-							// element.cityName = formData[i+4].value;
+							element.city = formData[i+4].value;
 							element.postOfficeBox = formData[i+5].value;
 							element.addressTypeId = formData[i+6].value;
 							element.addressUsedFrom = formData[i+7].value;
@@ -1915,7 +1914,7 @@
 							i = i+3;
 						} else {
 							element.isPrimaryPhoneNumber = false;
-							element.phoneNumberTypeId = formData[i].value;
+							element.phoneNumberTypeId = Number(formData[i].value);
 							element.phoneNumber = formData[i+1].value;
 							i = i+2;
 						}
@@ -2804,8 +2803,8 @@
 			var actorHasAddresses = Array();
 			actor.model.actorHasAddresses.forEach(function(actorHasAddress) {
 				if ( actorHasAddress.id.actorId > 0 && actorHasAddress.id.addressId > 0 )
-				actorHasAddress.address.streetName = "TEMP NAME";
-				actorHasAddress.address.cityName = "TEMP NAME";
+				// actorHasAddress.address.street = "TEMP NAME";
+				// actorHasAddress.address.city = "TEMP NAME";
 				actorHasAddresses.push(actorHasAddress);
 			});
 			this.actorHasAddresses = actorHasAddresses;
@@ -2887,15 +2886,15 @@
 		},
 
 		setPhoneNumberTypeList: function(phoneNumberTypes) {
-			// console.log("TCL: setAddressTypeList -> phoneNumberTypes", phoneNumberTypes);
+			// console.log("TCL: setPhoneNumberTypeList -> phoneNumberTypes", phoneNumberTypes);
 			if ( !phoneNumberTypes ) return;
 			// setup model
-			var phoneNumberTypes = Array();
+			var types = Array();
 			phoneNumberTypes.forEach(function(phoneNumberType) {
 				if ( phoneNumberType.id > 0 )
-					phoneNumberTypes.push(phoneNumberType);
+					types.push(phoneNumberType);
 			});
-			TIMAAT.ActorDatasets.phoneNumberTypes = phoneNumberTypes;
+			TIMAAT.ActorDatasets.phoneNumberTypes = types;
 		},
 
 		addActor: function(type) {
@@ -3270,16 +3269,15 @@
 										<div class="col-md-5">
 											<label class="col-form-label col-form-label-sm">Street name</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname"
-														 name="streetName[`+i+`]"
-														 data-role="streetName[`+actor.model.actorHasAddresses[i].id.addressId+`]"
-														 value="`+actor.model.actorHasAddresses[i].address.streetName+`"
+														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-street"
+														 name="street[`+i+`]"
+														 data-role="street[`+actor.model.actorHasAddresses[i].id.addressId+`]"
+														 value="`+actor.model.actorHasAddresses[i].address.street+`"
 														 placeholder="[Enter street name]"
 														 aria-describedby="Street name"
 														 minlength="3"
-														 maxlength="200"
-														 rows="1"
-														 readonly="true">
+														 maxlength="100"
+														 rows="1">
 										</div>
 										<div class="col-md-2">
 											<label class="col-form-label col-form-label-sm">Street number</label>
@@ -3319,13 +3317,13 @@
 										<div class="col-md-6">
 											<label class="col-form-label col-form-label-sm">City</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-cityname"
-														 name="cityName[`+i+`]"
-														 data-role="cityName[`+actor.model.actorHasAddresses[i].id.addressId+`]"
-														 value="`+actor.model.actorHasAddresses[i].address.cityName+`"
+														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city"
+														 name="city[`+i+`]"
+														 data-role="city[`+actor.model.actorHasAddresses[i].id.addressId+`]"
+														 value="`+actor.model.actorHasAddresses[i].address.city+`"
 														 placeholder="[Enter city]"
 														 aria-describedby="City"
-														 readonly="true">
+														 maxlength="100">
 										</div>
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Post office box</label>
@@ -3485,8 +3483,8 @@
 				if (actor.model.primaryEmailAddress && actor.model.primaryEmailAddress.id == email.id.emailAddressId) {
 					$('[data-role="primaryEmailAddress['+email.id.emailAddressId+']"]').prop('checked', true);
 				}
-				$('[data-role="emailAddressTypeId['+email.id.emailAddressId+']"]')
-					.find('option[value='+email.emailAddressType.id+']').attr('selected', true);
+				$('[data-role="emailAddressTypeId['+email.id.emailAddressId+']"]').find('option[value='+email.emailAddressType.id+']')
+																																					.attr('selected', true);
 				$('input[name="emailAddress['+i+']"]').rules("add", { required: true, email: true});
 			}
 			if ( action == 'show') {
@@ -3535,7 +3533,7 @@
 			var i = 0;
 			var numPhoneNumbers = actor.model.actorHasPhoneNumbers.length;
       // console.log("TCL: actor.model.actorHasPhoneNumbers", actor.model.actorHasPhoneNumbers);
-			for (; i< numPhoneNumbers; i++) {
+			for (; i < numPhoneNumbers; i++) {
 				$('[data-role="dynamic-actorhasphonenumber-fields"]').append(
 					`<div class="form-group" data-role="phonenumber-entry">
 							<div class="form-row">
@@ -4062,18 +4060,18 @@
 					// modify models for backend
 					var tempAddress = newActorHasAddresses[i].address;
 					var tempActorHasAddress = newActorHasAddresses[i];
-					tempAddress.street = {};
-					tempAddress.street = { locationId: 282 }; // TODO temporarily until street location is properly connected
-					delete tempAddress.streetName;
-					delete tempAddress.cityName;
+					// tempAddress.street = {};
+					// tempAddress.street = { locationId: 282 }; // TODO temporarily until street location is properly connected
+					// delete tempAddress.street;
+					// delete tempAddress.city;
 					delete tempActorHasAddress.address;
 
 					var addedAddressModel = await TIMAAT.ActorService.addAddress(actor.model.id, tempAddress);
 					var addedActorHasAddressModel = await TIMAAT.ActorService.updateActorHasAddress(actor.model.id, addedAddressModel.id, tempActorHasAddress);
 					addedActorHasAddressModel.address = {};
 					addedActorHasAddressModel.address = addedAddressModel;
-					addedActorHasAddressModel.address.streetName = 'TEMP NAME';
-					addedActorHasAddressModel.address.cityName = 'TEMP NAME';
+					// addedActorHasAddressModel.address.street = 'TEMP NAME';
+					// addedActorHasAddressModel.address.city = 'TEMP NAME';
 					actor.model.actorHasAddresses.push(addedActorHasAddressModel);
 				}
 			} catch(error) {
@@ -4342,15 +4340,15 @@
 				var tempAddress = actorHasAddress.address;
 				// modify models for backend
 				delete tempActorHasAddress.address;
-				delete tempAddress.streetName;
-				delete tempAddress.cityName;
+				// delete tempAddress.street;
+				// delete tempAddress.city;
 				var updatedTempAddress = await TIMAAT.ActorService.updateAddress(tempAddress);
 				tempActorHasAddress.id.actorId = actor.model.id;
 				tempActorHasAddress.id.addressId = updatedTempAddress.id;
 				var updatedTempActorHasAddress = await TIMAAT.ActorService.updateActorHasAddress(actorHasAddress.id.actorId, actorHasAddress.id.addressId, tempActorHasAddress);
 				updatedTempActorHasAddress.address = updatedTempAddress;
-				updatedTempActorHasAddress.address.streetName = 'TEMP NAME';
-				updatedTempActorHasAddress.address.cityName = 'TEMP NAME';
+				// updatedTempActorHasAddress.address.street = 'TEMP NAME';
+				// updatedTempActorHasAddress.address.city = 'TEMP NAME';
 
 				var i = 0;
 				for (; i < actor.model.actorHasAddresses.length; i++) {
@@ -4387,7 +4385,7 @@
 		},
 
 		updateActorHasPhoneNumber: async function(actorHasPhoneNumber, actor) {
-			// console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
+			console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
 			try {
 				// update address
 				var tempActorHasPhoneNumber = actorHasPhoneNumber;
@@ -4816,14 +4814,15 @@
 				postalCode: data.postalCode,
 				streetNumber: data.streetNumber,
 				streetAddition: data.streetAddition,
-				streetName: 'TEMP NAME',
-				cityName: 'TEMP NAME',
+				street: data.street,
+				city: data.city,
 			};
 			actorHasAddressModel.addressType = this.addressTypes[Number(data.addressTypeId)-1];
 			return actorHasAddressModel;
 		},
 
 		updateActorHasAddressModel: function(originalModel, data) {
+    // console.log("TCL ~ $ ~ originalModel, data", originalModel, data);
 			var updatedModel = originalModel;
 			updatedModel.usedFrom = data.addressUsedFrom;
 			updatedModel.usedUntil = data.addressUsedUntil;
@@ -4832,6 +4831,8 @@
 			updatedModel.address.postalCode = data.postalCode;
 			updatedModel.address.streetNumber = data.streetNumber;
 			updatedModel.address.streetAddition = data.streetAddition;
+			updatedModel.address.street = data.street;
+			updatedModel.address.city = data.city;
 			return updatedModel;
 		},
 
@@ -4851,6 +4852,7 @@
 		},
 
 		updateActorHasEmailAddressModel: async function(originalModel, data) {
+      // console.log("TCL ~ updateActorHasEmailAddressModel:function ~ originalModel, data", originalModel, data);
 			var updatedModel = originalModel;
 			updatedModel.emailAddressType = this.emailAddressTypes[Number(data.emailAddressTypeId)-1];
 			updatedModel.emailAddress.email = data.email;
@@ -4873,6 +4875,7 @@
 		},
 
 		updateActorHasPhoneNumberModel: async function(originalModel, data) {
+      // console.log("TCL ~ updateActorHasPhoneNumberModel:function ~ originalModel, data", originalModel, data);
 			var updatedModel = originalModel;
 			updatedModel.phoneNumberType = this.phoneNumberTypes[Number(data.phoneNumberTypeId)-1];
 			updatedModel.phoneNumber.phoneNumber = data.phoneNumber;
@@ -4932,21 +4935,19 @@
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>
-							<legend>Add new Address: (NB: Streetname and city currently not implemented!)</legend>
+							<legend>Add new Address:</legend>
 							<div class="form-row">
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">Street name</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetname"
-												 name="streetName"
-												 data-role="streetName"
+												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-street"
+												 name="street"
+												 data-role="street"
 												 placeholder="[Enter street name]"
-												 value="TEMP NAME"
 												 aria-describedby="Street name"
 												 minlength="3"
-												 maxlength="200"
-												 rows="1"
-												 readonly="true">
+												 maxlength="100"
+												 rows="1">
 								</div>
 								<div class="col-md-2">
 									<label class="col-form-label col-form-label-sm">Street number</label>
@@ -4983,13 +4984,12 @@
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">City</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-cityname"
-												 name="cityName"
-												 data-role="cityName"
+												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city"
+												 name="city"
+												 data-role="city"
 												 placeholder="[Enter city]"
-												 value="TEMP NAME"
 												 aria-describedby="City"
-												 readonly="true">
+												 maxlength="100">
 								</div>
 								<div class="col-md-3">
 									<label class="col-form-label col-form-label-sm">Post office box</label>

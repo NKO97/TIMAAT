@@ -267,19 +267,17 @@
             // TODO make sure media collections are loaded
             // show media collection component
             TIMAAT.UI.showComponent('media');
-            TIMAAT.UI.refreshDataTable('mediumCollection');
-
             // show corresponding medium collection form
             if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current medium collection
               $('#timaat-mediumcollectiondatasets-mediumcollection-list tr[id='+pathSegments[1]+']').trigger('click');
               let mediumCollection = {};
               mediumCollection.model = await TIMAAT.MediumCollectionService.getMediumCollection(pathSegments[1]);
-              // console.log("TCL: setupView:function -> mediumCollection", mediumCollection);
+              let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
               TIMAAT.MediumCollectionDatasets.currentPermissionLevel = await TIMAAT.MediumCollectionService.getMediumCollectionPermissionLevel(mediumCollection.model.id);
               // TIMAAT.UI.clearLastSelection('mediumCollection');
               TIMAAT.UI.selectedMediumCollectionId = pathSegments[1];
+              TIMAAT.UI.refreshDataTable('mediumCollection');
               $('#mediumcollection-metadata-form').data('mediumCollection', mediumCollection);
-              let type = mediumCollection.model.mediaCollectionType.mediaCollectionTypeTranslations[0].type;
               $('#mediumcollection-metadata-form').data('type', type);
               if (pathSegments.length == 2) { //* #mediumCollection/:id    (default view, show datasheet)
                 TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-metadata', 'mediumcollection-metadata-form');
@@ -288,16 +286,15 @@
               else { // other mediumCollection form than datasheet
                 switch (pathSegments[2]) {
                   case 'items': //* #mediumCollection/:id/items
-                  if (TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
-                    TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/' + mediumCollection.model.id + '/hasMediaList')
-                    TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload();
-                  } else {
+                  if (!TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList) {
                     await TIMAAT.MediumCollectionDatasets.setupMediumCollectionItemListDataTable(mediumCollection.model.id);
                     TIMAAT.MediumCollectionDatasets.setMediumCollectionItemList();
                   }
-                    // TIMAAT.MediumCollectionDatasets.clearLastItemSelection();
-                    TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-items', 'mediumcollection-mediaItems');
-                    TIMAAT.UI.displayDataSetContent('items', mediumCollection, 'mediumCollection');
+                  TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-items', 'mediumcollection-mediaItems');
+                  TIMAAT.UI.displayDataSetContent('items', mediumCollection, 'mediumCollection');
+                  TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.url('/TIMAAT/api/mediumCollection/' + mediumCollection.model.id + '/hasMediaList')
+                  TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload().columns.adjust();
+                  // TIMAAT.MediumCollectionDatasets.clearLastItemSelection();
                   break;
                   // case 'publication': //* #mediumCollection/:id/publication
                   // TIMAAT.UI.displayComponent('mediumCollection', 'mediumcollection-tab', 'mediumcollection-datatable', 'mediumcollection-tab-publication', 'mediumcollection-publication');

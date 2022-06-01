@@ -10,7 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 
@@ -47,8 +46,12 @@ public class Address implements Serializable {
 	private List<ActorHasAddress> actorHasAddresses;
 
 	//bi-directional many-to-one association to Street
-	@ManyToOne
-	private Street street;
+	// @ManyToOne
+	// private Street streetLocation;
+
+	private String city;
+
+	private String street;
 
 	//bi-directional many-to-one association to Medium
 	@OneToMany(mappedBy="primaryAddress")
@@ -120,11 +123,27 @@ public class Address implements Serializable {
 		return primaryAddress;
 	}
 
-	public Street getStreet() {
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	// public Street getStreetLocation() {
+	// 	return this.streetLocation;
+	// }
+
+	// public void setStreetLocation(Street streetLocation) {
+	// 	this.streetLocation = streetLocation;
+	// }
+
+	public String getStreet() {
 		return this.street;
 	}
 
-	public void setStreet(Street street) {
+	public void setStreet(String street) {
 		this.street = street;
 	}
 
