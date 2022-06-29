@@ -20,19 +20,19 @@
 }(function (TIMAAT) {
 
 	TIMAAT.UI = {
-		component: null,
-    subNavTab: 'dataSheet',
-    selectedCategoryId: null,
-    selectedCategorySetId: null,
-    selectedRoleId: null,
-    selectedRoleGroupId: null,
-    selectedLanguageId: null,
-		selectedActorId: null,
-		selectedEventId: null,
-		selectedMediumId: null,
-		selectedMediumCollectionId: null,
+		component                     : null,
+		selectedActorId               : null,
+		selectedEventId               : null,
+		selectedMediumCollectionId    : null,
 		selectedMediumCollectionItemId: null,
-		selectedMusicId: null,
+		selectedMediumId              : null,
+		selectedMusicId               : null,
+		selectedCategoryId            : null,
+		selectedCategorySetId         : null,
+		selectedLanguageId            : null,
+		selectedRoleGroupId           : null,
+		selectedRoleId                : null,
+		subNavTab                     : 'dataSheet',
 
 		init: function() {
 			// console.log("TCL: UI: init: function()");
@@ -41,12 +41,14 @@
 			this.templates = {
 					notification: `<div class="toast mb-1" role="alert" aria-live="assertive" aria-atomic="true">
 						<div class="toast-header">
-							<span class="notification-action-color badge"><i class="notification-action fas fa-fw"></i></span>
-							&nbsp;<strong class="notification-user mr-auto">(unbekannt)</strong>
-							<small class="notification-time text-muted">jetzt</small>
+							<span class="notification__action-color badge">
+								<i class="notificationAction fas fa-fw"></i>
+							</span>
+							&nbsp;<strong class="notificationUser mr-auto">(unknown)</strong>
+							<small class="notificationTime text-muted">jetzt</small>
 							<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						</div>
-						<div class="notification-message toast-body"></div>
+						<div class="notificationMessage toast-body"></div>
 					</div>`,
 			}
 
@@ -59,14 +61,14 @@
 			TIMAAT.UserSettings.init();
 			TIMAAT.URLHistory.init();
 
-			$('#timaat-login-user').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
-			$('#timaat-login-pass').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#timaat-login-submit').click(); });
-			$('#timaat-login-submit').on('click', TIMAAT.UI.processLogin);
+			$('#logInUserName').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#loginSubmitButton').click(); });
+			$('#logInPassword').on('keyup', function (e) { if (e.keyCode == 13) jQuery('#loginSubmitButton').click(); });
+			$('#loginSubmitButton').on('click', TIMAAT.UI.processLogin);
 			// console.log("TCL ~ TIMAAT.Service.state", TIMAAT.Service.state);
 			// console.log("TCL ~ TIMAAT.Service.token", TIMAAT.Service.token);
 			if ( TIMAAT.Service.state != 1 ) {
-				$('body').addClass('timaat-login-modal-open');
-				$('#timaat-login-modal').modal('show');
+				$('#wrapper').addClass('body__wrapper--blur');
+				$('#loginModal').modal('show');
 			}
 
 			// window.addEventListener('load', function (event) {
@@ -74,9 +76,9 @@
 			// 	if (TIMAAT.Service.session == null) {
 			// 		this.processLogin();
 			// 	} else {
-			// 		$('body').removeClass('timaat-login-modal-open');
-			// 		$('#timaat-login-modal').modal('hide');
-			// 		$('#timaat-user-info').html(event.displayName);
+			//    $('#wrapper').removeClass('body__wrapper--blur');
+			// 		$('#loginModal').modal('hide');
+			// 		$('#userInfo').html(event.displayName);
 			// 	}
 			// });
 
@@ -90,17 +92,17 @@
 			});
 
 			// init user log popover functionality
-			$('#timaat-user-log-list').popover({
+			$('#userLogList').popover({
 				placement: 'bottom',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			$('#timaat-user-log-list').on('inserted.bs.popover', function () {
+			$('#userLogList').on('inserted.bs.popover', function () {
 				TIMAAT.Service.getUserLog(TIMAAT.Service.session.id, 12, function(log) {
 					var html = '';
 					if ( log.length == 0 ) html = "No data available";
@@ -131,10 +133,10 @@
 					html += '<b><i class="'+icon+'"></i> '+TIMAAT.Util.formatLogType(entry.userLogEventType.type)
 								+'</b><br>'+TIMAAT.Util.formatDate(entry.dateTime)+'<br>';
 				});
-				$('.timaat-user-log-details').html(html);
+				$('.userLogDetails').html(html);
 
 				$(log).each(function(index, entry) {TIMAAT.Service.idCache.set(entry.userAccount.id, entry.userAccount.displayName);});
-				//	$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"ich")});
+				//	$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item,"ich")});
 				});
 			});
 
@@ -154,18 +156,43 @@
 			TIMAAT.UI.component = component;
 			TIMAAT.VideoPlayer.pause(); // TODO refactor
 			$('#mediumVideoPreview').get(0).pause();
-			$('.timaat-component').hide();
-			$('.timaat-sidebar-tab').removeClass('bg-info');
-			$('.timaat-sidebar-tab a').removeClass('selected');
-			$('#timaat-component-'+component).show();
+			$('.component').hide();
+			$('.js-sidebar__li').removeClass('bg-info');
+			$('.js-sidebar__a').removeClass('selected');
+			switch (component) {
+				case 'videoPlayer':
+					$('#componentVideoPlayer').show();
+				break;
+				case 'lists':
+					$('#componentLists').show();
+				break;
+				case 'media':
+					$('#componentMedia').show();
+				break;
+				case 'actors':
+					$('#componentActors').show();
+				break;
+				case 'locations':
+					$('#componentLocations').show();
+				break;
+				case 'events':
+					$('#componentEvents').show();
+				break;
+				case 'music':
+					$('#componentMusic').show();
+				break;
+				case 'settings':
+					$('#componentSettings').show();
+				break;
+			}
 			if (component == 'media') {
-				$('#mediumPreviewTab').removeClass('annotationMode');
-				$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
-				$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+				$('#mediumPreviewDataTab').removeClass('annotationMode');
+				$('#mediumDatasetsMediumTabsContainer').append($('#mediumDatasetsMediumTabs'));
+				$('#mediumModalsContainer').append($('#mediumModals'));
 				TIMAAT.MediumDatasets.container = 'media';
 			}
-			$('.timaat-sidebar-tab-'+component).addClass('bg-info');
-			$('.timaat-sidebar-tab-'+component+' a').addClass('selected');
+			$('.sidebarTab'+component).addClass('bg-info');
+			$('.sidebarTab'+component+' a').addClass('selected');
 		},
 
 		receiveNotification(notificationEvent) {
@@ -226,32 +253,32 @@
 					action = 'fa-eye';
 					message = 'current analysis closed'
 					break;
-				case 'add-segment':
+				case 'addSegment':
 					color = 'badge-success';
 					action = 'fa-plus';
 					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> added';
 					break;
-				case 'edit-segment':
+				case 'editSegment':
 					color = 'badge-warning';
 					action = 'fa-edit';
 					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> edited';
 					break;
-				case 'remove-segment':
+				case 'removeSegment':
 					color = 'badge-danger';
 					action = 'fa-trash-alt';
 					message = 'Segment <strong>"'+notification.data.analysisSegmentTranslations[0].title+'"</strong> deleted';
 					break;
-				case 'add-annotation':
+				case 'addAnnotation':
 					color = 'badge-success';
 					action = 'fa-plus';
 					message = 'Annotation <strong>"'+notification.data.title+'"</strong> added';
 					break;
-				case 'edit-annotation':
+				case 'editAnnotation':
 					color = 'badge-warning';
 					action = 'fa-edit';
 					message = 'Annotation <strong>"'+notification.data.title+'"</strong> edited';
 					break;
-				case 'remove-annotation':
+				case 'removeAnnotation':
 					color = 'badge-danger';
 					action = 'fa-trash-alt';
 					message = 'Annotation <strong>"'+notification.data.title+'"</strong> deleted';
@@ -270,13 +297,13 @@
 					message = 'unknown action: '+notification.message;
 					break;
 			}
-			ui.find('.notification-action-color').addClass(color);
-			ui.find('.notification-action').addClass(action);
-			ui.find('.notification-user').text(user);
-			ui.find('.notification-message').html(message);
-			ui.find('.notification-time').text(TIMAAT.Util.getFuzzyDate(notification.timestamp));
+			ui.find('.notification__action-color').addClass(color);
+			ui.find('.notificationAction').addClass(action);
+			ui.find('.notificationUser').text(user);
+			ui.find('.notificationMessage').html(message);
+			ui.find('.notificationTime').text(TIMAAT.Util.getFuzzyDate(notification.timestamp));
 
-			$('#timaat-notification-pane').append(ui);
+			$('#notificationPane').append(ui);
 			// display notification
 			ui.toast({delay:4000})
 			.on('hidden.bs.toast',function(){$(this).toast('dispose').remove();})
@@ -286,29 +313,29 @@
 		setWaiting: function(waiting) {
 			// console.log("TCL: setWaiting: function(waiting)");
 			// console.log("TCL: waiting", waiting);
-			if (waiting) $('#timaat-ui-waiting').modal('show');
-			else $('#timaat-ui-waiting').modal('hide');
+			if (waiting) $('#UiWaitingModal').modal('show');
+			else $('#UiWaitingModal').modal('hide');
 		},
 
 		setLoginEnabled: function(enabled) {
-			$('#timaat-login-user').prop('disabled', !enabled);
-			$('#timaat-login-pass').prop('disabled', !enabled);
-			$('#timaat-login-submit').prop('disabled', !enabled);
-			if ( enabled ) $('#timaat-login-submit i.login-spinner').addClass('d-none');
-			else $('#timaat-login-submit i.login-spinner').removeClass('d-none');
+			$('#logInUserName').prop('disabled', !enabled);
+			$('#logInPassword').prop('disabled', !enabled);
+			$('#loginSubmitButton').prop('disabled', !enabled);
+			if ( enabled ) $('#loginSubmitButton i.login-spinner').addClass('d-none');
+			else $('#loginSubmitButton i.login-spinner').removeClass('d-none');
 		},
 
 		processLogin: function() {
 			// console.log("TCL: processLogin: function()");
-			var user = jQuery('#timaat-login-user').val();
-			var pass = jQuery('#timaat-login-pass').val();
+			var user = jQuery('#logInUserName').val();
+			var pass = jQuery('#logInPassword').val();
 			if ( user.length > 0 && pass.length > 0 ) {
 				TIMAAT.UI.setLoginEnabled(false);
 
 				setTimeout(function() {
 					var hash = TIMAAT.Util.getArgonHash(pass, user + TIMAAT.Service.clientSalt); // TODO refactor
 					var credentials = {
-						username : user,
+						username: user,
 						password: hash
 					}
 
@@ -325,10 +352,10 @@
             // console.log("TCL ~ setTimeout ~ TIMAAT.Service.session", TIMAAT.Service.session);
 						TIMAAT.Service.token = e.token;
             // console.log("TCL ~ setTimeout ~ TIMAAT.Service.token", TIMAAT.Service.token);
-						$('body').removeClass('timaat-login-modal-open');
-						$('#timaat-login-modal').modal('hide');
-						// $('#timaat-user-info').html(e.accountName);
-						$('#timaat-user-info').html(e.displayName);
+						$('#wrapper').removeClass('body__wrapper--blur');
+						$('#loginModal').modal('hide');
+						// $('#userInfo').html(e.accountName);
+						$('#userInfo').html(e.displayName);
 
 						TIMAAT.MediumDatasets.loadRequiredRoleIds();
 						TIMAAT.Datasets.load();
@@ -345,7 +372,7 @@
 					}).fail(function(error) {
 						TIMAAT.UI.setLoginEnabled(true);
 						console.error("process login ERROR: ", error);
-						jQuery('#timaat-login-message').fadeIn();
+						jQuery('#loginMessage').fadeIn();
 					});
 				}, 50);
 			}
@@ -368,29 +395,29 @@
 				case 'role':
 				case 'roleGroup':
 				case 'language':
-					$('#list-tabs').show();
+					$('#listTabs').show();
 				break;
 				case 'actor':
-					$('#actor-tabs').show();
+					$('#actorTabs').show();
 				break;
 				case 'event':
-					$('#event-tabs').show();
+					$('#eventTabs').show();
 				break;
 				case 'medium':
 				case 'mediumCollection':
-					$('#medium-tabs').show();
+					$('#mediumTabs').show();
 				break;
 				case 'music':
-					$('#music-tabs').show();
+					$('#musicTabs').show();
 				break;
 				case 'settings':
-					$('#settings-tabs').show();
+					$('#settingsTabs').show();
 				break;
 			}
 		},
 
 		setNavBarActiveLink: function(navBarLinkId) {
-			$('.top-nav-bar-link').removeClass('active');
+			$('.navBarLinkTop').removeClass('active');
 			if (navBarLinkId) {
 				$('#'+navBarLinkId).addClass('active');
 			}
@@ -398,7 +425,7 @@
 
 		// display left column (data table list) and show corresponding data
 		setAndDisplayDataTableActiveActiveCard: function(dataTableCardId) {
-			$('.datatables').hide();
+			$('.dataTables').hide();
 			if (dataTableCardId) {
 				$('#'+dataTableCardId).show();
 			}
@@ -412,7 +439,7 @@
 			if (navTabLinkId) {
 				this.displayAndSetDataSetContentNavTab(navTabLinkId, type, subtype);
 				if (subtype && (subtype == 'document' || subtype == 'software' || subtype == 'text' || subtype == 'videogame')) {
-					contentId = 'medium-metadata-form'; // when in preview form and switching to medium without preview
+					contentId = 'mediumFormMetadata'; // when in preview form and switching to medium without preview
 					this.subNavTab = 'dataSheet';
 				}
 			}
@@ -433,47 +460,47 @@
 				case 'role':
 				case 'roleGroup':
 				case 'language':
-					$('#list-nav-tabs').show();
-					// $('.list-data-tabs').show(); // TODO check if data-tabs is necessary
+					$('#listsNavTabs').show();
+					// $('.listDataTabs').show(); // TODO check if data-tabs is necessary
 				break;
 				case 'actor':
-					$('#actor-nav-tabs').show();
+					$('#actorNavigationTabs').show();
 				break;
 				case 'event':
-					$('#event-nav-tabs').show();
+					$('#eventNavTabs').show();
 				break;
 				case 'medium':
-					$('#medium-nav-tabs').show();
+					$('#mediumNavTabs').show();
 					switch(subtype) {
 						case 'document':
 						case 'software':
 						case 'text':
 						case 'videogame':
-							$('#mediumPreviewTab').hide();
+							$('#mediumPreviewDataTab').hide();
 						break;
 						case 'audio':
 						case 'image':
 						case 'video':
-							$('#mediumPreviewTab').show();
+							$('#mediumPreviewDataTab').show();
 						break;
 					}
-					if ($('#mediumPreviewTab').hasClass('annotationMode')) {
-						$('#mediumPreviewTab').hide();
+					if ($('#mediumPreviewDataTab').hasClass('annotationMode')) {
+						$('#mediumPreviewDataTab').hide();
 					}
 
 				break;
 				case 'mediumCollection':
-					$('#mediumcollection-nav-tabs').show();
+					$('#mediumCollectionNavTabs').show();
 				break;
 				case 'music':
-					$('#music-nav-tabs').show();
+					$('#musicNavTabs').show();
 				break;
 			}
 			this.setDataSetContentActiveNavTab(navTabLinkId);
 		},
 
 		setDataSetContentActiveNavTab: function(navTabLinkId) {
-			$('.content-nav-bar-link').removeClass('active');
+			$('.navBarLinkContent').removeClass('active');
 			if (navTabLinkId) {
 				$('#'+navTabLinkId).addClass('active');
 			}
@@ -481,7 +508,7 @@
 
 		// display dataset content data
 		displayDataSetContentArea: function(contentHash) {
-			$('.dataset-content').hide();
+			$('.datasetContent').hide();
 			if (contentHash) {
 				$('#'+contentHash).show();
 			}
@@ -494,7 +521,7 @@
         case 'category':
           switch(form) {
             case 'dataSheet':
-              this.setDataSetContentActiveNavTab('list-tab-metadata');
+              this.setDataSetContentActiveNavTab('listsTabMetadata');
               TIMAAT.CategoryLists.categoryFormDataSheet(mode, data);
             break;
           }
@@ -502,7 +529,7 @@
         case 'categorySet':
           switch(form) {
             case 'dataSheet':
-              this.setDataSetContentActiveNavTab('list-tab-metadata');
+              this.setDataSetContentActiveNavTab('listsTabMetadata');
               TIMAAT.CategoryLists.categorySetFormDataSheet(mode, data);
             break;
           }
@@ -510,7 +537,7 @@
         case 'role':
           switch(form) {
             case 'dataSheet':
-              this.setDataSetContentActiveNavTab('list-tab-metadata');
+              this.setDataSetContentActiveNavTab('listsTabMetadata');
               TIMAAT.RoleLists.roleFormDataSheet(mode, data);
             break;
           }
@@ -518,7 +545,7 @@
         case 'roleGroup':
           switch(form) {
             case 'dataSheet':
-              this.setDataSetContentActiveNavTab('list-tab-metadata');
+              this.setDataSetContentActiveNavTab('listsTabMetadata');
               TIMAAT.RoleLists.roleGroupFormDataSheet(mode, data);
             break;
           }
@@ -526,7 +553,7 @@
         case 'language':
           switch(form) {
             case 'dataSheet':
-              this.setDataSetContentActiveNavTab('list-tab-metadata');
+              this.setDataSetContentActiveNavTab('listsTabMetadata');
               TIMAAT.LanguageLists.languageFormDataSheet(mode, data);
             break;
           }
@@ -536,23 +563,23 @@
 					TIMAAT.UI.addSelectedClassToSelectedItem(subtype, data.model.id);
 					switch(form) {
 						case 'preview':
-							this.setDataSetContentActiveNavTab('medium-tab-preview');
+							this.setDataSetContentActiveNavTab('mediumPreviewTab');
 							TIMAAT.MediumDatasets.mediumFormPreview(subtype, data);
 						break;
 						case 'dataSheet':
-							this.setDataSetContentActiveNavTab('medium-tab-metadata');
+							this.setDataSetContentActiveNavTab('mediumMetadataTab');
 							TIMAAT.MediumDatasets.mediumFormDataSheet(mode, subtype, data);
 						break;
 						case 'titles':
-							this.setDataSetContentActiveNavTab('medium-tab-titles');
+							this.setDataSetContentActiveNavTab('mediumTitlesTab');
 							TIMAAT.MediumDatasets.mediumFormTitles(mode, data);
 						break;
 						case 'languageTracks':
-							this.setDataSetContentActiveNavTab('medium-tab-languagetracks');
+							this.setDataSetContentActiveNavTab('mediumLanguageTracksTab');
 							TIMAAT.MediumDatasets.mediumFormLanguageTracks(mode, data);
 						break;
 						case 'actorWithRoles':
-							this.setDataSetContentActiveNavTab('medium-tab-actorwithroles');
+							this.setDataSetContentActiveNavTab('mediumActorWithRolesTab');
 							TIMAAT.MediumDatasets.mediumFormActorRoles(mode, data);
 						break;
 					}
@@ -562,15 +589,15 @@
 					TIMAAT.UI.addSelectedClassToSelectedItem(subtype, data.model.id);
           switch(form) {
             case 'dataSheet':
-              this.setDataSetContentActiveNavTab('mediumcollection-tab-metadata');
+              this.setDataSetContentActiveNavTab('mediumCollectionMetadataTab');
               TIMAAT.MediumCollectionDatasets.mediumCollectionFormDataSheet(mode, subtype, data);
             break;
             case 'items':
-              this.setDataSetContentActiveNavTab('mediumcollection-tab-items');
+              this.setDataSetContentActiveNavTab('mediumCollectionItemsTab');
               TIMAAT.MediumCollectionDatasets.mediumCollectionFormItems(mode, data);
             break;
             case 'publication':
-              this.setDataSetContentActiveNavTab('mediumcollection-tab-publication');
+              this.setDataSetContentActiveNavTab('mediumCollectionPublicationTab');
               TIMAAT.MediumCollectionDatasets.mediumCollectionFormPublication(data);
             break;
 						case 'allMedia':
@@ -583,23 +610,23 @@
 					var subtype = data.model.musicType.musicTypeTranslations[0].type;
 					switch(form) {
 						case 'preview':
-							this.setDataSetContentActiveNavTab('music-tab-preview');
+							this.setDataSetContentActiveNavTab('musicTabPreview');
 							TIMAAT.MusicDatasets.musicFormPreview(subtype, data);
 						break;
 						case 'dataSheet':
-							this.setDataSetContentActiveNavTab('music-tab-metadata');
+							this.setDataSetContentActiveNavTab('musicTabMetadata');
 							TIMAAT.MusicDatasets.musicFormDataSheet(mode, subtype, data);
 						break;
 						case 'titles':
-							this.setDataSetContentActiveNavTab('music-tab-titles');
+							this.setDataSetContentActiveNavTab('musicTabTitles');
 							TIMAAT.MusicDatasets.musicFormTitles(mode, data);
 						break;
 						case 'actorWithRoles':
-							this.setDataSetContentActiveNavTab('music-tab-actorwithroles');
+							this.setDataSetContentActiveNavTab('musicTabActorWithRoles');
 							TIMAAT.MusicDatasets.musicFormActorRoles(mode, data);
 						break;
 						case 'mediumHasMusicList':
-							this.setDataSetContentActiveNavTab('music-tab-mediumhasmusiclist');
+							this.setDataSetContentActiveNavTab('musicTabMediumHasMusicList');
 							TIMAAT.MusicDatasets.musicFormMediumHasMusicList(mode, data);
 						break;
 					}
@@ -607,7 +634,7 @@
 				case 'event':
 					switch(form) {
 						case 'dataSheet':
-							this.setDataSetContentActiveNavTab('event-tab-metadata');
+							this.setDataSetContentActiveNavTab('eventTabMetadata');
 							TIMAAT.EventDatasets.eventFormDataSheet(mode, data);
 						break;
 					}
@@ -617,43 +644,43 @@
 					TIMAAT.UI.addSelectedClassToSelectedItem(subtype, data.model.id);
 					switch(form) {
 						case 'dataSheet':
-							this.setDataSetContentActiveNavTab('actor-tab-metadata');
+							this.setDataSetContentActiveNavTab('actorTabMetadata');
 							TIMAAT.ActorDatasets.actorFormDataSheet(mode, subtype, data);
 						break;
 						case 'names':
-							this.setDataSetContentActiveNavTab('actor-tab-names');
+							this.setDataSetContentActiveNavTab('actorTabNames');
 							TIMAAT.ActorDatasets.actorFormNames(mode, data);
 						break;
 						case 'addresses':
-							this.setDataSetContentActiveNavTab('actor-tab-addresses');
+							this.setDataSetContentActiveNavTab('actorTabAddresses');
 							TIMAAT.ActorDatasets.actorFormAddresses(mode, data);
 						break;
 						case 'emails':
-							this.setDataSetContentActiveNavTab('actor-tab-emailaddresses');
+							this.setDataSetContentActiveNavTab('actorTabEmailAddresses');
 							TIMAAT.ActorDatasets.actorFormEmailAddresses(mode, data);
 						break;
 						case 'phoneNumbers':
-							this.setDataSetContentActiveNavTab('actor-tab-phonenumbers');
+							this.setDataSetContentActiveNavTab('actorTabPhoneNumbers');
 							TIMAAT.ActorDatasets.actorFormPhoneNumbers(mode, data);
 						break;
 						case 'memberOfCollectives':
-							this.setDataSetContentActiveNavTab('actor-tab-memberofcollectives');
+							this.setDataSetContentActiveNavTab('actorTabMemberOfCollectives');
 							TIMAAT.ActorDatasets.actorFormMemberOfCollectives(mode, subtype, data);
 						break;
 						case 'actorRelationships':
-							this.setDataSetContentActiveNavTab('actor-tab-actorrelationships');
+							this.setDataSetContentActiveNavTab('actorTabActorRelationships');
 							TIMAAT.ActorDatasets.actorFormActorRelationships(mode, data);
 						break;
 						case 'locatedInCountry':
-							this.setDataSetContentActiveNavTab('actor-tab-locatedincountry');
+							this.setDataSetContentActiveNavTab('actorTabLocatedInCountry');
 							TIMAAT.ActorDatasets.actorFormLocatedInCountry(mode, data);
 						break;
 						case 'roles':
-							this.setDataSetContentActiveNavTab('actor-tab-roles');
+							this.setDataSetContentActiveNavTab('actorTabRoles');
 							TIMAAT.ActorDatasets.actorFormRoles(mode, data);
 						break;
 						case 'rolesInMedia':
-							this.setDataSetContentActiveNavTab('actor-tab-role-in-medium');
+							this.setDataSetContentActiveNavTab('actorTabRoleInMedium');
 							TIMAAT.ActorDatasets.actorFormRoleMedium(mode, data);
 						break;
 					}

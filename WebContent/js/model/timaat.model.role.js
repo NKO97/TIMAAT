@@ -27,15 +27,15 @@
 
 			// create and style list view element
 			this.listView = $(
-				`<li class="list-group__item">
+				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`<span class="timaat-rolelists-role-list-name">
+							`<span class="roleListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 						  </div>
@@ -44,7 +44,7 @@
 				</li>`
 			);
 
-			// $('#timaat-rolelists-role-list').append(this.listView);
+			// $('#roleList').append(this.listView);
 			// console.log("TCL: Role -> constructor -> this.updateUI()");
 			var role = this; // save role for system events
 
@@ -52,15 +52,15 @@
 
 			// attach role handlers
 			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: Role -> constructor -> open role datasheet");
+				// console.log("TCL: Role -> constructor -> open role dataSheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.roles-nav-tabs').show();
-				$('.roles-data-tabs').hide();
-				$('.nav-tabs a[href="#roleDatasheet"]').tab('show');
-				$('#role-metadata-form').data('role', role);
+				$('.rolesNavTabs').show();
+				$('.rolesDataTabs').hide();
+				$('.nav-tabs a[href="#roleDataSheet"]').tab('show');
+				$('#roleFormMetadata').data('role', role);
 				TIMAAT.RoleLists.roleFormDataSheet('show', 'role', role);
 			});
     }
@@ -69,7 +69,7 @@
 			// console.log("TCL: Role -> updateUI -> this.model", this.model);
 			var name = this.model.roleTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-rolelists-role-list-name').text(name);
+			this.listView.find('.roleListName').text(name);
 
 		}
 
@@ -77,7 +77,7 @@
 			// remove role from UI
 			this.listView.remove();
       // console.log("TCL: Role -> remove -> this", this);
-			$('#role-metadata-form').data('role', null);
+			$('#roleFormMetadata').data('role', null);
 			// remove from roles list
 			var index;
 			for (var i = 0; i < TIMAAT.RoleLists.roles.length; i++) {

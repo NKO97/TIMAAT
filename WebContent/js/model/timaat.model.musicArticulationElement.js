@@ -28,18 +28,18 @@
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group__item timaat-annotation-list-music-articulation-element p-0 bg-secondary">
+				<li class="list-group-item annotationListMusicArticulationElement p-0 bg-secondary">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold pt-1 text-light pl-1">
-							<i class="timaat-annotation-music-articulation-element-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-							<span class="timaat-annotation-music-articulation-element-type"></span>
+							<i class="annotationMusicArticulationElementCommentIcon fas fa-fw fa-comment" aria-hidden="true"></i>
+							<span class="annotationMusicArticulationElementType"></span>
 						</span>
 					</div>
 				</li>`
 			);
 			this.timelineView = $(`
-				<div class="timaat-timeline-music-articulation-element">
-					<div class="timaat-timeline-music-articulation-element-type text-white font-weight-bold"></div>
+				<div class="timelineMusicArticulationElement">
+					<div class="timeline__music-articulation-element-type text-white font-weight-bold"></div>
 				</div>`
 			);
 			this.timelineView.attr('data-start', this.model.startTime);
@@ -51,11 +51,11 @@
 		updateUI() {
 			// console.log("TCL: MusicArticulationElement -> updateUI -> updateUI()");
       // console.log("TCL: MusicArticulationElement -> updateUI -> this: ", this);
-			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('data-start-time', this.model.startTime);
+			this.listView.attr('data-end-time', this.model.endTime);
 			this.listView.attr('id', 'musicArticulationElement-'+this.model.id);
 			this.listView.attr('data-type', 'musicArticulationElement');
-			this.timelineView.find('.timaat-timeline-music-articulation-element-type').html(this.model.articulation.articulationTranslations[0].type);
+			this.timelineView.find('.timeline__music-articulation-element-type').html(this.model.articulation.articulationTranslations[0].type);
 
 			// update timeline position
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
@@ -66,20 +66,20 @@
 
 		addUI() {
 			// console.log("TCL: MusicArticulationElement -> addUI -> addUI()");
-			$('#timaat-timeline-music-articulation-element-pane').append(this.timelineView);
+			$('#timelinePaneMusicArticulation').append(this.timelineView);
 			var musicArticulationElement = this; // save annotation for events
 
 			// attach event handlers
 			this.timelineView.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.curMusicArticulationElement = musicArticulationElement;
-				this.classList.add('timaat-timeline-selected-music-articulation-element');
+				this.classList.add('timelineSelectedMusicArticulationElement');
 				TIMAAT.VideoPlayer.selectedElementType = 'musicArticulationElement';
 				TIMAAT.VideoPlayer.jumpVisible(musicArticulationElement.model.startTime, musicArticulationElement.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
-				$('#timaat-timeline-keyframe-pane').hide();
+				$('#timelineKeyframePane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(musicArticulationElement, 'musicArticulationElement');
 				// TODO
 				// TIMAAT.URLHistory.setURL(null, 'MusicArticulationElement · '+musicArticulationElement.model.musicArticulationElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicArticulationElement/'+musicArticulationElement.model.id);
@@ -87,7 +87,7 @@
 
 			this.timelineView.on('dblclick', this, function(ev) {
 				TIMAAT.VideoPlayer.curMusicArticulationElement = musicArticulationElement;
-				this.classList.add('timaat-timeline-selected-music-articulation-element');
+				this.classList.add('timelineSelectedMusicArticulationElement');
 				TIMAAT.VideoPlayer.selectedElementType = 'musicArticulationElement';
 				// TIMAAT.VideoPlayer.jumpVisible(musicArticulationElement.model.startTime, musicArticulationElement.model.endTime);
 				TIMAAT.VideoPlayer.jumpTo(musicArticulationElement.model.startTime);
@@ -95,9 +95,9 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
-				$('#timaat-timeline-keyframe-pane').hide();
+				$('#timelineKeyframePane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(musicArticulationElement, 'musicArticulationElement');
-				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+				TIMAAT.VideoPlayer.inspector.open('inspectorMetadata');
 				// TODO
 				// TIMAAT.URLHistory.setURL(null, 'MusicArticulationElement · '+musicArticulationElement.model.musicArticulationElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicArticulationElement/'+musicArticulationElement.model.id);
 			});

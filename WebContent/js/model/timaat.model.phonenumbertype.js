@@ -27,55 +27,55 @@
 			// model.ui = this;
 
 			// create and style list view element
-			var deletePhoneNumberTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-phonenumbertype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deletePhoneNumberTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm phoneNumberTypeRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deletePhoneNumberTypeButton = '';
-			this.listView = $('<li class="list-group__item"> '
+			this.listView = $('<li class="list-group-item"> '
 				+ deletePhoneNumberTypeButton +
-				'<span class="timaat-phonenumbertype-list-type"></span>' +
+				'<span class="phoneNumberTypeListType"></span>' +
 				'<br> \
-				<div class="timaat-phonenumbertype-list-count text-muted float-left"></div> \
+				<div class="phoneNumberTypeListCount text-muted float-left"></div> \
 				</li>'
 			);
 
-			$('#timaat-actordatasets-phonenumbertype-list').append(this.listView);
+			$('#actorDatasetsPhoneNumberTypeList').append(this.listView);
 			this.updateUI();
 			var PhoneNumberType = this; // save PhoneNumberType for system PhoneNumberTypes
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (phoneNumberType.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(phoneNumberType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+phoneNumberType.model.createdByUserAccountId+'">[ID '+phoneNumberType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(phoneNumberType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+phoneNumberType.model.lastEditedByUserAccountId+'">[ID '+phoneNumberType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+phoneNumberType.model.lastEditedByUserAccountId+'">[ID '+phoneNumberType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(phoneNumberType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,16 +85,16 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-actordatasets-phonenumbertype-meta').data('PhoneNumberType', PhoneNumberType);
-				$('#timaat-actordatasets-phonenumbertype-meta').modal('show');
+				$('#actorDatasetsPhoneNumberTypeMetaModal').data('PhoneNumberType', PhoneNumberType);
+				$('#actorDatasetsPhoneNumberTypeMetaModal').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-phonenumbertype-remove').on('click', this, function(ev) {
+			this.listView.find('.phoneNumberTypeRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-actordatasets-phonenumbertype-delete').data('PhoneNumberType', PhoneNumberType);
-				$('#timaat-actordatasets-phonenumbertype-delete').modal('show');
+				$('#actorDatasetsPhoneNumberTypeDeleteModal').data('PhoneNumberType', PhoneNumberType);
+				$('#actorDatasetsPhoneNumberTypeDeleteModal').modal('show');
 			});
 		}
 
@@ -103,7 +103,7 @@
 			// title
 			var type = this.model.phoneNumberTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[not assigned]";
-			this.listView.find('.timaat-phonenumbertype-list-name').text(type);
+			this.listView.find('.phoneNumberTypeListName').text(type);
 		}
 
 		remove() {

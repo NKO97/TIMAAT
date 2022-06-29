@@ -42,19 +42,19 @@
 				}
 			// }
 			this.listView = $(
-				`<li class="list-group__item">
+				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayMusicTypeIcon +
-							`<span class="timaat-musicdatasets-`+musicType+`-list-name">
+							`<span class="musicDatasets`+musicType+`ListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
-								<button type="button" title="Annotate `+musicType+`" class="btn btn-outline-success btn-sm btn-block timaat-musicdatasets-music-annotate"><i class="fas fa-draw-polygon"></i></button>
+								<button type="button" title="Annotate `+musicType+`" class="btn btn-outline-success btn-sm btn-block musicDatasetsMusicAnnotateButton"><i class="fas fa-draw-polygon"></i></button>
 						  </div>
 						</div>
 					</div>
@@ -62,46 +62,46 @@
 			);
 
 			// console.log("TCL: append me to list:", musicType);
-			// $('#timaat-musicdatasets-'+musicType+'-list').append(this.listView);
+			// $('#musicDatasets'+musicType+'List').append(this.listView);
 			var music = this; // save music for system events
 
 			this.updateUI();
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (music.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(music.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+music.model.createdByUserAccountId+'">[ID '+music.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(music.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+music.model.lastEditedByUserAccountId+'">[ID '+music.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+music.model.lastEditedByUserAccountId+'">[ID '+music.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(music.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -110,18 +110,18 @@
 		updateUI() {
 			// console.log("TCL: Music -> updateUI -> updateUI()");
 			// title
-			var type = $('#music-metadata-form').data('type');
+			var type = $('#musicFormMetadata').data('type');
 			var name = this.model.displayTitle.name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-musicdatasets-'+type+'-list-name').html(name);
+			this.listView.find('.musicDatasets'+type+'ListName').html(name);
 			if (type == 'music') {
-				this.listView.find('.timaat-musicdatasets-music-list-musictype').html(type);
+				this.listView.find('.musicDatasetsMusicListMusicType').html(type);
 			}
 
 			// if ( this.model.fileStatus != "noFile" && this.model.fileStatus != "unavailable" ) {
-			// 	this.listView.find('.timaat-musicdatasets-music-annotate').show();
+			// 	this.listView.find('.musicDatasetsMusicAnnotateButton').show();
 			// } else {
-			// 	this.listView.find('.timaat-musicdatasets-music-annotate').hide();
+			// 	this.listView.find('.musicDatasetsMusicAnnotateButton').hide();
 			// }
 		}
 
@@ -129,7 +129,7 @@
 			// console.log("TCL: Music -> remove -> remove()");
 			// remove music from UI
 			this.listView.remove(); // TODO remove tags from music_has_tags
-			$('#music-metadata-form').data('music', null);
+			$('#musicFormMetadata').data('music', null);
 		}
 
 	}

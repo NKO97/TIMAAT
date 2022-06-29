@@ -38,10 +38,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async changePassword(credentials) {
@@ -59,16 +59,16 @@
 					resolve(data);
 				}).fail(function(error) {
 					if (error.status = "409") { // password change declined because it was already used in the past by this user
-						$('#newPassword').after('<label id="newPassword-error" class="error" for="newPassword">You cannot use a password you have used in the past. Please chose a new one.</label>');
+						$('#newPassword').after('<label id="newPasswordError" class="error" for="newPassword">You cannot use a password you have used in the past. Please chose a new one.</label>');
             return;
 					} else {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
 					}
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
   }

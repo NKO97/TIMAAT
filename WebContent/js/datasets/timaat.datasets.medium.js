@@ -51,25 +51,25 @@
 			}
 			if (TIMAAT.UI.component != 'media') {
 				TIMAAT.UI.showComponent('media');
-				$('#medium-tab').trigger('click');
+				$('#mediumTab').trigger('click');
 			}
 		},
 
 		initMediumTypes: function() {
 			// console.log("TCL: MediumDatasets: initMediumTypes: function()");
 			// delete mediaType functionality
-			$('#timaat-mediatype-delete-submit').on('click', function(ev) {
-				var modal = $('#timaat-mediadatasets-mediumtype-delete');
+			$('#mediaTypeDeleteSubmitButton').on('click', function(ev) {
+				var modal = $('#mediumDatasetsMediumTypeDeleteModal');
 				let type = modal.data('mediaType');
 				if (type) TIMAAT.MediumDatasets._mediaTypeRemoved(type);
 				modal.modal('hide');
 			});
 
 			// add mediaType button
-			$('#timaat-mediatype-add').attr('onclick','TIMAAT.MediumDatasets.addMediumType()');
+			$('#mediaTypeAddButton').attr('onclick','TIMAAT.MediumDatasets.addMediumType()');
 
 			// add/edit mediaType functionality
-			$('#timaat-mediadatasets-mediumtype-meta').on('show.bs.modal', function (ev) {
+			$('#mediumDatasetsMediumTypeMeta').on('show.bs.modal', function (ev) {
 				// Create/Edit mediaType window setup
 				var modal = $(this);
 				var mediaType = modal.data('mediaType');
@@ -81,22 +81,22 @@
 				var hasContent = (mediaType) ? mediaType.model.hasContent : false;
 				// setup UI
 				$('#mediaTypeMetaLabel').html(heading);
-				$('#timaat-mediadatasets-mediumtype-meta-submit').html(submit);
-				$('#timaat-mediadatasets-mediumtype-meta-name').val(type).trigger('input');
-				$('#timaat-mediadatasets-mediumtype-meta-hasvisual').val(hasVisual);
-				$('#timaat-mediadatasets-mediumtype-meta-hasaudio').val(hasAudio);
-				$('#timaat-mediadatasets-mediumtype-meta-hascontent').val(hasContent);
+				$('#mediumDatasetsMediumTypeMetaSubmit').html(submit);
+				$('#mediumDatasetsMediumTypeMetaName').val(type).trigger('input');
+				$('#mediumDatasetsMediumTypeMetaHasVisual').val(hasVisual);
+				$('#mediumDatasetsMediumTypeMetaHasAudio').val(hasAudio);
+				$('#mediumDatasetsMediumTypeMetaHasContent').val(hasContent);
 			});
 
 			// Submit mediaType data
-			$('#timaat-mediadatasets-mediumtype-meta-submit').on('click', function(ev) {
+			$('#mediumDatasetsMediumTypeMetaSubmit').on('click', function(ev) {
 				// Create/Edit mediaType window submitted data validation
-				var modal = $('#timaat-mediadatasets-mediumtype-meta');
+				var modal = $('#mediumDatasetsMediumTypeMeta');
 				var mediaType = modal.data('mediaType');
-				var type = $('#timaat-mediadatasets-mediumtype-meta-name').val();
-				var hasVisual = $('#timaat-mediadatasets-mediumtype-meta-hasvisual').val();
-				var hasAudio = $('#timaat-mediadatasets-mediumtype-meta-hasaudio').val();
-				var hasContent = $('#timaat-mediadatasets-mediumtype-meta-hascontent').val();
+				var type = $('#mediumDatasetsMediumTypeMetaName').val();
+				var hasVisual = $('#mediumDatasetsMediumTypeMetaHasVisual').val();
+				var hasAudio = $('#mediumDatasetsMediumTypeMetaHasAudio').val();
+				var hasContent = $('#mediumDatasetsMediumTypeMetaHasContent').val();
 
 				if (mediaType) {
 					mediaType.model.medium.mediaTypeTranslations[0].type = type;
@@ -125,74 +125,74 @@
 
 			// validate mediaType data
 			// TODO validate all required fields
-			$('#timaat-mediadatasets-mediumtype-meta-name').on('input', function(ev) {
-				if ( $('#timaat-mediadatasets-mediumtype-meta-name').val().length > 0 ) {
-					$('#timaat-mediadatasets-mediumtype-meta-submit').prop('disabled', false);
-					$('#timaat-mediadatasets-mediumtype-meta-submit').removeAttr('disabled');
+			$('#mediumDatasetsMediumTypeMetaName').on('input', function(ev) {
+				if ( $('#mediumDatasetsMediumTypeMetaName').val().length > 0 ) {
+					$('#mediumDatasetsMediumTypeMetaSubmit').prop('disabled', false);
+					$('#mediumDatasetsMediumTypeMetaSubmit').removeAttr('disabled');
 				} else {
-					$('#timaat-mediadatasets-mediumtype-meta-submit').prop('disabled', true);
-					$('#timaat-mediadatasets-mediumtype-meta-submit').attr('disabled');
+					$('#mediumDatasetsMediumTypeMetaSubmit').prop('disabled', true);
+					$('#mediumDatasetsMediumTypeMetaSubmit').attr('disabled');
 				}
 			});
 		},
 
 		initMedia: function() {
 			// nav-bar functionality
-			$('#medium-tab').on('click', function(event) {
+			$('#mediumTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.initMediaComponent();
 				TIMAAT.MediumDatasets.loadMedia();
-				TIMAAT.UI.displayComponent('medium', 'medium-tab', 'medium-datatable');
-				$('#timaat-mediumdatasets-all-media').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'mediumTab', 'mediumDataTable');
+				$('#mediumDatasetsAllMedia').trigger('click');
 			});
 
-			$('#audio-tab').on('click', function(event) {
+			$('#audioTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('audio');
-				TIMAAT.UI.displayComponent('medium', 'audio-tab', 'audio-datatable', null, null, 'audio');
-				$('#timaat-mediumdatasets-all-audios').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'audioTab', 'audioDataTable', null, null, 'audio');
+				$('#mediumDatasetsAllAudios').trigger('click');
 			});
 
-			$('#document-tab').on('click', function(event) {
+			$('#documentTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('document');
-				TIMAAT.UI.displayComponent('medium', 'document-tab', 'document-datatable', null, null, 'document');
-				$('#timaat-mediumdatasets-all-documents').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'documentTab', 'documentDataTable', null, null, 'document');
+				$('#mediumDatasetsAllDocuments').trigger('click');
 			});
 
-			$('#image-tab').on('click', function(event) {
+			$('#imageTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('image');
-				TIMAAT.UI.displayComponent('medium', 'image-tab', 'image-datatable', null, null, 'image');
-				$('#timaat-mediumdatasets-all-images').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'imageTab', 'imageDataTable', null, null, 'image');
+				$('#mediumDatasetsAllImages').trigger('click');
 			});
 
-			$('#software-tab').on('click', function(event) {
+			$('#softwareTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('software');
-				TIMAAT.UI.displayComponent('medium', 'software-tab', 'software-datatable', null, null, 'software');
-				$('#timaat-mediumdatasets-all-softwares').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'softwareTab', 'softwareDataTable', null, null, 'software');
+				$('#mediumDatasetsAllSoftwares').trigger('click');
 			});
 
-			$('#text-tab').on('click', function(event) {
+			$('#textTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('text');
-				TIMAAT.UI.displayComponent('medium', 'text-tab', 'text-datatable', null, null, 'text');
-				$('#timaat-mediumdatasets-all-texts').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'textTab', 'textDataTable', null, null, 'text');
+				$('#mediumDatasetsAllTexts').trigger('click');
 			});
 
-			$('#video-tab').on('click', function(event) {
+			$('#videoTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('video');
-				TIMAAT.UI.displayComponent('medium', 'video-tab', 'video-datatable', null, null, 'video');
-				$('#timaat-mediumdatasets-all-videos').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'videoTab', 'videoDataTable', null, null, 'video');
+				$('#mediumDatasetsAllVideos').trigger('click');
 			});
 
-			$('#videogame-tab').on('click', function(event) {
+			$('#videogameTab').on('click', function(event) {
 				TIMAAT.MediumDatasets.loadMediumSubtype('videogame');
-				TIMAAT.UI.displayComponent('medium', 'videogame-tab', 'videogame-datatable', null, null, 'videogame');
-				$('#timaat-mediumdatasets-all-videogames').trigger('click');
+				TIMAAT.UI.displayComponent('medium', 'videogameTab', 'videogameDataTable', null, null, 'videogame');
+				$('#mediumDatasetsAllVideogames').trigger('click');
 			});
 
-			$('#medium-tab-metadata').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumMetadataTab').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
-				TIMAAT.UI.displayDataSetContentArea('medium-metadata-form');
+				TIMAAT.UI.displayDataSetContentArea('mediumFormMetadata');
 				TIMAAT.UI.displayDataSetContent('dataSheet', medium, 'medium');
 				if ( type == 'medium') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + id);
@@ -201,12 +201,12 @@
 				}
 			});
 
-			$('#medium-tab-preview').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumPreviewTab').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
-				TIMAAT.UI.displayDataSetContentArea('medium-preview-form');
+				TIMAAT.UI.displayDataSetContentArea('mediumFormPreview');
 				TIMAAT.UI.displayDataSetContent('preview', medium, 'medium');
 				if ( type == 'medium') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Preview · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + id + '/preview');
@@ -215,146 +215,146 @@
 				}
 			});
 
-			$('#timaat-mediumdatasets-all-media').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allMedia');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllMedia').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllMedia');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllMediaList) {
 					await TIMAAT.MediumDatasets.setupAllMediaDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.url('/TIMAAT/api/medium/list')
 				TIMAAT.MediumDatasets.dataTableAllMediaList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('medium');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-media').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllMedia').addClass('list-group-item--is-active');
 				TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/list');
 			});
 
-			$('#timaat-mediumdatasets-all-audios').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allAudios');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllAudios').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllAudios');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllAudiosList) {
 					await TIMAAT.MediumDatasets.setupAllAudiosDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllAudiosList.ajax.url('/TIMAAT/api/medium/audio/list')
 				TIMAAT.MediumDatasets.dataTableAllAudiosList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('audio');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-audios').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllAudios').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Audio Library', '#medium/audio/list');
 			});
 
-			$('#timaat-mediumdatasets-all-documents').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allDocuments');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllDocuments').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllDocuments');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllDocumentsList) {
 					await TIMAAT.MediumDatasets.setupAllDocumentsDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllDocumentsList.ajax.url('/TIMAAT/api/medium/document/list')
 				TIMAAT.MediumDatasets.dataTableAllDocumentsList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('document');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-documents').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllDocuments').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Document Library', '#medium/document/list');
 			});
 
-			$('#timaat-mediumdatasets-all-images').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allImages');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllImages').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllImages');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllImagesList) {
 					await TIMAAT.MediumDatasets.setupAllImagesDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllImagesList.ajax.url('/TIMAAT/api/medium/image/list')
 				TIMAAT.MediumDatasets.dataTableAllImagesList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('image');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-images').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllImages').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Image Library', '#medium/image/list');
 			});
 
-			$('#timaat-mediumdatasets-all-softwares').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allSoftwares');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllSoftwares').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllSoftwares');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllSoftwaresList) {
 					await TIMAAT.MediumDatasets.setupAllSoftwaresDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllSoftwaresList.ajax.url('/TIMAAT/api/medium/software/list')
 				TIMAAT.MediumDatasets.dataTableAllSoftwaresList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('software');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-softwares').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllSoftwares').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Software Library', '#medium/software/list');
 			});
 
-			$('#timaat-mediumdatasets-all-texts').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allTexts');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllTexts').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllTexts');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllTextsList) {
 					await TIMAAT.MediumDatasets.setupAllTextsDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllTextsList.ajax.url('/TIMAAT/api/medium/text/list')
 				TIMAAT.MediumDatasets.dataTableAllTextsList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('text');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-texts').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllTexts').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Text Library', '#medium/text/list');
 			});
 
-			$('#timaat-mediumdatasets-all-videos').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allVideos');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllVideos').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllVideos');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllVideosList) {
 					await TIMAAT.MediumDatasets.setupAllVideosDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllVideosList.ajax.url('/TIMAAT/api/medium/video/list')
 				TIMAAT.MediumDatasets.dataTableAllVideosList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('video');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-videos').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllVideos').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Video Library', '#medium/video/list');
 			});
 
-			$('#timaat-mediumdatasets-all-videogames').on('click', async function(event) {
-				TIMAAT.UI.displayDataSetContentArea('medium-allVideogames');
-				$('#medium-nav-tabs').hide();
+			$('#mediumDatasetsAllVideogames').on('click', async function(event) {
+				TIMAAT.UI.displayDataSetContentArea('mediumAllVideogames');
+				$('#mediumNavTabs').hide();
 				if (!TIMAAT.MediumDatasets.dataTableAllVideogamesList) {
 					await TIMAAT.MediumDatasets.setupAllVideogamesDataTable();
 				}
 				TIMAAT.MediumDatasets.dataTableAllVideogamesList.ajax.url('/TIMAAT/api/medium/videogame/list')
 				TIMAAT.MediumDatasets.dataTableAllVideogamesList.ajax.reload().draw();
 				TIMAAT.UI.clearLastSelection('videogame');
-				$('#medium-metadata-form').data('medium', null);
-				$('#medium-metadata-form').data('type', null);
-				$('#timaat-mediumdatasets-all-videogames').addClass('active');
+				$('#mediumFormMetadata').data('medium', null);
+				$('#mediumFormMetadata').data('type', null);
+				$('#mediumDatasetsAllVideogames').addClass('active');
 				TIMAAT.URLHistory.setURL(null, 'Videogame Library', '#medium/videogame/list');
 			});
 
-			// add medium button functionality (in medium list - opens datasheet form)
-			//* media have to be created via submedium
-			// $('#timaat-mediadatasets-medium-add').on('click', function(event) {
-			// 	$('#medium-metadata-form').data('type', 'medium');
-			// 	$('#medium-metadata-form').data('medium', null);
+			// add medium button functionality (in medium list - opens data sheet form)
+			//* media have to be created via sub-medium
+			// $('#mediumDatasetsMediumAddButton').on('click', function(event) {
+			// 	$('#mediumFormMetadata').data('type', 'medium');
+			// 	$('#mediumFormMetadata').data('medium', null);
 			// 	TIMAAT.MediumDatasets.addMedium('medium');
 			// });
 
 			// delete medium button (in form) handler
-			$('.mediadatasheet-form-delete-button').on('click', function(event) {
+			$('.mediumDataSheetFormDeleteButton').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				$('#mediumVideoPreview').get(0).pause();
-				$('#timaat-mediadatasets-medium-delete').data('medium', $('#medium-metadata-form').data('medium'));
-				$('#timaat-mediadatasets-medium-delete').modal('show');
+				$('#mediumDatasetsMediumDeleteModal').data('medium', $('#mediumFormMetadata').data('medium'));
+				$('#mediumDatasetsMediumDeleteModal').modal('show');
 			});
 
 			// confirm delete medium modal functionality
-			$('#timaat-mediadatasets-modal-delete-submit-button').on('click', async function(event) {
-				let modal = $('#timaat-mediadatasets-medium-delete');
+			$('#mediumDatasetsModalDeleteSubmitButton').on('click', async function(event) {
+				let modal = $('#mediumDatasetsMediumDeleteModal');
 				let medium = modal.data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
         // console.log("TCL: $ -> type", type);
@@ -365,7 +365,7 @@
 						console.error("ERROR: ", error);
 					}
 					try {
-						if ($('#medium-tab').hasClass('active')) {
+						if ($('#mediumTab').hasClass('active')) {
 							await TIMAAT.UI.refreshDataTable('medium');
 						} else {
 							await TIMAAT.UI.refreshDataTable(type);
@@ -375,36 +375,36 @@
 					}
 				}
 				modal.modal('hide');
-				if ( $('#medium-tab').hasClass('active') ) {
-					$('#medium-tab').trigger('click');
+				if ( $('#mediumTab').hasClass('active') ) {
+					$('#mediumTab').trigger('click');
 				} else {
-					$('#'+type+'-tab').trigger('click');
+					$('#'+type+'Tab').trigger('click');
 				}
 			});
 
 			// edit content form button handler
-			$('.mediadatasheet-form-edit-button').on('click', function(event) {
+			$('.mediumDataSheetFormEditButton').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				let medium = $('#medium-metadata-form').data('medium');
+				let medium = $('#mediumFormMetadata').data('medium');
 				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, medium, 'medium', 'edit');
 			});
 
 			// medium form handlers
 			// submit medium metadata button functionality
-			$('#medium-metadata-form-submit-button').on('click', async function(event) {
+			$('#mediumFormMetadataSubmitButton').on('click', async function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
-				if (!$('#medium-metadata-form').valid()) return false;
+				if (!$('#mediumFormMetadata').valid()) return false;
 
-				var medium = $('#medium-metadata-form').data('medium');
+				var medium = $('#mediumFormMetadata').data('medium');
         // console.log("TCL: $ -> medium", medium);
-				var type = $('#medium-metadata-form').data('type');
+				var type = $('#mediumFormMetadata').data('type');
         // console.log("TCL: $ -> type", type);
 
 				// create/edit medium window submitted data
 				TIMAAT.MediumDatasets.disableReadOnlyDataFields(false);
-				var formData = $('#medium-metadata-form').serializeArray();
+				var formData = $('#mediumFormMetadata').serializeArray();
 				TIMAAT.MediumDatasets.disableReadOnlyDataFields(true);
 				var formDataObject = {};
 				$(formData).each(function(i, field){
@@ -496,12 +496,12 @@
 					var newMedium = await TIMAAT.MediumDatasets.createMedium(type, mediumModel, mediumSubtypeModel, displayTitleModel, sourceModel);
 					medium = new TIMAAT.Medium(newMedium, type);
 					medium.model.fileStatus = 'noFile';
-					$('#medium-metadata-form').data('medium', medium);
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium');
-					$('#medium-tab-metadata').trigger('click');
+					$('#mediumFormMetadata').data('medium', medium);
+					TIMAAT.UI.displayDataSetContentContainer('mediumDataTab', 'mediumFormMetadata', 'medium');
+					$('#mediumMetadataTab').trigger('click');
 				}
 				TIMAAT.MediumDatasets.showAddMediumButton();
-				if ($('#medium-tab').hasClass('active')) {
+				if ($('#mediumTab').hasClass('active')) {
 					await TIMAAT.UI.refreshDataTable('medium');
 				} else {
 					await TIMAAT.UI.refreshDataTable(type);
@@ -511,27 +511,27 @@
 			});
 
 			// cancel add/edit button in content form functionality
-			$('#medium-metadata-form-dismiss-button').on('click', async function(event) {
+			$('#mediumFormMetadataDismissButton').on('click', async function(event) {
 				TIMAAT.MediumDatasets.showAddMediumButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
 			// category set button handler
-			$('#medium-datasheet-form-categoryset-button').on('click', async function(event) {
+			$('#mediumDataSheetFormCategorySetButton').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var modal = $('#timaat-mediadatasets-medium-categorysets');
-				modal.data('medium', $('#medium-metadata-form').data('medium'));
+				var modal = $('#mediumDatasetsMediumCategorySetsModal');
+				modal.data('medium', $('#mediumFormMetadata').data('medium'));
 				var medium = modal.data('medium');
 				modal.find('.modal-body').html(`
 					<form role="form" id="mediumCategorySetsForm">
 						<div class="form-group">
-							<!-- <label for="medium-categorySets-multi-select-dropdown">Medium category sets</label> -->
+							<!-- <label for="mediumCategorySetsMultiSelectDropdown">Medium category sets</label> -->
 							<div class="col-md-12">
 								<select class="form-control form-control-md multi-select-dropdown"
 												style="width:100%;"
-												id="medium-categorySets-multi-select-dropdown"
+												id="mediumCategorySetsMultiSelectDropdown"
 												name="categorySetId"
 												data-role="categorySetId"
 												data-placeholder="Select medium category sets"
@@ -540,7 +540,7 @@
 							</div>
 						</div>
 					</form>`);
-				$('#medium-categorySets-multi-select-dropdown').select2({
+				$('#mediumCategorySetsMultiSelectDropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -573,7 +573,7 @@
 				});
 				TIMAAT.MediumService.getCategorySetList(medium.model.id).then(function(data) {
 					// console.log("TCL: then: data", data);
-					var categorySetSelect = $('#medium-categorySets-multi-select-dropdown');
+					var categorySetSelect = $('#mediumCategorySetsMultiSelectDropdown');
 					if (data.length > 0) {
 						data.sort((a, b) => (a.name > b.name)? 1 : -1);
 						// create the options and append to Select2
@@ -595,10 +595,10 @@
 			});
 
 			// submit category set modal button functionality
-			$('#timaat-mediadatasets-modal-categoryset-submit').on('click', async function(event) {
+			$('#mediumDatasetsModalCategorySetSubmit').on('click', async function(event) {
 				event.preventDefault();
 				// console.log("TCL: submit category set list");
-				var modal = $('#timaat-mediadatasets-medium-categorysets');
+				var modal = $('#mediumDatasetsMediumCategorySetsModal');
 				if (!$('#mediumCategorySetsForm').valid())
 					return false;
 				var medium = modal.data('medium');
@@ -621,25 +621,25 @@
 					// console.log("TCL: updatedMediumModel", updatedMediumModel);
 					medium.model.categorySets = updatedMediumModel.categorySets;
 				}
-				$('#medium-metadata-form').data('medium', medium);
+				$('#mediumFormMetadata').data('medium', medium);
 				modal.modal('hide');
 			});
 
 			// category button handler
-			$('#medium-datasheet-form-category-button').on('click', async function(event) {
+			$('#mediumDataSheetFormCategoryButton').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var modal = $('#timaat-mediadatasets-medium-categories');
-				modal.data('medium', $('#medium-metadata-form').data('medium'));
+				var modal = $('#mediumDatasetsMediumCategoriesModal');
+				modal.data('medium', $('#mediumFormMetadata').data('medium'));
 				var medium = modal.data('medium');
 				modal.find('.modal-body').html(`
 					<form role="form" id="mediumCategoriesForm">
 						<div class="form-group">
-							<!-- <label for="medium-categories-multi-select-dropdown">Medium categories</label> -->
+							<!-- <label for="mediumCategoriesMultiSelectDropdown">Medium categories</label> -->
 							<div class="col-md-12">
 								<select class="form-control form-control-md multi-select-dropdown"
 												style="width:100%;"
-												id="medium-categories-multi-select-dropdown"
+												id="mediumCategoriesMultiSelectDropdown"
 												name="categoryId"
 												data-role="categoryId"
 												data-placeholder="Select medium categories"
@@ -648,7 +648,7 @@
 							</div>
 						</div>
 					</form>`);
-				$('#medium-categories-multi-select-dropdown').select2({
+				$('#mediumCategoriesMultiSelectDropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -682,7 +682,7 @@
 				});
 				TIMAAT.MediumService.getSelectedCategories(medium.model.id).then(function(data) {
 					// console.log("TCL: then: data", data);
-					var categorySelect = $('#medium-categories-multi-select-dropdown');
+					var categorySelect = $('#mediumCategoriesMultiSelectDropdown');
 					if (data.length > 0) {
 						data.sort((a, b) => (a.name > b.name)? 1 : -1);
 						// create the options and append to Select2
@@ -704,10 +704,10 @@
 			});
 
 			// submit category modal button functionality
-			$('#timaat-mediadatasets-modal-category-submit').on('click', async function(event) {
+			$('#mediumDatasetsModalCategorySubmit').on('click', async function(event) {
 				event.preventDefault();
 				// console.log("TCL: submit category list");
-				var modal = $('#timaat-mediadatasets-medium-categories');
+				var modal = $('#mediumDatasetsMediumCategoriesModal');
 				if (!$('#mediumCategoriesForm').valid())
 					return false;
 				var medium = modal.data('medium');
@@ -730,25 +730,25 @@
 					// console.log("TCL: updatedMediumModel", updatedMediumModel);
 					medium.model.categories = updatedMediumModel.categories;
 				}
-				$('#medium-metadata-form').data('medium', medium);
+				$('#mediumFormMetadata').data('medium', medium);
 				modal.modal('hide');
 			});
 
 			// tag button handler
-			$('#medium-datasheet-form-tag-button').on('click', async function(event) {
+			$('#mediumDataSheetFormTagButton').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var modal = $('#timaat-mediadatasets-medium-tags');
-				modal.data('medium', $('#medium-metadata-form').data('medium'));
+				var modal = $('#mediumDatasetsMediumTagsModal');
+				modal.data('medium', $('#mediumFormMetadata').data('medium'));
 				var medium = modal.data('medium');
 				modal.find('.modal-body').html(`
 					<form role="form" id="mediumTagsForm">
 						<div class="form-group">
-							<label for="medium-tags-multi-select-dropdown">Medium tags</label>
+							<label for="mediumTagsMultiSelectDropdown">Medium tags</label>
 							<div class="col-md-12">
 								<select class="form-control form-control-md multi-select-dropdown"
 												style="width:100%;"
-												id="medium-tags-multi-select-dropdown"
+												id="mediumTagsMultiSelectDropdown"
 												name="tagId"
 												data-role="tagId"
 												data-placeholder="Select medium tags"
@@ -757,7 +757,7 @@
 							</div>
 						</div>
 					</form>`);
-        $('#medium-tags-multi-select-dropdown').select2({
+        $('#mediumTagsMultiSelectDropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -791,7 +791,7 @@
 				});
 				await TIMAAT.MediumService.getTagList(medium.model.id).then(function(data) {
 					// console.log("TCL: then: data", data);
-					var tagSelect = $('#medium-tags-multi-select-dropdown');
+					var tagSelect = $('#mediumTagsMultiSelectDropdown');
 					if (data.length > 0) {
 						data.sort((a, b) => (a.name > b.name)? 1 : -1);
 						// create the options and append to Select2
@@ -813,9 +813,9 @@
 			});
 
 			// submit tag modal button functionality
-			$('#timaat-mediadatasets-modal-tag-submit').on('click', async function(event) {
+			$('#mediumDatasetsModalTagSubmit').on('click', async function(event) {
 				event.preventDefault();
-				var modal = $('#timaat-mediadatasets-medium-tags');
+				var modal = $('#mediumDatasetsMediumTagsModal');
 				if (!$('#mediumTagsForm').valid())
 					return false;
 				var medium = modal.data('medium');
@@ -836,31 +836,31 @@
 					// console.log("TCL: updatedMediumModel", updatedMediumModel);
 					medium.model.tags = updatedMediumModel.tags;
 				}
-				$('#medium-metadata-form').data('medium', medium);
+				$('#mediumFormMetadata').data('medium', medium);
 				modal.modal('hide');
 			});
 
-			$('#timaat-mediadatasets-metadata-type-id').on('change', function(event) {
+			$('#mediumDatasetsMetadataTypeId').on('change', function(event) {
 				event.stopPropagation();
-				let type = $('#timaat-mediadatasets-metadata-type-id').find('option:selected').html();
+				let type = $('#mediumDatasetsMetadataTypeId').find('option:selected').html();
 				TIMAAT.MediumDatasets.initFormDataSheetData(type);
 			});
 
 			// upload button handler
-			$('.js-form-upload-button').on('click', async function(event) {
+			$('.uploadMediumButton').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				let medium = $('#medium-metadata-form').data('medium');
+				let medium = $('#mediumFormMetadata').data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				medium = new TIMAAT.Medium(medium.model, type);
-				medium.listView.find('.timaat-medium-upload-file').click();
+				medium.listView.find('.mediumUploadFile').click();
 			});
 
 			// file upload success event handler
 			$(document).on('success.upload.medium.TIMAAT', async function(event, uploadedMedium) {
       	// console.log("TCL: Medium -> constructor -> event, uploadedMedium", event, uploadedMedium);
 				if ( !uploadedMedium ) return;
-				var medium = $('#medium-metadata-form').data('medium');
+				var medium = $('#mediumFormMetadata').data('medium');
 				if ( medium == undefined || medium.model.id != uploadedMedium.id ) return;
 				var type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				medium.model.fileStatus = await TIMAAT.MediumService.updateFileStatus(medium.model, type);
@@ -871,7 +871,7 @@
 					switch (type) {
 						case 'audio':
 							medium.model.mediumAudio.length = uploadedMedium.mediumAudio.length;
-							if ($('#medium-tab').hasClass('active')) {
+							if ($('#mediumTab').hasClass('active')) {
 								await TIMAAT.UI.refreshDataTable('medium');
 							} else {
 								await TIMAAT.UI.refreshDataTable('audio');
@@ -881,7 +881,7 @@
 							medium.model.mediumImage.width = uploadedMedium.mediumImage.width;
 							medium.model.mediumImage.height = uploadedMedium.mediumImage.height;
 							// medium.model.mediumImage.bitDepth = uploadedMedium.mediumImage.bitDepth; // TODO
-							if ($('#medium-tab').hasClass('active')) {
+							if ($('#mediumTab').hasClass('active')) {
 								await TIMAAT.UI.refreshDataTable('medium');
 							} else {
 								await TIMAAT.UI.refreshDataTable('image');
@@ -892,7 +892,7 @@
 							medium.model.mediumVideo.height = uploadedMedium.mediumVideo.height;
 							medium.model.mediumVideo.length = uploadedMedium.mediumVideo.length;
 							medium.model.mediumVideo.frameRate = uploadedMedium.mediumVideo.frameRate;
-							if ($('#medium-tab').hasClass('active')) {
+							if ($('#mediumTab').hasClass('active')) {
 								await TIMAAT.UI.refreshDataTable('medium');
 							} else {
 								await TIMAAT.UI.refreshDataTable('video');
@@ -900,8 +900,8 @@
 						break;
 					}
 				}
-				$('.js-form-upload-button').hide();
-				$('.js-form-upload-button').prop('disabled', true);
+				$('.uploadMediumButton').hide();
+				$('.uploadMediumButton').prop('disabled', true);
 				if (TIMAAT.UI.subNavTab == 'preview') {
 					TIMAAT.UI.displayDataSetContent('preview', medium, 'medium');
 				} else {
@@ -910,11 +910,11 @@
 			});
 
 			// annotate button handler
-			$('.medium-datasheet-form-annotate-button').on('click', async function(event) {
+			$('.mediumDataSheetFormAnnotateButton').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var medium = $('#medium-metadata-form').data('medium');
-				TIMAAT.UI.showComponent('videoplayer');
+				var medium = $('#mediumFormMetadata').data('medium');
+				TIMAAT.UI.showComponent('videoPlayer');
 				// setup medium in player
 				TIMAAT.VideoPlayer.setupMedium(medium.model);
 				// load medium annotations from server
@@ -924,34 +924,34 @@
 			});
 
 			// data table events
-			$('.mediadataset-table').on('page.dt', function () {
+			$('.mediumDatasetTable').on('page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
 			// Key press events
-			$('#medium-metadata-form-submit-button').on('keypress', function(event) {
+			$('#mediumFormMetadataSubmitButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#medium-metadata-form-submit-button').trigger('click');
+					$('#mediumFormMetadataSubmitButton').trigger('click');
 				}
 			});
 
-			$('#medium-metadata-form-dismiss-button').on('keypress', function(event) {
+			$('#mediumFormMetadataDismissButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#medium-metadata-form-dismiss-button').trigger('click');
+					$('#mediumFormMetadataDismissButton').trigger('click');
 				}
 			});
 
 		},
 
 		initTitles: function() {
-			$('#medium-tab-titles').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumTitlesTab').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
-				TIMAAT.UI.displayDataSetContentArea('medium-titles-form');
+				TIMAAT.UI.displayDataSetContentArea('mediumFormTitles');
 				TIMAAT.MediumDatasets.setMediumTitleList(medium);
 				TIMAAT.UI.displayDataSetContent('titles', medium, 'medium');
 				if (type == 'medium') {
@@ -973,11 +973,11 @@
 			});
 
 			// Add title button click
-			// $(document).on('click','[data-role="medium-new-title-fields"] > .form-group [data-role="add"]', function(event) {
-			$(document).on('click','.add-actor-has-roles-button', function(event) {
+			// $(document).on('click','[data-role="mediumNewTitleFields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.addActorHasRolesButton', function(event) {
 					event.preventDefault();
 				// console.log("TCL: add title to list");
-				var listEntry = $(this).closest('[data-role="medium-new-title-fields"]');
+				var listEntry = $(this).closest('[data-role="mediumNewTitleFields"]');
 				var title = '';
 				var languageId = null;
 				var languageName = '';
@@ -988,18 +988,18 @@
 					languageId = $(this).val();
 					languageName =$(this).text();
 				}));
-				if (!$('#medium-titles-form').valid())
+				if (!$('#mediumFormTitles').valid())
 					return false;
 				if (title != '' && languageId != null) {
-					var titlesInForm = $('#medium-titles-form').serializeArray();
+					var titlesInForm = $('#mediumFormTitles').serializeArray();
 					// console.log("TCL: titlesInForm", titlesInForm);
 					var numberOfTitleElements = 2;
 					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements-1].name; // find last used indexed name
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 					var i = Number(indexString)+1;
           // console.log("i", i);
-					$('#medium-dynamic-title-fields').append(
-						`<div class="form-group" data-role="title-entry">
+					$('#mediumDynamicTitleFields').append(
+						`<div class="form-group" data-role="titleEntry">
 						<div class="form-row">
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
@@ -1024,7 +1024,7 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name"
+								<input class="form-control form-control-sm mediumDatasetsMediumTitlesTitleName"
 											 name="newTitle[`+i+`]"
 											 data-role="newTitle[`+i+`]"
 											 placeholder="[Enter title]"
@@ -1036,22 +1036,22 @@
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
-												id="medium-new-title-language-select-dropdown_`+i+`"
+								<select class="form-control form-control-sm mediumDatasetsMediumTitlesTitleLanguageId"
+												id="mediumNewTitleLanguageSelectDropdown_`+i+`"
 												name="newTitleLanguageId[`+i+`]"
 												data-role="newTitleLanguageId[`+i+`]"
 												required>
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="form-group__button js-form-group__button remove-title-button btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button removeTitleButton btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>
 					</div>`
 					);
-					$('#medium-new-title-language-select-dropdown_'+i).select2({
+					$('#mediumNewTitleLanguageSelectDropdown_'+i).select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -1083,12 +1083,12 @@
 						},
 						minimumInputLength: 0,
 					});
-					var languageSelect = $('#medium-new-title-language-select-dropdown_'+i);
+					var languageSelect = $('#mediumNewTitleLanguageSelectDropdown_'+i);
 					var option = new Option(languageName, languageId, true, true);
 					languageSelect.append(option).trigger('change');
 					$('input[name="newTitle['+i+']"]').rules('add', { required: true, minlength: 3, maxlength: 200, });
 					$('input[data-role="newTitle['+i+']"]').attr('value', TIMAAT.MediumDatasets.replaceSpecialCharacters(title));
-					$('#medium-title-language-select-dropdown').empty();
+					$('#mediumTitleLanguageSelectDropdown').empty();
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
@@ -1102,8 +1102,8 @@
 			});
 
 			// Remove title button click
-			// $(document).on('click','[data-role="medium-dynamic-title-fields"] > .form-group [data-role="remove"]', function(event) {
-			$(document).on('click','.remove-title-button', function(event) {
+			// $(document).on('click','[data-role="mediumDynamicTitleFields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.removeTitleButton', function(event) {
 					event.preventDefault();
 				var isDisplayTitle = $(this).closest('.form-group').find('input[name=isDisplayTitle]:checked').val();
 				if (isDisplayTitle == "on") {
@@ -1118,29 +1118,29 @@
 			});
 
 			// Submit medium titles button functionality
-			$('#medium-titles-form-submit').on('click', async function(event) {
+			$('#mediumFormTitlesSubmit').on('click', async function(event) {
 				// console.log("TCL: Titles form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("medium-new-title-fields");
+				var node = document.getElementById("mediumNewTitleFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				};
 				// test if form is valid
-				if (!$('#medium-titles-form').valid()) {
-					$('[data-role="medium-new-title-fields"]').append(TIMAAT.MediumDatasets.titleFormTitleToAppend());
+				if (!$('#mediumFormTitles').valid()) {
+					$('[data-role="mediumNewTitleFields"]').append(TIMAAT.MediumDatasets.titleFormTitleToAppend());
 					this.getTitleFormLanguageDropdownData();
 					return false;
 				}
 				// console.log("TCL: Titles form: valid");
 
 				// the original medium model (in case of editing an existing medium)
-				var medium = $('#medium-titles-form').data("medium");
+				var medium = $('#mediumFormTitles').data("medium");
 				var type = medium.model.mediaType.mediaTypeTranslations[0].type;
         // console.log("TCL: type", type);
 
 				// Create/Edit medium window submitted data
-				var formData = $('#medium-titles-form').serializeArray();
+				var formData = $('#mediumFormTitles').serializeArray();
         console.log("TCL: $ -> formData", formData);
 				var formTitleList = [];
 				var i = 0;
@@ -1333,7 +1333,7 @@
 					}
 				}
 				// console.log("TCL: show medium title form");
-				if ($('#medium-tab').hasClass('active')) {
+				if ($('#mediumTab').hasClass('active')) {
 					await TIMAAT.UI.refreshDataTable('medium');
 				} else {
 					await TIMAAT.UI.refreshDataTable(type);
@@ -1343,50 +1343,50 @@
 			});
 
 			// Cancel add/edit button in titles form functionality
-			$('#medium-titles-form-dismiss').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumFormTitlesDismiss').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				TIMAAT.UI.displayDataSetContent('titles', medium, 'medium');
 			});
 
 			// Key press events
-			$('#medium-titles-form-submit').on('keypress', function(event) {
+			$('#mediumFormTitlesSubmit').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#medium-titles-form-submit').trigger('click');
+					$('#mediumFormTitlesSubmit').trigger('click');
 				}
 			});
 
-			$('#medium-titles-form-dismiss').on('keypress', function(event) {
+			$('#mediumFormTitlesDismiss').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#medium-titles-form-dismiss').trigger('click');
+					$('#mediumFormTitlesDismiss').trigger('click');
 				}
 			});
 
-			$('#medium-dynamic-title-fields').on('keypress', function(event) {
+			$('#mediumDynamicTitleFields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#medium-new-title-fields').on('keypress', function(event) {
+			$('#mediumNewTitleFields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
-					$('#medium-new-title-fields').find('[data-role="add"]').trigger('click');
+					$('#mediumNewTitleFields').find('[data-role="add"]').trigger('click');
 				}
 			});
 		},
 
 		initLanguageTracks: function() {
-			// languagetrack tab click handling
-			$('#medium-tab-languagetracks').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			// language track tab click handling
+			$('#mediumLanguageTracksTab').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
-				TIMAAT.UI.displayDataSetContentArea('medium-languagetracks-form');
+				TIMAAT.UI.displayDataSetContentArea('mediumFormLanguageTracks');
 				TIMAAT.MediumDatasets.setMediumLanguageTrackList(medium);
 				TIMAAT.UI.displayDataSetContent('languageTracks', medium, 'medium');
 				if (type == 'medium') {
@@ -1397,17 +1397,17 @@
 			});
 
 			// Add languageTrack button click
-			// $(document).on('click','[data-role="medium-new-languagetrack-fields"] > .form-group [data-role="add"]', async function(event) {
-			$(document).on('click','.add-language-track-button', async function(event) {
+			// $(document).on('click','[data-role="mediumNewLanguageTrackFields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','.addLanguageTrackButton', async function(event) {
 					event.preventDefault();
-				var listEntry = $(this).closest('[data-role="medium-new-languagetrack-fields"]');
+				var listEntry = $(this).closest('[data-role="mediumNewLanguageTrackFields"]');
 				var mediumLanguageTypeId = listEntry.find('[data-role="languageTrackTypeId"]').val();
 				var languageId = listEntry.find('[data-role="languageTrackLanguageId"]').val();
 				var languageName = listEntry.find('[data-role="languageTrackLanguageId"]').text();
-				// if (!$('#medium-languagetracks-form').valid()) return false;
+				// if (!$('#mediumFormLanguageTracks').valid()) return false;
 				if (mediumLanguageTypeId != null && languageId != null) {
-					var medium = $('#medium-metadata-form').data('medium');
-					var languageTracksInForm = $('#medium-languagetracks-form').serializeArray();
+					var medium = $('#mediumFormMetadata').data('medium');
+					var languageTracksInForm = $('#mediumFormLanguageTracks').serializeArray();
 					var newTrackEntry = {
 						mediumId: medium.model.id,
 						languageId: Number(languageTracksInForm[languageTracksInForm.length-1].value),
@@ -1425,12 +1425,12 @@
 					if (!duplicate) {
 						var i = Math.floor((languageTracksInForm.length -2) / 2 ); // length -2 as the 'add new track' row is still part of the form and has to be removed
 						// console.log("TCL: i", i);
-						$('#medium-dynamic-languagetrack-fields').append(
-							`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
+						$('#mediumDynamicLanguageTrackFields').append(
+							`<div class="form-group" data-role="languageTrackEntry" data-id="`+i+`">
 							<div class="form-row">
 								<div class="col-md-5">
 									<label class="sr-only">Track Type</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id"
+									<select class="form-control form-control-sm mediumDatasetsMediumLanguageTracksLanguageTrackTypeId"
 													name="languageTrackTypeId[`+i+`]"
 													data-role="languageTrackTypeId[`+i+`]"
 													required
@@ -1441,22 +1441,22 @@
 								</div>
 								<div class="col-md-5">
 									<label class="sr-only">Track Language</label>
-									<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id"
-													id="new-languagetrack-language-select-dropdown_`+i+`"
+									<select class="form-control form-control-sm mediumDatasetsMediumLanguageTracksLanguageTrackLanguageId"
+													id="newLanguageTrackLanguageSelectDropdown_`+i+`"
 													name="languageTrackLanguageId[`+i+`]"
 													data-role="languageTrackLanguageId[`+i+`]"
 													required>
 									</select>
 								</div>
 								<div class="col-md-2 text-center">
-									<button class="form-group__button js-form-group__button remove-language-track-button btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button removeLanguageTrackButton btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
 							</div>
 						</div>`
 						);
-						$('#new-languagetrack-language-select-dropdown_'+i).select2({
+						$('#newLanguageTrackLanguageSelectDropdown_'+i).select2({
 							closeOnSelect: true,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -1488,7 +1488,7 @@
 							},
 							minimumInputLength: 0,
 						});
-						var languageSelect = $('#new-languagetrack-language-select-dropdown_'+i);
+						var languageSelect = $('#newLanguageTrackLanguageSelectDropdown_'+i);
 						var option = new Option(languageName, languageId, true, true);
 						languageSelect.append(option).trigger('change');
 						$('[data-role="languageTrackTypeId['+i+']"]').find('option[value='+mediumLanguageTypeId+']').attr('selected', true);
@@ -1500,7 +1500,7 @@
 						TIMAAT.UI.displayDataSetContent('languageTracks', medium, 'medium', 'edit');
 					}
 					else { // duplicate entry
-						$('#timaat-mediadatasets-languagetrack-duplicate').modal("show");
+						$('#mediumDatasetsLanguageTrackDuplicateModal').modal("show");
 					}
 				}
 				else { // incomplete form data
@@ -1509,12 +1509,12 @@
 			});
 
 			// Remove languageTrack button click
-			// $(document).on('click','[data-role="medium-dynamic-languagetrack-fields"] > .form-group [data-role="remove"]', async function(event) {
-			$(document).on('click','.remove-language-track-button', async function(event) {
+			// $(document).on('click','[data-role="mediumDynamicLanguageTrackFields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','.removeLanguageTrackButton', async function(event) {
 					event.preventDefault();
 				var entry = $(this).closest('.form-group').attr('data-id');
-				var medium = $('#medium-metadata-form').data('medium');
-				var listEntry = $(this).closest('[data-role="medium-dynamic-languagetrack-fields"]');
+				var medium = $('#mediumFormMetadata').data('medium');
+				var listEntry = $(this).closest('[data-role="mediumDynamicLanguageTrackFields"]');
 				var mediumLanguageTypeId = listEntry.find('[name="languageTrackTypeId['+entry+']"]').val();
 				var languageId = listEntry.find('[name="languageTrackLanguageId['+entry+']"]').val();
 				var i = 0;
@@ -1530,20 +1530,20 @@
 			});
 
 			// Done button in languageTracks form functionality
-			$('#medium-languagetracks-form-done').click( function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumFormLanguageTracksDoneButton').click( function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				TIMAAT.UI.displayDataSetContent('languageTracks', medium, 'medium');
 			});
 
 		},
 
 		initActorRoles: function() {
-			$('#medium-tab-actorwithroles').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumActorWithRolesTab').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				let type = medium.model.mediaType.mediaTypeTranslations[0].type;
 				let name = medium.model.displayTitle.name;
 				let id = medium.model.id;
-				TIMAAT.UI.displayDataSetContentArea('medium-actorwithroles-form');
+				TIMAAT.UI.displayDataSetContentArea('mediumFormActorWithRoles');
 				TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
 				if ( type == 'medium') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Actors with Roles · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + id + '/actorsWithRoles');
@@ -1553,11 +1553,11 @@
 			});
 
 			// add actor-has-roles button click
-			// $(document).on('click','[data-role="medium-new-actorwithrole-fields"] > .form-group [data-role="add"]', async function(event) {
-			$(document).on('click','.add-actor-has-roles-button', async function(event) {
+			// $(document).on('click','[data-role="mediumNewActorWithRoleFields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','.addActorHasRolesButton', async function(event) {
 					// console.log("TCL: add new actor with role(s)");
 				event.preventDefault();
-				var listEntry = $(this).closest('[data-role="medium-new-actorwithrole-fields"]');
+				var listEntry = $(this).closest('[data-role="mediumNewActorWithRoleFields"]');
 				var newFormEntry = [];
 				if (listEntry.find('select').each(function(){
 					newFormEntry.push($(this).val());
@@ -1565,15 +1565,15 @@
 				// var newEntryId = newFormEntry[0];
 				// console.log("TCL: newFormEntry", newFormEntry);
 
-				if (!$('#medium-actorwithroles-form').valid() || newFormEntry[1].length == 0) //! temp solution to prevent adding actors without roles
-				// if (!$('#medium-actorwithroles-form').valid())
+				if (!$('#mediumFormActorWithRoles').valid() || newFormEntry[1].length == 0) //! temp solution to prevent adding actors without roles
+				// if (!$('#mediumFormActorWithRoles').valid())
 				return false;
 
-				$('.disable-on-submit').prop('disabled', true);
-				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', false);
-				var existingEntriesInForm = $('#medium-actorwithroles-form').serializeArray();
-				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
-				$('.disable-on-submit').prop('disabled', false);
+				$('.disableOnSubmit').prop('disabled', true);
+				$('[id^="mediumHasActorWithRoleActorId-"').prop('disabled', false);
+				var existingEntriesInForm = $('#mediumFormActorWithRoles').serializeArray();
+				$('[id^="mediumHasActorWithRoleActorId-"').prop('disabled', true);
+				$('.disableOnSubmit').prop('disabled', false);
 				// console.log("TCL: existingEntriesInForm", existingEntriesInForm);
 
 				// create list of actorIds that the medium is already connected with
@@ -1602,17 +1602,17 @@
 
 				if (!duplicate) {
 					// var newActorId = newFormEntry[0];
-					var newActorSelectData = $('#mediumhasactorwithrole-actorid').select2('data');
+					var newActorSelectData = $('#mediumHasActorWithRoleActorId').select2('data');
 					var newActorId = newActorSelectData[0].id;
           console.log("TCL: $ -> newActorId", newActorId);
-					var newRoleSelectData = $('#medium-actorwithroles-multi-select-dropdown').select2('data');
+					var newRoleSelectData = $('#mediumActorWithRolesMultiSelectDropdown').select2('data');
 					// var actorHasRoleIds = newFormEntry[1];
-					$('#medium-dynamic-actorwithrole-fields').append(TIMAAT.MediumDatasets.appendActorWithRolesDataset(existingEntriesIdList.length, newActorId));
+					$('#mediumDynamicActorWithRoleFields').append(TIMAAT.MediumDatasets.appendActorWithRolesDataset(existingEntriesIdList.length, newActorId));
 					TIMAAT.MediumDatasets.getMediumHasActorWithRoleData(newActorId);
 					// select actor for new entry
 					await TIMAAT.ActorService.getActor(newActorId).then(function (data) {
             console.log("TCL: newActorId", newActorId);
-						var actorSelect = $('#mediumhasactorwithrole-actorid-'+newActorId);
+						var actorSelect = $('#mediumHasActorWithRoleActorId-'+newActorId);
 						// console.log("TCL: actorSelect", actorSelect);
 						// console.log("TCL: then: data", data);
 						var option = new Option(data.displayName.name, data.id, true, true);
@@ -1625,12 +1625,12 @@
 							}
 						});
 					});
-					$('#mediumhasactorwithrole-actorid-'+newActorId).prop('disabled', true);
+					$('#mediumHasActorWithRoleActorId-'+newActorId).prop('disabled', true);
 
 					// provide roles list for new actor entry
 					TIMAAT.MediumDatasets.getMediumHasActorWithRolesDropdownData(newActorId);
 
-					var roleSelect = $('#medium-actorwithroles-multi-select-dropdown-'+newActorId);
+					var roleSelect = $('#mediumActorWithRolesMultiSelectDropdown-'+newActorId);
 					var j = 0;
 					for (; j < newRoleSelectData.length; j++) {
 						var option = new Option(newRoleSelectData[j].text, newRoleSelectData[j].id, true, true);
@@ -1644,30 +1644,30 @@
 					});
 
 					// clear new entry values
-					$('#mediumhasactorwithrole-actorid').val(null).trigger('change');
-					// $('#mediumhasactorwithrole-actorid').prop('required', true);
-					$('#medium-actorwithroles-multi-select-dropdown').val(null).trigger('change');
-					// $('#medium-actorwithroles-multi-select-dropdown').prop('required', true);
+					$('#mediumHasActorWithRoleActorId').val(null).trigger('change');
+					// $('#mediumHasActorWithRoleActorId').prop('required', true);
+					$('#mediumActorWithRolesMultiSelectDropdown').val(null).trigger('change');
+					// $('#mediumActorWithRolesMultiSelectDropdown').prop('required', true);
 				}
 				else { // duplicate actor
-					$('#timaat-mediadatasets-actorwithrole-duplicate').modal('show');
+					$('#mediumDatasetsActorWithRoleDuplicateModal').modal('show');
 				}
 			});
 
-			// remove actorwithroles button click
-			// $(document).on('click','[data-role="medium-dynamic-actorwithrole-fields"] > .form-group [data-role="remove"]', async function(event) {
-			$(document).on('click','.remove-actor-with-role-button', async function(event) {
+			// remove actor with roles button click
+			// $(document).on('click','[data-role="mediumDynamicActorWithRoleFields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','.removeActorWithRoleButton', async function(event) {
 					// console.log("TCL: remove actor with role(s)");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
-			// submit actorwithroles button functionality
-			$('#medium-actorwithroles-form-submit').on('click', async function(event) {
+			// submit actor with roles button functionality
+			$('#mediumFormActorWithRolesSubmitButton').on('click', async function(event) {
 				// console.log("TCL: ActorWithRole form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("medium-new-actorwithrole-fields");
+				var node = document.getElementById("mediumNewActorWithRoleFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
@@ -1676,19 +1676,19 @@
 				//TODO
 
 				// test if form is valid
-				if (!$('#medium-actorwithroles-form').valid()) {
-					$('[data-role="medium-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
+				if (!$('#mediumFormActorWithRoles').valid()) {
+					$('[data-role="mediumNewActorWithRoleFields"]').append(this.appendNewActorHasRolesField());
 					return false;
 				}
 
-				var medium = $('#medium-metadata-form').data('medium');
+				var medium = $('#mediumFormMetadata').data('medium');
 
 				// Create/Edit actor window submitted data
-				$('.disable-on-submit').prop('disabled', true);
-				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', false);
-				var formDataRaw = $('#medium-actorwithroles-form').serializeArray();
-				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
-				$('.disable-on-submit').prop('disabled', false);
+				$('.disableOnSubmit').prop('disabled', true);
+				$('[id^="mediumHasActorWithRoleActorId-"').prop('disabled', false);
+				var formDataRaw = $('#mediumFormActorWithRoles').serializeArray();
+				$('[id^="mediumHasActorWithRoleActorId-"').prop('disabled', true);
+				$('.disableOnSubmit').prop('disabled', false);
 				// console.log("TCL: formDataRaw", formDataRaw);
 
 				var formDataObject = {};
@@ -1712,7 +1712,7 @@
 				for (; i < actorList.length; i++) {
 					existingEntriesIdList.push(actorList[i].id);
 				}
-				// DELETE actorwithroles data if id is in existingEntriesIdList but not in formEntryIds
+				// DELETE actor with roles data if id is in existingEntriesIdList but not in formEntryIds
 				i = 0;
 				for (; i < existingEntriesIdList.length; i++) {
 					// console.log("TCL: check for DELETE ACTOR: ", existingEntriesIdList[i]);
@@ -1733,7 +1733,7 @@
 					}
 				}
 				// console.log("TCL: DELETE actorWithRole (end)");
-				// ADD actorwithroles data if id is not in existingEntriesIdList but in formEntryIds
+				// ADD actor with roles data if id is not in existingEntriesIdList but in formEntryIds
 				i = 0;
 				for (; i < formEntryIds.length; i++) {
 					// console.log("TCL: check for ADD ACTOR: ", formEntryIds[i]);
@@ -1747,7 +1747,7 @@
 					}
 					if (!datasetExists) {
 						// console.log("TCL: ADD actor entries with id: ", formEntryIds[i]);
-						var roleSelectData = $('#medium-actorwithroles-multi-select-dropdown-'+formEntryIds[i]).select2('data');
+						var roleSelectData = $('#mediumActorWithRolesMultiSelectDropdown-'+formEntryIds[i]).select2('data');
 						// console.log("TCL: roleSelectData", roleSelectData);
 						var k = 0;
 						for (; k < roleSelectData.length; k++) {
@@ -1761,7 +1761,7 @@
 				}
 				// console.log("TCL: ADD new actorWithRole (end)");
 				//* the splicing in remove and add sections reduced both id lists to the same entries remaining to compute
-				// UPDATE actorwithroles data if id is in existingEntriesIdList and in formEntryIds
+				// UPDATE actor with roles data if id is in existingEntriesIdList and in formEntryIds
 				i = 0;
 				for (; i < existingEntriesIdList.length; i++) {
 					// console.log("TCL: check for UPDATE ACTOR: ", existingEntriesIdList[i]);
@@ -1773,7 +1773,7 @@
 						existingRoleIds.push(existingRoles[j].id);
 					}
 					// console.log("TCL: existing role ids for the current actor", existingRoleIds);
-					var roleSelectData = $('#medium-actorwithroles-multi-select-dropdown-'+existingEntriesIdList[i]).select2('data');
+					var roleSelectData = $('#mediumActorWithRolesMultiSelectDropdown-'+existingEntriesIdList[i]).select2('data');
 					// console.log("TCL: roleSelectData", roleSelectData);
 					if (roleSelectData == undefined) {
 						roleSelectData = [];
@@ -1833,8 +1833,8 @@
 			});
 
 			// cancel add/edit button in titles form functionality
-			$('#medium-actorwithroles-form-dismiss').on('click', function(event) {
-				let medium = $('#medium-metadata-form').data('medium');
+			$('#mediumFormActorWithRolesDismissButton').on('click', function(event) {
+				let medium = $('#mediumFormMetadata').data('medium');
 				TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
 			});
 
@@ -1857,7 +1857,7 @@
 		},
 
 		loadMedia: function() {
-			$('#medium-metadata-form').data('type', 'medium');
+			$('#mediumFormMetadata').data('type', 'medium');
 			$('#mediumVideoPreview').get(0).pause();
 			this.setMediumList();
 			TIMAAT.UI.addSelectedClassToSelectedItem('medium', null);
@@ -1877,7 +1877,7 @@
 
 		loadMediumSubtype: function(type) {
     	// console.log("TCL: $ -> type", type);
-			$('#medium-metadata-form').data('type', type);
+			$('#mediumFormMetadata').data('type', type);
 			$('#mediumVideoPreview').get(0).pause();
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
@@ -2038,160 +2038,160 @@
 
 		addMedium: function(type) {
 			// console.log("TCL: addMedium: type", type);
-			TIMAAT.UI.displayDataSetContentContainer('medium-tab-metadata', 'medium-metadata-form');
-			$('.add-medium-button').hide();
-			$('.add-medium-button').prop('disabled', true);
-			$('.add-medium-button :input').prop('disabled', true);
-			$('#medium-metadata-form').data('type', type);
-			$('#medium-metadata-form').data('medium', null);
-			$('#medium-displayTitle-language-select-dropdown').empty().trigger('change');
+			TIMAAT.UI.displayDataSetContentContainer('mediumMetadataTab', 'mediumFormMetadata');
+			$('.addMediumButton').hide();
+			$('.addMediumButton').prop('disabled', true);
+			$('.addMediumButton :input').prop('disabled', true);
+			$('#mediumFormMetadata').data('type', type);
+			$('#mediumFormMetadata').data('medium', null);
+			$('#mediumDisplayTitleLanguageSelectDropdown').empty().trigger('change');
 			mediumFormMetadataValidator.resetForm();
 			$('#mediumVideoPreview').get(0).pause();
 
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			$('#medium-metadata-form').trigger('reset');
+			$('#mediumFormMetadata').trigger('reset');
 
 			// setup form
 			this.initFormDataSheetData(type);
 			this.getMediumFormTitleLanguageDropdownData();
 			this.initFormDataSheetForEdit();
-			$('#medium-metadata-form-submit-button').html('Add');
+			$('#mediumFormMetadataSubmitButton').html('Add');
 			$('#mediumFormHeader').html("Add "+type);
-			$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
-			// $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
+			$('#mediumDatasetsMetadataMediumSourceIsPrimarySource').prop('checked', true);
+			// $('#mediumDatasetsMetadataMediumSourceIsStillAvailable').prop('checked', false);
 		},
 
 		mediumFormDataSheet: async function(action, type, data) {
 			// console.log("TCL: action, type, data", action, type, data);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
-			$('#medium-metadata-form').trigger('reset');
+			$('#mediumFormMetadata').trigger('reset');
 			this.initFormDataSheetData(type);
 			mediumFormMetadataValidator.resetForm();
 			$('#mediumVideoPreview').get(0).pause();
 
 			this.getMediumFormTitleLanguageDropdownData();
-			var languageSelect = $('#medium-displayTitle-language-select-dropdown');
+			var languageSelect = $('#mediumDisplayTitleLanguageSelectDropdown');
 			var option = new Option(data.model.displayTitle.language.name, data.model.displayTitle.language.id, true, true);
 			languageSelect.append(option).trigger('change');
 
 			if ( action == 'show' ) {
-				$('#medium-metadata-form :input').prop('disabled', true);
-				$('.form-buttons').prop('disabled', false);
-				$('.form-buttons :input').prop('disabled', false);
-				$('.form-buttons').show();
+				$('#mediumFormMetadata :input').prop('disabled', true);
+				$('.formButtons').prop('disabled', false);
+				$('.formButtons :input').prop('disabled', false);
+				$('.formButtons').show();
 				this.initFormForShow(data.model);
-				$('#medium-metadata-form-submit-button').hide();
-				$('#medium-metadata-form-dismiss-button').hide();
+				$('#mediumFormMetadataSubmitButton').hide();
+				$('#mediumFormMetadataDismissButton').hide();
 				$('#mediumFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
-				$('#medium-displayTitle-language-select-dropdown').select2('destroy').attr("readonly", true);
+				$('#mediumDisplayTitleLanguageSelectDropdown').select2('destroy').attr("readonly", true);
 			}
 			else if ( action == 'edit' ) {
 				this.initFormDataSheetForEdit();
 				this.disableReadOnlyDataFields(true);
-				$('.add-medium-button').hide();
-				$('.add-medium-button').prop('disabled', true);
-				$('.add-medium-button :input').prop('disabled', true);
-				$('#medium-metadata-form-submit-button').html('Save');
+				$('.addMediumButton').hide();
+				$('.addMediumButton').prop('disabled', true);
+				$('.addMediumButton :input').prop('disabled', true);
+				$('#mediumFormMetadataSubmitButton').html('Save');
 				$('#mediumFormHeader').html("Edit "+type);
 			}
 
 			// setup UI
 			// medium data
-			$('#timaat-mediadatasets-metadata-medium-type-id').val(data.model.mediaType.id);
-			$('#timaat-mediadatasets-metadata-medium-copyright').val(data.model.copyright);
-			$('#timaat-mediadatasets-metadata-medium-remark').val(data.model.remark);
+			$('#mediumDatasetsMetadataMediumTypeId').val(data.model.mediaType.id);
+			$('#mediumDatasetsMetadataMediumCopyright').val(data.model.copyright);
+			$('#mediumDatasetsMetadataMediumRemark').val(data.model.remark);
 			if (data.model.releaseDate != null && !(isNaN(data.model.releaseDate)))
-				$('#timaat-mediadatasets-metadata-medium-releasedate').val(moment.utc(data.model.releaseDate).format('YYYY-MM-DD'));
-				else $('#timaat-mediadatasets-metadata-medium-releasedate').val('');
+				$('#mediumDatasetsMetadataMediumReleaseDate').val(moment.utc(data.model.releaseDate).format('YYYY-MM-DD'));
+				else $('#mediumDatasetsMetadataMediumReleaseDate').val('');
 			if (data.model.recordingStartDate != null && !(isNaN(data.model.recordingStartDate)))
-				$('#timaat-mediadatasets-metadata-medium-recordingstartdate').val(moment.utc(data.model.recordingStartDate).format('YYYY-MM-DD'));
-				else $('#timaat-mediadatasets-metadata-medium-recordingstartdate').val('');
+				$('#mediumDatasetsMetadataMediumRecordingStartDate').val(moment.utc(data.model.recordingStartDate).format('YYYY-MM-DD'));
+				else $('#mediumDatasetsMetadataMediumRecordingStartDate').val('');
 			if (data.model.recordingEndDate != null && !(isNaN(data.model.recordingEndDate)))
-				$('#timaat-mediadatasets-metadata-medium-recordingenddate').val(moment.utc(data.model.recordingEndDate).format('YYYY-MM-DD'));
-				else $('#timaat-mediadatasets-metadata-medium-recordingenddate').val('');
+				$('#mediumDatasetsMetadataMediumRecordingEndDate').val(moment.utc(data.model.recordingEndDate).format('YYYY-MM-DD'));
+				else $('#mediumDatasetsMetadataMediumRecordingEndDate').val('');
 			// display-title data
-			$('#timaat-mediadatasets-metadata-medium-title').val(data.model.displayTitle.name);
+			$('#mediumDatasetsMetadataMediumTitle').val(data.model.displayTitle.name);
 			// source data
 			if (data.model.sources[0].isPrimarySource)
-				$('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', true);
-				else $('#timaat-mediadatasets-metadata-medium-source-isprimarysource').prop('checked', false);
-			$('#timaat-mediadatasets-metadata-medium-source-url').val(data.model.sources[0].url);
+				$('#mediumDatasetsMetadataMediumSourceIsPrimarySource').prop('checked', true);
+				else $('#mediumDatasetsMetadataMediumSourceIsPrimarySource').prop('checked', false);
+			$('#mediumDatasetsMetadataMediumSourceURL').val(data.model.sources[0].url);
 			if (data.model.sources[0].lastAccessed != null && !(isNaN(data.model.sources[0].lastAccessed)))
-				$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val(moment.utc(data.model.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
-				else $('#timaat-mediadatasets-metadata-medium-source-lastaccessed').val('');
+				$('#mediumDatasetsMetadataMediumSourceLastAccessed').val(moment.utc(data.model.sources[0].lastAccessed).format('YYYY-MM-DD HH:mm'));
+				else $('#mediumDatasetsMetadataMediumSourceLastAccessed').val('');
 			if (data.model.sources[0].isStillAvailable)
-				$('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', true);
-				else $('#timaat-mediadatasets-metadata-medium-source-isstillavailable').prop('checked', false);
+				$('#mediumDatasetsMetadataMediumSourceIsStillAvailable').prop('checked', true);
+				else $('#mediumDatasetsMetadataMediumSourceIsStillAvailable').prop('checked', false);
 
 			// medium subtype specific data
 			switch (type) {
 				case 'audio':
-					$('#timaat-mediadatasets-metadata-audio-length').val(TIMAAT.Util.formatTime(data.model.mediumAudio.length));
+					$('#mediumDatasetsMetadataAudioLength').val(TIMAAT.Util.formatTime(data.model.mediumAudio.length));
 					if (data.model.mediumAudio.audioPostProduction) {
-						$('#timaat-mediadatasets-metadata-audio-audio-post-production-overdubbing').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].overdubbing);
-						$('#timaat-mediadatasets-metadata-audio-audio-post-production-reverb').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].reverb);
-						$('#timaat-mediadatasets-metadata-audio-audio-post-production-delay').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].delay);
-						$('#timaat-mediadatasets-metadata-audio-audio-post-production-panning').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].panning);
-						$('#timaat-mediadatasets-metadata-audio-audio-post-production-bass').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].bass);
-						$('#timaat-mediadatasets-metadata-audio-audio-post-production-treble').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].treble);
+						$('#mediumDatasetsMetadataAudioAudioPostProductionOverdubbing').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].overdubbing);
+						$('#mediumDatasetsMetadataAudioAudioPostProductionReverb').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].reverb);
+						$('#mediumDatasetsMetadataAudioAudioPostProductionDelay').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].delay);
+						$('#mediumDatasetsMetadataAudioAudioPostProductionPanning').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].panning);
+						$('#mediumDatasetsMetadataAudioAudioPostProductionBass').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].bass);
+						$('#mediumDatasetsMetadataAudioAudioPostProductionTreble').val(data.model.mediumAudio.audioPostProduction.audioPostProductionTranslations[0].treble);
 					}
 				break;
 				case "mediumDocument":
 				break;
 				case 'image':
-					$('#timaat-mediadatasets-metadata-image-width').val(data.model.mediumImage.width);
-					$('#timaat-mediadatasets-metadata-image-height').val(data.model.mediumImage.height);
-					// $('#timaat-mediadatasets-metadata-image-bitdepth').val(data.model.mediumImage.bitDepth);
+					$('#mediumDatasetsMetadataImageWidth').val(data.model.mediumImage.width);
+					$('#mediumDatasetsMetadataImageHeight').val(data.model.mediumImage.height);
+					// $('#mediumDatasetsMetadataImageBitDepth').val(data.model.mediumImage.bitDepth);
 				break;
 				case 'software':
-					$('#timaat-mediadatasets-metadata-software-version').val(data.model.mediumSoftware.version);
+					$('#mediumDatasetsMetadataSoftwareVersion').val(data.model.mediumSoftware.version);
 				break;
 				case 'text':
-					$('#timaat-mediadatasets-metadata-text-content').val(data.model.mediumText.content);
+					$('#mediumDatasetsMetadataTextContent').val(data.model.mediumText.content);
 				break;
 				case 'video':
-					$('#timaat-mediadatasets-metadata-video-length').val(TIMAAT.Util.formatTime(data.model.mediumVideo.length));
-					// $('#timaat-mediadatasets-metadata-video-videocodec').val(data.model.mediumVideo.videoCodec);
-					$('#timaat-mediadatasets-metadata-video-width').val(data.model.mediumVideo.width);
-					$('#timaat-mediadatasets-metadata-video-height').val(data.model.mediumVideo.height);
-					$('#timaat-mediadatasets-metadata-video-framerate').val(data.model.mediumVideo.frameRate);
-					// $('#timaat-mediadatasets-metadata-video-datarate').val(data.model.mediumVideo.dataRate);
-					// $('#timaat-mediadatasets-metadata-video-totalbitrate').val(data.model.mediumVideo.totalBitrate);
+					$('#mediumDatasetsMetadataVideoLength').val(TIMAAT.Util.formatTime(data.model.mediumVideo.length));
+					// $('#mediumDatasetsMetadataVideoVideoCodec').val(data.model.mediumVideo.videoCodec);
+					$('#mediumDatasetsMetadataVideoWidth').val(data.model.mediumVideo.width);
+					$('#mediumDatasetsMetadataVideoHeight').val(data.model.mediumVideo.height);
+					$('#mediumDatasetsMetadataVideoFrameRate').val(data.model.mediumVideo.frameRate);
+					// $('#mediumDatasetsMetadataVideoDataRate').val(data.model.mediumVideo.dataRate);
+					// $('#mediumDatasetsMetadataVideoTotalBitrate').val(data.model.mediumVideo.totalBitrate);
 					if (data.model.mediumVideo.isEpisode)
-						$('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', true);
-					else $('#timaat-mediadatasets-metadata-video-isepisode').prop('checked', false);
+						$('#mediumDatasetsMetadataVideoIsEpisode').prop('checked', true);
+					else $('#mediumDatasetsMetadataVideoIsEpisode').prop('checked', false);
 				break;
 				case 'videogame':
 					if (data.model.mediumVideogame.isEpisode)
-						$('#timaat-mediadatasets-metadata-videogame-isepisode').prop('checked', true);
-					else $('#timaat-mediadatasets-metadata-videogame-isepisode').prop('checked', false);
+						$('#mediumDatasetsMetadataVideogameIsEpisode').prop('checked', true);
+					else $('#mediumDatasetsMetadataVideogameIsEpisode').prop('checked', false);
 				break;
 			}
-			$('#medium-metadata-form').data('medium', data);
+			$('#mediumFormMetadata').data('medium', data);
 		},
 
 		mediumFormPreview: function(type, data) {
 			// console.log("TCL: mediumFormPreview - type, data", type, data);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(type, data.model.id);
-			$('#medium-preview-form').trigger('reset');
+			$('#mediumFormPreview').trigger('reset');
 			// mediumFormMetadataValidator.resetForm();
 
 			// handling if type is 'medium' and user is in all media view
 			if (type == 'medium')	type = data.model.mediaType.mediaTypeTranslations[0].type;
 
-			$('#medium-preview-form :input').prop('disabled', true);
-			$('.video-preview').hide();
-			$('.image-preview').hide();
-			$('.audio-preview').hide();
+			$('#mediumFormPreview :input').prop('disabled', true);
+			$('.videoPreview').hide();
+			$('.imagePreview').hide();
+			$('.audioPreview').hide();
 			if ( data.model.fileStatus == 'noFile' || !data.model.fileStatus) {
 				if (data.model.mediumVideo || data.model.mediumImage || data.model.mediumAudio ) {
-					$('.js-form-upload-button').prop('disabled', false);
-					$('.js-form-upload-button').show();
+					$('.uploadMediumButton').prop('disabled', false);
+					$('.uploadMediumButton').show();
 				}
-				$('.medium-datasheet-form-annotate-button').hide();
-				$('.medium-datasheet-form-annotate-button').prop('disabled', true);
-				$('.image-preview').show();
+				$('.mediumDataSheetFormAnnotateButton').hide();
+				$('.mediumDataSheetFormAnnotateButton').prop('disabled', true);
+				$('.imagePreview').show();
 				$('#mediumImagePreview').attr('title', 'placeholder');
 				$('#mediumImagePreview').attr('alt', 'placeholder');
 				switch (type) {
@@ -2203,63 +2203,63 @@
 					break;
 				}
 			} else {
-				$('.js-form-upload-button').hide();
-				$('.js-form-upload-button').prop('disabled', true);
+				$('.uploadMediumButton').hide();
+				$('.uploadMediumButton').prop('disabled', true);
 				if (type == 'video' || type == 'image' || type == 'audio') {
-					$('.medium-datasheet-form-annotate-button').prop('disabled', false);
-					$('.medium-datasheet-form-annotate-button').show();
+					$('.mediumDataSheetFormAnnotateButton').prop('disabled', false);
+					$('.mediumDataSheetFormAnnotateButton').show();
 				} else {
-					$('.medium-datasheet-form-annotate-button').hide();
-					$('.medium-datasheet-form-annotate-button').prop('disabled', true);
+					$('.mediumDataSheetFormAnnotateButton').hide();
+					$('.mediumDataSheetFormAnnotateButton').prop('disabled', true);
 				}
 				switch (type) {
-					case 'audio': // TODO check audio-preview functionality
+					case 'audio': // TODO check audioPreview functionality
 						$('#mediumAudioPreview').attr('src', '/TIMAAT/api/medium/audio/'+data.model.id+'/download'+'?token='+data.model.viewToken);
-						$('.audio-preview').show();
+						$('.audioPreview').show();
 					break;
 					case 'image':
 						$('#mediumImagePreview').attr('src', '/TIMAAT/api/medium/image/'+data.model.id+'/preview'+'?token='+data.model.viewToken);
 						$('#mediumImagePreview').attr('title', data.model.displayTitle.name);
 						$('#mediumImagePreview').attr('alt', data.model.displayTitle.name);
-						$('.image-preview').show();
+						$('.imagePreview').show();
 					break;
 					case 'video':
 						if ( data.model.fileStatus && data.model.fileStatus != 'ready' && data.model.fileStatus != 'transcoding' && data.model.fileStatus != 'waiting' ) {
 							$('#mediumImagePreview').attr('src', 'img/preview-placeholder.png');
 							$('#mediumImagePreview').attr('title', 'placeholder');
 							$('#mediumImagePreview').attr('alt', 'placeholder');
-							$('.image-preview').show();
+							$('.imagePreview').show();
 						} else {
 							$('#mediumVideoPreview').attr('src', '/TIMAAT/api/medium/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
-							$('.video-preview').show();
+							$('.videoPreview').show();
 						}
 					break;
 					default:
 						$('#mediumImagePreview').attr('src', 'img/preview-placeholder.png');
 						$('#mediumImagePreview').attr('title', 'placeholder');
 						$('#mediumImagePreview').attr('alt', 'placeholder');
-						$('.image-preview').show();
+						$('.imagePreview').show();
 					break;
 				}
 			}
-			$('.mediadatasheet-form-delete-button').prop('disabled', false);
-			$('.mediadatasheet-form-delete-button :input').prop('disabled', false);
-			$('.mediadatasheet-form-delete-button').show();
-			$('#mediumPreviewFormHeader').html(type+" Preview (#"+ data.model.id+')');
+			$('.mediumDataSheetFormDeleteButton').prop('disabled', false);
+			$('.mediumDataSheetFormDeleteButton :input').prop('disabled', false);
+			$('.mediumDataSheetFormDeleteButton').show();
+			$('#mediumFormPreviewHeader').html(type+" Preview (#"+ data.model.id+')');
 		},
 
 		mediumFormTitles: function(action, medium) {
 			// console.log("TCL: mediumFormTitles: (action, medium): ", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
-			var node = document.getElementById("medium-dynamic-title-fields");
+			var node = document.getElementById("mediumDynamicTitleFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			};
-			var node = document.getElementById("medium-new-title-fields");
+			var node = document.getElementById("mediumNewTitleFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			};
-			$('#medium-titles-form').trigger('reset');
+			$('#mediumFormTitles').trigger('reset');
 			mediumFormTitlesValidator.resetForm();
 			$('#mediumVideoPreview').get(0).pause();
 
@@ -2270,8 +2270,8 @@
       // console.log("TCL: medium.model.titles", medium.model.titles);
 			for (; i < numTitles; i++) {
 				// console.log("TCL: medium.model.titles[i].language.id", medium.model.titles[i].language.id);
-				$('[data-role="medium-dynamic-title-fields"]').append(
-					`<div class="form-group" data-role="title-entry">
+				$('[data-role="mediumDynamicTitleFields"]').append(
+					`<div class="form-group" data-role="titleEntry">
 						<div class="form-row">
 							<div class="col-sm-2 col-md-1 text-center">
 								<div class="form-check">
@@ -2296,7 +2296,7 @@
 							</div>
 							<div class="col-sm-5 col-md-7">
 								<label class="sr-only">Title</label>
-								<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name"
+								<input class="form-control form-control-sm mediumDatasetsMediumTitlesTitleName"
 											 name="title[`+i+`]"
 											 data-role="title[`+medium.model.titles[i].id+`]"
 											 placeholder="[Enter title]"
@@ -2308,8 +2308,8 @@
 							</div>
 							<div class="col-sm-2 col-md-2">
 								<label class="sr-only">Title's Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
-												id="medium-title-language-select-dropdown_`+medium.model.titles[i].id+`"
+								<select class="form-control form-control-sm mediumDatasetsMediumTitlesTitleLanguageId"
+												id="mediumTitleLanguageSelectDropdown_`+medium.model.titles[i].id+`"
 												name="titleLanguageId[`+i+`]"
 												data-role="titleLanguageId[`+medium.model.titles[i].id+`]"
 												data-placeholder="Select title language"
@@ -2317,7 +2317,7 @@
 								</select>
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="form-group__button js-form-group__button remove-title-button btn btn-danger"
+								<button class="form-group__button js-form-group__button removeTitleButton btn btn-danger"
 												data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
@@ -2325,7 +2325,7 @@
 						</div>
 					</div>`
 					);
-					$('#medium-title-language-select-dropdown_'+medium.model.titles[i].id).select2({
+					$('#mediumTitleLanguageSelectDropdown_'+medium.model.titles[i].id).select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2358,7 +2358,7 @@
 						minimumInputLength: 0,
 					});
 					let title = medium.model.titles[i];
-					var languageSelect = $('#medium-title-language-select-dropdown_'+title.id);
+					var languageSelect = $('#mediumTitleLanguageSelectDropdown_'+title.id);
 					var option = new Option(title.language.name, title.language.id, true, true);
 					languageSelect.append(option).trigger('change');
 					if (medium.model.displayTitle.id == title.id) {
@@ -2372,52 +2372,52 @@
 			};
 
 			if ( action == 'show') {
-				$('#medium-titles-form :input').prop('disabled', true);
+				$('#mediumFormTitles :input').prop('disabled', true);
 				this.initFormForShow(medium.model);
-				$('#medium-titles-form-submit').hide();
-				$('#medium-titles-form-dismiss').hide();
-				$('[data-role="medium-new-title-fields"').hide();
-				$('.title-form-divider').hide();
+				$('#mediumFormTitlesSubmit').hide();
+				$('#mediumFormTitlesDismiss').hide();
+				$('[data-role="mediumNewTitleFields"').hide();
+				$('.titleFormDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#mediumTitlesLabel').html("Medium titles");
 				let i = 0;
 				for (; i < numTitles; i++) {
-					$('#medium-title-language-select-dropdown_'+medium.model.titles[i].id).select2('destroy').attr("readonly", true);
+					$('#mediumTitleLanguageSelectDropdown_'+medium.model.titles[i].id).select2('destroy').attr("readonly", true);
 				}
 			}
 			else if (action == 'edit') {
-				$('#medium-titles-form :input').prop('disabled', false);
+				$('#mediumFormTitles :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#medium-titles-form-submit').html("Save");
-				$('#medium-titles-form-submit').show();
-				$('#medium-titles-form-dismiss').show();
+				$('#mediumFormTitlesSubmit').html("Save");
+				$('#mediumFormTitlesSubmit').show();
+				$('#mediumFormTitlesDismiss').show();
 				$('#mediumTitlesLabel').html("Edit medium titles");
-				$('[data-role="medium-new-title-fields"').show();
-				$('.title-form-divider').show();
-				$('#timaat-mediadatasets-metadata-medium-title').focus();
+				$('[data-role="mediumNewTitleFields"').show();
+				$('.titleFormDivider').show();
+				$('#mediumDatasetsMetadataMediumTitle').focus();
 
 				// fields for new title entry
-				$('[data-role="medium-new-title-fields"]').append(this.titleFormTitleToAppend());
+				$('[data-role="mediumNewTitleFields"]').append(this.titleFormTitleToAppend());
 				this.getTitleFormLanguageDropdownData();
 
-				$('#medium-titles-form').data('medium', medium);
+				$('#mediumFormTitles').data('medium', medium);
 			}
 		},
 
 		mediumFormLanguageTracks: function(action, medium) {
     	// console.log("TCL: mediumFormLanguageTracks: action, medium", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
-			var node = document.getElementById("medium-dynamic-languagetrack-fields");
+			var node = document.getElementById("mediumDynamicLanguageTrackFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			};
-			var node = document.getElementById("medium-new-languagetrack-fields");
+			var node = document.getElementById("mediumNewLanguageTrackFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			};
-			$('#medium-languagetracks-form').trigger('reset');
+			$('#mediumFormLanguageTracks').trigger('reset');
 			mediumFormLanguageTracksValidator.resetForm();
 			$('#mediumVideoPreview').get(0).pause();
 
@@ -2427,12 +2427,12 @@
 			// console.log("TCL: medium", medium);
 			var numLanguageTracks = medium.model.mediumHasLanguages.length;
 			for (; i < numLanguageTracks; i++) {
-				$('[data-role="medium-dynamic-languagetrack-fields"]').append(
-					`<div class="form-group" data-role="languagetrack-entry" data-id="`+i+`">
+				$('[data-role="mediumDynamicLanguageTrackFields"]').append(
+					`<div class="form-group" data-role="languageTrackEntry" data-id="`+i+`">
 						<div class="form-row">
 							<div class="col-md-5">
 								<label class="sr-only">Track Type</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id"
+								<select class="form-control form-control-sm mediumDatasetsMediumLanguageTracksLanguageTrackTypeId"
 												name="languageTrackTypeId[`+i+`]"
 												data-role="languageTrackTypeId[`+medium.model.mediumHasLanguages[i].mediumLanguageType.id+`]"
 												required>
@@ -2443,22 +2443,22 @@
 							</div>
 							<div class="col-md-5">
 								<label class="sr-only">Track Language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id"
-												id="languagetrack-language-select-dropdown_`+i+`"
+								<select class="form-control form-control-sm mediumDatasetsMediumLanguageTracksLanguageTrackLanguageId"
+												id="languageTrackLanguageSelectDropdown_`+i+`"
 												name="languageTrackLanguageId[`+i+`]"
 												data-role="languageTrackLanguageId[`+medium.model.mediumHasLanguages[i].language.id+`]"
 												required>
 								</select>
 							</div>
 							<div class="col-md-2 text-center">
-								<button class="form-group__button js-form-group__button remove-language-track-button btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button removeLanguageTrackButton btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>
 					</div>`
 					);
-					$('#languagetrack-language-select-dropdown_'+i).select2({
+					$('#languageTrackLanguageSelectDropdown_'+i).select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2490,42 +2490,42 @@
 						},
 						minimumInputLength: 0,
 					});
-					var languageSelect = $('#languagetrack-language-select-dropdown_'+i);
+					var languageSelect = $('#languageTrackLanguageSelectDropdown_'+i);
 					var option = new Option(medium.model.mediumHasLanguages[i].language.name, medium.model.mediumHasLanguages[i].language.id, true, true);
 					languageSelect.append(option).trigger('change');
 					$('[data-role="languageTrackTypeId['+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']"')
 						.find('option[value='+medium.model.mediumHasLanguages[i].mediumLanguageType.id+']')
 						.attr('selected', true);
 					$('select[name="languageTrackTypeId['+i+']"]').rules("add", { required: true });
-					$('#languagetrack-language-select-dropdown_'+i).select2('destroy').attr("readonly", true);
+					$('#languageTrackLanguageSelectDropdown_'+i).select2('destroy').attr("readonly", true);
 			};
 
 			if ( action == 'show') {
-				$('#medium-languagetracks-form :input').prop('disabled', true);
+				$('#mediumFormLanguageTracks :input').prop('disabled', true);
 				this.initFormForShow(medium.model);
-				$('#medium-languagetracks-form-done').hide();
-				$('[data-role="medium-new-languagetrack-fields"').hide();
-				$('.languagetrack-form-divider').hide();
+				$('#mediumFormLanguageTracksDoneButton').hide();
+				$('[data-role="mediumNewLanguageTrackFields"').hide();
+				$('.languageTrackFormDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#mediumLanguageTracksLabel').html("Medium track list");
 			}
 			else if (action == 'edit') {
-				$('.timaat-mediadatasets-medium-languagetracks-languagetrack-type-id').prop('disabled', true);
-				$('#medium-languagetracks-form :input').prop('disabled', false);
+				$('.mediumDatasetsMediumLanguageTracksLanguageTrackTypeId').prop('disabled', true);
+				$('#mediumFormLanguageTracks :input').prop('disabled', false);
 				this.initFormDataSheetForEdit();
 				this.hideFormButtons();
-				$('#medium-languagetracks-form-done').html("Done");
-				$('#medium-languagetracks-form-done').show();
-				$('[data-role="medium-new-languagetrack-fields"').show();
-				$('.languagetrack-form-divider').show();
+				$('#mediumFormLanguageTracksDoneButton').html("Done");
+				$('#mediumFormLanguageTracksDoneButton').show();
+				$('[data-role="mediumNewLanguageTrackFields"').show();
+				$('.languageTrackFormDivider').show();
 				$('#mediumLanguageTracksLabel').html("Edit medium track list");
 
 				// fields for new languageTrack entry
 				// add empty 'add new track' row to form when edit mode is enabled
-				$('[data-role="medium-new-languagetrack-fields"]').append(
-					`<div class="form-group" data-role="languagetrack-entry">
+				$('[data-role="mediumNewLanguageTrackFields"]').append(
+					`<div class="form-group" data-role="languageTrackEntry">
 						<div class="form-row">
 							<div class="col-md-12 text-left">
 								<div class="form-check">
@@ -2536,7 +2536,7 @@
 						<div class="form-row">
 							<div class="col-md-5">
 								<label class="sr-only">Track type</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-type-id"
+								<select class="form-control form-control-sm mediumDatasetsMediumLanguageTracksLanguageTrackTypeId"
 												name="languageTrackTypeId"
 												data-role="languageTrackTypeId"
 												required>
@@ -2547,8 +2547,8 @@
 							</div>
 							<div class="col-md-5">
 								<label class="sr-only">Track language</label>
-								<select class="form-control form-control-sm timaat-mediadatasets-medium-languagetracks-languagetrack-language-id"
-												id="languagetrack-language-select-dropdown"
+								<select class="form-control form-control-sm mediumDatasetsMediumLanguageTracksLanguageTrackLanguageId"
+												id="languageTrackLanguageSelectDropdown"
 												name="languageTrackLanguageId"
 												data-role="languageTrackLanguageId"
 												data-placeholder="Select language"
@@ -2556,14 +2556,14 @@
 								</select>
 							</div>
 							<div class="col-md-2 text-center">
-								<button class="form-group__button form-group__button--add js-form-group__button add-language-track-button btn btn-primary" data-role="add">
+								<button class="form-group__button form-group__button--add js-form-group__button addLanguageTrackButton btn btn-primary" data-role="add">
 									<i class="fas fa-plus"></i>
 								</button>
 							</div>
 						</div>
 					</div>`
 				);
-				$('#languagetrack-language-select-dropdown').select2({
+				$('#languageTrackLanguageSelectDropdown').select2({
 					closeOnSelect: true,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -2596,22 +2596,22 @@
 					minimumInputLength: 0,
 				});
 
-				$('#medium-languagetracks-form').data('medium', medium);
+				$('#mediumFormLanguageTracks').data('medium', medium);
 			}
 		},
 
 		mediumFormActorRoles: async function(action, medium) {
 			// console.log("TCL: mediumFormActorRoles: action, medium", action, medium);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(medium.model.mediaType.mediaTypeTranslations[0].type, medium.model.id);
-			var node = document.getElementById("medium-dynamic-actorwithrole-fields");
+			var node = document.getElementById("mediumDynamicActorWithRoleFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			};
-			var node = document.getElementById("medium-new-actorwithrole-fields");
+			var node = document.getElementById("mediumNewActorWithRoleFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			};
-			$('#medium-actorwithroles-form').trigger('reset');
+			$('#mediumFormActorWithRoles').trigger('reset');
 			// mediumFormActorRolesValidator.resetForm();
 			$('#mediumVideoPreview').get(0).pause();
 
@@ -2630,7 +2630,7 @@
 			i = 0;
 			for (; i < actorIdList.length; i++) {
         // console.log("TCL: mediumFormActorRoles:function -> actorIdList", actorIdList);
-				$('[data-role="medium-dynamic-actorwithrole-fields"]').append(this.appendActorWithRolesDataset(i, actorIdList[i]));
+				$('[data-role="mediumDynamicActorWithRoleFields"]').append(this.appendActorWithRolesDataset(i, actorIdList[i]));
 
 				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
 				this.getMediumHasActorWithRoleData(actorIdList[i]);
@@ -2638,7 +2638,7 @@
 				// await TIMAAT.MediumService.getActorList(medium.model.id).then(function (data) {
 				await TIMAAT.ActorService.getActor(actorIdList[i]).then(function (data) {
           // console.log("TCL: actorIdList[i]", actorIdList[i]);
-					var actorSelect = $('#mediumhasactorwithrole-actorid-'+actorIdList[i]);
+					var actorSelect = $('#mediumHasActorWithRoleActorId-'+actorIdList[i]);
 					// console.log("TCL: actorSelect", actorSelect);
 					// console.log("TCL: then: data", data);
 					var option = new Option(data.displayName.name, data.id, true, true);
@@ -2656,7 +2656,7 @@
 				// provide roles list for new selected actor
 				this.getMediumHasActorWithRolesDropdownData(actorIdList[i]);
 
-				var roleSelect = $('#medium-actorwithroles-multi-select-dropdown-'+actorIdList[i]);
+				var roleSelect = $('#mediumActorWithRolesMultiSelectDropdown-'+actorIdList[i]);
 				// console.log("TCL: roleSelect", roleSelect);
 				await TIMAAT.MediumService.getActorHasRoleList(medium.model.id, actorIdList[i]).then(function (data) {
 					// console.log("TCL: then: data", data);
@@ -2680,34 +2680,34 @@
 			}
 
 			if ( action == 'show') {
-				$('#medium-actorwithroles-form :input').prop('disabled', true);
+				$('#mediumFormActorWithRoles :input').prop('disabled', true);
 				this.initFormForShow(medium.model);
-				$('#medium-actorwithroles-form-submit').hide();
-				$('#medium-actorwithroles-form-dismiss').hide();
-				$('[data-role="medium-new-actorwithrole-fields"]').hide();
-				$('.actorwithrole-form-divider').hide();
+				$('#mediumFormActorWithRolesSubmitButton').hide();
+				$('#mediumFormActorWithRolesDismissButton').hide();
+				$('[data-role="mediumNewActorWithRoleFields"]').hide();
+				$('.actorWithRoleFormDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#mediumActorRolesLabel').html("Medium actor roles");
 			}
 			else if (action == 'edit') {
-				$('#medium-actorwithroles-form :input').prop('disabled', false);
-				$('[id^="mediumhasactorwithrole-actorid-"').prop('disabled', true);
+				$('#mediumFormActorWithRoles :input').prop('disabled', false);
+				$('[id^="mediumHasActorWithRoleActorId-"').prop('disabled', true);
 				this.hideFormButtons();
-				$('#medium-actorwithroles-form-submit').html("Save");
-				$('#medium-actorwithroles-form-submit').show();
-				$('#medium-actorwithroles-form-dismiss').show();
+				$('#mediumFormActorWithRolesSubmitButton').html("Save");
+				$('#mediumFormActorWithRolesSubmitButton').show();
+				$('#mediumFormActorWithRolesDismissButton').show();
 				$('#mediumActorRolesLabel').html("Edit medium actor roles");
-				$('[data-role="medium-new-actorwithrole-fields"]').show();
-				$('.actorwithrole-form-divider').show();
-				// $('#timaat-mediadatasets-metadata-medium-actorwithrole').focus();
+				$('[data-role="mediumNewActorWithRoleFields"]').show();
+				$('.actorWithRoleFormDivider').show();
+				// $('#mediumDatasetsMetadataMediumActorWithRole').focus();
 
 				// fields for new title entry
-				$('[data-role="medium-new-actorwithrole-fields"]').append(this.appendNewActorHasRolesField());
+				$('[data-role="mediumNewActorWithRoleFields"]').append(this.appendNewActorHasRolesField());
 
 				// provide list of actors that already have a medium_has_actor_with_role entry, filter by role_group
-				$('#mediumhasactorwithrole-actorid').select2({
+				$('#mediumHasActorWithRoleActorId').select2({
 					closeOnSelect: true,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -2741,13 +2741,13 @@
 				});
 
 				// url for role fetch needs to change on actor change
-				$('#mediumhasactorwithrole-actorid').on('change', function (event) {
+				$('#mediumHasActorWithRoleActorId').on('change', function (event) {
 					// console.log("TCL: actor selection changed");
 					// console.log("TCL: selected Actor Id", $(this).val());
 					if (!($(this).val() == null)) {
-						$('#medium-actorwithroles-multi-select-dropdown').val(null).trigger('change');
+						$('#mediumActorWithRolesMultiSelectDropdown').val(null).trigger('change');
 						// provide roles list for new selected actor
-						$('#medium-actorwithroles-multi-select-dropdown').select2({
+						$('#mediumActorWithRolesMultiSelectDropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -2782,7 +2782,7 @@
 					}
 				});
 
-				$('#medium-actorwithroles-form').data('medium', medium);
+				$('#mediumFormActorWithRoles').data('medium', medium);
 			}
 		},
 
@@ -2915,12 +2915,12 @@
 			if ( medium.fileStatus != 'ready'  &&  medium.fileStatus != 'noFile' ) medium.ui.find('.js-medium-file-status').show();
 			if ( medium.fileStatus == 'waiting' ) medium.ui.find('.js-medium-file-status__icon').removeClass('fa-cog').addClass('fa-hourglass-half');
 			if ( medium.fileStatus == 'noFile'  ) {
-				medium.ui.find('.timaat-medium-annotate').hide();
+				medium.ui.find('.mediumAnnotate').hide(); // TODO wrong class?
 
 				// user selected file, trigger form submit / upload
-				medium.ui.find('.timaat-medium-upload-file').off('change').on('change', function(ev) {
-					let filelist = medium.ui.find('.timaat-medium-upload-file')[0].files;
-					if ( filelist.length  > 0 ) TIMAAT.UploadManager.queueUpload(medium, medium.ui.find('form'));
+				medium.ui.find('.mediumUploadFile').off('change').on('change', function(ev) {
+					let fileList = medium.ui.find('.mediumUploadFile')[0].files;
+					if ( fileList.length  > 0 ) TIMAAT.UploadManager.queueUpload(medium, medium.ui.find('form'));
 				});
 			}
 		},
@@ -2937,7 +2937,7 @@
 
 			try { // update original title
 				if (medium.model.originalTitle) { // medium initially has no original title set
-					// for changes in datasheet form that impact data in originaltitle
+					// for changes in data sheet form that impact data in original title
 					if (medium.model.displayTitle.id == medium.model.originalTitle.id) {
 						medium.model.originalTitle = medium.model.displayTitle;
 					}
@@ -3287,7 +3287,7 @@
 					medium.model.titles.splice(i,1);
 				}
 			}
-			$('#medium-metadata-form').data('medium', null);
+			$('#mediumFormMetadata').data('medium', null);
 		},
 
 		updateMediumModelData: async function(model, formDataObject) {
@@ -3480,7 +3480,7 @@
 
 		titleFormTitleToAppend: function() {
 			var titleToAppend =
-			`<div class="form-group" data-role="title-entry">
+			`<div class="form-group" data-role="titleEntry">
 				<div class="form-row">
 					<div class="col-md-2 text-center">
 						<div class="form-check">
@@ -3489,7 +3489,7 @@
 					</div>
 					<div class="col-md-6">
 						<label class="sr-only">Title</label>
-						<input class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-name"
+						<input class="form-control form-control-sm mediumDatasetsMediumTitlesTitleName"
 									 name="title"
 									 data-role="title"
 									 placeholder="[Enter title]"
@@ -3501,8 +3501,8 @@
 					</div>
 					<div class="col-md-3">
 						<label class="sr-only">Title's Language</label>
-						<select class="form-control form-control-sm timaat-mediadatasets-medium-titles-title-language-id"
-										id="medium-title-language-select-dropdown"
+						<select class="form-control form-control-sm mediumDatasetsMediumTitlesTitleLanguageId"
+										id="mediumTitleLanguageSelectDropdown"
 										name="titleLanguageId"
 										data-role="titleLanguageId"
 										data-placeholder="Select title language"
@@ -3510,7 +3510,7 @@
 						</select>
 					</div>
 					<div class="col-md-1 text-center">
-						<button class="form-group__button form-group__button--add js-form-group__button add-title-button btn btn-primary" data-role="add">
+						<button class="form-group__button form-group__button--add js-form-group__button addTitleButton btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -3522,14 +3522,14 @@
 		appendActorWithRolesDataset: function(i, actorId) {
     	console.log("TCL: appendActorWithRolesDataset (i, actorId): ", i, actorId);
 			var entryToAppend =
-				`<div class="form-group" data-role="mediumhasactorwithrole-entry" data-id="`+i+`" data-actor-id=`+actorId+`>
+				`<div class="form-group" data-role="mediumHasActorWithRoleEntry" data-id="`+i+`" data-actor-id=`+actorId+`>
 					<div class="form-row">
 						<div class="col-md-11">
 							<div class="form-row">
 								<div class="col-md-4">
 									<label class="sr-only">Actor</label>
-									<select class="form-control form-control-sm mediumhasactorwithrole-actorid"
-													id="mediumhasactorwithrole-actorid-`+actorId+`"
+									<select class="form-control form-control-sm mediumHasActorWithRoleActorId"
+													id="mediumHasActorWithRoleActorId-`+actorId+`"
 													name="actorId"
 													data-placeholder="Select actor"
 													data-role="actorId-`+actorId+`"
@@ -3539,7 +3539,7 @@
 								<div class="col-md-8">
 									<label class="sr-only">Has Role(s)</label>
 									<select class="form-control form-control-sm"
-													id="medium-actorwithroles-multi-select-dropdown-`+actorId+`"
+													id="mediumActorWithRolesMultiSelectDropdown-`+actorId+`"
 													name="roleId"
 													data-placeholder="Select role(s)"
 													data-role="actorWithRoles-`+actorId+`"
@@ -3550,7 +3550,7 @@
 							</div>
 						</div>
 						<div class="col-md-1 text-center">
-							<button class="form-group__button js-form-group__button remove-actor-with-role-button btn btn-danger" data-role="remove">
+							<button class="form-group__button js-form-group__button removeActorWithRoleButton btn btn-danger" data-role="remove">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
@@ -3561,7 +3561,7 @@
 
 		appendNewActorHasRolesField: function() {
 			let entryToAppend =
-				`<div class="form-group" data-role="mediumhasactorwithrole-entry" data-id="-1">
+				`<div class="form-group" data-role="mediumHasActorWithRoleEntry" data-id="-1">
 					<div class="form-row">
 						<div class="col-md-11">
 							<fieldset>
@@ -3569,8 +3569,8 @@
 								<div class="form-row">
 									<div class="col-md-4">
 										<label class="sr-only">Actor</label>
-										<select class="form-control form-control-sm mediumhasactorwithrole-actorid"
-														id="mediumhasactorwithrole-actorid"
+										<select class="form-control form-control-sm mediumHasActorWithRoleActorId"
+														id="mediumHasActorWithRoleActorId"
 														name="actorId"
 														data-placeholder="Select actor"
 														data-role="actorId"
@@ -3580,7 +3580,7 @@
 									<div class="col-md-8">
 										<label class="sr-only">Has Role(s)</label>
 										<select class="form-control form-control-sm"
-														id="medium-actorwithroles-multi-select-dropdown"
+														id="mediumActorWithRolesMultiSelectDropdown"
 														name="roleId"
 														data-placeholder="Select role(s)"
 														multiple="multiple"
@@ -3591,8 +3591,8 @@
 								</div>
 							</fieldset>
 						</div>
-						<div class="col-md-1 vertical-aligned">
-							<button type="button" class="form-group__button js-form-group__button add-actor-has-roles-button btn btn-primary" data-role="add">
+						<div class="col-md-1 align-items--vertically">
+							<button type="button" class="form-group__button js-form-group__button addActorHasRolesButton btn btn-primary" data-role="add">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -3602,82 +3602,82 @@
 		},
 
 		initFormDataSheetForEdit: function() {
-			$('#timaat-mediadatasets-metadata-medium-releasedate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-mediadatasets-metadata-medium-recordingstartdate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-mediadatasets-metadata-medium-recordingenddate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-mediadatasets-metadata-medium-source-lastaccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#medium-metadata-form :input').prop('disabled', false);
+			$('#mediumDatasetsMetadataMediumReleaseDate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#mediumDatasetsMetadataMediumRecordingStartDate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#mediumDatasetsMetadataMediumRecordingEndDate').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#mediumDatasetsMetadataMediumSourceLastAccessed').datetimepicker({format: 'YYYY-MM-DD HH:mm', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#mediumFormMetadata :input').prop('disabled', false);
 			this.hideFormButtons();
-			$('#medium-metadata-form-submit-button').show();
-			$('#medium-metadata-form-dismiss-button').show();
-			$('#timaat-mediadatasets-metadata-medium-title').focus();
+			$('#mediumFormMetadataSubmitButton').show();
+			$('#mediumFormMetadataDismissButton').show();
+			$('#mediumDatasetsMetadataMediumTitle').focus();
 		},
 
 		initFormForShow: function (model) {
-			$('.mediadatasheet-form-edit-button').prop('disabled', false);
-			$('.mediadatasheet-form-edit-button :input').prop('disabled', false);
-			$('.mediadatasheet-form-edit-button').show();
-			$('.js-form-upload-button').hide();
-			$('.js-form-upload-button').prop('disabled', true);
+			$('.mediumDataSheetFormEditButton').prop('disabled', false);
+			$('.mediumDataSheetFormEditButton :input').prop('disabled', false);
+			$('.mediumDataSheetFormEditButton').show();
+			$('.uploadMediumButton').hide();
+			$('.uploadMediumButton').prop('disabled', true);
 			if ( model.fileStatus == 'noFile' || !model.fileStatus) {
 				if (model.mediumVideo || model.mediumImage || model.mediumAudio) {
-					$('.js-form-upload-button').prop('disabled', false);
-					$('.js-form-upload-button').show();
+					$('.uploadMediumButton').prop('disabled', false);
+					$('.uploadMediumButton').show();
 				}
-				$('.medium-datasheet-form-annotate-button').hide();
-				$('.medium-datasheet-form-annotate-button').prop('disabled', true);
+				$('.mediumDataSheetFormAnnotateButton').hide();
+				$('.mediumDataSheetFormAnnotateButton').prop('disabled', true);
 			} else {
 				if (model.mediaType.mediaTypeTranslations[0].type == 'video' || model.mediaType.mediaTypeTranslations[0].type == 'image' || model.mediaType.mediaTypeTranslations[0].type == 'audio') {
-					$('.medium-datasheet-form-annotate-button').prop('disabled', false);
-					$('.medium-datasheet-form-annotate-button').show();
+					$('.mediumDataSheetFormAnnotateButton').prop('disabled', false);
+					$('.mediumDataSheetFormAnnotateButton').show();
 				} else {
-					$('.medium-datasheet-form-annotate-button').hide();
-					$('.medium-datasheet-form-annotate-button').prop('disabled', true);
+					$('.mediumDataSheetFormAnnotateButton').hide();
+					$('.mediumDataSheetFormAnnotateButton').prop('disabled', true);
 				}
 			}
-			if (this.container == 'videoplayer') {
-				$('.medium-datasheet-form-annotate-button').hide();
-				$('.medium-datasheet-form-annotate-button').prop('disabled', true);
+			if (this.container == 'videoPlayer') {
+				$('.mediumDataSheetFormAnnotateButton').hide();
+				$('.mediumDataSheetFormAnnotateButton').prop('disabled', true);
 			}
 		},
 
 		initFormDataSheetData: function(type) {
-			$('.datasheet-data').hide();
-			$('.title-data').show();
-			$('.medium-data').show();
-			$('.source-data').show();
-			$('.'+type+'-data').show();
+			$('.dataSheetData').hide();
+			$('.titleData').show();
+			$('.mediumData').show();
+			$('.sourceData').show();
+			$('.'+type+'Data').show();
 		},
 
 		hideFormButtons: function() {
-			$('.form-buttons').hide();
-			$('.form-buttons').prop('disabled', true);
-			$('.form-buttons :input').prop('disabled', true);
+			$('.formButtons').hide();
+			$('.formButtons').prop('disabled', true);
+			$('.formButtons :input').prop('disabled', true);
 		},
 
 		disableReadOnlyDataFields: function(disabled) {
-				$('#timaat-mediadatasets-metadata-audio-length').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-audio-audiocodec').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-image-width').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-image-height').prop('disabled', disabled);
-				// $('#timaat-mediadatasets-metadata-image-bitdepth').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-length').prop('disabled', disabled);
-				// $('#timaat-mediadatasets-metadata-video-videocodec').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-width').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-height').prop('disabled', disabled);
-				$('#timaat-mediadatasets-metadata-video-framerate').prop('disabled', disabled);
-				// $('#timaat-mediadatasets-metadata-video-datarate').prop('disabled', disabled);
-				// $('#timaat-mediadatasets-metadata-video-totalbitrate').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataAudioLength').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataAudioCodec').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataImageWidth').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataImageHeight').prop('disabled', disabled);
+				// $('#mediumDatasetsMetadataImageBitDepth').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataVideoLength').prop('disabled', disabled);
+				// $('#mediumDatasetsMetadataVideoVideoCodec').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataVideoWidth').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataVideoHeight').prop('disabled', disabled);
+				$('#mediumDatasetsMetadataVideoFrameRate').prop('disabled', disabled);
+				// $('#mediumDatasetsMetadataVideoDataRate').prop('disabled', disabled);
+				// $('#mediumDatasetsMetadataVideoTotalBitrate').prop('disabled', disabled);
 		},
 
 		showAddMediumButton: function() {
-			$('.add-medium-button').prop('disabled', false);
-			$('.add-medium-button :input').prop('disabled', false);
-			$('.add-medium-button').show();
+			$('.addMediumButton').prop('disabled', false);
+			$('.addMediumButton :input').prop('disabled', false);
+			$('.addMediumButton').show();
 		},
 
 		getMediumFormTitleLanguageDropdownData: function() {
-			$('#medium-displayTitle-language-select-dropdown').select2({
+			$('#mediumDisplayTitleLanguageSelectDropdown').select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -3712,7 +3712,7 @@
 		},
 
 		getTitleFormLanguageDropdownData: function() {
-			$('#medium-title-language-select-dropdown').select2({
+			$('#mediumTitleLanguageSelectDropdown').select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -3748,7 +3748,7 @@
 
 		getMediumHasActorWithRoleData: function(id) {
     	console.log("TCL: getMediumHasActorWithRoleData:function -> id", id);
-			$('#mediumhasactorwithrole-actorid-'+id).select2({
+			$('#mediumHasActorWithRoleActorId-'+id).select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: false,
@@ -3783,7 +3783,7 @@
 		},
 
 		getMediumHasActorWithRolesDropdownData: function(id) {
-			$('#medium-actorwithroles-multi-select-dropdown-'+id).select2({
+			$('#mediumActorWithRolesMultiSelectDropdown-'+id).select2({
 				closeOnSelect: false,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -3858,7 +3858,7 @@
 
 		setupAllMediaDataTable: async function() {
 			// console.log("TCL: setupAllMediaDataTable");
-			this.dataTableAllMediaList = $('#timaat-mediumdatasets-medium-all-media-table').DataTable({
+			this.dataTableAllMediaList = $('#mediumDatasetsAllMediaDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -3911,14 +3911,14 @@
 					// rowItem.on('click', function(event) {
 					// });
 
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -3926,11 +3926,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -3942,7 +3942,7 @@
 						let length = medium.mediumVideo.length;
 						let timeCode = Math.round((ev.originalEvent.offsetX/254)*length);
 						timeCode = Math.min(Math.max(0, timeCode),length);
-						rowItem.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
+						rowItem.find('.mediumThumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
 					});
 
 					rowItem.find('.card-img-top').bind("mouseleave", function(ev) {
@@ -3957,31 +3957,17 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'mediumPreview', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllMediaDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo || mediumItem.mediumImage || mediumItem.mediumAudio) {
-							ui = `<div class="timaat-medium-status js-medium-file-status">
+							ui = `<div class="medium-file-status js-medium-file-status">
 											<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Medium preview"/>`;
+										<img class="card-img-top center mediumThumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Medium preview"/>`;
 						}
-						// else if (mediumItem.mediumImage) {
-						// 	ui = `<div style="display:flex">
-						// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
-						// 				</div>`;
-						// } else if (mediumItem.mediumAudio) {
-						// 	ui = `<div style="display:flex">
-						// 					<i class="center fas fa-file-audio fa-5x"></i>
-						// 				</div>`;
-						// }
-						// else {
-						// 	ui = `<div style="display:flex">
-						// 					<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-						// 				</div>`;
-						// }
 						else {
-								ui = `<div style="display:flex"></div>`;
+								ui = `<div class="display--flex"></div>`;
 						}
 						return ui;
 						}
@@ -4024,7 +4010,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in media library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -4079,24 +4065,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -4123,7 +4109,7 @@
 
 		setupAllAudiosDataTable: async function() {
 			// console.log("TCL: setupAllAudiosDataTable");
-			this.dataTableAllAudiosList = $('#timaat-mediumdatasets-medium-all-audios-table').DataTable({
+			this.dataTableAllAudiosList = $('#mediumDatasetsMediumAllAudiosDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -4173,14 +4159,14 @@
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -4188,11 +4174,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -4217,7 +4203,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in audios library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -4272,24 +4258,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -4316,7 +4302,7 @@
 
 		setupAllDocumentsDataTable: async function() {
 			// console.log("TCL: setupAllDocumentsDataTable");
-			this.dataTableAllDocumentsList = $('#timaat-mediumdatasets-medium-all-documents-table').DataTable({
+			this.dataTableAllDocumentsList = $('#mediumDatasetsMediumAllDocumentsDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -4366,14 +4352,14 @@
 					TIMAAT.MediumDatasets.setMediumStatus(medium);
 
 					// set up events
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -4381,11 +4367,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -4395,31 +4381,6 @@
 
 				},
 				"columns": [
-					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-					// 	// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-					// 	let ui;
-					// 	if (mediumItem.mediumVideo) {
-					// 		ui = `<div class="medium-file-status js-medium-file-status">
-					// 						<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
-					// 						</div>
-					// 					<img class="card-img-top center" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-					// 	}
-					// 	else if (mediumItem.mediumImage) {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-					// 					</div>`;
-					// 	} else if (mediumItem.mediumAudio) {
-					// 		ui = `<div style="display:flex">
-					// 						<i class="center fas fa-file-audio fa-5x"></i>
-					// 					</div>`;
-					// 	} else {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-					// 					</div>`;
-					// 	}
-					// 	return ui;
-					// 	}
-					// },
 					{ data: 'id', name: 'title', className: 'title', width: '50%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -4435,7 +4396,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in documents library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -4460,24 +4421,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -4504,7 +4465,7 @@
 
 		setupAllImagesDataTable: async function() {
 			// console.log("TCL: setupAllImagesDataTable");
-			this.dataTableAllImagesList = $('#timaat-mediumdatasets-medium-all-images-table').DataTable({
+			this.dataTableAllImagesList = $('#mediumDatasetsMediumAllImagesDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -4557,14 +4518,14 @@
 					// rowItem.on('click', function(event) {
 					// });
 
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -4572,11 +4533,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -4586,25 +4547,25 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'mediumPreview', orderable: false, width: '20%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
 							ui = `<div class="medium-file-status js-medium-file-status">
 											<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center mediumThumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+							ui = `<div class="display--flex">
+											<img class="card-img-top center mediumThumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
+							ui = `<div class="display--flex">
 											<i class="center fas fa-file-audio fa-5x"></i>
 										</div>`;
 						} else {
-							ui = `<div style="display:flex">
+							ui = `<div class="display--flex">
 											<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
 										</div>`;
 						}
@@ -4626,7 +4587,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in images library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -4651,24 +4612,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -4695,7 +4656,7 @@
 
 		setupAllSoftwaresDataTable: async function() {
 			// console.log("TCL: setupAllSoftwaresDataTable");
-			this.dataTableAllSoftwaresList = $('#timaat-mediumdatasets-medium-all-softwares-table').DataTable({
+			this.dataTableAllSoftwaresList = $('#mediumDatasetsMediumAllSoftwaresDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -4748,14 +4709,14 @@
 					// rowItem.on('click', function(event) {
 					// });
 
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -4763,11 +4724,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -4777,31 +4738,6 @@
 
 				},
 				"columns": [
-					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-					// 	// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-					// 	let ui;
-					// 	if (mediumItem.mediumVideo) {
-					// 		ui = `<div class="medium-file-status js-medium-file-status">
-					// 						<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
-					// 						</div>
-					// 					<img class="card-img-top center" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-					// 	}
-					// 	else if (mediumItem.mediumImage) {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-					// 					</div>`;
-					// 	} else if (mediumItem.mediumAudio) {
-					// 		ui = `<div style="display:flex">
-					// 						<i class="center fas fa-file-audio fa-5x"></i>
-					// 					</div>`;
-					// 	} else {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-					// 					</div>`;
-					// 	}
-					// 	return ui;
-					// 	}
-					// },
 					{ data: 'id', name: 'title', className: 'title', width: '40%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -4817,7 +4753,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in softwares library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -4861,24 +4797,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -4905,7 +4841,7 @@
 
 		setupAllTextsDataTable: async function() {
 			// console.log("TCL: setupAllTextsDataTable");
-			this.dataTableAllTextsList = $('#timaat-mediumdatasets-medium-all-texts-table').DataTable({
+			this.dataTableAllTextsList = $('#mediumDatasetsMediumAllTextsDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -4958,14 +4894,14 @@
 					// rowItem.on('click', function(event) {
 					// });
 
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -4973,11 +4909,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -4987,31 +4923,6 @@
 
 				},
 				"columns": [
-					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-					// 	// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-					// 	let ui;
-					// 	if (mediumItem.mediumVideo) {
-					// 		ui = `<div class="medium-file-status js-medium-file-status">
-					// 						<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
-					// 						</div>
-					// 					<img class="card-img-top center" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-					// 	}
-					// 	else if (mediumItem.mediumImage) {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-					// 					</div>`;
-					// 	} else if (mediumItem.mediumAudio) {
-					// 		ui = `<div style="display:flex">
-					// 						<i class="center fas fa-file-audio fa-5x"></i>
-					// 					</div>`;
-					// 	} else {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-					// 					</div>`;
-					// 	}
-					// 	return ui;
-					// 	}
-					// },
 					{ data: 'id', name: 'title', className: 'title', width: '40%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -5027,7 +4938,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in texts library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -5071,24 +4982,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -5115,7 +5026,7 @@
 
 		setupAllVideosDataTable: async function() {
 			// console.log("TCL: setupAllVideosDataTable");
-			this.dataTableAllVideosList = $('#timaat-mediumdatasets-medium-all-videos-table').DataTable({
+			this.dataTableAllVideosList = $('#mediumDatasetsMediumAllVideosDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5168,14 +5079,14 @@
 					// rowItem.on('click', function(event) {
 					// });
 
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -5183,11 +5094,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -5199,7 +5110,7 @@
 						let length = medium.mediumVideo.length;
 						let timeCode = Math.round((ev.originalEvent.offsetX/254)*length);
 						timeCode = Math.min(Math.max(0, timeCode),length);
-						rowItem.find('.timaat-medium-thumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
+						rowItem.find('.mediumThumbnail').attr('src', "/TIMAAT/api/medium/video/"+medium.id+"/thumbnail"+"?time="+timeCode+"&token="+medium.viewToken);
 					});
 
 					rowItem.find('.card-img-top').bind("mouseleave", function(ev) {
@@ -5214,25 +5125,25 @@
 
 				},
 				"columns": [
-					{ data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'mediumPreview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui;
 						if (mediumItem.mediumVideo) {
 							ui = `<div class="medium-file-status js-medium-file-status">
 											<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
 											</div>
-										<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
+										<img class="card-img-top center mediumThumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Video preview"/>`;
 						}
 						else if (mediumItem.mediumImage) {
-							ui = `<div style="display:flex">
-											<img class="card-img-top center timaat-medium-thumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
+							ui = `<div class="display--flex">
+											<img class="card-img-top center mediumThumbnail" src="img/preview-placeholder.png" width="150" height="85" alt="Image preview"/>
 										</div>`;
 						} else if (mediumItem.mediumAudio) {
-							ui = `<div style="display:flex">
+							ui = `<div class="display--flex">
 											<i class="center fas fa-file-audio fa-5x"></i>
 										</div>`;
 						} else {
-							ui = `<div style="display:flex">
+							ui = `<div class="display--flex">
 											<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
 										</div>`;
 						}
@@ -5254,7 +5165,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in videos library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -5309,24 +5220,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -5353,7 +5264,7 @@
 
 		setupAllVideogamesDataTable: async function() {
 			// console.log("TCL: setupAllVideogamesDataTable");
-			this.dataTableAllVideogamesList = $('#timaat-mediumdatasets-medium-all-videogames-table').DataTable({
+			this.dataTableAllVideogamesList = $('#mediumDatasetsMediumAllVideogamesDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 1, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5406,14 +5317,14 @@
 					// rowItem.on('click', function(event) {
 					// });
 
-					rowItem.on('click', '.mediumItem-upload-button', async function(event) {
+					rowItem.on('click', '.mediumItemUploadButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						let item = new TIMAAT.Medium(medium, type);
-						item.listView.find('.timaat-medium-upload-file').click();
+						item.listView.find('.mediumUploadFile').click();
 					});
 
-					rowItem.on('click', '.mediumItem-annotate-button', async function(event) {
+					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -5421,11 +5332,11 @@
 						await TIMAAT.VideoPlayer.initializeAnnotationMode(medium);
 					});
 
-					rowItem.on('click', '.timaat-mediadatasets-media-metadata', async function(event) {
+					rowItem.on('click', '.mediumDatasetsMediumMetadata', async function(event) {
 						event.stopPropagation();
 						let mediumModel = {};
 						mediumModel.model = medium;
-						TIMAAT.UI.displayComponent('medium', type+'-tab', type+'-datatable', 'medium-tab-metadata', 'medium-metadata-form');
+						TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMetadataTab', 'mediumFormMetadata');
 						TIMAAT.UI.displayDataSetContent('dataSheet', mediumModel, 'medium');
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect(type, mediumModel);
 					});
@@ -5435,31 +5346,6 @@
 
 				},
 				"columns": [
-					// { data: null, className: 'medium-preview', orderable: false, width: '150px', render: function(data, type, mediumItem, meta) {
-					// 	// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
-					// 	let ui;
-					// 	if (mediumItem.mediumVideo) {
-					// 		ui = `<div class="medium-file-status js-medium-file-status">
-					// 						<i class="js-medium-file-status__icon fas fa-cog fa-spin"></i>
-					// 						</div>
-					// 					<img class="card-img-top center" src="img/video-placeholder.png" width="150" height="85" alt="Video preview"/>`;
-					// 	}
-					// 	else if (mediumItem.mediumImage) {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/image-placeholder.png" width="150" height="85" alt="Image preview"/>
-					// 					</div>`;
-					// 	} else if (mediumItem.mediumAudio) {
-					// 		ui = `<div style="display:flex">
-					// 						<i class="center fas fa-file-audio fa-5x"></i>
-					// 					</div>`;
-					// 	} else {
-					// 		ui = `<div style="display:flex">
-					// 						<img class="card-img-top center" src="img/preview-placeholder.png" width="150" height="85" alt="No preview available"/>
-					// 					</div>`;
-					// 	}
-					// 	return ui;
-					// 	}
-					// },
 					{ data: 'id', name: 'title', className: 'title', width: '40%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let displayMediumTypeIcon = '';
@@ -5475,7 +5361,7 @@
 							// TODO not working anymore due to server side dataTable data search
 							mediumItem.titles.forEach(function(title) { // make additional titles searchable in videogames library
 								if (title.id != mediumItem.displayTitle.id && (mediumItem.originalTitle == null || title.id != mediumItem.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							return titleDisplay;
@@ -5519,24 +5405,24 @@
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload video" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate video" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if ( mediumItem.mediumAudio ){
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload audio" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate audio" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						} else if (mediumItem.mediumImage) {
 							if ( !mediumItem.fileStatus || mediumItem.fileStatus == 'noFile' ) {
-								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItem-upload-button"><i class="fas fa-file-upload"></i></button>`;
+								ui +=	`<button type="button" title="Upload image" class="btn btn-outline-secondary btn-sm mediumItemUploadButton"><i class="fas fa-file-upload"></i></button>`;
 							} else {
-								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItem-annotate-button"><i class="fas fa-draw-polygon"></i></button>`;
+								ui +=	`<button type="button" title="Annotate image" class="btn btn-outline-secondary btn-sm mediumItemAnnotateButton"><i class="fas fa-draw-polygon"></i></button>`;
 							}
 						}
-						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm timaat-mediadatasets-media-metadata"><i class="fas fa-file-alt"></i></button>
+						ui += `<button type="button" title="Edit data sheet" class="btn btn-outline-secondary btn-sm mediumDatasetsMediumMetadata"><i class="fas fa-file-alt"></i></button>
 									</div>`;
 						return ui;
 						},
@@ -5564,7 +5450,7 @@
 		setupMediaDataTable: function() {
 			// console.log("TCL: setupMediaDataTable");
 			// setup dataTable
-			this.dataTableMedia = $('#timaat-mediadatasets-media-table').DataTable({
+			this.dataTableMedia = $('#mediumDatasetsMediaListDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5646,7 +5532,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-media').removeClass('active');
+						$('#mediumDatasetsAllMedia').removeClass('list-group-item--is-active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						let subtype = mediumModel.model.mediaType.mediaTypeTranslations[0].type;
@@ -5698,9 +5584,9 @@
 							if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 								titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 							}
-							medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+							medium.titles.forEach(function(title) { // make additional titles searchable in media library
 								if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-									titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+									titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 								}
 							});
 							// console.log("TCL: medium", medium);
@@ -5730,7 +5616,7 @@
 		setupAudioDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableAudio = $('#timaat-mediadatasets-audio-table').DataTable({
+			this.dataTableAudio = $('#mediumDatasetsAudioTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5766,13 +5652,13 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.MediumDatasets.audios (last)", TIMAAT.MediumDatasets.audios);
 						// setup model
-						var meds = Array();
+						var audioList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'audio'));
+								audioList.push(new TIMAAT.Medium(medium, 'audio'));
 							}
 						});
-						TIMAAT.MediumDatasets.audios = meds;
+						TIMAAT.MediumDatasets.audios = audioList;
 						TIMAAT.MediumDatasets.audios.model = data.data;
 						// console.log("TCL: TIMAAT.MediumDatasets.audios (current)", TIMAAT.MediumDatasets.audios);
 						return data.data;
@@ -5812,7 +5698,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-audios').removeClass('active');
+						$('#mediumDatasetsAllAudios').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('audio', mediumModel);
@@ -5837,9 +5723,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -5868,7 +5754,7 @@
 		setupDocumentDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableDocument = $('#timaat-mediadatasets-document-table').DataTable({
+			this.dataTableDocument = $('#mediumDatasetsDocumentTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5904,13 +5790,13 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.MediumDatasets.documents (last)", TIMAAT.MediumDatasets.documents);
 						// setup model
-						var meds = Array();
+						var documentList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'document'));
+								documentList.push(new TIMAAT.Medium(medium, 'document'));
 							}
 						});
-						TIMAAT.MediumDatasets.documents = meds;
+						TIMAAT.MediumDatasets.documents = documentList;
 						TIMAAT.MediumDatasets.documents.model = data.data;
 						// console.log("TCL: TIMAAT.MediumDatasets.documents (current)", TIMAAT.MediumDatasets.documents);
 						return data.data;
@@ -5952,7 +5838,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-documents').removeClass('active');
+						$('#mediumDatasetsAllDocuments').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('document', mediumModel);
@@ -5977,9 +5863,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -6008,7 +5894,7 @@
 		setupImageDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableImage = $('#timaat-mediadatasets-image-table').DataTable({
+			this.dataTableImage = $('#mediumDatasetsImageTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -6044,13 +5930,13 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.MediumDatasets.images (last)", TIMAAT.MediumDatasets.images);
 						// setup model
-						var meds = Array();
+						var imageList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'image'));
+								imageList.push(new TIMAAT.Medium(medium, 'image'));
 							}
 						});
-						TIMAAT.MediumDatasets.images = meds;
+						TIMAAT.MediumDatasets.images = imageList;
 						TIMAAT.MediumDatasets.images.model = data.data;
 						// console.log("TCL: TIMAAT.MediumDatasets.images (current)", TIMAAT.MediumDatasets.images);
 						return data.data;
@@ -6092,7 +5978,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-images').removeClass('active');
+						$('#mediumDatasetsAllImages').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('image', mediumModel);
@@ -6117,9 +6003,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -6148,7 +6034,7 @@
 		setupSoftwareDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableSoftware = $('#timaat-mediadatasets-software-table').DataTable({
+			this.dataTableSoftware = $('#mediumDatasetsSoftwareTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -6184,13 +6070,13 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.MediumDatasets.softwares (last)", TIMAAT.MediumDatasets.softwares);
 						// setup model
-						var meds = Array();
+						var softwareList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'software'));
+								softwareList.push(new TIMAAT.Medium(medium, 'software'));
 							}
 						});
-						TIMAAT.MediumDatasets.softwares = meds;
+						TIMAAT.MediumDatasets.softwares = softwareList;
 						TIMAAT.MediumDatasets.softwares.model = data.data;
 						// console.log("TCL: TIMAAT.MediumDatasets.softwares (current)", TIMAAT.MediumDatasets.softwares);
 						return data.data;
@@ -6232,7 +6118,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-softwares').removeClass('active');
+						$('#mediumDatasetsAllSoftwares').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('software', mediumModel);
@@ -6257,9 +6143,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -6288,7 +6174,7 @@
 		setupTextDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableText = $('#timaat-mediadatasets-text-table').DataTable({
+			this.dataTableText = $('#mediumDatasetsTextTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -6324,13 +6210,13 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.MediumDatasets.texts (last)", TIMAAT.MediumDatasets.texts);
 						// setup model
-						var meds = Array();
+						var textList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'text'));
+								textList.push(new TIMAAT.Medium(medium, 'text'));
 							}
 						});
-						TIMAAT.MediumDatasets.texts = meds;
+						TIMAAT.MediumDatasets.texts = textList;
 						TIMAAT.MediumDatasets.texts.model = data.data;
 						// console.log("TCL: TIMAAT.MediumDatasets.texts (current)", TIMAAT.MediumDatasets.texts);
 						return data.data;
@@ -6372,7 +6258,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-texts').removeClass('active');
+						$('#mediumDatasetsAllTexts').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('text', mediumModel);
@@ -6397,9 +6283,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -6428,7 +6314,7 @@
 		setupVideoDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableVideo = $('#timaat-mediadatasets-video-table').DataTable({
+			this.dataTableVideo = $('#mediumDatasetsVideoTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -6463,13 +6349,13 @@
 					"dataSrc": function(data) {
           	// console.log("TCL: data", data);
 						// setup model
-						var meds = Array();
+						var videoList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'video'));
+								videoList.push(new TIMAAT.Medium(medium, 'video'));
 							}
 						});
-						TIMAAT.MediumDatasets.videos = meds;
+						TIMAAT.MediumDatasets.videos = videoList;
 						TIMAAT.MediumDatasets.videos.model = data.data;
 						return data.data;
 					}
@@ -6510,7 +6396,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-videos').removeClass('active');
+						$('#mediumDatasetsAllVideos').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('video', mediumModel);
@@ -6538,9 +6424,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -6569,7 +6455,7 @@
 		setupVideogameDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable
-			this.dataTableVideogame = $('#timaat-mediadatasets-videogame-table').DataTable({
+			this.dataTableVideogame = $('#mediumDatasetsVideogameTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -6605,13 +6491,13 @@
           	// console.log("TCL: data", data);
 						// console.log("TCL: TIMAAT.MediumDatasets.videogames (last)", TIMAAT.MediumDatasets.videogames);
 						// setup model
-						var meds = Array();
+						var videogameList = Array();
 						data.data.forEach(function(medium) {
 							if ( medium.id > 0 ) {
-								meds.push(new TIMAAT.Medium(medium, 'videogame'));
+								videogameList.push(new TIMAAT.Medium(medium, 'videogame'));
 							}
 						});
-						TIMAAT.MediumDatasets.videogames = meds;
+						TIMAAT.MediumDatasets.videogames = videogameList;
 						TIMAAT.MediumDatasets.videogames.model = data.data;
 						// console.log("TCL: TIMAAT.MediumDatasets.videogames (current)", TIMAAT.MediumDatasets.videogames);
 						return data.data;
@@ -6653,7 +6539,7 @@
 
 					mediumElement.on('click', '.title', function(event) {
 						event.stopPropagation();
-						$('#timaat-mediumdatasets-all-videogames').removeClass('active');
+						$('#mediumDatasetsAllVideogames').removeClass('active');
 						let mediumModel = {};
 						mediumModel.model = medium;
 						TIMAAT.MediumDatasets.setDataTableOnItemSelect('videogame', mediumModel);
@@ -6678,9 +6564,9 @@
 						if (medium.originalTitle != null && medium.displayTitle.id != medium.originalTitle.id) {
 							titleDisplay += `<p><i>(OT: `+medium.originalTitle.name+`)</i></p>`;
 						}
-						medium.titles.forEach(function(title) { // make additional titles searchable in medialibrary
+						medium.titles.forEach(function(title) { // make additional titles searchable in media library
 							if (title.id != medium.displayTitle.id && (medium.originalTitle == null || title.id != medium.originalTitle.id)) {
-								titleDisplay += `<div style="display:none">`+title.name+`</div>`;
+								titleDisplay += `<div class="display--none">`+title.name+`</div>`;
 							}
 						});
 						return titleDisplay;
@@ -6710,25 +6596,25 @@
     	// console.log("TCL: setDataTableOnItemSelect:function -> type, selectedItem", type, selectedItem);
 			// show tag editor - trigger popup
 			TIMAAT.UI.hidePopups();
-			$('#timaat-mediadatasets-medium-tabs-container').append($('#timaat-mediadatasets-medium-tabs'));
-			$('#timaat-medium-modals-container').append($('#timaat-medium-modals'));
+			$('#mediumDatasetsMediumTabsContainer').append($('#mediumDatasetsMediumTabs'));
+			$('#mediumModalsContainer').append($('#mediumModals'));
 			this.container = 'media';
-			$('#mediumPreviewTab').removeClass('annotationMode');
+			$('#mediumPreviewDataTab').removeClass('annotationMode');
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-metadata-form', 'medium', subtype);
+					TIMAAT.UI.displayDataSetContentContainer('mediumDataTab', 'mediumFormMetadata', 'medium', subtype);
 				break;
 				case 'preview':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-preview-form', 'medium', subtype);
+					TIMAAT.UI.displayDataSetContentContainer('mediumDataTab', 'mediumFormPreview', 'medium', subtype);
 				break;
 				case 'titles':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-titles-form', 'medium', subtype);
+					TIMAAT.UI.displayDataSetContentContainer('mediumDataTab', 'mediumFormTitles', 'medium', subtype);
 				break;
 				case 'languageTracks':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-languagetracks-form', 'medium', subtype);
+					TIMAAT.UI.displayDataSetContentContainer('mediumDataTab', 'mediumFormLanguageTracks', 'medium', subtype);
 				break;
 				case 'actorWithRoles':
-					TIMAAT.UI.displayDataSetContentContainer('medium-data-tab', 'medium-actorwithroles-form', 'medium', subtype);
+					TIMAAT.UI.displayDataSetContentContainer('mediumDataTab', 'mediumFormActorWithRoles', 'medium', subtype);
 				break;
 			}
 			TIMAAT.UI.clearLastSelection(type);
@@ -6747,8 +6633,8 @@
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayTitle.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + type + '/' + selectedItem.model.id + '/' + TIMAAT.UI.subNavTab);
 				}
 			}
-			$('#medium-metadata-form').data('type', type);
-			$('#medium-metadata-form').data('medium', selectedItem);
+			$('#mediumFormMetadata').data('type', type);
+			$('#mediumFormMetadata').data('medium', selectedItem);
 			this.showAddMediumButton();
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'medium');
 		},

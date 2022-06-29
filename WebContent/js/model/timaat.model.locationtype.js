@@ -27,56 +27,56 @@
 					// model.ui = this;
 
 					// create and style list view element
-					var deleteLocationTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-locationtype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+					var deleteLocationTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm locationTypeRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 					if ( model.id < 0 ) deleteLocationTypeButton = '';
-					this.listView = $('<li class="list-group__item"> '
+					this.listView = $('<li class="list-group-item"> '
 						+ deleteLocationTypeButton +
-						'<span class="timaat-locationtype-list-type"></span>' +
+						'<span class="locationTypeListType"></span>' +
 						'<br> \
-						<div class="timaat-locationtype-list-count text-muted float-left"></div> \
+						<div class="locationTypeListCount text-muted float-left"></div> \
 						</li>'
 					);
 
-					$('#timaat-locationtype-list').append(this.listView);
+					$('#locationTypeList').append(this.listView);
 					this.updateUI();
 					var locationType = this; // save locationType for system locationTypes
 
 					// attach user log info
-					this.listView.find('.timaat-user-log').popover({
+					this.listView.find('.timaat__user-log').popover({
 						placement: 'right',
 						title: '<i class="fas fa-user"></i> editing log',
 						trigger: 'click',
 						html: true,
-						content: '<div class="timaat-user-log-details">Loading ...</div>',
+						content: '<div class="userLogDetails">Loading ...</div>',
 						container: 'body',
 						boundary: 'viewport',
 					});
 
-					this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+					this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 						TIMAAT.UI.hidePopups();
 					});
 
-					this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
-						// console.log("TCL: Locationtype -> constructor -> Display editing log");
-						if (locationtype.model.lastEditedAt == null) {
-							$('.timaat-user-log-details').html(
-								'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
-								'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>'
+					this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
+						// console.log("TCL: LocationType -> constructor -> Display editing log");
+						if (locationType.model.lastEditedAt == null) {
+							$('.userLogDetails').html(
+								'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+locationType.model.createdByUserAccountId+'">[ID '+locationType.model.createdByUserAccountId+']</span></b><br>\
+								'+TIMAAT.Util.formatDate(locationType.model.createdAt)+'<br>'
 							);
-							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+							$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 						} else {
-							$('.timaat-user-log-details').html(
-									'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+locationtype.model.createdByUserAccountId+'">[ID '+locationtype.model.createdByUserAccountId+']</span></b><br>\
-									'+TIMAAT.Util.formatDate(locationtype.model.createdAt)+'<br>\
-									<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+locationtype.model.lastEditedByUserAccountId+'">[ID '+locationtype.model.lastEditedByUserAccountId+']</span></b><br>\
-									'+TIMAAT.Util.formatDate(locationtype.model.lastEditedAt)+'<br>'
+							$('.userLogDetails').html(
+									'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+locationType.model.createdByUserAccountId+'">[ID '+locationType.model.createdByUserAccountId+']</span></b><br>\
+									'+TIMAAT.Util.formatDate(locationType.model.createdAt)+'<br>\
+									<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+locationType.model.lastEditedByUserAccountId+'">[ID '+locationType.model.lastEditedByUserAccountId+']</span></b><br>\
+									'+TIMAAT.Util.formatDate(locationType.model.lastEditedAt)+'<br>'
 							);
-							$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+							$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 						}
 					});
 
 					// attach user log info
-					this.listView.find('.timaat-user-log').on('click', function(ev) {
+					this.listView.find('.timaat__user-log').on('click', function(ev) {
 						ev.preventDefault();
 						ev.stopPropagation();
 					});
@@ -86,29 +86,29 @@
 						ev.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						// show metadata editor
-						$('#timaat-locationdatasets-locationtype-meta').data('locationType', locationType);
-						$('#timaat-locationdatasets-locationtype-meta').modal('show');
+						$('#locationDatasetsLocationTypeMeta').data('locationType', locationType);
+						$('#locationDatasetsLocationTypeMeta').modal('show');
 					});
 
 					// remove handler
-					this.listView.find('.timaat-locationtype-remove').on('click', this, function(ev) {
+					this.listView.find('.locationTypeRemoveButton').on('click', this, function(ev) {
 						ev.stopPropagation();
 						TIMAAT.UI.hidePopups();
-						$('#timaat-locationdatasets-locationtype-delete').data('locationType', locationType);
-						$('#timaat-locationdatasets-locationtype-delete').modal('show');
+						$('#locationDatasetsLocationTypeDeleteModal').data('locationType', locationType);
+						$('#locationDatasetsLocationTypeDeleteModal').modal('show');
 					});
 				}
 
 				updateUI() {
-					// console.log("TCL: Locationtype -> updateUI -> updateUI() -> model", this.model);
+					// console.log("TCL: LocationType -> updateUI -> updateUI() -> model", this.model);
 					// title
 					var type = this.model.locationTypeTranslations[0].type;
 					if ( this.model.id < 0 ) type = "[not assigned]";
-					this.listView.find('.timaat-locationtype-list-name').text(type);
+					this.listView.find('.locationTypeListName').text(type);
 				}
 
 				remove() {
-		      // console.log("TCL: Locationtype -> remove -> remove()");
+		      // console.log("TCL: LocationType -> remove -> remove()");
 					// remove locationType from UI
 					this.listView.remove(); // TODO remove tags from location_type_has_tags
 					// remove from locationType list

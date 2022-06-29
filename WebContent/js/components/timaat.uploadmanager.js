@@ -24,18 +24,18 @@
 			this.medium = medium;
 			this.form = form;
 			this.state = 'init';
-			this.ui = $(`<li class="list-group__item">
-							<button type="button" class="upload-cancel btn float-right btn-outline-danger ml-2"><i class="fas fa-times-circle"></i></button>
+			this.ui = $(`<li class="list-group-item">
+							<button type="button" class="cancelUpload btn float-right btn-outline-danger ml-2"><i class="fas fa-times-circle"></i></button>
 							<span class="filename text-dark">[FILENAME]</span><br>
 							<div class="progress">
-								<div class="progress-bar bg-secondary" role="progressbar" style="width: 100%;">In queue...</div>
+								<div class="progressBar bg-secondary width--100" role="progressbar">In queue...</div>
 							</div>
 						</li>
 			`);
 
 			this.attachListeners();
 
-			let fileList = $(form).find('.timaat-medium-upload-file')[0].files;
+			let fileList = $(form).find('.mediumUploadFile')[0].files;
 			if ( fileList && fileList.length > 0 ) {
 				this.filename = fileList[0].name;
 				this.fileSize = fileList[0].size;
@@ -52,7 +52,7 @@
 				e.preventDefault();
 				let oldPercent = 0;
 				xhr.upload.addEventListener('loadstart', function(event) {
-					uploadItem.ui.find('.progress-bar').removeClass('bg-secondary').css('width', '0%').text('0%');
+					uploadItem.ui.find('.progressBar').removeClass('bg-secondary').css('width', '0%').text('0%');
 					console.info('UPLOAD::Start', uploadItem.medium);
 				}, false);
 
@@ -61,7 +61,7 @@
 						if ( oldPercent != percent.toFixed(1) ) {
 							oldPercent = percent.toFixed(1);
 	//			            console.log('UPLOAD:Progress: ' + percent.toFixed(1)+'%', uploadItem.video);
-							uploadItem.ui.find('.progress-bar').css('width', percent.toFixed(1) + '%').text(percent.toFixed(1)+'%');
+							uploadItem.ui.find('.progressBar').css('width', percent.toFixed(1) + '%').text(percent.toFixed(1)+'%');
 						}
 				}, false);
 
@@ -72,7 +72,7 @@
 					if ( uploadItem.state == 'abort' ) return;
 					if (event.target.readyState == 4) {
 						if (event.target.status == 200) {
-							uploadItem.ui.find('.progress-bar').addClass('bg-success').css('width', '100%').text('Upload successful');
+							uploadItem.ui.find('.progressBar').addClass('bg-success').css('width', '100%').text('Upload successful');
 							uploadItem.state = 'done';
 							console.info('UPLOAD::SUCCESS');
 							switch (type) {
@@ -104,7 +104,7 @@
 						} else {
 							uploadItem.state = 'fail';
 								console.error('UPLOAD FAILED: Error in the response.', event);
-							uploadItem.ui.find('.progress-bar').addClass('bg-danger').css('width', '100%').text('Upload failed');
+							uploadItem.ui.find('.progressBar').addClass('bg-danger').css('width', '100%').text('Upload failed');
 						}
 					} else console.info('STATE CHANGE: ', event);
 				}, false);
@@ -122,7 +122,7 @@
 		}
 
 		attachListeners() {
-			this.ui.find('button.upload-cancel').off('click').on('click', this, this._handleAbort);
+			this.ui.find('button.cancelUpload').off('click').on('click', this, this._handleAbort);
 		}
 
 		startUpload() {
@@ -151,25 +151,25 @@
 		init: function() {
 
 			TIMAAT.UploadManager.ui = $(`<div>
-					<span class="timaat-uploads-message">no active uploads</span>
-					<ul class="timaat-upload-list list-group list-group-flush"></ul>
+					<span class="uploadsMessage">no active uploads</span>
+					<ul class="upload__list list-group list-group-flush"></ul>
 			</div>`);
 
 			// init upload manager popover functionality
-			$('#timaat-upload-manager').popover({
+			$('#uploadManager').popover({
 				placement: 'bottom',
 				title: '<i class="fas fa-cloud-upload-alt"></i> Video uploads',
 				trigger: 'click',
 				html: true,
-				template: '<div class="popover timaat-upload-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+				template: '<div class="popover uploadPopover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
 				content: `
-				<div class="timaat-upload-details">
+				<div class="uploadDetails">
 				</div>`,
 				container: 'body',
 				boundary: 'viewport',
 			});
-			$('#timaat-upload-manager').on('inserted.bs.popover', function () {
-				$('.timaat-upload-details').append(TIMAAT.UploadManager.ui);
+			$('#uploadManager').on('inserted.bs.popover', function () {
+				$('.uploadDetails').append(TIMAAT.UploadManager.ui);
 				for (let uploadItem of TIMAAT.UploadManager.uploads) uploadItem.attachListeners();
 			});
 		},
@@ -185,9 +185,9 @@
 			let uploadItem = new TIMAAT.UploadItem(medium, medium.mediaType.mediaTypeTranslations[0].type, form);
 			TIMAAT.UploadManager.uploads.push(uploadItem);
 			// add UI
-			TIMAAT.UploadManager.ui.find('ul.timaat-upload-list').append(uploadItem.ui);
-			TIMAAT.UploadManager.ui.find('.timaat-uploads-message').hide();
-			$('#timaat-upload-manager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-info');
+			TIMAAT.UploadManager.ui.find('ul.upload__list').append(uploadItem.ui);
+			TIMAAT.UploadManager.ui.find('.uploadsMessage').hide();
+			$('#uploadManager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-info');
 
 			// send event
 			$(document).trigger('added.upload.TIMAAT', medium);
@@ -200,8 +200,8 @@
 			TIMAAT.UploadManager.uploads.splice(TIMAAT.UploadManager.uploads.indexOf(item),1);
 
 			if ( TIMAAT.UploadManager.uploads.length == 0 ) {
-				TIMAAT.UploadManager.ui.find('.timaat-uploads-message').show();
-				$('#timaat-upload-manager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-secondary');
+				TIMAAT.UploadManager.ui.find('.uploadsMessage').show();
+				$('#uploadManager').removeClass('btn-secondary').removeClass('btn-info').addClass('btn-secondary');
 			}
 
 			// send event

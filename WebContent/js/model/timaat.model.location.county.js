@@ -26,56 +26,56 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteCountyButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-county-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteCountyButton = '<button type="button" class="btn btn-outline btn-danger btn-sm countyRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteCountyButton = '';
-			this.listView = $('<li class="list-group__item"> ' +
+			this.listView = $('<li class="list-group-item"> ' +
 				deleteCountyButton +
-				'<span class="timaat-county-list-name"></span>' +
+				'<span class="locationDatasetsCountyListName"></span>' +
 				'<br>' +
-				'<div class="timaat-county-list-count text-muted float-left"></div>' +
-				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+				'<div class="locationDatasetsCountyListCount text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat__user-log"><i class="fas fa-user"></i></div>' +
 			'</li>'
 			);
 
-			$('#timaat-county-list').append(this.listView);
+			$('#locationDatasetsCountyList').append(this.listView);
 			this.updateUI();
 			var county = this; // save county for system events
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (county.model.location.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+county.model.location.createdByUserAccountId+'">[ID '+county.model.location.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+county.model.location.createdByUserAccountId+'">[ID '+county.model.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(county.model.location.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+county.model.location.createdByUserAccountId+'">[ID '+county.model.location.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+county.model.location.createdByUserAccountId+'">[ID '+county.model.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(county.model.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+county.model.location.lastEditedByUserAccountId+'">[ID '+county.model.location.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+county.model.location.lastEditedByUserAccountId+'">[ID '+county.model.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(county.model.location.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,23 +85,23 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				// county.listView.find('.timaat-county-list-tags').popover('show');
+				// county.listView.find('.locationDatasetsCountyListTags').popover('show');
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-locationdatasets-county-meta').data('county', county);
-				$('#timaat-locationdatasets-county-meta').modal('show');
+				$('#locationDatasetsAddCountyModal').data('county', county);
+				$('#locationDatasetsAddCountyModal').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-county-remove').on('click', this, function(ev) {
+			this.listView.find('.countyRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-locationdatasets-county-delete').data('county', county);
-				$('#timaat-locationdatasets-county-delete').modal('show');
+				$('#locationDatasetsDeleteCountyModal').data('county', county);
+				$('#locationDatasetsDeleteCountyModal').modal('show');
 			});
 		}
 
@@ -110,7 +110,7 @@
 			// title
 			var name = this.model.location.locationTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-county-list-name').text(name);
+			this.listView.find('.locationDatasetsCountyListName').text(name);
 		}
 
 		remove() {

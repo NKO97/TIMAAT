@@ -20,7 +20,7 @@
 }(function (TIMAAT) {
 
 	TIMAAT.Util = {
-		serverprefix: "",
+		serverPrefix: "",
 
 		formatTime: function(timeInMilliseconds, withFraction = false) {
     	// console.log("TCL: timeInMilliseconds, withFraction ", timeInMilliseconds, withFraction );
@@ -192,14 +192,14 @@
 			let months  = Math.floor(days / 30);
 			let years   = Math.floor(days / 365);
 
-			if ( years > 0 ) fuzzyDate = (years == 1) ? 'a year ago' : years+' years ago';
-			else if ( months > 0 ) fuzzyDate = (months == 1) ? 'a month ago' : months+' months ago';
-			else if ( weeks > 0 ) fuzzyDate = (weeks == 1) ? 'last week' : weeks+' weeks ago';
-			else if ( days > 0 ) fuzzyDate = (days == 1) ? 'yesterday' : days+' days ago';
-			else if ( hours > 0 ) fuzzyDate = (hours == 1) ? 'an hour ago' : hours+' hours ago';
+			if   		( years > 0 ) fuzzyDate   = (years == 1) ? 'a year ago' : years+' years ago';
+			else if ( months > 0 ) fuzzyDate  = (months == 1) ? 'a month ago' : months+' months ago';
+			else if ( weeks > 0 ) fuzzyDate   = (weeks == 1) ? 'last week' : weeks+' weeks ago';
+			else if ( days > 0 ) fuzzyDate    = (days == 1) ? 'yesterday' : days+' days ago';
+			else if ( hours > 0 ) fuzzyDate   = (hours == 1) ? 'an hour ago' : hours+' hours ago';
 			else if ( minutes > 0 ) fuzzyDate = (minutes == 1) ? 'a minute ago' : minutes+' minutes ago';
 			else if ( seconds > 4 ) fuzzyDate = seconds+' seconds ago';
-			else fuzzyDate = 'now';
+			else fuzzyDate                    = 'now';
 
 			return fuzzyDate;
 		},

@@ -25,14 +25,14 @@
     },
 
     initAnalysis: function() {
-      $('#timaat-analysis-add-submit').on('click', async function(event) {
+      $('#analysisAddSubmitButton').on('click', async function(event) {
         event.preventDefault();
-        var modal = $('#timaat-videoplayer-analysis-add');
+        var modal = $('#analysisAddModal');
         if (!$('#newAnalysisMethodModalForm').valid())
 					return false;
         var analysisMethodTypeId = modal.data('analysisMethodTypeId');
         var annotationId = modal.data('annotationId');
-        let remark = $('#analysis-remark').val();
+        let remark = $('#analysisRemark').val();
         let analysisModel = {
           id: 0,
           annotation: {
@@ -44,7 +44,7 @@
               id: analysisMethodTypeId,
             },
           },
-          preproduction: "",
+          preProduction: "",
           remark: remark
         };
         var analysisMethodId;
@@ -55,7 +55,7 @@
 
         switch(analysisMethodTypeId) {
           case 1: // Martinez Scheffel Unreliable Narration
-            analysisMethodId = Number($('#martinez-scheffel-unreliable-narration-select-dropdown').val());
+            analysisMethodId = Number($('#martinezScheffelUnreliableNarrationSelectDropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
@@ -70,7 +70,7 @@
           case 6: // Stanzel Narrative Situations //* won't be implemented
           break;
           case 7: // Color Temperature
-            analysisMethodId = Number($('#color-temperature-select-dropdown').val());
+            analysisMethodId = Number($('#colorTemperatureSelectDropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
@@ -85,45 +85,45 @@
               cameraElevation: null,
               cameraDepthOfFocus: null,
             };
-            (Number($('#camera-distance-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraDistance = { analysisMethodId: Number($('#camera-distance-select-dropdown').val()) };
-            (Number($('#camera-shot-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraShotType = { analysisMethodId: Number($('#camera-shot-type-select-dropdown').val()) };
-            (Number($('#camera-vertical-angle-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraVerticalAngle = { analysisMethodId: Number($('#camera-vertical-angle-select-dropdown').val()) };
-            (Number($('#camera-horizontal-angle-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraHorizontalAngle = { analysisMethodId: Number($('#camera-horizontal-angle-select-dropdown').val()) };
-            (Number($('#camera-axis-of-action-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraAxisOfAction = { analysisMethodId: Number($('#camera-axis-of-action-select-dropdown').val()) };
-            (Number($('#camera-elevation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraElevation = { analysisMethodId: Number($('#camera-elevation-select-dropdown').val()) };
-            (Number($('#camera-depth-of-focus-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraDepthOfFocus = { analysisMethodId: Number($('#camera-depth-of-focus-select-dropdown').val()) };
+            (Number($('#cameraDistanceSelectDropDown').val()) == 0) ? null : analysisMethodVariantModel.cameraDistance = { analysisMethodId: Number($('#cameraDistanceSelectDropDown').val()) };
+            (Number($('#cameraShotTypeSelectDropDown').val()) == 0) ? null : analysisMethodVariantModel.cameraShotType = { analysisMethodId: Number($('#cameraShotTypeSelectDropDown').val()) };
+            (Number($('#cameraVerticalAngleSelectDropDown').val()) == 0) ? null : analysisMethodVariantModel.cameraVerticalAngle = { analysisMethodId: Number($('#cameraVerticalAngleSelectDropDown').val()) };
+            (Number($('#cameraHorizontalAngleSelectDropDown').val()) == 0) ? null : analysisMethodVariantModel.cameraHorizontalAngle = { analysisMethodId: Number($('#cameraHorizontalAngleSelectDropDown').val()) };
+            (Number($('#cameraAxisOfActionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraAxisOfAction = { analysisMethodId: Number($('#cameraAxisOfActionSelectDropdown').val()) };
+            (Number($('#cameraElevationSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraElevation = { analysisMethodId: Number($('#cameraElevationSelectDropdown').val()) };
+            (Number($('#cameraDepthOfFocusSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraDepthOfFocus = { analysisMethodId: Number($('#cameraDepthOfFocusSelectDropdown').val()) };
 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
             analysis.analysisMethod.conceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "conceptCameraPositionAndPerspective");
           break;
           case 9: // Camera Elevation
-            analysisMethodId = Number($('#camera-elevation-select-dropdown').val());
+            analysisMethodId = Number($('#cameraElevationSelectDropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 10: // Camera Axis of Action
-            analysisMethodId = Number($('#camera-axis-of-action-select-dropdown').val());
+            analysisMethodId = Number($('#cameraAxisOfActionSelectDropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 11: // Camera Horizontal Angle
-            analysisMethodId = Number($('#camera-horizontal-angle-select-dropdown').val());
+            analysisMethodId = Number($('#cameraHorizontalAngleSelectDropDown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 12: // Camera Vertical Angle
-            analysisMethodId = Number($('#camera-vertical-angle-select-dropdown').val());
+            analysisMethodId = Number($('#cameraVerticalAngleSelectDropDown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 13: // Camera Shot Type
-            analysisMethodId = Number($('#camera-shot-type-select-dropdown').val());
+            analysisMethodId = Number($('#cameraShotTypeSelectDropDown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
           case 14: // Camera Distance
-            analysisMethodId = Number($('#camera-distance-select-dropdown').val());
+            analysisMethodId = Number($('#cameraDistanceSelectDropDown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
@@ -163,24 +163,24 @@
             cameraElevation: null,
             cameraDepthOfFocus: null
           };
-          (Number($('#camera-movement-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementType = { analysisMethodId: Number($('#camera-movement-type-select-dropdown').val()) };
-          (Number($('#camera-movement-characteristic-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementCharacteristic = { analysisMethodId: Number($('#camera-movement-characteristic-select-dropdown').val()) };
-          (Number($('#camera-handling-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraHandling = { analysisMethodId: Number($('#camera-handling-select-dropdown').val()) };
-          (Number($('#concept-direction-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.conceptDirection = { analysisMethodId: Number($('#concept-direction-select-dropdown').val()) };
-          (Number($('#start-camera-distance-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#start-camera-distance-select-dropdown').val()) };
-          (Number($('#start-camera-shot-type-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#start-camera-shot-type-select-dropdown').val()) };
-          (Number($('#start-camera-vertical-angle-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#start-camera-vertical-angle-select-dropdown').val()) };
-          (Number($('#start-camera-horizontal-angle-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#start-camera-horizontal-angle-select-dropdown').val()) };
-          (Number($('#start-camera-axis-of-action-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#start-camera-axis-of-action-select-dropdown').val()) };
-          (Number($('#start-camera-elevation-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#start-camera-elevation-select-dropdown').val()) };
-          (Number($('#start-camera-depth-of-focus-select-dropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDepthOfFocus = { analysisMethodId: Number($('#start-camera-depth-of-focus-select-dropdown').val()) };
-          (Number($('#end-camera-distance-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#end-camera-distance-select-dropdown').val()) };
-          (Number($('#end-camera-shot-type-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#end-camera-shot-type-select-dropdown').val()) };
-          (Number($('#end-camera-vertical-angle-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#end-camera-vertical-angle-select-dropdown').val()) };
-          (Number($('#end-camera-horizontal-angle-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#end-camera-horizontal-angle-select-dropdown').val()) };
-          (Number($('#end-camera-axis-of-action-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#end-camera-axis-of-action-select-dropdown').val()) };
-          (Number($('#end-camera-elevation-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#end-camera-elevation-select-dropdown').val()) };
-          (Number($('#end-camera-depth-of-focus-select-dropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDepthOfFocus = { analysisMethodId: Number($('#end-camera-depth-of-focus-select-dropdown').val()) };
+          (Number($('#cameraMovementTypeSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementType = { analysisMethodId: Number($('#cameraMovementTypeSelectDropdown').val()) };
+          (Number($('#cameraMovementCharacteristicSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraMovementCharacteristic = { analysisMethodId: Number($('#cameraMovementCharacteristicSelectDropdown').val()) };
+          (Number($('#cameraHandlingSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraHandling = { analysisMethodId: Number($('#cameraHandlingSelectDropdown').val()) };
+          (Number($('#conceptDirectionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.conceptDirection = { analysisMethodId: Number($('#conceptDirectionSelectDropdown').val()) };
+          (Number($('#startCameraDistanceSelectDropDown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#startCameraDistanceSelectDropDown').val()) };
+          (Number($('#startCameraShotTypeSelectDropDown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#startCameraShotTypeSelectDropDown').val()) };
+          (Number($('#startCameraVerticalAngleSelectDropDown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#startCameraVerticalAngleSelectDropDown').val()) };
+          (Number($('#startCameraHorizontalAngleSelectDropDown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#startCameraHorizontalAngleSelectDropDown').val()) };
+          (Number($('#startCameraAxisOfActionSelectDropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#startCameraAxisOfActionSelectDropdown').val()) };
+          (Number($('#startCameraElevationSelectDropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#startCameraElevationSelectDropdown').val()) };
+          (Number($('#startCameraDepthOfFocusSelectDropdown').val()) == 0) ? null : startConceptCameraPositionAndPerspectiveModel.cameraDepthOfFocus = { analysisMethodId: Number($('#startCameraDepthOfFocusSelectDropdown').val()) };
+          (Number($('#endCameraDistanceSelectDropDown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDistance = { analysisMethodId: Number($('#endCameraDistanceSelectDropDown').val()) };
+          (Number($('#endCameraShotTypeSelectDropDown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraShotType = { analysisMethodId: Number($('#endCameraShotTypeSelectDropDown').val()) };
+          (Number($('#endCameraVerticalAngleSelectDropDown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraVerticalAngle = { analysisMethodId: Number($('#endCameraVerticalAngleSelectDropDown').val()) };
+          (Number($('#endCameraHorizontalAngleSelectDropDown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraHorizontalAngle = { analysisMethodId: Number($('#endCameraHorizontalAngleSelectDropDown').val()) };
+          (Number($('#endCameraAxisOfActionSelectDropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraAxisOfAction = { analysisMethodId: Number($('#endCameraAxisOfActionSelectDropdown').val()) };
+          (Number($('#endCameraElevationSelectDropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraElevation = { analysisMethodId: Number($('#endCameraElevationSelectDropdown').val()) };
+          (Number($('#endCameraDepthOfFocusSelectDropdown').val()) == 0) ? null : endConceptCameraPositionAndPerspectiveModel.cameraDepthOfFocus = { analysisMethodId: Number($('#endCameraDepthOfFocusSelectDropdown').val()) };
           let startConceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(startConceptCameraPositionAndPerspectiveModel, 'conceptCameraPositionAndPerspective');
           analysisMethodVariantModel.startConceptCameraPositionAndPerspective.analysisMethodId = startConceptCameraPositionAndPerspective.analysisMethodId;
           let endConceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(endConceptCameraPositionAndPerspectiveModel, 'conceptCameraPositionAndPerspective');
@@ -190,7 +190,7 @@
           analysis.analysisMethod.conceptCameraPositionAndPerspective = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "cameraMovement");
           break;
           case 17: // Camera Handling
-            analysisMethodId = Number($('#camera-handling-select-dropdown').val());
+            analysisMethodId = Number($('#cameraHandlingSelectDropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
@@ -201,12 +201,12 @@
           case 20: // Sound Effect Descriptive
             analysisMethodVariantModel = {
               analysisMethodId: 0,
-              answerQ1: $('#sound-effect-descriptive-answer-q1').val(),
-              answerQ2: $('#sound-effect-descriptive-answer-q2').val(),
-              answerQ3: $('#sound-effect-descriptive-answer-q3').val(),
-              answerQ4: $('#sound-effect-descriptive-answer-q4').val(),
-              answerQ5: $('#sound-effect-descriptive-answer-q5').val(),
-              answerQ6: $('#sound-effect-descriptive-answer-q6').val()
+              answerQ1: $('#soundEffectDescriptiveAnswerQ1').val(),
+              answerQ2: $('#soundEffectDescriptiveAnswerQ2').val(),
+              answerQ3: $('#soundEffectDescriptiveAnswerQ3').val(),
+              answerQ4: $('#soundEffectDescriptiveAnswerQ4').val(),
+              answerQ5: $('#soundEffectDescriptiveAnswerQ5').val(),
+              answerQ6: $('#soundEffectDescriptiveAnswerQ6').val()
             };
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
@@ -223,10 +223,10 @@
                   id: 0
                 },
               },
-              harmony: $('#analysis-music-harmony').val(),
-              isPause: $('#analysis-music-isPause').prop('checked'),
-              melody: $('#analysis-music-melody').val(),
-              tempo: $('#analysis-music-tempo').val(),
+              harmony: $('#analysisMusicHarmony').val(),
+              isPause: $('#analysisMusicIsPause').prop('checked'),
+              melody: $('#analysisMusicMelody').val(),
+              tempo: $('#analysisMusicTempo').val(),
               articulation: null,
               dynamicMarking: null,
               changeInDynamics: null,
@@ -241,19 +241,19 @@
               lineupMembers: null,
               musicalNotations: null,
             };
-            (Number($('#analysis-music-articulation-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.articulation = { id: Number($('#analysis-music-articulation-select-dropdown').val()) };
-            (Number($('#analysis-music-dynamicMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.dynamicMarking = { id:  Number($('#analysis-music-dynamicMarking-select-dropdown').val())};
-            (Number($('#analysis-music-changeInDynamics-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInDynamics = { id:  Number($('#analysis-music-changeInDynamics-select-dropdown').val())};
-            (Number($('#analysis-music-changeInTempo-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInTempo = { id: Number($('#analysis-music-changeInTempo-select-dropdown').val())};
-            (Number($('#analysis-music-tempoMarking-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.tempoMarking = { id: Number($('#analysis-music-tempoMarking-select-dropdown').val())};
-            (Number($('#analysis-music-musicalKey-select-dropdown').val()) == 0 ) ? null : analysisMethodVariantModel.musicalKey = { id: Number($('#analysis-music-musicalKey-select-dropdown').val())};
-            (Number($('#analysis-music-rhythm-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.rhythm = { id: Number($('#analysis-music-rhythm-select-dropdown').val())};
-            (Number($('#analysis-music-timbre-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.timbre = { id: Number($('#analysis-music-timbre-select-dropdown').val())};
-            (Number($('#analysis-music-jins-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.jins = { id: Number($('#analysis-music-jins-select-dropdown').val())};
-            (Number($('#analysis-music-maqam-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.maqam = { id: Number($('#analysis-music-maqam-select-dropdown').val())};
-            (Number($('#analysis-music-songStructure-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.songStructure = { id: Number($('#analysis-music-songStructure-select-dropdown').val())};
-            (Number($('#analysis-music-lineupMembers-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lineupMembers = [{ id: Number($('#analysis-music-lineupMembers-select-dropdown').val())}];
-            (Number($('#analysis-music-musicalNotations-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.musicalNotations = [{ id: Number($('#analysis-music-musicalNotations-select-dropdown').val())}];
+            (Number($('#analysisMusicArticulationSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.articulation = { id: Number($('#analysisMusicArticulationSelectDropdown').val()) };
+            (Number($('#analysisMusicDynamicMarkingSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.dynamicMarking = { id:  Number($('#analysisMusicDynamicMarkingSelectDropdown').val())};
+            (Number($('#analysisMusicChangeInDynamicsSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInDynamics = { id:  Number($('#analysisMusicChangeInDynamicsSelectDropdown').val())};
+            (Number($('#analysisMusicChangeInTempoSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.changeInTempo = { id: Number($('#analysisMusicChangeInTempoSelectDropdown').val())};
+            (Number($('#analysisMusicTempoMarkingSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.tempoMarking = { id: Number($('#analysisMusicTempoMarkingSelectDropdown').val())};
+            (Number($('#analysisMusicMusicalKeySelectDropdown').val()) == 0 ) ? null : analysisMethodVariantModel.musicalKey = { id: Number($('#analysisMusicMusicalKeySelectDropdown').val())};
+            (Number($('#analysisMusicRhythmSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.rhythm = { id: Number($('#analysisMusicRhythmSelectDropdown').val())};
+            (Number($('#analysisMusicTimbreSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.timbre = { id: Number($('#analysisMusicTimbreSelectDropdown').val())};
+            (Number($('#analysisMusicJinsSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.jins = { id: Number($('#analysisMusicJinsSelectDropdown').val())};
+            (Number($('#analysisMusicMaqamSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.maqam = { id: Number($('#analysisMusicMaqamSelectDropdown').val())};
+            (Number($('#analysisMusicSongStructureSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.songStructure = { id: Number($('#analysisMusicSongStructureSelectDropdown').val())};
+            (Number($('#analysisMusicLineupMembersSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lineupMembers = [{ id: Number($('#analysisMusicLineupMembersSelectDropdown').val())}];
+            (Number($('#analysisMusicMusicalNotationsSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.musicalNotations = [{ id: Number($('#analysisMusicMusicalNotationsSelectDropdown').val())}];
             audioPostProductionTranslationModel = {
               id: 0,
               audioPostProduction: {
@@ -262,12 +262,12 @@
               language: {
                 id: 1 // TODO
               },
-              overdubbing: $('#audio-post-production-overdubbing').val(),
-              reverb: $('#audio-post-production-reverb').val(),
-              delay: $('#audio-post-production-delay').val(),
-              panning: $('#audio-post-production-panning').val(),
-              bass: $('#audio-post-production-bass').val(),
-              treble: $('#audio-post-production-treble').val(),
+              overdubbing: $('#audioPostProductionOverdubbing').val(),
+              reverb: $('#audioPostProductionReverb').val(),
+              delay: $('#audioPostProductionDelay').val(),
+              panning: $('#audioPostProductionPanning').val(),
+              bass: $('#audioPostProductionBass').val(),
+              treble: $('#audioPostProductionTreble').val(),
             };
             audioPostProductionModel = await TIMAAT.AnalysisService.createAudioPostProduction();
             audioPostProductionTranslationModel.audioPostProduction.id = audioPostProductionModel.id;
@@ -288,12 +288,12 @@
                 },
               },
               // categorySet: { id: 0 },
-              accent: $('#analysis-speech-accent').val(),
-              intonation: $('#analysis-speech-intonation').val(),
-              volume: $('#analysis-speech-volume').val(),
-              tempo: $('#analysis-speech-tempo').val(),
-              pauses: $('#analysis-speech-pauses').val(),
-              timbre: $('#analysis-speech-timbre').val(),
+              accent: $('#analysisSpeechAccent').val(),
+              intonation: $('#analysisSpeechIntonation').val(),
+              volume: $('#analysisSpeechVolume').val(),
+              tempo: $('#analysisSpeechTempo').val(),
+              pauses: $('#analysisSpeechPauses').val(),
+              timbre: $('#analysisSpeechTimbre').val(),
             };
             audioPostProductionTranslationModel = {
               id: 0,
@@ -303,12 +303,12 @@
               language: {
                 id: 1 // TODO
               },
-              overdubbing: $('#audio-post-production-overdubbing').val(),
-              reverb: $('#audio-post-production-reverb').val(),
-              delay: $('#audio-post-production-delay').val(),
-              panning: $('#audio-post-production-panning').val(),
-              bass: $('#audio-post-production-bass').val(),
-              treble: $('#audio-post-production-treble').val(),
+              overdubbing: $('#audioPostProductionOverdubbing').val(),
+              reverb: $('#audioPostProductionReverb').val(),
+              delay: $('#audioPostProductionDelay').val(),
+              panning: $('#audioPostProductionPanning').val(),
+              bass: $('#audioPostProductionBass').val(),
+              treble: $('#audioPostProductionTreble').val(),
             };
             audioPostProductionModel = await TIMAAT.AnalysisService.createAudioPostProduction();
             audioPostProductionTranslationModel.audioPostProduction.id = audioPostProductionModel.id;
@@ -363,14 +363,14 @@
               playbackSpeed: null,
               imageCadreEditing: null
             };
-            (Number($('#montage-figure-macro-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.montageFigureMacro = { analysisMethodId: Number($('#montage-figure-macro-select-dropdown').val()) };
-            (Number($('#montage-figure-micro-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.montageFigureMicro = { analysisMethodId: Number($('#montage-figure-micro-select-dropdown').val()) };
-            (Number($('#take-junction-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.takeJunction = { analysisMethodId: Number($('#take-junction-select-dropdown').val()) };
-            (Number($('#editing-rhythm-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.editingRhythm = { analysisMethodId: Number($('#editing-rhythm-select-dropdown').val()) };
-            (Number($('#take-type-progression-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.takeTypeProgression = { analysisMethodId: Number($('#take-type-progression-select-dropdown').val()) };
-            (Number($('#camera-shot-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.cameraShotType = { analysisMethodId: Number($('#camera-shot-type-select-dropdown').val()) };
-            (Number($('#playback-speed-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.playbackSpeed = { analysisMethodId: Number($('#playback-speed-select-dropdown').val()) };
-            (Number($('#image-cadre-editing-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.imageCadreEditing = { analysisMethodId: Number($('#image-cadre-editing-select-dropdown').val()) };
+            (Number($('#montageFigureMacroSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.montageFigureMacro = { analysisMethodId: Number($('#montageFigureMacroSelectDropdown').val()) };
+            (Number($('#montageFigureMicroSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.montageFigureMicro = { analysisMethodId: Number($('#montageFigureMicroSelectDropdown').val()) };
+            (Number($('#takeJunctionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.takeJunction = { analysisMethodId: Number($('#takeJunctionSelectDropdown').val()) };
+            (Number($('#editingRhythmSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.editingRhythm = { analysisMethodId: Number($('#editingRhythmSelectDropdown').val()) };
+            (Number($('#takeTypeProgressionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.takeTypeProgression = { analysisMethodId: Number($('#takeTypeProgressionSelectDropdown').val()) };
+            (Number($('#cameraShotTypeSelectDropDown').val()) == 0) ? null : analysisMethodVariantModel.cameraShotType = { analysisMethodId: Number($('#cameraShotTypeSelectDropDown').val()) };
+            (Number($('#playbackSpeedSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.playbackSpeed = { analysisMethodId: Number($('#playbackSpeedSelectDropdown').val()) };
+            (Number($('#imageCadreEditingSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.imageCadreEditing = { analysisMethodId: Number($('#imageCadreEditingSelectDropdown').val()) };
             let takeLengthModel = {
               analysisMethodId: 0,
               text: $('#takeLength').val()
@@ -408,17 +408,17 @@
               lightModifier: null,
               lightingDuration: null
             };
-            (Number($('#lighting-type-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightingType = { analysisMethodId: Number($('#lighting-type-select-dropdown').val()) };
-            (Number($('#light-position-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPosition = { analysisMethodId: Number($('#light-position-select-dropdown').val()) };
-            (Number($('#light-position-angle-horizontal-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPositionAngleHorizontal = { analysisMethodId: Number($('#light-position-angle-horizontal-select-dropdown').val()) };
-            (Number($('#light-position-angle-vertical-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPositionAngleVertical = { analysisMethodId: Number($('#light-position-angle-vertical-select-dropdown').val()) };
-            (Number($('#light-modifier-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightModifier = { analysisMethodId: Number($('#light-modifier-select-dropdown').val()) };
-            (Number($('#lighting-duration-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.lightingDuration = { analysisMethodId: Number($('#lighting-duration-select-dropdown').val()) };
+            (Number($('#lightingTypeSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lightingType = { analysisMethodId: Number($('#lightingTypeSelectDropdown').val()) };
+            (Number($('#lightPositionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPosition = { analysisMethodId: Number($('#lightPositionSelectDropdown').val()) };
+            (Number($('#lightPositionAngleHorizontalSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPositionAngleHorizontal = { analysisMethodId: Number($('#lightPositionAngleHorizontalSelectDropdown').val()) };
+            (Number($('#lightPositionAngleVerticalSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lightPositionAngleVertical = { analysisMethodId: Number($('#lightPositionAngleVerticalSelectDropdown').val()) };
+            (Number($('#lightModifierSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lightModifier = { analysisMethodId: Number($('#lightModifierSelectDropdown').val()) };
+            (Number($('#lightingDurationSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.lightingDuration = { analysisMethodId: Number($('#lightingDurationSelectDropdown').val()) };
 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
             analysis.analysisMethod.lighting = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "lighting");
-            console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
+            // console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
           break;
           case 44: // AnalysisActor
             analysisMethodVariantModel = {
@@ -431,18 +431,18 @@
               physicalExpression: null,
               physicalExpressionIntensity: null
             };
-            (Number($('#acting-technique-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.actingTechnique = { analysisMethodId: Number($('#acting-technique-select-dropdown').val()) };
-            (Number($('#facial-expression-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.facialExpression = { analysisMethodId: Number($('#facial-expression-select-dropdown').val()) };
-            (Number($('#facial-expression-intensity-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.facialExpressionIntensity = { analysisMethodId: Number($('#facial-expression-intensity-select-dropdown').val()) };
-            (Number($('#gestural-emotion-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.gesturalEmotion = { analysisMethodId: Number($('#gestural-emotion-select-dropdown').val()) };
-            (Number($('#gestural-emotion-intensity-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.gesturalEmotionIntensity = { analysisMethodId: Number($('#gestural-emotion-intensity-select-dropdown').val()) };
-            (Number($('#physical-expression-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.physicalExpression = { analysisMethodId: Number($('#physical-expression-select-dropdown').val()) };
-            (Number($('#physical-expression-intensity-select-dropdown').val()) == 0) ? null : analysisMethodVariantModel.physicalExpressionIntensity = { analysisMethodId: Number($('#physical-expression-intensity-select-dropdown').val()) };
+            (Number($('#actingTechniqueSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.actingTechnique = { analysisMethodId: Number($('#actingTechniqueSelectDropdown').val()) };
+            (Number($('#facialExpressionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.facialExpression = { analysisMethodId: Number($('#facialExpressionSelectDropdown').val()) };
+            (Number($('#facialExpressionIntensitySelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.facialExpressionIntensity = { analysisMethodId: Number($('#facialExpressionIntensitySelectDropdown').val()) };
+            (Number($('#gesturalEmotionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.gesturalEmotion = { analysisMethodId: Number($('#gesturalEmotionSelectDropdown').val()) };
+            (Number($('#gesturalEmotionIntensitySelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.gesturalEmotionIntensity = { analysisMethodId: Number($('#gesturalEmotionIntensitySelectDropdown').val()) };
+            (Number($('#physicalExpressionSelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.physicalExpression = { analysisMethodId: Number($('#physicalExpressionSelectDropdown').val()) };
+            (Number($('#physicalExpressionIntensitySelectDropdown').val()) == 0) ? null : analysisMethodVariantModel.physicalExpressionIntensity = { analysisMethodId: Number($('#physicalExpressionIntensitySelectDropdown').val()) };
 
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
             analysisMethodVariantModel.analysisMethodId = analysis.analysisMethod.id;
             analysis.analysisMethod.analysisActor = await TIMAAT.AnalysisService.createAnalysisMethodVariant(analysisMethodVariantModel, "analysisActor");
-            console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
+            // console.log("TCL: $ ->  analysis.analysisMethod",  analysis.analysisMethod);
           break;
           case 45: // Acting Technique - Part of 44: Analysis Actor
           break;
@@ -459,7 +459,7 @@
           case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
           break;
           case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
-            analysisMethodId = Number($('#camera-depth-of-focus-select-dropdown').val());
+            analysisMethodId = Number($('#cameraDepthOfFocusSelectDropdown').val());
             analysisModel.analysisMethod.id = analysisMethodId;
             analysis = await TIMAAT.AnalysisService.addAnalysisMethodToAnalysis(analysisModel);
           break;
@@ -472,9 +472,9 @@
         TIMAAT.VideoPlayer.inspector.setItem(TIMAAT.VideoPlayer.curAnnotation, 'annotation'); // mainly to reverse unsaved layer changes
       });
 
-      $('#timaat-analysis-delete-submit').on('click', async function(event) {
+      $('#analysisGuidelineDeleteSubmitButton').on('click', async function(event) {
         event.preventDefault();
-        var modal = $('#timaat-videoplayer-analysis-delete');
+        var modal = $('#analysisGuidelineDeleteModal');
         var analysisId = modal.data('analysisId');
         var analysisMethodId = modal.data('analysisMethodId');
         var audioPostProductionId = modal.data('audioPostProductionId');
@@ -509,7 +509,7 @@
       }).change();
 
       // Add event listener for opening and closing details
-      $('#analysis-annotation-table tbody').on('click', 'td.details-control', function () {
+      $('#annotationAnalysisGuidelineTable tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.row(tr);
         var tdi = tr.find("i.fa");
@@ -531,7 +531,7 @@
       });
 
       // event listener to show tooltip for expand/collapse details
-      $('#analysis-annotation-table').on('mouseenter', 'tbody tr', function () {
+      $('#annotationAnalysisGuidelineTable').on('mouseenter', 'tbody tr', function () {
         var tr = $(this).closest('tr');
         var row = TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.row(tr);
         var tdi = tr.find("i.fa");
@@ -546,8 +546,8 @@
         }
       });
 
-      // event listener to close select2 dropdowns when modal is closed
-      $('#timaat-videoplayer-analysis-add').on('hidden.bs.modal', function() {
+      // event listener to close select2 dropdown when modal is closed
+      $('#analysisAddModal').on('hidden.bs.modal', function() {
         $('.select-dropdown').select2('close');
       });
     },
@@ -558,7 +558,7 @@
     },
 
     annotationAnalysisMethodAddModal: function(annotationId, analysisMethodType) {
-      let modal = $('#timaat-videoplayer-analysis-add');
+      let modal = $('#analysisAddModal');
       modal.data('analysisMethodTypeId', analysisMethodType.id);
       modal.data('annotationId', annotationId);
       var select2Options = {
@@ -594,10 +594,10 @@
       var audioPostProductionHtml = `<hr>
       <h5 class="modal-title">Post Production Information</h5>
       <div class="form-group">
-        <label for="audio-post-production-overdubbing">Overdubbing</label>
+        <label for="audioPostProductionOverdubbing">Overdubbing</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="audio-post-production-overdubbing"
+                    id="audioPostProductionOverdubbing"
                     maxlength="255"
                     aria-label="Overdubbing"
                     name="overdubbing"
@@ -605,10 +605,10 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="audio-post-production-reverb">Reverb</label>
+        <label for="audioPostProductionReverb">Reverb</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="audio-post-production-reverb"
+                    id="audioPostProductionReverb"
                     maxlength="255"
                     aria-label="Reverb"
                     name="reverb"
@@ -616,10 +616,10 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="audio-post-production-delay">Delay</label>
+        <label for="audioPostProductionDelay">Delay</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="audio-post-production-delay"
+                    id="audioPostProductionDelay"
                     maxlength="255"
                     aria-label="Delay"
                     name="delay"
@@ -627,10 +627,10 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="audio-post-production-panning">Panning</label>
+        <label for="audioPostProductionPanning">Panning</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="audio-post-production-panning"
+                    id="audioPostProductionPanning"
                     maxlength="255"
                     aria-label="Panning"
                     name="panning"
@@ -638,10 +638,10 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="audio-post-production-bass">Bass</label>
+        <label for="audioPostProductionBass">Bass</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="audio-post-production-bass"
+                    id="audioPostProductionBass"
                     maxlength="255"
                     aria-label="Bass"
                     name="bass"
@@ -649,10 +649,10 @@
           </div>
       </div>
       <div class="form-group">
-        <label for="audio-post-production-treble">Treble</label>
+        <label for="audioPostProductionTreble">Treble</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="audio-post-production-treble"
+                    id="audioPostProductionTreble"
                     maxlength="255"
                     aria-label="Treble"
                     name="treble"
@@ -662,10 +662,10 @@
       var remarkHtml = `<hr>
       <h5 class="modal-title">Remark</h5>
       <div class="form-group">
-        <label class="sr-only" for="analysis-remark">Remark</label>
+        <label class="sr-only" for="analysisRemark">Remark</label>
         <div class="col-md-12">
           <textarea class="form-control form-control-sm"
-                    id="analysis-remark"
+                    id="analysisRemark"
                     aria-label="Remark"
                     placeholder="Remark"></textarea>
         </div>
@@ -677,11 +677,11 @@
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="martinez-scheffel-unreliable-narration-select-dropdown">Unreliable Narration</label>
+                <label for="martinezScheffelUnreliableNarrationSelectDropdown">Unreliable Narration</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="martinez-scheffel-unreliable-narration-select-dropdown"
+                          id="martinezScheffelUnreliableNarrationSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select unreliable narration"
@@ -691,7 +691,7 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#martinez-scheffel-unreliable-narration-select-dropdown').select2(select2Options);
+          $('#martinezScheffelUnreliableNarrationSelectDropdown').select2(select2Options);
         break;
         case 2: // Greimas Actantial Model //* won't be implemented
         break;
@@ -708,11 +708,11 @@
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="color-temperature-select-dropdown">Color Temperature</label>
+                <label for="colorTemperatureSelectDropdown">Color Temperature</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="color-temperature-select-dropdown"
+                          id="colorTemperatureSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select color temperature"
@@ -722,7 +722,7 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#color-temperature-select-dropdown').select2(select2Options);
+          $('#colorTemperatureSelectDropdown').select2(select2Options);
         break;
         case 8: // Concept Camera Position and Perspective
         $('#analysisAddLabel').text('Describe Camera Position and Perspective');
@@ -730,11 +730,11 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <h5 class="modal-title">Camera Position and Perspective</h5>
             <div class="form-group">
-            <label for="camera-distance-select-dropdown">Camera Distance</label>
+            <label for="cameraDistanceSelectDropDown">Camera Distance</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-distance-select-dropdown"
+                        id="cameraDistanceSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera distance">
@@ -742,22 +742,22 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-shot-type-select-dropdown">Camera Shot Type</label>
+            <label for="cameraShotTypeSelectDropDown">Camera Shot Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-shot-type-select-dropdown"
+                        id="cameraShotTypeSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera shot type">
                 </select>
               </div>
             </div><div class="form-group">
-            <label for="camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
+            <label for="cameraVerticalAngleSelectDropDown">Camera Vertical Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-vertical-angle-select-dropdown"
+                        id="cameraVerticalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera vertical angle">
@@ -765,11 +765,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
+            <label for="cameraHorizontalAngleSelectDropDown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-horizontal-angle-select-dropdown"
+                        id="cameraHorizontalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera horizontal angle">
@@ -777,11 +777,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
+            <label for="cameraAxisOfActionSelectDropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-axis-of-action-select-dropdown"
+                        id="cameraAxisOfActionSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera axis of action">
@@ -789,11 +789,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-elevation-select-dropdown">Camera Elevation</label>
+            <label for="cameraElevationSelectDropdown">Camera Elevation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-elevation-select-dropdown"
+                        id="cameraElevationSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera elevation">
@@ -801,11 +801,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
+            <label for="cameraDepthOfFocusSelectDropdown">Camera Depth of Focus</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-depth-of-focus-select-dropdown"
+                        id="cameraDepthOfFocusSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera depth of focus">
@@ -815,30 +815,30 @@
             remarkHtml +
           `</form>`);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
-        $('#camera-distance-select-dropdown').select2(select2Options);
+        $('#cameraDistanceSelectDropDown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
-        $('#camera-shot-type-select-dropdown').select2(select2Options);
+        $('#cameraShotTypeSelectDropDown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraVerticalAngle/selectList/';
-        $('#camera-vertical-angle-select-dropdown').select2(select2Options);
+        $('#cameraVerticalAngleSelectDropDown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHorizontalAngle/selectList/';
-        $('#camera-horizontal-angle-select-dropdown').select2(select2Options);
+        $('#cameraHorizontalAngleSelectDropDown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraAxisOfAction/selectList/';
-        $('#camera-axis-of-action-select-dropdown').select2(select2Options);
+        $('#cameraAxisOfActionSelectDropdown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
-        $('#camera-elevation-select-dropdown').select2(select2Options);
+        $('#cameraElevationSelectDropdown').select2(select2Options);
         select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDepthOfFocus/selectList/';
-        $('#camera-depth-of-focus-select-dropdown').select2(select2Options);
+        $('#cameraDepthOfFocusSelectDropdown').select2(select2Options);
         break;
         case 9: // Camera Elevation
           $('#analysisAddLabel').text('Choose Camera Elevation');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="camera-elevation-select-dropdown">Camera Elevation</label>
+                <label for="cameraElevationSelectDropdown">Camera Elevation</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-elevation-select-dropdown"
+                          id="cameraElevationSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera elevation"
@@ -848,18 +848,18 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#camera-elevation-select-dropdown').select2(select2Options);
+          $('#cameraElevationSelectDropdown').select2(select2Options);
         break;
         case 10: // Camera Axis of Action
         $('#analysisAddLabel').text('Choose Axis of Action');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-              <label for="camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
+              <label for="cameraAxisOfActionSelectDropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-axis-of-action-select-dropdown"
+                        id="cameraAxisOfActionSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera axis of action"
@@ -869,18 +869,18 @@
             </div>`+
             remarkHtml +
           `</form>`);
-        $('#camera-axis-of-action-select-dropdown').select2(select2Options);
+        $('#cameraAxisOfActionSelectDropdown').select2(select2Options);
         break;
         case 11: // Camera Horizontal Angle
         $('#analysisAddLabel').text('Choose Camera Horizontal Angle');
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-            <label for="camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
+            <label for="cameraHorizontalAngleSelectDropDown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-horizontal-angle-select-dropdown"
+                        id="cameraHorizontalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera horizontal angle"
@@ -890,18 +890,18 @@
             </div>`+
             remarkHtml +
           `</form>`);
-        $('#camera-horizontal-angle-select-dropdown').select2(select2Options);
+        $('#cameraHorizontalAngleSelectDropDown').select2(select2Options);
         break;
         case 12: // Camera Vertical Angle
           $('#analysisAddLabel').text('Choose Camera Vertical Angle');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-              <label for="camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
+              <label for="cameraVerticalAngleSelectDropDown">Camera Vertical Angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-vertical-angle-select-dropdown"
+                          id="cameraVerticalAngleSelectDropDown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera vertical angle"
@@ -911,18 +911,18 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#camera-vertical-angle-select-dropdown').select2(select2Options);
+          $('#cameraVerticalAngleSelectDropDown').select2(select2Options);
         break;
         case 13: // Camera Shot Type - part of 34: Editing / Montage
           $('#analysisAddLabel').text('Choose Camera Shot Type');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-              <label for="camera-shot-type-select-dropdown">Camera Shot Type</label>
+              <label for="cameraShotTypeSelectDropDown">Camera Shot Type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-shot-type-select-dropdown"
+                          id="cameraShotTypeSelectDropDown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera shot type"
@@ -932,18 +932,18 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#camera-shot-type-select-dropdown').select2(select2Options);
+          $('#cameraShotTypeSelectDropDown').select2(select2Options);
         break;
         case 14: // Camera Distance
           $('#analysisAddLabel').text('Choose Camera Distance');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="camera-distance-select-dropdown">Camera Distance</label>
+                <label for="cameraDistanceSelectDropDown">Camera Distance</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-distance-select-dropdown"
+                          id="cameraDistanceSelectDropDown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera distance"
@@ -953,7 +953,7 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#camera-distance-select-dropdown').select2(select2Options);
+          $('#cameraDistanceSelectDropDown').select2(select2Options);
         break;
         case 15: // Concept Camera Movement and Handling //* won't be implemented
         break;
@@ -962,11 +962,11 @@
         modal.find('.modal-body').html(`
           <form role="form" id="newAnalysisMethodModalForm">
             <div class="form-group">
-            <label for="camera-movement-type-select-dropdown">Camera Movement Type</label>
+            <label for="cameraMovementTypeSelectDropdown">Camera Movement Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-movement-type-select-dropdown"
+                        id="cameraMovementTypeSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera movement type">
@@ -974,11 +974,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-movement-characteristic-select-dropdown">Camera Movement Characteristic</label>
+            <label for="cameraMovementCharacteristicSelectDropdown">Camera Movement Characteristic</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-movement-characteristic-select-dropdown"
+                        id="cameraMovementCharacteristicSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera movement characteristic">
@@ -986,11 +986,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="camera-handling-select-dropdown">Camera Handling</label>
+            <label for="cameraHandlingSelectDropdown">Camera Handling</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="camera-handling-select-dropdown"
+                        id="cameraHandlingSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera handling">
@@ -998,11 +998,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="concept-direction-select-dropdown">Concept Direction</label>
+            <label for="conceptDirectionSelectDropdown">Concept Direction</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="concept-direction-select-dropdown"
+                        id="conceptDirectionSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select concept direction">
@@ -1011,11 +1011,11 @@
             </div>
             <h5 class="modal-title">Start Camera Position and Perspective</h5>
             <div class="form-group">
-            <label for="start-camera-distance-select-dropdown">Camera Distance</label>
+            <label for="startCameraDistanceSelectDropDown">Camera Distance</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-distance-select-dropdown"
+                        id="startCameraDistanceSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera distance">
@@ -1023,22 +1023,22 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-shot-type-select-dropdown">Camera Shot Type</label>
+            <label for="startCameraShotTypeSelectDropDown">Camera Shot Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-shot-type-select-dropdown"
+                        id="startCameraShotTypeSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera shot type">
                 </select>
               </div>
             </div><div class="form-group">
-            <label for="start-camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
+            <label for="startCameraVerticalAngleSelectDropDown">Camera Vertical Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-vertical-angle-select-dropdown"
+                        id="startCameraVerticalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera vertical angle">
@@ -1046,11 +1046,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
+            <label for="startCameraHorizontalAngleSelectDropDown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-horizontal-angle-select-dropdown"
+                        id="startCameraHorizontalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera horizontal angle">
@@ -1058,11 +1058,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
+            <label for="startCameraAxisOfActionSelectDropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-axis-of-action-select-dropdown"
+                        id="startCameraAxisOfActionSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera axis of action">
@@ -1070,11 +1070,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-elevation-select-dropdown">Camera Elevation</label>
+            <label for="startCameraElevationSelectDropdown">Camera Elevation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-elevation-select-dropdown"
+                        id="startCameraElevationSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera elevation">
@@ -1082,11 +1082,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="start-camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
+            <label for="startCameraDepthOfFocusSelectDropdown">Camera Depth of Focus</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="start-camera-depth-of-focus-select-dropdown"
+                        id="startCameraDepthOfFocusSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera depth of focus">
@@ -1095,11 +1095,11 @@
             </div>
             <h5 class="modal-title">End Camera Position and Perspective</h5>
             <div class="form-group">
-            <label for="end-camera-distance-select-dropdown">Camera Distance</label>
+            <label for="endCameraDistanceSelectDropDown">Camera Distance</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-distance-select-dropdown"
+                        id="endCameraDistanceSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera distance">
@@ -1107,22 +1107,22 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-shot-type-select-dropdown">Camera Shot Type</label>
+            <label for="endCameraShotTypeSelectDropDown">Camera Shot Type</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-shot-type-select-dropdown"
+                        id="endCameraShotTypeSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera shot type">
                 </select>
               </div>
             </div><div class="form-group">
-            <label for="end-camera-vertical-angle-select-dropdown">Camera Vertical Angle</label>
+            <label for="endCameraVerticalAngleSelectDropDown">Camera Vertical Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-vertical-angle-select-dropdown"
+                        id="endCameraVerticalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera vertical angle">
@@ -1130,11 +1130,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-horizontal-angle-select-dropdown">Camera Horizontal Angle</label>
+            <label for="endCameraHorizontalAngleSelectDropDown">Camera Horizontal Angle</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-horizontal-angle-select-dropdown"
+                        id="endCameraHorizontalAngleSelectDropDown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera horizontal angle">
@@ -1142,11 +1142,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-axis-of-action-select-dropdown">Camera Axis of Action</label>
+            <label for="endCameraAxisOfActionSelectDropdown">Camera Axis of Action</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-axis-of-action-select-dropdown"
+                        id="endCameraAxisOfActionSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera axis of action">
@@ -1154,11 +1154,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-elevation-select-dropdown">Camera Elevation</label>
+            <label for="endCameraElevationSelectDropdown">Camera Elevation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-elevation-select-dropdown"
+                        id="endCameraElevationSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera elevation">
@@ -1166,11 +1166,11 @@
               </div>
             </div>
             <div class="form-group">
-            <label for="end-camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
+            <label for="endCameraDepthOfFocusSelectDropdown">Camera Depth of Focus</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="end-camera-depth-of-focus-select-dropdown"
+                        id="endCameraDepthOfFocusSelectDropdown"
                         name="analysisMethodId"
                         data-role="analysisMethodId"
                         data-placeholder="Select camera depth of focus">
@@ -1180,52 +1180,52 @@
             remarkHtml +
           `</form>`);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraMovementType/selectList/';
-          $('#camera-movement-type-select-dropdown').select2(select2Options);
+          $('#cameraMovementTypeSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraMovementCharacteristic/selectList/';
-          $('#camera-movement-characteristic-select-dropdown').select2(select2Options);
+          $('#cameraMovementCharacteristicSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHandling/selectList/';
-          $('#camera-handling-select-dropdown').select2(select2Options);
+          $('#cameraHandlingSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/conceptDirection/selectList/';
-          $('#concept-direction-select-dropdown').select2(select2Options);
+          $('#conceptDirectionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
-          $('#start-camera-distance-select-dropdown').select2(select2Options);
+          $('#startCameraDistanceSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
-          $('#start-camera-shot-type-select-dropdown').select2(select2Options);
+          $('#startCameraShotTypeSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraVerticalAngle/selectList/';
-          $('#start-camera-vertical-angle-select-dropdown').select2(select2Options);
+          $('#startCameraVerticalAngleSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHorizontalAngle/selectList/';
-          $('#start-camera-horizontal-angle-select-dropdown').select2(select2Options);
+          $('#startCameraHorizontalAngleSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraAxisOfAction/selectList/';
-          $('#start-camera-axis-of-action-select-dropdown').select2(select2Options);
+          $('#startCameraAxisOfActionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
-          $('#start-camera-elevation-select-dropdown').select2(select2Options);
+          $('#startCameraElevationSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDepthOfFocus/selectList/';
-          $('#start-camera-depth-of-focus-select-dropdown').select2(select2Options);
+          $('#startCameraDepthOfFocusSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDistance/selectList/';
-          $('#end-camera-distance-select-dropdown').select2(select2Options);
+          $('#endCameraDistanceSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
-          $('#end-camera-shot-type-select-dropdown').select2(select2Options);
+          $('#endCameraShotTypeSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraVerticalAngle/selectList/';
-          $('#end-camera-vertical-angle-select-dropdown').select2(select2Options);
+          $('#endCameraVerticalAngleSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraHorizontalAngle/selectList/';
-          $('#end-camera-horizontal-angle-select-dropdown').select2(select2Options);
+          $('#endCameraHorizontalAngleSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraAxisOfAction/selectList/';
-          $('#end-camera-axis-of-action-select-dropdown').select2(select2Options);
+          $('#endCameraAxisOfActionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraElevation/selectList/';
-          $('#end-camera-elevation-select-dropdown').select2(select2Options);
+          $('#endCameraElevationSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraDepthOfFocus/selectList/';
-          $('#end-camera-depth-of-focus-select-dropdown').select2(select2Options);
+          $('#endCameraDepthOfFocusSelectDropdown').select2(select2Options);
         break;
         case 17: // Camera Handling
           $('#analysisAddLabel').text('Choose Camera Handling');
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-              <label for="camera-handling-select-dropdown">Camera Handling</label>
+              <label for="cameraHandlingSelectDropdown">Camera Handling</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-handling-select-dropdown"
+                          id="cameraHandlingSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera handling"
@@ -1235,7 +1235,7 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#camera-handling-select-dropdown').select2(select2Options);
+          $('#cameraHandlingSelectDropdown').select2(select2Options);
         break;
         case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
         break;
@@ -1246,60 +1246,60 @@
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q1">1.) What does the sound sound like (z.B. wooden, metallic, soft, fast)?</label>
+                <label for="soundEffectDescriptiveAnswerQ1">1.) What does the sound sound like (z.B. wooden, metallic, soft, fast)?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
-                            id="sound-effect-descriptive-answer-q1"
+                            id="soundEffectDescriptiveAnswerQ1"
                             aria-label="Question 1"
                             name="question"
                             placeholder="Answer to question 1"></textarea>
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q2">2.) Is the sound realistic oder artificial?</label>
+                <label for="soundEffectDescriptiveAnswerQ2">2.) Is the sound realistic oder artificial?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
-                            id="sound-effect-descriptive-answer-q2"
+                            id="soundEffectDescriptiveAnswerQ2"
                             aria-label="Question 2"
                             name="question"
                             placeholder="Answer to question 2"></textarea>
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q3">3.) From where does the sound sound?</label>
+                <label for="soundEffectDescriptiveAnswerQ3">3.) From where does the sound sound?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
-                            id="sound-effect-descriptive-answer-q3"
+                            id="soundEffectDescriptiveAnswerQ3"
                             aria-label="Question 3"
                             name="question"
                             placeholder="Answer to question 3"></textarea>
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q4">4.) Does the sound move or is it stationary?</label>
+                <label for="soundEffectDescriptiveAnswerQ4">4.) Does the sound move or is it stationary?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
-                            id="sound-effect-descriptive-answer-q4"
+                            id="soundEffectDescriptiveAnswerQ4"
                             aria-label="Question 4"
                             name="question"
                             placeholder="Answer to question 4"></textarea>
                 </div>
               </div>
               <div class="form-group">
-                <label for="sound-effect-descriptive-answer-q5">5.) Is the sound part of the narrated scene or not?</label>
+                <label for="soundEffectDescriptiveAnswerQ5">5.) Is the sound part of the narrated scene or not?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
-                            id="sound-effect-descriptive-answer-q5"
+                            id="soundEffectDescriptiveAnswerQ5"
                             aria-label="Question 5"
                             name="question"
                             placeholder="Answer to question 5"></textarea>
                   </div>
               </div>
               <div class="form-group">
-                <label ="sound-effect-descriptive-answer-q6">6.) What motivates the sound (e.g., does it originate in the narration, is it artistically motivated, does it make the scene more or less realistic)?</label>
+                <label ="soundEffectDescriptiveAnswerQ6">6.) What motivates the sound (e.g., does it originate in the narration, is it artistically motivated, does it make the scene more or less realistic)?</label>
                 <div class="col-md-12">
                   <textarea class="form-control form-control-sm"
-                            id="sound-effect-descriptive-answer-q6"
+                            id="soundEffectDescriptiveAnswerQ6"
                             aria-label="Question 6"
                             name="question"
                             placeholder="Answer to question 6"></textarea>
@@ -1316,10 +1316,10 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <h5 class="modal-title">Analysis Music</h5>
             <div class="form-group">
-              <label for="analysis-music-harmony">Harmony</label>
+              <label for="analysisMusicHarmony">Harmony</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-music-harmony"
+                          id="analysisMusicHarmony"
                           aria-label="Harmony"
                           name="harmony"
                           placeholder="Enter harmony description"></textarea>
@@ -1330,31 +1330,31 @@
               <div class="col-md-12">
                 <div class="form-check">
                   <input class="form-check-input"
-                         id="analysis-music-isPause"
+                         id="analysisMusicIsPause"
                          type="checkbox"
                          name="isPause"
                          data-role="isPause"
                          placeholder="Is Pause">
-                <label for="analysis-music-isPause">Is a Pause</label>
+                <label for="analysisMusicIsPause">Is a Pause</label>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-melody">Melody</label>
+              <label for="analysisMusicMelody">Melody</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-music-melody"
+                          id="analysisMusicMelody"
                           aria-label="Melody"
                           name="melody"
                           placeholder="Enter melody description"></textarea>
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-articulation-select-dropdown">Articulation</label>
+              <label for="analysisMusicArticulationSelectDropdown">Articulation</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-articulation-select-dropdown"
+                        id="analysisMusicArticulationSelectDropdown"
                         name="articulation"
                         data-role="articulation"
                         data-placeholder="Select articulation">
@@ -1362,11 +1362,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-dynamicMarking-select-dropdown">Dynamic Marking</label>
+              <label for="analysisMusicDynamicMarkingSelectDropdown">Dynamic Marking</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-dynamicMarking-select-dropdown"
+                        id="analysisMusicDynamicMarkingSelectDropdown"
                         name="dynamicMarking"
                         data-role="dynamicMarking"
                         data-placeholder="Select dynamic marking">
@@ -1374,11 +1374,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-changeInDynamics-select-dropdown">Change in Dynamics</label>
+              <label for="analysisMusicChangeInDynamicsSelectDropdown">Change in Dynamics</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-changeInDynamics-select-dropdown"
+                        id="analysisMusicChangeInDynamicsSelectDropdown"
                         name="changeInDynamics"
                         data-role="changeInDynamics"
                         data-placeholder="Select change in dynamics">
@@ -1386,11 +1386,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-tempo">Tempo</label>
+              <label for="analysisMusicTempo">Tempo</label>
               <div class="col-md-12">
-                <input class="form-control form-control-md analysis-music-tempo"
+                <input class="form-control form-control-md analysisMusicTempo"
                         style="width:100%;"
-                        id="analysis-music-tempo"
+                        id="analysisMusicTempo"
                         name="tempo"
                         data-role="tempo"
                         data-placeholder="Enter tempo"
@@ -1400,11 +1400,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-changeInTempo-select-dropdown">Change in Tempo</label>
+              <label for="analysisMusicChangeInTempoSelectDropdown">Change in Tempo</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-changeInTempo-select-dropdown"
+                        id="analysisMusicChangeInTempoSelectDropdown"
                         name="changeInTempo"
                         data-role="changeInTempo"
                         data-placeholder="Select change in tempo">
@@ -1412,11 +1412,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-tempoMarking-select-dropdown">Tempo Marking</label>
+              <label for="analysisMusicTempoMarkingSelectDropdown">Tempo Marking</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-tempoMarking-select-dropdown"
+                        id="analysisMusicTempoMarkingSelectDropdown"
                         name="tempoMarking"
                         data-role="tempoMarking"
                         data-placeholder="Select tempo marking">
@@ -1424,11 +1424,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-musicalKey-select-dropdown">Musical Key</label>
+              <label for="analysisMusicMusicalKeySelectDropdown">Musical Key</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-musicalKey-select-dropdown"
+                        id="analysisMusicMusicalKeySelectDropdown"
                         name="musicalKey"
                         data-role="musicalKey"
                         data-placeholder="Select musical key">
@@ -1436,11 +1436,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-rhythm-select-dropdown">Rhythm [WIP]</label>
+              <label for="analysisMusicRhythmSelectDropdown">Rhythm [WIP]</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-rhythm-select-dropdown"
+                        id="analysisMusicRhythmSelectDropdown"
                         name="rhythm"
                         data-role="rhythm"
                         data-placeholder="Select rhythm">
@@ -1448,11 +1448,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-timbre-select-dropdown">Timbre [WIP]</label>
+              <label for="analysisMusicTimbreSelectDropdown">Timbre [WIP]</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-timbre-select-dropdown"
+                        id="analysisMusicTimbreSelectDropdown"
                         name="timbre"
                         data-role="timbre"
                         data-placeholder="Select timbre">
@@ -1460,11 +1460,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-jins-select-dropdown">Jins</label>
+              <label for="analysisMusicJinsSelectDropdown">Jins</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-jins-select-dropdown"
+                        id="analysisMusicJinsSelectDropdown"
                         name="jins"
                         data-role="jins"
                         data-placeholder="Select jins">
@@ -1472,11 +1472,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-maqam-select-dropdown">Maqam</label>
+              <label for="analysisMusicMaqamSelectDropdown">Maqam</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-maqam-select-dropdown"
+                        id="analysisMusicMaqamSelectDropdown"
                         name="maqam"
                         data-role="maqam"
                         data-placeholder="Select maqam">
@@ -1484,11 +1484,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-songStructure-select-dropdown">Song Structure [WIP]</label>
+              <label for="analysisMusicSongStructureSelectDropdown">Song Structure [WIP]</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-songStructure-select-dropdown"
+                        id="analysisMusicSongStructureSelectDropdown"
                         name="songStructure"
                         data-role="songStructure"
                         data-placeholder="Select songStructure">
@@ -1496,11 +1496,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-lineupMembers-select-dropdown">Lineup Members [WIP]</label>
+              <label for="analysisMusicLineupMembersSelectDropdown">Lineup Members [WIP]</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-lineupMembers-select-dropdown"
+                        id="analysisMusicLineupMembersSelectDropdown"
                         name="lineupMembers"
                         data-role="lineupMembers"
                         data-placeholder="Select lineup members">
@@ -1508,11 +1508,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-music-musicalNotations-select-dropdown">Musical Notation [WIP]</label>
+              <label for="analysisMusicMusicalNotationsSelectDropdown">Musical Notation [WIP]</label>
               <div class="col-md-12">
                 <select class="form-control form-control-md select-dropdown"
                         style="width:100%;"
-                        id="analysis-music-musicalNotations-select-dropdown"
+                        id="analysisMusicMusicalNotationsSelectDropdown"
                         name="musicalNotation"
                         data-role="musicalNotation"
                         data-placeholder="Select musical notation">
@@ -1523,31 +1523,31 @@
             remarkHtml +
           `</form>`);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/articulation/selectList/';
-          $('#analysis-music-articulation-select-dropdown').select2(select2Options);
+          $('#analysisMusicArticulationSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/dynamicMarking/selectList/';
-          $('#analysis-music-dynamicMarking-select-dropdown').select2(select2Options);
+          $('#analysisMusicDynamicMarkingSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/changeInDynamics/selectList/';
-          $('#analysis-music-changeInDynamics-select-dropdown').select2(select2Options);
+          $('#analysisMusicChangeInDynamicsSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/changeInTempo/selectList/';
-          $('#analysis-music-changeInTempo-select-dropdown').select2(select2Options);
+          $('#analysisMusicChangeInTempoSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/tempoMarking/selectList/';
-          $('#analysis-music-tempoMarking-select-dropdown').select2(select2Options);
+          $('#analysisMusicTempoMarkingSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/musicalKey/selectList/';
-          $('#analysis-music-musicalKey-select-dropdown').select2(select2Options);
+          $('#analysisMusicMusicalKeySelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/rhythm/selectList/';
-          $('#analysis-music-rhythm-select-dropdown').select2(select2Options);
+          $('#analysisMusicRhythmSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/timbre/selectList/';
-          $('#analysis-music-timbre-select-dropdown').select2(select2Options);
+          $('#analysisMusicTimbreSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/jins/selectList/';
-          $('#analysis-music-jins-select-dropdown').select2(select2Options);
+          $('#analysisMusicJinsSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/maqam/selectList/';
-          $('#analysis-music-maqam-select-dropdown').select2(select2Options);
+          $('#analysisMusicMaqamSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/songStructure/selectList/';
-          $('#analysis-music-songStructure-select-dropdown').select2(select2Options);
+          $('#analysisMusicSongStructureSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lineupMembers/selectList/';
-          $('#analysis-music-lineupMembers-select-dropdown').select2(select2Options);
+          $('#analysisMusicLineupMembersSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/musicalNotations/selectList/';
-          $('#analysis-music-musicalNotations-select-dropdown').select2(select2Options);
+          $('#analysisMusicMusicalNotationsSelectDropdown').select2(select2Options);
         break;
         case 23: // Analysis Speech
         $('#analysisAddLabel').text('Describe Speech');
@@ -1555,10 +1555,10 @@
           <form role="form" id="newAnalysisMethodModalForm">
             <h5 class="modal-title">Analysis Speech</h5>
             <div class="form-group">
-              <label for="analysis-speech-accent">Accent</label>
+              <label for="analysisSpeechAccent">Accent</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-speech-accent"
+                          id="analysisSpeechAccent"
                           maxlength="255"
                           aria-label="Accent"
                           name="accent"
@@ -1566,10 +1566,10 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-speech-intonation">Intonation</label>
+              <label for="analysisSpeechIntonation">Intonation</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-speech-intonation"
+                          id="analysisSpeechIntonation"
                           maxlength="255"
                           aria-label="Intonation"
                           name="intonation"
@@ -1577,10 +1577,10 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-speech-volume">Volume</label>
+              <label for="analysisSpeechVolume">Volume</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-speech-volume"
+                          id="analysisSpeechVolume"
                           maxlength="255"
                           aria-label="Volume"
                           name="volume"
@@ -1588,10 +1588,10 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-speech-tempo">Tempo</label>
+              <label for="analysisSpeechTempo">Tempo</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-speech-tempo"
+                          id="analysisSpeechTempo"
                           maxlength="255"
                           aria-label="Tempo"
                           name="tempo"
@@ -1599,10 +1599,10 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="analysis-speech-pauses">Pauses</label>
+              <label for="analysisSpeechPauses">Pauses</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-speech-pauses"
+                          id="analysisSpeechPauses"
                           maxlength="255"
                           aria-label="Pauses"
                           name="pauses"
@@ -1610,10 +1610,10 @@
                 </div>
             </div>
             <div class="form-group">
-              <label ="analysis-speech-timbre">Timbre</label>
+              <label ="analysisSpeechTimbre">Timbre</label>
               <div class="col-md-12">
                 <textarea class="form-control form-control-sm"
-                          id="analysis-speech-timbre"
+                          id="analysisSpeechTimbre"
                           maxlength="255"
                           aria-label="Timbre"
                           name="timbre"
@@ -1665,11 +1665,11 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <h5 class="modal-title">Editing/Montage</h5>
               <div class="form-group">
-              <label for="montage-figure-macro-select-dropdown">Montage Figure Macro</label>
+              <label for="montageFigureMacroSelectDropdown">Montage Figure Macro</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="montage-figure-macro-select-dropdown"
+                          id="montageFigureMacroSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select montage figure macro">
@@ -1677,22 +1677,22 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="montage-figure-macro-select-dropdown">Montage Figure Micro</label>
+              <label for="montageFigureMacroSelectDropdown">Montage Figure Micro</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="montage-figure-micro-select-dropdown"
+                          id="montageFigureMicroSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select montage figure micro">
                   </select>
                 </div>
               </div><div class="form-group">
-              <label for="take-junction-select-dropdown">Take Junction</label>
+              <label for="takeJunctionSelectDropdown">Take Junction</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="take-junction-select-dropdown"
+                          id="takeJunctionSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select take junction">
@@ -1700,11 +1700,11 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="editing-rhythm-select-dropdown">Editing Rhythm</label>
+              <label for="editingRhythmSelectDropdown">Editing Rhythm</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="editing-rhythm-select-dropdown"
+                          id="editingRhythmSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select editing rhythm">
@@ -1722,11 +1722,11 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="take-type-progression-select-dropdown">Take Type Progression</label>
+              <label for="takeTypeProgressionSelectDropdown">Take Type Progression</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="take-type-progression-select-dropdown"
+                          id="takeTypeProgressionSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select take type progression">
@@ -1734,11 +1734,11 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="camera-shot-type-select-dropdown">Camera Shot Type</label>
+              <label for="cameraShotTypeSelectDropDown">Camera Shot Type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-shot-type-select-dropdown"
+                          id="cameraShotTypeSelectDropDown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera shot type">
@@ -1746,11 +1746,11 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="playback-speed-select-dropdown">Playback Speed</label>
+              <label for="playbackSpeedSelectDropdown">Playback Speed</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="playback-speed-select-dropdown"
+                          id="playbackSpeedSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select playback speed">
@@ -1758,11 +1758,11 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="image-cadre-editing-select-dropdown">Image Cadre Editing</label>
+              <label for="imageCadreEditingSelectDropdown">Image Cadre Editing</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="image-cadre-editing-select-dropdown"
+                          id="imageCadreEditingSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select image cadre editing">
@@ -1772,21 +1772,21 @@
               remarkHtml +
             `</form>`);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/montageFigureMacro/selectList/';
-          $('#montage-figure-macro-select-dropdown').select2(select2Options);
+          $('#montageFigureMacroSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/montageFigureMicro/selectList/';
-          $('#montage-figure-micro-select-dropdown').select2(select2Options);
+          $('#montageFigureMicroSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/takeJunction/selectList/';
-          $('#take-junction-select-dropdown').select2(select2Options);
+          $('#takeJunctionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/editingRhythm/selectList/';
-          $('#editing-rhythm-select-dropdown').select2(select2Options);
+          $('#editingRhythmSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/takeTypeProgression/selectList/';
-          $('#take-type-progression-select-dropdown').select2(select2Options);
+          $('#takeTypeProgressionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/cameraShotType/selectList/';
-          $('#camera-shot-type-select-dropdown').select2(select2Options);
+          $('#cameraShotTypeSelectDropDown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/playbackSpeed/selectList/';
-          $('#playback-speed-select-dropdown').select2(select2Options);
+          $('#playbackSpeedSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/imageCadreEditing/selectList/';
-          $('#image-cadre-editing-select-dropdown').select2(select2Options);
+          $('#imageCadreEditingSelectDropdown').select2(select2Options);
         break;
         case 35: // Concept Direction
         break;
@@ -1810,11 +1810,11 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <h5 class="modal-title">Lighting</h5>
               <div class="form-group">
-                <label for="lighting-type-select-dropdown">Lighting Type</label>
+                <label for="lightingTypeSelectDropdown">Lighting Type</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="lighting-type-select-dropdown"
+                          id="lightingTypeSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select lighting type">
@@ -1822,11 +1822,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-position-select-dropdown">Light Position</label>
+                <label for="lightPositionSelectDropdown">Light Position</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="light-position-select-dropdown"
+                          id="lightPositionSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select light position">
@@ -1834,11 +1834,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-position-angle-horizontal-select-dropdown">Light Position Horizontal Angle</label>
+                <label for="lightPositionAngleHorizontalSelectDropdown">Light Position Horizontal Angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="light-position-angle-horizontal-select-dropdown"
+                          id="lightPositionAngleHorizontalSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select light position horizontal angle">
@@ -1846,11 +1846,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-position-angle-vertical-select-dropdown">Light Position Vertical Angle</label>
+                <label for="lightPositionAngleVerticalSelectDropdown">Light Position Vertical Angle</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="light-position-angle-vertical-select-dropdown"
+                          id="lightPositionAngleVerticalSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select light position vertical angle">
@@ -1858,11 +1858,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="light-modifier-select-dropdown">Light Modifier</label>
+                <label for="lightModifierSelectDropdown">Light Modifier</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="light-modifier-select-dropdown"
+                          id="lightModifierSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select light modifier">
@@ -1870,11 +1870,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="lighting-duration-select-dropdown">Lighting Duration</label>
+                <label for="lightingDurationSelectDropdown">Lighting Duration</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="lighting-duration-select-dropdown"
+                          id="lightingDurationSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select lighting duration">
@@ -1884,17 +1884,17 @@
               remarkHtml +
             `</form>`);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightingType/selectList/';
-          $('#lighting-type-select-dropdown').select2(select2Options);
+          $('#lightingTypeSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightPosition/selectList/';
-          $('#light-position-select-dropdown').select2(select2Options);
+          $('#lightPositionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightPositionAngleHorizontal/selectList/';
-          $('#light-position-angle-horizontal-select-dropdown').select2(select2Options);
+          $('#lightPositionAngleHorizontalSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightPositionAngleVertical/selectList/';
-          $('#light-position-angle-vertical-select-dropdown').select2(select2Options);
+          $('#lightPositionAngleVerticalSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightModifier/selectList/';
-          $('#light-modifier-select-dropdown').select2(select2Options);
+          $('#lightModifierSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/lightingDuration/selectList/';
-          $('#lighting-duration-select-dropdown').select2(select2Options);
+          $('#lightingDurationSelectDropdown').select2(select2Options);
         break;
         case 44:
           $('#analysisAddLabel').text('Describe Actor');
@@ -1902,11 +1902,11 @@
             <form role="form" id="newAnalysisMethodModalForm">
               <h5 class="modal-title">Analysis Actor</h5>
               <div class="form-group">
-                <label for="acting-technique-select-dropdown">Acting Technique</label>
+                <label for="actingTechniqueSelectDropdown">Acting Technique</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="acting-technique-select-dropdown"
+                          id="actingTechniqueSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select acting technique">
@@ -1914,11 +1914,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="facial-expression-select-dropdown">Facial Expression</label>
+                <label for="facialExpressionSelectDropdown">Facial Expression</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="facial-expression-select-dropdown"
+                          id="facialExpressionSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select facial expression">
@@ -1926,11 +1926,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="facial-expression-intensity-select-dropdown">Facial Expression Intensity</label>
+                <label for="facialExpressionIntensitySelectDropdown">Facial Expression Intensity</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="facial-expression-intensity-select-dropdown"
+                          id="facialExpressionIntensitySelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select facial expression intensity">
@@ -1938,11 +1938,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="physical-expression-select-dropdown">Physical Expression</label>
+                <label for="physicalExpressionSelectDropdown">Physical Expression</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="physical-expression-select-dropdown"
+                          id="physicalExpressionSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select physical expression">
@@ -1950,11 +1950,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="physical-expression-intensity-select-dropdown">Physical Expression Intensity</label>
+                <label for="physicalExpressionIntensitySelectDropdown">Physical Expression Intensity</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="physical-expression-intensity-select-dropdown"
+                          id="physicalExpressionIntensitySelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select physical expression intensity">
@@ -1962,11 +1962,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="gestural-emotion-select-dropdown">Gestural Emotion</label>
+                <label for="gesturalEmotionSelectDropdown">Gestural Emotion</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="gestural-emotion-select-dropdown"
+                          id="gesturalEmotionSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select gestural emotion">
@@ -1974,11 +1974,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="gestural-emotion-intensity-select-dropdown">Gestural Emotion Intensity</label>
+                <label for="gesturalEmotionIntensitySelectDropdown">Gestural Emotion Intensity</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="gestural-emotion-intensity-select-dropdown"
+                          id="gesturalEmotionIntensitySelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select gestural emotion intensity">
@@ -1988,19 +1988,19 @@
               remarkHtml +
             `</form>`);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/actingTechnique/selectList/';
-          $('#acting-technique-select-dropdown').select2(select2Options);
+          $('#actingTechniqueSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/facialExpression/selectList/';
-          $('#facial-expression-select-dropdown').select2(select2Options);
+          $('#facialExpressionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/facialExpressionIntensity/selectList/';
-          $('#facial-expression-intensity-select-dropdown').select2(select2Options);
+          $('#facialExpressionIntensitySelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/physicalExpression/selectList/';
-          $('#physical-expression-select-dropdown').select2(select2Options);
+          $('#physicalExpressionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/physicalExpressionIntensity/selectList/';
-          $('#physical-expression-intensity-select-dropdown').select2(select2Options);
+          $('#physicalExpressionIntensitySelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/gesturalEmotion/selectList/';
-          $('#gestural-emotion-select-dropdown').select2(select2Options);
+          $('#gesturalEmotionSelectDropdown').select2(select2Options);
           select2Options.ajax.url = 'api/analysis/method/'+analysisMethodType.id+'/gesturalEmotionIntensity/selectList/';
-          $('#gestural-emotion-intensity-select-dropdown').select2(select2Options);
+          $('#gesturalEmotionIntensitySelectDropdown').select2(select2Options);
         break;
         case 45: // Acting Technique - Part of 44: Analysis Actor
         break;
@@ -2021,11 +2021,11 @@
           modal.find('.modal-body').html(`
             <form role="form" id="newAnalysisMethodModalForm">
               <div class="form-group">
-                <label for="camera-depth-of-focus-select-dropdown">Camera Depth of Focus</label>
+                <label for="cameraDepthOfFocusSelectDropdown">Camera Depth of Focus</label>
                 <div class="col-md-12">
                   <select class="form-control form-control-md select-dropdown"
                           style="width:100%;"
-                          id="camera-depth-of-focus-select-dropdown"
+                          id="cameraDepthOfFocusSelectDropdown"
                           name="analysisMethodId"
                           data-role="analysisMethodId"
                           data-placeholder="Select camera depth of focus"
@@ -2035,15 +2035,15 @@
               </div>`+
               remarkHtml +
             `</form>`);
-          $('#camera-depth-of-focus-select-dropdown').select2(select2Options);
+          $('#cameraDepthOfFocusSelectDropdown').select2(select2Options);
         break;
       }
       // $('select[name="analysisMethodId"]').rules('add', { required: true });
       modal.modal('show');
     },
 
-    annotationAnalysisMethodDeleteModal: function(analysis) {
-      let modal = $('#timaat-videoplayer-analysis-delete');
+    annotationAnalysisGuidelineDeleteModal: function(analysis) {
+      let modal = $('#analysisGuidelineDeleteModal');
       modal.data('analysisId', analysis.id);
       modal.data('isStatic', analysis.analysisMethod.analysisMethodType.isStatic);
       modal.data('analysisMethodId', analysis.analysisMethod.id);
@@ -2718,7 +2718,7 @@
     },
 
     setupAnalysisMethodsDataTable: function() {
-      TIMAAT.AnalysisDatasets.dataTableAnalysisMethods = $('#analysis-methods-available-table').DataTable({
+      TIMAAT.AnalysisDatasets.dataTableAnalysisMethods = $('#annotationAnalysisGuidelinesAvailableTable').DataTable({
 				lengthChange: false,
 				dom         : 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
@@ -2756,7 +2756,7 @@
 					let analysisMethodType = data;
 					analysisMethodTypeElement.data('analysisMethodType', analysisMethodType);
 
-					analysisMethodTypeElement.find('.add-analysisMethod').on('click', analysisMethodType, async function(ev) {
+					analysisMethodTypeElement.find('.addAnalysisMethod').on('click', analysisMethodType, async function(ev) {
 						ev.stopPropagation();
             if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
               $('#analysisListNoPermissionModal').modal('show');
@@ -2773,7 +2773,7 @@
 					});
 				},
 				"columns": [{
-					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, analysisMethodType, meta) {
+					data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, analysisMethodType, meta) {
 						// let displayAnalysisTypeIcon = '';
 						// switch (analysis.analysisMethodType.analysisMethodTypeTranslations[0].name) {
 						// 	case 'person':
@@ -2795,7 +2795,7 @@
                 }
               }
               if (!methodIsStaticAndExists) { //* static analyses may only be assigned once, others can occur multiple times
-                nameDisplay += `<span class="add-analysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw" title="Add analysis guideline"></i></span>`;
+                nameDisplay += `<span class="addAnalysisMethod badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw" title="Add analysis guideline"></i></span>`;
               }
             }
 						nameDisplay += `</p>`;
@@ -2826,7 +2826,7 @@
     },
 
     setupAnnotationAnalysisDataTable: function() {
-			TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis = $('#analysis-annotation-table').DataTable({
+			TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis = $('#annotationAnalysisGuidelineTable').DataTable({
 				lengthChange: false,
 				pageLength  : 10,
 				dom         : 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
@@ -2860,7 +2860,7 @@
 					let analysis = data;
 					analysisElement.data('analysis', analysis);
 
-					analysisElement.find('.remove-AnalysisMethod').on('click', analysis, async function(ev) {
+					analysisElement.find('.removeAnalysisMethod').on('click', analysis, async function(ev) {
 						ev.stopPropagation();
             if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
               $('#analysisListNoPermissionModal').modal('show');
@@ -2868,7 +2868,7 @@
             }
 						if ( !TIMAAT.VideoPlayer.curAnnotation ) return;
 						// $(this).remove();
-						TIMAAT.AnalysisDatasets.annotationAnalysisMethodDeleteModal(analysis);
+						TIMAAT.AnalysisDatasets.annotationAnalysisGuidelineDeleteModal(analysis);
 						// TIMAAT.AnalysisService.removeAnnotationAnalysis(TIMAAT.VideoPlayer.curAnnotation.model.id, analysis.id)
 						// .then((result)=>{
 							// inspector.ui.dataTableAnalysisMethods.ajax.reload();
@@ -2888,7 +2888,7 @@
 						},
 						// width:"15px"
 					},
-					{	data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, analysis, meta) {
+					{	data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, analysis, meta) {
 							// let displayAnalysisTypeIcon = '';
 							// switch (analysis.analysisMethodType.analysisMethodTypeTranslations[0].name) {
 							// 	case 'person':
@@ -2900,7 +2900,7 @@
 							// }
 							// let nameDisplay = `<p>` + displayAnalysisTypeIcon + `  ` + analysis.analysisMethodType.analysisMethodTypeTranslations[0].name+`
 							let nameDisplay = `<p>` + `  ` + analysis.analysisMethod.analysisMethodType.analysisMethodTypeTranslations[0].name +`
-							<span class="remove-AnalysisMethod badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis guideline"></i></span>
+							<span class="removeAnalysisMethod badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw" title="Remove analysis guideline"></i></span>
 							</p>`;
 							return nameDisplay;
 						}

@@ -27,15 +27,15 @@
 
 			// create and style list view element
 			this.listView = $(
-				`<li class="list-group__item">
+				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`<span class="timaat-categorylists-category-list-name">
+							`<span class="categoryListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 						  </div>
@@ -44,7 +44,7 @@
 				</li>`
 			);
 
-			// $('#timaat-categorylists-category-list').append(this.listView);
+			// $('#categoryList').append(this.listView);
 			// console.log("TCL: Category -> constructor -> this.updateUI()");
 			var category = this; // save category for system events
 
@@ -52,15 +52,15 @@
 
 			// attach category handlers
 			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: Category -> constructor -> open category datasheet");
+				// console.log("TCL: Category -> constructor -> open category dataSheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.categories-nav-tabs').show();
-				$('.categories-data-tabs').hide();
-				$('.nav-tabs a[href="#categoryDatasheet"]').tab('show');
-				$('#category-metadata-form').data('category', category);
+				$('.categoriesNavTabs').show();
+				$('.categoriesDataTabs').hide();
+				$('.nav-tabs a[href="#categoryDataSheet"]').tab('show');
+				$('#categoryFormMetadata').data('category', category);
         // console.log("TCL: Category -> constructor -> category", category);
 				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'category', category);
 			});
@@ -69,7 +69,7 @@
 		updateUI() {
 			var name = this.model.name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-categorylists-category-list-name').text(name);
+			this.listView.find('.categoryListName').text(name);
 
 		}
 
@@ -77,8 +77,8 @@
 			// remove category from UI
 			this.listView.remove();
       // console.log("TCL: Category -> remove -> this", this);
-			$('#category-metadata-form').data('category', null);
-			// remove from categoryset lists
+			$('#categoryFormMetadata').data('category', null);
+			// remove from category set lists
 			var index;
 			for (var i = 0; i < TIMAAT.CategoryLists.categories.length; i++) {
 				if (TIMAAT.CategoryLists.categories[i].model.id == this.model.id) {

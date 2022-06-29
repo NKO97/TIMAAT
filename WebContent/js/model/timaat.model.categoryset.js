@@ -27,15 +27,15 @@
 
 			// create and style list view element
 			this.listView = $(
-				`<li class="list-group__item">
+				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`<span class="timaat-categorylists-categoryset-list-name">
+							`<span class="categorySetListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 						  </div>
@@ -44,23 +44,23 @@
 				</li>`
 			);
 
-			// $('#timaat-categorylists-categoryset-list').append(this.listView);
+			// $('#categorySetList').append(this.listView);
 			// console.log("TCL: CategorySet -> constructor -> this.updateUI()");
-			var categorySet = this; // save categoryset for system events
+			var categorySet = this; // save category set for system events
 
 			this.updateUI();
 
 			// attach categoryset handlers
 			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: CategorySet -> constructor -> open categoryset datasheet");
+				// console.log("TCL: CategorySet -> constructor -> open category set dataSheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.categorysets-nav-tabs').show();
-				$('.categorysets-data-tabs').hide();
-				$('.nav-tabs a[href="#categorySetDatasheet"]').tab('show');
-				$('#category-metadata-form').data('categorySet', categorySet);
+				$('.categorySetsNavTabs').show();
+				$('.categorySetsDataTabs').hide();
+				$('.nav-tabs a[href="#categorySetDataSheet"]').tab('show');
+				$('#categoryFormMetadata').data('categorySet', categorySet);
         // console.log("TCL: CategorySet -> constructor -> categorySet", categorySet);
 				TIMAAT.CategoryLists.categoryOrCategorySetFormDataSheet('show', 'categorySet', categorySet);
 			});
@@ -69,16 +69,16 @@
 		updateUI() {
 			var name = this.model.name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-categorylists-categoryset-list-name').text(name);
+			this.listView.find('.categorySetListName').text(name);
 
 		}
 
 		remove() {
-			// remove categoryset from UI
+			// remove category set from UI
 			this.listView.remove();
       // console.log("TCL: CategorySet -> remove -> this", this);
-			$('#category-metadata-form').data('categorySet', null);
-			// remove from categoryset lists
+			$('#categoryFormMetadata').data('categorySet', null);
+			// remove from category set lists
 			var index;
 			for (var i = 0; i < TIMAAT.CategoryLists.categorySets.length; i++) {
 				if (TIMAAT.CategoryLists.categorySets[i].model.id == this.model.id) {

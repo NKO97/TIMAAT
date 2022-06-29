@@ -51,25 +51,26 @@
 			}
 			if (TIMAAT.UI.component != 'actors') {
 				TIMAAT.UI.showComponent('actors');
-				$('#actor-tab').trigger('click');
+				$('#actorTab').trigger('click');
 			}
 		},
 
+		//* not implemented
 		initActorTypes: function() {
 			// console.log("TCL: ActorDatasets: initActorTypes: function()");
 			// delete actorType functionality
-			$('#timaat-actortype-delete-submit').on('click', function(ev) {
-				var modal = $('#timaat-actordatasets-actortype-delete');
+			$('#actorTypeDeleteSubmitButton').on('click', function(ev) {
+				var modal = $('#actorDatasetsDeleteActorTypeModal');
 				var actorType = modal.data('actorType');
 				if (actorType) TIMAAT.ActorDatasets._actorTypeRemoved(actorType);
 				modal.modal('hide');
 			});
 
 			// add actorType button
-			$('#timaat-actortype-add').attr('onclick','TIMAAT.ActorDatasets.addActorType()');
+			$('#addActorTypeButton').attr('onclick','TIMAAT.ActorDatasets.addActorType()');
 
 			// add/edit actorType functionality
-			$('#timaat-actordatasets-actortype-meta').on('show.bs.modal', function (ev) {
+			$('#actorDatasetsActorTypeMetaModal').on('show.bs.modal', function (ev) {
 				// Create/Edit actorType window setup
 				var modal = $(this);
 				var actorType = modal.data('actorType');
@@ -78,16 +79,16 @@
 				var type = (actorType) ? actorType.model.type : 0;
 				// setup UI
 				$('#actorTypeMetaLabel').html(heading);
-				$('#timaat-actordatasets-actortype-meta-submit').html(submit);
-				$('#timaat-actordatasets-actortype-meta-name').val(type).trigger('input');
+				$('#actorDatasetsActorTypeMetaModalSubmitButton').html(submit);
+				$('#actorDatasetsActorTypeMetaModalName').val(type).trigger('input');
 			});
 
 			// Submit actorType data
-			$('#timaat-actordatasets-actortype-meta-submit').on('click', function(ev) {
+			$('#actorDatasetsActorTypeMetaModalSubmitButton').on('click', function(ev) {
 				// Create/Edit actorType window submitted data validation
-				var modal = $('#timaat-actordatasets-actortype-meta');
+				var modal = $('#actorDatasetsActorTypeMetaModal');
 				var actorType = modal.data('actorType');
-				var type = $('#timaat-actordatasets-actortype-meta-name').val();
+				var type = $('#actorDatasetsActorTypeMetaModalName').val();
 
 				if (actorType) {
 					actorType.model.actor.actorTypeTranslations[0].type = type;
@@ -110,44 +111,44 @@
 
 			// validate actorType data
 			// TODO validate all required fields
-			$('#timaat-actordatasets-actortype-meta-name').on('input', function(ev) {
-				if ( $('#timaat-actordatasets-actortype-meta-name').val().length > 0 ) {
-					$('#timaat-actordatasets-actortype-meta-submit').prop('disabled', false);
-					$('#timaat-actordatasets-actortype-meta-submit').removeAttr('disabled');
+			$('#actorDatasetsActorTypeMetaModalName').on('input', function(ev) {
+				if ( $('#actorDatasetsActorTypeMetaModalName').val().length > 0 ) {
+					$('#actorDatasetsActorTypeMetaModalSubmitButton').prop('disabled', false);
+					$('#actorDatasetsActorTypeMetaModalSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-actordatasets-actortype-meta-submit').prop('disabled', true);
-					$('#timaat-actordatasets-actortype-meta-submit').attr('disabled');
+					$('#actorDatasetsActorTypeMetaModalSubmitButton').prop('disabled', true);
+					$('#actorDatasetsActorTypeMetaModalSubmitButton').attr('disabled');
 				}
 			});
 		},
 
 		initActors: function() {
 			// console.log("TCL: ActorDatasets: initActors: function()");
-			$('#actor-tab').on('click', function(event) {
+			$('#actorTab').on('click', function(event) {
 				TIMAAT.ActorDatasets.loadActors();
-				TIMAAT.UI.displayComponent('actor', 'actor-tab', 'actor-datatable');
+				TIMAAT.UI.displayComponent('actor', 'actorTab', 'actorDataTable');
 				TIMAAT.URLHistory.setURL(null, 'Actor Datasets ', '#actor/list');
 			});
 
-			$('#person-tab').on('click', function(event) {
+			$('#personTab').on('click', function(event) {
 				TIMAAT.ActorDatasets.loadActorSubtype('person');
-				TIMAAT.UI.displayComponent('actor', 'person-tab', 'person-datatable');
+				TIMAAT.UI.displayComponent('actor', 'personTab', 'personDataTable');
 				TIMAAT.URLHistory.setURL(null, 'Person Datasets ', '#actor/person/list');
 			});
 
-			$('#collective-tab').on('click', function(event) {
+			$('#collectiveTab').on('click', function(event) {
 				TIMAAT.ActorDatasets.loadActorSubtype('collective');
-				TIMAAT.UI.displayComponent('actor', 'collective-tab', 'collective-datatable');
+				TIMAAT.UI.displayComponent('actor', 'collectiveTab', 'collectiveDataTable');
 				TIMAAT.URLHistory.setURL(null, 'Collective Datasets ', '#actor/collective/list');
 			});
 
 			// nav-bar functionality
-			$('#actor-tab-metadata').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabMetadata').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-metadata-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormMetadata');
 				TIMAAT.UI.displayDataSetContent('dataSheet', actor, 'actor');
 				if ( type == 'actor') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + id);
@@ -157,36 +158,35 @@
 			});
 
 			$('.toggleAble > legend').on('click', function(event) {
-				if ($('#actor-profile-images').css('visibility') == 'hidden') {
-					$('#actor-profile-images').css('visibility', 'visible');
-					$('#legend-collapse-icon').toggleClass('fa-caret-down fa-caret-up');
-					let actor = $('#actor-metadata-form').data('actor');
+				if ($('#actorProfileImages').hasClass('visibility--hidden')) {
+					$('#actorProfileImages').toggleClass('visibility--hidden visibility--visible');
+					$('.legendCollapseIcon').toggleClass('fa-caret-down fa-caret-up');
+					let actor = $('#actorFormMetadata').data('actor');
 					let maxHeight = Math.max.apply(Math, actor.model.profileImages.map(function(o) {return o.height}));
 					if (maxHeight > 480)
-						$('#profile-image-carousel-inner').css('height', 480);
+						$('#profileImageCarouselInner').css('height', 480);
 					else
-						$('#profile-image-carousel-inner').css('height', maxHeight);
+						$('#profileImageCarouselInner').css('height', maxHeight);
 				}
 				else {
-					$('#actor-profile-images').css('visibility', 'hidden');
-					$('#profile-image-carousel-inner').css('height', 0);
-					$('#legend-collapse-icon').toggleClass('fa-caret-down fa-caret-up');
+					$('#profileImageCarouselInner').css('height', 0);
+					$('.legendCollapseIcon').toggleClass('fa-caret-down fa-caret-up');
 				}
 			});
 
 			// delete actor button (in form) handler
-			$('#actor-metadata-form-delete-button').on('click', function(event) {
+			$('#actorFormMetadataDeleteButton').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-actordatasets-actor-delete').data('actor', $('#actor-metadata-form').data('actor'));
-				$('#timaat-actordatasets-actor-delete').modal('show');
+				$('#actorDatasetsActorDeleteModal').data('actor', $('#actorFormMetadata').data('actor'));
+				$('#actorDatasetsActorDeleteModal').modal('show');
 			});
 
 			// confirm delete actor modal functionality
-			$('#timaat-actordatasets-modal-delete-submit-button').on('click', async function(ev) {
-				var modal = $('#timaat-actordatasets-actor-delete');
+			$('#actorDatasetsActorDeleteModalSubmitButton').on('click', async function(ev) {
+				var modal = $('#actorDatasetsActorDeleteModal');
 				var actor = modal.data('actor');
-				let type = $('#actor-metadata-form').data('type');
+				let type = $('#actorFormMetadata').data('type');
 				if (actor) {
 					try {
 						await TIMAAT.ActorDatasets._actorRemoved(actor);
@@ -194,7 +194,7 @@
 						console.error("ERROR: ", error);
 					}
 					try {
-						if ($('#actor-tab').hasClass('active')) {
+						if ($('#actorTab').hasClass('active')) {
 							await TIMAAT.UI.refreshDataTable('actor');
 						} else {
 							await TIMAAT.UI.refreshDataTable(type);
@@ -204,33 +204,35 @@
 					}
 				}
 				modal.modal('hide');
-				if ( $('#actor-tab').hasClass('active') ) {
-					$('#actor-tab').trigger('click');
+				if ( $('#actorTab').hasClass('active') ) {
+					$('#actorTab').trigger('click');
 				} else {
-					$('#'+type+'-tab').trigger('click');
+					$('#'+type+'Tab').trigger('click');
 				}
 			});
 
 			// edit content form button handler
-			$('.actordatasheet-form-edit-button').on('click', function(event) {
+			$('.actorDataSheetFormEditButton').on('click', function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, $('#actor-metadata-form').data('actor'), 'actor', 'edit');
+				TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, $('#actorFormMetadata').data('actor'), 'actor', 'edit');
 			});
 
 			// actor form handlers
 			// carousel button handler
 			$('a[data-slide="prev"]').on('click', function() {
-				$('#dynamic-profile-image-fields').carousel('prev');
+				$('#dynamicProfileImageFields').carousel('prev');
 			});
 
 			// carousel button handler
 			$('a[data-slide="next"]').on('click', function() {
-				$('#dynamic-profile-image-fields').carousel('next');
+				$('#dynamicProfileImageFields').carousel('next');
 			});
 
+			//* not in use
 			// add profile image to list
-			$('.datasheet-form-add-profile-image-button').on('click', function(event) {
+			$('.actorFormDataSheetAddProfileImageButton').on('click', function(event) {
+				// TODO something is missing here?
 				var entryToAppend =
 					`<div class="form-group" data-role="ActorProfileImageEntry">
 						<div class="form-row">
@@ -248,16 +250,17 @@
 					</div>`;
 			});
 
+			//* not in use
 			// remove currently displayed profile image
-			$('.datasheet-form-remove-profile-image-button').on('click', function(event) {
-				$('#dynamic-profile-image-fields').find('.carousel-indicators > li.active').remove();
-				$('#dynamic-profile-image-fields').find('.carousel-indicators > li').first().addClass('active');
-				$('#dynamic-profile-image-fields').find('.carousel-item.active').remove();
-				$('#dynamic-profile-image-fields').find('.carousel-item').first().addClass('active');
+			$('.actorFormDataSheetRemoveProfileImageButton').on('click', function(event) {
+				$('#dynamicProfileImageFields').find('.carousel-indicators > li.active').remove();
+				$('#dynamicProfileImageFields').find('.carousel-indicators > li').first().addClass('active');
+				$('#dynamicProfileImageFields').find('.carousel-item.active').remove();
+				$('#dynamicProfileImageFields').find('.carousel-item').first().addClass('active');
 				var remainingElements = $('.carousel-inner > div').length;
 				if (remainingElements == 0) {
-					$('#dynamic-profile-image-fields').hide();
-					$('#dynamic-profile-image-fields-placeholder').show();
+					$('#dynamicProfileImageFields').hide();
+					$('#dynamicProfileImageFieldsPlaceholder').show();
 				} else {
 					var i = 1;
 					for (; i <= remainingElements; i++) {
@@ -267,17 +270,17 @@
 			});
 
 			// submit actor metadata button functionality
-			$('#actor-metadata-form-submit-button').on('click', async function(event) {
+			$('#actorFormMetadataSubmitButton').on('click', async function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
-				if (!$('#actor-metadata-form').valid()) return false;
+				if (!$('#actorFormMetadata').valid()) return false;
 
-				var actor = $('#actor-metadata-form').data('actor');
-				var type = $('#actor-metadata-form').data('type');
+				var actor = $('#actorFormMetadata').data('actor');
+				var type = $('#actorFormMetadata').data('type');
 				// var type = actor.model.actorType.actorTypeTranslations[0].type; // won't work for adding new actors
 
 				// create/Edit actor window submitted data
-				var formData = $('#actor-metadata-form').serializeArray();
+				var formData = $('#actorFormMetadata').serializeArray();
 				var formDataObject = {};
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
@@ -354,12 +357,12 @@
 					}
 					var newActor = await TIMAAT.ActorDatasets.createActor(type, actorModel, actorSubtypeModel, displayNameModel, actorSubtypeTranslationModel, citizenshipModel);
 					actor = new TIMAAT.Actor(newActor, type);
-					$('#actor-metadata-form').data('actor', actor);
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-metadata-form', 'actor');
-					$('#actor-tab-metadata').trigger('click');
+					$('#actorFormMetadata').data('actor', actor);
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormMetadata', 'actor');
+					$('#actorTab-metadata').trigger('click');
 				}
 				TIMAAT.ActorDatasets.showAddActorButton();
-				if ($('#actor-tab').hasClass('active')) {
+				if ($('#actorTab').hasClass('active')) {
 					await TIMAAT.UI.refreshDataTable('actor');
 				} else {
 					await TIMAAT.UI.refreshDataTable(type);
@@ -369,27 +372,27 @@
 			});
 
 			// cancel add/edit button in content form functionality
-			$('#actor-metadata-form-dismiss-button').on('click', async function(event) {
+			$('#actorFormMetadataDismissButton').on('click', async function(event) {
 				TIMAAT.ActorDatasets.showAddActorButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
 			// tag button handler
-			$('#actor-metadata-form-tag').on('click', async function(event) {
+			$('#actorFormMetadataTag').on('click', async function(event) {
 				event.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				var modal = $('#timaat-actordatasets-actor-tags');
-				modal.data('actor', $('#actor-metadata-form').data('actor'));
+				var modal = $('#actorDatasetsActorTagModal');
+				modal.data('actor', $('#actorFormMetadata').data('actor'));
 				var actor = modal.data('actor');
 				modal.find('.modal-body').html(`
 					<form role="form" id="actorTagsModalForm">
 						<div class="form-group">
-							<label for="actor-tags-multi-select-dropdown">Actor tags</label>
+							<label for="actorTagsMultiSelectDropdown">Actor tags</label>
 							<div class="col-md-12">
 								<select class="form-control form-control-md multi-select-dropdown"
 												style="width:100%;"
-												id="actor-tags-multi-select-dropdown"
+												id="actorTagsMultiSelectDropdown"
 												name="tagId"
 												data-role="tagId"
 												data-placeholder="Select actor tags"
@@ -398,7 +401,7 @@
 							</div>
 						</div>`+
 					`</form>`);
-        $('#actor-tags-multi-select-dropdown').select2({
+        $('#actorTagsMultiSelectDropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -432,7 +435,7 @@
 				});
 				await TIMAAT.ActorService.getTagList(actor.model.id).then(function(data) {
 					// console.log("TCL: then: data", data);
-					var tagSelect = $('#actor-tags-multi-select-dropdown');
+					var tagSelect = $('#actorTagsMultiSelectDropdown');
 					if (data.length > 0) {
 						// create the options and append to Select2
 						var i = 0;
@@ -449,13 +452,13 @@
 						});
 					}
 				});
-				$('#timaat-actordatasets-actor-tags').modal('show');
+				$('#actorDatasetsActorTagModal').modal('show');
 			});
 
 			// submit tag modal button functionality
-			$('#timaat-actordatasets-modal-tag-submit').on('click', async function(event) {
+			$('#actorDatasetsActorTagModalSubmitButton').on('click', async function(event) {
 				event.preventDefault();
-				var modal = $('#timaat-actordatasets-actor-tags');
+				var modal = $('#actorDatasetsActorTagModal');
 				if (!$('#actorTagsModalForm').valid())
 					return false;
 				var actor = modal.data('actor');
@@ -478,53 +481,54 @@
 					// console.log("TCL: updatedActorModel", updatedActorModel);
 					actor.model.tags = updatedActorModel.tags;
 				}
-				$('#actor-metadata-form').data('actor', actor);
+				$('#actorFormMetadata').data('actor', actor);
 				modal.modal('hide');
 			});
 
-			$('#timaat-actordatasets-metadata-type-id').on('change', function(event) {
+			//* not in use
+			$('#actorDatasetsMetadataTypeId').on('change', function(event) {
 				event.stopPropagation();
-				let type = $('#timaat-actordatasets-metadata-type-id').find('option:selected').html();
+				let type = $('#actorDatasetsMetadataTypeId').find('option:selected').html();
 				TIMAAT.ActorDatasets.initFormDataSheetData(type);
 			});
 
 			// data table events
-			$('#timaat-actordatasets-actor-table').on( 'page.dt', function () {
+			$('#actorDatasetsActorDataTable').on( 'page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
-			$('#timaat-actordatasets-person-table').on( 'page.dt', function () {
+			$('#actorDatasetsPersonDataTable').on( 'page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
-			$('#timaat-actordatasets-collective-table').on( 'page.dt', function () {
+			$('#actorDatasetsCollectiveDataTable').on( 'page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
 			// key press events
-			$('#actor-metadata-form-submit-button').on('keypress', function(event) {
+			$('#actorFormMetadataSubmitButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-metadata-form-submit-button').trigger('click');
+					$('#actorFormMetadataSubmitButton').trigger('click');
 				}
 			});
 
-			$('#actor-metadata-form-dismiss-button').on('keypress', function(event) {
+			$('#actorFormMetadataDismissButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-metadata-form-dismiss-button').trigger('click');
+					$('#actorFormMetadataDismissButton').trigger('click');
 				}
 			});
 
 		},
 
 		initNames: function() {
-			$('#actor-tab-names').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabNames').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-names-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormNames');
 				TIMAAT.ActorDatasets.setActorNameList(actor);
 				TIMAAT.UI.displayDataSetContent('names', actor, 'actor');
 				if ( type == 'actor') {
@@ -546,21 +550,21 @@
 			});
 
 			// Add name button click
-			// $(document).on('click','[data-role="new-name-fields"] > .form-group [data-role="add"]', function(event) {
-			$(document).on('click','.add-name-button', function(event) {
+			// $(document).on('click','[data-role="newActorNameFields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.addActorNameButton', function(event) {
 					event.preventDefault();
 				// console.log("TCL: add name to list");
-				var listEntry = $(this).closest('[data-role="new-name-fields"]');
+				var listEntry = $(this).closest('[data-role="newActorNameFields"]');
 				var newName = [];
 				if (listEntry.find('input').each(function(){
 					newName.push($(this).val());
           // console.log("TCL: $(this).val()", $(this).val());
           // console.log("TCL: newName", newName);
 				}));
-				if (!$('#actor-names-form').valid())
+				if (!$('#actorFormNames').valid())
 					return false;
 				if (newName != '') { // TODO is '' proper check?
-					var namesInForm = $('#actor-names-form').serializeArray();
+					var namesInForm = $('#actorFormNames').serializeArray();
 					// console.log("TCL: namesInForm", namesInForm);
 					var numberOfNameElements = 3;
 					var indexName = namesInForm[namesInForm.length-numberOfNameElements-1].name; // find last used indexed name (first prior to new address fields)
@@ -568,7 +572,7 @@
 					var i = Number(indexString)+1;
 					// console.log("TCL: namesInForm", namesInForm);
 					// console.log("TCL: i", i);
-					$('#dynamic-name-fields').append(
+					$('#dynamicActorNameFields').append(
 						`<div class="form-group" data-role="name-entry">
 						<div class="form-row">
 							<div class="col-sm-1 col-md-1 text-center">
@@ -594,7 +598,7 @@
 							</div>
 							<div class="col-sm-5 col-md-5">
 								<label class="sr-only">Name</label>
-								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name"
+								<input class="form-control form-control-sm"
 											 name="newActorName[`+i+`]"
 											 data-role="newActorName[`+i+`]"
 											 value="`+newName[0]+`"
@@ -607,7 +611,7 @@
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
 								<input type="text"
-											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom"
+											 class="form-control form-control-sm actorDatasetsActorActorNamesNameUsedFrom"
 											 name="newNameUsedFrom[`+i+`]"
 											 data-role="newNameUsedFrom[`+i+`]"
 											 value="`+newName[1]+`"
@@ -617,7 +621,7 @@
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
 								<input type="text"
-											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil"
+											 class="form-control form-control-sm actorDatasetsActorActorNamesNameUsedUntil"
 											 name="newNameUsedUntil[`+i+`]"
 											 data-role="newNameUsedUntil[`+i+`]"
 											 value="`+newName[2]+`"
@@ -625,7 +629,7 @@
 											 aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="form-group__button js-form-group__button remove-name-button btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button removeActorNameButton btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -639,8 +643,8 @@
 					if (listEntry.find('select').each(function(){
 						$(this).val('');
 					}));
-					$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-					$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.actorDatasetsActorActorNamesNameUsedFrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.actorDatasetsActorActorNamesNameUsedUntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				}
 				else {
 					// TODO open modal showing error that not all required fields are set.
@@ -648,8 +652,8 @@
 			});
 
 			// Remove name button click
-			// $(document).on('click','[data-role="dynamic-name-fields"] > .form-group [data-role="remove"]', function(event) {
-			$(document).on('click','.remove-name-button', function(event) {
+			// $(document).on('click','[data-role="dynamicActorNameFields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.removeActorNameButton', function(event) {
 					event.preventDefault();
 				var isDisplayName = $(this).closest('.form-group').find('input[name=isDisplayName]:checked').val();
 				if (isDisplayName == "on") {
@@ -664,26 +668,26 @@
 			});
 
 			// Submit actor names button functionality
-			$('#actor-names-form-submit').on('click', async function(event) {
+			$('#actorFormNamesSubmitButton').on('click', async function(event) {
 				// console.log("TCL: Names form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-name-fields");
+				var node = document.getElementById("newActorNameFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
 				// test if form is valid
-				if (!$('#actor-names-form').valid()) {
-					$('[data-role="new-name-fields"]').append(TIMAAT.ActorDatasets.appendNewNameField());
+				if (!$('#actorFormNames').valid()) {
+					$('[data-role="newActorNameFields"]').append(TIMAAT.ActorDatasets.appendNewNameField());
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-names-form').data("actor");
+				var actor = $('#actorFormNames').data("actor");
 				var type = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $('#actor-names-form').serializeArray();
+				var formData = $('#actorFormNames').serializeArray();
 				var formNameList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formNameList with data
@@ -915,7 +919,7 @@
 					}
 				}
 				// console.log("TCL: show actor name form");
-				if ($('#actor-tab').hasClass('active')) {
+				if ($('#actorTab').hasClass('active')) {
 					await TIMAAT.UI.refreshDataTable('actor');
 				} else {
 					await TIMAAT.UI.refreshDataTable(type);
@@ -925,49 +929,49 @@
 			});
 
 			// Cancel add/edit button in names form functionality
-			$('#actor-names-form-dismiss').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
+			$('#actorFormNamesDismissButton').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
 				TIMAAT.UI.displayDataSetContent('names', actor, 'actor');
 			});
 
 			// Key press events
-			$('#actor-names-form-submit').on('keypress', function(event) {
+			$('#actorFormNamesSubmitButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-names-form-submit').trigger('click');
+					$('#actorFormNamesSubmitButton').trigger('click');
 				}
 			});
 
-			$('#actor-names-form-dismiss').on('keypress', function(event) {
+			$('#actorFormNamesDismissButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-names-form-dismiss').trigger('click');
+					$('#actorFormNamesDismissButton').trigger('click');
 				}
 			});
 
-			$('#dynamic-name-fields').on('keypress', function(event) {
+			$('#dynamicActorNameFields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-name-fields').on('keypress', function(event) {
+			$('#newActorNameFields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
-					$('#new-name-fields').find('[data-role="add"]').trigger('click');
+					$('#newActorNameFields').find('[data-role="add"]').trigger('click');
 				}
 			});
 		},
 
 		initAddresses: function() {
-			$('#actor-tab-addresses').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabAddresses').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-addresses-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormAddresses');
 				TIMAAT.ActorDatasets.setActorHasAddressList(actor);
 				TIMAAT.UI.displayDataSetContent('addresses', actor, 'actor');
 				if ( type == 'actor') {
@@ -978,11 +982,11 @@
 			});
 
 			// Add address button click
-			// $(document).on('click','[data-role="new-actorhasaddress-fields"] > .form-group [data-role="add"]', function(event) {
-			$(document).on('click','.add-address-button', function(event) {
+			// $(document).on('click','[data-role="newActorHasAddressFields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.addActorAddressButton', function(event) {
 					event.preventDefault();
 				// console.log("TCL: add address to list");
-				var listEntry = $(this).closest('[data-role="new-actorhasaddress-fields"]');
+				var listEntry = $(this).closest('[data-role="newActorHasAddressFields"]');
 				var newAddress = [];
 				var addressTypeId = 1;
 				if (listEntry.find('select').each(function(){
@@ -991,11 +995,11 @@
 				if (listEntry.find('input').each(function(){
 					newAddress.push($(this).val());
 				}));
-				if (!$('#actor-addresses-form').valid())
+				if (!$('#actorFormAddresses').valid())
 					return false;
 				// console.log("TCL: newAddress", newAddress);
 				if (newAddress != '') { // TODO is '' proper check?
-					var addressesInForm = $('#actor-addresses-form').serializeArray();
+					var addressesInForm = $('#actorFormAddresses').serializeArray();
 					// console.log("TCL: addressesInForm", addressesInForm);
 					var i;
 					var numberOfAddressElements = 9;
@@ -1008,8 +1012,8 @@
 						i = 0;
 					}
 					// console.log("TCL: i", i);
-					$('#dynamic-actorhasaddress-fields').append(
-						`<div class="form-group" data-role="address-entry">
+					$('#dynamicActorHasAddressFields').append(
+						`<div class="form-group" data-role="addressEntry">
 							<div class="form-row">
 								<div class="col-md-11">
 									<fieldset>
@@ -1027,7 +1031,7 @@
 											<div class="col-md-5">
 												<label class="col-form-label col-form-label-sm">Street name</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-street"
+															 class="form-control form-control-sm"
 															 name="newStreet[`+i+`]"
 															 data-role="newStreet[`+i+`]"
 															 value="`+newAddress[0]+`"
@@ -1040,7 +1044,7 @@
 											<div class="col-md-2">
 												<label class="col-form-label col-form-label-sm">Street number</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber"
+															 class="form-control form-control-sm"
 															 name="newStreetNumber[`+i+`]"
 															 data-role="newStreetNumber[`+i+`]"
 															 value="`+newAddress[1]+`"
@@ -1051,7 +1055,7 @@
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Street addition</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition"
+															 class="form-control form-control-sm"
 															 name="newStreetAddition[`+i+`]" data-role="newStreetAddition[`+i+`]"
 															 value="`+newAddress[2]+`"
 															 placeholder="[Enter street addition]"
@@ -1062,7 +1066,7 @@
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Postal code</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode"
+															 class="form-control form-control-sm"
 															 name="newPostalCode[`+i+`]"
 															 data-role="newPostalCode[`+i+`]"
 															 value="`+newAddress[3]+`"
@@ -1073,7 +1077,7 @@
 											<div class="col-md-6">
 												<label class="col-form-label col-form-label-sm">City</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city"
+															 class="form-control form-control-sm"
 															 name="newCity[`+i+`]"
 															 data-role="newCity[`+i+`]"
 															 value="`+newAddress[4]+`"
@@ -1084,7 +1088,7 @@
 											<div class="col-md-3">
 												<label class="col-form-label col-form-label-sm">Post office box</label>
 												<input type="text"
-															 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox"
+															 class="form-control form-control-sm"
 															 name="newPostOfficeBox[`+i+`]"
 															 data-role="newPostOfficeBox[`+i+`]"
 															 value="`+newAddress[5]+`"
@@ -1096,7 +1100,7 @@
 										<div class="form-row">
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Address type*</label>
-												<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id" name="newAddressTypeId[`+i+`]" data-role="newAddressTypeId[`+i+`]" required>
+												<select class="form-control form-control-sm" name="newAddressTypeId[`+i+`]" data-role="newAddressTypeId[`+i+`]" required>
 													<option value="" disabled selected hidden>[Choose address type...]</option>
 													<option value="1"> </option>
 													<option value="2">business</option>
@@ -1106,17 +1110,17 @@
 											</div>
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Address used from</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom" name="addressUsedFrom[`+i+`]" data-role="addressUsedFrom" value="`+newAddress[6]+`" placeholder="[Enter used from]" aria-describedby="Address used from">
+												<input type="text" class="form-control form-control-sm actorDatasetsActorAddressesAddressUsedFrom" name="addressUsedFrom[`+i+`]" data-role="addressUsedFrom" value="`+newAddress[6]+`" placeholder="[Enter used from]" aria-describedby="Address used from">
 											</div>
 											<div class="col-md-4">
 												<label class="col-form-label col-form-label-sm">Address used until</label>
-												<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil" name="addressUsedUntil[`+i+`]" data-role="addressUsedUntil" value="`+newAddress[7]+`" placeholder="[Enter used until]" aria-describedby="Address used until">
+												<input type="text" class="form-control form-control-sm actorDatasetsActorAddressesAddressUsedUntil" name="addressUsedUntil[`+i+`]" data-role="addressUsedUntil" value="`+newAddress[7]+`" placeholder="[Enter used until]" aria-describedby="Address used until">
 											</div>
 										</div>
 									</fieldset>
 								</div>
-								<div class="col-md-1 vertical-aligned">
-									<button class="form-group__button js-form-group__button remove-address-button btn btn-danger" data-role="remove">
+								<div class="col-md-1 align-items--vertically">
+									<button class="form-group__button js-form-group__button removeActorAddressButton btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -1133,8 +1137,8 @@
 						// console.log("TCL: find(select) $(this).val()", $(this).val());
 						$(this).val('');
 					}));
-					$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-					$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.actorDatasetsActorAddressesAddressUsedFrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.actorDatasetsActorAddressesAddressUsedUntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 				}
 				else {
 					// TODO open modal showing error that not all required fields are set.
@@ -1142,33 +1146,33 @@
 			});
 
 			// Remove address button click
-			// $(document).on('click','[data-role="dynamic-actorhasaddress-fields"] > .form-group [data-role="remove"]', function(event) {
-			$(document).on('click','.remove-address-button', function(event) {
+			// $(document).on('click','[data-role="dynamicActorHasAddressFields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.removeActorAddressButton', function(event) {
 					event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
 
 			// Submit actor addresses button functionality
-			$('#actor-addresses-form-submit').on('click', async function(event) {
+			$('#actorFormAddressesSubmitButton').on('click', async function(event) {
 				// console.log("TCL: Addresses form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-actorhasaddress-fields");
+				var node = document.getElementById("newActorHasAddressFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
 				// test if form is valid
-				if (!$('#actor-addresses-form').valid()) {
-					$('[data-role="new-actorhasaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewAddressField());
+				if (!$('#actorFormAddresses').valid()) {
+					$('[data-role="newActorHasAddressFields"]').append(TIMAAT.ActorDatasets.appendNewAddressField());
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-addresses-form').data("actor");
+				var actor = $('#actorFormAddresses').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $('#actor-addresses-form').serializeArray();
+				var formData = $('#actorFormAddresses').serializeArray();
 				var formActorHasAddressesList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formActorHasAddressesList with data
@@ -1317,38 +1321,38 @@
 			});
 
 			// Cancel add/edit button in addresses form functionality
-			$('#actor-addresses-form-dismiss').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
+			$('#actorFormAddressesDismissButton').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
 				TIMAAT.UI.displayDataSetContent('addresses', actor, 'actor');
 			});
 
 			// Key press events
-			$('#actor-addresses-form-submit').on('keypress', function(event) {
+			$('#actorFormAddressesSubmitButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-addresses-form-submit').trigger('click');
+					$('#actorFormAddressesSubmitButton').trigger('click');
 				}
 			});
 
-			$('#actor-addresses-form-dismiss').on('keypress', function(event) {
+			$('#actorFormAddressesDismissButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-addresses-form-dismiss').trigger('click');
+					$('#actorFormAddressesDismissButton').trigger('click');
 				}
 			});
 
-			$('#dynamic-actorhasaddress-fields').on('keypress', function(event) {
+			$('#dynamicActorHasAddressFields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-actorhasaddress-fields').on('keypress', function(event) {
+			$('#newActorHasAddressFields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
-					$('#new-actorhasaddress-fields').find('[data-role="add"]').trigger('click');
+					$('#newActorHasAddressFields').find('[data-role="add"]').trigger('click');
 				}
 			});
 
@@ -1357,18 +1361,18 @@
 		initAddressTypes: function() {
 			// console.log("TCL: ActorDatasets: initAddressTypes: function()");
 			// delete addressType functionality
-			$('#timaat-addresstype-delete-submit').on('click', function(ev) {
-				var modal = $('#timaat-actordatasets-addresstype-delete');
+			$('#addressTypeDeleteSubmitButton').on('click', function(ev) {
+				var modal = $('#actorDatasetsAddressTypeDeleteModal');
 				var addressType = modal.data('addressType');
 				if (addressType) TIMAAT.ActorDatasets._addressTypeRemoved(addressType);
 				modal.modal('hide');
 			});
 
 			// add addressType button
-			$('#timaat-addresstype-add').attr('onclick','TIMAAT.ActorDatasets.addAddressType()');
+			$('#addressTypeAddButton').attr('onclick','TIMAAT.ActorDatasets.addAddressType()');
 
 			// add/edit addressType functionality
-			$('#timaat-actordatasets-addresstype-meta').on('show.bs.modal', function (ev) {
+			$('#actorDatasetsAddressTypeMeta').on('show.bs.modal', function (ev) {
 				// Create/Edit addressType window setup
 				var modal = $(this);
 				var addressType = modal.data('addressType');
@@ -1377,16 +1381,16 @@
 				var type = (addressType) ? addressType.model.type : 0;
 				// setup UI
 				$('#addressTypeMetaLabel').html(heading);
-				$('#timaat-actordatasets-addresstype-meta-submit').html(submit);
-				$('#timaat-actordatasets-addresstype-meta-name').val(type).trigger('input');
+				$('#actorDatasetsAddressTypeMetaSubmitButton').html(submit);
+				$('#actorDatasetsAddressTypeMetaName').val(type).trigger('input');
 			});
 
 			// Submit addressType data
-			$('#timaat-actordatasets-addresstype-meta-submit').on('click', function(ev) {
+			$('#actorDatasetsAddressTypeMetaSubmitButton').on('click', function(ev) {
 				// Create/Edit addressType window submitted data validation
-				var modal = $('#timaat-actordatasets-addresstype-meta');
+				var modal = $('#actorDatasetsAddressTypeMeta');
 				var addressType = modal.data('addressType');
-				var type = $('#timaat-actordatasets-addresstype-meta-name').val();
+				var type = $('#actorDatasetsAddressTypeMetaName').val();
 
 				if (addressType) {
 					addressType.model.actor.addressTypeTranslations[0].type = type;
@@ -1409,24 +1413,24 @@
 
 			// validate addressType data
 			// TODO validate all required fields
-			$('#timaat-actordatasets-addresstype-meta-name').on('input', function(ev) {
-				if ( $('#timaat-actordatasets-addresstype-meta-name').val().length > 0 ) {
-					$('#timaat-actordatasets-addresstype-meta-submit').prop('disabled', false);
-					$('#timaat-actordatasets-addresstype-meta-submit').removeAttr('disabled');
+			$('#actorDatasetsAddressTypeMetaName').on('input', function(ev) {
+				if ( $('#actorDatasetsAddressTypeMetaName').val().length > 0 ) {
+					$('#actorDatasetsAddressTypeMetaSubmitButton').prop('disabled', false);
+					$('#actorDatasetsAddressTypeMetaSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-actordatasets-addresstype-meta-submit').prop('disabled', true);
-					$('#timaat-actordatasets-addresstype-meta-submit').attr('disabled');
+					$('#actorDatasetsAddressTypeMetaSubmitButton').prop('disabled', true);
+					$('#actorDatasetsAddressTypeMetaSubmitButton').attr('disabled');
 				}
 			});
 		},
 
 		initEmailAddresses: function() {
-			$('#actor-tab-emailaddresses').on('click',function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabEmailAddresses').on('click',function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-emailaddresses-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormEmailAddresses');
 				TIMAAT.ActorDatasets.setActorHasEmailAddressList(actor);
 				TIMAAT.UI.displayDataSetContent('emails', actor, 'actor');
 				if ( type == 'actor') {
@@ -1437,11 +1441,11 @@
 			});
 
 			// Add email address button click
-			// $(document).on('click','[data-role="new-actorhasemailaddress-fields"] > .form-group [data-role="add"]', function(event) {
-			$(document).on('click','.add-email-address-button', function(event) {
+			// $(document).on('click','[data-role="newActorHasEmailAddressFields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.addEmailAddressButton', function(event) {
 					event.preventDefault();
 				// console.log("TCL: add email address to list");
-				var listEntry = $(this).closest('[data-role="new-actorhasemailaddress-fields"]');
+				var listEntry = $(this).closest('[data-role="newActorHasEmailAddressFields"]');
 				var newEmailAddress = [];
 				var emailAddressTypeId = 1;
 				if (listEntry.find('select').each(function(){
@@ -1450,11 +1454,11 @@
 				if (listEntry.find('input').each(function(){
 					newEmailAddress.push($(this).val());
 				}));
-				if (!$('#actor-emailaddresses-form').valid())
+				if (!$('#actorFormEmailAddresses').valid())
 					return false;
 				// console.log("TCL: newEmailAddress", newEmailAddress);
 				if (newEmailAddress != '') { // TODO is '' proper check?
-					var emailAddressesInForm = $('#actor-emailaddresses-form').serializeArray();
+					var emailAddressesInForm = $('#actorFormEmailAddresses').serializeArray();
 					// console.log("TCL: emailAddressesInForm", emailAddressesInForm);
 					var i;
 					var numberOfEmailAddressElements = 2;
@@ -1467,8 +1471,8 @@
 						i = 0;
 					}
 					// console.log("TCL: i", i);
-					$('#dynamic-actorhasemailaddress-fields').append(
-						`<div class="form-group" data-role="emailaddress-entry">
+					$('#dynamicActorHasEmailAddressFields').append(
+						`<div class="form-group" data-role="emailAddressEntry">
 							<div class="form-row">
 									<div class="col-md-2 text-center">
 										<div class="form-check">
@@ -1478,7 +1482,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Email address type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="newEmailAddressTypeId[`+i+`]" data-role="newEmailAddressTypeId[`+i+`]" required>
+									<select class="form-control form-control-sm" name="newEmailAddressTypeId[`+i+`]" data-role="newEmailAddressTypeId[`+i+`]" required>
 										<option value="" disabled selected hidden>[Choose email type...]</option>
 										<option value="1"> </option>
 										<option value="2">home</option>
@@ -1490,10 +1494,10 @@
 								</div>
 									<div class="col-md-6">
 										<label class="sr-only">Email address</label>
-										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="newEmailAddress[`+i+`]" data-role="newEmailAddress[`+i+`]" value="`+newEmailAddress[0]+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
+										<input type="text" class="form-control form-control-sm" name="newEmailAddress[`+i+`]" data-role="newEmailAddress[`+i+`]" value="`+newEmailAddress[0]+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
 									</div>
 								<div class="col-md-1 text-center">
-									<button class="form-group__button js-form-group__button remove-email-address-button btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button removeEmailAddressButton btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -1517,33 +1521,33 @@
 			});
 
 			// Remove email address button click
-			// $(document).on('click','[data-role="dynamic-actorhasemailaddress-fields"] > .form-group [data-role="remove"]', function(event) {
-			$(document).on('click','.remove-email-address-button', function(event) {
+			// $(document).on('click','[data-role="dynamicActorHasEmailAddressFields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.removeEmailAddressButton', function(event) {
 					event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
 
 			// Submit actor email addresses button functionality
-			$('#actor-emailaddresses-form-submit').on('click', async function(event) {
+			$('#actorFormEmailAddressesSubmitButton').on('click', async function(event) {
 				// console.log("TCL: Email addresses form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-actorhasemailaddress-fields");
+				var node = document.getElementById("newActorHasEmailAddressFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
 				// test if form is valid
-				if (!$('#actor-emailaddresses-form').valid()) {
-					$('[data-role="new-actorhasemailaddress-fields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());
+				if (!$('#actorFormEmailAddresses').valid()) {
+					$('[data-role="newActorHasEmailAddressFields"]').append(TIMAAT.ActorDatasets.appendNewEmailAddressField());
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-emailaddresses-form').data("actor");
+				var actor = $('#actorFormEmailAddresses').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $('#actor-emailaddresses-form').serializeArray();
+				var formData = $('#actorFormEmailAddresses').serializeArray();
 				var formActorHasEmailAddressesList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formActorHasEmailAddressesList with data
@@ -1671,38 +1675,38 @@
 			});
 
 			// Cancel add/edit button in email addresses form functionality
-			$('#actor-emailaddresses-form-dismiss').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
+			$('#actorFormEmailAddressesDismissButton').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
 				TIMAAT.UI.displayDataSetContent('emails', actor, 'actor');
 			});
 
 			// Key press events
-			$('#actor-emailaddresses-form-submit').on('keypress', function(event) {
+			$('#actorFormEmailAddressesSubmitButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-emailaddresses-form-submit').trigger('click');
+					$('#actorFormEmailAddressesSubmitButton').trigger('click');
 				}
 			});
 
-			$('#actor-emailaddresses-form-dismiss').on('keypress', function(event) {
+			$('#actorFormEmailAddressesDismissButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-emailaddresses-form-dismiss').trigger('click');
+					$('#actorFormEmailAddressesDismissButton').trigger('click');
 				}
 			});
 
-			$('#dynamic-actorhasemailaddress-fields').on('keypress', function(event) {
+			$('#dynamicActorHasEmailAddressFields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-actorhasemailaddress-fields').on('keypress', function(event) {
+			$('#newActorHasEmailAddressFields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
-					$('#new-actorhasemailaddress-fields').find('[data-role="add"]').trigger('click');
+					$('#newActorHasEmailAddressFields').find('[data-role="add"]').trigger('click');
 				}
 			});
 		},
@@ -1710,18 +1714,18 @@
 		initEmailAddressTypes: function() {
 			// console.log("TCL: ActorDatasets: initEmailAddressTypes: function()");
 			// delete emailAddressType functionality
-			$('#timaat-emailaddresstype-delete-submit').on('click', function(ev) {
-				var modal = $('#timaat-actordatasets-emailaddresstype-delete');
+			$('#emailAddressTypeDeleteSubmitButton').on('click', function(ev) {
+				var modal = $('#actorDatasetsEmailAddressTypeDeleteModal');
 				var emailAddressType = modal.data('emailAddressType');
 				if (emailAddressType) TIMAAT.ActorDatasets._emailAddressTypeRemoved(emailAddressType);
 				modal.modal('hide');
 			});
 
 			// add emailAddressType button
-			$('#timaat-emailaddresstype-add').attr('onclick','TIMAAT.ActorDatasets.addEmailAddressType()');
+			$('#emailAddressTypeAddButton').attr('onclick','TIMAAT.ActorDatasets.addEmailAddressType()');
 
 			// add/edit emailAddressType functionality
-			$('#timaat-actordatasets-emailaddresstype-meta').on('show.bs.modal', function (ev) {
+			$('#actorDatasetsEmailAddressTypeMetaModal').on('show.bs.modal', function (ev) {
 				// Create/Edit emailAddressType window setup
 				var modal = $(this);
 				var emailAddressType = modal.data('emailAddressType');
@@ -1730,16 +1734,16 @@
 				var type = (emailAddressType) ? emailAddressType.model.type : 0;
 				// setup UI
 				$('#emailAddressTypeMetaLabel').html(heading);
-				$('#timaat-actordatasets-emailaddresstype-meta-submit').html(submit);
-				$('#timaat-actordatasets-emailaddresstype-meta-name').val(type).trigger('input');
+				$('#actorDatasetsEmailAddressTypeMetaSubmitButton').html(submit);
+				$('#actorDatasetsEmailAddressTypeMetaName').val(type).trigger('input');
 			});
 
 			// Submit emailAddressType data
-			$('#timaat-actordatasets-emailaddresstype-meta-submit').on('click', function(ev) {
+			$('#actorDatasetsEmailAddressTypeMetaSubmitButton').on('click', function(ev) {
 				// Create/Edit emailAddressType window submitted data validation
-				var modal = $('#timaat-actordatasets-emailaddresstype-meta');
+				var modal = $('#actorDatasetsEmailAddressTypeMetaModal');
 				var emailAddressType = modal.data('emailAddressType');
-				var type = $('#timaat-actordatasets-emailaddresstype-meta-name').val();
+				var type = $('#actorDatasetsEmailAddressTypeMetaName').val();
 
 				if (emailAddressType) {
 					emailAddressType.model.actor.emailAddressTypeTranslations[0].type = type;
@@ -1762,24 +1766,24 @@
 
 			// validate emailAddressType data
 			// TODO validate all required fields
-			$('#timaat-actordatasets-emailaddresstype-meta-name').on('input', function(ev) {
-				if ( $('#timaat-actordatasets-emailaddresstype-meta-name').val().length > 0 ) {
-					$('#timaat-actordatasets-emailaddresstype-meta-submit').prop('disabled', false);
-					$('#timaat-actordatasets-emailaddresstype-meta-submit').removeAttr('disabled');
+			$('#actorDatasetsEmailAddressTypeMetaName').on('input', function(ev) {
+				if ( $('#actorDatasetsEmailAddressTypeMetaName').val().length > 0 ) {
+					$('#actorDatasetsEmailAddressTypeMetaSubmitButton').prop('disabled', false);
+					$('#actorDatasetsEmailAddressTypeMetaSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-actordatasets-emailaddresstype-meta-submit').prop('disabled', true);
-					$('#timaat-actordatasets-emailaddresstype-meta-submit').attr('disabled');
+					$('#actorDatasetsEmailAddressTypeMetaSubmitButton').prop('disabled', true);
+					$('#actorDatasetsEmailAddressTypeMetaSubmitButton').attr('disabled');
 				}
 			});
 		},
 
 		initPhoneNumbers: function() {
-			$('#actor-tab-phonenumbers').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabPhoneNumbers').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-phonenumbers-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormPhoneNumbers');
 				TIMAAT.ActorDatasets.setActorHasPhoneNumberList(actor);
 				TIMAAT.UI.displayDataSetContent('phoneNumbers', actor, 'actor');
 				if ( type == 'actor') {
@@ -1790,11 +1794,11 @@
 			});
 
 			// Add phone number button click
-			// $(document).on('click','[data-role="new-actorhasphonenumber-fields"] > .form-group [data-role="add"]', function(event) {
-			$(document).on('click','.add-phone-number-button', function(event) {
+			// $(document).on('click','[data-role="newActorHasPhoneNumberFields"] > .form-group [data-role="add"]', function(event) {
+			$(document).on('click','.addActorPhoneNumberButton', function(event) {
 					event.preventDefault();
 				// console.log("TCL: add phone number to list");
-				var listEntry = $(this).closest('[data-role="new-actorhasphonenumber-fields"]');
+				var listEntry = $(this).closest('[data-role="newActorHasPhoneNumberFields"]');
 				var newPhoneNumber = [];
 				var phoneNumberTypeId = 1;
 				if (listEntry.find('select').each(function(){
@@ -1803,11 +1807,11 @@
 				if (listEntry.find('input').each(function(){
 					newPhoneNumber.push($(this).val());
 				}));
-				if (!$('#actor-phonenumbers-form').valid())
+				if (!$('#actorFormPhoneNumbers').valid())
 					return false;
 				// console.log("TCL: newPhoneNumber", newPhoneNumber);
 				if (newPhoneNumber != '') { // TODO is '' proper check?
-					var phoneNumbersInForm = $('#actor-phonenumbers-form').serializeArray();
+					var phoneNumbersInForm = $('#actorFormPhoneNumbers').serializeArray();
 					// console.log("TCL: phoneNumbersInForm", phoneNumbersInForm);
 					var i;
 					var numberOfPhoneNumberElements = 2;
@@ -1820,8 +1824,8 @@
 						i = 0;
 					}
 					// console.log("TCL: i", i);
-					$('#dynamic-actorhasphonenumber-fields').append(
-						`<div class="form-group" data-role="phonenumber-entry">
+					$('#dynamicActorHasPhoneNumberFields').append(
+						`<div class="form-group" data-role="phoneNumberEntry">
 							<div class="form-row">
 									<div class="col-md-2 text-center">
 										<div class="form-check">
@@ -1831,7 +1835,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Phone number type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="newPhoneNumberTypeId[`+i+`]" data-role="newPhoneNumberTypeId[`+i+`]" required>
+									<select class="form-control form-control-sm" name="newPhoneNumberTypeId[`+i+`]" data-role="newPhoneNumberTypeId[`+i+`]" required>
 										<option value="" disabled selected hidden>[Choose phone number type...]</option>
 										<option value="1"> </option>
 										<option value="2">mobile</option>
@@ -1844,10 +1848,10 @@
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Phone number</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="newPhoneNumber[`+i+`]" data-role="newPhoneNumber[`+i+`]" value="`+newPhoneNumber[0]+`" maxlength="30" placeholder="[Enter phone number] "aria-describedby="Phone number" required>
+									<input type="text" class="form-control form-control-sm" name="newPhoneNumber[`+i+`]" data-role="newPhoneNumber[`+i+`]" value="`+newPhoneNumber[0]+`" maxlength="30" placeholder="[Enter phone number] "aria-describedby="Phone number" required>
 								</div>
 								<div class="col-md-1 text-center">
-									<button class="form-group__button js-form-group__button remove-phone-number-button btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button removePhoneNumberButton btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -1871,33 +1875,33 @@
 			});
 
 			// Remove phone number button click
-			// $(document).on('click','[data-role="dynamic-actorhasphonenumber-fields"] > .form-group [data-role="remove"]', function(event) {
-			$(document).on('click','.remove-phone-number-button', function(event) {
+			// $(document).on('click','[data-role="dynamicActorHasPhoneNumberFields"] > .form-group [data-role="remove"]', function(event) {
+			$(document).on('click','.removePhoneNumberButton', function(event) {
 					event.preventDefault();
 					$(this).closest('.form-group').remove();
 			});
 
-			// Submit actor phonenumbers button functionality
-			$('#actor-phonenumbers-form-submit').on('click', async function(event) {
+			// Submit actor phone numbers button functionality
+			$('#actorFormPhoneNumbersSubmitButton').on('click', async function(event) {
 				// console.log("TCL: Phone numbers form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-actorhasphonenumber-fields");
+				var node = document.getElementById("newActorHasPhoneNumberFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
 				// test if form is valid
-				if (!$('#actor-phonenumbers-form').valid()) {
-					$('[data-role="new-actorhasphonenumber-fields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());
+				if (!$('#actorFormPhoneNumbers').valid()) {
+					$('[data-role="newActorHasPhoneNumberFields"]').append(TIMAAT.ActorDatasets.appendNewPhoneNumberField());
 					return false;
 				}
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-phonenumbers-form').data("actor");
+				var actor = $('#actorFormPhoneNumbers').data("actor");
 				var actorType = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// Create/Edit actor window submitted data
-				var formData = $('#actor-phonenumbers-form').serializeArray();
+				var formData = $('#actorFormPhoneNumbers').serializeArray();
 				var formActorHasPhoneNumbersList = [];
 				var i = 0;
 				while ( i < formData.length) { // fill formActorHasPhoneNumbersList with data
@@ -2025,38 +2029,38 @@
 			});
 
 			// Cancel add/edit button in phone numbers form functionality
-			$('#actor-phonenumbers-form-dismiss').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
+			$('#actorFormPhoneNumbersDismissButton').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
 				TIMAAT.UI.displayDataSetContent('phoneNumbers', actor, 'actor');
 			});
 
 			// Key press events
-			$('#actor-phonenumbers-form-submit').on('keypress', function(event) {
+			$('#actorFormPhoneNumbersSubmitButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-phonenumbers-form-submit').trigger('click');
+					$('#actorFormPhoneNumbersSubmitButton').trigger('click');
 				}
 			});
 
-			$('#actor-phonenumbers-form-dismiss').on('keypress', function(event) {
+			$('#actorFormPhoneNumbersDismissButton').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
-					$('#actor-phonenumbers-form-dismiss').trigger('click');
+					$('#actorFormPhoneNumbersDismissButton').trigger('click');
 				}
 			});
 
-			$('#dynamic-actorhasphonenumber-fields').on('keypress', function(event) {
+			$('#dynamicActorHasPhoneNumberFields').on('keypress', function(event) {
 				// event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault(); // prevent activating delete button when pressing enter in a field of the row
 				}
 			});
 
-			$('#new-actorhasphonenumber-fields').on('keypress', function(event) {
+			$('#newActorHasPhoneNumberFields').on('keypress', function(event) {
 				event.stopPropagation();
 				if (event.which == '13') { // == enter
 					event.preventDefault();
-					$('#new-actorhasphonenumber-fields').find('[data-role="add"]').trigger('click');
+					$('#newActorHasPhoneNumberFields').find('[data-role="add"]').trigger('click');
 				}
 			});
 		},
@@ -2064,18 +2068,18 @@
 		initPhoneNumberTypes: function() {
 			// console.log("TCL: ActorDatasets: initPhoneNumberTypes: function()");
 			// delete phoneNumberType functionality
-			$('#timaat-phonenumbertype-delete-submit').on('click', function(ev) {
-				var modal = $('#timaat-actordatasets-phonenumbertype-delete');
+			$('#phoneNumberTypeDeleteSubmitButton').on('click', function(ev) {
+				var modal = $('#actorDatasetsPhoneNumberTypeDeleteModal');
 				var phoneNumberType = modal.data('phoneNumberType');
 				if (phoneNumberType) TIMAAT.ActorDatasets._phoneNumberTypeRemoved(phoneNumberType);
 				modal.modal('hide');
 			});
 
 			// add phoneNumberType button
-			$('#timaat-phonenumbertype-add').attr('onclick','TIMAAT.ActorDatasets.addPhoneNumberType()');
+			$('#phoneNumberTypeAddButton').attr('onclick','TIMAAT.ActorDatasets.addPhoneNumberType()');
 
 			// add/edit phoneNumberType functionality
-			$('#timaat-actordatasets-phonenumbertype-meta').on('show.bs.modal', function (ev) {
+			$('#actorDatasetsPhoneNumberTypeMetaModal').on('show.bs.modal', function (ev) {
 				// Create/Edit phoneNumberType window setup
 				var modal = $(this);
 				var phoneNumberType = modal.data('phoneNumberType');
@@ -2084,16 +2088,16 @@
 				var type = (phoneNumberType) ? phoneNumberType.model.type : 0;
 				// setup UI
 				$('#phoneNumberTypeMetaLabel').html(heading);
-				$('#timaat-actordatasets-phonenumbertype-meta-submit').html(submit);
-				$('#timaat-actordatasets-phonenumbertype-meta-name').val(type).trigger('input');
+				$('#actorDatasetsPhoneNumberTypeMetaSubmitButton').html(submit);
+				$('#actorDatasetsPhoneNumberTypeMetaName').val(type).trigger('input');
 			});
 
 			// Submit phoneNumberType data
-			$('#timaat-actordatasets-phonenumbertype-meta-submit').on('click', function(ev) {
+			$('#actorDatasetsPhoneNumberTypeMetaSubmitButton').on('click', function(ev) {
 				// Create/Edit phoneNumberType window submitted data validation
-				var modal = $('#timaat-actordatasets-phonenumbertype-meta');
+				var modal = $('#actorDatasetsPhoneNumberTypeMetaModal');
 				var phoneNumberType = modal.data('phoneNumberType');
-				var type = $('#timaat-actordatasets-phonenumbertype-meta-name').val();
+				var type = $('#actorDatasetsPhoneNumberTypeMetaName').val();
 
 				if (phoneNumberType) {
 					phoneNumberType.model.actor.phoneNumberTypeTranslations[0].type = type;
@@ -2116,24 +2120,24 @@
 
 			// validate phoneNumberType data
 			// TODO validate all required fields
-			$('#timaat-actordatasets-phonenumbertype-meta-name').on('input', function(ev) {
-				if ( $('#timaat-actordatasets-phonenumbertype-meta-name').val().length > 0 ) {
-					$('#timaat-actordatasets-phonenumbertype-meta-submit').prop('disabled', false);
-					$('#timaat-actordatasets-phonenumbertype-meta-submit').removeAttr('disabled');
+			$('#actorDatasetsPhoneNumberTypeMetaName').on('input', function(ev) {
+				if ( $('#actorDatasetsPhoneNumberTypeMetaName').val().length > 0 ) {
+					$('#actorDatasetsPhoneNumberTypeMetaSubmitButton').prop('disabled', false);
+					$('#actorDatasetsPhoneNumberTypeMetaSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-actordatasets-phonenumbertype-meta-submit').prop('disabled', true);
-					$('#timaat-actordatasets-phonenumbertype-meta-submit').attr('disabled');
+					$('#actorDatasetsPhoneNumberTypeMetaSubmitButton').prop('disabled', true);
+					$('#actorDatasetsPhoneNumberTypeMetaSubmitButton').attr('disabled');
 				}
 			});
 		},
 
 		initMemberOfCollectives: function() {
-			$('#actor-tab-memberofcollectives').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabMemberOfCollectives').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-memberofcollectives-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormMemberOfCollectives');
 				TIMAAT.ActorDatasets.setPersonIsMemberOfCollectiveList(actor, type);
 				TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
 				if ( type == 'actor') {
@@ -2144,11 +2148,11 @@
 			});
 
 			// add membership button click
-			// $(document).on('click','[data-role="new-personismemberofcollective-fields"] > .form-group [data-role="add"]', async function(event) {
-			$(document).on('click','.add-member-of-collective-button', async function(event) {
+			// $(document).on('click','[data-role="newPersonIsMemberOfCollectiveFields"] > .form-group [data-role="add"]', async function(event) {
+			$(document).on('click','.addActorMemberOfCollectiveButton', async function(event) {
 					// console.log("TCL: MemberOfCollective form: add new membership");
 				event.preventDefault();
-				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-fields"]');
+				var listEntry = $(this).closest('[data-role="newPersonIsMemberOfCollectiveFields"]');
 				var newFormEntry = [];
 				var newEntryId = null;
 				if (listEntry.find('select').each(function(){
@@ -2159,16 +2163,16 @@
 				}));
 				// console.log("TCL: newFormEntry", newFormEntry);
 
-				if (!$('#actor-memberofcollectives-form').valid()) {
+				if (!$('#actorFormMemberOfCollectives').valid()) {
 					return false;
 				}
-				var actor = $('#actor-metadata-form').data('actor');
+				var actor = $('#actorFormMetadata').data('actor');
 				var type = actor.model.actorType.actorTypeTranslations[0].type;
 
-				$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', false);
-				$('.disable-on-submit').prop('disabled', true);
-				var existingEntriesInForm = $('#actor-memberofcollectives-form').serializeArray();
-				$('.disable-on-submit').prop('disabled', false);
+				$('.actorDatasetsActorMemberOfCollectiveActorId').prop('disabled', false);
+				$('.disableOnSubmit').prop('disabled', true);
+				var existingEntriesInForm = $('#actorFormMemberOfCollectives').serializeArray();
+				$('.disableOnSubmit').prop('disabled', false);
 				// console.log("TCL: existingEntriesInForm", existingEntriesInForm);
 
 				// create list of collectiveIds that the person is is already a member of
@@ -2212,18 +2216,18 @@
 					}
 					let actorName = await TIMAAT.ActorService.getActorName(newEntryId);
 					var appendNewFormDataEntry = TIMAAT.ActorDatasets.appendMemberOfCollectiveDataset(existingEntriesIdList.length, newEntryId, actorName, newEntryDetails, 'sr-only', true);
-					$('#dynamic-personismemberofcollective-fields').append(appendNewFormDataEntry);
-					$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', true);
+					$('#dynamicPersonIsMemberOfCollectiveFields').append(appendNewFormDataEntry);
+					$('.actorDatasetsActorMemberOfCollectiveActorId').prop('disabled', true);
 
-					$('[data-role="new-personismemberofcollective-fields"]').find('[data-role="memberofcollective-details-entry"]').remove();
+					$('[data-role="newPersonIsMemberOfCollectiveFields"]').find('[data-role="memberOfCollectiveDetailsEntry"]').remove();
 					if (listEntry.find('input').each(function(){
 						$(this).val('');
 					}));
 					if (listEntry.find('select').each(function(){
 						$(this).val('');
 					}));
-					$('.timaat-actordatasets-actor-memberofcollectives-joinedat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-					$('.timaat-actordatasets-actor-memberofcollectives-leftat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.actorDatasetsActorMemberOfCollectivesJoinedAt').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+					$('.actorDatasetsActorMemberOfCollectivesLeftAt').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
 					// only needed when changes have to be saved immediately
 					// await TIMAAT.ActorDatasets.addPersonIsMemberOfCollective(actor.model.id, newMemberOfCollectiveEntry);
@@ -2231,18 +2235,18 @@
 					// TIMAAT.ActorDatasets.actorFormMemberOfCollectives('edit', type, actor);
 				}
 				else { // duplicate collective
-					$('#timaat-actordatasets-memberofcollective-duplicate').modal('show');
+					$('#actorDatasetsMemberOfCollectiveDuplicateModal').modal('show');
 				}
 			});
 
 			// add membership detail button click
 			// $(document).on('click', '.form-group [data-role="addMembershipDetails"]', async function(event) {
-			$(document).on('click', '.add-membership-details-button', async function(event) {
+			$(document).on('click', '.addMembershipDetailsButton', async function(event) {
 						// console.log("TCL: MemberOfCollective form: add details to membership");
 				event.preventDefault();
-				var listEntry = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]');
+				var listEntry = $(this).closest('[data-role="newPersonIsMemberOfCollectiveDetailsFields"]');
 				var newMemberOfCollectiveData = [];
-				var actorId = $(this).closest(('[data-role="personismemberofcollective-entry"]')).attr("data-actor-id");
+				var actorId = $(this).closest(('[data-role="personIsMemberOfCollectiveEntry"]')).attr("data-actor-id");
 				if (listEntry.find('input').each(function(){
 					newMemberOfCollectiveData.push($(this).val());
 				}));
@@ -2256,9 +2260,9 @@
 					joinedAt: newMemberOfCollectiveData[1],
 					leftAt: newMemberOfCollectiveData[2]
 				};
-				var dataId = $(this).closest('[data-role="personismemberofcollective-entry"]').attr('data-id');
-				var dataDetailsId = $(this).closest('[data-role="new-personismemberofcollective-details-fields"]').attr("data-details-id");
-				$(this).closest('[data-role="new-personismemberofcollective-details-fields"]').before(TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(dataId, dataDetailsId, actorId, newMembershipDetailsEntry, 'sr-only'));
+				var dataId = $(this).closest('[data-role="personIsMemberOfCollectiveEntry"]').attr('data-id');
+				var dataDetailsId = $(this).closest('[data-role="newPersonIsMemberOfCollectiveDetailsFields"]').attr("data-details-id");
+				$(this).closest('[data-role="newPersonIsMemberOfCollectiveDetailsFields"]').before(TIMAAT.ActorDatasets.appendMemberOfCollectiveDetailFields(dataId, dataDetailsId, actorId, newMembershipDetailsEntry, 'sr-only'));
 
 				$('[data-role="actorId['+actorId+']"]').find('option[value='+actorId+']').attr('selected', true);
 				if (listEntry.find('input').each(function(){
@@ -2267,13 +2271,13 @@
 				if (listEntry.find('select').each(function(){
 					$(this).val('');
 				}));
-				$('.timaat-actordatasets-actor-memberofcollectives-joinedat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('.timaat-actordatasets-actor-memberofcollectives-leftat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorMemberOfCollectivesJoinedAt').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorMemberOfCollectivesLeftAt').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 			});
 
 			// remove member of collective button click
-			// $(document).on('click','[data-role="dynamic-personismemberofcollective-fields"] > .form-group [data-role="remove"]', async function(event) {
-			$(document).on('click','.remove-member-of-collective-button', async function(event) {
+			// $(document).on('click','[data-role="dynamicPersonIsMemberOfCollectiveFields"] > .form-group [data-role="remove"]', async function(event) {
+			$(document).on('click','.removeActorMemberOfCollectiveButton', async function(event) {
 					// console.log("TCL: MemberOfCollective form: remove membership");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
@@ -2281,30 +2285,30 @@
 
 			// remove membership detail button click
 			// $(document).on('click','.form-group [data-role="removeMembershipDetails"]', async function(event) {
-			$(document).on('click','.remove-membership-details', async function(event) {
+			$(document).on('click','.removeMembershipDetails', async function(event) {
 					// console.log("TCL: MemberOfCollective form: remove details");
 				event.preventDefault();
 				$(this).closest('.form-group').remove();
 			});
 
-			// submit actor memberofcollectives button functionality
-			$('#actor-memberofcollectives-form-submit').on('click', async function(event) {
+			// submit actor member of collectives button functionality
+			$('#actorFormMemberOfCollectivesSubmitButton').on('click', async function(event) {
 				// console.log("TCL: MemberOfCollective form: submit");
 				// add rules to dynamically added form fields
 				event.preventDefault();
-				var node = document.getElementById("new-personismemberofcollective-fields");
+				var node = document.getElementById("newPersonIsMemberOfCollectiveFields");
 				while (node.lastChild) {
 					node.removeChild(node.lastChild);
 				}
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-metadata-form').data('actor');
+				var actor = $('#actorFormMetadata').data('actor');
 				var type = actor.model.actorType.actorTypeTranslations[0].type;
 
 				// test if form is valid
-				if (!$('#actor-memberofcollectives-form').valid()) {
-					$('[data-role="new-personismemberofcollective-fields"]').append(TIMAAT.ActorDatasets.appendNewMemberOfCollectiveField());
+				if (!$('#actorFormMemberOfCollectives').valid()) {
+					$('[data-role="newPersonIsMemberOfCollectiveFields"]').append(TIMAAT.ActorDatasets.appendNewMemberOfCollectiveField());
 					var listType = (type == 'person') ? 'collective' : 'person'; // person needs collective entries and vice versa
-					$('#actor-select-dropdown').select2({
+					$('#actorSelectDropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2340,10 +2344,10 @@
 				}
 
 				// create/edit actor window submitted data
-				$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', false);
-				$('.disable-on-submit').prop('disabled', true);
-				var formData = $('#actor-memberofcollectives-form').serializeArray();
-				$('.disable-on-submit').prop('disabled', false);
+				$('.actorDatasetsActorMemberOfCollectiveActorId').prop('disabled', false);
+				$('.disableOnSubmit').prop('disabled', true);
+				var formData = $('#actorFormMemberOfCollectives').serializeArray();
+				$('.disableOnSubmit').prop('disabled', false);
         // console.log("TCL: formData", formData);
 				var formEntries = [];
 				var formEntryIds = []; // List of all collectives containing membership data for this actor
@@ -2549,7 +2553,7 @@
 					}
 				}
 				// actor.updateUI();
-				if ($('#actor-tab').hasClass('active')) {
+				if ($('#actorTab').hasClass('active')) {
 					await TIMAAT.UI.refreshDataTable('actor');
 				} else {
 					await TIMAAT.UI.refreshDataTable(type);
@@ -2559,8 +2563,8 @@
 			});
 
 			// cancel add/edit button in memberOfCollective form functionality
-			$('#actor-memberofcollectives-form-dismiss').on('click', function(event) {
-				let actor = $('#actor-memberofcollectives-form').data('actor');
+			$('#actorFormMemberOfCollectivesDismissButton').on('click', function(event) {
+				let actor = $('#actorFormMemberOfCollectives').data('actor');
 				TIMAAT.UI.displayDataSetContent('memberOfCollectives', actor, 'actor');
 			});
 
@@ -2568,12 +2572,12 @@
 
 		initRoles: function() {
 			// nav-bar functionality
-			$('#actor-tab-roles').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabRoles').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-roles-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormRoles');
 				TIMAAT.UI.displayDataSetContent('roles', actor, 'actor');
 				if ( type == 'actor') {
 					TIMAAT.URLHistory.setURL(null, name + ' · Roles · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + id + '/roles');
@@ -2584,17 +2588,17 @@
 
 			// actor role form handlers
 			// submit actor role button functionality
-			$('#actor-roles-form-submit').on('click', async function(event) {
+			$('#actorFormRolesSubmitButton').on('click', async function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
-				// if (!$('#actor-roles-form').valid()) return false;
+				// if (!$('#actorFormRoles').valid()) return false;
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-metadata-form').data('actor');
+				var actor = $('#actorFormMetadata').data('actor');
         // console.log("TCL: actor", actor);
 
 				// create/edit role window submitted data
-				var formSelectData = $('#actor-roles-form').serializeArray();
+				var formSelectData = $('#actorFormRoles').serializeArray();
         // console.log("TCL: formSelectData", formSelectData);
         // console.log("TCL: formData", formData);
         // var formDataObject = {};
@@ -2622,8 +2626,8 @@
 			});
 
 			// cancel add/edit button in actor roles form functionality
-			$('#actor-roles-form-dismiss').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
+			$('#actorFormRolesDismissButton').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
 				TIMAAT.UI.displayDataSetContent('roles', actor, 'actor');
 			});
 
@@ -2631,12 +2635,12 @@
 
 		initRoleMedium: function() {
 			// nav-bar functionality
-			$('#actor-tab-role-in-medium').on('click', function(event) {
-				let actor = $('#actor-metadata-form').data('actor');
-				let type = $('#actor-metadata-form').data('type');
+			$('#actorTabRoleInMedium').on('click', function(event) {
+				let actor = $('#actorFormMetadata').data('actor');
+				let type = $('#actorFormMetadata').data('type');
 				let name = actor.model.displayName.name;
 				let id = actor.model.id;
-				TIMAAT.UI.displayDataSetContentArea('actor-role-in-medium-form');
+				TIMAAT.UI.displayDataSetContentArea('actorFormActorRoleInMedium');
 				TIMAAT.ActorDatasets.setActorHasAddressList(actor);
 				TIMAAT.UI.displayDataSetContent('rolesInMedia', actor, 'actor');
 				if ( type == 'actor') {
@@ -2648,17 +2652,17 @@
 
 			// actor role medium form handlers
 			// submit actor role medium button functionality
-			$('#actor-role-in-medium-form-submit').on('click', async function(event) {
+			$('#actorFormActorRoleInMediumSubmitButton').on('click', async function(event) {
 				// continue only if client side validation has passed
 				event.preventDefault();
-				// if (!$('#actor-roles-form').valid()) return false;
+				// if (!$('#actorFormRoles').valid()) return false;
 
 				// the original actor model (in case of editing an existing actor)
-				var actor = $('#actor-metadata-form').data('actor');
+				var actor = $('#actorFormMetadata').data('actor');
         // console.log("TCL: actor", actor);
 
 				// create/edit role medium window submitted data
-				var formSelectData = $('#actor-role-in-medium-form').serializeArray();
+				var formSelectData = $('#actorFormActorRoleInMedium').serializeArray();
         // console.log("TCL: formSelectData", formSelectData);
         // console.log("TCL: formData", formData);
         // var formDataObject = {};
@@ -2686,8 +2690,8 @@
 			});
 
 			// cancel add/edit button in actor role medium form functionality
-			$('#actor-role-in-medium-form-dismiss').on('click', function(event) {
-				let actor = ('#actor-metadata-form').data('actor');
+			$('#actorFormActorRoleInMediumDismissButton').on('click', function(event) {
+				let actor = ('#actorFormMetadata').data('actor');
 				TIMAAT.UI.displayDataSetContent('rolesInMedia', actor, 'actor');
 			});
 
@@ -2707,7 +2711,7 @@
 		},
 
 		loadActors: function() {
-			$('#actor-metadata-form').data('type', 'actor');
+			$('#actorFormMetadata').data('type', 'actor');
 			TIMAAT.UI.addSelectedClassToSelectedItem('actor', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
 			this.setActorList();
@@ -2720,7 +2724,7 @@
 		},
 
 		loadActorSubtype: function(type) {
-			$('#actor-metadata-form').data('type', type);
+			$('#actorFormMetadata').data('type', type);
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
 			this.showAddActorButton();
@@ -2899,23 +2903,23 @@
 
 		addActor: function(type) {
 			// console.log("TCL: addActor: type", type);
-			TIMAAT.UI.displayDataSetContentContainer('actor-tab-metadata', 'actor-metadata-form');
+			TIMAAT.UI.displayDataSetContentContainer('actorTabMetadata', 'actorFormMetadata');
 			this.hideAddActorButton();
-			$('#actor-metadata-form').data('type', type);
-			$('#actor-metadata-form').data('actor', null);
-			$('#person-sex-type-select-dropdown').empty().trigger('change');
+			$('#actorFormMetadata').data('type', type);
+			$('#actorFormMetadata').data('actor', null);
+			$('#personSexTypeSelectDropdown').empty().trigger('change');
 			actorFormMetadataValidator.resetForm();
 
 			$('.carousel-inner').empty();
 			$('.carousel-indicators').empty();
-			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
+			var node = document.getElementById("actorFormDataSheetProfileImageSelection");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
 
 			TIMAAT.UI.addSelectedClassToSelectedItem(type, null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
-			$('#actor-metadata-form').trigger('reset');
+			$('#actorFormMetadata').trigger('reset');
 
 			// setup form
 			this.initFormDataSheetData(type);
@@ -2924,33 +2928,33 @@
 			}
 			// this.getActorFormImageDropdownData();
 			this.initFormDataSheetForEdit(type);
-			$('#actor-metadata-form-submit-button').html('Add');
+			$('#actorFormMetadataSubmitButton').html('Add');
 			$('#actorFormHeader').html("Add "+type);
 
-			$('#dynamic-profile-image-fields').hide();
-			$('#dynamic-profile-image-fields-placeholder').show();
+			$('#dynamicProfileImageFields').hide();
+			$('#dynamicProfileImageFieldsPlaceholder').show();
 			$('.carousel-item').first().addClass('active');
 			$('.carousel-indicators > li').first().addClass('active');
-			$('#dynamic-profile-image-fields').carousel();
-			// $('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
+			$('#dynamicProfileImageFields').carousel();
+			// $('#actorDatasetsMetadataActorIsFictional').prop('checked', false);
 		},
 
 		actorFormDataSheet: async function(action, type, data) {
 			// console.log("TCL: actorFormDataSheet - action, type, data: ", action, type, data);
 			$('.carousel-inner').empty();
 			$('.carousel-indicators').empty();
-			var node = document.getElementById("actor-datasheet-form-profile-image-selection");
+			var node = document.getElementById("actorFormDataSheetProfileImageSelection");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-metadata-form').trigger('reset');
+			$('#actorFormMetadata').trigger('reset');
 
 			if (data.model.profileImages.length == 0) {
-				$('#dynamic-profile-image-fields').hide();
-				$('#dynamic-profile-image-fields-placeholder').show();
+				$('#dynamicProfileImageFields').hide();
+				$('#dynamicProfileImageFieldsPlaceholder').show();
 			} else {
-				$('#dynamic-profile-image-fields-placeholder').hide();
-				$('#dynamic-profile-image-fields').show();
+				$('#dynamicProfileImageFieldsPlaceholder').hide();
+				$('#dynamicProfileImageFields').show();
 				var i = 0;
 				for (; i < data.model.profileImages.length; i++) {
 					// console.log("TCL: data.model.profileImages["+i+"]", data.model.profileImages[i]);
@@ -2958,21 +2962,20 @@
 					$(`<div class="carousel-item"
 									data-id=`+data.model.profileImages[i].mediumId+`>
 							<img src="/TIMAAT/api/actor/profileImage/`+data.model.profileImages[i].mediumId+`?token=`+viewToken+`"
-									style="max-height:100%; max-width:100%"
-									class="center">
+									class="center max-height--100 max-width--100">
 						</div>`).appendTo('.carousel-inner');
-					$(`<li data-target="#dynamic-profile-image-fields"
+					$(`<li data-target="#dynamicProfileImageFields"
 								data-slide-to="`+i+`">
 						</li>`).appendTo('.carousel-indicators');
 				}
 				let maxHeight = Math.max.apply(Math, data.model.profileImages.map(function(o) {return o.height}));
 				if (maxHeight > 480)
-					$('#profile-image-carousel-inner').css('height', 480);
+					$('#profileImageCarouselInner').css('height', 480);
 				else
-					$('#profile-image-carousel-inner').css('height', maxHeight);
+					$('#profileImageCarouselInner').css('height', maxHeight);
 				$('.carousel-item').first().addClass('active');
 				$('.carousel-indicators > li').first().addClass('active');
-				$('#dynamic-profile-image-fields').carousel();
+				$('#dynamicProfileImageFields').carousel();
 			}
 
 			this.initFormDataSheetData(type);
@@ -2981,29 +2984,29 @@
 			// this.getActorFormImageDropdownData();
 			if (type == 'person') {
 				this.getActorFormDataSheetPersonSexDropdownData();
-				let sexSelect = $('#person-sex-type-select-dropdown');
+				let sexSelect = $('#personSexTypeSelectDropdown');
 				let option = new Option(data.model.actorPerson.sex.sexTranslations[0].type, data.model.actorPerson.sex.id, true, true);
 				sexSelect.append(option).trigger('change');
 			}
 
-			$('#actor-profile-images').css('visibility', 'visible');
+			$('#actorProfileImages').removeClass('visibility--hidden').addClass('visibility--visible');
 
 			if ( action == 'show') {
-				$('#actor-metadata-form :input').prop('disabled', true);
+				$('#actorFormMetadata :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-datasheet-form-profile-image-selection').hide();
+				$('#actorFormDataSheetProfileImageSelection').hide();
 				$('#actorFormHeader').html(type+" Data Sheet (#"+ data.model.id+')');
 				if (type == 'person') {
-					$('#person-sex-type-select-dropdown').select2('destroy').attr('readonly', true);
+					$('#personSexTypeSelectDropdown').select2('destroy').attr('readonly', true);
 				}
 			}
 			else if (action == 'edit') {
 				this.initFormDataSheetForEdit(type);
 				this.hideAddActorButton();
-				$('#actor-metadata-form-submit-button').html("Save");
+				$('#actorFormMetadataSubmitButton').html("Save");
 				$('#actorFormHeader').html("Edit "+type);
 
-				var profileImageSelect = $('#actor-profile-image-multi-select-dropdown');
+				var profileImageSelect = $('#actorProfileImageMultiSelectDropdown');
 				await TIMAAT.ActorService.getActorHasImageList(data.model.id).then(async function(data) {
 					// console.log("TCL: then: data", data);
 					if (data.length > 0) {
@@ -3033,75 +3036,75 @@
 
 			// setup UI
 			if (data.model.profileImages.length == 0) {
-				$('.datasheet-form-remove-profile-image-button').prop('disabled', true);
-				$('.datasheet-form-remove-profile-image-button :input').prop('disabled', true);
-				$('.datasheet-form-remove-profile-image-button').removeClass('btn-danger').removeClass('btn-outline').addClass('btn-secondary');
+				$('.actorFormDataSheetRemoveProfileImageButton').prop('disabled', true);
+				$('.actorFormDataSheetRemoveProfileImageButton :input').prop('disabled', true);
+				$('.actorFormDataSheetRemoveProfileImageButton').removeClass('btn-danger').removeClass('btn-outline').addClass('btn-secondary');
 			} else if (data.model.profileImages.length >= 5) {
-				$('.datasheet-form-add-profile-image-button').prop('disabled', true);
-				$('.datasheet-form-add-profile-image-button :input').prop('disabled', true);
-				$('.datasheet-form-add-profile-image-button').removeClass('btn-primary').removeClass('btn-outline').addClass('btn-secondary');
+				$('.actorFormDataSheetAddProfileImageButton').prop('disabled', true);
+				$('.actorFormDataSheetAddProfileImageButton :input').prop('disabled', true);
+				$('.actorFormDataSheetAddProfileImageButton').removeClass('btn-primary').removeClass('btn-outline').addClass('btn-secondary');
 			} else {
-				$('.datasheet-form-add-profile-image-button').prop('disabled', false);
-				$('.datasheet-form-add-profile-image-button :input').prop('disabled', false);
-				$('.datasheet-form-add-profile-image-button').removeClass('btn-secondary').addClass('btn-outline').addClass('btn-primary');
-				$('.datasheet-form-remove-profile-image-button').prop('disabled', false);
-				$('.datasheet-form-remove-profile-image-button :input').prop('disabled', false);
-				$('.datasheet-form-remove-profile-image-button').removeClass('btn-secondary').addClass('btn-outline').addClass('btn-danger');
+				$('.actorFormDataSheetAddProfileImageButton').prop('disabled', false);
+				$('.actorFormDataSheetAddProfileImageButton :input').prop('disabled', false);
+				$('.actorFormDataSheetAddProfileImageButton').removeClass('btn-secondary').addClass('btn-outline').addClass('btn-primary');
+				$('.actorFormDataSheetRemoveProfileImageButton').prop('disabled', false);
+				$('.actorFormDataSheetRemoveProfileImageButton :input').prop('disabled', false);
+				$('.actorFormDataSheetRemoveProfileImageButton').removeClass('btn-secondary').addClass('btn-outline').addClass('btn-danger');
 			}
-			$('#timaat-actordatasets-metadata-actor-type-id').val(data.model.actorType.id);
-			$('#timaat-actordatasets-metadata-actor-name').val(data.model.displayName.name);
+			$('#actorDatasetsMetadataActorTypeId').val(data.model.actorType.id);
+			$('#actorDatasetsMetadataActorName').val(data.model.displayName.name);
 			if (data.model.displayName.usedFrom != null && !(isNaN(data.model.displayName.usedFrom)))
-				$('#timaat-actordatasets-metadata-actor-name-usedfrom').val(moment.utc(data.model.displayName.usedFrom).format('YYYY-MM-DD'));
-				else $('#timaat-actordatasets-metadata-actor-name-usedfrom').val('');
+				$('#actorDatasetsMetadataActorNameUsedFrom').val(moment.utc(data.model.displayName.usedFrom).format('YYYY-MM-DD'));
+				else $('#actorDatasetsMetadataActorNameUsedFrom').val('');
 			if(data.model.displayName.usedUntil != null && !(isNaN(data.model.displayName.usedUntil)))
-				$('#timaat-actordatasets-metadata-actor-name-useduntil').val(moment.utc(data.model.displayName.usedUntil).format('YYYY-MM-DD'));
-				else $('#timaat-actordatasets-metadata-actor-name-useduntil').val('');
+				$('#actorDatasetsMetadataActorNameUsedUntil').val(moment.utc(data.model.displayName.usedUntil).format('YYYY-MM-DD'));
+				else $('#actorDatasetsMetadataActorNameUsedUntil').val('');
 			if (data.model.isFictional)
-				$('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', true);
-				else $('#timaat-actordatasets-metadata-actor-isfictional').prop('checked', false);
+				$('#actorDatasetsMetadataActorIsFictional').prop('checked', true);
+				else $('#actorDatasetsMetadataActorIsFictional').prop('checked', false);
 
 			// actor subtype specific data
 			switch (type) {
 				case 'person':
-					$('#timaat-actordatasets-metadata-person-title').val(data.model.actorPerson.title);
+					$('#actorDatasetsMetadataPersonTitle').val(data.model.actorPerson.title);
 					if (data.model.actorPerson.dateOfBirth != null && !(isNaN(data.model.actorPerson.dateOfBirth)))
-						$('#timaat-actordatasets-metadata-person-dateofbirth').val(moment.utc(data.model.actorPerson.dateOfBirth).format('YYYY-MM-DD'));
-						else $('#timaat-actordatasets-metadata-person-dateofbirth').val('');
-					$('#timaat-actordatasets-metadata-person-placeofbirth').val(data.model.actorPerson.placeOfBirth);
+						$('#actorDatasetsMetadataPersonDateOfBirth').val(moment.utc(data.model.actorPerson.dateOfBirth).format('YYYY-MM-DD'));
+						else $('#actorDatasetsMetadataPersonDateOfBirth').val('');
+					$('#actorDatasetsMetadataPersonPlaceOfBirth').val(data.model.actorPerson.placeOfBirth);
 					if (data.model.actorPerson.dayOfDeath != null && !(isNaN(data.model.actorPerson.dayOfDeath)))
-						$('#timaat-actordatasets-metadata-person-dayofdeath').val(moment.utc(data.model.actorPerson.dayOfDeath).format('YYYY-MM-DD'));
-						else $('#timaat-actordatasets-metadata-person-dayofdeath').val('');
-					$('#timaat-actordatasets-metadata-person-placeofdeath').val(data.model.actorPerson.placeOfDeath);
-					// $('#timaat-actordatasets-metadata-person-citizenship-name').val(data.actorPerson.citizenships[0].citizenshipTranslations[0].name);
-					$('#timaat-actordatasets-metadata-person-citizenship-name').val(data.model.actorPerson.citizenship);
-					$('#timaat-actordatasets-metadata-person-specialfeatures').val(data.model.actorPerson.actorPersonTranslations[0].specialFeatures);
+						$('#actorDatasetsMetadataPersonDayOfDeath').val(moment.utc(data.model.actorPerson.dayOfDeath).format('YYYY-MM-DD'));
+						else $('#actorDatasetsMetadataPersonDayOfDeath').val('');
+					$('#actorDatasetsMetadataPersonPlaceOfDeath').val(data.model.actorPerson.placeOfDeath);
+					// $('#actorDatasetsMetadataPersonCitizenshipName').val(data.actorPerson.citizenships[0].citizenshipTranslations[0].name);
+					$('#actorDatasetsMetadataPersonCitizenshipName').val(data.model.actorPerson.citizenship);
+					$('#actorDatasetsMetadataPersonSpecialFeatures').val(data.model.actorPerson.actorPersonTranslations[0].specialFeatures);
 					// TODO remove once location is properly connected
-					// $('#timaat-actordatasets-metadata-person-placeofbirth').prop('disabled', true);
-					// $('#timaat-actordatasets-metadata-person-placeofdeath').prop('disabled', true);
+					// $('#actorDatasetsMetadataPersonPlaceOfBirth').prop('disabled', true);
+					// $('#actorDatasetsMetadataPersonPlaceOfDeath').prop('disabled', true);
 				break;
 				case 'collective':
 					if (data.model.actorCollective.founded != null && !(isNaN(data.model.actorCollective.founded)))
-						$('#timaat-actordatasets-metadata-collective-founded').val(moment.utc(data.model.actorCollective.founded).format('YYYY-MM-DD'));
-						else $('#timaat-actordatasets-metadata-collective-founded').val('');
+						$('#actorDatasetsMetadataCollectiveFounded').val(moment.utc(data.model.actorCollective.founded).format('YYYY-MM-DD'));
+						else $('#actorDatasetsMetadataCollectiveFounded').val('');
 					if (data.model.actorCollective.disbanded != null && !(isNaN(data.model.actorCollective.disbanded)))
-						$('#timaat-actordatasets-metadata-collective-disbanded').val(moment.utc(data.model.actorCollective.disbanded).format('YYYY-MM-DD'));
-						else $('#timaat-actordatasets-metadata-collective-disbanded').val('');
+						$('#actorDatasetsMetadataCollectiveDisbanded').val(moment.utc(data.model.actorCollective.disbanded).format('YYYY-MM-DD'));
+						else $('#actorDatasetsMetadataCollectiveDisbanded').val('');
 				break;
 			}
-			$('#actor-metadata-form').data('actor', data);
+			$('#actorFormMetadata').data('actor', data);
 		},
 
 		actorFormNames: function(action, actor) {
 			// console.log("TCL: actorFormNames: action, actor", action, actor);
-			var node = document.getElementById("dynamic-name-fields");
+			var node = document.getElementById("dynamicActorNameFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			var node = document.getElementById("new-name-fields");
+			var node = document.getElementById("newActorNameFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-names-form').trigger('reset');
+			$('#actorFormNames').trigger('reset');
 			actorFormNamesValidator.resetForm();
 
 			// setup UI
@@ -3110,7 +3113,7 @@
 			var numNames = actor.model.actorNames.length;
       // console.log("TCL: actor.model.actorNames", actor.model.actorNames);
 			for (; i < numNames; i++) {
-				$('[data-role="dynamic-name-fields"]').append(
+				$('[data-role="dynamicActorNameFields"]').append(
 					`<div class="form-group" data-role="name-entry">
 						<div class="form-row">
 							<div class="col-sm-1 col-md-1 text-center">
@@ -3136,7 +3139,7 @@
 							</div>
 							<div class="col-sm-5 col-md-5">
 								<label class="sr-only">Name</label>
-								<input class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name"
+								<input class="form-control form-control-sm"
 											 name="actorName[`+i+`]"
 											 data-role="actorName[`+actor.model.actorNames[i].id+`]"
 											 placeholder="[Enter name]"
@@ -3149,7 +3152,7 @@
 							<div class="col-md-2">
 								<label class="sr-only">Name used from</label>
 								<input type="text"
-											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom"
+											 class="form-control form-control-sm actorDatasetsActorActorNamesNameUsedFrom"
 											 id="nameUsedFrom[`+i+`]"
 											 name="nameUsedFrom[`+i+`]"
 											 data-role="nameUsedFrom[`+actor.model.actorNames[i].id+`]"
@@ -3159,7 +3162,7 @@
 							<div class="col-md-2">
 								<label class="sr-only">Name used until</label>
 								<input type="text"
-											 class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil"
+											 class="form-control form-control-sm actorDatasetsActorActorNamesNameUsedUntil"
 											 id="nameUsedUntil[`+i+`]"
 											 name="nameUsedUntil[`+i+`]"
 											 data-role="nameUsedUntil[`+actor.model.actorNames[i].id+`]"
@@ -3167,7 +3170,7 @@
 											 aria-describedby="Name used until">
 							</div>
 							<div class="col-sm-1 col-md-1 text-center">
-								<button class="form-group__button js-form-group__button remove-name-button btn btn-danger" data-role="remove">
+								<button class="form-group__button js-form-group__button removeActorNameButton btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -3191,58 +3194,58 @@
 					else $('[data-role="nameUsedUntil['+name.id+']"]').val('');
 			}
 			if ( action == 'show') {
-				$('#actor-names-form :input').prop('disabled', true);
+				$('#actorFormNames :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-names-form-submit').hide();
-				$('#actor-names-form-dismiss').hide();
-				$('[data-role="new-name-fields"').hide();
-				$('.name-form-divider').hide();
+				$('#actorFormNamesSubmitButton').hide();
+				$('#actorFormNamesDismissButton').hide();
+				$('[data-role="newActorNameFields"').hide();
+				$('.actorFormNameDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#actorNamesLabel').html("Actor name list");
 				if (actor.model.actorType.actorTypeTranslations[0].type == "person") {
-					$('#actor-display-name-header').html("Display Name");
-					$('#actor-birth-name-header').html("Birth Name");
+					$('#actorDisplayNameHeader').html("Display Name");
+					$('#actorBirthNameHeader').html("Birth Name");
 				}
 				if (actor.model.actorType.actorTypeTranslations[0].type == "collective") {
-					$('#actor-display-name-header').html("Display Designation");
-					$('#actor-birth-name-header').html("Original Designation");
+					$('#actorDisplayNameHeader').html("Display Designation");
+					$('#actorBirthNameHeader').html("Original Designation");
 				}
 			}
 			else if (action == 'edit') {
-				$('#actor-names-form :input').prop('disabled', false);
+				$('#actorFormNames :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#actor-names-form-submit').html("Save");
-				$('#actor-names-form-submit').show();
-				$('#actor-names-form-dismiss').show();
+				$('#actorFormNamesSubmitButton').html("Save");
+				$('#actorFormNamesSubmitButton').show();
+				$('#actorFormNamesDismissButton').show();
 				$('#actorNamesLabel').html("Edit actor name list");
-				$('[data-role="new-name-fields"').show();
-				$('.name-form-divider').show();
-				$('#timaat-actordatasets-metadata-actor-name').focus();
+				$('[data-role="newActorNameFields"').show();
+				$('.actorFormNameDivider').show();
+				$('#actorDatasetsMetadataActorName').focus();
 
 				// fields for new name entry
-				$('[data-role="new-name-fields"]').append(this.appendNewNameField());
-				// $('.actor-names-container').find('.js-form-group__button').show(); //* enable after dynamic fields are added
+				$('[data-role="newActorNameFields"]').append(this.appendNewNameField());
+				// $('.actorNamesContainer').find('.js-form-group__button').show(); //* enable after dynamic fields are added
 
-				$('.timaat-actordatasets-actor-actornames-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('.timaat-actordatasets-actor-actornames-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorActorNamesNameUsedFrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorActorNamesNameUsedUntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
-				$('#actor-names-form').data('actor', actor);
+				$('#actorFormNames').data('actor', actor);
 			}
 		},
 
 		actorFormAddresses: function(action, actor) {
     	// console.log("TCL: actorFormAddresses: action, actor", action, actor);
-			var node = document.getElementById("dynamic-actorhasaddress-fields");
+			var node = document.getElementById("dynamicActorHasAddressFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			var node = document.getElementById("new-actorhasaddress-fields");
+			var node = document.getElementById("newActorHasAddressFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-addresses-form').trigger('reset');
+			$('#actorFormAddresses').trigger('reset');
 			actorFormAddressesValidator.resetForm();
 
 			// setup UI
@@ -3250,8 +3253,8 @@
 			var numAddresses = actor.model.actorHasAddresses.length;
       // console.log("TCL: actor.model.actorHasAddresses", actor.model.actorHasAddresses);
 			for (; i< numAddresses; i++) {
-				$('[data-role="dynamic-actorhasaddress-fields"]').append(
-					`<div class="form-group" data-role="address-entry">
+				$('[data-role="dynamicActorHasAddressFields"]').append(
+					`<div class="form-group" data-role="addressEntry">
 						<div class="form-row">
 							<div class="col-md-11">
 								<fieldset>
@@ -3269,7 +3272,7 @@
 										<div class="col-md-5">
 											<label class="col-form-label col-form-label-sm">Street name</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-street"
+														 class="form-control form-control-sm"
 														 name="street[`+i+`]"
 														 data-role="street[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 value="`+actor.model.actorHasAddresses[i].address.street+`"
@@ -3282,7 +3285,7 @@
 										<div class="col-md-2">
 											<label class="col-form-label col-form-label-sm">Street number</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber"
+														 class="form-control form-control-sm"
 														 name="streetNumber[`+i+`]"
 														 data-role="streetNumber[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 value="`+actor.model.actorHasAddresses[i].address.streetNumber+`"
@@ -3293,7 +3296,7 @@
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Street addition</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition"
+														 class="form-control form-control-sm"
 														 name="streetAddition[`+i+`]"
 														 data-role="streetAddition[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 value="`+actor.model.actorHasAddresses[i].address.streetAddition+`"
@@ -3306,7 +3309,7 @@
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Postal code</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode"
+														 class="form-control form-control-sm"
 														 name="postalCode[`+i+`]"
 														 data-role="postalCode[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 value="`+actor.model.actorHasAddresses[i].address.postalCode+`"
@@ -3317,7 +3320,7 @@
 										<div class="col-md-6">
 											<label class="col-form-label col-form-label-sm">City</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city"
+														 class="form-control form-control-sm"
 														 name="city[`+i+`]"
 														 data-role="city[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 value="`+actor.model.actorHasAddresses[i].address.city+`"
@@ -3328,7 +3331,7 @@
 										<div class="col-md-3">
 											<label class="col-form-label col-form-label-sm">Post office box</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox"
+														 class="form-control form-control-sm"
 														 name="postOfficeBox[`+i+`]"
 														 data-role="postOfficeBox[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 value="`+actor.model.actorHasAddresses[i].address.postOfficeBox+`"
@@ -3340,7 +3343,7 @@
 									<div class="form-row">
 										<div class="col-md-4">
 											<label class="col-form-label col-form-label-sm">Address type*</label>
-											<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id"
+											<select class="form-control form-control-sm"
 															name="addressTypeId[`+i+`]"
 															data-role="addressTypeId[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 															required>
@@ -3354,7 +3357,7 @@
 										<div class="col-md-4">
 											<label class="col-form-label col-form-label-sm">Address used from</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom"
+														 class="form-control form-control-sm actorDatasetsActorAddressesAddressUsedFrom"
 														 name="addressUsedFrom[`+i+`]"
 														 data-role="addressUsedFrom[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 placeholder="[Enter used from]"
@@ -3363,7 +3366,7 @@
 										<div class="col-md-4">
 											<label class="col-form-label col-form-label-sm">Address used until</label>
 											<input type="text"
-														 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil"
+														 class="form-control form-control-sm actorDatasetsActorAddressesAddressUsedUntil"
 														 name="addressUsedUntil[`+i+`]"
 														 data-role="addressUsedUntil[`+actor.model.actorHasAddresses[i].id.addressId+`]"
 														 placeholder="[Enter used until]"
@@ -3372,8 +3375,8 @@
 									</div>
 								</fieldset>
 							</div>
-							<div class="col-md-1 vertical-aligned">
-								<button class="form-group__button js-form-group__button remove-address-button btn btn-danger" data-role="remove">
+							<div class="col-md-1 align-items--vertically">
+								<button class="form-group__button js-form-group__button removeActorAddressButton btn btn-danger" data-role="remove">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -3395,50 +3398,50 @@
 					else $('[data-role="addressUsedUntil['+address.id.addressId+']"]').val('');
 			}
 			if ( action == 'show') {
-				$('#actor-addresses-form :input').prop('disabled', true);
+				$('#actorFormAddresses :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-addresses-form-submit').hide();
-				$('#actor-addresses-form-dismiss').hide();
-				$('[data-role="new-actorhasaddress-fields"').hide();
-				$('.address-form-divider').hide();
+				$('#actorFormAddressesSubmitButton').hide();
+				$('#actorFormAddressesDismissButton').hide();
+				$('[data-role="newActorHasAddressFields"').hide();
+				$('.actorFormAddressDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#actorAddressesLabel').html("Actor address list");
 			}
 			else if (action == 'edit') {
-				$('#actor-addresses-form :input').prop('disabled', false);
+				$('#actorFormAddresses :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#actor-addresses-form-submit').html("Save");
-				$('#actor-addresses-form-submit').show();
-				$('#actor-addresses-form-dismiss').show();
+				$('#actorFormAddressesSubmitButton').html("Save");
+				$('#actorFormAddressesSubmitButton').show();
+				$('#actorFormAddressesDismissButton').show();
 				$('#actorAddressesLabel').html("Edit actor address list");
-				$('[data-role="new-actorhasaddress-fields"').show();
-				$('.address-form-divider').show();
-				$('#timaat-actordatasets-metadata-actor-address').focus();
+				$('[data-role="newActorHasAddressFields"').show();
+				$('.actorFormAddressDivider').show();
+				$('#actorDatasetsMetadataActorAddress').focus();
 
 				// fields for new address entry
-				$('[data-role="new-actorhasaddress-fields"]').append(this.appendNewAddressField());
+				$('[data-role="newActorHasAddressFields"]').append(this.appendNewAddressField());
 
-				$('.timaat-actordatasets-actor-addresses-address-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('.timaat-actordatasets-actor-addresses-address-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorAddressesAddressUsedFrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorAddressesAddressUsedUntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
 				// console.log("TCL: actor", actor);
-				$('#actor-addresses-form').data('actor', actor);
+				$('#actorFormAddresses').data('actor', actor);
 			}
 		},
 
 		actorFormEmailAddresses: function(action, actor) {
     	// console.log("TCL: actorFormEmailAddresses: action, actor", action, actor);
-			var node = document.getElementById("dynamic-actorhasemailaddress-fields");
+			var node = document.getElementById("dynamicActorHasEmailAddressFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			var node = document.getElementById("new-actorhasemailaddress-fields");
+			var node = document.getElementById("newActorHasEmailAddressFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-emailaddresses-form').trigger('reset');
+			$('#actorFormEmailAddresses').trigger('reset');
 			actorFormEmailAddressesValidator.resetForm();
 
 			// setup UI
@@ -3446,8 +3449,8 @@
 			var numEmailAddresses = actor.model.actorHasEmailAddresses.length;
       // console.log("TCL: actor.model.actorHasEmailAddresses", actor.model.actorHasEmailAddresses);
 			for (; i< numEmailAddresses; i++) {
-				$('[data-role="dynamic-actorhasemailaddress-fields"]').append(
-					`<div class="form-group" data-role="emailaddress-entry">
+				$('[data-role="dynamicActorHasEmailAddressFields"]').append(
+					`<div class="form-group" data-role="emailAddressEntry">
 							<div class="form-row">
 									<div class="col-md-2 text-center">
 										<div class="form-check">
@@ -3457,7 +3460,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Email address type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" required>
+									<select class="form-control form-control-sm" name="emailAddressTypeId[`+i+`]" data-role="emailAddressTypeId[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" required>
 										<option value="" disabled selected hidden>[Choose email type...]</option>
 										<option value="1"> </option>
 										<option value="2">home</option>
@@ -3469,10 +3472,10 @@
 								</div>
 									<div class="col-md-6">
 										<label class="sr-only">Email address</label>
-										<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="emailAddress[`+i+`]" data-role="emailAddress[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" value="`+actor.model.actorHasEmailAddresses[i].emailAddress.email+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
+										<input type="text" class="form-control form-control-sm" name="emailAddress[`+i+`]" data-role="emailAddress[`+actor.model.actorHasEmailAddresses[i].id.emailAddressId+`]" value="`+actor.model.actorHasEmailAddresses[i].emailAddress.email+`" placeholder="[Enter email address]" aria-describedby="Email address" required>
 									</div>
 								<div class="col-md-1 text-center">
-									<button class="form-group__button js-form-group__button remove-email-address-button btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button removeEmailAddressButton btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -3488,45 +3491,45 @@
 				$('input[name="emailAddress['+i+']"]').rules("add", { required: true, email: true});
 			}
 			if ( action == 'show') {
-				$('#actor-emailaddresses-form :input').prop('disabled', true);
+				$('#actorFormEmailAddresses :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-emailaddresses-form-submit').hide();
-				$('#actor-emailaddresses-form-dismiss').hide();
-				$('[data-role="new-actorhasemailaddress-fields"').hide();
-				$('.emailaddress-form-divider').hide();
+				$('#actorFormEmailAddressesSubmitButton').hide();
+				$('#actorFormEmailAddressesDismissButton').hide();
+				$('[data-role="newActorHasEmailAddressFields"').hide();
+				$('.actorFormEmailAddressDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#actorEmailAddressesLabel').html("Actor email list");
 			}
 			else if (action == 'edit') {
-				$('#actor-emailaddresses-form :input').prop('disabled', false);
+				$('#actorFormEmailAddresses :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#actor-emailaddresses-form-submit').show();
-				$('#actor-emailaddresses-form-dismiss').show();
-				$('#actor-emailaddresses-form-submit').html("Save");
+				$('#actorFormEmailAddressesSubmitButton').show();
+				$('#actorFormEmailAddressesDismissButton').show();
+				$('#actorFormEmailAddressesSubmitButton').html("Save");
 				$('#actorEmailAddressesLabel').html("Edit Actor email list");
-				$('[data-role="new-actorhasemailaddress-fields"').show();
-				$('.emailaddress-form-divider').show();
-				$('#timaat-actordatasets-metadata-actor-emailaddress').focus();
+				$('[data-role="newActorHasEmailAddressFields"').show();
+				$('.actorFormEmailAddressDivider').show();
+				$('#actorDatasetsMetadataActorEmailAddress').focus();
 
 				// fields for new email address entry
-				$('[data-role="new-actorhasemailaddress-fields"]').append(this.appendNewEmailAddressField());
-				$('#actor-emailaddresses-form').data('actor', actor);
+				$('[data-role="newActorHasEmailAddressFields"]').append(this.appendNewEmailAddressField());
+				$('#actorFormEmailAddresses').data('actor', actor);
 			}
 		},
 
 		actorFormPhoneNumbers: function(action, actor) {
     	// console.log("TCL: actorFormPhoneNumbers: action, actor", action, actor);
-			var node = document.getElementById("dynamic-actorhasphonenumber-fields");
+			var node = document.getElementById("dynamicActorHasPhoneNumberFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			var node = document.getElementById("new-actorhasphonenumber-fields");
+			var node = document.getElementById("newActorHasPhoneNumberFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-phonenumbers-form').trigger('reset');
+			$('#actorFormPhoneNumbers').trigger('reset');
 			actorFormPhoneNumbersValidator.resetForm();
 
 			// setup UI
@@ -3534,8 +3537,8 @@
 			var numPhoneNumbers = actor.model.actorHasPhoneNumbers.length;
       // console.log("TCL: actor.model.actorHasPhoneNumbers", actor.model.actorHasPhoneNumbers);
 			for (; i < numPhoneNumbers; i++) {
-				$('[data-role="dynamic-actorhasphonenumber-fields"]').append(
-					`<div class="form-group" data-role="phonenumber-entry">
+				$('[data-role="dynamicActorHasPhoneNumberFields"]').append(
+					`<div class="form-group" data-role="phoneNumberEntry">
 							<div class="form-row">
 									<div class="col-md-2 text-center">
 										<div class="form-check">
@@ -3545,7 +3548,7 @@
 									</div>
 									<div class="col-md-3">
 									<label class="sr-only">Phone number type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" required>
+									<select class="form-control form-control-sm" name="phoneNumberTypeId[`+i+`]" data-role="phoneNumberTypeId[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" required>
 										<option value="" disabled selected hidden>[Choose phone number type...]</option>
 										<option value="1"> </option>
 										<option value="2">mobile</option>
@@ -3558,10 +3561,10 @@
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Phone number</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" value="`+actor.model.actorHasPhoneNumbers[i].phoneNumber.phoneNumber+`" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
+									<input type="text" class="form-control form-control-sm" name="phoneNumber[`+i+`]" data-role="phoneNumber[`+actor.model.actorHasPhoneNumbers[i].id.phoneNumberId+`]" value="`+actor.model.actorHasPhoneNumbers[i].phoneNumber.phoneNumber+`" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
 								</div>
 								<div class="col-md-1 text-center">
-									<button class="form-group__button js-form-group__button remove-phone-number-button btn btn-danger" data-role="remove">
+									<button class="form-group__button js-form-group__button removePhoneNumberButton btn btn-danger" data-role="remove">
 										<i class="fas fa-trash-alt"></i>
 									</button>
 								</div>
@@ -3577,45 +3580,45 @@
 				$('input[name="phoneNumber['+i+']"]').rules("add", { required: true, maxlength: 30});
 			}
 			if ( action == 'show') {
-				$('#actor-phonenumbers-form :input').prop('disabled', true);
+				$('#actorFormPhoneNumbers :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-phonenumbers-form-submit').hide();
-				$('#actor-phonenumbers-form-dismiss').hide();
-				$('[data-role="new-actorhasphonenumber-fields"').hide();
-				$('.phonenumber-form-divider').hide();
+				$('#actorFormPhoneNumbersSubmitButton').hide();
+				$('#actorFormPhoneNumbersDismissButton').hide();
+				$('[data-role="newActorHasPhoneNumberFields"').hide();
+				$('.actorFormPhoneNumberDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="add"]').hide();
 				$('.js-form-group__button').hide();
 				$('#actorPhoneNumbersLabel').html("Actor phone number list");
 			}
 			else if (action == 'edit') {
-				$('#actor-phonenumbers-form :input').prop('disabled', false);
+				$('#actorFormPhoneNumbers :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#actor-phonenumbers-form-submit').html("Save");
-				$('#actor-phonenumbers-form-submit').show();
-				$('#actor-phonenumbers-form-dismiss').show();
+				$('#actorFormPhoneNumbersSubmitButton').html("Save");
+				$('#actorFormPhoneNumbersSubmitButton').show();
+				$('#actorFormPhoneNumbersDismissButton').show();
 				$('#actorPhoneNumbersLabel').html("Edit Actor phone number list");
-				$('[data-role="new-actorhasphonenumber-fields"').show();
-				$('.phonenumber-form-divider').show();
-				$('#timaat-actordatasets-metadata-actor-phonenumber').focus();
+				$('[data-role="newActorHasPhoneNumberFields"').show();
+				$('.actorFormPhoneNumberDivider').show();
+				$('#actorDatasetsMetadataActorPhoneNumber').focus();
 
 				// fields for new phone number entry
-				$('[data-role="new-actorhasphonenumber-fields"]').append(this.appendNewPhoneNumberField());
-				$('#actor-phonenumbers-form').data('actor', actor);
+				$('[data-role="newActorHasPhoneNumberFields"]').append(this.appendNewPhoneNumberField());
+				$('#actorFormPhoneNumbers').data('actor', actor);
 			}
 		},
 
 		actorFormMemberOfCollectives: async function(action, type, actor) {
     	// console.log("TCL: actorFormMemberOfCollectives: action, type, actor", action, type, actor);
-			var node = document.getElementById("dynamic-personismemberofcollective-fields");
+			var node = document.getElementById("dynamicPersonIsMemberOfCollectiveFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			var node = document.getElementById("new-personismemberofcollective-fields");
+			var node = document.getElementById("newPersonIsMemberOfCollectiveFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-memberofcollectives-form').trigger('reset');
+			$('#actorFormMemberOfCollectives').trigger('reset');
 			actorFormMemberOfCollectivesValidator.resetForm();
 
 			// setup UI
@@ -3651,7 +3654,7 @@
 				let actorName = await TIMAAT.ActorService.getActorName(actorId);
 				var memberOfCollectiveFormData = this.appendMemberOfCollectiveDataset(i, actorId, actorName, apimoac.membershipDetails, 'sr-only', editMode);
 				// TODO expand form by membershipDetail information
-				$('#dynamic-personismemberofcollective-fields').append(memberOfCollectiveFormData);
+				$('#dynamicPersonIsMemberOfCollectiveFields').append(memberOfCollectiveFormData);
 				var j = 0;
 				for (; j < numMembershipDetails; j++) {
 					var apimoacmd = apimoac.membershipDetails[j];
@@ -3665,12 +3668,12 @@
 				}
 			}
 			if ( action == 'show') {
-				$('#actor-memberofcollectives-form :input').prop('disabled', true);
+				$('#actorFormMemberOfCollectives :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-memberofcollectives-form-submit').hide();
-				$('#actor-memberofcollectives-form-dismiss').hide();
-				$('[data-role="new-personismemberofcollective-fields"]').hide();
-				$('.memberofcollective-form-divider').hide();
+				$('#actorFormMemberOfCollectivesSubmitButton').hide();
+				$('#actorFormMemberOfCollectivesDismissButton').hide();
+				$('[data-role="newPersonIsMemberOfCollectiveFields"]').hide();
+				$('.actorFormMemberOfCollectiveDivider').hide();
 				// $('[data-role="remove"]').hide();
 				// $('[data-role="removeMembershipDetails"]').hide();
 				$('[data-role="add"]').hide();
@@ -3690,13 +3693,13 @@
 				}
 			}
 			else if (action == 'edit') {
-				$('#actor-memberofcollectives-form :input').prop('disabled', false);
+				$('#actorFormMemberOfCollectives :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#actor-memberofcollectives-form-submit').show();
-				$('#actor-memberofcollectives-form-dismiss').show();
-				$('.timaat-actordatasets-actor-memberofcollective-actor-id').prop('disabled', true);
-				$('[data-role="new-personismemberofcollective-fields"]').show();
-				$('.memberofcollective-form-divider').show();
+				$('#actorFormMemberOfCollectivesSubmitButton').show();
+				$('#actorFormMemberOfCollectivesDismissButton').show();
+				$('.actorDatasetsActorMemberOfCollectiveActorId').prop('disabled', true);
+				$('[data-role="newPersonIsMemberOfCollectiveFields"]').show();
+				$('.actorFormMemberOfCollectiveDivider').show();
 				switch (type) {
 					case 'person':
 						$('#actorMemberOfCollectiveLabel').html("Edit person is member of collective list");
@@ -3709,12 +3712,12 @@
 						$('#newMemberLabel').html("Member");
 					break;
 				}
-				// $('#actor-memberofcollectives-form-submit').html("Save");
-				$('#actor-select-dropdown').focus();
+				// $('#actorFormMemberOfCollectivesSubmitButton').html("Save");
+				$('#actorSelectDropdown').focus();
 
-				// fields for new memberofcollective entry
-				$('[data-role="new-personismemberofcollective-fields"]').append(this.appendNewMemberOfCollectiveFields());
-				$('#actor-select-dropdown').select2({
+				// fields for new member of collective entry
+				$('[data-role="newPersonIsMemberOfCollectiveFields"]').append(this.appendNewMemberOfCollectiveFields());
+				$('#actorSelectDropdown').select2({
 					closeOnSelect: true,
 					scrollAfterSelect: true,
 					allowClear: true,
@@ -3747,25 +3750,25 @@
 					minimumInputLength: 0,
 				});
 
-				$('.timaat-actordatasets-actor-memberofcollectives-joinedat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-				$('.timaat-actordatasets-actor-memberofcollectives-leftat').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorMemberOfCollectivesJoinedAt').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+				$('.actorDatasetsActorMemberOfCollectivesLeftAt').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
 
 				// console.log("TCL: actor", actor);
-				$('#actor-memberofcollectives-form').data('actor', actor);
+				$('#actorFormMemberOfCollectives').data('actor', actor);
 			}
 		},
 
 		actorFormRoles: async function(action, actor) {
 			// console.log("TCL: actorFormRoles: action, actor", action, actor);
-			var node = document.getElementById("dynamic-actorhasrole-fields");
+			var node = document.getElementById("dynamicActorHasRoleFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-roles-form').trigger('reset');
+			$('#actorFormRoles').trigger('reset');
 			// actorFormRolesValidator.resetForm();
 
-			$('#dynamic-actorhasrole-fields').append(this.appendActorHasRolesDataset());
-			$('#actorroles-multi-select-dropdown').select2({
+			$('#dynamicActorHasRoleFields').append(this.appendActorHasRolesDataset());
+			$('#actorRolesMultiSelectDropdown').select2({
 				closeOnSelect: false,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -3797,7 +3800,7 @@
 				},
 				minimumInputLength: 0,
 			});
-			var roleSelect = $('#actorroles-multi-select-dropdown');
+			var roleSelect = $('#actorRolesMultiSelectDropdown');
 			await TIMAAT.ActorService.getActorHasRoleList(actor.model.id).then(function(data) {
 				// console.log("TCL: then: data", data);
 				if (data.length > 0) {
@@ -3819,36 +3822,36 @@
 			});
 
 			if ( action == 'show') {
-				$('#actor-roles-form :input').prop('disabled', true);
+				$('#actorFormRoles :input').prop('disabled', true);
 				this.initFormForShow();
-				$('#actor-roles-form-submit').hide();
-				$('#actor-roles-form-dismiss').hide();
-				$('.actorroles-form-divider').hide();
+				$('#actorFormRolesSubmitButton').hide();
+				$('#actorFormRolesDismissButton').hide();
+				$('.actorFormActorHasRoleDivider').hide();
 				// $('[data-role="save"]').hide();
 				$('#actorRolesLabel').html("Actor has role(s) list");
 			}
 			else if (action == 'edit') {
-				$('#actor-roles-form :input').prop('disabled', false);
+				$('#actorFormRoles :input').prop('disabled', false);
 				this.hideFormButtons();
-				$('#actor-roles-form-submit').html("Save");
-				$('#actor-roles-form-submit').show();
-				$('#actor-roles-form-dismiss').show();
+				$('#actorFormRolesSubmitButton').html("Save");
+				$('#actorFormRolesSubmitButton').show();
+				$('#actorFormRolesDismissButton').show();
 				$('#actorRolesLabel').html("Edit actor roles list");
-				$('.actorroles-form-divider').show();
-				$('#actorroles-multi-select-dropdown').focus();
+				$('.actorFormActorHasRoleDivider').show();
+				$('#actorRolesMultiSelectDropdown').focus();
 
 				// console.log("TCL: actor", actor);
-				$('#actor-roles-form').data('actor', actor);
+				$('#actorFormRoles').data('actor', actor);
 			}
 		},
 
 		actorFormRoleMedium: async function(action, actor) {
 			// console.log("TCL: actorFormRoleMedium: action, actor", action, actor);
-			var node = document.getElementById("dynamic-actorroleinmedium-fields");
+			var node = document.getElementById("dynamicActorRoleInMediumFields");
 			while (node.lastChild) {
 				node.removeChild(node.lastChild);
 			}
-			$('#actor-role-in-medium-form').trigger('reset');
+			$('#actorFormActorRoleInMedium').trigger('reset');
 			var actorIsProducer = false;
 			let index = -1;
 			index = actor.model.roles.findIndex(({id}) => id == 5);
@@ -3859,8 +3862,8 @@
 
 				$('.form-subheader').show();
 
-				$('#dynamic-actorroleinmedium-fields').append(this.appendActorRoleInMediumDataset());
-				$('#actorrolemedium-multi-select-dropdown').select2({
+				$('#dynamicActorRoleInMediumFields').append(this.appendActorRoleInMediumDataset());
+				$('#actorRoleInMediumMultiSelectDropdown').select2({
 					closeOnSelect: false,
 					scrollAfterSelect: false,
 					allowClear: true,
@@ -3892,7 +3895,7 @@
 					},
 					minimumInputLength: 0,
 				});
-				var roleMediumSelect = $('#actorrolemedium-multi-select-dropdown');
+				var roleMediumSelect = $('#actorRoleInMediumMultiSelectDropdown');
 				await TIMAAT.ActorService.getActorRoleInMediumList(actor.model.id, 5).then(function(data) { // TODO 5 = Producer
 					// console.log("TCL: then: data", data);
 					if (data.length > 0) {
@@ -3914,32 +3917,32 @@
 				});
 
 				if ( action == 'show') {
-					$('#actor-role-in-medium-form :input').prop('disabled', true);
+					$('#actorFormActorRoleInMedium :input').prop('disabled', true);
 					this.initFormForShow();
-					$('#actor-role-in-medium-form-submit').hide();
-					$('#actor-role-in-medium-form-dismiss').hide();
-					$('.actorrolemedium-form-divider').hide();
+					$('#actorFormActorRoleInMediumSubmitButton').hide();
+					$('#actorFormActorRoleInMediumDismissButton').hide();
+					$('.actorRoleMediumFormDivider').hide();
 					// $('[data-role="save"]').hide();
 					$('#actorRoleMediumLabel').html("Actor has role in medium list");
 				}
 				else if (action == 'edit') {
-					$('#actor-role-in-medium-form :input').prop('disabled', false);
+					$('#actorFormActorRoleInMedium :input').prop('disabled', false);
 					this.hideFormButtons();
-					$('#actor-role-in-medium-form-submit').html("Save");
-					$('#actor-role-in-medium-form-submit').show();
-					$('#actor-role-in-medium-form-dismiss').show();
+					$('#actorFormActorRoleInMediumSubmitButton').html("Save");
+					$('#actorFormActorRoleInMediumSubmitButton').show();
+					$('#actorFormActorRoleInMediumDismissButton').show();
 					$('#actorRoleMediumLabel').html("Edit actor has role in medium list");
-					$('.actorrolemedium-form-divider').show();
-					$('#actorrolemedium-multi-select-dropdown').focus();
-					$('#actor-role-in-medium-form').data('actor', actor);
+					$('.actorRoleMediumFormDivider').show();
+					$('#actorRoleInMediumMultiSelectDropdown').focus();
+					$('#actorFormActorRoleInMedium').data('actor', actor);
 				}
 			} else {
 				$('.form-subheader').hide();
-				$('.form-buttons').hide();
-				$('.form-buttons').prop('disabled', true);
-				$('.form-buttons :input').prop('disabled', true);
-				$('#actor-role-in-medium-form-submit').hide();
-				$('#actor-role-in-medium-form-dismiss').hide();
+				$('.formButtons').hide();
+				$('.formButtons').prop('disabled', true);
+				$('.formButtons :input').prop('disabled', true);
+				$('#actorFormActorRoleInMediumSubmitButton').hide();
+				$('#actorFormActorRoleInMediumDismissButton').hide();
 				$('#actorRoleMediumLabel').html("Actor is no Producer");
 			}
 		},
@@ -4018,7 +4021,7 @@
 					break;
 				}
 				// console.log("TCL: newActorModel", newActorModel);
-				// await this._actorAdded(actorType, newActorModel); //* commented out with datatables
+				// await this._actorAdded(actorType, newActorModel); //* commented out with dataTables
 			} catch(error) {
 				console.error("ERROR: ", error);
 			}
@@ -4126,7 +4129,7 @@
 		addPersonIsMemberOfCollective: async function(actor, personIsMemberOfCollectiveData) {
 			// console.log("TCL: addPersonIsMemberOfCollective: async function -> actor, personIsMemberOfCollectiveData", actor, personIsMemberOfCollectiveData);
 			try {
-				// create memberofcollective
+				// create member of collective
 				// TODO create and add membershipDetails
 				//? create model?
 				var newPersonIsMemberOfCollective = await TIMAAT.ActorService.addPersonIsMemberOfCollective(personIsMemberOfCollectiveData.actorId, personIsMemberOfCollectiveData.collectiveId);
@@ -4155,12 +4158,12 @@
 		updateActor: async function(actorSubtype, actor) {
 			console.log("TCL: updateActor:function -> actorSubtype, actor", actorSubtype, actor);
 				try {
-					// update birthname
+					// update birth name
 					if (actor.model.birthName) { // actor initially has no birth name set
 						var tempBirthName = await TIMAAT.ActorService.updateName(actor.model.birthName);
 						actor.model.birthName = tempBirthName;
 					}
-					// update displayname
+					// update display name
 					var tempDisplayName = await TIMAAT.ActorService.updateName(actor.model.displayName);
 					actor.model.displayName = tempDisplayName;
 					// update primary address
@@ -4174,7 +4177,7 @@
 						actor.model.primaryEmailAddress = tempPrimaryEmailAddress;
 					}
 					// update phone number address
-					if (actor.model.primaryPhoneNumber) { // actor initially has no primaryphone number set
+					if (actor.model.primaryPhoneNumber) { // actor initially has no primary phone number set
 						var tempPrimaryPhoneNumber = await TIMAAT.ActorService.updatePhoneNumber(actor.model.primaryPhoneNumber);
 						actor.model.primaryPhoneNumber = tempPrimaryPhoneNumber;
 					}
@@ -4488,7 +4491,7 @@
       } catch(error) {
         console.error("ERROR: ", error);
       };
-			if ($('#actor-tab').hasClass('active')) {
+			if ($('#actorTab').hasClass('active')) {
 				await TIMAAT.UI.refreshDataTable('actor');
 			} else {
 				await TIMAAT.UI.refreshDataTable(actorModel.actorType.actorTypeTranslations[0].type);
@@ -4697,33 +4700,29 @@
 				break;
 			}
 			var model = {
-				id: 0,
+				id         : 0,
 				isFictional: formDataObject.isFictional,
-				actorType: {
+				actorType  : {
 					id: typeId,
 				},
 				displayName: {
-					id: 0,
+					id   : 0,
 					actor: {
 						id: 0
 					},
-					name: formDataObject.displayName,
-					usedFrom: formDataObject.nameUsedFrom,
+					name     : formDataObject.displayName,
+					usedFrom : formDataObject.nameUsedFrom,
 					usedUntil: formDataObject.nameUsedUntil,
 				},
 				birthName: {
-					id: 0,
+					id   : 0,
 					actor: {
 						id: 0
 					},
-					name: formDataObject.displayName,
-					usedFrom: formDataObject.nameUsedFrom,
+					name     : formDataObject.displayName,
+					usedFrom : formDataObject.nameUsedFrom,
 					usedUntil: formDataObject.nameUsedUntil,
 				},
-				// actorNames: [{}],
-				// actorHasPhoneNumbers: [{}],
-				// actorHasAddresses: [{}],
-				// actorHasEmailAddresses: [{}],
 				profileImages: formDataObject.profileImages
 			};
 			// var i = 0;
@@ -4740,14 +4739,14 @@
 			switch(actorType) {
 				case 'person':
 					model = {
-						actorId: 0,
-						title: formDataObject.title,
-						dateOfBirth: formDataObject.dateOfBirth,
+						actorId     : 0,
+						title       : formDataObject.title,
+						dateOfBirth : formDataObject.dateOfBirth,
 						placeOfBirth: formDataObject.placeOfBirth,
 						// placeOfBirth: { // TODO
 						// 	id: formDataObject.placeOfBirth
 						// 	},
-						dayOfDeath: formDataObject.dayOfDeath,
+						dayOfDeath  : formDataObject.dayOfDeath,
 						placeOfDeath: formDataObject.placeOfDeath,
 						// placeOfDeath: { // TODO
 						// 	id: formDataObject.placeOfDeath
@@ -4756,7 +4755,7 @@
 							id: formDataObject.sexId
 						},
 						actorPersonIsMemberOfActorCollectives: [],
-						actorPersonTranslations: [],
+						actorPersonTranslations              : [],
 						// citizenships : []
 						citizenship: formDataObject.citizenship,
 					};
@@ -4909,18 +4908,18 @@
 					</div>
 					<div class="col-md-5">
 						<label class="sr-only">Name*</label>
-						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-name" name="actorName" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" data-role="actorName" required>
+						<input type="text" class="form-control form-control-sm" name="actorName" placeholder="[Enter name]" aria-describedby="Name" minlength="3" maxlength="200" rows="1" data-role="actorName" required>
 					</div>
 					<div class="col-md-2">
 						<label class="sr-only">Name used from</label>
-						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-usedfrom" id="timaat-actordatasets-actor-actornames-name-usedfrom" name="nameUsedFrom" data-role="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
+						<input type="text" class="form-control form-control-sm actorDatasetsActorActorNamesNameUsedFrom" id="actorDatasetsActorActorNamesNameUsedFrom" name="nameUsedFrom" data-role="nameUsedFrom" placeholder="[Enter name used from]" aria-describedby="Name used from">
 					</div>
 					<div class="col-md-2">
 						<label class="sr-only">Name used until</label>
-						<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-actornames-name-useduntil" id="timaat-actordatasets-actor-actornames-name-useduntil" name="nameUsedUntil" data-role="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
+						<input type="text" class="form-control form-control-sm actorDatasetsActorActorNamesNameUsedUntil" id="actorDatasetsActorActorNamesNameUsedUntil" name="nameUsedUntil" data-role="nameUsedUntil" placeholder="[Enter name used until]" aria-describedby="Name used until">
 					</div>
 					<div class="col-md-1">
-						<button class="form-group__button js-form-group__button add-name-button btn btn-primary" data-role="add">
+						<button class="form-group__button js-form-group__button addActorNameButton btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -4931,7 +4930,7 @@
 
 		appendNewAddressField: function() {
 			var addressToAppend =
-			`<div class="form-group" data-role="address-entry">
+			`<div class="form-group" data-role="addressEntry">
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>
@@ -4940,7 +4939,7 @@
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">Street name</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-street"
+												 class="form-control form-control-sm"
 												 name="street"
 												 data-role="street"
 												 placeholder="[Enter street name]"
@@ -4952,7 +4951,7 @@
 								<div class="col-md-2">
 									<label class="col-form-label col-form-label-sm">Street number</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetnumber"
+												 class="form-control form-control-sm"
 												 name="streetNumber"
 												 data-role="streetNumber"
 												 placeholder="[Enter street number]"
@@ -4962,7 +4961,7 @@
 								<div class="col-md-4">
 									<label class="col-form-label col-form-label-sm">Street addition</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-streetaddition"
+												 class="form-control form-control-sm"
 												 name="streetAddition"
 												 data-role="streetAddition"
 												 placeholder="[Enter street addition]"
@@ -4974,7 +4973,7 @@
 								<div class="col-md-3">
 									<label class="col-form-label col-form-label-sm">Postal code</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postalcode"
+												 class="form-control form-control-sm"
 												 name="postalCode"
 												 data-role="postalCode"
 												 placeholder="[Enter postal code]"
@@ -4984,7 +4983,7 @@
 								<div class="col-md-6">
 									<label class="col-form-label col-form-label-sm">City</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-city"
+												 class="form-control form-control-sm"
 												 name="city"
 												 data-role="city"
 												 placeholder="[Enter city]"
@@ -4994,7 +4993,7 @@
 								<div class="col-md-3">
 									<label class="col-form-label col-form-label-sm">Post office box</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-postofficebox"
+												 class="form-control form-control-sm"
 												 name="postOfficeBox"
 												 ata-role="postOfficeBox"
 												 placeholder="[Enter post office box]"
@@ -5005,7 +5004,7 @@
 							<div class="form-row">
 								<div class="col-md-4">
 									<label class="col-form-label col-form-label-sm">Address type*</label>
-									<select class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-addresstype-id"
+									<select class="form-control form-control-sm"
 													name="addressTypeId"
 													data-role="addressTypeId"
 													required>
@@ -5019,8 +5018,7 @@
 								<div class="col-md-4">
 									<label class="col-form-label col-form-label-sm">Address used from</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-usedfrom"
-												 id="timaat-actordatasets-actor-addresses-address-usedfrom"
+												 class="form-control form-control-sm actorDatasetsActorAddressesAddressUsedFrom"
 												 name="addressUsedFrom"
 												 data-role="addressUsedFrom"
 												 placeholder="[Enter used from]"
@@ -5029,8 +5027,7 @@
 								<div class="col-md-4">
 									<label class="col-form-label col-form-label-sm">Address used until</label>
 									<input type="text"
-												 class="form-control form-control-sm timaat-actordatasets-actor-addresses-address-useduntil"
-												 id="timaat-actordatasets-actor-addresses-address-useduntil"
+												 class="form-control form-control-sm actorDatasetsActorAddressesAddressUsedUntil"
 												 name="addressUsedUntil"
 												 data-role="addressUsedUntil"
 												 placeholder="[Enter used until]"
@@ -5039,8 +5036,8 @@
 							</div>
 						</fieldset>
 					</div>
-					<div class="col-md-1 vertical-aligned">
-						<button class="form-group__button js-form-group__button add-address-button btn btn-primary" data-role="add">
+					<div class="col-md-1 align-items--vertically">
+						<button class="form-group__button js-form-group__button addActorAddressButton btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -5051,7 +5048,7 @@
 
 		appendNewEmailAddressField: function() {
 			var emailAddressToAppend =
-				`<div class="form-group" data-role="emailaddress-entry">
+				`<div class="form-group" data-role="emailAddressEntry">
 					<div class="form-row">
 						<div class="col-md-2 text-center">
 							<div class="form-check">
@@ -5060,7 +5057,7 @@
 						</div>
 						<div class="col-md-3">
 							<label class="sr-only">Email address type*</label>
-							<select class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddresstype-id" name="emailAddressTypeId" data-role="emailAddressTypeId" required>
+							<select class="form-control form-control-sm" name="emailAddressTypeId" data-role="emailAddressTypeId" required>
 								<option value="" disabled selected hidden>[Choose email type...]</option>
 								<option value="1"> </option>
 								<option value="2">home</option>
@@ -5072,10 +5069,10 @@
 						</div>
 						<div class="col-md-6">
 							<label class="sr-only">Email address</label>
-							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-emailaddresses-emailaddress" name="emailAddress" data-role="emailAddress" placeholder="[Enter email address]" aria-describedby="Email address" required>
+							<input type="text" class="form-control form-control-sm" name="emailAddress" data-role="emailAddress" placeholder="[Enter email address]" aria-describedby="Email address" required>
 						</div>
 						<div class="col-md-1">
-							<button class="form-group__button js-form-group__button add-email-address-button btn btn-primary" data-role="add">
+							<button class="form-group__button js-form-group__button addEmailAddressButton btn btn-primary" data-role="add">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -5086,7 +5083,7 @@
 
 		appendNewPhoneNumberField: function() {
 			var phoneNumberToAppend =
-				`<div class="form-group" data-role="phonenumber-entry">
+				`<div class="form-group" data-role="phoneNumberEntry">
 					<div class="form-row">
 						<div class="col-md-2 text-center">
 							<div class="form-check">
@@ -5095,7 +5092,7 @@
 						</div>
 						<div class="col-md-3">
 							<label class="sr-only">Phone number type*</label>
-							<select class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumbertype-id" name="phoneNumberTypeId" data-role="phoneNumberTypeId" required>
+							<select class="form-control form-control-sm" name="phoneNumberTypeId" data-role="phoneNumberTypeId" required>
 								<option value="" disabled selected hidden>[Choose phone number type...]</option>
 								<option value="1"> </option>
 								<option value="2">mobile</option>
@@ -5108,10 +5105,10 @@
 						</div>
 						<div class="col-md-6">
 							<label class="sr-only">Phone number</label>
-							<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-phonenumbers-phonenumber" name="phoneNumber" data-role="phoneNumber" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" rerquired>
+							<input type="text" class="form-control form-control-sm" name="phoneNumber" data-role="phoneNumber" maxlength="30" placeholder="[Enter phone number]" aria-describedby="Phone number" required>
 						</div>
 						<div class="col-md-1">
-							<button class="form-group__button js-form-group__button add-phone-number-button btn btn-primary" data-role="add">
+							<button class="form-group__button js-form-group__button addActorPhoneNumberButton btn btn-primary" data-role="add">
 								<i class="fas fa-plus"></i>
 							</button>
 						</div>
@@ -5123,7 +5120,7 @@
 		appendMemberOfCollectiveDataset: function(i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode) {
 			// console.log("TCL: appendMemberOfCollectiveDataset -> i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode", i, actorId, actorName, memberOfCollectiveData, labelClassString, editMode);
 			var memberOfCollectiveFormData =
-			`<div class="form-group" data-role="personismemberofcollective-entry" data-id=`+i+` data-actor-id=`+actorId+`>
+			`<div class="form-group" data-role="personIsMemberOfCollectiveEntry" data-id=`+i+` data-actor-id=`+actorId+`>
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>
@@ -5137,7 +5134,7 @@
 								</div>
 								<div class="col-md-6">
 									<label class="sr-only">Member of collective</label>
-									<input type="text" class="form-control form-control-sm timaat-actordatasets-actor-memberofcollective-actor-id"
+									<input type="text" class="form-control form-control-sm actorDatasetsActorMemberOfCollectiveActorId"
 													id="actorName_`+actorId+`"
 													name="actorName"
 													value="`+actorName.name+`"
@@ -5146,8 +5143,8 @@
 													aria-describedby="actor name"
 													required>
 								</div>
-								<div class="col-md-6 person-memberofcollectives-details-container">
-									<div data-role="person-memberofcollectives-details-entries">`;
+								<div class="col-md-6">
+									<div data-role="personMemberOfCollectivesDetailsEntries">`;
 			// append list of membership details
 			var j = 0;
 			for (; j < memberOfCollectiveData.length; j++) {
@@ -5155,19 +5152,19 @@
 			}
 			memberOfCollectiveFormData +=
 									`</div>
-									<div class="form-group" data-role="new-personismemberofcollective-details-fields" data-details-id="`+j+`">`;
+									<div class="form-group" data-role="newPersonIsMemberOfCollectiveDetailsFields" data-details-id="`+j+`">`;
 			if (editMode) {
 				memberOfCollectiveFormData += this.appendMemberOfCollectiveNewDetailFields();
 			}
 			memberOfCollectiveFormData +=
-										`<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the memberofcollective -->
+										`<!-- form sheet: one row for new memberOfCollective detail information that shall be added to the member of collective -->
 									</div>
 								</div>
 							</div>
 						</fieldset>
 					</div>
-					<div class="col-md-1 vertical-aligned">
-						<button type="button" class="form-group__button js-form-group__button remove-member-of-collective-button btn btn-danger" data-role="remove">
+					<div class="col-md-1 align-items--vertically">
+						<button type="button" class="form-group__button js-form-group__button removeActorMemberOfCollectiveButton btn btn-danger" data-role="remove">
 							<i class="fas fa-trash-alt"></i>
 						</button>
 					</div>
@@ -5181,7 +5178,7 @@
     	// console.log("TCL: appendNewMemberOfCollectiveFields");
 			// var numMembershipDetails = 0; // TODO
 			var memberOfCollectiveToAppend =
-			`<div class="form-group" data-role="personismemberofcollective-entry" data-id=-1>
+			`<div class="form-group" data-role="personIsMemberOfCollectiveEntry" data-id=-1>
 				<div class="form-row">
 					<div class="col-md-11">
 						<fieldset>
@@ -5190,16 +5187,16 @@
 								<div class="col-md-6">
 									<label class="sr-only">Member of collective</label>
 									<select class="form-control form-control-sm"
-													id="actor-select-dropdown"
+													id="actorSelectDropdown"
 													name="actorId"
 													data-role="actorId"
 													data-placeholder="Select actor"
 													required>
 									</select>
 								</div>
-								<div class="col-md-6 person-memberofcollectives-details-container">
+								<div class="col-md-6">
 									<div class="form-group"
-											 data-role="new-personismemberofcollective-details-fields"
+											 data-role="newPersonIsMemberOfCollectiveDetailsFields"
 											 data-details-id="0">`;
 			memberOfCollectiveToAppend += this.appendMemberOfCollectiveNewDetailFields();
 			memberOfCollectiveToAppend +=
@@ -5208,8 +5205,8 @@
 							</div>
 						</fieldset>
 					</div>
-					<div class="col-md-1 vertical-aligned">
-						<button type="button" class="form-group__button js-form-group__button add-member-of-collective-button btn btn-primary" data-role="add">
+					<div class="col-md-1 align-items--vertically">
+						<button type="button" class="form-group__button js-form-group__button addActorMemberOfCollectiveButton btn btn-primary" data-role="add">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -5222,7 +5219,7 @@
 		appendMemberOfCollectiveDetailFields: function(i, j, actorId, memberOfCollectiveData, labelClassString) {
     	// console.log("TCL: appendMemberOfCollectiveDetailFields: i, j, actorId, memberOfCollectiveData, labelClassString", i, j, actorId, memberOfCollectiveData, labelClassString);
 			var membershipDetails =
-				`<div class="form-group" data-role="memberofcollective-details-entry" data-details-id="`+j+`">
+				`<div class="form-group" data-role="memberOfCollectiveDetailsEntry" data-details-id="`+j+`">
 					<div class="form-row">
 						<div class="hidden" aria-hidden="true">
 							<input type="hidden"
@@ -5233,7 +5230,7 @@
 						<div class="col-md-5">
 							<label class="`+labelClassString+`">Joined at</label>
 							<input type="text"
-										 class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-joinedat"
+										 class="form-control form-control-sm actorDatasetsActorMemberOfCollectivesJoinedAt"
 										 name="joinedAt[`+actorId+`][`+j+`]"
 										 data-role="joinedAt[`+actorId+`][`+j+`]"`;
 				if (memberOfCollectiveData != null) { membershipDetails += `value="`+memberOfCollectiveData.joinedAt+`"`; }
@@ -5244,7 +5241,7 @@
 						<div class="col-md-5">
 							<label class="`+labelClassString+`">Left at</label>
 							<input type="text"
-										 class="form-control form-control-sm timaat-actordatasets-actor-memberofcollectives-leftat"
+										 class="form-control form-control-sm actorDatasetsActorMemberOfCollectivesLeftAt"
 										 name="leftAt[`+actorId+`][`+j+`]"
 										 data-role="leftAt[`+actorId+`][`+j+`]"`;
 				if (memberOfCollectiveData != null) { membershipDetails += `value="`+memberOfCollectiveData.leftAt+`"`; }
@@ -5252,8 +5249,8 @@
 										`placeholder="[Enter left at]"
 										aria-describedby="Collective left at">
 						</div>
-						<div class="col-md-2 vertical-aligned">
-							<button type="button" class="form-group__button js-form-group__button remove-membership-details btn btn-danger" data-role="removeMembershipDetails">
+						<div class="col-md-2 align-items--vertically">
+							<button type="button" class="form-group__button js-form-group__button removeMembershipDetails btn btn-danger" data-role="removeMembershipDetails">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
@@ -5269,14 +5266,14 @@
 			`<div class="form-row">
 				<div class="hidden" aria-hidden="true">
 					<input type="hidden"
-									class="form-control form-control-sm disable-on-submit disable-on-add"
+									class="form-control form-control-sm disableOnSubmit disableOnAdd"
 									name="membershipDetailId"
 									value="0">
 				</div>
 				<div class="col-md-5">
 					<label class="sr-only">Joined at</label>
 					<input type="text"
-								class="form-control disable-on-submit form-control-sm timaat-actordatasets-actor-memberofcollectives-joinedat"
+								class="form-control disableOnSubmit form-control-sm actorDatasetsActorMemberOfCollectivesJoinedAt"
 								name="joinedAt"
 								data-role="joinedAt"
 								placeholder="[Enter joined at]"
@@ -5285,14 +5282,14 @@
 				<div class="col-md-5">
 					<label class="sr-only">Left at</label>
 					<input type="text"
-								class="form-control disable-on-submit form-control-sm timaat-actordatasets-actor-memberofcollectives-leftat"
+								class="form-control disableOnSubmit form-control-sm actorDatasetsActorMemberOfCollectivesLeftAt"
 								name="leftAt"
 								data-role="leftAt"
 								placeholder="[Enter left at]"
 								aria-describedby="Collective left at">
 				</div>
-				<div class="col-md-2 vertical-aligned">
-					<button type="button" class="form-group__button js-form-group__button add-membership-details-button btn btn-primary" data-role="addMembershipDetails">
+				<div class="col-md-2 align-items--vertically">
+					<button type="button" class="form-group__button js-form-group__button addMembershipDetailsButton btn btn-primary" data-role="addMembershipDetails">
 						<i class="fas fa-plus"></i>
 					</button>
 				</div>
@@ -5302,12 +5299,12 @@
 
 		appendActorHasRolesDataset: function() {
 			var entryToAppend =
-			`<div class="form-group" data-role="actorhasrole-entry">
+			`<div class="form-group" data-role="actorHasRoleEntry">
 				<div class="form-row">
 					<div class="col-md-12">
             <label class="sr-only">Has Role(s)</label>
             <select class="form-control form-control-sm"
-                    id="actorroles-multi-select-dropdown"
+                    id="actorRolesMultiSelectDropdown"
                     name="roleId"
                     data-placeholder="Select role(s)"
                     multiple="multiple"
@@ -5321,12 +5318,12 @@
 
 		appendActorRoleInMediumDataset: function() {
 			var entryToAppend =
-			`<div class="form-group" data-role="actorroleinmedium-entry">
+			`<div class="form-group" data-role="actorRoleInMediumEntry">
 				<div class="form-row">
 					<div class="col-md-12">
             <label class="sr-only">Has Role(s)</label>
             <select class="form-control form-control-sm"
-                    id="actorrolemedium-multi-select-dropdown"
+                    id="actorRoleInMediumMultiSelectDropdown"
                     name="mediumId"
                     data-placeholder="Select media"
                     multiple="multiple"
@@ -5339,26 +5336,26 @@
 		},
 
 		initFormDataSheetForEdit: function(type) {
-			$('#timaat-actordatasets-metadata-actor-name-usedfrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-actordatasets-metadata-actor-name-useduntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-actordatasets-metadata-person-dateofbirth').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-actordatasets-metadata-person-dayofdeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-actordatasets-metadata-collective-founded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#timaat-actordatasets-metadata-collective-disbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
-			$('#actor-metadata-form :input').prop('disabled', false);
+			$('#actorDatasetsMetadataActorNameUsedFrom').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#actorDatasetsMetadataActorNameUsedUntil').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#actorDatasetsMetadataPersonDateOfBirth').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#actorDatasetsMetadataPersonDayOfDeath').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#actorDatasetsMetadataCollectiveFounded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#actorDatasetsMetadataCollectiveDisbanded').datetimepicker({timepicker: false, changeMonth: true, changeYear: true, scrollInput: false, format: 'YYYY-MM-DD', yearStart: 1900, yearEnd: new Date().getFullYear()});
+			$('#actorFormMetadata :input').prop('disabled', false);
 			this.hideFormButtons();
-			$('#actor-metadata-form-submit-button').show();
-			$('#actor-metadata-form-dismiss-button').show();
-			$('#actor-datasheet-form-profile-image-selection').show();
-			$('#timaat-actordatasets-metadata-actor-name').focus();
+			$('#actorFormMetadataSubmitButton').show();
+			$('#actorFormMetadataDismissButton').show();
+			$('#actorFormDataSheetProfileImageSelection').show();
+			$('#actorDatasetsMetadataActorName').focus();
 			let imageSelect =
 				`<label class="col-form-label col-form-label-sm">Change the associated profile images (max. 5 in total):</label>
-				<div class="form-group" data-role="profileImages-entry">
+				<div class="form-group" data-role="profileImagesEntry">
 					<div class="form-row">
 						<div class="col-md-12">
 							<label class="sr-only">Profile Image(s)</label>
 							<select class="form-control form-control-sm"
-											id="actor-profile-image-multi-select-dropdown"
+											id="actorProfileImageMultiSelectDropdown"
 											name="imageId"
 											data-placeholder="Select images"
 											multiple="multiple"
@@ -5367,15 +5364,15 @@
 						</div>
 					</div>
 				</div>`;
-			$('#actor-datasheet-form-profile-image-selection').append(imageSelect);
+			$('#actorFormDataSheetProfileImageSelection').append(imageSelect);
 			function formatPreview(data) {
 				// console.log("TCL: formatPreview -> data", data);
 				if (data.loading) {
 					return data.text;
 				}
 				var $container = $(
-					"<div class='select2-result-repository clearfix' style='display:flex'>" +
-						"<div class='select2-result-repository__avatar'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"' style='max-height:100%; max-width:100%'></div>" +
+					"<div class='select2-result-repository clearfix display--flex'>" +
+						"<div class='select2-result-repository__avatar max-height--100 max-width--100'><img src='/TIMAAT/api/medium/image/"+data.id+"/thumbnail"+"?token="+data.token+"'></div>" +
 						"<div class='select2-result-repository__meta'>" +
 							"<div class='select2-result-repository__title'></div>" +
 							"<div class='select2-result-repository__description'></div>" +
@@ -5388,7 +5385,7 @@
 			function formatSelection(data) {
 				return data.text;
 			}
-			$('#actor-profile-image-multi-select-dropdown').select2({
+			$('#actorProfileImageMultiSelectDropdown').select2({
 				closeOnSelect: false,
 				scrollAfterSelect: false,
 				maximumSelectionLength: 5,
@@ -5430,40 +5427,40 @@
 		},
 
 		initFormForShow: function() {
-			$('.form-buttons').prop('disabled', false);
-			$('.form-buttons :input').prop('disabled', false);
-			$('.form-buttons').show();
-      $('.form-submit-button').hide();
-      $('.form-dismiss-button').hide();
+			$('.formButtons').prop('disabled', false);
+			$('.formButtons :input').prop('disabled', false);
+			$('.formButtons').show();
+      $('.formSubmitButton').hide();
+      $('.formDismissButton').hide();
 		},
 
 		initFormDataSheetData: function(type) {
-			$('.datasheet-data').hide();
-			// $('.name-data').show();
-			$('.actor-data').show();
-			$('.'+type+'-data').show();
+			$('.dataSheetData').hide();
+			// $('.nameData').show();
+			$('.actorData').show();
+			$('.'+type+'Data').show();
 		},
 
 		hideFormButtons: function() {
-			$('.form-buttons').hide();
-			$('.form-buttons').prop('disabled', true);
-			$('.form-buttons :input').prop('disabled', true);
+			$('.formButtons').hide();
+			$('.formButtons').prop('disabled', true);
+			$('.formButtons :input').prop('disabled', true);
 		},
 
 		showAddActorButton: function() {
-			$('.add-actor-button').prop('disabled', false);
-			$('.add-actor-button :input').prop('disabled', false);
-			$('.add-actor-button').show();
+			$('.addActorButton').prop('disabled', false);
+			$('.addActorButton :input').prop('disabled', false);
+			$('.addActorButton').show();
 		},
 
 		hideAddActorButton: function() {
-			$('.add-actor-button').hide();
-			$('.add-actor-button').prop('disabled', true);
-			$('.add-actor-button :input').prop('disabled', true);
+			$('.addActorButton').hide();
+			$('.addActorButton').prop('disabled', true);
+			$('.addActorButton :input').prop('disabled', true);
 		},
 
 		getActorFormDataSheetPersonSexDropdownData: function() {
-			$('#person-sex-type-select-dropdown').select2({
+			$('#personSexTypeSelectDropdown').select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,
 				allowClear: true,
@@ -5500,7 +5497,7 @@
 		setupActorDataTable: function() {
 			// console.log("TCL: setupActorDataTable");
 			// setup dataTable
-			this.dataTableActor = $('#timaat-actordatasets-actor-table').DataTable({
+			this.dataTableActor = $('#actorDatasetsActorDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5523,7 +5520,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// actorsubtype: ''
+							// actorSubtype: ''
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -5566,7 +5563,7 @@
 					}
 				},
 				"rowCallback": function( row, data ) {
-					console.log("TCL: rowCallback(actor) - row, data", row, data);
+					// console.log("TCL: rowCallback(actor) - row, data", row, data);
 					if (data.id == TIMAAT.UI.selectedActorId) {
 						TIMAAT.UI.clearLastSelection('actor');
 						// $(row).addClass('selected');
@@ -5581,7 +5578,6 @@
 					actorElement.data('actor', actor);
 
 					actorElement.on('click', '.name', function(event) {
-						console.log("click");
 						event.stopPropagation();
 						TIMAAT.ActorDatasets.setDataTableOnItemSelect('actor', actor.id);
 					});
@@ -5606,9 +5602,9 @@
 								nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
 							}
 						}
-						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actor library
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
-								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+								nameDisplay += `<div class="display--none">`+name.name+`</div>`;
 							}
 						});
 						return nameDisplay;
@@ -5636,7 +5632,7 @@
 		setupPersonDataTable: function() {
 			// console.log("TCL: setupPersonDataTable");
 			// setup dataTable
-			this.dataTablePerson = $('#timaat-actordatasets-person-table').DataTable({
+			this.dataTablePerson = $('#actorDatasetsPersonDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5659,7 +5655,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// actorsubtype: 'person'
+							// actorSubtype: 'person'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -5731,9 +5727,9 @@
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
 							nameDisplay += `<p><i>(BN: `+actor.birthName.name+`)</i></p>`;
 						}
-						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actor library
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
-								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+								nameDisplay += `<div class="display--none">`+name.name+`</div>`;
 							}
 						});
 						return nameDisplay;
@@ -5761,7 +5757,7 @@
 		setupCollectiveDataTable: function() {
 			// console.log("TCL: setupCollectiveDataTable");
 			// setup dataTable
-			this.dataTableCollective = $('#timaat-actordatasets-collective-table').DataTable({
+			this.dataTableCollective = $('#actorDatasetsCollectiveDataTable').DataTable({
 				"lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 				"order"         : [[ 0, 'asc' ]],
 				"pagingType"    : "full", // "simple_numbers",
@@ -5784,7 +5780,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// actorsubtype: 'collective'
+							// actorSubtype: 'collective'
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -5856,9 +5852,9 @@
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
 							nameDisplay += `<p><i>(OD: `+actor.birthName.name+`)</i></p>`;
 						}
-						actor.actorNames.forEach(function(name) { // make additional names searchable in actorlibrary
+						actor.actorNames.forEach(function(name) { // make additional names searchable in actor library
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
-								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+								nameDisplay += `<div class="display--none">`+name.name+`</div>`;
 							}
 						});
 						return nameDisplay;
@@ -5889,28 +5885,28 @@
 			TIMAAT.UI.hidePopups();
 			switch (TIMAAT.UI.subNavTab) {
 				case 'dataSheet':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-metadata-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormMetadata', 'actor');
 				break;
 				case 'names':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-names-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormNames', 'actor');
 				break;
 				case 'addresses':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-addresses-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormAddresses', 'actor');
 				break;
 				case 'emails':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-emailaddresses-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormEmailAddresses', 'actor');
 				break;
 				case 'phoneNumbers':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-phonenumbers-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormPhoneNumbers', 'actor');
 				break;
 				case 'memberOfCollectives':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-memberofcollectives-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormMemberOfCollectives', 'actor');
 				break;
 				case 'roles':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-roles-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormRoles', 'actor');
 				break;
 				case 'rolesInMedia':
-					TIMAAT.UI.displayDataSetContentContainer('actor-data-tab', 'actor-role-in-medium-form', 'actor');
+					TIMAAT.UI.displayDataSetContentContainer('actorDataTab', 'actorFormActorRoleInMedium', 'actor');
 				break;
 			}
 			TIMAAT.UI.clearLastSelection(type);
@@ -5945,8 +5941,8 @@
 					TIMAAT.URLHistory.setURL(null, selectedItem.model.displayName.name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#actor/' + type + '/' + selectedItem.model.id + '/' + TIMAAT.UI.subNavTab);
 				}
 			}
-			$('#actor-metadata-form').data('type', type);
-			$('#actor-metadata-form').data('actor', selectedItem);
+			$('#actorFormMetadata').data('type', type);
+			$('#actorFormMetadata').data('actor', selectedItem);
 			this.showAddActorButton();
 			TIMAAT.UI.displayDataSetContent(TIMAAT.UI.subNavTab, selectedItem, 'actor');
 		},

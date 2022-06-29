@@ -24,25 +24,23 @@
 			// console.log('TCL: Timeline -> constructor');
 
 			// init UI
-			this.ui = {};
-			this.ui.zoom = 1;
-			this.ui.minZoom = 1;
-			this.ui.maxZoom = 1;
-			this.ui.tracking = false;
-
-			let timeline = this;
+			let timeline      = this;
+			this.ui           = {};
 			this.ui.indicator = $('.js-timeline__position-indicator');
-			this.ui.pane = $('.js-timeline__layer-pane');
-			this.ui.zoomIn = $('.timeline-zoom-in');
-			this.ui.zoomOut = $('.timeline-zoom-out');
-			this.ui.track = $('.timeline-track');
+			this.ui.maxZoom   = 1;
+			this.ui.minZoom   = 1;
+			this.ui.pane      = $('.js-timeline__layer-pane');
+			this.ui.timeInfo  = this.ui.pane.find('.timeline-info');
+			this.ui.track     = $('.timelineTrack');
+			this.ui.tracking  = false;
+			this.ui.zoom      = 1;
+			this.ui.zoomIn    = $('.timelineZoomIn');
 			this.ui.zoomIn.prop('disabled', true);
+			this.ui.zoomOut   = $('.timelineZoomOut');
 			this.ui.zoomOut.prop('disabled', true);
-
-			this.ui.timeinfo = this.ui.pane.find('.timeline-info');
 			this.ui.tickTemplate =
 				`<div class="timeline__scale-segment float-left pt-1">
-					<span class="timeline__scale-segment--graduation-mark-0 timecode-label text-light">00:01</span>
+					<span class="timeline__scale-segment--graduation-mark-0 timecodeLabel text-light">00:01</span>
 					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-1"></span>
 					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-2"></span>
 					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-3"></span>
@@ -59,7 +57,7 @@
 				timeline.ui.pane.find('.js-timeline__section-header').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
 			});
 
-			this.ui.pane.find('.timeline-sortable-sections').sortable({
+			this.ui.pane.find('.timelineSortableSections').sortable({
 				axis: 'y',
 				handle: '.js-timeline__section-header',
 				containment: 'parent',
@@ -71,7 +69,7 @@
 			this.ui.zoomOut.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom+1); });
 			this.ui.track.on('click', function(ev) { timeline.tracking = !timeline.isTacking; });
 
-			this.ui.timeinfo.on('click mousedown drag', function(ev) {
+			this.ui.timeInfo.on('click mousedown drag', function(ev) {
 				let el = $(ev.target);
 				let offset = ev.offsetX;
 				if ( el && el.hasClass('timeline__scale-segment') ) {
@@ -151,7 +149,7 @@
 		}
 
 		_initTicks() {
-			this.ui.timeinfo.empty();
+			this.ui.timeInfo.empty();
 			for (let i = 0; i <= Math.ceil(this.duration / 1000.0 / this.ui.zoom)+1; i++) {
 				let tick = $(this.ui.tickTemplate);
 				let time = i * this.ui.zoom;
@@ -163,8 +161,8 @@
 				if ( hour > 0 ) timecode += hour+':';
 				timecode += (min < 10) ? '0'+min+':' : min+':';
 				timecode += (sek < 10) ? '0'+sek : sek;
-				tick.find('.timecode-label').text(timecode);
-				this.ui.timeinfo.append(tick);
+				tick.find('.timecodeLabel').text(timecode);
+				this.ui.timeInfo.append(tick);
 			}
 
 		}

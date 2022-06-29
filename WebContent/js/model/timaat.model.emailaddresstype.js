@@ -27,55 +27,55 @@
 			// model.ui = this;
 
 			// create and style list view element
-			var deleteEmailAddressTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-emailaddresstype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteEmailAddressTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm emailAddressTypeRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteEmailAddressTypeButton = '';
-			this.listView = $('<li class="list-group__item"> '
+			this.listView = $('<li class="list-group-item"> '
 				+ deleteEmailAddressTypeButton +
-				'<span class="timaat-emailaddresstype-list-type"></span>' +
+				'<span class="emailAddressTypeListType"></span>' +
 				'<br> \
-				<div class="timaat-emailaddresstype-list-count text-muted float-left"></div> \
+				<div class="emailAddressTypeListCount text-muted float-left"></div> \
 				</li>'
 			);
 
-			$('#timaat-actordatasets-emailaddresstype-list').append(this.listView);
+			$('#actorDatasetsEmailAddressTypeList').append(this.listView);
 			this.updateUI();
 			var EmailAddressType = this; // save EmailAddressType for system EmailAddressTypes
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (emailAddressType.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(emailAddressType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+emailAddressType.model.createdByUserAccountId+'">[ID '+emailAddressType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(emailAddressType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+emailAddressType.model.lastEditedByUserAccountId+'">[ID '+emailAddressType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+emailAddressType.model.lastEditedByUserAccountId+'">[ID '+emailAddressType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(emailAddressType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,16 +85,16 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-actordatasets-emailaddresstype-meta').data('EmailAddressType', EmailAddressType);
-				$('#timaat-actordatasets-emailaddresstype-meta').modal('show');
+				$('#actorDatasetsEmailAddressTypeMetaModal').data('EmailAddressType', EmailAddressType);
+				$('#actorDatasetsEmailAddressTypeMetaModal').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-emailaddresstype-remove').on('click', this, function(ev) {
+			this.listView.find('.emailAddressTypeRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-actordatasets-emailaddresstype-delete').data('EmailAddressType', EmailAddressType);
-				$('#timaat-actordatasets-emailaddresstype-delete').modal('show');
+				$('#actorDatasetsEmailAddressTypeDeleteModal').data('EmailAddressType', EmailAddressType);
+				$('#actorDatasetsEmailAddressTypeDeleteModal').modal('show');
 			});
 		}
 
@@ -103,7 +103,7 @@
 			// title
 			var type = this.model.emailAddressTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[not assigned]";
-			this.listView.find('.timaat-emailaddresstype-list-name').text(type);
+			this.listView.find('.emailaddresstypeListName').text(type);
 		}
 
 		remove() {

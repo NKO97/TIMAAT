@@ -35,20 +35,20 @@
 			}
 			// init keyframe UI
 			this.ui = {
-					timelineTemplate : `<div class="timaat-timeline-keyframe">
-																<div class="timaat-timeline-keyframehead">
+					timelineTemplate : `<div class="timeline__keyframe">
+																<div class="timeline__keyframe-head">
 																</div>
 															</div>`,
-					inspectorTemplate : `<div class="list-group__item p-0">
+					inspectorTemplate : `<div class="list-group-item p-0">
 																<div class="input-group input-group-sm">
 																	<div class="input-group-prepend">
-																		<span class="input-group-text keyframe-number">01</span>
+																		<span class="input-group-text keyframeNumber">01</span>
 																	</div>
-																	<input type="text" class="form-control keyframe-time">
+																	<input type="text" class="form-control keyframeTime">
 																	<div class="input-group-append">
-																		<button title="undo time change" class="btn btn-secondary keyframe-undo"><i class="fas fa-undo fa-fw"></i></button>
-																		<button title="jump to keyframe" class="btn btn-secondary keyframe-jumpTo"><i class="fas fa-compress-arrows-alt fa-fw"></i></button>
-																		<button title="delete keyframe" class="btn btn-danger keyframe-remove"><i class="fas fa-trash-alt fa-fw"></i></button>
+																		<button title="undo time change" class="btn btn-secondary keyframeUndo"><i class="fas fa-undo fa-fw"></i></button>
+																		<button title="jump to keyframe" class="btn btn-secondary keyframeJumpTo"><i class="fas fa-compress-arrows-alt fa-fw"></i></button>
+																		<button title="delete keyframe" class="btn btn-danger keyframeRemove"><i class="fas fa-trash-alt fa-fw"></i></button>
 																	</div>
 																</div>
 															</div>`
@@ -56,12 +56,12 @@
 			this.ui.timelineView = $(this.ui.timelineTemplate);
 			this.ui.inspectorView = $(this.ui.inspectorTemplate);
 			if ( this._time == 0 || this._time == (this.parent.model.endTime - this.parent.model.startTime)) {
-				this.ui.inspectorView.find('.keyframe-time').prop('disabled', true);
-				this.ui.inspectorView.find('.keyframe-undo').prop('disabled', true);
-				this.ui.inspectorView.find('.keyframe-remove').prop('disabled', true);
+				this.ui.inspectorView.find('.keyframeTime').prop('disabled', true);
+				this.ui.inspectorView.find('.keyframeUndo').prop('disabled', true);
+				this.ui.inspectorView.find('.keyframeRemove').prop('disabled', true);
 			}
-			this.ui.head = this.ui.timelineView.find('.timaat-timeline-keyframehead');
-			$('#timaat-timeline-keyframe-pane').append(this.ui.timelineView);
+			this.ui.head = this.ui.timelineView.find('.timeline__keyframe-head');
+			$('#timelineKeyframePane').append(this.ui.timelineView);
 			if ( this.time == 0 ) this.ui.head.addClass('first');
 
 			// add events
@@ -70,11 +70,11 @@
 				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.startTime + ev.data.time);
 			});
 
-			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframe-time').on('blur change', this, function(ev) {
+			if ( this._time != 0 ) this.ui.inspectorView.find('.keyframeTime').on('blur change', this, function(ev) {
 				if ( !ev.data ) return;
 				let keyframe = ev.data;
 				let anno = keyframe.parent;
-				let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframe-time').val()) - anno.startTime;
+				let newTime = TIMAAT.Util.parseTime(keyframe.ui.inspectorView.find('.keyframeTime').val()) - anno.startTime;
 				let minTime = 0;
 				if ( anno.svg.keyframes.indexOf(keyframe) > 0 ) minTime = anno.svg.keyframes[ anno.svg.keyframes.indexOf(keyframe)-1 ].time + 1;
 				minTime = Math.floor(minTime);
@@ -91,19 +91,19 @@
 				}
 			});
 
-			this.ui.inspectorView.find('.keyframe-undo').on('click', this, function(ev) {
+			this.ui.inspectorView.find('.keyframeUndo').on('click', this, function(ev) {
 				if ( !ev.data ) return;
 				ev.data.discardChanges();
 				ev.data.parent._updateShapeUI();
 				ev.data.parent.updateEditableUI();
 			});
 
-			this.ui.inspectorView.find('.keyframe-jumpTo').on('click', this, function(ev) {
+			this.ui.inspectorView.find('.keyframeJumpTo').on('click', this, function(ev) {
 				if ( !ev.data ) return;
 				TIMAAT.VideoPlayer.jumpTo(ev.data.parent.model.startTime + ev.data.model.time);
 			});
 
-			this.ui.inspectorView.find('.keyframe-remove').on('click', this, function(ev) {
+			this.ui.inspectorView.find('.keyframeRemove').on('click', this, function(ev) {
 				if ( !ev.data ) return;
 				ev.data.parent.removeKeyframe(ev.data);
 			});
@@ -142,7 +142,7 @@
 			this._updateOffsetUI();
 			this.updateTimeUI();
 			// send event
-			$(document).trigger('keyframechanged.annotation.TIMAAT', this.parent);
+			$(document).trigger('keyFrameChanged.annotation.TIMAAT', this.parent);
 		}
 
 		getShape(id) {
@@ -161,7 +161,7 @@
 			this.updateUI();
 			this._updateOffsetUI();
 			// send event
-			$(document).trigger('keyframechanged.annotation.TIMAAT', this.parent);
+			$(document).trigger('keyFrameChanged.annotation.TIMAAT', this.parent);
 		}
 
 		saveChanges() {
@@ -301,12 +301,12 @@
 		remove() {
 			// remove UI
 			this.ui.timelineView.remove();
-			this.ui.inspectorView.find('.keyframe-time').off();
+			this.ui.inspectorView.find('.keyframeTime').off();
 			this.ui.inspectorView.remove();
 		}
 
 		_updateOffsetUI() {
-			// var width =  $('#video-seek-bar').width();
+			// var width =  $('#videoSeekBar').width();
 			let offset = (this.parent.startTime + this.time) / TIMAAT.VideoPlayer.duration * 100.0;
 			this.ui.timelineView.css('margin-left', offset + '%');
 		}
@@ -315,7 +315,7 @@
 		}
 
 		updateTimeUI() {
-			this.ui.inspectorView.find('.keyframe-time').val(TIMAAT.Util.formatTime(this.parent.startTime + this._time, true));
+			this.ui.inspectorView.find('.keyframeTime').val(TIMAAT.Util.formatTime(this.parent.startTime + this._time, true));
 		}
 
 		updateUI() {
@@ -343,7 +343,7 @@
 					// TODO only for Internet Explorer
 					padNumber = ('000'+frameNumber).substr(-3);
 				}
-				this.ui.inspectorView.find('.keyframe-number').text(padNumber);
+				this.ui.inspectorView.find('.keyframeNumber').text(padNumber);
 			}
 		}
 

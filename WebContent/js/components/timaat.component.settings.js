@@ -23,41 +23,41 @@
 
 		init: function() {
       this.initSettings();
-      TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
+      TIMAAT.UI.displayComponent('settings', 'settingsGeneralTab', null);
 		},
 
     initSettingsComponent: function() {
       TIMAAT.UI.showComponent('settings');
-      $('#settings-general-tab').trigger('click');
+      $('#settingsGeneralTab').trigger('click');
     },
 
 		initSettings: function() {
       // nav-bar functionality
-			$('#settings-general-tab').on('click', function(event) {
+			$('#settingsGeneralTab').on('click', function(event) {
 				TIMAAT.Settings.loadSettings();
 				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings');
 			});
 
-      $('#length-fix-button').on('click', function(event) {
+      $('#fixDurationButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           console.log("length fix button clicked");
           TIMAAT.Settings.fixLength();
         }
       });
 
-      $('#no-permission-set-fix-button').on('click', function(event) {
+      $('#fixNoPermissionSetButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           console.log("add missing permissions");
           TIMAAT.Settings.fixPermissions();
         }
       });
-      $('#no-annotation-uuid-set-fix-button').on('click', function(event) {
+      $('#fixAnnotationNoUUIDSetButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           console.log("add missing annotation uuids");
           TIMAAT.Settings.fixAnnotationUUIDs();
         }
       });
-      $('#keyframe-time-seconds-to-milliseconds-fix-button').on('click', function(event) {
+      $('#fixKeyframeTimeSecondsToMillisecondsButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           console.log("fix annotation keyframe timestamps from s to ms");
           TIMAAT.Settings.fixKeyframeTimes();
@@ -66,7 +66,7 @@
     },
 
     loadSettings: function() {
-			TIMAAT.UI.displayComponent('settings', 'settings-general-tab', null);
+			TIMAAT.UI.displayComponent('settings', 'settingsGeneralTab', null);
 			// TIMAAT.UI.addSelectedClassToSelectedItem('settings', null);
 			// TIMAAT.UI.subNavTab = 'dataSheet';
 		},

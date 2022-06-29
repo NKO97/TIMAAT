@@ -27,55 +27,55 @@
 			// model.ui = this;
 
 			// create and style list view element
-			var deleteAddressTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-addresstype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteAddressTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm addressTypeRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteAddressTypeButton = '';
-			this.listView = $('<li class="list-group__item"> '
+			this.listView = $('<li class="list-group-item"> '
 				+ deleteAddressTypeButton +
-				'<span class="timaat-addresstype-list-type"></span>' +
+				'<span class="addressTypeListType"></span>' +
 				'<br> \
-				<div class="timaat-addresstype-list-count text-muted float-left"></div> \
+				<div class="addressTypeListCount text-muted float-left"></div> \
 				</li>'
 			);
 
-			$('#timaat-actordatasets-addresstype-list').append(this.listView);
+			$('#actorDatasetsAddressTypeList').append(this.listView);
 			this.updateUI();
 			var AddressType = this; // save AddressType for system AddressTypes
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (addressType.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+addressType.model.createdByUserAccountId+'">[ID '+addressType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+addressType.model.createdByUserAccountId+'">[ID '+addressType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(addressType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+addressType.model.createdByUserAccountId+'">[ID '+addressType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+addressType.model.createdByUserAccountId+'">[ID '+addressType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(addressType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+addressType.model.lastEditedByUserAccountId+'">[ID '+addressType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+addressType.model.lastEditedByUserAccountId+'">[ID '+addressType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(addressType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,16 +85,16 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-actordatasets-addresstype-meta').data('AddressType', AddressType);
-				$('#timaat-actordatasets-addresstype-meta').modal('show');
+				$('#actorDatasetsAddressTypeMeta').data('AddressType', AddressType);
+				$('#actorDatasetsAddressTypeMeta').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-addresstype-remove').on('click', this, function(ev) {
+			this.listView.find('.addressTypeRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-actordatasets-addresstype-delete').data('AddressType', AddressType);
-				$('#timaat-actordatasets-addresstype-delete').modal('show');
+				$('#actorDatasetsAddressTypeDeleteModal').data('AddressType', AddressType);
+				$('#actorDatasetsAddressTypeDeleteModal').modal('show');
 			});
 		}
 
@@ -103,7 +103,7 @@
 			// title
 			var type = this.model.addressTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[not assigned]";
-			this.listView.find('.timaat-addresstype-list-name').text(type);
+			this.listView.find('.addressTypeListName').text(type);
 		}
 
 		remove() {

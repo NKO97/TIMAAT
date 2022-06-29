@@ -27,15 +27,15 @@
 
 			// create and style list view element
 			this.listView = $(
-				`<li class="list-group__item">
+				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`<span class="timaat-languagelists-language-list-name">
+							`<span class="languageListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 						  </div>
@@ -44,7 +44,7 @@
 				</li>`
 			);
 
-			// $('#timaat-languagelists-language-list').append(this.listView);
+			// $('#languageList').append(this.listView);
 			// console.log("TCL: Language -> constructor -> this.updateUI()");
 			var language = this; // save language for system events
 
@@ -52,15 +52,15 @@
 
 			// attach language handlers
 			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: Language -> constructor -> open language datasheet");
+				// console.log("TCL: Language -> constructor -> open language dataSheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.languages-nav-tabs').show();
-				$('.languages-data-tabs').hide();
-				$('.nav-tabs a[href="#languageDatasheet"]').tab('show');
-				$('#language-metadata-form').data('language', language);
+				$('.languagesNavTabs').show();
+				$('.languagesDataTabs').hide();
+				$('.nav-tabs a[href="#languageDataSheet"]').tab('show');
+				$('#languageFormMetadata').data('language', language);
 				TIMAAT.LanguageLists.languageFormDataSheet('show', language);
 			});
     }
@@ -68,7 +68,7 @@
 		updateUI() {
 			var name = this.model.name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-languagelists-language-list-name').text(name);
+			this.listView.find('.languageListName').text(name);
 
 		}
 
@@ -76,8 +76,8 @@
 			// remove language from UI
 			this.listView.remove();
       // console.log("TCL: Language -> remove -> this", this);
-			$('#language-metadata-form').data('language', null);
-			// remove from languageset lists
+			$('#languageFormMetadata').data('language', null);
+			// remove from language set lists
 			var index;
 			for (var i = 0; i < TIMAAT.LanguageLists.languages.length; i++) {
 				if (TIMAAT.LanguageLists.languages[i].model.id == this.model.id) {

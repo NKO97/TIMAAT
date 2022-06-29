@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,7 +29,8 @@ public class Analysis implements Serializable {
 	private int id;
 
 	@Lob
-	private String preproduction;
+	@Column(name="preproduction")
+	private String preProduction;
 
 	@Lob
 	private String remark;
@@ -54,12 +56,12 @@ public class Analysis implements Serializable {
 		this.id = id;
 	}
 
-	public String getPreproduction() {
-		return this.preproduction;
+	public String getpreProduction() {
+		return this.preProduction;
 	}
 
-	public void setPreproduction(String preproduction) {
-		this.preproduction = preproduction;
+	public void setpreProduction(String preProduction) {
+		this.preProduction = preProduction;
 	}
 
 	public String getRemark() {

@@ -28,18 +28,18 @@
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group__item timaat-annotation-list-music-text-setting-element p-0 bg-secondary">
+				<li class="list-group-item annotationListMusicTextSettingElement p-0 bg-secondary">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold pt-1 text-light pl-1">
-							<i class="timaat-annotation-music-text-setting-element-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-							<span class="timaat-annotation-music-text-setting-element-type"></span>
+							<i class="annotationMusicTextSettingElementCommentIcon fas fa-fw fa-comment" aria-hidden="true"></i>
+							<span class="annotationMusicTextSettingElementType"></span>
 						</span>
 					</div>
 				</li>`
 			);
 			this.timelineView = $(`
-				<div class="timaat-timeline-music-text-setting-element">
-					<div class="timaat-timeline-music-text-setting-element-type text-white font-weight-bold"></div>
+				<div class="timeline__music-text-setting-element">
+					<div class="timeline__music-text-setting-element-type text-white font-weight-bold"></div>
 				</div>`
 			);
 			this.timelineView.attr('data-start', this.model.startTime);
@@ -51,11 +51,11 @@
 		updateUI() {
 			// console.log("TCL: MusicTextSettingElement -> updateUI -> updateUI()");
       // console.log("TCL: MusicTextSettingElement -> updateUI -> this: ", this);
-			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('data-start-time', this.model.startTime);
+			this.listView.attr('data-end-time', this.model.endTime);
 			this.listView.attr('id', 'musicTextSettingElement-'+this.model.id);
 			this.listView.attr('data-type', 'musicTextSettingElement');
-			this.timelineView.find('.timaat-timeline-music-text-setting-element-type').html(this.model.musicTextSettingElementType.musicTextSettingElementTypeTranslations[0].type);
+			this.timelineView.find('.timeline__music-text-setting-element-type').html(this.model.musicTextSettingElementType.musicTextSettingElementTypeTranslations[0].type);
 
 			// update timeline position
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
@@ -66,20 +66,20 @@
 
 		addUI() {
 			// console.log("TCL: MusicTextSettingElement -> addUI -> addUI()");
-			$('#timaat-timeline-music-text-setting-element-pane').append(this.timelineView);
+			$('#timelinePaneMusicTextSetting').append(this.timelineView);
 			var musicTextSettingElement = this; // save annotation for events
 
 			// attach event handlers
 			this.timelineView.on('click', this, function(ev) {
 				TIMAAT.VideoPlayer.curMusicTextSettingElement = musicTextSettingElement;
-				this.classList.add('timaat-timeline-selected-music-text-setting-element');
+				this.classList.add('timelineSelectedMusicTextSettingElement');
 				TIMAAT.VideoPlayer.selectedElementType = 'musicTextSettingElement';
 				TIMAAT.VideoPlayer.jumpVisible(musicTextSettingElement.model.startTime, musicTextSettingElement.model.endTime);
 				TIMAAT.VideoPlayer.pause();
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
-				$('#timaat-timeline-keyframe-pane').hide();
+				$('#timelineKeyframePane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(musicTextSettingElement, 'musicTextSettingElement');
 				// TODO
 				// TIMAAT.URLHistory.setURL(null, 'MusicTextSettingElement · '+musicTextSettingElement.model.musicTextSettingElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicTextSettingElement/'+musicTextSettingElement.model.id);
@@ -87,7 +87,7 @@
 
 			this.timelineView.on('dblclick', this, function(ev) {
 				TIMAAT.VideoPlayer.curMusicTextSettingElement = musicTextSettingElement;
-				this.classList.add('timaat-timeline-selected-music-text-setting-element');
+				this.classList.add('timelineSelectedMusicTextSettingElement');
 				TIMAAT.VideoPlayer.selectedElementType = 'musicTextSettingElement';
 				// TIMAAT.VideoPlayer.jumpVisible(musicTextSettingElement.model.startTime, musicTextSettingElement.model.endTime);
 				TIMAAT.VideoPlayer.jumpTo(musicTextSettingElement.model.startTime);
@@ -95,9 +95,9 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
-				$('#timaat-timeline-keyframe-pane').hide();
+				$('#timelineKeyframePane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(musicTextSettingElement, 'musicTextSettingElement');
-				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+				TIMAAT.VideoPlayer.inspector.open('inspectorMetadata');
 				// TODO
 				// TIMAAT.URLHistory.setURL(null, 'MusicTextSettingElement · '+musicTextSettingElement.model.musicTextSettingElementTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/musicTextSettingElement/'+musicTextSettingElement.model.id);
 			});
