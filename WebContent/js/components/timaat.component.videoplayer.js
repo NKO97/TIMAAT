@@ -542,31 +542,49 @@
 
 			// bookmark / add / remove annotation control
 			L.control.custom({
-					position: 'topleft',
-					content : `<button class="annotation-controls__button--disabled btn btn-light" id="videoPlayerAnnotationQuickAddButton" title="Quick annotate" onclick="TIMAAT.VideoPlayer.addQuickAnnotation()" type="button">
-											<i class="fas fa-bookmark"></i>
-										</button>
-										<button class="annotation-controls__button--disabled btn btn-light ml-0" id="videoPlayerAnnotationAddButton" title="Create new annotation" onclick="TIMAAT.VideoPlayer.addAnnotation()" type="button">
-											<i class="fa fa-plus"></i>
-										</button>
-										<button class="annotation-controls__button--disabled btn btn-light ml-0" id="videoPlayerAnnotationRemoveButton" title="Delete annotation" onclick="TIMAAT.VideoPlayer.removeAnnotation()" disabled type="button">
-											<i class="fa fa-trash-alt"></i>
-										</button>`,
-					classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
-					style   :
-					{ margin: '10px', padding: '0px 0 0 0', },
+				position: 'topleft',
+				content : `<button type="button"
+													 class="annotation-controls__button--disabled btn btn-light"
+													 id="videoPlayerAnnotationQuickAddButton"
+													 title="Quick annotate"
+													 onclick="TIMAAT.VideoPlayer.addQuickAnnotation()">
+										<i class="fas fa-bookmark fa-fw"></i>
+									</button>
+									<button type="button"
+													class="annotation-controls__button--disabled btn btn-light ml-0"
+													id="videoPlayerAnnotationAddButton"
+													title="Create new annotation"
+													onclick="TIMAAT.VideoPlayer.addAnnotation()">
+										<i class="fa fa-plus fa-fw"></i>
+									</button>
+									<button type="button"
+													class="annotation-controls__button--disabled btn btn-light ml-0"
+													id="videoPlayerAnnotationRemoveButton"
+													title="Delete annotation"
+													onclick="TIMAAT.VideoPlayer.removeAnnotation()"
+													disabled>
+										<i class="fa fa-trash-alt fa-fw"></i>
+									</button>`,
+				classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
+				style   :	{ margin: '10px', padding: '0px 0 0 0', },
 			})
 			.addTo(TIMAAT.VideoPlayer.viewer);
 
 			// save polygon changes control
 			TIMAAT.VideoPlayer.savePolygonCtrl = L.control.custom({
 				enabled: false,
-					position: 'topleft',
-					content : '<button disabled title="Save changes to annotation" id="videoPlayerSavePolygonsButton" onclick="TIMAAT.VideoPlayer.updateAnnotations()" type="button" class="btn btn-light">'+
-										'    <i class="fa fa-save"></i>' +
-										'</button>',
-					classes : 'btn-group-vertical btn-group-sm leaflet-bar',
-					style   : { margin: '10px', padding: '0px 0 0 0', },
+				position: 'topleft',
+				content : `<button type="button"
+													 data-type"save"
+													 class="btn btn-light"
+													 id="videoPlayerSavePolygonsButton"
+													 title="Save changes to annotation"
+													 onclick="TIMAAT.VideoPlayer.updateAnnotations()"
+													 disabled>
+										<i class="fa fa-save fa-fw"></i>
+									</button>`,
+				classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
+				style   : { margin: '10px', padding: '0px 0 0 0', },
 			});
 
 			TIMAAT.VideoPlayer.savePolygonCtrl.setEnabled = function(enabled) {
@@ -584,22 +602,38 @@
 
 			// shape editing control
 			TIMAAT.VideoPlayer.editShapesCtrl = L.control.custom({
-					position: 'topleft',
-					enabled: true,
-					content : `<button data-type="rectangle" type="button" title="Create rectangle annotation" onclick="TIMAAT.VideoPlayer.createShape('rectangle')" class="rectangle btn btn-sm btn-light">
-									<i class="fas fa-vector-square"></i>
-								</button>
-								<button data-type="polygon" type="button" title="Create polygon annotation" onclick="TIMAAT.VideoPlayer.createShape('polygon')" class="polygon ml-0 btn btn-sm btn-light">
-									<i class="fas fa-draw-polygon"></i>
-								</button>
-								<button data-type="line" type="button" title="Create line annotation" onclick="TIMAAT.VideoPlayer.createShape('line')" class="line ml-0 btn btn-sm btn-light">
-									<i class="fas fa-slash"></i>
-								</button>
-								<button data-type="circle" type="button" title="Create circle annotation" onclick="TIMAAT.VideoPlayer.createShape('circle')" class="circle ml-0 btn btn-sm btn-light">
-									<i class="far fa-circle"></i>
-								</button>`,
-					classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
-					style   : { margin: '10px', padding: '0px 0 0 0', },
+				position: 'topleft',
+				enabled: true,
+				content : `<button type="button"
+													 data-type="rectangle"
+													 class="rectangle btn btn-sm btn-light"
+													 title="Create rectangle annotation"
+													 onclick="TIMAAT.VideoPlayer.createShape('rectangle')">
+										<i class="fas fa-vector-square fa-fw"></i>
+									</button>
+									<button type="button"
+													data-type="polygon"
+													class="polygon ml-0 btn btn-sm btn-light"
+													title="Create polygon annotation"
+													onclick="TIMAAT.VideoPlayer.createShape('polygon')">
+										<i class="fas fa-draw-polygon fa-fw"></i>
+									</button>
+									<button type="button"
+													data-type="line"
+													class="line ml-0 btn btn-sm btn-light"
+													title="Create line annotation"
+													onclick="TIMAAT.VideoPlayer.createShape('line')">
+										<i class="fas fa-slash fa-fw"></i>
+									</button>
+									<button type="button"
+													data-type="circle"
+													class="circle ml-0 btn btn-sm btn-light"
+													title="Create circle annotation"
+													onclick="TIMAAT.VideoPlayer.createShape('circle')">
+										<i class="far fa-circle fa-fw"></i>
+									</button>`,
+				classes : 'btn-group btn-group-sm btn-group-vertical leaflet-bar',
+				style   : { margin: '10px', padding: '0px 0 0 0', },
 			});
 
 			TIMAAT.VideoPlayer.editShapesCtrl.setEnabled = function(enabled) {
