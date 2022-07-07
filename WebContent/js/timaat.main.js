@@ -4,7 +4,7 @@
 	(factory((global.TIMAAT = {})));
 }(this, (function (exports) { 'use strict';
 
-	var version = 'v0.15.3a-dev (2022-06-29)';
+	var version = 'v0.15.3b-dev (2022-07-07)';
 
 	document.title = 'TIMAAT - Client ' + version;
 	$('#versionInfo').text(version);

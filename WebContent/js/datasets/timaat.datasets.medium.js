@@ -3864,7 +3864,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -4060,7 +4060,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllMediaDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -4115,7 +4115,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -4253,7 +4253,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllAudiosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -4308,7 +4308,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -4416,7 +4416,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllDocumentsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -4471,7 +4471,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -4607,7 +4607,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllImagesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -4662,7 +4662,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -4792,7 +4792,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllSoftwaresDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -4847,7 +4847,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -4977,7 +4977,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllTextsDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -5032,7 +5032,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -5215,7 +5215,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideosDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){
@@ -5270,7 +5270,7 @@
 				"pagingType"    : "full", // "simple_numbers",
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -5400,7 +5400,7 @@
 							}
 						}
 					},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, mediumItem, meta) {
 						// console.log("TCL: setupAllVideogamesDataTable:function -> data, type, mediumItem, meta", data, type, mediumItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( mediumItem.mediumVideo ){

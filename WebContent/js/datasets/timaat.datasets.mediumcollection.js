@@ -898,7 +898,7 @@
 				"dom"           : '<l<t>ip>',
 				"processing"    : true,
 				"stateSave"     : true,
-				"scrollX"				: true,
+				"scrollX"				: false,
 				"scrollY"       : "60vh",
 				"scrollCollapse": true,
 				"rowId"					: 'id',
@@ -931,6 +931,9 @@
 						return data.data;
 					}
 				},
+				// "initComplete": function(settings, json) {
+				// 	TIMAAT.MediumCollectionDatasets.dataTableMediaCollectionItemList.ajax.reload()
+				// },
 				"drawCallback": function( settings ) {
 					let api = this.api();
 					let i = 0;
@@ -1089,8 +1092,8 @@
 						// console.log(`TCL: sortOrder:function -> data, type, collection, meta`, data, type, collection, meta);
 						let order =
 							`<div class="row">
-								<div class="col-md-6 text-align--right pr-1 pl-0">`+(collection.sortOrder+1)+`</div>
-								<div class="col-md-6">`;
+								<div class="col-md-6 text-align--right pr-2 pl-0">`+(collection.sortOrder+1)+`</div>
+								<div class="btn-group-vertical">`;
 						if (meta.row > 0) {
 							order += `<button type="button" title="Sort up" class="btn btn-outline-secondary btn-sm mediumCollectionDatasetsCollectionItemMoveUp"><i class="fas fa-sort-up"></i></button>`;
 						}
@@ -1213,7 +1216,7 @@
 						}
 					}
 				},
-					{ data: null, className: 'actions', orderable: false, width: '5%', render: function(data, type, collectionItem, meta) {
+					{ data: null, className: 'actions text-align--center', orderable: false, width: '5%', render: function(data, type, collectionItem, meta) {
 						// console.log("TCL: setupMediumCollectionItemListDataTable:function -> data, type, collectionItem, meta", data, type, collectionItem, meta);
 						let ui = `<div class="btn-group-vertical" role="group">`;
 						if ( collectionItem.medium.mediumVideo ){

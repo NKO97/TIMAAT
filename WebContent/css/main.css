@@ -350,6 +350,28 @@ th.table--padding.sorting_asc:before, th.table--padding.sorting_desc:before, th.
 	display: none;
 }
 
+/* .dataTables_scroll {
+	overflow: auto;
+}
+
+.dataTables_scrollHead,
+.dataTables_scrollBody {
+	overflow: visible!important;
+} */
+
+.dataTables_wrapper {
+	padding-top: 0.5rem;
+}
+
+div.dataTables_filter,
+div.dataTables_length {
+  display: inline-block;
+  margin-left: 1em;
+}
+
+table.dataTable {
+  border: none;
+}
 
 .input-usersettings {
 	margin-bottom: 16px !important;
