@@ -252,6 +252,10 @@ select:disabled {
 	background-color: white;
 }
 
+.sidebar__li--settings-tab {
+	display: none;
+}
+
 .sidebar__a {
 	color: #555;
 }

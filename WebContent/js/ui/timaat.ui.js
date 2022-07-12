@@ -369,6 +369,13 @@
 						} else {
 							TIMAAT.MediumDatasets.initMediaComponent()
 						}
+
+						// restrict access to settings tab to admin user only
+						if (TIMAAT.Service.session.displayName == "admin") {
+							$('.adminAccessOnly').show();
+						} else {
+							$('.adminAccessOnly').hide();
+						}
 					}).fail(function(error) {
 						TIMAAT.UI.setLoginEnabled(true);
 						console.error("process login ERROR: ", error);

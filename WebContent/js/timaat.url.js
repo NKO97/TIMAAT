@@ -812,8 +812,14 @@
             if (pathSegments.length > 1) {
               this.redirectToDefaultView();
             }
-            TIMAAT.UI.showComponent('settings');
-            TIMAAT.Settings.loadSettings();
+            if (TIMAAT.Service.session && TIMAAT.Service.session.displayName == "admin") {
+							$('.adminAccessOnly').show();
+              TIMAAT.UI.showComponent('settings');
+              TIMAAT.Settings.loadSettings();
+            } else {
+              $('.adminAccessOnly').hide();
+              this.redirectToDefaultView();
+            }
           break;
           case 'analysis': // #analysis...
             // make sure analysis list is loaded
