@@ -42,7 +42,7 @@
   padding-top: 0;
 }
 
-#timaat-right-sidebar .closebtn {
+#publicationRightSidebar .closebtn {
 	left: 15px;
 	padding-left: 0px;
 	right: initial;
@@ -67,11 +67,11 @@
 	display: none;
 }
 
-#timaat-main::-webkit-scrollbar {
+#publicationMain::-webkit-scrollbar {
 	display: none;
 }
 
-#timaat-main.collection::-webkit-scrollbar {
+#publicationMain.collection::-webkit-scrollbar {
 	display: block;
 }
 
@@ -83,42 +83,49 @@ body {
 	width: 256px;
 }
 
-#timaat-main {
+#publicationMain {
 	overflow: auto;
 	position: absolute;
 	transition: margin-left .5s, margin-right .5s;
 	height: 100%;
 	right: 0;
 	left: 0;
-
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 }
-#timaat-main.collection {
+
+#publicationMain.collection {
 	-ms-overflow-style: unset;
 	scrollbar-width: unset;
 }
 
-#timaat-viewer {
+#publication__viewer {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	background: #111111;
 }
 
-.timaat-publication-settings {
+.publication__settings {
 	min-width: 30em;
 }
 
 .timaat-list-info {
 	line-height: 1;
 }
-.timaat-annotation-list-selected {
+
+.annotation__list--selected {
 	background-color: #c9e2ff;
 }
 
-.timaat-annotation-list-selected:hover {
+.annotation__list--selected:hover {
 	background-color: #c9e2ff !important;
+}
+
+.annotation__status-marker {
+	float: left;
+	line-height: 300%;
+	margin-right: 5px;
 }
 
 #timaat-analysis-list {
@@ -128,11 +135,12 @@ body {
 #timaat-analysis-list li i {
 	display: none;
 }
+
 #timaat-analysis-list li.selected i {
 	display: inline;
 }
 
-.timaat-list-title {
+.list__title {
 	/* color: #CCCCCC; */
 	white-space: normal;
 	word-wrap: break-word;
@@ -150,21 +158,22 @@ body {
 	text-align: justify;
 } */
 
-.timaat-annotation-wrapper, .timaat-metadata-wrapper {
+.annotation__wrapper, .timaat-metadata-wrapper {
 	/* position: absolute; */
 	min-width: 250px;
 	top: 3.5em;
 	bottom: 0;
 }
 
-#timaat-annotation-list {
+.analysis__list {
 	font-size: 85%;
 }
-#timaat-annotation-list li {
+
+.analysis__list--li {
 	cursor: pointer;
 }
 
-#timaat-video-controls {
+#publicationVideoControls {
 	display: none;
 	position: fixed;
 	bottom: 0;
@@ -180,7 +189,7 @@ body {
 	color: white;
 }
 
-#timaat-video-controls .time-info {
+#publicationVideoControls .timeInfo {
 	display: none;
 	border-radius: 0.25rem;
 	position: absolute;
@@ -190,19 +199,19 @@ body {
 	width: 60px;
 	z-index: 9000;
 }
-#timaat-video-controls .time-info.show {
+#publicationVideoControls .timeInfo.show {
 	display: block !important;
 }
 
-#timaat-video-controls .video-timings {
+#publicationVideoControls .video-timings {
 	font-family: sans-serif;
 }
 
-#timaat-video-controls .btn {
+#publicationVideoControls .btn {
 	text-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 
-#timaat-video-controls .seekbar {
+#publicationVideoControls .seekbar {
 	width: 100%;
 	height: 6px;
 	background-color: #555;
@@ -214,17 +223,17 @@ body {
 	border-right: 0px;
 }
 
-#timaat-video-controls .segment-seekbar {
+#publicationVideoControls .segment-seekbar {
 	border: 1px solid transparent;
 	background: transparent;
 	height: 6px;
 }
 
-#timaat-video-controls .video-seek-bar {
+#publicationVideoControls .videoSeekBar {
 	height: 9px;
 }
 
-#timaat-video-controls .seekbar .progress {
+#publicationVideoControls .seekbar .progress {
   background-color: red;
   width: 0;
   position: absolute;
@@ -236,29 +245,45 @@ body {
   transition: all ease 0.25s;
 }
 
-#timaat-video-controls .toggle-play-pause.play .pause-icon {
+#publicationVideoControls .toggle-play-pause.play .pause-icon {
   display: none;
 }
 
-#timaat-video-controls .toggle-play-pause.pause .play-icon {
+#publicationVideoControls .toggle-play-pause.pause .play-icon {
   display: none;
 }
 
-#timaat-video-controls .toggle-volume.on .volume-off {
+#publicationVideoControls .toggle-volume.on .volume-off {
   display: none;
 }
 
-#timaat-video-controls .toggle-volume.off .volume-on {
+#publicationVideoControls .toggle-volume.off .volume-on {
   display: none;
 }
 
-#timaat-video-controls .video-volume-control {
+#publicationVideoControls .video-volume-control {
   width: 100px;
 }
 
-#timaat-video-controls:hover {
-}
+/* #publicationVideoControls:hover {
+} */
 
 @media screen and (max-height: 450px) {
   .sidebar a {font-size: 18px;}
+}
+
+
+.width--268 {
+	width: 268px;
+}
+
+.font__size--80 {
+	font-size: 80%;
+}
+
+.video-template--duration {
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	opacity: 0.8;
 }

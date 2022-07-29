@@ -27,55 +27,55 @@
 			// model.ui = this;
 
 			// create and style list view element
-			var deleteMediumTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-mediatype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteMediumTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm mediumTypeRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteMediumTypeButton = '';
 			this.listView = $('<li class="list-group-item"> '
 				+ deleteMediumTypeButton +
-				'<span class="timaat-mediatype-list-type"></span>' +
+				'<span class="mediumTypeListType"></span>' +
 				'<br> \
-				<div class="timaat-mediatype-list-count text-muted float-left"></div> \
+				<div class="mediumTypeListCount text-muted float-left"></div> \
 				</li>'
 			);
 
-			$('#timaat-mediadatasets-mediumtype-list').append(this.listView);
+			$('#mediumDatasetsMediumTypeList').append(this.listView);
 			this.updateUI();
 			var MediumType = this; // save MediumType for system MediumTypes
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (mediaType.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+mediaType.model.createdByUserAccountId+'">[ID '+mediaType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediaType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+mediaType.model.lastEditedByUserAccountId+'">[ID '+mediaType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+mediaType.model.lastEditedByUserAccountId+'">[ID '+mediaType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(mediaType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,16 +85,16 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-mediadatasets-mediumtype-meta').data('MediumType', MediumType);
-				$('#timaat-mediadatasets-mediumtype-meta').modal('show');
+				$('#mediumDatasetsMediumTypeMeta').data('MediumType', MediumType);
+				$('#mediumDatasetsMediumTypeMeta').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-mediatype-remove').on('click', this, function(ev) {
+			this.listView.find('.mediumTypeRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-mediadatasets-mediumtype-delete').data('MediumType', MediumType);
-				$('#timaat-mediadatasets-mediumtype-delete').modal('show');
+				$('#mediumDatasetsMediumTypeDeleteModal').data('MediumType', MediumType);
+				$('#mediumDatasetsMediumTypeDeleteModal').modal('show');
 			});
 		}
 
@@ -103,7 +103,7 @@
 			// title
 			var type = this.model.mediaTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[not assigned]";
-			this.listView.find('.timaat-mediatype-list-name').text(type);
+			this.listView.find('.mediumTypeListName').text(type);
 		}
 
 		remove() {

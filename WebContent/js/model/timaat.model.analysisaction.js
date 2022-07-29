@@ -28,18 +28,18 @@
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group-item timaat-annotation-list-action p-0 bg-secondary">
+				<li class="list-group-item annotationListAction p-0 bg-secondary">
 					<div class="d-flex justify-content-between">
 						<span class="font-weight-bold pt-1 text-light pl-1">
-							<i class="timaat-annotation-action-comment-icon fas fa-fw fa-comment" aria-hidden="true"></i>
-							<span class="timaat-annotation-action-name"></span>
+							<i class="annotationActionCommentIcon fas fa-fw fa-comment" aria-hidden="true"></i>
+							<span class="annotationActionName"></span>
 						</span>
 					</div>
 				</li>`
 			);
 			this.timelineView = $(`
-				<div class="timaat-timeline-action">
-					<div class="timaat-timeline-action-name text-white font-weight-bold"></div>
+				<div class="timeline__action">
+					<div class="timeline__action-name text-white font-weight-bold"></div>
 				</div>`
 			);
 
@@ -49,17 +49,17 @@
 
 		updateUI() {
 			// console.log("TCL: AnalysisAction -> updateUI -> updateUI()");
-			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('data-start-time', this.model.startTime);
+			this.listView.attr('data-end-time', this.model.endTime);
 			this.listView.attr('id', 'action-'+this.model.id);
 			this.listView.attr('data-type', 'action');
 			let timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
-			this.listView.find('.timaat-annotation-action-name').html(this.model.analysisActionTranslations[0].name);
-			this.listView.find('.timaat-annotation-action-shortDescription').html(this.model.analysisActionTranslations[0].shortDescription);
-			this.listView.find('.timaat-annotation-action-comment').html(this.model.analysisActionTranslations[0].comment);
-			this.listView.find('.timaat-annotation-action-transcript').html(this.model.analysisActionTranslations[0].transcript);
-			this.timelineView.find('.timaat-timeline-action-name ').html(this.model.analysisActionTranslations[0].name);
+			this.listView.find('.annotationActionName').html(this.model.analysisActionTranslations[0].name);
+			this.listView.find('.annotationActionShortDescription').html(this.model.analysisActionTranslations[0].shortDescription);
+			this.listView.find('.annotationActionComment').html(this.model.analysisActionTranslations[0].comment);
+			this.listView.find('.annotationActionTranscript').html(this.model.analysisActionTranslations[0].transcript);
+			this.timelineView.find('.timeline__action-name ').html(this.model.analysisActionTranslations[0].name);
 
 			// update timeline position
 			let length = (this.model.endTime - this.model.startTime) / (TIMAAT.VideoPlayer.duration) * 100.0;
@@ -71,7 +71,7 @@
 
 		addUI() {
 			// console.log("TCL: AnalysisAction -> addUI -> addUI()");
-			$('#timaat-timeline-action-pane').append(this.timelineView);
+			$('#timelinePaneAction').append(this.timelineView);
 
 			var action = this; // save annotation for events
 			// attach event handlers
@@ -90,7 +90,7 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
-				$('#timaat-timeline-keyframe-pane').hide();
+				$('#timelineKeyframePane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
 					// TODO
 					// TIMAAT.URLHistory.setURL(null, 'Action · '+action.model.analysisActionTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/action/'+action.model.id);
@@ -111,9 +111,9 @@
 				if (TIMAAT.VideoPlayer.curAnnotation) {
 					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
 				}
-				$('#timaat-timeline-keyframe-pane').hide();
+				$('#timelineKeyframePane').hide();
 				TIMAAT.VideoPlayer.inspector.setItem(action, 'action');
-				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+				TIMAAT.VideoPlayer.inspector.open('inspectorMetadata');
 					// TODO
 					// TIMAAT.URLHistory.setURL(null, 'Action · '+action.model.analysisActionTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/action/'+action.model.id);
 			});

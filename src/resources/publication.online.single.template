@@ -83,10 +83,10 @@
   <!-- ***************************************************************************************************************** -->
 
   <body onload="setupPublication()">
-    <div id="timaat-left-sidebar" class="sidebar collapsed">
+    <div id="publicationLeftSidebar" class="sidebar collapsed">
       <div class="alert-dark mb-0">
         <div class="mb-2 d-inline-flex timaat-list-info">
-          <span class="badge timaat-list-title"></span>
+          <span class="badge list__title"></span>
         </div>
       </div>
       <!-- <a
@@ -95,14 +95,14 @@
         onclick="TIMAATPub.closeSidebar('left')"
         ><i class="fas fa-chevron-circle-left"></i
       ></a> -->
-      <div class="timaat-annotation-wrapper overflow-auto">
+      <div class="annotation__wrapper overflow-auto">
         <ul
-          id="timaat-annotation-list"
-          class="list-group list-group-flush"
+          id="analysisList"
+          class="list-group list-group-flush analysis__list"
         ></ul>
       </div>
     </div>
-    <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
+    <div id="publicationRightSidebar" class="sidebar sidebar-right collapsed">
       <div class="alert alert-dark mb-0 text-center">
         <span class="badge">Metadata</span>
       </div>
@@ -114,7 +114,7 @@
       ></a>
       <div class="timaat-metadata-wrapper overflow-auto">
         <div class="metadata-content">
-          <div class="metadata-section annotation-section">
+          <div class="metadataSection annotationSection">
             <div
               class="
                 metadata-header
@@ -129,8 +129,8 @@
               Annotation
             </div>
           </div>
-          <div class="metadata-section annotation-metadata d-none">
-            <div class="metadata-field annotation-title">
+          <div class="metadataSection annotationMetadata d-none">
+            <div class="metadata-field annotationTitle">
               <div
                 class="
                   metadata-header
@@ -149,7 +149,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-comment">
+            <div class="metadata-field annotationComment">
               <div
                 class="
                   metadata-header
@@ -168,7 +168,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-categories">
+            <div class="metadata-field annotationCategories">
               <div
                 class="
                   metadata-header
@@ -187,7 +187,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-tags">
+            <div class="metadata-field annotationTags">
               <div
                 class="
                   metadata-header
@@ -206,7 +206,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-actors">
+            <div class="metadata-field annotationActors">
               <div
                 class="
                   metadata-header
@@ -225,7 +225,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-events">
+            <div class="metadata-field annotationEvents">
               <div
                 class="
                   metadata-header
@@ -245,13 +245,13 @@
               </div>
             </div>
             <!--
-						<div class="metadata-field annotation-places">
+						<div class="metadata-field annotationPlaces">
 						<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
 						<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- not specified -</div><span class="contents"></span></div>
 						</div>
 						-->
           </div>
-          <div class="metadata-section segment-section">
+          <div class="metadataSection segmentSection">
             <div
               class="
                 metadata-header
@@ -266,8 +266,8 @@
               Segment
             </div>
           </div>
-          <div class="metadata-section segment-metadata d-none">
-            <div class="metadata-field segment-name">
+          <div class="metadataSection segmentMetadata d-none">
+            <div class="metadata-field segmentName">
               <div
                 class="
                   metadata-header
@@ -286,7 +286,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field segment-description">
+            <div class="metadata-field segmentDescription">
               <div
                 class="
                   metadata-header
@@ -305,7 +305,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field segment-comment">
+            <div class="metadata-field segmentComment">
               <div
                 class="
                   metadata-header
@@ -324,7 +324,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field segment-categories">
+            <div class="metadata-field segmentCategories">
               <div
                 class="
                   metadata-header
@@ -344,7 +344,7 @@
               </div>
             </div>
           </div>
-          <div class="metadata-section list-section">
+          <div class="metadataSection listSection">
             <div
               class="
                 metadata-header
@@ -359,8 +359,8 @@
               Analysis
             </div>
           </div>
-          <div class="metadata-section list-metadata">
-            <div class="metadata-field list-title">
+          <div class="metadataSection listMetadata">
+            <div class="metadata-field listTitle">
               <div
                 class="
                   metadata-header
@@ -379,7 +379,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field list-comment">
+            <div class="metadata-field listComment">
               <div
                 class="
                   metadata-header
@@ -398,7 +398,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field list-categorySets">
+            <div class="metadata-field listCategorySets">
               <div
                 class="
                   metadata-header
@@ -417,7 +417,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field list-tags">
+            <div class="metadata-field listTags">
               <div
                 class="
                   metadata-header
@@ -437,7 +437,7 @@
               </div>
             </div>
           </div>
-          <div class="metadata-section medium-section">
+          <div class="metadataSection mediumSection">
             <div
               class="
                 metadata-header
@@ -452,8 +452,8 @@
               Medium
             </div>
           </div>
-          <div class="metadata-section medium-metadata">
-            <div class="metadata-field medium-title">
+          <div class="metadataSection mediumMetadata">
+            <div class="metadata-field mediumTitle">
               <div
                 class="
                   metadata-header
@@ -472,7 +472,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-remark">
+            <div class="metadata-field mediumRemark">
               <div
                 class="
                   metadata-header
@@ -491,7 +491,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-release-date">
+            <div class="metadata-field mediumReleaseData">
               <div
                 class="
                   metadata-header
@@ -510,7 +510,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-source">
+            <div class="metadata-field mediumSource">
               <div
                 class="
                   metadata-header
@@ -529,7 +529,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-copyright">
+            <div class="metadata-field mediumCopyright">
               <div
                 class="
                   metadata-header
@@ -548,7 +548,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-categories">
+            <div class="metadata-field mediumCategories">
               <div
                 class="
                   metadata-header
@@ -567,7 +567,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-tags">
+            <div class="metadata-field mediumTags">
               <div
                 class="
                   metadata-header
@@ -590,12 +590,12 @@
         </div>
       </div>
     </div>
-    <div id="timaat-main">
+    <div id="publicationMain">
       <div class="alert alert-dark timaat-header mb-0">
         <div class="d-flex justify-content-between">
           <div class="left-header">
             <div
-              class="btn-group btn-group-sm dropdown stop-playback-conditions"
+              class="btn-group btn-group-sm dropdown stopPlaybackConditions"
             >
               <button
                 type="button"
@@ -606,7 +606,7 @@
               >
                 <i class="fas fa-cog"></i>
               </button>
-              <div class="dropdown-menu pl-2 pr-2 timaat-publication-settings">
+              <div class="dropdown-menu pl-2 pr-2 publication__settings">
                 <span class="badge"
                   ><i class="fas fa-chalkboard-teacher"></i> TIMAAT
                   Publication</span
@@ -620,7 +620,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-image"
+                        class="timaat-settings settingsStopAtImage"
                       />
                     </div>
                   </div>
@@ -631,7 +631,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-polygon"
+                        class="timaat-settings settingsStopAtPolygon"
                       />
                     </div>
                   </div>
@@ -642,7 +642,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-audio"
+                        class="timaat-settings settingsStopAtAudio"
                       />
                     </div>
                   </div>
@@ -658,7 +658,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-segment"
+                        class="timaat-settings settingsStopAtSegment"
                       />
                     </div>
                   </div>
@@ -669,11 +669,11 @@
               </div>
             </div>
             &nbsp; <i class="fas fa-video"></i>
-            <span class="video-title"></span>
+            <span class="mediumTitle"></span>
           </div>
           <div class="right-header">
             <button
-              id="timaat-toggle-fullscreen"
+              id="publicationToggleFullscreen"
               title="Fullscreen mode"
               type="button"
               class="mr-2 btn btn-sm btn-outline-dark"
@@ -683,7 +683,7 @@
             <button
               title="go to video"
               type="button"
-              onclick="javascript:$('#timaat-main').animate({scrollTop:60}, 100);"
+              onclick="javascript:$('#publicationMain').animate({scrollTop:60}, 100);"
               class="btn btn-sm btn-outline-dark"
             >
               <i class="fas fa-arrow-down"></i>
@@ -691,12 +691,12 @@
           </div>
         </div>
       </div>
-      <div id="timaat-viewer"></div>
-      <div id="timaat-video-controls">
-        <div class="time-info p-1 bg-dark text-white text-center">00:00:00</div>
+      <div id="publication__viewer"></div>
+      <div id="publicationVideoControls">
+        <div class="timeInfo p-1 bg-dark text-white text-center">00:00:00</div>
         <div class="top-control">
           <div class="segment-seekbar seekbar mt-1 mb-1"></div>
-          <div class="video-seek-bar seekbar">
+          <div class="videoSeekBar seekbar">
             <span class="progress"></span>
           </div>
         </div>
@@ -706,7 +706,7 @@
             <div class="btn-group btn-group-sm ml-1 mr-2">
               <button
                 title="Annotation list [a]"
-                class="btn btn-outline-secondary text-white toggle-left-sidebar"
+                class="btn btn-outline-secondary text-white toggleLeftSidebar"
               >
                 <i class="fas fa-draw-polygon"></i>
               </button>
@@ -741,9 +741,9 @@
             <div class="btn-group btn-group-sm">
               <button
                 title="Playback speed [s]"
-                class="btn text-white video-speed"
+                class="btn text-white playbackSpeed"
               >
-                <span class="video-speed-info">1&times;</span>
+                <span class="playbackSpeedInfo">1&times;</span>
               </button>
             </div>
             <!-- Volume Control -->
@@ -755,14 +755,14 @@
                 <i class="fas fa-volume-up icon volume-on"></i>
                 <i class="fas fa-volume-mute icon volume-off"></i>
               </button>
-              <div class="volume-seekbar seekbar align-self-center">
+              <div class="volumeSeekBar seekbar align-self-center">
                 <span class="progress" style="width: 100%"></span>
               </div>
             </div>
             <div class="video-timings ml-3 d-inline-flex">
-              <div class="start-time time">00:00:00</div>
+              <div class="startTime time">00:00:00</div>
               &nbsp;/&nbsp;
-              <div class="end-time time">00:00:00</div>
+              <div class="endTime time">00:00:00</div>
             </div>
           </div>
           <div class="right-controls mt-2 mb-2">
@@ -773,7 +773,7 @@
                 class="
                   btn btn-outline-secondary
                   text-white
-                  toggle-right-sidebar
+                  toggleRightSidebar
                 "
               >
                 <i class="fas fa-info fa-fw"></i>

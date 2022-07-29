@@ -26,56 +26,56 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteCityButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-city-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteCityButton = '<button type="button" class="btn btn-outline btn-danger btn-sm cityRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteCityButton = '';
 			this.listView = $('<li class="list-group-item"> ' +
 				deleteCityButton +
-				'<span class="timaat-city-list-name"></span>' +
+				'<span class="locationDatasetsCityListName"></span>' +
 				'<br>' +
-				'<div class="timaat-city-list-count text-muted float-left"></div>' +
-				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+				'<div class="locationDatasetsCityListCount text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat__user-log"><i class="fas fa-user"></i></div>' +
 			'</li>'
 			);
 
-			$('#timaat-city-list').append(this.listView);
+			$('#locationDatasetsCityList').append(this.listView);
 			this.updateUI();
 			var city = this; // save city for system events
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (city.model.location.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(city.model.location.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+city.model.location.createdByUserAccountId+'">[ID '+city.model.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(city.model.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+city.model.location.lastEditedByUserAccountId+'">[ID '+city.model.location.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+city.model.location.lastEditedByUserAccountId+'">[ID '+city.model.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(city.model.location.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,23 +85,23 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				// city.listView.find('.timaat-city-list-tags').popover('show');
+				// city.listView.find('.locationDatasetsCityListTags').popover('show');
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-locationdatasets-city-meta').data('city', city);
-				$('#timaat-locationdatasets-city-meta').modal('show');
+				$('#locationDatasetsAddCityModal').data('city', city);
+				$('#locationDatasetsAddCityModal').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-city-remove').on('click', this, function(ev) {
+			this.listView.find('.cityRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-locationdatasets-city-delete').data('city', city);
-				$('#timaat-locationdatasets-city-delete').modal('show');
+				$('#locationDatasetsDeleteCityModal').data('city', city);
+				$('#locationDatasetsDeleteCityModal').modal('show');
 			});
 		}
 
@@ -110,7 +110,7 @@
 			// title
 			var name = this.model.location.locationTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-city-list-name').text(name);
+			this.listView.find('.locationDatasetsCityListName').text(name);
 		}
 
 		remove() {

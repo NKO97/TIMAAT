@@ -29,15 +29,15 @@
 		initLanguages: function() {
       // console.log("TCL: initLanguages: function()");
       // nav-bar functionality
-      $('#language-tab').on('click', function(event) {
+      $('#languageTab').on('click', function(event) {
         TIMAAT.LanguageLists.loadLanguages();
-        TIMAAT.UI.displayComponent('language', 'language-tab', 'language-datatable');
+        TIMAAT.UI.displayComponent('language', 'languageTab', 'languageDataTable');
         TIMAAT.URLHistory.setURL(null, 'Language Datasets', '#language/list');
       });
 
       // confirm delete language modal functionality
-      $('#timaat-languagelists-language-delete-submit-button').on('click', async function(ev) {
-        var modal = $('#timaat-languagelists-language-delete');
+      $('#languageListLanguageDeleteModalSubmitButton').on('click', async function(ev) {
+        var modal = $('#languageListLanguageDeleteModal');
         var language = modal.data('language');
         if (language) {
           try {
@@ -55,36 +55,36 @@
         modal.modal('hide');
         TIMAAT.UI.hideDataSetContentContainer();
         // TIMAAT.LanguageLists.loadLanguages();
-        $('#language-tab').trigger('click');
+        $('#languageTab').trigger('click');
       });
 
 			// delete button (in form) handler
-      $('#language-metadata-form-delete-button').on('click', function(event) {
+      $('#languageFormMetadataDeleteButton').on('click', function(event) {
         event.stopPropagation();
         TIMAAT.UI.hidePopups();
-        $('#timaat-languagelists-language-delete').data('language', $('#language-metadata-form').data('language'));
-        $('#timaat-languagelists-language-delete').modal('show');
+        $('#languageListLanguageDeleteModal').data('language', $('#languageFormMetadata').data('language'));
+        $('#languageListLanguageDeleteModal').modal('show');
 			});
 
 			// edit content form button handler
-      $('#language-metadata-form-edit-button').on('click', function(event) {
+      $('#languageFormMetadataEditButton').on('click', function(event) {
         event.stopPropagation();
         TIMAAT.UI.hidePopups();
-        TIMAAT.UI.displayDataSetContent('dataSheet', $('#language-metadata-form').data('language'), 'language', 'edit');
+        TIMAAT.UI.displayDataSetContent('dataSheet', $('#languageFormMetadata').data('language'), 'language', 'edit');
 			});
 
       // submit content form button functionality
-			$('#language-metadata-form-submit-button').on('click', async function(event) {
+			$('#languageFormMetadataSubmitButton').on('click', async function(event) {
 				// continue only if client side validation has passed
         event.preventDefault();
-				if (!$('#language-metadata-form').valid()) return false;
+				if (!$('#languageFormMetadata').valid()) return false;
 
 				// the original language model (in case of editing an existing language)
-				var language = $('#language-metadata-form').data('language');
+				var language = $('#languageFormMetadata').data('language');
         // console.log("TCL: language", language);
 
 				// create/edit language window submitted data
-				var formDataRaw = $('#language-metadata-form').serializeArray();
+				var formDataRaw = $('#languageFormMetadata').serializeArray();
         // console.log("TCL: formDataRaw", formDataRaw);
         var formDataObject = {};
         $(formDataRaw).each(function(i, field){
@@ -94,14 +94,14 @@
         var duplicateName;
         var duplicateCode;
         if (duplicateName || duplicateCode) {
-          $('#timaat-languagelists-language-duplicate').modal('show');
+          $('#languageListLanguageDuplicateModal').modal('show');
         }
         if (language) { // update language
           if (language.model.id != 1) { //* Do not change 'default' entry
             duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name, language.model.id);
             duplicateCode = await TIMAAT.LanguageService.checkForDuplicateCode(formDataObject.code, language.model.id);
             if (duplicateName || duplicateCode) {
-              $('#timaat-languagelists-language-duplicate').modal('show');
+              $('#languageListLanguageDuplicateModal').modal('show');
               return;
             } else {
               // console.log("TCL: language", language);
@@ -117,15 +117,15 @@
           duplicateName = await TIMAAT.LanguageService.checkForDuplicateName(formDataObject.name, 0);
           duplicateCode = await TIMAAT.LanguageService.checkForDuplicateCode(formDataObject.code, 0);
           if (duplicateName || duplicateCode) {
-            $('#timaat-languagelists-language-duplicate').modal('show');
+            $('#languageListLanguageDuplicateModal').modal('show');
             return;
           } else {
             var languageModel = await TIMAAT.LanguageLists.createLanguageModel(formDataObject);
             var newLanguage = await TIMAAT.LanguageLists.createLanguage(languageModel);
             language = new TIMAAT.Language(newLanguage);
-            $('#language-metadata-form').data('language', language);
-            $('#list-tab-metadata').data('type', 'language');
-            $('#list-tab-metadata').trigger('click');
+            $('#languageFormMetadata').data('language', language);
+            $('#listsTabMetadata').data('type', 'language');
+            $('#listsTabMetadata').trigger('click');
           }
         }
         TIMAAT.LanguageLists.showAddLanguageButton();
@@ -135,14 +135,14 @@
 			});
 
 			// cancel add/edit button in content form functionality
-			$('#language-metadata-form-dismiss-button').on('click', async function(event) {
+			$('#languageFormMetadataDismissButton').on('click', async function(event) {
         TIMAAT.LanguageLists.showAddLanguageButton();
 				let currentUrlHash = window.location.hash;
         await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
       // data table events
-			$('#timaat-languagelists-language-table').on( 'page.dt', function () {
+			$('#languageTable').on( 'page.dt', function () {
 				$('.dataTables_scrollBody').scrollTop(0);
 			});
 
@@ -153,7 +153,7 @@
 		},
 
 		loadLanguages: function() {
-			$('#list-tab-metadata').data('type', 'language');
+			$('#listsTabMetadata').data('type', 'language');
 			TIMAAT.UI.addSelectedClassToSelectedItem('language', null);
 			TIMAAT.UI.subNavTab = 'dataSheet';
       this.showAddLanguageButton();
@@ -175,7 +175,7 @@
 		setupLanguageDataTable: function() {
       // console.log("TCL: setupLanguageDataTable");
       // setup dataTable
-      this.dataTableLanguages = $('#timaat-languagelists-language-table').DataTable({
+      this.dataTableLanguages = $('#languageTable').DataTable({
         "lengthMenu"    : [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         "order"         : [[ 0, 'asc' ]],
         "pagingType"    : "full", // "simple_numbers",
@@ -290,7 +290,7 @@
 			TIMAAT.UI.hidePopups();
 			// switch (this.subNavTab) {
 			// 	case 'dataSheet':
-        TIMAAT.UI.displayDataSetContentContainer('language-data-tab', 'language-metadata-form', 'language');
+        TIMAAT.UI.displayDataSetContentContainer('languageDataTab', 'languageFormMetadata', 'language');
 			// 	break;
 			// }
 			TIMAAT.UI.clearLastSelection('language');
@@ -298,8 +298,8 @@
 			let selectedItem;
       index = this.languages.findIndex(({model}) => model.id === selectedItemId);
       selectedItem = this.languages[index];
-      $('#list-tab-metadata').data('type', 'language');
-      $('#language-metadata-form').data('language', selectedItem);
+      $('#listsTabMetadata').data('type', 'language');
+      $('#languageFormMetadata').data('language', selectedItem);
       TIMAAT.UI.addSelectedClassToSelectedItem('language', selectedItemId);
       TIMAAT.URLHistory.setURL(null, selectedItem.model.name + ' · Datasets · Language', '#language/' + selectedItem.model.id);
       this.showAddLanguageButton();
@@ -308,95 +308,92 @@
 
 		addLanguage: function() {
 			// console.log("TCL: addLanguage");
-      TIMAAT.UI.displayDataSetContentContainer('list-tab-metadata', 'language-metadata-form');
-      $('#list-tab-metadata').data('type', 'language');
-			$('#language-metadata-form').data('language', null);
+      TIMAAT.UI.displayDataSetContentContainer('listsTabMetadata', 'languageFormMetadata');
+      $('#listsTabMetadata').data('type', 'language');
+			$('#languageFormMetadata').data('language', null);
       languageFormMetadataValidator.resetForm();
 
       TIMAAT.UI.addSelectedClassToSelectedItem('language', null);
       // setup form
-			$('#language-metadata-form').trigger('reset');
+			$('#languageFormMetadata').trigger('reset');
       this.initFormDataSheetData();
       this.initFormDataSheetForEdit();
-      $('#language-metadata-form-submit-button').html("Add");
+      $('#languageFormMetadataSubmitButton').html("Add");
       $('#languageFormHeader').html("Add language");
 		},
 
 		languageFormDataSheet: async function(action, data) {
       // console.log("TCL: action, data: ", action, data);
       // TIMAAT.UI.addSelectedClassToSelectedItem('language', data.model.id);
-      $('#language-metadata-form').trigger('reset');
-      $('#list-tab-metadata').data('type', 'language');
+      $('#languageFormMetadata').trigger('reset');
+      $('#listsTabMetadata').data('type', 'language');
       this.initFormDataSheetData();
       languageFormMetadataValidator.resetForm();
 
       if ( action == 'show') {
-        $('#language-metadata-form :input').prop('disabled', true);
+        $('#languageFormMetadata :input').prop('disabled', true);
         this.initFormForShow();
         $('#languageFormHeader').html("Language data sheet (#"+ data.model.id+')');
       }
       else if (action == 'edit') {
         this.initFormDataSheetForEdit();
-        $('#language-metadata-form-submit-button').html("Save");
+        $('#languageFormMetadataSubmitButton').html("Save");
         $('#languageFormHeader').html("Edit Language");
       }
       // name data
-      $('#timaat-language-metadata-name').val(data.model.name);
-      $('#timaat-languagelists-metadata-code').val(data.model.code);
+      $('#languageMetadataName').val(data.model.name);
+      $('#languageMetadataCode').val(data.model.code);
 
-      $('#language-metadata-form').data('language', data);
+      $('#languageFormMetadata').data('language', data);
     },
 
     initFormDataSheetForEdit: function() {
       this.hideFormButtons();
       this.hideAddLanguageButton();
-      $('#language-metadata-form :input').prop('disabled', false);
-      $('#language-metadata-form-submit-button').show();
-      $('#language-metadata-form-dismiss-button').show();
-      $('#timaat-language-metadata-name').focus();
+      $('#languageFormMetadata :input').prop('disabled', false);
+      $('#languageFormMetadataSubmitButton').show();
+      $('#languageFormMetadataDismissButton').show();
+      $('#languageMetadataName').focus();
     },
 
     initFormForShow: function(model) {
-      $('.language-form-edit-button').prop('disabled', false);
-			$('.language-form-edit-button :input').prop('disabled', false);
-			$('.language-form-edit-button').show();
-      $('.form-buttons').prop('disabled', false);
-      $('.form-buttons :input').prop('disabled', false);
-      $('.form-buttons').show();
-      $('#language-metadata-form-submit-button').hide();
-      $('#language-metadata-form-dismiss-button').hide();
+      $('.formButtons').prop('disabled', false);
+      $('.formButtons :input').prop('disabled', false);
+      $('.formButtons').show();
+      $('#languageFormMetadataSubmitButton').hide();
+      $('#languageFormMetadataDismissButton').hide();
     },
 
     initFormDataSheetData: function() {
-      $('.datasheet-data').hide();
-      $('.name-data').show();
+      $('.dataSheetData').hide();
+      $('.nameData').show();
     },
 
     hideFormButtons: function() {
-			$('.form-buttons').hide();
-			$('.form-buttons').prop('disabled', true);
-			$('.form-buttons :input').prop('disabled', true);
+			$('.formButtons').hide();
+			$('.formButtons').prop('disabled', true);
+			$('.formButtons :input').prop('disabled', true);
 		},
 
     showAddLanguageButton: function() {
-      $('.add-language-button').prop('disabled', false);
-      $('.add-language-button :input').prop('disabled', false);
-      $('.add-language-button').show();
+      $('.addLanguageButton').prop('disabled', false);
+      $('.addLanguageButton :input').prop('disabled', false);
+      $('.addLanguageButton').show();
     },
 
     hideAddLanguageButton: function() {
-      $('.add-language-button').hide();
-      $('.add-language-button').prop('disabled', true);
-      $('.add-language-button :input').prop('disabled', true);
+      $('.addLanguageButton').hide();
+      $('.addLanguageButton').prop('disabled', true);
+      $('.addLanguageButton :input').prop('disabled', true);
     },
 
     createLanguageModel: async function(formDataObject) {
       // console.log("TCL: formDataObject", formDataObject);
       var model = {
-        id: 0,
-        name: formDataObject.name,
-        code: formDataObject.code,
-        isSystemLanguage: false //! TODO
+        id              : 0,
+        name            : formDataObject.name,
+        code            : formDataObject.code,
+        isSystemLanguage: false                 //! TODO
       };
       return model;
     },

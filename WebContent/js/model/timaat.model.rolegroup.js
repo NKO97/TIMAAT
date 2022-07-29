@@ -30,12 +30,12 @@
 				`<li class="list-group-item">
 					<div class="row">
 						<div class="col-lg-10">` +
-							`<span class="timaat-rolelists-rolegroup-list-name">
+							`<span class="roleGroupListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 						  </div>
@@ -44,40 +44,40 @@
 				</li>`
 			);
 
-			// $('#timaat-rolelists-rolegroup-list').append(this.listView);
+			// $('#roleGroupList').append(this.listView);
 			// console.log("TCL: RoleGroup -> constructor -> this.updateUI()");
-			var roleGroup = this; // save rolegroup for system events
+			var roleGroup = this; // save roleGroup for system events
 
 			this.updateUI();
 
-			// attach rolegroup handlers
+			// attach roleGroup handlers
 			$(this.listView).on('click', this, function(ev) {
-				// console.log("TCL: RoleGroup -> constructor -> open rolegroup datasheet");
+				// console.log("TCL: RoleGroup -> constructor -> open roleGroup dataSheet");
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
 				$('.form').hide();
-				$('.rolegroups-nav-tabs').show();
-				$('.rolegroups-data-tabs').hide();
-				$('.nav-tabs a[href="#roleGroupDatasheet"]').tab('show');
-				$('#rolegroup-metadata-form').data('rolegroup', roleGroup);
+				$('.roleGroupsNavTabs').show();
+				$('.roleGroupsDataTabs').hide();
+				$('.nav-tabs a[href="#roleGroupDataSheet"]').tab('show');
+				$('#roleGroupFormMetadata').data('roleGroup', roleGroup);
         // console.log("TCL: RoleGroup -> constructor -> roleGroup", roleGroup);
-				TIMAAT.RoleLists.roleGroupFormDataSheet('show', 'rolegroup', roleGroup);
+				TIMAAT.RoleLists.roleGroupFormDataSheet('show', 'roleGroup', roleGroup);
 			});
     }
 
 		updateUI() {
 			var name = this.model.roleGroupTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-rolelists-rolegroup-list-name').text(name);
+			this.listView.find('.roleGroupListName').text(name);
 
 		}
 
 		remove() {
-			// remove rolegroup from UI
+			// remove roleGroup from UI
 			this.listView.remove();
       // console.log("TCL: RoleGroup -> remove -> this", this);
-			$('#rolegroup-metadata-form').data('rolegroup', null);
+			$('#roleGroupFormMetadata').data('roleGroup', null);
 			// remove from role groups list
 			var index;
 			for (var i = 0; i < TIMAAT.RoleLists.roleGroups.length; i++) {

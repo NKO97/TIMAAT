@@ -506,7 +506,7 @@
 		},
 
 		async addAddress(actorId, address) {
-      // console.log("TCL: addAddress -> actorId, address", actorId, address);
+      console.log("TCL: addAddress -> actorId, address", actorId, address);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/address/"+address.id,
@@ -1157,8 +1157,7 @@
 					},
 				}).done(function(data) {
 					resolve(data);
-				})
-				.fail(function(error) {
+				}).fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
 				});

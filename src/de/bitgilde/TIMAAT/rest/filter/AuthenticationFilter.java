@@ -41,7 +41,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		// Get the Authorization header from the request
     String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-
     // Validate the Authorization header
     if (!isTokenBasedAuthentication(authorizationHeader)) {
       abortWithUnauthorized(requestContext);
@@ -50,7 +49,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     // Extract the token from the Authorization header
     String token = authorizationHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
-
+    if (token.equals("null") || token == null) {
+      abortWithUnauthorized(requestContext);
+      return;
+    }
     try {
 
       // Validate the token
@@ -72,7 +74,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     } catch (Exception e) {
         abortWithUnauthorized(requestContext);
     }
-	}
+  }
 
 	private boolean isTokenBasedAuthentication(String authorizationHeader) {
 
@@ -121,8 +123,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
   }
 
   public static String validateToken(String token) {
-      // Check if the token was issued by the server and if it's not expired
-      // Throw an Exception if the token is invalid
+    if (token.equals("null") || token == null) return null;
+    // Check if the token was issued by the server and if it's not expired
+    // Throw an Exception if the token is invalid
     Key key = TIMAATKeyGenerator.generateKey();
     String username = "";
       try {
@@ -132,7 +135,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
       } catch (Exception e) {
         e.printStackTrace();
       }
-  return username;
+    return username;
   }
 
   public static Boolean isTokenValid(String token) {

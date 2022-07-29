@@ -398,7 +398,7 @@
 		},
 
 		async addTitle(mediumId, title) {
-      // console.log("TCL: addTitle -> mediumId, title", mediumId, title);
+      console.log("TCL: addTitle -> mediumId, title", mediumId, title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/title/"+title.id,
@@ -708,7 +708,7 @@
 					}).fail(function(error) {
 						// TODO handle error
 						// window.clearInterval(medium.poll);
-						// medium.ui.find('.timaat-medium-status').html('<i class="fas fa-eye-slash"></i> not available');
+						// medium.ui.find('.js-medium-file-status').html('<i class="fas fa-eye-slash"></i> not available');
 						console.error("ERROR: ", error);
 						console.error("ERROR responseText: ", error.responseText);
 					});

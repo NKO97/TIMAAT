@@ -34,50 +34,50 @@
         this.setLists();
       }
       TIMAAT.UI.showComponent('lists');
-      // $('#categoryset-tab').trigger('click');
+      // $('#categorySetTab').trigger('click');
     },
 
     initLists: function() {
-      $('#list-tab-metadata').on('click', function(event) {
-        let type = $('#list-tab-metadata').data('type');
+      $('#listsTabMetadata').on('click', function(event) {
+        let type = $('#listsTabMetadata').data('type');
         let data = null;
         let name = '';
         let id = 0;
         TIMAAT.UI.subNavTab = 'dataSheet';
         switch (type) {
           case 'category':
-            data = $('#category-metadata-form').data('category');
+            data = $('#categoryFormMetadata').data('category');
             name = data.model.name;
             id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('category-metadata-form');
+            TIMAAT.UI.displayDataSetContentArea('categoryFormMetadata');
             TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
             break;
           case 'categorySet':
-            data = $('#categoryset-metadata-form').data('categorySet');
+            data = $('#categorySetFormMetadata').data('categorySet');
             name = data.model.name;
             id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('categoryset-metadata-form');
+            TIMAAT.UI.displayDataSetContentArea('categorySetFormMetadata');
             TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
             break;
           case 'role':
-            data = $('#role-metadata-form').data('role');
+            data = $('#roleFormMetadata').data('role');
             name = data.model.roleTranslations[0].name;
             id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('role-metadata-form');
+            TIMAAT.UI.displayDataSetContentArea('roleFormMetadata');
             TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
             break;
           case 'roleGroup':
-            data = $('#rolegroup-metadata-form').data('roleGroup');
+            data = $('#roleGroupFormMetadata').data('roleGroup');
             name = data.model.roleGroupTranslations[0].name;
             id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('rolegroup-metadata-form');
+            TIMAAT.UI.displayDataSetContentArea('roleGroupFormMetadata');
             TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
             break;
           case 'language':
-            data = $('#language-metadata-form').data('language');
+            data = $('#languageFormMetadata').data('language');
             name = data.model.name;
             id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('language-metadata-form');
+            TIMAAT.UI.displayDataSetContentArea('languageFormMetadata');
             TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
             break;
         }

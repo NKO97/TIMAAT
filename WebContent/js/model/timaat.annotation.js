@@ -44,26 +44,24 @@
 			// create keyframes
 			for (let keyframe of this.svg.model.keyframes) this.svg.keyframes.push(new TIMAAT.Keyframe(keyframe, this));
 
-			this.svg.layer = L.layerGroup(null, {data:'annotationlayer', "annotation":this});
+			this.svg.layer = L.layerGroup(null, {data:'annotationLayer', "annotation":this});
 
 			// create and style list view element
 			this.listView = $(`
-				<li class="list-group-item" style="padding:0">
-					<div class="timaat-annotation-status-marker" style="float:left; line-height:300%; margin-right:5px;">&nbsp;</div>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-image fas fa-image" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-polygon fas fa-draw-polygon" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-animation fas fa-running" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-type timaat-annotation-list-type-audio fas fa-headphones" aria-hidden="true"></i>
-					<i class="timaat-annotation-list-comment fas fa-fw fa-comment" aria-hidden="true"></i>
-					<span class="timaat-annotation-list-time"></span>
-					<span class="text-nowrap timaat-annotation-list-categories pr-1 float-right text-muted"><i class=""></i></span>
+				<li class="list-group-item analysis__list--li p-0">
+					<div class="annotationStatusMarker annotation__status-marker">&nbsp;</div>
+					<i class="analysis-list-element__icon js-analysis-list-element__icon--visual-layer fas fa-image" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon js-analysis-list-element__icon--audio-layer fas fa-headphones" aria-hidden="true"></i>
+					<i class="analysis-list-element__icon--comment js-analysis-list-element__icon--comment fas fa-fw fa-comment" aria-hidden="true"></i>
+					<span class="annotationListTime"></span>
+					<span class="text-nowrap annotationListCategories pr-1 float-right text-muted"><i class=""></i></span>
 					<div class="d-flex justify-content-between">
-						<div class="timaat-annotation-list-title text-muted"></div>
-						<div class="text-muted timaat-user-log pr-1"><i class="fas fa-user"></i></div>
+						<div class="analysis-list-element__title js-analysis-list-element__title text-muted"></div>
+						<div class="text-muted timaat__user-log pr-1"><i class="fas fa-user"></i></div>
 					</div>
 				</li>`
 			);
-			if (TIMAAT.VideoPlayer.duration == 0) this.listView.find('.timaat-annotation-list-time').addClass('text-muted');
+			if (TIMAAT.VideoPlayer.duration == 0) this.listView.find('.annotationListTime').addClass('text-muted');
 
 			// convert SVG data
 			for (let svgItem of this.svg.model.keyframes[0].shapes) {
@@ -76,44 +74,44 @@
 
 			let anno = this; // save annotation for events
 
-			$('#timaat-annotation-list').append(this.listView);
-			this.listView.find('.timaat-annotation-list-categories').on('click', this, function(ev) {
+			$('#analysisList').append(this.listView);
+			this.listView.find('.annotationListCategories').on('click', this, function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 				TIMAAT.VideoPlayer.pause();
 				if ( TIMAAT.VideoPlayer.curAnnotation != ev.data ) TIMAAT.VideoPlayer.selectAnnotation(ev.data);
-				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-categories-and-tags');
+				TIMAAT.VideoPlayer.inspector.open('inspectorCategoriesAndTags');
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				// console.log("TCL: Annotation -> constructor -> Display editing log");
-				$('.timaat-user-log-details').html(
-					`<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="`+anno.model.createdByUserAccountId+'">[ID '+anno.model.createdByUserAccountId+']</span></b><br>\
+				$('.userLogDetails').html(
+					`<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="`+anno.model.createdByUserAccountId+'">[ID '+anno.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.createdAt)+'<br>\
-					<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+anno.model.lastEditedByUserAccountId+'">[ID '+anno.model.lastEditedByUserAccountId+']</span></b><br>\
+					<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+anno.model.lastEditedByUserAccountId+'">[ID '+anno.model.lastEditedByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(anno.model.lastEditedAt)+'<br>'
 				);
-				$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+				$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 			});
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
 
-			this.listView.find('.timaat-annotation-list-categories').on('dblclick', function(ev) {ev.stopPropagation();});
+			this.listView.find('.annotationListCategories').on('dblclick', function(ev) {ev.stopPropagation();});
 
 			// attach event handlers
 			$(this.listView).on('click', this, function(ev) {
@@ -122,9 +120,9 @@
 				else if (TIMAAT.VideoPlayer.curAnnotation) TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 				else TIMAAT.VideoPlayer.selectAnnotation(TIMAAT.VideoPlayer.curAnnotation);
 
-				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() && $('#timaat-timeline-visual-layer').is(':checked') ){
-					$('#timaat-timeline-keyframe-pane').show();
-				} // else $('#timaat-timeline-keyframe-pane').hide();
+				if ( TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.isAnimation() && $('#timelineVisualLayer').is(':checked') ){
+					$('#timelineKeyframePane').show();
+				} // else $('#timelineKeyframePane').hide();
 				if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
 					TIMAAT.VideoPlayer.inspector.ui.addAnimButton.prop('disabled', false);
 			 }
@@ -137,7 +135,7 @@
 				TIMAAT.VideoPlayer.selectAnnotation(ev.data);
 				TIMAAT.VideoPlayer.selectedElementType = 'annotation';
 				TIMAAT.VideoPlayer.pause();
-				TIMAAT.VideoPlayer.inspector.open('timaat-inspector-metadata');
+				TIMAAT.VideoPlayer.inspector.open('inspectorMetadata');
 				TIMAAT.VideoPlayer.updateListUI();
 			});
 
@@ -243,7 +241,7 @@
 			this.updateEditableUI();
 			this.updateUI();
 			// send event
-			$(document).trigger('keyframeadded.annotation.TIMAAT', this);
+			$(document).trigger('keyFrameAdded.annotation.TIMAAT', this);
 		}
 
 		removeCurrentKeyframe() {
@@ -267,7 +265,7 @@
 			this.updateEditableUI();
 			this.updateUI();
 			// send event
-			$(document).trigger('keyframeremoved.annotation.TIMAAT', this);
+			$(document).trigger('keyFrameRemoved.annotation.TIMAAT', this);
 		}
 
 		removeAnimationKeyframes() {
@@ -280,7 +278,7 @@
 			this.updateEditableUI();
 			this.updateUI();
 			// send event
-			$(document).trigger('keyframeremoved.annotation.TIMAAT', this);
+			$(document).trigger('keyFrameRemoved.annotation.TIMAAT', this);
 		}
 
 		get opacity() {
@@ -371,29 +369,29 @@
 
 		updateUI() {
 			// console.log("TCL: Annotation -> updateUI -> updateUI()");
-			this.listView.attr('data-starttime', this.model.startTime);
-			this.listView.attr('data-endtime', this.model.endTime);
+			this.listView.attr('data-start-time', this.model.startTime);
+			this.listView.attr('data-end-time', this.model.endTime);
 			this.listView.attr('id', 'annotation-'+this.model.id);
 			this.listView.attr('data-type', 'annotation');
-			this.listView.find('.timaat-annotation-list-type').css('color', '#'+this.svg.colorHex);
+			this.listView.find('.analysis-list-element__icon').css('color', '#'+this.svg.colorHex);
 			var timeString = " "+TIMAAT.Util.formatTime(this.model.startTime, true);
 			if ( this.model.startTime != this.model.endTime ) timeString += ' - '+TIMAAT.Util.formatTime(this.model.endTime, true);
 			if ( TIMAAT.VideoPlayer.duration == 0 ) timeString = ''; // empty time string for non time-based media (images)
-			this.listView.find('.timaat-annotation-list-time').html(timeString);
-			this.listView.find('.timaat-annotation-list-title').html(this.model.annotationTranslations[0].title);
+			this.listView.find('.annotationListTime').html(timeString);
+			this.listView.find('.js-analysis-list-element__title').html(this.model.annotationTranslations[0].title);
 			// categories
-			this.listView.find('.timaat-annotation-list-categories i').attr('title', this.model.categories.length+" Categories");
-			if (this.model.categories.length == 0) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-archive text-light timaat-no-categories');
-			else if (this.model.categories.length == 1) this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-archive').attr('title', "one category");
-			else this.listView.find('.timaat-annotation-list-categories i').attr('class','fas fa-archive');
+			this.listView.find('.annotationListCategories i').attr('title', this.model.categories.length+" Categories");
+			if (this.model.categories.length == 0) this.listView.find('.annotationListCategories i').attr('class','fas fa-archive text-light noCategories');
+			else if (this.model.categories.length == 1) this.listView.find('.annotationListCategories i').attr('class','fas fa-archive').attr('title', "one category");
+			else this.listView.find('.annotationListCategories i').attr('class','fas fa-archive');
 			// type
 			this._updateAnnotationType();
 
 			// comment
 			if ( this.model.annotationTranslations[0].comment && this.model.annotationTranslations[0].comment.length > 0 )
-				this.listView.find('.timaat-annotation-list-comment').show();
+				this.listView.find('.js-analysis-list-element__icon--comment').show();
 			else
-				this.listView.find('.timaat-annotation-list-comment').hide();
+				this.listView.find('.js-analysis-list-element__icon--comment').hide();
 
 			// update svg
 			for (let item of this.svg.items) {
@@ -405,28 +403,22 @@
 		}
 
 		_updateAnnotationType() {
-			let typeImage = this.listView.find('.timaat-annotation-list-type-image');
-			let typePolygon = this.listView.find('.timaat-annotation-list-type-polygon');
-			let typeAnimation = this.listView.find('.timaat-annotation-list-type-animation');
-			let typeAudio = this.listView.find('.timaat-annotation-list-type-audio');
+			let layerVisualIcon = this.listView.find('.js-analysis-list-element__icon--visual-layer');
+			let layerAudioIcon = this.listView.find('.js-analysis-list-element__icon--audio-layer');
 			if ( this.layerVisual) {
-				if ( this.svg.items.length > 0 ) {
-					typePolygon.show();
-					typeImage.hide();
+				if ( this.isAnimation() ) {
+					layerVisualIcon.removeClass('fa-image').removeClass('fa-draw-polygon').addClass('fa-running');
+				} else if ( this.svg.items.length > 0 ) {
+					layerVisualIcon.removeClass('fa-image').removeClass('fa-running').addClass('fa-draw-polygon');
+				} else {
+					layerVisualIcon.removeClass('fa-running').removeClass('fa-draw-polygon').addClass('fa-image');
 				}
-				else {
-					typePolygon.hide();
-					typeImage.show();
-				}
+				layerVisualIcon.show();
 			} else {
-				typePolygon.hide();
-				typeImage.hide();
+				layerVisualIcon.hide();
+				layerVisualIcon.removeClass('fa-image').removeClass('fa-draw-polygon').removeClass('fa-running');
 			}
-			if ( this.isAnimation() ) {
-				typeAnimation.show();
-				typePolygon.hide()
-			} else typeAnimation.hide();
-			( this.layerAudio ) ? typeAudio.show() : typeAudio.hide();
+			( this.layerAudio ) ? layerAudioIcon.show() : layerAudioIcon.hide();
 		};
 
 		remove() {
@@ -459,7 +451,7 @@
 
 			// in case it was not set before, adding geometric data requires visual layer to be set
 			this.model.layerVisual = true;
-			$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+			$('#inspectorVisualLayerCheckbox').prop('checked', true);
 
 			this.changed = true;
 
@@ -581,12 +573,12 @@
 			if ( this.active == active ) return;
 			this.active = active;
 			if ( active ) {
-				this.listView.find('.timaat-annotation-status-marker').addClass('bg-success');
+				this.listView.find('.annotationStatusMarker').addClass('bg-success');
 				TIMAAT.VideoPlayer.viewer.annoLayer.addLayer(this.svg.layer);
 				// scroll list
 				this._scrollIntoView(this.listView);
 			} else {
-				this.listView.find('.timaat-annotation-status-marker').removeClass('bg-success');
+				this.listView.find('.annotationStatusMarker').removeClass('bg-success');
 				TIMAAT.VideoPlayer.viewer.annoLayer.removeLayer(this.svg.layer);
 				this.svg.layer.options.removed = true;
 			}
@@ -619,7 +611,7 @@
 			if ( this.selected == selected ) return;
 			this.selected = selected;
 			if ( selected ) {
-				this.listView.addClass('timaat-annotation-list-selected');
+				this.listView.addClass('annotation__list--selected');
 				for (let item of this.svg.items) {
 					item.bringToFront();
 /*
@@ -634,7 +626,7 @@
 			}
 			else {
 				this.discardChanges();
-				this.listView.removeClass('timaat-annotation-list-selected');
+				this.listView.removeClass('annotation__list--selected');
 				TIMAAT.VideoPlayer.curAnnotation = null;
 /*
 				this.svg.items.forEach(function(item) {
@@ -724,14 +716,14 @@
 		}
 
 		_scrollIntoView(listItem) {
-			var listTop = $('.timaat-annotation-list-wrapper').scrollTop();
-			var listHeight = $('.timaat-annotation-list-wrapper').height();
+			var listTop = $('.analysisList').scrollTop();
+			var listHeight = $('.analysisList').height();
 			var elementTop = listItem.position().top;
 			// TODO scroll from bottom if out of view
 			if ( elementTop < 0 )
-				$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)}, 100);
+				$('.analysisList').animate({scrollTop:(listTop+elementTop)}, 100);
 			if ( elementTop > listHeight )
-				$('.timaat-annotation-list-wrapper').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
+				$('.analysisList').animate({scrollTop:(listTop+elementTop)-listHeight+48}, 100);
 
 		}
 

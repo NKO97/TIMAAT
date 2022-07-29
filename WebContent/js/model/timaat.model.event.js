@@ -32,12 +32,12 @@
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayEventTypeIcon +
-							`  <span class="timaat-eventdatasets-event-list-name">
+							`  <span class="eventDatasetsEventListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 						  </div>
@@ -52,40 +52,40 @@
 			this.updateUI();
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (event.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+event.model.createdByUserAccountId+'">[ID '+event.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+event.model.createdByUserAccountId+'">[ID '+event.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(event.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+event.model.createdByUserAccountId+'">[ID '+event.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+event.model.createdByUserAccountId+'">[ID '+event.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(event.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+event.model.lastEditedByUserAccountId+'">[ID '+event.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+event.model.lastEditedByUserAccountId+'">[ID '+event.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(event.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -98,18 +98,18 @@
 			// console.log("TCL: Event -> updateUI -> this", this);
 			var name = this.model.eventTranslations[0].name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-eventdatasets-event-list-name').html(name);
+			this.listView.find('.eventDatasetsEventListName').html(name);
 
 			// tag count
 			// var count = this.model.tags.length + " tags";
 			// if ( this.model.tags.length == 0 ) count = "No tags";
 			// if ( this.model.tags.length == 1 ) count = "one tag";
-			// this.listView.find('.timaat-eventdatasets-event-list-count').text(count);
+			// this.listView.find('.eventDatasetsEventListCount').text(count);
 			// tags
-			// this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('title', this.model.tags.length+" Tags");
-			// if (this.model.tags.length == 0) this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tag timaat-no-tags');
-			// else if (this.model.tags.length == 1) this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tag text-dark').attr('title', "one tag");
-			// else this.listView.find('.timaat-eventdatasets-event-list-tags i').attr('class','fas fa-tags text-dark');
+			// this.listView.find('.eventDatasetsEventListTags i').attr('title', this.model.tags.length+" Tags");
+			// if (this.model.tags.length == 0) this.listView.find('.eventDatasetsEventListTags i').attr('class','fas fa-tag dataset__no-tags');
+			// else if (this.model.tags.length == 1) this.listView.find('.eventDatasetsEventListTags i').attr('class','fas fa-tag text-dark').attr('title', "one tag");
+			// else this.listView.find('.eventDatasetsEventListTags i').attr('class','fas fa-tags text-dark');
 		}
 
 		remove() {
@@ -117,7 +117,7 @@
 			// remove event from UI
 			this.listView.remove(); // TODO remove tags from event_has_tags
       // console.log("TCL: Event -> remove -> this", this);
-			$('#event-metadata-form').data('event', null);
+			$('#eventFormMetadata').data('event', null);
 		}
 	}
 

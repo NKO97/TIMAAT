@@ -987,7 +987,7 @@ public class EndpointAnalysisList {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
-																					 "add-segment",
+																					 "addSegment",
 																					 analysisSegment.getMediumAnalysisList().getId(),
 																					 analysisSegment);
 
@@ -1051,7 +1051,7 @@ public class EndpointAnalysisList {
 																					 UserLogManager.LogEvents.ANALYSISSEGMENTEDITED);
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
-																					 "edit-segment",
+																					 "editSegment",
 																					 analysisSegment.getMediumAnalysisList().getId(),
 																					 analysisSegment);
 
@@ -1094,7 +1094,7 @@ public class EndpointAnalysisList {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
-																					 "remove-segment",
+																					 "removeSegment",
 																					 mediumAnalysisList.getId(),
 																					 analysisSegment);
 

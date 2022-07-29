@@ -1,9 +1,6 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import java.io.Serializable;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -38,11 +34,6 @@ public class UserPassword implements Serializable {
 
 	@Column(name="stretched_hash_encrypted")
 	private String stretchedHashEncrypted;
-
-	//bi-directional many-to-one association to UserAccount
-	@JsonIgnore
-	@OneToMany(mappedBy="userPassword")
-	private List<UserAccount> userAccounts;
 
 	//bi-directional many-to-one association to UserPasswordHashType
 	@ManyToOne
@@ -82,28 +73,6 @@ public class UserPassword implements Serializable {
 
 	public void setStretchedHashEncrypted(String stretchedHashEncrypted) {
 		this.stretchedHashEncrypted = stretchedHashEncrypted;
-	}
-
-	public List<UserAccount> getUserAccounts() {
-		return this.userAccounts;
-	}
-
-	public void setUserAccounts(List<UserAccount> userAccounts) {
-		this.userAccounts = userAccounts;
-	}
-
-	public UserAccount addUserAccount(UserAccount userAccount) {
-		getUserAccounts().add(userAccount);
-		userAccount.setUserPassword(this);
-
-		return userAccount;
-	}
-
-	public UserAccount removeUserAccount(UserAccount userAccount) {
-		getUserAccounts().remove(userAccount);
-		userAccount.setUserPassword(null);
-
-		return userAccount;
 	}
 
 	public UserPasswordHashType getUserPasswordHashType() {

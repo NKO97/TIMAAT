@@ -83,7 +83,7 @@
   <!-- ***************************************************************************************************************** -->
 
   <body class="bg-light" onload="setupPublication()">
-    <div id="timaat-left-sidebar" class="sidebar collapsed">
+    <div id="publicationLeftSidebar" class="sidebar collapsed">
       <div class="alert alert-dark mb-0">
         <span class="badge">Analysisliste</span>
       </div>
@@ -93,14 +93,14 @@
         onclick="TIMAATPub.closeSidebar('left')"
         ><i class="fas fa-chevron-circle-left"></i
       ></a> -->
-      <div class="timaat-annotation-wrapper overflow-auto">
+      <div class="annotation__wrapper overflow-auto">
         <ul
-          id="timaat-annotation-list"
-          class="list-group list-group-flush"
+          id="analysisList"
+          class="list-group list-group-flush analysis__list"
         ></ul>
       </div>
     </div>
-    <div id="timaat-right-sidebar" class="sidebar sidebar-right collapsed">
+    <div id="publicationRightSidebar" class="sidebar sidebar-right collapsed">
       <div class="alert alert-dark mb-0 text-center">
         <span class="badge">Metadata</span>
       </div>
@@ -112,7 +112,7 @@
       ></a>
       <div class="timaat-metadata-wrapper overflow-auto">
         <div class="metadata-content">
-          <div class="metadata-section annotation-section">
+          <div class="metadataSection annotationSection">
             <div
               class="
                 metadata-header
@@ -127,8 +127,8 @@
               Annotation
             </div>
           </div>
-          <div class="metadata-section annotation-metadata d-none">
-            <div class="metadata-field annotation-title">
+          <div class="metadataSection annotationMetadata d-none">
+            <div class="metadata-field annotationTitle">
               <div
                 class="
                   metadata-header
@@ -147,7 +147,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-comment">
+            <div class="metadata-field annotationComment">
               <div
                 class="
                   metadata-header
@@ -166,7 +166,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-categories">
+            <div class="metadata-field annotationCategories">
               <div
                 class="
                   metadata-header
@@ -185,7 +185,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-tags">
+            <div class="metadata-field annotationTags">
               <div
                 class="
                   metadata-header
@@ -204,7 +204,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-actors">
+            <div class="metadata-field annotationActors">
               <div
                 class="
                   metadata-header
@@ -223,7 +223,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field annotation-events">
+            <div class="metadata-field annotationEvents">
               <div
                 class="
                   metadata-header
@@ -243,13 +243,13 @@
               </div>
             </div>
             <!--
-			<div class="metadata-field annotation-places">
+			<div class="metadata-field annotationPlaces">
 			<div class="metadata-header border-bottom border-dark bg-light pl-2 pr-2"><i class="fas fa-globe-americas"></i> Orte</div>
 			<div class="metadata-value mb-2 pl-2 pr-2"><div class="empty-placeholder text-center text-muted">- not specified -</div><span class="contents"></span></div>
 			</div>
 			-->
           </div>
-          <div class="metadata-section medium-section">
+          <div class="metadataSection mediumSection">
             <div
               class="
                 metadata-header
@@ -264,8 +264,8 @@
               Medium
             </div>
           </div>
-          <div class="metadata-section medium-metadata">
-            <div class="metadata-field medium-title">
+          <div class="metadataSection mediumMetadata">
+            <div class="metadata-field mediumTitle">
               <div
                 class="
                   metadata-header
@@ -284,7 +284,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-remark">
+            <div class="metadata-field mediumRemark">
               <div
                 class="
                   metadata-header
@@ -303,7 +303,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-release-date">
+            <div class="metadata-field mediumReleaseData">
               <div
                 class="
                   metadata-header
@@ -322,7 +322,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-source">
+            <div class="metadata-field mediumSource">
               <div
                 class="
                   metadata-header
@@ -341,7 +341,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-copyright">
+            <div class="metadata-field mediumCopyright">
               <div
                 class="
                   metadata-header
@@ -360,7 +360,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-categories">
+            <div class="metadata-field mediumCategories">
               <div
                 class="
                   metadata-header
@@ -379,7 +379,7 @@
                 <span class="contents"></span>
               </div>
             </div>
-            <div class="metadata-field medium-tags">
+            <div class="metadata-field mediumTags">
               <div
                 class="
                   metadata-header
@@ -402,12 +402,12 @@
         </div>
       </div>
     </div>
-    <div id="timaat-main" class="collection">
+    <div id="publicationMain" class="collection">
       <div class="alert alert-dark timaat-header mb-0">
         <div class="d-flex justify-content-between">
           <div class="left-header">
             <div
-              class="btn-group btn-group-sm dropdown stop-playback-conditions"
+              class="btn-group btn-group-sm dropdown stopPlaybackConditions"
             >
               <button
                 type="button"
@@ -418,7 +418,7 @@
               >
                 <i class="fas fa-cog"></i>
               </button>
-              <div class="dropdown-menu pl-2 pr-2 timaat-publication-settings">
+              <div class="dropdown-menu pl-2 pr-2 publication__settings">
                 <span class="badge"
                   ><i class="fas fa-chalkboard-teacher"></i> TIMAAT
                   Publication</span
@@ -432,7 +432,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-image"
+                        class="timaat-settings settingsStopAtImage"
                       />
                     </div>
                   </div>
@@ -443,7 +443,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-polygon"
+                        class="timaat-settings settingsStopAtPolygon"
                       />
                     </div>
                   </div>
@@ -454,7 +454,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-audio"
+                        class="timaat-settings settingsStopAtAudio"
                       />
                     </div>
                   </div>
@@ -470,7 +470,7 @@
                     <div class="input-group-text">
                       <input
                         type="checkbox"
-                        class="timaat-settings settings-stop-segment"
+                        class="timaat-settings settingsStopAtSegment"
                       />
                     </div>
                   </div>
@@ -481,11 +481,11 @@
               </div>
             </div>
             &nbsp; <i class="fas fa-folder-open"></i>
-            <span class="video-title"></span>
+            <span class="mediumTitle"></span>
           </div>
           <div class="right-header">
             <button
-              id="timaat-toggle-fullscreen"
+              id="publicationToggleFullscreen"
               title="Fullscreen mode"
               type="button"
               class="mr-2 btn btn-sm btn-outline-dark"
@@ -495,7 +495,7 @@
           </div>
         </div>
       </div>
-      <ul id="timaat-collection" class="list-unstyled row p-3 m-auto"></ul>
+      <ul id="publicationCollectionList" class="list-unstyled row p-3 m-auto"></ul>
     </div>
   </body>
 </html>

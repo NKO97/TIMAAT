@@ -18,17 +18,17 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.UserSettings = {
-		
+
 		init: function() {
       this.initSettings();
 		},
 
 		initSettings: function() {
-      $('#timaat-user-settings').on('click', function(event) {
+      $('#userSettings').on('click', function(event) {
         if (TIMAAT.Service.session && TIMAAT.Service.session.displayName == 'Gast Account') { //* Do not allow changes to gast-account used on demo-server
-            let modal = $('#user-settings');
+            let modal = $('#userSettingsModal');
             modal.find('.modal-header').html(`
               <h5 class="modal-title">User settings</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -44,12 +44,12 @@
             modal.modal('show');
         } else {
           changeUserPasswordValidator.resetForm();
-          let modal = $('#user-settings');
+          let modal = $('#userSettingsModal');
           modal.modal('show');
         }
       });
 
-      $('#user-settings-change-password-submit-button').on('click', async function (event) {
+      $('#userSettingsChangePasswordSubmitButton').on('click', async function (event) {
         event.preventDefault();
         if (!$('#changeUserPassword').valid())
           return;
@@ -66,7 +66,7 @@
           let newPassword = $('#newPassword').val();
           let newHash = TIMAAT.Util.getArgonHash(newPassword, username + TIMAAT.Service.clientSalt);
           if (currentPassword == newPassword) {
-            $('#newPassword').after('<label id="newPassword-error" class="error" for="newPassword">Your new password cannot be the same as your old one</label>');
+            $('#newPassword').after('<label id="newPasswordError" class="error" for="newPassword">Your new password cannot be the same as your old one</label>');
             return;
           } else {
             let newCredentials = {
@@ -76,22 +76,22 @@
             };
             await TIMAAT.UserService.changePassword(newCredentials);
             $('#changeUserPassword').trigger('reset');
-            $('#user-settings').modal('hide');
+            $('#userSettingsModal').modal('hide');
             let modal = $('#passwordChanged');
             modal.modal('show');
           }
         } else {
-          $('#currentPassword').after('<label id="currentPassword-error" class="error" for="currentPassword">Please enter your current password</label>');
+          $('#currentPassword').after('<label id="currentPasswordError" class="error" for="currentPassword">Please enter your current password</label>');
           return;
         }
       });
 
-      $('#user-settings').on('hidden.bs.modal', function(event) {
+      $('#userSettingsModal').on('hidden.bs.modal', function(event) {
         $('#changeUserPassword').trigger('reset');
       });
 
     },
-		
+
 	}
-	
+
 }, window));

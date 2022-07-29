@@ -35,28 +35,21 @@
 				// displayMediumTypeIcon = '  <i class="fas fa-photo-video"></i> '; // default media icon
 				switch (mediumType) {
 					case 'audio':
-						// displayMediumTypeIcon = '  <i class="far fa-file-audio"></i> ';
 						fileTypesAccepted = '.mp3';
 					break;
 					case 'document':
-						// displayMediumTypeIcon = '  <i class="far fa-file-pdf"></i> ';
 					break;
 					case 'image':
-						// displayMediumTypeIcon = '  <i class="far fa-file-image"></i> ';
 						fileTypesAccepted = '.png,.jpg';
 					break;
 					case 'software':
-						// displayMediumTypeIcon = '  <i class="fas fa-compact-disc"></i> ';
 					break;
 					case 'text':
-						// displayMediumTypeIcon = '  <i class="far fa-file-alt"></i> ';
 					break;
 					case 'video':
-						// displayMediumTypeIcon = '  <i class="far fa-file-video"></i> ';
 						fileTypesAccepted = '.mp4';
 					break;
 					case 'videogame':
-						// displayMediumTypeIcon = '  <i class="fas fa-gamepad"></i> ';
 					break;
 				}
 			// }
@@ -65,19 +58,19 @@
 					<div class="row">
 						<div class="col-lg-10">` +
 							displayMediumTypeIcon +
-							`<span class="timaat-mediadatasets-`+mediumType+`-list-name">
+							`<span class="mediumDatasets`+mediumType+`ListName">
 							</span>
 						</div>
 						<div class="col-lg-2 float-right">
 						  <div class="btn-group-vertical">
-								<div class="text-muted timaat-user-log" style="margin-left: 12px; margin-bottom: 10px;">
+								<div class="text-muted timaat__user-log">
 									<i class="fas fa-user"></i>
 								</div>
 								<form action="/TIMAAT/api/medium/`+mediumType+`/`+this.model.id+`/upload" method="post" enctype="multipart/form-data">
-									<input name="file" accept="`+fileTypesAccepted+`" class="timaat-medium-upload-file d-none" type="file" />
-									<button type="submit" title="Upload `+mediumType+`" class="btn btn-outline btn-primary btn-sm timaat-mediadatasets-medium-upload float-left"><i class="fas fa-upload"></i></button>
+									<input name="file" accept="`+fileTypesAccepted+`" class="mediumUploadFile d-none" type="file" />
+									<button type="submit" title="Upload `+mediumType+`" class="btn btn-outline btn-primary btn-sm mediumDatasetsMediumUploadButton float-left"><i class="fas fa-upload"></i></button>
 								</form>
-								<button type="button" title="Annotate `+mediumType+`" class="btn btn-outline-success btn-sm btn-block timaat-mediadatasets-medium-annotate"><i class="fas fa-draw-polygon"></i></button>
+								<button type="button" title="Annotate `+mediumType+`" class="btn btn-outline-success btn-sm btn-block mediumDatasetsMediumAnnotateButton"><i class="fas fa-draw-polygon"></i></button>
 						  </div>
 						</div>
 					</div>
@@ -85,60 +78,60 @@
 			);
 
 			// console.log("TCL: append me to list:", mediumType);
-			// $('#timaat-mediadatasets-'+mediumType+'-list').append(this.listView);
+			// $('#mediumDatasets'+mediumType+'List').append(this.listView);
 			var medium = this; // save medium for system events
 
 			// attach video upload functionality
 			// upload button click triggers file selection
-			this.listView.find('.timaat-mediadatasets-medium-upload').on('click', function(ev) {
+			this.listView.find('.mediumDatasetsMediumUploadButton').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
-				medium.listView.find('.timaat-medium-upload-file').click();
+				medium.listView.find('.mediumUploadFile').click();
 			});
 
 			// user selected file, trigger form submit / upload
-			this.listView.find('.timaat-medium-upload-file').on('change', function(ev) {
-				let fileList = medium.listView.find('.timaat-medium-upload-file')[0].files;
+			this.listView.find('.mediumUploadFile').on('change', function(ev) {
+				let fileList = medium.listView.find('.mediumUploadFile')[0].files;
 				if ( fileList.length  > 0 ) TIMAAT.UploadManager.queueUpload(medium.model, medium.listView.find('form'));
 			});
 
 			this.updateUI();
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (medium.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+medium.model.createdByUserAccountId+'">[ID '+medium.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(medium.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+medium.model.lastEditedByUserAccountId+'">[ID '+medium.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+medium.model.lastEditedByUserAccountId+'">[ID '+medium.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(medium.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -147,24 +140,24 @@
 		updateUI() {
 			// console.log("TCL: Medium -> updateUI -> updateUI()");
 			// title
-			var type = $('#medium-metadata-form').data('type');
+			var type = $('#mediumFormMetadata').data('type');
 			var name = this.model.displayTitle.name;
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-mediadatasets-'+type+'-list-name').html(name);
+			this.listView.find('.mediumDatasets'+type+'ListName').html(name);
 			if (type == 'medium') {
-				this.listView.find('.timaat-mediadatasets-medium-list-mediatype').html(type);
+				this.listView.find('.mediumDatasetsAllMediaListMediumType').html(type);
 			}
 
 			if ( this.model.fileStatus == "noFile" && !TIMAAT.UploadManager.isUploading(this.model) ) {
-				this.listView.find('.timaat-mediadatasets-medium-upload').show();
+				this.listView.find('.mediumDatasetsMediumUploadButton').show();
 			} else {
-				this.listView.find('.timaat-mediadatasets-medium-upload').hide();
+				this.listView.find('.mediumDatasetsMediumUploadButton').hide();
 			}
 
 			if ( this.model.fileStatus != "noFile" && this.model.fileStatus != "unavailable" ) {
-				this.listView.find('.timaat-mediadatasets-medium-annotate').show();
+				this.listView.find('.mediumDatasetsMediumAnnotateButton').show();
 			} else {
-				this.listView.find('.timaat-mediadatasets-medium-annotate').hide();
+				this.listView.find('.mediumDatasetsMediumAnnotateButton').hide();
 			}
 		}
 
@@ -172,7 +165,7 @@
 			// console.log("TCL: Medium -> remove -> remove()");
 			// remove medium from UI
 			this.listView.remove(); // TODO remove tags from medium_has_tags
-			$('#medium-metadata-form').data('medium', null);
+			$('#mediumFormMetadata').data('medium', null);
 		}
 
 	}

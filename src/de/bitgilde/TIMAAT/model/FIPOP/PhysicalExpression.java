@@ -32,7 +32,7 @@ public class PhysicalExpression implements Serializable {
 	//bi-directional one-to-one association to AnalysisMethod
 	@OneToOne
 	@PrimaryKeyJoinColumn(name="analysis_method_id")
-	@JsonIgnore // PyhsicalExpression is accessed through AnalysisMethod --> avoid reference cycle
+	@JsonIgnore // physicalExpression is accessed through AnalysisMethod --> avoid reference cycle
 	private AnalysisMethod analysisMethod;
 
 	//bi-directional many-to-one association to PhysicalExpressionTranslation

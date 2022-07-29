@@ -27,55 +27,55 @@
 			// model.ui = this;
 
 			// create and style list view element
-			var deleteActorTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-actortype-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteActorTypeButton = '<button type="button" class="btn btn-outline btn-danger btn-sm actorTypeRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteActorTypeButton = '';
 			this.listView = $('<li class="list-group-item"> '
 				+ deleteActorTypeButton +
-				'<span class="timaat-actortype-list-type"></span>' +
+				'<span class="actorTypeListType"></span>' +
 				'<br> \
-				<div class="timaat-actortype-list-count text-muted float-left"></div> \
+				<div class="actorTypeListCount text-muted float-left"></div> \
 				</li>'
 			);
 
-			$('#timaat-actordatasets-mediumtype-list').append(this.listView);
+			$('#actorDatasetsMediumTypeList').append(this.listView);
 			this.updateUI();
 			var ActorType = this; // save ActorType for system ActorTypes
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (actorType.model.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(actorType.model.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+actorType.model.createdByUserAccountId+'">[ID '+actorType.model.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actorType.model.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+actorType.model.lastEditedByUserAccountId+'">[ID '+actorType.model.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+actorType.model.lastEditedByUserAccountId+'">[ID '+actorType.model.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(actorType.model.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,16 +85,16 @@
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-actordatasets-mediumtype-meta').data('ActorType', ActorType);
-				$('#timaat-actordatasets-mediumtype-meta').modal('show');
+				$('#actorDatasetsMediumTypeMetaModal').data('ActorType', ActorType);
+				$('#actorDatasetsMediumTypeMetaModal').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-actortype-remove').on('click', this, function(ev) {
+			this.listView.find('.actorTypeRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-actordatasets-mediumtype-delete').data('ActorType', ActorType);
-				$('#timaat-actordatasets-mediumtype-delete').modal('show');
+				$('#actorDatasetsMediumTypeDeleteModal').data('ActorType', ActorType);
+				$('#actorDatasetsMediumTypeDeleteModal').modal('show');
 			});
 		}
 
@@ -103,7 +103,7 @@
 			// title
 			var type = this.model.actorTypeTranslations[0].type;
 			if ( this.model.id < 0 ) type = "[not assigned]";
-			this.listView.find('.timaat-actortype-list-name').text(type);
+			this.listView.find('.actorTypeListName').text(type);
 		}
 
 		remove() {

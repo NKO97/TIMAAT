@@ -1,6 +1,6 @@
 //  <!-- focus username field in login mask -->
-$('#timaat-login-modal').on('shown.bs.modal', function() {
-  $('#timaat-login-user').focus();
+$('#loginModal').on('shown.bs.modal', function() {
+  $('#logInUserName').focus();
 });
 
 // <!-- client side form validation -->
@@ -10,8 +10,12 @@ jQuery.validator.addMethod("greaterThanStart", function (value, element, params)
 },'Must be greater than recording start date.');
 
 jQuery.validator.addMethod("equals", function (value, element, params) {
-  return this.optional(element) || value == $(params).val();
+  return value == $(params).val();
 },'The retyped password does not match your new password.');
+
+jQuery.validator.addMethod("notEqualTo", function (value, element, params) {
+  return value != $(params).val();
+},'Username and display name cannot be identical.');
 
 var changeUserPassword = $('#changeUserPassword');
 var changeUserPasswordValidator = $('#changeUserPassword').validate({
@@ -53,8 +57,50 @@ var changeUserPasswordValidator = $('#changeUserPassword').validate({
     changeUserPassword.submit();
   }
 });
-var mediumFormMetadata = $('#medium-metadata-form');
-var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
+var createNewAccountForm = $('#createNewAccountForm');
+var createNewAccountFormValidator = $('#createNewAccountForm').validate({
+  rules: {
+    newAccountUsername: {
+      required: true,
+      minlength: 8,
+      maxlength: 45,
+    },
+    newAccountDisplayName: {
+      required: true,
+      minlength: 5,
+      maxlength: 45,
+      notEqualTo: '#newAccountUsername'
+    },
+    newAccountPassword: {
+      required: true,
+      minlength: 13,
+      maxlength: 255,
+    },
+  },
+  messages: {
+    newAccountUsername: {
+      required: "Please enter a valid login name",
+      minlength: "The login name has to be at least 8 characters long.",
+      maxlength: "The login name cannot be longer than 45 characters.",
+    },
+    newAccountDisplayName: {
+      required: "Please enter a new password",
+      minlength: "The display name has to be at least 5 characters long.",
+      maxlength: "The display name cannot be longer than 45 characters.",
+      notEqualTo: "Username and display name cannot be identical.",
+    },
+    newAccountPassword: {
+      required: "Please provide a temporary password",
+      minlength: "The password has to be at least 13 characters long.",
+      maxlength: "The password cannot be longer than 255 characters. That's enough entropy. :)",
+    },
+  },
+  submitHandler: function(createNewAccountForm) {
+    createNewAccountForm.submit();
+  }
+});
+var mediumFormMetadata = $('#mediumFormMetadata');
+var mediumFormMetadataValidator = $('#mediumFormMetadata').validate({
   rules: {
     displayTitle: {
       required: true,
@@ -68,8 +114,8 @@ var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
       required: true,
     },
     recordingEndDate: {
-      required: function(element) {return ($("#timaat-mediadatasets-metadata-medium-recordingenddate").val()!="");},
-      greaterThanStart: '#timaat-mediadatasets-metadata-medium-recordingstartdate'
+      required: function(element) {return ($("#mediumDatasetsMetadataMediumRecordingEndDate").val()!="");},
+      greaterThanStart: '#mediumDatasetsMetadataMediumRecordingStartDate'
     },
     width: {
       number: true,
@@ -140,8 +186,8 @@ var mediumFormMetadataValidator = $('#medium-metadata-form').validate({
     mediumFormMetadata.submit();
   },
 });
-var mediumFormTitles = $('#medium-titles-form');
-var mediumFormTitlesValidator = $('#medium-titles-form').validate({
+var mediumFormTitles = $('#mediumFormTitles');
+var mediumFormTitlesValidator = $('#mediumFormTitles').validate({
   rules: {
     title: {
       required: true,
@@ -166,8 +212,8 @@ var mediumFormTitlesValidator = $('#medium-titles-form').validate({
     mediumFormTitles.submit();
   },
 });
-var mediumFormLanguageTracks = $('#medium-languagetracks-form');
-var mediumFormLanguageTracksValidator = $('#medium-languagetracks-form').validate({
+var mediumFormLanguageTracks = $('#mediumFormLanguageTracks');
+var mediumFormLanguageTracksValidator = $('#mediumFormLanguageTracks').validate({
   rules: {
     languageTrackTypeId: {
       required: true,
@@ -188,8 +234,8 @@ var mediumFormLanguageTracksValidator = $('#medium-languagetracks-form').validat
     mediumFormLanguageTracks.submit();
   },
 });
-var mediumFormActorRoles = $('#medium-actorwithroles-form');
-var mediumFormActorRolesValidator = $('#medium-actorwithroles-form').validate({
+var mediumFormActorRoles = $('#mediumFormActorWithRoles');
+var mediumFormActorRolesValidator = $('#mediumFormActorWithRoles').validate({
   ignore: [],
   rules: {
     actorId: {
@@ -211,8 +257,8 @@ var mediumFormActorRolesValidator = $('#medium-actorwithroles-form').validate({
     mediumFormLanguageTracks.submit();
   },
 });
-var mediumCollectionFormMetadata = $('#mediumcollection-metadata-form');
-var mediumCollectionFormMetadataValidator = $('#mediumcollection-metadata-form').validate({
+var mediumCollectionFormMetadata = $('#mediumCollectionFormMetadata');
+var mediumCollectionFormMetadataValidator = $('#mediumCollectionFormMetadata').validate({
   rules: {
     title: {
       required: true,
@@ -223,8 +269,8 @@ var mediumCollectionFormMetadataValidator = $('#mediumcollection-metadata-form')
       required: true,
     },
     ended: {
-      required: function(element) {return ($("#timaat-mediumcollectiondatasets-metadata-series-ended").val()!="");},
-      greaterThanStart: '#timaat-mediumcollectiondatasets-metadata-series-started'
+      required: function(element) {return ($("#mediumCollectionDatasetsMetadataSeriesEnded").val()!="");},
+      greaterThanStart: '#mediumCollectionDatasetsMetadataSeriesStarted'
     },
   },
   messages: {
@@ -244,8 +290,8 @@ var mediumCollectionFormMetadataValidator = $('#mediumcollection-metadata-form')
     mediumCollectionFormMetadata.submit();
   },
 });
-var actorFormMetadata = $('#actor-metadata-form');
-var actorFormMetadataValidator = $('#actor-metadata-form').validate({
+var actorFormMetadata = $('#actorFormMetadata');
+var actorFormMetadataValidator = $('#actorFormMetadata').validate({
   rules: {
     displayName: {
       required: true,
@@ -276,8 +322,8 @@ var actorFormMetadataValidator = $('#actor-metadata-form').validate({
     actorFormMetadata.submit();
   },
 });
-var actorFormNames = $('#actor-names-form');
-var actorFormNamesValidator = $('#actor-names-form').validate({
+var actorFormNames = $('#actorFormNames');
+var actorFormNamesValidator = $('#actorFormNames').validate({
   rules: {
     actorName: {
       required: true,
@@ -296,8 +342,8 @@ var actorFormNamesValidator = $('#actor-names-form').validate({
     actorFormNames.submit();
   },
 });
-var actorFormAddresses = $('#actor-addresses-form');
-var actorFormAddressesValidator = $('#actor-addresses-form').validate({
+var actorFormAddresses = $('#actorFormAddresses');
+var actorFormAddressesValidator = $('#actorFormAddresses').validate({
   rules: {
     city: {
       maxlength: 100,
@@ -348,8 +394,8 @@ var actorFormAddressesValidator = $('#actor-addresses-form').validate({
     actorFormAddresses.submit();
   },
 });
-var actorFormEmailAddresses = $('#actor-emailaddresses-form');
-var actorFormEmailAddressesValidator = $('#actor-emailaddresses-form').validate({
+var actorFormEmailAddresses = $('#actorFormEmailAddresses');
+var actorFormEmailAddressesValidator = $('#actorFormEmailAddresses').validate({
   rules: {
     email: {
       email: true
@@ -370,8 +416,8 @@ var actorFormEmailAddressesValidator = $('#actor-emailaddresses-form').validate(
     actorFormEmailAddresses.submit();
   },
 });
-var actorFormPhoneNumbers = $('#actor-phonenumbers-form');
-var actorFormPhoneNumbersValidator = $('#actor-phonenumbers-form').validate({
+var actorFormPhoneNumbers = $('#actorFormPhoneNumbers');
+var actorFormPhoneNumbersValidator = $('#actorFormPhoneNumbers').validate({
   rules: {
     phoneNumberTypeId: {
       required: true
@@ -386,8 +432,8 @@ var actorFormPhoneNumbersValidator = $('#actor-phonenumbers-form').validate({
     actorFormPhoneNumbers.submit();
   },
 });
-var actorFormMemberOfCollectives = $('#actor-memberofcollectives-form');
-var actorFormMemberOfCollectivesValidator = $('#actor-memberofcollectives-form').validate({
+var actorFormMemberOfCollectives = $('#actorFormMemberOfCollectives');
+var actorFormMemberOfCollectivesValidator = $('#actorFormMemberOfCollectives').validate({
   rules: {
     collectiveId: {
       required: true
@@ -402,8 +448,8 @@ var actorFormMemberOfCollectivesValidator = $('#actor-memberofcollectives-form')
     actorFormMemberOfCollectives.submit();
   },
 });
-var eventFormMetadata = $('#event-metadata-form');
-var eventFormMetadataValidator = $('#event-metadata-form').validate({
+var eventFormMetadata = $('#eventFormMetadata');
+var eventFormMetadataValidator = $('#eventFormMetadata').validate({
   rules: {
     name: {
       required: true,
@@ -428,8 +474,8 @@ var eventFormMetadataValidator = $('#event-metadata-form').validate({
     eventFormMetadata.submit();
   },
 });
-var roleFormMetadata = $('#role-metadata-form');
-var roleFormMetadataValidator = $('#role-metadata-form').validate({
+var roleFormMetadata = $('#roleFormMetadata');
+var roleFormMetadataValidator = $('#roleFormMetadata').validate({
   rules: {
     name: {
       required: true,
@@ -448,8 +494,8 @@ var roleFormMetadataValidator = $('#role-metadata-form').validate({
     roleFormMetadata.submit();
   },
 });
-var roleGroupFormMetadata = $('#rolegroup-metadata-form');
-var roleGroupFormMetadataValidator = $('#rolegroup-metadata-form').validate({
+var roleGroupFormMetadata = $('#roleGroupFormMetadata');
+var roleGroupFormMetadataValidator = $('#roleGroupFormMetadata').validate({
   rules: {
     name: {
       required: true,
@@ -468,8 +514,8 @@ var roleGroupFormMetadataValidator = $('#rolegroup-metadata-form').validate({
     roleGroupFormMetadata.submit();
   },
 });
-var categoryOrCategorySetFormMetadata = $('#category-metadata-form');
-var categoryOrCategorySetFormMetadataValidator = $('#category-metadata-form').validate({
+var categoryOrCategorySetFormMetadata = $('#categoryFormMetadata');
+var categoryOrCategorySetFormMetadataValidator = $('#categoryFormMetadata').validate({
   rules: {
     name: {
       required: true,
@@ -488,8 +534,8 @@ var categoryOrCategorySetFormMetadataValidator = $('#category-metadata-form').va
     categoryOrCategorySetFormMetadata.submit();
   },
 });
-var languageFormMetadata = $('#language-metadata-form');
-var languageFormMetadataValidator = $('#language-metadata-form').validate({
+var languageFormMetadata = $('#languageFormMetadata');
+var languageFormMetadataValidator = $('#languageFormMetadata').validate({
   rules: {
     name: {
       required: true,
@@ -518,8 +564,8 @@ var languageFormMetadataValidator = $('#language-metadata-form').validate({
     languageFormMetadata.submit();
   },
 });
-var analysisMethodModal = $('#timaat-videoplayer-analysis-add');
-var analysisMethodModalValidator = $('#timaat-videoplayer-analysis-add').validate({
+var analysisMethodModal = $('#analysisAddModal');
+var analysisMethodModalValidator = $('#analysisAddModal').validate({
   rules: {
     analysisMethodId: {
       required: true,
@@ -612,8 +658,8 @@ var analysisMethodModalValidator = $('#timaat-videoplayer-analysis-add').validat
     analysisMethodModal.submit();
   },
 });
-var musicFormMetadata = $('#music-metadata-form');
-var musicFormMetadataValidator = $('#music-metadata-form').validate({
+var musicFormMetadata = $('#musicFormMetadata');
+var musicFormMetadataValidator = $('#musicFormMetadata').validate({
   rules: {
     displayTitle: {
       required: true,
@@ -652,8 +698,8 @@ var musicFormMetadataValidator = $('#music-metadata-form').validate({
     musicFormMetadata.submit();
   },
 });
-var musicFormTitles = $('#music-titles-form');
-var musicFormTitlesValidator = $('#music-titles-form').validate({
+var musicFormTitles = $('#musicFormTitles');
+var musicFormTitlesValidator = $('#musicFormTitles').validate({
   rules: {
     title: {
       required: true,
@@ -678,8 +724,8 @@ var musicFormTitlesValidator = $('#music-titles-form').validate({
     musicFormTitles.submit();
   },
 });
-var musicFormActorRoles = $('#music-actorwithroles-form');
-var musicFormActorRolesValidator = $('#music-actorwithroles-form').validate({
+var musicFormActorRoles = $('#musicFormActorWithRoles');
+var musicFormActorRolesValidator = $('#musicFormActorWithRoles').validate({
   ignore: [],
   rules: {
     actorId: {
@@ -701,8 +747,8 @@ var musicFormActorRolesValidator = $('#music-actorwithroles-form').validate({
     musicFormLanguageTracks.submit();
   },
 });
-var musicFormMediumHasMusicList = $('#music-mediumhasmusiclist-form');
-var musicFormMediumHasMusicListValidator = $('#music-mediumhasmusiclist-form').validate({
+var musicFormMediumHasMusicList = $('#musicFormMediumHasMusicList');
+var musicFormMediumHasMusicListValidator = $('#musicFormMediumHasMusicList').validate({
   ignore: [],
   rules: {
     mediumId: {

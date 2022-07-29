@@ -24,63 +24,55 @@
 			// console.log('TCL: Timeline -> constructor');
 
 			// init UI
-			this.ui = {};
-			this.ui.zoom = 1;
-			this.ui.minZoom = 1;
-			this.ui.maxZoom = 1;
-			this.ui.tracking = false;
-
-			let timeline = this;
-			this.ui.indicator = $('.time-indicator');
-			this.ui.pane = $('#timeline .timeline-layer-pane');
-			this.ui.zoomIn = $('.timeline-zoom-in');
-			this.ui.zoomOut = $('.timeline-zoom-out');
-			this.ui.track = $('.timeline-track');
+			let timeline      = this;
+			this.ui           = {};
+			this.ui.indicator = $('.js-timeline__position-indicator');
+			this.ui.maxZoom   = 1;
+			this.ui.minZoom   = 1;
+			this.ui.pane      = $('.js-timeline__layer-pane');
+			this.ui.timeInfo  = this.ui.pane.find('.timeline-info');
+			this.ui.track     = $('.timelineTrack');
+			this.ui.tracking  = false;
+			this.ui.zoom      = 1;
+			this.ui.zoomIn    = $('.timelineZoomIn');
 			this.ui.zoomIn.prop('disabled', true);
+			this.ui.zoomOut   = $('.timelineZoomOut');
 			this.ui.zoomOut.prop('disabled', true);
-
-			this.ui.timeinfo = this.ui.pane.find('.timeline-info');
 			this.ui.tickTemplate =
-				`<div class="timeline-fulltick float-left pt-1">
-					<div class="timeline-tick-0" style="font-size: 11px;padding-left: 2px;height: 28px;border-left: 1px solid #fff;position: absolute;margin-left: 0%;">
-						<div class="timecode-label text-light" style="margin-top: -2px;">00:01</div>
-					</div>
-					<div class="timeline-tick-1" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 10%;"></div>
-					<div class="timeline-tick-2" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 20%;"></div>
-					<div class="timeline-tick-3" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 30%;"></div>
-					<div class="timeline-tick-4" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 40%;"></div>
-					<div class="timeline-tick-5" style="margin-top: 13px;height: 15px; border-left: 1px solid #eee;	position: absolute; margin-left: 50%;"></div>
-					<div class="timeline-tick-6" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 60%;"></div>
-					<div class="timeline-tick-7" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 70%;"></div>
-					<div class="timeline-tick-8" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 80%;"></div>
-					<div class="timeline-tick-9" style="margin-top: 18px;height: 10px; border-left: 1px solid #eee; position: absolute; margin-left: 90%;"></div>
+				`<div class="timeline__scale-segment float-left pt-1">
+					<span class="timeline__scale-segment--graduation-mark-0 timecodeLabel text-light">00:01</span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-1"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-2"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-3"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-4"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-5"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-6"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-7"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-8"></span>
+					<span class="timeline__scale-segment--graduation-mark timeline__scale-segment--graduation-mark-9"></span>
 				</div>`;
 
 			// attach listeners
 			this.ui.pane.on('scroll', function(ev) {
-				timeline.ui.pane.find('.timeline-section-header').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
+				timeline.ui.pane.find('.js-timeline__section-header').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
 			});
 
-			this.ui.pane.find('.timeline-sortable-sections').sortable({
+			this.ui.pane.find('.timelineSortableSections').sortable({
 				axis: 'y',
-				handle: '.timeline-section-header',
+				handle: '.js-timeline__section-header',
 				containment: 'parent',
 			});
 
-			this.ui.pane.find('.timeline-section .timeline-section-header .collapse-widget').on('click', function() {
-				let section = $(this).parent().parent().parent().parent();
-				if ( section.hasClass('collapsed') ) section.removeClass('collapsed'); else section.addClass('collapsed');
-			});
 			this.tracking = this.ui.tracking;
 
 			this.ui.zoomIn.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom-1); });
 			this.ui.zoomOut.on('click', function(ev) { timeline.setZoom(timeline.ui.zoom+1); });
 			this.ui.track.on('click', function(ev) { timeline.tracking = !timeline.isTacking; });
 
-			this.ui.timeinfo.on('click mousedown drag', function(ev) {
+			this.ui.timeInfo.on('click mousedown drag', function(ev) {
 				let el = $(ev.target);
 				let offset = ev.offsetX;
-				if ( el && el.hasClass('timeline-fulltick') ) {
+				if ( el && el.hasClass('timeline__scale-segment') ) {
 					let timeInMs = Math.floor(parseInt(el.attr('data-start')) + ((offset / 50.0) * timeline.ui.zoom));
 					TIMAAT.VideoPlayer.jumpTo(timeInMs);
 				}
@@ -128,7 +120,7 @@
 
 			this.ui.zoom = newZoom;
 			this.ui.width = (this.duration / 1000.0 / this.ui.zoom * 50.0);
-			this.ui.pane.find('.timeline-section-content').css('width', this.ui.width + 'px');
+			this.ui.pane.find('.timeline__section-content').css('width', this.ui.width + 'px');
 			this._initTicks();
 
 			this.ui.zoomIn.prop('disabled', this.ui.zoom == this.ui.maxZoom);
@@ -153,11 +145,11 @@
 			}
 		}
 		invalidateSize() {
-			this.ui.uiWidth = $('#timeline').width();
+			this.ui.uiWidth = $('.timeline').width();
 		}
 
 		_initTicks() {
-			this.ui.timeinfo.empty();
+			this.ui.timeInfo.empty();
 			for (let i = 0; i <= Math.ceil(this.duration / 1000.0 / this.ui.zoom)+1; i++) {
 				let tick = $(this.ui.tickTemplate);
 				let time = i * this.ui.zoom;
@@ -169,8 +161,8 @@
 				if ( hour > 0 ) timecode += hour+':';
 				timecode += (min < 10) ? '0'+min+':' : min+':';
 				timecode += (sek < 10) ? '0'+sek : sek;
-				tick.find('.timecode-label').text(timecode);
-				this.ui.timeinfo.append(tick);
+				tick.find('.timecodeLabel').text(timecode);
+				this.ui.timeInfo.append(tick);
 			}
 
 		}

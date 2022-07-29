@@ -580,7 +580,7 @@ public class EndpointAnnotation {
 		UserLogManager.getLogger().addLogEntry(annotation.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANNOTATIONCREATED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "add-annotation", mediumAnalysisListId, annotation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "addAnnotation", mediumAnalysisListId, annotation);
 
 		return Response.ok().entity(annotation).build();
 	}
@@ -680,7 +680,7 @@ public class EndpointAnnotation {
 															 UserLogManager.LogEvents.ANNOTATIONEDITED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "edit-annotation", annotation.getMediumAnalysisList().getId(), annotation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "editAnnotation", annotation.getMediumAnalysisList().getId(), annotation);
 		// System.out.println("EndpointAnnotation: updateAnnotation - update complete");
 		return Response.ok().entity(annotation).build();
 	}
@@ -710,7 +710,7 @@ public class EndpointAnnotation {
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANNOTATIONDELETED);
 
 		// send notification action
-		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "remove-annotation", mal.getId(), annotation);
+		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "removeAnnotation", mal.getId(), annotation);
 
 		return Response.ok().build();
 	}

@@ -1548,7 +1548,7 @@ public class EndpointActor {
 
 		System.out.println("EndpointActor: addAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address address = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
@@ -1564,7 +1564,6 @@ public class EndpointActor {
 			System.out.println("EndpointActor: addAddress: address == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addAddress: address: "+address.getAddress());
 		// sanitize object data
 		address.setId(0);
 

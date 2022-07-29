@@ -27,15 +27,15 @@
 			this._viewer = viewer;
 			this._inspector = L.control.sidebar({
 				autoPan    : false,
-				container  : 'timaat-inspector',
+				container  : 'mediaPlayerInspector',
 				closeButton: true,
 				position   : 'right',
 			}).addTo(viewer);
 
 			// activate floating inspector
-			$('#timaat-inspector').appendTo('#timaat-component-videoplayer');
-			$('#timaat-inspector').draggable({handle:'.inspector-title', containment:'#wrapper'});
-			$('#timaat-inspector .leaflet-sidebar-tabs ul:not(.inspector-tabs)').remove();
+			$('#mediaPlayerInspector').appendTo('#componentVideoPlayer');
+			$('#mediaPlayerInspector').draggable({handle:'.inspector__title', containment:'#wrapper'});
+			$('#mediaPlayerInspector .leaflet-sidebar-tabs ul:not(.inspector__tabs)').remove();
 			// ul#list li:not(.active)
 
 			// init state system
@@ -46,9 +46,9 @@
 
 			// init UI
 			this.ui = {};
-			this.ui.addAnimButton = $('#timaat-inspector-animation-add-button');
-			this.ui.removeAnimButton = $('#timaat-inspector-animation-delete-button');
-			this.ui.keyframeList = $('#timaat-inspector-animation-keyframes');
+			this.ui.addAnimButton = $('#inspectorAnimationAddButton');
+			this.ui.removeAnimButton = $('#inspectorAnimationDeleteButton');
+			this.ui.keyframeList = $('#inspectorAnimationKeyframes');
 			let inspector = this;
 
 			// actors panel
@@ -71,7 +71,7 @@
 				}
 			};
 
-			this.ui.dataTableActors = $('#timaat-inspector-actors-pane .actors-available').DataTable({
+			this.ui.dataTableActors = $('#annotationAvailableActorsTable').DataTable({
 				lengthChange	: false,
 				dom						: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
@@ -110,7 +110,7 @@
 					let actor = data;
 					actorElement.data('actor', actor);
 
-					actorElement.find('.add-actor').on('click', actor, function(ev) {
+					actorElement.find('.addActor').on('click', actor, function(ev) {
 						ev.stopPropagation();
 						if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
               $('#analysisListNoPermissionModal').modal('show');
@@ -128,7 +128,7 @@
 					});
 				},
 				"columns": [{
-					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, actor, meta) {
+					data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, actor, meta) {
 						let displayActorTypeIcon = '';
 						let actorType = actor.actorType.actorTypeTranslations[0].type;
 						switch (actorType) {
@@ -140,7 +140,7 @@
 							break;
 						}
 						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`
-								<span class="add-actor badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
+								<span class="addActor badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
 							</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
 							if (actorType == 'person') {
@@ -151,7 +151,7 @@
 						}
 						actor.actorNames.forEach(function(name) { // make additional names searchable in actor library
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
-								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+								nameDisplay += `<div class="display--none">`+name.name+`</div>`;
 							}
 						});
 						return nameDisplay;
@@ -161,7 +161,7 @@
 			});
 //			$(this.ui.dataTableActors.table().container()).find('.table-title').text('Available Actors');
 
-			this.ui.dataTableAnnoActors = $('#timaat-inspector-actors-pane .actors-annotation').DataTable({
+			this.ui.dataTableAnnoActors = $('#annotationActorsTable').DataTable({
 				lengthChange	: false,
 				pageLength		: 10,
 				dom						: 'rt<"row"<"col-sm-10"i><"col-sm-2"p>>',
@@ -195,7 +195,7 @@
 					let actor = data;
 					actorElement.data('actor', actor);
 
-					actorElement.find('.remove-actor').on('click', actor, function(ev) {
+					actorElement.find('.removeActor').on('click', actor, function(ev) {
 						ev.stopPropagation();
 						if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
               $('#analysisListNoPermissionModal').modal('show');
@@ -213,7 +213,7 @@
 					});
 				},
 				"columns": [{
-					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, actor, meta) {
+					data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, actor, meta) {
 						let displayActorTypeIcon = '';
 						let actorType = actor.actorType.actorTypeTranslations[0].type
 						switch (actorType) {
@@ -225,7 +225,7 @@
 							break;
 						}
 						let nameDisplay = `<p>` + displayActorTypeIcon + `  ` + actor.displayName.name +`
-						<span class="remove-actor badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>
+						<span class="removeActor badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>
 						</p>`;
 						if (actor.birthName != null && actor.displayName.id != actor.birthName.id) {
 							if (actorType == 'person') {
@@ -236,7 +236,7 @@
 						}
 						actor.actorNames.forEach(function(name) { // make additional names searchable in actor library
 							if (name.id != actor.displayName.id && (actor.birthName == null || name.id != actor.birthName.id)) {
-								nameDisplay += `<div style="display:none">`+name.name+`</div>`;
+								nameDisplay += `<div class="display--none">`+name.name+`</div>`;
 							}
 						});
 						return nameDisplay;
@@ -265,7 +265,7 @@
 				}
 			};
 
-			this.ui.dataTableEvents = $('#timaat-inspector-events-pane .events-available').DataTable({
+			this.ui.dataTableEvents = $('#annotationAvailableEventsTable').DataTable({
 				lengthChange	: false,
 				dom						: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
 				// dom				: 'r<"row"<"col-6"<"btn btn-sm btn-outline-dark disabled table-title">><"col-6"f>>t<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
@@ -304,7 +304,7 @@
 					let event = data;
 					eventElement.data('event', event);
 
-					eventElement.find('.add-event').on('click', event, function(ev) {
+					eventElement.find('.addEvent').on('click', event, function(ev) {
 						ev.stopPropagation();
 						if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
               $('#analysisListNoPermissionModal').modal('show');
@@ -322,10 +322,10 @@
 					});
 				},
 				"columns": [{
-					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, event, meta) {
+					data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, event, meta) {
 						// console.log("TCL: event", event);
 						let nameDisplay = `<p>` + event.eventTranslations[0].name +
-								`<span class="add-event badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>` +
+								`<span class="addEvent badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>` +
 							`</p>`;
 						return nameDisplay;
 					}
@@ -334,7 +334,7 @@
 			});
 			// $(this.ui.dataTableEvents.table().container()).find('.table-title').text('Available Events');
 
-			this.ui.dataTableAnnoEvents = $('#timaat-inspector-events-pane .events-annotation').DataTable({
+			this.ui.dataTableAnnoEvents = $('#annotationEventsTable').DataTable({
 				lengthChange	: false,
 				pageLength		: 10,
 				dom						: 'rt<"row"<"col-sm-10"i><"col-sm-2"p>>',
@@ -368,7 +368,7 @@
 					let event = data;
 					eventElement.data('event', event);
 
-					eventElement.find('.remove-event').on('click', event, function(ev) {
+					eventElement.find('.removeEvent').on('click', event, function(ev) {
 						ev.stopPropagation();
 						if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
               $('#analysisListNoPermissionModal').modal('show');
@@ -386,10 +386,10 @@
 					});
 				},
 				"columns": [{
-					data: 'id', name: 'name', className: 'name timaat-padding', render: function(data, type, event, meta) {
+					data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, event, meta) {
 						// console.log("TCL: event", event);
 						let nameDisplay = `<p>` + event.eventTranslations[0].name +
-							`<span class="remove-event badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>` +
+							`<span class="removeEvent badge btn btn-sm btn-danger p-1 float-right"><i class="fas fa-minus fa-fw"></i></span>` +
 						`</p>`;
 						return nameDisplay;
 					}
@@ -398,7 +398,7 @@
 			});
 
 			// attach listeners
-			$('#timaat-inspector-meta-submit').on('click', async function(ev) {
+			$('#inspectorSubmitButton').on('click', async function(ev) {
 				if ( !inspector.state.type ) return;
 				if (TIMAAT.VideoPlayer.currentPermissionLevel < 2 && !(inspector.state.type == 'analysisList' && !inspector.state.item)) {
 					$('#analysisListNoPermissionModal').modal('show');
@@ -407,17 +407,17 @@
 				// annotations
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
-					var title = $('#timaat-inspector-meta-name').val();
-					var opacity = Number($('#timaat-inspector-meta-opacity').val());
-					let layerVisual = $('#timaat-inspector-meta-visual-layer').is(":checked") ? true : false;
-					let layerAudio = $('#timaat-inspector-meta-audio-layer').is(":checked") ? true : false;
+					var title = $('#inspectorName').val();
+					var opacity = Number($('#inspectorOpacity').val());
+					let layerVisual = $('#inspectorVisualLayerCheckbox').is(":checked") ? true : false;
+					let layerAudio = $('#inspectorAudioLayerCheckbox').is(":checked") ? true : false;
 					if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'audio') layerAudio = true; // layer display is invisible in audio but needs to be set
 					if (TIMAAT.VideoPlayer.curAnalysisList.mediumType == 'image') layerVisual = true; // layer display is invisible in image but needs to be set
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					$('#inspectorComment').summernote('code', comment);
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					var color = inspector.cp.colorHex.substring(1);
 					if (anno) {
 						anno.model.annotationTranslations[0].title = title;
@@ -468,10 +468,10 @@
 				// analysis lists
 				if ( inspector.state.type == 'analysisList' ) {
 					var list = inspector.state.item;
-					var title = $('#timaat-inspector-meta-name').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var title = $('#inspectorName').val();
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
+					$('#inspectorComment').summernote('code', comment);
 					if (list) {
 						TIMAAT.Util.setDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'title', title);
 						TIMAAT.Util.setDefaultTranslation(TIMAAT.VideoPlayer.curAnalysisList, 'mediumAnalysisListTranslations', 'text', comment);
@@ -484,21 +484,21 @@
 				// analysis segments
 				if ( inspector.state.type == 'segment' ) {
 					var segment = inspector.state.item;
-					var name = $('#timaat-inspector-meta-name').val();
-					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var name = $('#inspectorName').val();
+					var shortDescription = $('#inspectorShortDescription').val();
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					$('#inspectorComment').summernote('code', comment);
+					var transcript = $('#inspectorTranscript').summernote('code');
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
 
 					// early out: segment has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment has no time range');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Segments need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Segment has no time range');
+						$('#segmentElementModal').find('.modal-body').html("Segments need to cover a spatial area. Start and end time may not be identical.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					// early out: segment's sequences and scenes do not exceed new time range
@@ -507,9 +507,9 @@
 						i = 0;
 						for (; i < sequenceList.length; i++) {
 							if (startTime > sequenceList[i].startTime || endTime < sequenceList[i].endTime) {
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment time interval too small');
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
-								$('#timaat-videoplayer-segment-element-modal').modal('show');
+								$('#segmentElementModal').find('.modal-title').html('Segment time interval too small');
+								$('#segmentElementModal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
+								$('#segmentElementModal').modal('show');
 								return;
 							}
 						}
@@ -517,9 +517,9 @@
 						i = 0;
 						for (; i < sceneList.length; i++) {
 							if (startTime > sceneList[i].startTime || endTime < sceneList[i].endTime) {
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment time interval too small');
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
-								$('#timaat-videoplayer-segment-element-modal').modal('show');
+								$('#segmentElementModal').find('.modal-title').html('Segment time interval too small');
+								$('#segmentElementModal').find('.modal-body').html("The segment's time interval has to be large enough to encompass its elements. Remove or alter conflicting sequences and scenes first.");
+								$('#segmentElementModal').modal('show');
 								return;
 							}
 						}
@@ -541,9 +541,9 @@
 					}
 					// early out: segment overlaps with other segments
 					if (overlapping) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Segment is overlapping');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Segments are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Segment is overlapping');
+						$('#segmentElementModal').find('.modal-body').html("Segments are not allowed to overlap. Please check your start and end time values.");
+						$('#segmentElementModal').modal('show');
 					} else {
 						if (segment) {
 							segment.model.analysisSegmentTranslations[0].name = name;
@@ -580,28 +580,28 @@
 				if ( inspector.state.type == 'sequence' ) {
 					var sequence = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> sequence", sequence);
-					var name = $('#timaat-inspector-meta-name').val();
-					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var name = $('#inspectorName').val();
+					var shortDescription = $('#inspectorShortDescription').val();
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					$('#inspectorComment').summernote('code', comment);
+					var transcript = $('#inspectorTranscript').summernote('code');
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
 
 					// early out: sequence has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence has no time range');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Sequences need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Sequence has no time range');
+						$('#segmentElementModal').find('.modal-body').html("Sequences need to cover a spatial area. Start and end time may not be identical.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					// early out: sequence's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence out of bounds');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The sequence's start and end time have to be within the range of the segment it belongs to.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Sequence out of bounds');
+						$('#segmentElementModal').find('.modal-body').html("The sequence's start and end time have to be within the range of the segment it belongs to.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					if (sequence) {
@@ -610,9 +610,9 @@
 						i = 0;
 						for (; i < takeList.length; i++) {
 							if (startTime > takeList[i].startTime || endTime < takeList[i].endTime) {
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence time interval too small');
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The sequence's time interval has to be large enough to encompass its elements. Remove or alter conflicting takes first.");
-								$('#timaat-videoplayer-segment-element-modal').modal('show');
+								$('#segmentElementModal').find('.modal-title').html('Sequence time interval too small');
+								$('#segmentElementModal').find('.modal-body').html("The sequence's time interval has to be large enough to encompass its elements. Remove or alter conflicting takes first.");
+								$('#segmentElementModal').modal('show');
 								return;
 							}
 						}
@@ -635,9 +635,9 @@
 					}
 					// early out: sequence overlaps with other sequences
 					if (overlapping) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Sequence is overlapping');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Sequences are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Sequence is overlapping');
+						$('#segmentElementModal').find('.modal-body').html("Sequences are not allowed to overlap. Please check your start and end time values.");
+						$('#segmentElementModal').modal('show');
 					} else {
 						if (sequence) {
 							sequence.model.analysisSequenceTranslations[0].name = name;
@@ -676,27 +676,27 @@
 				// analysis takes
 				if ( inspector.state.type == 'take' ) {
 					var take = inspector.state.item;
-					var name = $('#timaat-inspector-meta-name').val();
-					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var name = $('#inspectorName').val();
+					var shortDescription = $('#inspectorShortDescription').val();
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					$('#inspectorComment').summernote('code', comment);
+					var transcript = $('#inspectorTranscript').summernote('code');
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 
 					// early out: take has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take has no time range');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Takes need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Take has no time range');
+						$('#segmentElementModal').find('.modal-body').html("Takes need to cover a spatial area. Start and end time may not be identical.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					// early out: take's time range exceeds sequence's time range
 					if (startTime < TIMAAT.VideoPlayer.curSequence.model.startTime || endTime > TIMAAT.VideoPlayer.curSequence.model.endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take out of bounds');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The take's start and end time have to be within the range of the sequence it belongs to.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Take out of bounds');
+						$('#segmentElementModal').find('.modal-body').html("The take's start and end time have to be within the range of the sequence it belongs to.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 
@@ -718,9 +718,9 @@
 					}
 					// early out: take overlaps with other takes
 					if (overlapping) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Take is overlapping');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Takes are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Take is overlapping');
+						$('#segmentElementModal').find('.modal-body').html("Takes are not allowed to overlap. Please check your start and end time values.");
+						$('#segmentElementModal').modal('show');
 					} else {
 						if (take) {
 							take.model.analysisTakeTranslations[0].name = name;
@@ -758,28 +758,28 @@
 				// analysis scenes
 				if ( inspector.state.type == 'scene' ) {
 					var scene = inspector.state.item;
-					var name = $('#timaat-inspector-meta-name').val();
-					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var name = $('#inspectorName').val();
+					var shortDescription = $('#inspectorShortDescription').val();
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					$('#inspectorComment').summernote('code', comment);
+					var transcript = $('#inspectorTranscript').summernote('code');
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
 
 					// early out: scene has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene has no time range');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Scenes need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Scene has no time range');
+						$('#segmentElementModal').find('.modal-body').html("Scenes need to cover a spatial area. Start and end time may not be identical.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					// early out: scene's time range exceeds segment's time range
 					if (startTime < TIMAAT.VideoPlayer.curSegment.model.startTime || endTime > TIMAAT.VideoPlayer.curSegment.model.endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene out of bounds');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The scene's start and end time have to be within the range of the segment it belongs to.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Scene out of bounds');
+						$('#segmentElementModal').find('.modal-body').html("The scene's start and end time have to be within the range of the segment it belongs to.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					// early out: scene's actions do not exceed new time range
@@ -788,9 +788,9 @@
 						i = 0;
 						for (; i < actionList.length; i++) {
 							if (startTime > actionList[i].startTime || endTime < actionList[i].endTime) {
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene time interval too small');
-								$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The scene's time interval has to be large enough to encompass its elements. Remove or alter conflicting actions first.");
-								$('#timaat-videoplayer-segment-element-modal').modal('show');
+								$('#segmentElementModal').find('.modal-title').html('Scene time interval too small');
+								$('#segmentElementModal').find('.modal-body').html("The scene's time interval has to be large enough to encompass its elements. Remove or alter conflicting actions first.");
+								$('#segmentElementModal').modal('show');
 								return;
 							}
 						}
@@ -813,9 +813,9 @@
 					}
 					// early out: scene overlaps with other scenes
 					if (overlapping) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Scene is overlapping');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Scenes are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Scene is overlapping');
+						$('#segmentElementModal').find('.modal-body').html("Scenes are not allowed to overlap. Please check your start and end time values.");
+						$('#segmentElementModal').modal('show');
 					} else {
 						if (scene) {
 							scene.model.analysisSceneTranslations[0].name = name;
@@ -853,27 +853,27 @@
 				// analysis actions
 				if ( inspector.state.type == 'action' ) {
 					var action = inspector.state.item;
-					var name = $('#timaat-inspector-meta-name').val();
-					var shortDescription = $('#timaat-inspector-meta-shortDescription').val();
-					var comment = $('#timaat-inspector-meta-comment').summernote('code');
+					var name = $('#inspectorName').val();
+					var shortDescription = $('#inspectorShortDescription').val();
+					var comment = $('#inspectorComment').summernote('code');
 					comment = comment.substring(0,4096);
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					var transcript = $('#timaat-inspector-meta-transcript').summernote('code');
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					$('#inspectorComment').summernote('code', comment);
+					var transcript = $('#inspectorTranscript').summernote('code');
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 
 					// early out: action has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action has no time range');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Actions need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Action has no time range');
+						$('#segmentElementModal').find('.modal-body').html("Actions need to cover a spatial area. Start and end time may not be identical.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 					// early out: action's time range exceeds scene's time range
 					if (startTime < TIMAAT.VideoPlayer.curScene.model.startTime || endTime > TIMAAT.VideoPlayer.curScene.model.endTime) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action out of bounds');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("The action's start and end time have to be within the range of the scene it belongs to.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Action out of bounds');
+						$('#segmentElementModal').find('.modal-body').html("The action's start and end time have to be within the range of the scene it belongs to.");
+						$('#segmentElementModal').modal('show');
 						return;
 					}
 
@@ -895,9 +895,9 @@
 					}
 					// early out: action overlaps with other actions
 					if (overlapping) {
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-title').html('Action is overlapping');
-						$('#timaat-videoplayer-segment-element-modal').find('.modal-body').html("Actions are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-segment-element-modal').modal('show');
+						$('#segmentElementModal').find('.modal-title').html('Action is overlapping');
+						$('#segmentElementModal').find('.modal-body').html("Actions are not allowed to overlap. Please check your start and end time values.");
+						$('#segmentElementModal').modal('show');
 					} else {
 						if (action) {
 							action.model.analysisActionTranslations[0].name = name;
@@ -935,20 +935,20 @@
 				if ( inspector.state.type == 'musicFormElement' ) {
 					var musicFormElement = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
-					var text = $('#timaat-inspector-meta-lyrics').summernote('code');
+					var text = $('#inspectorLyrics').summernote('code');
 					text = text.substring(0, 4096);
-					$('#timaat-inspector-meta-lyrics').summernote('code', text);
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
-					var repeatLastRow = $('#timaat-inspector-meta-repeat-last-row').is(':checked') ? true : false;
+					$('#inspectorLyrics').summernote('code', text);
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
+					var repeatLastRow = $('#inspectorRepeatLastRow').is(':checked') ? true : false;
 					let i = 0;
-					let typeId = $('#music-form-element-type-select-dropdown').val();
+					let typeId = $('#musicFormElementTypeSelectionDropdown').val();
 
 					// early out: musicFormElement has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-music-form-element-modal').find('.modal-title').html('Music Form Element has no time range');
-						$('#timaat-videoplayer-music-form-element-modal').find('.modal-body').html("Music Form Elements need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-music-form-element-modal').modal('show');
+						$('#musicFormElementModal').find('.modal-title').html('Music Form Element has no time range');
+						$('#musicFormElementModal').find('.modal-body').html("Music Form Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#musicFormElementModal').modal('show');
 						return;
 					}
 					// musicFormElement has a time range and still encompasses its sub elements. Now check for overlap with other musicFormElementList
@@ -968,9 +968,9 @@
 					}
 					// early out: musicFormElement overlaps with other musicFormElementList
 					if (overlapping) {
-						$('#timaat-videoplayer-music-form-element-modal').find('.modal-title').html('Music Form Element is overlapping');
-						$('#timaat-videoplayer-music-form-element-modal').find('.modal-body').html("Music Form Elements are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-music-form-element-modal').modal('show');
+						$('#musicFormElementModal').find('.modal-title').html('Music Form Element is overlapping');
+						$('#musicFormElementModal').find('.modal-body').html("Music Form Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#musicFormElementModal').modal('show');
 					} else {
 						if (musicFormElement) {
 							musicFormElement.model.musicFormElementTranslations[0].text = text;
@@ -1009,16 +1009,16 @@
 				if ( inspector.state.type == 'musicChangeInTempoElement' ) {
 					var musicChangeInTempoElement = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
-					let changeInTempoId = $('#music-change-in-tempo-element-select-dropdown').val();
+					let changeInTempoId = $('#musicChangeInTempoElementSelectDropdown').val();
 
 					// early out: musicChangeInTempoElement has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-title').html('Music Change In Tempo Element has no time range');
-						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-body').html("Music Change In Tempo Elements need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-music-change-in-tempo-element-modal').modal('show');
+						$('#musicChangeInTempoElementModal').find('.modal-title').html('Music Change In Tempo Element has no time range');
+						$('#musicChangeInTempoElementModal').find('.modal-body').html("Music Change In Tempo Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#musicChangeInTempoElementModal').modal('show');
 						return;
 					}
 					// musicChangeInTempoElement has a time range and still encompasses its sub elements. Now check for overlap with other musicChangeInTempoElementList
@@ -1038,9 +1038,9 @@
 					}
 					// early out: musicChangeInTempoElement overlaps with other musicChangeInTempoElementList
 					if (overlapping) {
-						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-title').html('Music Change In Tempo Element is overlapping');
-						$('#timaat-videoplayer-music-change-in-tempo-element-modal').find('.modal-body').html("Music Change In Tempo Elements are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-music-change-in-tempo-element-modal').modal('show');
+						$('#musicChangeInTempoElementModal').find('.modal-title').html('Music Change In Tempo Element is overlapping');
+						$('#musicChangeInTempoElementModal').find('.modal-body').html("Music Change In Tempo Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#musicChangeInTempoElementModal').modal('show');
 					} else {
 						if (musicChangeInTempoElement) {
 							musicChangeInTempoElement.model.startTime = startTime;
@@ -1072,16 +1072,16 @@
 				if ( inspector.state.type == 'musicArticulationElement' ) {
 					var musicArticulationElement = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
-					let articulationId = $('#music-articulation-element-select-dropdown').val();
+					let articulationId = $('#articulationElementSelectDropdown').val();
 
 					// early out: musicArticulationElement has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-title').html('Music Articulation Element has no time range');
-						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-body').html("Music Articulation Elements need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-music-articulation-element-modal').modal('show');
+						$('#musicArticulationElementModal').find('.modal-title').html('Music Articulation Element has no time range');
+						$('#musicArticulationElementModal').find('.modal-body').html("Music Articulation Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#musicArticulationElementModal').modal('show');
 						return;
 					}
 					// musicArticulationElement has a time range and still encompasses its sub elements. Now check for overlap with other musicArticulationElementList
@@ -1101,9 +1101,9 @@
 					}
 					// early out: musicArticulationElement overlaps with other musicArticulationElementList
 					if (overlapping) {
-						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-title').html('Music Articulation Element is overlapping');
-						$('#timaat-videoplayer-music-articulation-element-modal').find('.modal-body').html("Music Articulation Elements are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-music-articulation-element-modal').modal('show');
+						$('#musicArticulationElementModal').find('.modal-title').html('Music Articulation Element is overlapping');
+						$('#musicArticulationElementModal').find('.modal-body').html("Music Articulation Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#musicArticulationElementModal').modal('show');
 					} else {
 						if (musicArticulationElement) {
 							musicArticulationElement.model.startTime = startTime;
@@ -1135,16 +1135,16 @@
 				if ( inspector.state.type == 'musicDynamicsElement' ) {
 					var musicDynamicsElement = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
-					let typeId = $('#music-dynamics-element-select-dropdown').val();
+					let typeId = $('#musicDynamicsElementSelectDropdown').val();
 
 					// early out: musicDynamicsElement has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-music-dynamics-element-modal').find('.modal-title').html('Music Text Setting Element has no time range');
-						$('#timaat-videoplayer-music-dynamics-element-modal').find('.modal-body').html("Music Text Setting Elements need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-music-dynamics-element-modal').modal('show');
+						$('#musicDynamicsElementModal').find('.modal-title').html('Music Text Setting Element has no time range');
+						$('#musicDynamicsElementModal').find('.modal-body').html("Music Text Setting Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#musicDynamicsElementModal').modal('show');
 						return;
 					}
 					// musicDynamicsElement has a time range and still encompasses its sub elements. Now check for overlap with other musicDynamicsElementList
@@ -1164,9 +1164,9 @@
 					}
 					// early out: musicDynamicsElement overlaps with other musicDynamicsElementList
 					if (overlapping) {
-						$('#timaat-videoplayer-music-dynamics-element-modal').find('.modal-title').html('Music Text Setting Element is overlapping');
-						$('#timaat-videoplayer-music-dynamics-element-modal').find('.modal-body').html("Music Text Setting Elements are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-music-dynamics-element-modal').modal('show');
+						$('#musicDynamicsElementModal').find('.modal-title').html('Music Text Setting Element is overlapping');
+						$('#musicDynamicsElementModal').find('.modal-body').html("Music Text Setting Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#musicDynamicsElementModal').modal('show');
 					} else {
 						if (musicDynamicsElement) {
 							musicDynamicsElement.model.startTime = startTime;
@@ -1198,16 +1198,16 @@
 				if ( inspector.state.type == 'musicTextSettingElement' ) {
 					var musicTextSettingElement = inspector.state.item;
           // console.log("TCL: Inspector -> $ -> inspector.state.item", inspector.state.item);
-					var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-					var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+					var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+					var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 					let i = 0;
-					let typeId = $('#music-text-setting-element-select-dropdown').val();
+					let typeId = $('#musicTextSettingElementSelectDropdown').val();
 
 					// early out: musicTextSettingElement has no time range
 					if (startTime == endTime) {
-						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-title').html('Music Text Setting Element has no time range');
-						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-body').html("Music Text Setting Elements need to cover a spatial area. Start and end time may not be identical.");
-						$('#timaat-videoplayer-music-text-setting-element-modal').modal('show');
+						$('#musicTextSettingElementModal').find('.modal-title').html('Music Text Setting Element has no time range');
+						$('#musicTextSettingElementModal').find('.modal-body').html("Music Text Setting Elements need to cover a spatial area. Start and end time may not be identical.");
+						$('#musicTextSettingElementModal').modal('show');
 						return;
 					}
 					// musicTextSettingElement has a time range and still encompasses its sub elements. Now check for overlap with other musicTextSettingElementList
@@ -1227,9 +1227,9 @@
 					}
 					// early out: musicTextSettingElement overlaps with other musicTextSettingElementList
 					if (overlapping) {
-						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-title').html('Music Text Setting Element is overlapping');
-						$('#timaat-videoplayer-music-text-setting-element-modal').find('.modal-body').html("Music Text Setting Elements are not allowed to overlap. Please check your start and end time values.");
-						$('#timaat-videoplayer-music-text-setting-element-modal').modal('show');
+						$('#musicTextSettingElementModal').find('.modal-title').html('Music Text Setting Element is overlapping');
+						$('#musicTextSettingElementModal').find('.modal-body').html("Music Text Setting Elements are not allowed to overlap. Please check your start and end time values.");
+						$('#musicTextSettingElementModal').modal('show');
 					} else {
 						if (musicTextSettingElement) {
 							musicTextSettingElement.model.startTime = startTime;
@@ -1259,15 +1259,15 @@
 				}
 			});
 
-			$('#timaat-inspector-meta-visual-layer').on('click', function(event) {
+			$('#inspectorVisualLayerCheckbox').on('click', function(event) {
 				// if svg and/or animation data is available, prevent un-checking
-				if (!$('#timaat-inspector-meta-visual-layer').is(":checked") && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
+				if (!$('#inspectorVisualLayerCheckbox').is(":checked") && TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.selectorSvgs[0].svgData != '{"keyframes":[{"time":0,"shapes":[]}]}') {
 					event.preventDefault();
-					$('#timaat-annotation-analysis-layer-in-use').modal('show');
+					$('#annotationAnalysisLayerInUseModal').modal('show');
 					return;
 				}
 				// if an analysis is attached that is only available for the visual-layer, prevent un-checking
-				if (!$('#timaat-inspector-meta-visual-layer').is(":checked")) {
+				if (!$('#inspectorVisualLayerCheckbox').is(":checked")) {
 					if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.analysis.length > 0) { // early out
 						let indexes = TIMAAT.VideoPlayer.curAnnotation.model.analysis.reduce((result, entry, index) => entry.analysisMethod.analysisMethodType.layerVisual === true ? result.concat(index) : result, []);
 						let i = 0;
@@ -1280,19 +1280,19 @@
 						}
 						if (preventUncheck) {
 							event.preventDefault();
-							$('#timaat-annotation-analysis-layer-in-use').modal('show');
+							$('#annotationAnalysisLayerInUseModal').modal('show');
 							return;
 						}
 					}
 				}
 				// if both checkboxes are unchecked after un-checking a checkbox, check the other one
-				if (!$('#timaat-inspector-meta-visual-layer').is(":checked") && !$('#timaat-inspector-meta-audio-layer').is(":checked")) {
-					$('#timaat-inspector-meta-audio-layer').prop("checked", true);
+				if (!$('#inspectorVisualLayerCheckbox').is(":checked") && !$('#inspectorAudioLayerCheckbox').is(":checked")) {
+					$('#inspectorAudioLayerCheckbox').prop("checked", true);
 				}
 			});
 
-			$('#timaat-inspector-meta-audio-layer').on('click', function(event) {
-				if (!$('#timaat-inspector-meta-audio-layer').is(":checked")) {
+			$('#inspectorAudioLayerCheckbox').on('click', function(event) {
+				if (!$('#inspectorAudioLayerCheckbox').is(":checked")) {
 					if (TIMAAT.VideoPlayer.curAnnotation && TIMAAT.VideoPlayer.curAnnotation.model.analysis.length > 0) { // early out
 						let indexes = TIMAAT.VideoPlayer.curAnnotation.model.analysis.reduce((result, entry, index) => entry.analysisMethod.analysisMethodType.layerAudio === true ? result.concat(index) : result, []);
 						let i = 0;
@@ -1305,18 +1305,18 @@
 						}
 						if (preventUncheck) {
 							event.preventDefault();
-							$('#timaat-annotation-analysis-layer-in-use').modal('show');
+							$('#annotationAnalysisLayerInUseModal').modal('show');
 							return;
 						}
 					}
 				}
 				// if both checkboxes are unchecked after un-checking a checkbox, check the other one
-				if (!$('#timaat-inspector-meta-audio-layer').is(":checked") && !$('#timaat-inspector-meta-visual-layer').is(":checked")) {
-					$('#timaat-inspector-meta-visual-layer').prop("checked", true);
+				if (!$('#inspectorAudioLayerCheckbox').is(":checked") && !$('#inspectorVisualLayerCheckbox').is(":checked")) {
+					$('#inspectorVisualLayerCheckbox').prop("checked", true);
 				}
 			});
 
-			$('#timaat-inspector-meta-delete').on('click', function() {
+			$('#inspectorDeleteButton').on('click', function() {
 				//* musicFormElement is not part of an analysisList and therefore modifying is not restricted to certain users
 				if (inspector.state.type == 'musicFormElement') {
 					TIMAAT.VideoPlayer.removeMusicFormElement(TIMAAT.VideoPlayer.curMusicFormElement);
@@ -1372,77 +1372,77 @@
 			});
 
 			// setup annotation metadata UI and events
-			$('#timaat-inspector-meta-colorPicker').tinycolorpicker();
-			this.cp = $('#timaat-inspector-meta-colorPicker').data("plugin_tinycolorpicker");
+			$('#inspectorColorPicker').tinycolorpicker();
+			this.cp = $('#inspectorColorPicker').data("plugin_tinycolorpicker");
 			this.cp.setColor('rgb(3, 145, 206)');
 
-			$('#timaat-inspector-meta-name').on('input', function(ev) {
-				if ( $('#timaat-inspector-meta-name').val().length > 0 ) {
-					$('#timaat-inspector-meta-submit').prop('disabled', false);
-					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+			$('#inspectorName').on('input', function(ev) {
+				if ( $('#inspectorName').val().length > 0 ) {
+					$('#inspectorSubmitButton').prop('disabled', false);
+					$('#inspectorSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop('disabled', true);
-					$('#timaat-inspector-meta-submit').attr('disabled');
+					$('#inspectorSubmitButton').prop('disabled', true);
+					$('#inspectorSubmitButton').attr('disabled');
 				}
 			});
 
-			$('#music-form-element-type-select-dropdown').on('change', function(ev) {
-				if ( $('#music-form-element-type-select-dropdown').val() > 0 ) {
-					$('#timaat-inspector-meta-submit').prop('disabled', false);
-					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+			$('#musicFormElementTypeSelectionDropdown').on('change', function(ev) {
+				if ( $('#musicFormElementTypeSelectionDropdown').val() > 0 ) {
+					$('#inspectorSubmitButton').prop('disabled', false);
+					$('#inspectorSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop('disabled', true);
-					$('#timaat-inspector-meta-submit').attr('disabled');
+					$('#inspectorSubmitButton').prop('disabled', true);
+					$('#inspectorSubmitButton').attr('disabled');
 				}
 			});
 
-			$('#music-change-in-tempo-element-select-dropdown').on('change', function(ev) {
-				if ( $('#music-change-in-tempo-element-select-dropdown').val() > 0 ) {
-					$('#timaat-inspector-meta-submit').prop('disabled', false);
-					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+			$('#musicChangeInTempoElementSelectDropdown').on('change', function(ev) {
+				if ( $('#musicChangeInTempoElementSelectDropdown').val() > 0 ) {
+					$('#inspectorSubmitButton').prop('disabled', false);
+					$('#inspectorSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop('disabled', true);
-					$('#timaat-inspector-meta-submit').attr('disabled');
+					$('#inspectorSubmitButton').prop('disabled', true);
+					$('#inspectorSubmitButton').attr('disabled');
 				}
 			});
 
-			$('#music-articulation-element-select-dropdown').on('change', function(ev) {
-				if ( $('#music-articulation-element-select-dropdown').val() > 0 ) {
-					$('#timaat-inspector-meta-submit').prop('disabled', false);
-					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+			$('#articulationElementSelectDropdown').on('change', function(ev) {
+				if ( $('#articulationElementSelectDropdown').val() > 0 ) {
+					$('#inspectorSubmitButton').prop('disabled', false);
+					$('#inspectorSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop('disabled', true);
-					$('#timaat-inspector-meta-submit').attr('disabled');
+					$('#inspectorSubmitButton').prop('disabled', true);
+					$('#inspectorSubmitButton').attr('disabled');
 				}
 			});
 
-			$('#music-dynamics-element-select-dropdown').on('change', function(ev) {
-				if ( $('#music-dynamics-element-select-dropdown').val() > 0 ) {
-					$('#timaat-inspector-meta-submit').prop('disabled', false);
-					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+			$('#musicDynamicsElementSelectDropdown').on('change', function(ev) {
+				if ( $('#musicDynamicsElementSelectDropdown').val() > 0 ) {
+					$('#inspectorSubmitButton').prop('disabled', false);
+					$('#inspectorSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop('disabled', true);
-					$('#timaat-inspector-meta-submit').attr('disabled');
+					$('#inspectorSubmitButton').prop('disabled', true);
+					$('#inspectorSubmitButton').attr('disabled');
 				}
 			});
 
-			$('#music-text-setting-element-select-dropdown').on('change', function(ev) {
-				if ( $('#music-text-setting-element-select-dropdown').val() > 0 ) {
-					$('#timaat-inspector-meta-submit').prop('disabled', false);
-					$('#timaat-inspector-meta-submit').removeAttr('disabled');
+			$('#musicTextSettingElementSelectDropdown').on('change', function(ev) {
+				if ( $('#musicTextSettingElementSelectDropdown').val() > 0 ) {
+					$('#inspectorSubmitButton').prop('disabled', false);
+					$('#inspectorSubmitButton').removeAttr('disabled');
 				} else {
-					$('#timaat-inspector-meta-submit').prop('disabled', true);
-					$('#timaat-inspector-meta-submit').attr('disabled');
+					$('#inspectorSubmitButton').prop('disabled', true);
+					$('#inspectorSubmitButton').attr('disabled');
 				}
 			});
 
-			// $('#timaat-inspector-meta-colorPicker').on('change', function(event) {
+			// $('#inspectorColorPicker').on('change', function(event) {
       //   if ( inspector.state.type == 'annotation' ) {
-			// 		console.log("TCL: Inspector -> timaat-inspector-meta-colorPicker -> on change");
+			// 		console.log("TCL: Inspector -> inspectorColorPicker -> on change");
 			// 		let anno = inspector.state.item;
       //     console.log("TCL: Inspector -> $ -> anno", anno);
 			// 		if (!anno) return;
-			// 		let color = $('#timaat-inspector-meta-colorPicker').data("plugin_tinycolorpicker").colorHex;
+			// 		let color = $('#inspectorColorPicker').data("plugin_tinycolorpicker").colorHex;
       //     console.log("TCL: Inspector -> $ -> color", color);
 			// 		for (let item of anno.svg.items) {
 			// 			item.setStyle({color: + color });
@@ -1451,17 +1451,17 @@
 			// 	}
 			// })
 
-			$('#timaat-inspector-meta-opacity').on('change input', function(ev) {
+			$('#inspectorOpacity').on('change input', function(ev) {
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
 					if ( !anno ) return;
-					let opacity = Number($('#timaat-inspector-meta-opacity').val());
+					let opacity = Number($('#inspectorOpacity').val());
 					anno.opacity = opacity;
-					if ( opacity == 0 && anno.stroke == 0 ) $('#timaat-inspector-meta-outline').trigger('click');
+					if ( opacity == 0 && anno.stroke == 0 ) $('#inspectorOutlineButton').trigger('click');
 				}
 			});
 
-			$('#timaat-inspector-meta-outline').on('click', function(ev) {
+			$('#inspectorOutlineButton').on('click', function(ev) {
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
 					var stroke = $(this).hasClass('btn-primary') ? 0 : 2;
@@ -1473,13 +1473,13 @@
 				}
 			});
 
-			$('#timaat-inspector-meta-start, #timaat-inspector-meta-end').on('blur change', function(ev) {
-				var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-				var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+			$('#inspectorStartTimecode, #inspectorEndTimecode').on('blur change', function(ev) {
+				var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+				var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 				startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 				endTime = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
-				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
+				$('#inspectorStartTimecode').val(TIMAAT.Util.formatTime(startTime, true));
+				$('#inspectorEndTimecode').val(TIMAAT.Util.formatTime(endTime, true));
 
 				if ( inspector.state.item && inspector.state.type == 'annotation' ) {
 					inspector.state.item.startTime = startTime;
@@ -1488,9 +1488,9 @@
 				}
 			});
 
-			$('#timaat-inspector-meta-setstart').on('click', function() {
-				var startTimeInMs = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-				var endTimeInMs = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+			$('#inspectorStartTimecodeSetCurrentTime').on('click', function() {
+				var startTimeInMs = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+				var endTimeInMs = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 				var durationInMs = endTimeInMs - startTimeInMs;
 				let currentTimeInMs = TIMAAT.VideoPlayer.medium.currentTime * 1000;
 				durationInMs = Math.max(0, Math.min(durationInMs, TIMAAT.VideoPlayer.duration * 1000));
@@ -1513,13 +1513,13 @@
 						durationInMs = Math.max(0, Math.min(durationInMs, TIMAAT.VideoPlayer.curScene.model.endTime - startTimeInMs));
 					break;
 				}
-				$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTimeInMs, true));
+				$('#inspectorStartTimecode').val(TIMAAT.Util.formatTime(startTimeInMs, true));
 				endTimeInMs = startTimeInMs + durationInMs;
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTimeInMs, true));
-				$('#timaat-inspector-meta-start').trigger('blur');
+				$('#inspectorEndTimecode').val(TIMAAT.Util.formatTime(endTimeInMs, true));
+				$('#inspectorStartTimecode').trigger('blur');
 			});
 
-			$('#timaat-inspector-meta-setend').on('click', function() {
+			$('#inspectorEndTimecodeSetCurrentTime').on('click', function() {
 				let currentTimeInMs = TIMAAT.VideoPlayer.medium.currentTime * 1000;
 				let endTimeInMs = currentTimeInMs;
 				switch (TIMAAT.VideoPlayer.inspector.state.type) {
@@ -1537,11 +1537,11 @@
 							endTimeInMs = TIMAAT.VideoPlayer.curScene.model.endTime;
 					break;
 				}
-				$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTimeInMs, true));
-				$('#timaat-inspector-meta-start').trigger('blur');
+				$('#inspectorEndTimecode').val(TIMAAT.Util.formatTime(endTimeInMs, true));
+				$('#inspectorStartTimecode').trigger('blur');
 			});
 
-			$('#timaat-inspector-meta-duration').change(function(ev) {
+			$('#inspectorEndTimecodeDuration').change(function(ev) {
 				var time = parseInt($(this).val());
 				if ( ! isNaN(time) ) inspector.setMetaEnd(time);
 				$(this).parent().click();
@@ -1562,7 +1562,7 @@
 					TIMAAT.VideoPlayer.pause();
 					let anno = TIMAAT.VideoPlayer.curAnnotation;
 					anno.addKeyframeAt(anno.endTime / 1000);
-					$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+					$('#inspectorVisualLayerCheckbox').prop('checked', true);
 
 				}
 			});
@@ -1580,7 +1580,7 @@
 		}
 
 		get isOpen() {
-			return !$('#timaat-inspector').hasClass('collapsed');
+			return !$('#mediaPlayerInspector').hasClass('collapsed');
 		}
 
 		reset() {
@@ -1594,11 +1594,11 @@
 		switchPosition() {
 			if ( this.getPosition() == 'left' ) {
 				this.setPosition('right');
-				$('#timaat-inspector').removeClass('leaflet-sidebar-left');
+				$('#mediaPlayerInspector').removeClass('leaflet-sidebar-left');
 				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-right');
 			} else {
 				this.setPosition('left');
-				$('#timaat-inspector').removeClass('leaflet-sidebar-right');
+				$('#mediaPlayerInspector').removeClass('leaflet-sidebar-right');
 				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-left');
 			}
 		}
@@ -1609,35 +1609,35 @@
 			this.state.type = type;
 
 			// hide segment substructure elements
-			$('.timaat-segment-substructure-add').addClass("timaat-item-disabled");
-			$('.timaat-segment-substructure-add').removeAttr('onclick');
+			$('.addSegmentSubElement').addClass("item--disabled");
+			$('.addSegmentSubElement').removeAttr('onclick');
 
 			$('#segmentElementCategoriesForm').data('type', type);
 
 			// metadata panel default UI setting
-			$('#timaat-inspector-meta-start').prop('disabled', false);
-			$('#timaat-inspector-meta-setstart').prop('disabled', false);
-			$('#timaat-inspector-meta-end').prop('disabled', false);
-			$('#timaat-inspector-meta-setend').prop('disabled', false);
-			$('#timaat-inspector-meta-setend-dropdown').prop('disabled', false);
+			$('#inspectorStartTimecode').prop('disabled', false);
+			$('#inspectorStartTimecodeSetCurrentTime').prop('disabled', false);
+			$('#inspectorEndTimecode').prop('disabled', false);
+			$('#inspectorEndTimecodeSetCurrentTime').prop('disabled', false);
+			$('#inspectorEndTimecodeSetEndTimeDropdown').prop('disabled', false);
 
 			if (item) {
-				$('#timaat-inspector-meta-delete').prop('disabled', false);
-				$('#timaat-inspector-meta-delete').removeAttr('disabled');
-				$('#timaat-inspector-meta-delete').show();
+				$('#inspectorDeleteButton').prop('disabled', false);
+				$('#inspectorDeleteButton').removeAttr('disabled');
+				$('#inspectorDeleteButton').show();
 			} else {
-				$('#timaat-inspector-meta-delete').prop('disabled', true);
-				$('#timaat-inspector-meta-delete').attr('disabled');
-				$('#timaat-inspector-meta-delete').hide();
+				$('#inspectorDeleteButton').prop('disabled', true);
+				$('#inspectorDeleteButton').attr('disabled');
+				$('#inspectorDeleteButton').hide();
 			}
 
 			// animation panel default UI setting
-			this.disablePanel('timaat-inspector-animation');
-			this.disablePanel('timaat-inspector-categories-and-tags');
-			this.disablePanel('timaat-inspector-actors');
-			this.disablePanel('timaat-inspector-events');
-			// this.disablePanel('timaat-inspector-locations');
-			this.disablePanel('timaat-inspector-analysis');
+			this.disablePanel('inspectorAnimation');
+			this.disablePanel('inspectorCategoriesAndTags');
+			this.disablePanel('inspectorActors');
+			this.disablePanel('inspectorEvents');
+			// this.disablePanel('inspectorLocations');
+			this.disablePanel('inspectorAnalysisGuidelines');
 			this.ui.keyframeList.children().detach();
 
 			// actors panel default UI setting
@@ -1654,46 +1654,46 @@
 			switch (type) {
 				case undefined:
 				case null:
-					if ( this.isOpen ) this.open('timaat-inspector-metadata');
-					this.disablePanel('timaat-inspector-metadata');
-					$('#timaat-inspector-metadata-title').html('No element selected');
+					if ( this.isOpen ) this.open('inspectorMetadata');
+					this.disablePanel('inspectorMetadata');
+					$('#inspectorTitle').html('No element selected');
 				break;
 				case 'annotation':
 					if (!item) {
 						TIMAAT.VideoPlayer.curAnnotation = null;
 					}
-					this.enablePanel('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
 					// animation panel
-					if ( TIMAAT.VideoPlayer.model.medium.mediumVideo ) this.enablePanel('timaat-inspector-animation');
-					else this.disablePanel('timaat-inspector-animation');
+					if ( TIMAAT.VideoPlayer.model.medium.mediumVideo ) this.enablePanel('inspectorAnimation');
+					else this.disablePanel('inspectorAnimation');
 					if ( item != null ) {
-						this.enablePanel('timaat-inspector-actors');
-						this.enablePanel('timaat-inspector-events');
-						// this.enablePanel('timaat-inspector-locations');
-						this.enablePanel('timaat-inspector-analysis');
-						this.enablePanel('timaat-inspector-categories-and-tags');
+						this.enablePanel('inspectorActors');
+						this.enablePanel('inspectorEvents');
+						// this.enablePanel('inspectorLocations');
+						this.enablePanel('inspectorAnalysisGuidelines');
+						this.enablePanel('inspectorCategoriesAndTags');
 					}
 					// metadata panel
-					$('#timaat-inspector-meta-name').show();
-					$('#timaat-inspector-meta-color-group').show();
-					$('#timaat-inspector-meta-opacity-group').show();
-					if ( TIMAAT.VideoPlayer.model.medium.mediumVideo) $('#timaat-inspector-meta-type-group').show(); // TODO may have to change when new media types can be annotated
-					else $('#timaat-inspector-meta-type-group').hide();
-					if ( TIMAAT.VideoPlayer.duration > 0 ) $('#timaat-inspector-meta-timecode-group').show();
-					else $('#timaat-inspector-meta-timecode-group').hide();
+					$('#inspectorName').show();
+					$('#inspectorColorGroup').show();
+					$('#inspectorOpacityGroup').show();
+					if ( TIMAAT.VideoPlayer.model.medium.mediumVideo) $('#inspectorTypeGroup').show(); // TODO may have to change when new media types can be annotated
+					else $('#inspectorTypeGroup').hide();
+					if ( TIMAAT.VideoPlayer.duration > 0 ) $('#inspectorTimecodeGroup').show();
+					else $('#inspectorTimecodeGroup').hide();
 					if (item) {
-						$('#timaat-inspector-meta-start').prop('disabled', item.isAnimation());
-						$('#timaat-inspector-meta-setstart').prop('disabled', item.isAnimation());
-						$('#timaat-inspector-meta-end').prop('disabled', item.isAnimation());
-						$('#timaat-inspector-meta-setend').prop('disabled', item.isAnimation());
-						$('#timaat-inspector-meta-setend-dropdown').prop('disabled', item.isAnimation());
+						$('#inspectorStartTimecode').prop('disabled', item.isAnimation());
+						$('#inspectorStartTimecodeSetCurrentTime').prop('disabled', item.isAnimation());
+						$('#inspectorEndTimecode').prop('disabled', item.isAnimation());
+						$('#inspectorEndTimecodeSetCurrentTime').prop('disabled', item.isAnimation());
+						$('#inspectorEndTimecodeSetEndTimeDropdown').prop('disabled', item.isAnimation());
 					}
-					$('#timaat-inspector-meta-shortDescription-group').hide();
-					$('#timaat-inspector-meta-comment-group').show();
-					$('#timaat-inspector-meta-transcript-group').hide();
-					$('#timaat-inspector-meta-music-form-element-type-group').hide();
-					$('#timaat-inspector-meta-lyrics-group').hide();
-					$('#timaat-inspector-meta-repeat-last-row-group').hide();
+					$('#inspectorShortDescriptionGroup').hide();
+					$('#inspectorCommentGroup').show();
+					$('#inspectorTranscriptGroup').hide();
+					$('#inspectorMusicFormElementTypeGroup').hide();
+					$('#inspectorLyricsGroup').hide();
+					$('#inspectorMusicRepeatLastRowGroup').hide();
 					var anno = item;
 					var heading = (anno) ? "Edit annotation" : "Add annotation";
 					var submit = (anno) ? "Save" : "Add";
@@ -1721,28 +1721,28 @@
 
 
 					// setup UI from Video Player state
-					$('#timaat-inspector-metadata-title').html(heading);
-					$('#timaat-inspector-meta-submit').html(submit);
+					$('#inspectorTitle').html(heading);
+					$('#inspectorSubmitButton').html(submit);
 					this.cp.setColor('#'+colorHex);
-					$('#timaat-inspector-meta-name').val(title).trigger('input');
-					$('#timaat-inspector-meta-opacity').val(opacity);
+					$('#inspectorName').val(title).trigger('input');
+					$('#inspectorOpacity').val(opacity);
 					this._setInspectorStroke(stroke);
 					if (layerVisual) {
-						$('#timaat-inspector-meta-visual-layer').prop('checked', true);
+						$('#inspectorVisualLayerCheckbox').prop('checked', true);
 					} else {
-						$('#timaat-inspector-meta-visual-layer').prop('checked', false);
+						$('#inspectorVisualLayerCheckbox').prop('checked', false);
 					}
 					if (layerAudio) {
-						$('#timaat-inspector-meta-audio-layer').prop('checked', true);
+						$('#inspectorAudioLayerCheckbox').prop('checked', true);
 					} else {
-						$('#timaat-inspector-meta-audio-layer').prop('checked', false);
+						$('#inspectorAudioLayerCheckbox').prop('checked', false);
 					}
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					$('#timaat-inspector-meta-start').val(start);
-					$('#timaat-inspector-meta-end').val(end);
-					$('#timaat-inspector-categories-and-tags-title').html('Categories and tags');
+					$('#inspectorComment').summernote('code', comment);
+					$('#inspectorStartTimecode').val(start);
+					$('#inspectorEndTimecode').val(end);
+					$('#inspectorCategoriesAndTagsTitle').html('Categories and tags');
 
-					if ( !anno ) this.open('timaat-inspector-metadata');
+					if ( !anno ) this.open('inspectorMetadata');
 					else this.updateItem();
 
 					if ( item ) {
@@ -1752,13 +1752,13 @@
 						this.ui.dataTableAnnoActors.ajax.reload();
 						this.ui.dataTableActors.ajax.reload();
 						if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
-							$('#timaat-inspector-add-actors').hide();
-							$('#timaat-inspector-add-events').hide();
-							$('#timaat-inspector-add-analyses').hide();
+							$('#inspectorAddActors').hide();
+							$('#inspectorAddEvents').hide();
+							$('#inspectorAddAnalysisGuidelines').hide();
 						} else {
-							$('#timaat-inspector-add-actors').show();
-							$('#timaat-inspector-add-events').show();
-							$('#timaat-inspector-add-analyses').show();
+							$('#inspectorAddActors').show();
+							$('#inspectorAddEvents').show();
+							$('#inspectorAddAnalysisGuidelines').show();
 						}
 
 						// events panel
@@ -1773,25 +1773,25 @@
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 
 						// category and tag panel
-						$('#annotation-categories-multi-select-dropdown').val(null).trigger('change');
-						if ($('#annotation-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
-							$('#annotation-categories-multi-select-dropdown').select2('destroy');
+						$('#annotationCategoriesMultiSelectDropdown').val(null).trigger('change');
+						if ($('#annotationCategoriesMultiSelectDropdown').hasClass('select2-hidden-accessible')) {
+							$('#annotationCategoriesMultiSelectDropdown').select2('destroy');
 						}
-						$('#annotation-categories-multi-select-dropdown').find('option').remove();
+						$('#annotationCategoriesMultiSelectDropdown').find('option').remove();
 
-						$('#annotation-tags-multi-select-dropdown').val(null).trigger('change');
-						if ($('#annotation-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
-							$('#annotation-tags-multi-select-dropdown').select2('destroy');
+						$('#annotationTagsMultiSelectDropdown').val(null).trigger('change');
+						if ($('#annotationTagsMultiSelectDropdown').hasClass('select2-hidden-accessible')) {
+							$('#annotationTagsMultiSelectDropdown').select2('destroy');
 						}
-						$('#annotation-tags-multi-select-dropdown').find('option').remove();
+						$('#annotationTagsMultiSelectDropdown').find('option').remove();
 
 						$('.categoryAndTagPanel').hide();
 						$('#mediumAnalysisListCategoryPanel').show();
 						$('.mediumAnalysisListCategories').hide();
-						$('#annotation-categories').show();
+						$('#annotationCategories').show();
 						$('#annotationTagPanel').show();
 
-						$('#annotation-categories-multi-select-dropdown').select2({
+						$('#annotationCategoriesMultiSelectDropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -1824,7 +1824,7 @@
 						});
 						TIMAAT.AnnotationService.getSelectedCategories(item.model.id).then(function(data) {
 							// console.log("TCL: then: data", data);
-							var categorySelect = $('#annotation-categories-multi-select-dropdown');
+							var categorySelect = $('#annotationCategoriesMultiSelectDropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);
 								// create the options and append to Select2
@@ -1843,7 +1843,7 @@
 							}
 						});
 
-						$('#annotation-tags-multi-select-dropdown').select2({
+						$('#annotationTagsMultiSelectDropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -1878,7 +1878,7 @@
 						});
 						TIMAAT.AnnotationService.getTagList(item.model.id).then(function(data) {
 							// console.log("TCL: then: data", data);
-							var tagSelect = $('#annotation-tags-multi-select-dropdown');
+							var tagSelect = $('#annotationTagsMultiSelectDropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);
 								// create the options and append to Select2
@@ -1900,39 +1900,39 @@
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 				case 'analysisList':
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataAnalysisListElements();
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorAnalysisElements();
 					var list = item;
-					if ( !list ) this.open('timaat-inspector-metadata');
+					if ( !list ) this.open('inspectorMetadata');
 					var heading = (list) ? '<i class="fas fa-list-alt"></i> Edit analysis' : '<i class="fas fa-list-alt"></i> Add analysis';
 					var submit = (list) ? "Save" : "Add";
 					var title = (list) ? TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'title') : "";
 					var comment = (list) ? TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'text') : "";
 					// setup UI from Video Player state
-					$('#timaat-inspector-metadata-title').html(heading);
-					$('#timaat-inspector-meta-submit').html(submit);
-					$('#timaat-inspector-meta-name').val(title).trigger('input');
-					$('#timaat-inspector-meta-comment').summernote('code', comment);
-					$('#timaat-inspector-categories-and-tags-title').html('Category sets and tags');
+					$('#inspectorTitle').html(heading);
+					$('#inspectorSubmitButton').html(submit);
+					$('#inspectorName').val(title).trigger('input');
+					$('#inspectorComment').summernote('code', comment);
+					$('#inspectorCategoriesAndTagsTitle').html('Category sets and tags');
 					if ( item != null ) {
-						$('#mediumAnalysisList-categorySets-multi-select-dropdown').val(null).trigger('change');
-						if ($('#mediumAnalysisList-categorySets-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
-							$('#mediumAnalysisList-categorySets-multi-select-dropdown').select2('destroy');
+						$('#AnalysisCategorySetsMultiSelectDropdown').val(null).trigger('change');
+						if ($('#AnalysisCategorySetsMultiSelectDropdown').hasClass('select2-hidden-accessible')) {
+							$('#AnalysisCategorySetsMultiSelectDropdown').select2('destroy');
 						}
-						$('#mediumAnalysisList-categorySets-multi-select-dropdown').find('option').remove();
+						$('#AnalysisCategorySetsMultiSelectDropdown').find('option').remove();
 
-						$('#mediumAnalysisList-tags-multi-select-dropdown').val(null).trigger('change');
-						if ($('#mediumAnalysisList-tags-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
-							$('#mediumAnalysisList-tags-multi-select-dropdown').select2('destroy');
+						$('#mediumAnalysisTagsMultiSelectDropdown').val(null).trigger('change');
+						if ($('#mediumAnalysisTagsMultiSelectDropdown').hasClass('select2-hidden-accessible')) {
+							$('#mediumAnalysisTagsMultiSelectDropdown').select2('destroy');
 						}
-						$('#mediumAnalysisList-tags-multi-select-dropdown').find('option').remove();
+						$('#mediumAnalysisTagsMultiSelectDropdown').find('option').remove();
 
 						$('.categoryAndTagPanel').hide();
 						$('#mediumAnalysisListCategorySetPanel').show();
 						$('#mediumAnalysisListTagPanel').show();
-						this.enablePanel('timaat-inspector-categories-and-tags');
+						this.enablePanel('inspectorCategoriesAndTags');
 
-						$('#mediumAnalysisList-categorySets-multi-select-dropdown').select2({
+						$('#AnalysisCategorySetsMultiSelectDropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -1965,7 +1965,7 @@
 						});
 						TIMAAT.AnalysisListService.getCategorySetList(item.id).then(function(data) {
 							// console.log("TCL: then: data", data);
-							var categorySetSelect = $('#mediumAnalysisList-categorySets-multi-select-dropdown');
+							var categorySetSelect = $('#AnalysisCategorySetsMultiSelectDropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);
 								// create the options and append to Select2
@@ -1984,7 +1984,7 @@
 							}
 						});
 
-						$('#mediumAnalysisList-tags-multi-select-dropdown').select2({
+						$('#mediumAnalysisTagsMultiSelectDropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -2019,7 +2019,7 @@
 						});
 						TIMAAT.AnalysisListService.getTagList(item.id).then(function(data) {
 							// console.log("TCL: then: data", data);
-							var tagSelect = $('#mediumAnalysisList-tags-multi-select-dropdown');
+							var tagSelect = $('#mediumAnalysisTagsMultiSelectDropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);
 								// create the options and append to Select2
@@ -2039,7 +2039,7 @@
 						});
 					}
 
-					if ( this.isOpen ) this.open('timaat-inspector-metadata');
+					if ( this.isOpen ) this.open('inspectorMetadata');
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 				case 'segment':
@@ -2048,14 +2048,14 @@
 				case 'scene':
 				case 'action':
 					// metadata panel
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataSegmentElements();
-					if (!item) this.open('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorSegmentElements();
+					if (!item) this.open('inspectorMetadata');
 
 					// categories panel
 					if (item != null) {
-						this.enablePanel('timaat-inspector-categories-and-tags');
-						$('#timaat-inspector-categories-and-tags-title').html('Categories');
+						this.enablePanel('inspectorCategoriesAndTags');
+						$('#inspectorCategoriesAndTagsTitle').html('Categories');
 					}
 
 					// setup UI from Video Player state
@@ -2078,42 +2078,42 @@
 								model.name             = item.model.analysisSegmentTranslations[0].name;
 								model.shortDescription = item.model.analysisSegmentTranslations[0].shortDescription;
 								model.transcript       = item.model.analysisSegmentTranslations[0].transcript;
-								$('.timaat-analysissequence-add').removeClass("timaat-item-disabled");
-								$('.timaat-analysissequence-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("sequence")');
-								$('.timaat-analysisscene-add').removeClass("timaat-item-disabled");
-								$('.timaat-analysisscene-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("scene")');
+								$('.addSequence').removeClass("item--disabled");
+								$('.addSequence').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("sequence")');
+								$('.addScene').removeClass("item--disabled");
+								$('.addScene').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("scene")');
 							break;
 							case 'sequence':
-								model.heading ='<i class="fas fa-indent"></i> Edit sequence';
-								model.name =  item.model.analysisSequenceTranslations[0].name;
+								model.heading          = '<i class="fas fa-indent"></i> Edit sequence';
+								model.name             = item.model.analysisSequenceTranslations[0].name;
 								model.shortDescription = item.model.analysisSequenceTranslations[0].shortDescription;
-								model.comment =  item.model.analysisSequenceTranslations[0].comment;
-								model.transcript = item.model.analysisSequenceTranslations[0].transcript;
-								$('.timaat-analysistake-add').removeClass("timaat-item-disabled");
-								$('.timaat-analysistake-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("take")');
+								model.comment          = item.model.analysisSequenceTranslations[0].comment;
+								model.transcript       = item.model.analysisSequenceTranslations[0].transcript;
+								$('.addTake').removeClass("item--disabled");
+								$('.addTake').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("take")');
 							break;
 							case 'scene':
-								model.heading ='<i class="fas fa-indent"></i> Edit scene';
-								model.name =  item.model.analysisSceneTranslations[0].name;
+								model.heading          = '<i class="fas fa-indent"></i> Edit scene';
+								model.name             = item.model.analysisSceneTranslations[0].name;
 								model.shortDescription = item.model.analysisSceneTranslations[0].shortDescription;
-								model.comment =  item.model.analysisSceneTranslations[0].comment;
-								model.transcript = item.model.analysisSceneTranslations[0].transcript;
-								$('.timaat-analysisaction-add').removeClass("timaat-item-disabled");
-								$('.timaat-analysisaction-add').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("action")');
+								model.comment          = item.model.analysisSceneTranslations[0].comment;
+								model.transcript       = item.model.analysisSceneTranslations[0].transcript;
+								$('.addAction').removeClass("item--disabled");
+								$('.addAction').attr('onclick','TIMAAT.VideoPlayer.addAnalysisSegmentElement("action")');
 							break;
 							case 'take':
-								model.heading ='<i class="fas fa-indent"></i> Edit take';
-								model.name =  item.model.analysisTakeTranslations[0].name;
+								model.heading          = '<i class="fas fa-indent"></i> Edit take';
+								model.name             = item.model.analysisTakeTranslations[0].name;
 								model.shortDescription = item.model.analysisTakeTranslations[0].shortDescription;
-								model.comment =  item.model.analysisTakeTranslations[0].comment;
-								model.transcript = item.model.analysisTakeTranslations[0].transcript;
+								model.comment          = item.model.analysisTakeTranslations[0].comment;
+								model.transcript       = item.model.analysisTakeTranslations[0].transcript;
 							break;
 							case 'action':
-								model.heading ='<i class="fas fa-indent"></i> Edit action';
-								model.name =  item.model.analysisActionTranslations[0].name;
+								model.heading          = '<i class="fas fa-indent"></i> Edit action';
+								model.name             = item.model.analysisActionTranslations[0].name;
 								model.shortDescription = item.model.analysisActionTranslations[0].shortDescription;
-								model.comment =  item.model.analysisActionTranslations[0].comment;
-								model.transcript = item.model.analysisActionTranslations[0].transcript;
+								model.comment          = item.model.analysisActionTranslations[0].comment;
+								model.transcript       = item.model.analysisActionTranslations[0].transcript;
 							break;
 						}
 					}
@@ -2155,22 +2155,22 @@
 							break;
 						}
 					}
-					this.fillInspectorMetadataSegmentElements(model);
+					this.fillInspectorSegmentElements(model);
 
 					if (item) {
 						// category panel
-						$('#segment-element-categories-multi-select-dropdown').val(null).trigger('change');
-						if ($('#segment-element-categories-multi-select-dropdown').hasClass('select2-hidden-accessible')) {
-							$('#segment-element-categories-multi-select-dropdown').select2('destroy');
+						$('#segmentElementCategoriesMultiSelectDropdown').val(null).trigger('change');
+						if ($('#segmentElementCategoriesMultiSelectDropdown').hasClass('select2-hidden-accessible')) {
+							$('#segmentElementCategoriesMultiSelectDropdown').select2('destroy');
 						}
-						$('#segment-element-categories-multi-select-dropdown').find('option').remove();
+						$('#segmentElementCategoriesMultiSelectDropdown').find('option').remove();
 
 						$('.categoryAndTagPanel').hide();
 						$('#mediumAnalysisListCategoryPanel').show();
 						$('.mediumAnalysisListCategories').hide();
-						$('#segment-element-categories').show();
+						$('#segmentElementCategories').show();
 
-						$('#segment-element-categories-multi-select-dropdown').select2({
+						$('#segmentElementCategoriesMultiSelectDropdown').select2({
 							closeOnSelect: false,
 							scrollAfterSelect: true,
 							allowClear: true,
@@ -2203,7 +2203,7 @@
 						});
 						TIMAAT.AnalysisListService.getSelectedCategories(item.model.id, type).then(function(data) {
 							// console.log("TCL: then: data", data);
-							var categorySelect = $('#segment-element-categories-multi-select-dropdown');
+							var categorySelect = $('#segmentElementCategoriesMultiSelectDropdown');
 							if (data.length > 0) {
 								data.sort((a, b) => (a.name > b.name)? 1 : -1);
 								// create the options and append to Select2
@@ -2226,19 +2226,19 @@
 				break;
 				case 'musicFormElement':
 					// metadata panel
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataMusicFormElements();
-					if (!item) this.open('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorMusicFormElements();
+					if (!item) this.open('inspectorMetadata');
 
 					// setup UI from Video Player state
 					model = {
-						heading: '<i class="fas fa-indent"></i> Add form element',
-						submit: (item) ? "Save" : "Add",
-						type: null,
-						text: '',
+						heading      : '<i class="fas fa-indent"></i> Add form element',
+						submit       : (item) ? "Save"                                 : "Add",
+						type         : null,
+						text         : '',
 						repeatLastRow: false,
-						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
-						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+						start        : (item) ? item.model.startTime                   : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end          : (item) ? item.model.endTime                     : TIMAAT.VideoPlayer.duration,
 					};
 
 					if (item) {
@@ -2247,11 +2247,11 @@
 						model.text          = item.model.musicFormElementTranslations[0].text;
 						model.type          = item.model.musicFormElementType.id;
 					}
-					this.fillInspectorMetadataMusicFormElements(model);
-					(model.repeatLastRow) ? $('#timaat-inspector-meta-repeat-last-row').prop('checked', true) : $('#timaat-inspector-meta-repeat-last-row').prop('checked', false);
+					this.fillInspectorMusicFormElements(model);
+					(model.repeatLastRow) ? $('#inspectorRepeatLastRow').prop('checked', true) : $('#inspectorRepeatLastRow').prop('checked', false);
 					// category panel
-					// $('#music-form-element-type-select-dropdown').empty().trigger('change');
-					$('#music-form-element-type-select-dropdown').select2({
+					// $('#musicFormElementTypeSelectionDropdown').empty().trigger('change');
+					$('#musicFormElementTypeSelectionDropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2282,19 +2282,19 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.musicFormElementType) {
-						var musicFormElementTypeSelect = $('#music-form-element-type-select-dropdown');
+						var musicFormElementTypeSelect = $('#musicFormElementTypeSelectionDropdown');
 						var option = new Option(item.model.musicFormElementType.musicFormElementTypeTranslations[0].type, item.model.musicFormElementType.id, true, true);
 						musicFormElementTypeSelect.append(option).trigger('change');
 					} else {
-						$('#music-form-element-type-select-dropdown').empty().trigger('change');
+						$('#musicFormElementTypeSelectionDropdown').empty().trigger('change');
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 				case 'musicChangeInTempoElement':
 					// metadata panel
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataMusicChangeInTempoElements();
-					if (!item) this.open('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorMusicChangeInTempoElements();
+					if (!item) this.open('inspectorMetadata');
 
 					// setup UI from Video Player state
 					model = {
@@ -2306,13 +2306,13 @@
 					};
 
 					if (item) {
-						model.heading       = '<i class="fas fa-indent"></i> Edit change in tempo element';
-						model.type          = item.model.changeInTempo.id;
+						model.heading = '<i class="fas fa-indent"></i> Edit change in tempo element';
+						model.type    = item.model.changeInTempo.id;
 					}
-					this.fillInspectorMetadataMusicChangeInTempoElements(model);
+					this.fillInspectorMusicChangeInTempoElements(model);
 					// category panel
-					// $('#music-change-in-tempo-element-select-dropdown').empty().trigger('change');
-					$('#music-change-in-tempo-element-select-dropdown').select2({
+					// $('#musicChangeInTempoElementSelectDropdown').empty().trigger('change');
+					$('#musicChangeInTempoElementSelectDropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2343,37 +2343,37 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.changeInTempo) {
-						var changeInTempoSelect = $('#music-change-in-tempo-element-select-dropdown');
+						var changeInTempoSelect = $('#musicChangeInTempoElementSelectDropdown');
 						var option = new Option(item.model.changeInTempo.changeInTempoTranslations[0].type, item.model.changeInTempo.id, true, true);
 						changeInTempoSelect.append(option).trigger('change');
 					} else {
-						$('#music-change-in-tempo-element-select-dropdown').empty().trigger('change');
+						$('#musicChangeInTempoElementSelectDropdown').empty().trigger('change');
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 				case 'musicArticulationElement':
 					// metadata panel
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataMusicArticulationElements();
-					if (!item) this.open('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorMusicArticulationElements();
+					if (!item) this.open('inspectorMetadata');
 
 					// setup UI from Video Player state
 					model = {
 						heading: '<i class="fas fa-indent"></i> Add articulation element',
-						submit: (item) ? "Save" : "Add",
-						type: null,
-						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
-						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+						submit : (item) ? "Save"                                         : "Add",
+						type   : null,
+						start  : (item) ? item.model.startTime                           : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end    : (item) ? item.model.endTime                             : TIMAAT.VideoPlayer.duration,
 					};
 
 					if (item) {
-						model.heading       = '<i class="fas fa-indent"></i> Edit articulation element';
-						model.type          = item.model.articulation.id;
+						model.heading = '<i class="fas fa-indent"></i> Edit articulation element';
+						model.type    = item.model.articulation.id;
 					}
-					this.fillInspectorMetadataMusicArticulationElements(model);
+					this.fillInspectorMusicArticulationElements(model);
 					// category panel
-					// $('#music-articulation-element-select-dropdown').empty().trigger('change');
-					$('#music-articulation-element-select-dropdown').select2({
+					// $('#articulationElementSelectDropdown').empty().trigger('change');
+					$('#articulationElementSelectDropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2404,37 +2404,37 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.articulation) {
-						var articulationSelect = $('#music-articulation-element-select-dropdown');
+						var articulationSelect = $('#articulationElementSelectDropdown');
 						var option = new Option(item.model.articulation.articulationTranslations[0].type, item.model.articulation.id, true, true);
 						articulationSelect.append(option).trigger('change');
 					} else {
-						$('#music-articulation-element-select-dropdown').empty().trigger('change');
+						$('#articulationElementSelectDropdown').empty().trigger('change');
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 				case 'musicDynamicsElement':
 					// metadata panel
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataMusicDynamicsElements();
-					if (!item) this.open('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorMusicDynamicsElements();
+					if (!item) this.open('inspectorMetadata');
 
 					// setup UI from Video Player state
 					model = {
 						heading: '<i class="fas fa-indent"></i> Add dynamics element',
-						submit: (item) ? "Save" : "Add",
-						type: null,
-						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
-						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+						submit : (item) ? "Save"                                     : "Add",
+						type   : null,
+						start  : (item) ? item.model.startTime                       : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end    : (item) ? item.model.endTime                         : TIMAAT.VideoPlayer.duration,
 					};
 
 					if (item) {
-						model.heading       = '<i class="fas fa-indent"></i> Edit dynamics element';
-						model.type          = item.model.musicDynamicsElementType.id;
+						model.heading = '<i class="fas fa-indent"></i> Edit dynamics element';
+						model.type    = item.model.musicDynamicsElementType.id;
 					}
-					this.fillInspectorMetadataMusicDynamicsElements(model);
+					this.fillInspectorMusicDynamicsElements(model);
 					// category panel
-					// $('#music-dynamics-element-select-dropdown').empty().trigger('change');
-					$('#music-dynamics-element-select-dropdown').select2({
+					// $('#musicDynamicsElementSelectDropdown').empty().trigger('change');
+					$('#musicDynamicsElementSelectDropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2465,37 +2465,37 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.musicDynamicsElementType) {
-						var musicDynamicsElementTypeSelect = $('#music-dynamics-element-select-dropdown');
+						var musicDynamicsElementTypeSelect = $('#musicDynamicsElementSelectDropdown');
 						var option = new Option(item.model.musicDynamicsElementType.musicDynamicsElementTypeTranslations[0].type, item.model.musicDynamicsElementType.id, true, true);
 						musicDynamicsElementTypeSelect.append(option).trigger('change');
 					} else {
-						$('#music-dynamics-element-select-dropdown').empty().trigger('change');
+						$('#musicDynamicsElementSelectDropdown').empty().trigger('change');
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
 				case 'musicTextSettingElement':
 					// metadata panel
-					this.enablePanel('timaat-inspector-metadata');
-					this.initInspectorMetadataMusicTextSettingElements();
-					if (!item) this.open('timaat-inspector-metadata');
+					this.enablePanel('inspectorMetadata');
+					this.initInspectorMusicTextSettingElements();
+					if (!item) this.open('inspectorMetadata');
 
 					// setup UI from Video Player state
 					model = {
 						heading: '<i class="fas fa-indent"></i> Add text setting element',
-						submit: (item) ? "Save" : "Add",
-						type: null,
-						start: (item) ? item.model.startTime : TIMAAT.VideoPlayer.medium.currentTime * 1000,
-						end: (item) ? item.model.endTime : TIMAAT.VideoPlayer.duration,
+						submit : (item) ? "Save"                                         : "Add",
+						type   : null,
+						start  : (item) ? item.model.startTime                           : TIMAAT.VideoPlayer.medium.currentTime * 1000,
+						end    : (item) ? item.model.endTime                             : TIMAAT.VideoPlayer.duration,
 					};
 
 					if (item) {
-						model.heading       = '<i class="fas fa-indent"></i> Edit text setting element';
-						model.type          = item.model.musicTextSettingElementType.id;
+						model.heading = '<i class="fas fa-indent"></i> Edit text setting element';
+						model.type    = item.model.musicTextSettingElementType.id;
 					}
-					this.fillInspectorMetadataMusicTextSettingElements(model);
+					this.fillInspectorMusicTextSettingElements(model);
 					// category panel
-					// $('#music-text-setting-element-select-dropdown').empty().trigger('change');
-					$('#music-text-setting-element-select-dropdown').select2({
+					// $('#musicTextSettingElementSelectDropdown').empty().trigger('change');
+					$('#musicTextSettingElementSelectDropdown').select2({
 						closeOnSelect: true,
 						scrollAfterSelect: true,
 						allowClear: true,
@@ -2526,11 +2526,11 @@
 						minimumInputLength: 0,
 					});
 					if (item && item.model.musicTextSettingElementType) {
-						var musicTextSettingElementTypeSelect = $('#music-text-setting-element-select-dropdown');
+						var musicTextSettingElementTypeSelect = $('#musicTextSettingElementSelectDropdown');
 						var option = new Option(item.model.musicTextSettingElementType.musicTextSettingElementTypeTranslations[0].type, item.model.musicTextSettingElementType.id, true, true);
 						musicTextSettingElementTypeSelect.append(option).trigger('change');
 					} else {
-						$('#music-text-setting-element-select-dropdown').empty().trigger('change');
+						$('#musicTextSettingElementSelectDropdown').empty().trigger('change');
 					}
 					TIMAAT.VideoPlayer.updateListUI();
 				break;
@@ -2538,208 +2538,203 @@
 		}
 
 
-		initInspectorMetadataAnalysisListElements() {
-			$('#timaat-inspector-meta-name').show();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').hide();
-			$('#timaat-inspector-meta-shortDescription-group').hide();
-			$('#timaat-inspector-meta-comment-group').show();
-			$('#timaat-inspector-meta-transcript-group').hide();
-			$('#timaat-inspector-meta-music-form-element-type-group').hide();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
-			$('#timaat-inspector-meta-lyrics-group').hide();
-			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		initInspectorAnalysisElements() {
+			$('#inspectorName').show();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').hide();
+			$('#inspectorShortDescriptionGroup').hide();
+			$('#inspectorCommentGroup').show();
+			$('#inspectorTranscriptGroup').hide();
+			$('#inspectorMusicFormElementTypeGroup').hide();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').hide();
+			$('#inspectorMusicArticulationElementTypeGroup').hide();
+			$('#inspectorMusicDynamicsElementTypeGroup').hide();
+			$('#inspectorMusicTextSettingElementTypeGroup').hide();
+			$('#inspectorLyricsGroup').hide();
+			$('#inspectorMusicRepeatLastRowGroup').hide();
 		}
 
-		initInspectorMetadataSegmentElements() {
-			$('#timaat-inspector-meta-name').show();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').show();
-			$('#timaat-inspector-meta-shortDescription-group').show();
-			$('#timaat-inspector-meta-comment-group').show();
-			$('#timaat-inspector-meta-transcript-group').show();
-			$('#timaat-inspector-meta-music-form-element-type-group').hide();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
-			$('#timaat-inspector-meta-lyrics-group').hide();
-			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		initInspectorSegmentElements() {
+			$('#inspectorName').show();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').show();
+			$('#inspectorShortDescriptionGroup').show();
+			$('#inspectorCommentGroup').show();
+			$('#inspectorTranscriptGroup').show();
+			$('#inspectorMusicFormElementTypeGroup').hide();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').hide();
+			$('#inspectorMusicArticulationElementTypeGroup').hide();
+			$('#inspectorMusicDynamicsElementTypeGroup').hide();
+			$('#inspectorMusicTextSettingElementTypeGroup').hide();
+			$('#inspectorLyricsGroup').hide();
+			$('#inspectorMusicRepeatLastRowGroup').hide();
 		}
 
-		initInspectorMetadataMusicFormElements() {
-			$('#timaat-inspector-meta-name').hide();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').show();
-			$('#timaat-inspector-meta-shortDescription-group').hide();
-			$('#timaat-inspector-meta-comment-group').hide();
-			$('#timaat-inspector-meta-transcript-group').hide();
-			$('#timaat-inspector-meta-music-form-element-type-group').show();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
-			$('#timaat-inspector-meta-lyrics-group').show();
-			$('#timaat-inspector-meta-repeat-last-row-group').show();
+		initInspectorMusicFormElements() {
+			$('#inspectorName').hide();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').show();
+			$('#inspectorShortDescriptionGroup').hide();
+			$('#inspectorCommentGroup').hide();
+			$('#inspectorTranscriptGroup').hide();
+			$('#inspectorMusicFormElementTypeGroup').show();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').hide();
+			$('#inspectorMusicArticulationElementTypeGroup').hide();
+			$('#inspectorMusicDynamicsElementTypeGroup').hide();
+			$('#inspectorMusicTextSettingElementTypeGroup').hide();
+			$('#inspectorLyricsGroup').show();
+			$('#inspectorMusicRepeatLastRowGroup').show();
 		}
 
-		initInspectorMetadataMusicChangeInTempoElements() {
-			$('#timaat-inspector-meta-name').hide();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').show();
-			$('#timaat-inspector-meta-shortDescription-group').hide();
-			$('#timaat-inspector-meta-comment-group').hide();
-			$('#timaat-inspector-meta-transcript-group').hide();
-			$('#timaat-inspector-meta-music-form-element-type-group').hide();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').show();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
-			$('#timaat-inspector-meta-lyrics-group').hide();
-			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		initInspectorMusicChangeInTempoElements() {
+			$('#inspectorName').hide();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').show();
+			$('#inspectorShortDescriptionGroup').hide();
+			$('#inspectorCommentGroup').hide();
+			$('#inspectorTranscriptGroup').hide();
+			$('#inspectorMusicFormElementTypeGroup').hide();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').show();
+			$('#inspectorMusicArticulationElementTypeGroup').hide();
+			$('#inspectorMusicDynamicsElementTypeGroup').hide();
+			$('#inspectorMusicTextSettingElementTypeGroup').hide();
+			$('#inspectorLyricsGroup').hide();
+			$('#inspectorMusicRepeatLastRowGroup').hide();
 		}
 
-		initInspectorMetadataMusicArticulationElements() {
-			$('#timaat-inspector-meta-name').hide();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').show();
-			$('#timaat-inspector-meta-shortDescription-group').hide();
-			$('#timaat-inspector-meta-comment-group').hide();
-			$('#timaat-inspector-meta-transcript-group').hide();
-			$('#timaat-inspector-meta-music-form-element-type-group').hide();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').show();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
-			$('#timaat-inspector-meta-lyrics-group').hide();
-			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		initInspectorMusicArticulationElements() {
+			$('#inspectorName').hide();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').show();
+			$('#inspectorShortDescriptionGroup').hide();
+			$('#inspectorCommentGroup').hide();
+			$('#inspectorTranscriptGroup').hide();
+			$('#inspectorMusicFormElementTypeGroup').hide();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').hide();
+			$('#inspectorMusicArticulationElementTypeGroup').show();
+			$('#inspectorMusicDynamicsElementTypeGroup').hide();
+			$('#inspectorMusicTextSettingElementTypeGroup').hide();
+			$('#inspectorLyricsGroup').hide();
+			$('#inspectorMusicRepeatLastRowGroup').hide();
 		}
 
-		initInspectorMetadataMusicDynamicsElements() {
-			$('#timaat-inspector-meta-name').hide();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').show();
-			$('#timaat-inspector-meta-shortDescription-group').hide();
-			$('#timaat-inspector-meta-comment-group').hide();
-			$('#timaat-inspector-meta-transcript-group').hide();
-			$('#timaat-inspector-meta-music-form-element-type-group').hide();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').show();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').hide();
-			$('#timaat-inspector-meta-lyrics-group').hide();
-			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		initInspectorMusicDynamicsElements() {
+			$('#inspectorName').hide();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').show();
+			$('#inspectorShortDescriptionGroup').hide();
+			$('#inspectorCommentGroup').hide();
+			$('#inspectorTranscriptGroup').hide();
+			$('#inspectorMusicFormElementTypeGroup').hide();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').hide();
+			$('#inspectorMusicArticulationElementTypeGroup').hide();
+			$('#inspectorMusicDynamicsElementTypeGroup').show();
+			$('#inspectorMusicTextSettingElementTypeGroup').hide();
+			$('#inspectorLyricsGroup').hide();
+			$('#inspectorMusicRepeatLastRowGroup').hide();
 		}
 
-		initInspectorMetadataMusicTextSettingElements() {
-			$('#timaat-inspector-meta-name').hide();
-			$('#timaat-inspector-meta-color-group').hide();
-			$('#timaat-inspector-meta-opacity-group').hide();
-			$('#timaat-inspector-meta-type-group').hide();
-			$('#timaat-inspector-meta-timecode-group').show();
-			$('#timaat-inspector-meta-shortDescription-group').hide();
-			$('#timaat-inspector-meta-comment-group').hide();
-			$('#timaat-inspector-meta-transcript-group').hide();
-			$('#timaat-inspector-meta-music-form-element-type-group').hide();
-			$('#timaat-inspector-meta-music-change-in-tempo-element-type-group').hide();
-			$('#timaat-inspector-meta-music-articulation-element-type-group').hide();
-			$('#timaat-inspector-meta-music-dynamics-element-type-group').hide();
-			$('#timaat-inspector-meta-music-text-setting-element-type-group').show();
-			$('#timaat-inspector-meta-lyrics-group').hide();
-			$('#timaat-inspector-meta-repeat-last-row-group').hide();
+		initInspectorMusicTextSettingElements() {
+			$('#inspectorName').hide();
+			$('#inspectorColorGroup').hide();
+			$('#inspectorOpacityGroup').hide();
+			$('#inspectorTypeGroup').hide();
+			$('#inspectorTimecodeGroup').show();
+			$('#inspectorShortDescriptionGroup').hide();
+			$('#inspectorCommentGroup').hide();
+			$('#inspectorTranscriptGroup').hide();
+			$('#inspectorMusicFormElementTypeGroup').hide();
+			$('#inspectorMusicChangeInTempoElementTypeGroup').hide();
+			$('#inspectorMusicArticulationElementTypeGroup').hide();
+			$('#inspectorMusicDynamicsElementTypeGroup').hide();
+			$('#inspectorMusicTextSettingElementTypeGroup').show();
+			$('#inspectorLyricsGroup').hide();
+			$('#inspectorMusicRepeatLastRowGroup').hide();
 		}
 
-		fillInspectorMetadataSegmentElements(model) {
-      // console.log("TCL: Inspector -> fillInspectorMetadataSegmentElements -> model", model);
+		fillInspectorSegmentElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorSegmentElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
-			$('#timaat-inspector-metadata-title').html(model.heading);
-			$('#timaat-inspector-meta-submit').html(model.submit);
-			$('#timaat-inspector-meta-name').val(model.name).trigger('input');
-			$('#timaat-inspector-meta-shortDescription').val(model.shortDescription).trigger('input');
-			$('#timaat-inspector-meta-comment').summernote('code', model.comment);
-			$('#timaat-inspector-meta-transcript').summernote('code', model.transcript);
-			$('#timaat-inspector-meta-start').val(model.start);
-			$('#timaat-inspector-meta-end').val(model.end);
+			$('#inspectorTitle').html(model.heading);
+			$('#inspectorSubmitButton').html(model.submit);
+			$('#inspectorName').val(model.name).trigger('input');
+			$('#inspectorShortDescription').val(model.shortDescription).trigger('input');
+			$('#inspectorComment').summernote('code', model.comment);
+			$('#inspectorTranscript').summernote('code', model.transcript);
+			$('#inspectorStartTimecode').val(model.start);
+			$('#inspectorEndTimecode').val(model.end);
 		}
 
-		fillInspectorMetadataMusicFormElements(model) {
-      // console.log("TCL: Inspector -> fillInspectorMetadataMusicFormElements -> model", model);
+		fillInspectorMusicFormElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMusicFormElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
-			$('#timaat-inspector-metadata-title').html(model.heading);
-			$('#timaat-inspector-meta-submit').html(model.submit);
-			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
-			$('#timaat-inspector-meta-start').val(model.start);
-			$('#timaat-inspector-meta-end').val(model.end);
-			$('#timaat-inspector-meta-lyrics').summernote('code', model.text);
-			$('#timaat-inspector-meta-repeat-last-row').val(model.repeatLastRow);
+			$('#inspectorTitle').html(model.heading);
+			$('#inspectorSubmitButton').html(model.submit);
+			$('#inspectorStartTimecode').val(model.start);
+			$('#inspectorEndTimecode').val(model.end);
+			$('#inspectorLyrics').summernote('code', model.text);
+			$('#inspectorRepeatLastRow').val(model.repeatLastRow);
 		}
 
-		fillInspectorMetadataMusicChangeInTempoElements(model) {
-      // console.log("TCL: Inspector -> fillInspectorMetadataMusicChangeInTempoElements -> model", model);
+		fillInspectorMusicChangeInTempoElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMusicChangeInTempoElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
-			$('#timaat-inspector-metadata-title').html(model.heading);
-			$('#timaat-inspector-meta-submit').html(model.submit);
-			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
-			$('#timaat-inspector-meta-start').val(model.start);
-			$('#timaat-inspector-meta-end').val(model.end);
+			$('#inspectorTitle').html(model.heading);
+			$('#inspectorSubmitButton').html(model.submit);
+			$('#inspectorStartTimecode').val(model.start);
+			$('#inspectorEndTimecode').val(model.end);
 		}
 
-		fillInspectorMetadataMusicArticulationElements(model) {
-      // console.log("TCL: Inspector -> fillInspectorMetadataMusicArticulationElements -> model", model);
+		fillInspectorMusicArticulationElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMusicArticulationElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
-			$('#timaat-inspector-metadata-title').html(model.heading);
-			$('#timaat-inspector-meta-submit').html(model.submit);
-			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
-			$('#timaat-inspector-meta-start').val(model.start);
-			$('#timaat-inspector-meta-end').val(model.end);
+			$('#inspectorTitle').html(model.heading);
+			$('#inspectorSubmitButton').html(model.submit);
+			$('#inspectorStartTimecode').val(model.start);
+			$('#inspectorEndTimecode').val(model.end);
 		}
 
-		fillInspectorMetadataMusicDynamicsElements(model) {
-      // console.log("TCL: Inspector -> fillInspectorMetadataMusicDynamicsElements -> model", model);
+		fillInspectorMusicDynamicsElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMusicDynamicsElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
-			$('#timaat-inspector-metadata-title').html(model.heading);
-			$('#timaat-inspector-meta-submit').html(model.submit);
-			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
-			$('#timaat-inspector-meta-start').val(model.start);
-			$('#timaat-inspector-meta-end').val(model.end);
+			$('#inspectorTitle').html(model.heading);
+			$('#inspectorSubmitButton').html(model.submit);
+			$('#inspectorStartTimecode').val(model.start);
+			$('#inspectorEndTimecode').val(model.end);
 		}
 
-		fillInspectorMetadataMusicTextSettingElements(model) {
-      // console.log("TCL: Inspector -> fillInspectorMetadataMusicTextSettingElements -> model", model);
+		fillInspectorMusicTextSettingElements(model) {
+      // console.log("TCL: Inspector -> fillInspectorMusicTextSettingElements -> model", model);
 			model.start = TIMAAT.Util.formatTime(model.start, true);
 			model.end = TIMAAT.Util.formatTime(model.end, true);
-			$('#timaat-inspector-metadata-title').html(model.heading);
-			$('#timaat-inspector-meta-submit').html(model.submit);
-			// $('#timaat-inspector-meta-type').val(model.type).trigger('input');
-			$('#timaat-inspector-meta-start').val(model.start);
-			$('#timaat-inspector-meta-end').val(model.end);
+			$('#inspectorTitle').html(model.heading);
+			$('#inspectorSubmitButton').html(model.submit);
+			$('#inspectorStartTimecode').val(model.start);
+			$('#inspectorEndTimecode').val(model.end);
 		}
 
 		updateItem() {
 			if ( !this.state.item ) return;
 			let model = {
-				heading: $('#timaat-inspector-metadata-title').val(),
-				submit: $('#timaat-inspector-meta-submit').val(),
+				heading: $('#inspectorTitle').val(),
+				submit: $('#inspectorSubmitButton').val(),
 				name: "",
 				shortDescription: "",
 				comment: "",
@@ -2753,8 +2748,8 @@
 					var end = TIMAAT.Util.formatTime(this.state.item.endTime, true);
 					// update UI
 					// metadata panel
-					$('#timaat-inspector-meta-start').val(start);
-					$('#timaat-inspector-meta-end').val(end);
+					$('#inspectorStartTimecode').val(start);
+					$('#inspectorEndTimecode').val(end);
 
 					// animation panel
 					if ( this.state.item.isAnimation() ) {
@@ -2774,62 +2769,62 @@
 						this.ui.keyframeList.append(keyframe.ui.inspectorView);
 				break;
 				case 'segment':
-					model.name = this.state.item.model.analysisSegmentTranslations[0].name;
+					model.name             = this.state.item.model.analysisSegmentTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisSegmentTranslations[0].shortDescription;
-					model.comment = this.state.item.model.analysisSegmentTranslations[0].comment;
-					model.transcript = this.state.item.model.analysisSegmentTranslations[0].transcript;
-					model.start = this.state.item.model.startTime;
-					model.end = this.state.item.model.endTime;
+					model.comment          = this.state.item.model.analysisSegmentTranslations[0].comment;
+					model.transcript       = this.state.item.model.analysisSegmentTranslations[0].transcript;
+					model.start            = this.state.item.model.startTime;
+					model.end              = this.state.item.model.endTime;
 					// setup UI from Video Player state
-					this.fillInspectorMetadataSegmentElements(model);
+					this.fillInspectorSegmentElements(model);
 				break;
 				case 'sequence':
-					model.name = this.state.item.model.analysisSequenceTranslations[0].name;
+					model.name             = this.state.item.model.analysisSequenceTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisSequenceTranslations[0].shortDescription;
-					model.comment = this.state.item.model.analysisSequenceTranslations[0].comment;
-					model.transcript = this.state.item.model.analysisSequenceTranslations[0].transcript;
-					model.start = this.state.item.model.startTime;
-					model.end = this.state.item.model.endTime;
+					model.comment          = this.state.item.model.analysisSequenceTranslations[0].comment;
+					model.transcript       = this.state.item.model.analysisSequenceTranslations[0].transcript;
+					model.start            = this.state.item.model.startTime;
+					model.end              = this.state.item.model.endTime;
 					// setup UI from Video Player state
-					this.fillInspectorMetadataSegmentElements(model);
+					this.fillInspectorSegmentElements(model);
 				break;
 				case 'take':
-					model.name = this.state.item.model.analysisTakeTranslations[0].name;
+					model.name             = this.state.item.model.analysisTakeTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisTakeTranslations[0].shortDescription;
-					model.comment = this.state.item.model.analysisTakeTranslations[0].comment;
-					model.transcript = this.state.item.model.analysisTakeTranslations[0].transcript;
-					model.start = this.state.item.model.startTime;
-					model.end = this.state.item.model.endTime;
+					model.comment          = this.state.item.model.analysisTakeTranslations[0].comment;
+					model.transcript       = this.state.item.model.analysisTakeTranslations[0].transcript;
+					model.start            = this.state.item.model.startTime;
+					model.end              = this.state.item.model.endTime;
 					// setup UI from Video Player state
-					this.fillInspectorMetadataSegmentElements(model);
+					this.fillInspectorSegmentElements(model);
 				break;
 				case 'scene':
-					model.name = this.state.item.model.analysisSceneTranslations[0].name;
+					model.name             = this.state.item.model.analysisSceneTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisSceneTranslations[0].shortDescription;
-					model.comment = this.state.item.model.analysisSceneTranslations[0].comment;
-					model.transcript = this.state.item.model.analysisSceneTranslations[0].transcript;
-					model.start = this.state.item.model.startTime;
-					model.end = this.state.item.model.endTime;
+					model.comment          = this.state.item.model.analysisSceneTranslations[0].comment;
+					model.transcript       = this.state.item.model.analysisSceneTranslations[0].transcript;
+					model.start            = this.state.item.model.startTime;
+					model.end              = this.state.item.model.endTime;
 					// setup UI from Video Player state
-					this.fillInspectorMetadataSegmentElements(model);
+					this.fillInspectorSegmentElements(model);
 				break;
 				case 'action':
-					model.name = this.state.item.model.analysisActionTranslations[0].name;
+					model.name             = this.state.item.model.analysisActionTranslations[0].name;
 					model.shortDescription = this.state.item.model.analysisActionTranslations[0].shortDescription;
-					model.comment = this.state.item.model.analysisActionTranslations[0].comment;
-					model.transcript = this.state.item.model.analysisActionTranslations[0].transcript;
-					model.start = this.state.item.model.startTime;
-					model.end = this.state.item.model.endTime;
+					model.comment          = this.state.item.model.analysisActionTranslations[0].comment;
+					model.transcript       = this.state.item.model.analysisActionTranslations[0].transcript;
+					model.start            = this.state.item.model.startTime;
+					model.end              = this.state.item.model.endTime;
 					// setup UI from Video Player state
-					this.fillInspectorMetadataSegmentElements(model);
+					this.fillInspectorSegmentElements(model);
 				break;
 			}
 		}
 
 		setMetaEnd(milliseconds) {
 			// console.log("TCL: setMetaEnd: function(milliseconds) ", milliseconds);
-			var startTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-start').val());
-			var endTime = TIMAAT.Util.parseTime($('#timaat-inspector-meta-end').val());
+			var startTime = TIMAAT.Util.parseTime($('#inspectorStartTimecode').val());
+			var endTime = TIMAAT.Util.parseTime($('#inspectorEndTimecode').val());
 			if ( milliseconds == 0 ) {
 				// 0 means current frame in video player
 				milliseconds = TIMAAT.VideoPlayer.medium.currentTime * 1000 - startTime;
@@ -2838,8 +2833,8 @@
 			endTime   = startTime+milliseconds;
 			startTime = Math.min(Math.max(0,startTime), TIMAAT.VideoPlayer.duration);
 			endTime   = Math.min(Math.max(startTime,endTime), TIMAAT.VideoPlayer.duration);
-			$('#timaat-inspector-meta-start').val(TIMAAT.Util.formatTime(startTime, true));
-			$('#timaat-inspector-meta-end').val(TIMAAT.Util.formatTime(endTime, true));
+			$('#inspectorStartTimecode').val(TIMAAT.Util.formatTime(startTime, true));
+			$('#inspectorEndTimecode').val(TIMAAT.Util.formatTime(endTime, true));
 
 			if ( this.state.item && this.state.type == 'annotation' ) {
 				this.state.item.startTime = startTime;
@@ -2873,11 +2868,11 @@
 
 		_setInspectorStroke(stroke) {
 			if ( stroke > 0 ) {
-				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-primary');
-				$('#timaat-inspector-meta-outline').find('i').attr('class', 'far fa-square');
+				$('#inspectorOutlineButton').attr('class', 'btn btn-primary');
+				$('#inspectorOutlineButton').find('i').attr('class', 'far fa-square');
 			} else {
-				$('#timaat-inspector-meta-outline').attr('class', 'btn btn-outline-secondary');
-				$('#timaat-inspector-meta-outline').find('i').attr('class', 'fas fa-border-style');
+				$('#inspectorOutlineButton').attr('class', 'btn btn-outline-secondary');
+				$('#inspectorOutlineButton').find('i').attr('class', 'fas fa-border-style');
 			}
 		}
 

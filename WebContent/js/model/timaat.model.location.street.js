@@ -26,56 +26,56 @@
 			this.model = model;
 
 			// create and style list view element
-			var deleteStreetButton = '<button type="button" class="btn btn-outline btn-danger btn-sm timaat-street-remove float-left"><i class="fas fa-trash-alt"></i></button>';
+			var deleteStreetButton = '<button type="button" class="btn btn-outline btn-danger btn-sm streetRemoveButton float-left"><i class="fas fa-trash-alt"></i></button>';
 			if ( model.id < 0 ) deleteStreetButton = '';
 			this.listView = $('<li class="list-group-item"> ' +
 				deleteStreetButton +
-				'<span class="timaat-street-list-name"></span>' +
+				'<span class="locationDatasetsStreetListName"></span>' +
 				'<br>' +
-				'<div class="timaat-street-list-count text-muted float-left"></div>' +
-				'<div class="float-right text-muted timaat-user-log" style="margin-right: -14px;"><i class="fas fa-user"></i></div>' +
+				'<div class="locationDatasetsStreetListCount text-muted float-left"></div>' +
+				'<div class="float-right text-muted timaat__user-log"><i class="fas fa-user"></i></div>' +
 			'</li>'
 			);
 
-			$('#timaat-street-list').append(this.listView);
+			$('#locationDatasetsStreetList').append(this.listView);
 			this.updateUI();
 			var street = this; // save street for system events
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').popover({
+			this.listView.find('.timaat__user-log').popover({
 				placement: 'right',
 				title: '<i class="fas fa-user"></i> editing log',
 				trigger: 'click',
 				html: true,
-				content: '<div class="timaat-user-log-details">Loading ...</div>',
+				content: '<div class="userLogDetails">Loading ...</div>',
 				container: 'body',
 				boundary: 'viewport',
 			});
 
-			this.listView.find('.timaat-user-log').on('show.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('show.bs.popover', function () {
 				TIMAAT.UI.hidePopups();
 			});
 
-			this.listView.find('.timaat-user-log').on('inserted.bs.popover', function () {
+			this.listView.find('.timaat__user-log').on('inserted.bs.popover', function () {
 				if (street.model.location.lastEditedAt == null) {
-					$('.timaat-user-log-details').html(
-						'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+						'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
 						'+TIMAAT.Util.formatDate(street.model.location.createdAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				} else {
-					$('.timaat-user-log-details').html(
-							'<b><i class="fas fa-plus-square"></i> Created by <span class="timaat-userId" data-userId="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
+					$('.userLogDetails').html(
+							'<b><i class="fas fa-plus-square"></i> Created by <span class="userId" data-user-id="'+street.model.location.createdByUserAccountId+'">[ID '+street.model.location.createdByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(street.model.location.createdAt)+'<br>\
-							<b><i class="fas fa-edit"></i> Edited by <span class="timaat-userId" data-userId="'+street.model.location.lastEditedByUserAccountId+'">[ID '+street.model.location.lastEditedByUserAccountId+']</span></b><br>\
+							<b><i class="fas fa-edit"></i> Edited by <span class="userId" data-user-id="'+street.model.location.lastEditedByUserAccountId+'">[ID '+street.model.location.lastEditedByUserAccountId+']</span></b><br>\
 							'+TIMAAT.Util.formatDate(street.model.location.lastEditedAt)+'<br>'
 					);
-					$('.timaat-user-log-details').find('.timaat-userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
+					$('.userLogDetails').find('.userId').each(function(index,item) {TIMAAT.Util.resolveUserID(item, "me")});
 				}
 			});
 
 			// attach user log info
-			this.listView.find('.timaat-user-log').on('click', function(ev) {
+			this.listView.find('.timaat__user-log').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
 			});
@@ -85,23 +85,23 @@
 				ev.stopPropagation();
 				// show tag editor - trigger popup
 				TIMAAT.UI.hidePopups();
-				// street.listView.find('.timaat-street-list-tags').popover('show');
+				// street.listView.find('.locationDatasetsStreetListTags').popover('show');
 			});
 
 			$(this.listView).on('dblclick', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
 				// show metadata editor
-				$('#timaat-locationdatasets-street-meta').data('street', street);
-				$('#timaat-locationdatasets-street-meta').modal('show');
+				$('#locationDatasetsAddStreetModal').data('street', street);
+				$('#locationDatasetsAddStreetModal').modal('show');
 			});
 
 			// remove handler
-			this.listView.find('.timaat-street-remove').on('click', this, function(ev) {
+			this.listView.find('.streetRemoveButton').on('click', this, function(ev) {
 				ev.stopPropagation();
 				TIMAAT.UI.hidePopups();
-				$('#timaat-locationdatasets-street-delete').data('street', street);
-				$('#timaat-locationdatasets-street-delete').modal('show');
+				$('#locationDatasetsDeleteStreetModal').data('street', street);
+				$('#locationDatasetsDeleteStreetModal').modal('show');
 			});
 		}
 
@@ -110,7 +110,7 @@
 			// title
 			// var name = this.model.location.locationTranslations[0].name; // TODO reenable once working again
 			if ( this.model.id < 0 ) name = "[not assigned]";
-			this.listView.find('.timaat-street-list-name').text(name);
+			this.listView.find('.locationDatasetsStreetListName').text(name);
 		}
 
 		remove() {

@@ -31,6 +31,7 @@
 			TIMAAT.Service.state = 2;
 			TIMAAT.Service.token = null;
 			TIMAAT.Service.session = null;
+			window.location.hash = "";
 			location.reload();
 			// TODO refactor
 			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
@@ -75,6 +76,28 @@
 			});
 		},
 
+		async loginNameExists(loginName) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/accountNameExists'+'?name='+loginName,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: loginNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
 		async displayNameExists(displayName) {
 			return new Promise(resolve => {
 				$.ajax({
@@ -86,7 +109,52 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: displayNameExists -> data", data);
+					// console.log("TCL: displayNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async createUserPassword(newUserPassword) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/password',
+					type       : "POST",
+					data       : JSON.stringify(newUserPassword),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createUserPassword -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async createUserAccount(newUserAccount) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/0',
+					type       : "POST",
+					data       : JSON.stringify(newUserAccount),
+					contentType: "application/json; charset=utf-8",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createUserAccount -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
@@ -189,7 +257,7 @@
 			// console.log("TCL: addTag -> callback", callback);
 			// console.log("TCL: addTag -> set, tagname, callback", set, tagname, callback);
 			var serviceEndpoint = "annotation";
-			if ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categoryset";
+			if ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categorySet";
 			else if ( set.constructor === TIMAAT.Actor ) serviceEndpoint = "actor";
 			else if ( set.constructor === TIMAAT.Location ) serviceEndpoint = "location";
 			else if ( set.constructor === TIMAAT.Country ) serviceEndpoint = "country";
@@ -242,7 +310,7 @@
       // console.log("TCL: removeTag -> callback", callback);
       // console.log("TCL: removeTag -> set, tagname, callback", set, tagname, callback);
 			var serviceEndpoint = "annotation";
-			if  ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categoryset";
+			if  ( set.constructor === TIMAAT.CategorySet ) serviceEndpoint = "tag/categorySet";
 			else if ( set.constructor === TIMAAT.Actor ) serviceEndpoint = "actor";
 			else if ( set.constructor === TIMAAT.Location ) serviceEndpoint = "location";
 			else if ( set.constructor === TIMAAT.Country ) serviceEndpoint = "country";
@@ -263,11 +331,11 @@
 			});
 		},
 
-		// addCategory(set, catname, callback) {
+		// addCategory(set, catName, callback) {
 		// 	var serviceEndpoint = "category";
 
 		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
+		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catName,
 		// 		type:"POST",
 		// 		contentType:"application/json; charset=utf-8",
 		// 		dataType:"json",
@@ -275,7 +343,7 @@
 		// 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 		// 		},
 		// 	}).done(function(data) {
-		// 		TIMAAT.Service.updateCategorySets(catname);
+		// 		TIMAAT.Service.updateCategorySets(catName);
 		// 		callback(data);
 		// 	})
 		// 	.fail(function(error) {
@@ -284,17 +352,17 @@
 		// 	});
 		// },
 
-		removeCategory(set, catname, callback) {
+		removeCategory(set, categoryName, callback) {
 			var serviceEndpoint = "category"; // set/{id}/category/{name}
 			jQuery.ajax({
-				url       : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+catname,
+				url       : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/"+serviceEndpoint+"/set/"+set.model.id+"/category/"+categoryName,
 				type      : "DELETE",
 				beforeSend: function (xhr) {
 					xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 				},
 			}).done(function(data) {
-				TIMAAT.Service.updateCategorySets(catname);
-				callback(catname);
+				TIMAAT.Service.updateCategorySets(categoryName);
+				callback(categoryName);
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
@@ -335,11 +403,11 @@
 			});
 		},
 
-		updateCategorySet(categoryset) {
-			// console.log("TCL: updateCategorySet -> categoryset", categoryset);
+		updateCategorySet(categorySet) {
+			// console.log("TCL: updateCategorySet -> categorySet", categorySet);
 			var set = {
-					id: categoryset.model.id,
-					name: categoryset.model.name,
+					id: categorySet.model.id,
+					name: categorySet.model.name,
 					categorySetHasCategories: []
 			};
 			jQuery.ajax({
@@ -353,11 +421,11 @@
 				},
 			}).done(function(data) {
 				// TODO refactor
-				categoryset.model.id = data.id;
-				categoryset.model.name = data.name;
-				categoryset.model.categories = data.categories;
-				// console.log("TCL: updateCategorySet -> categoryset.updateUI()");
-				categoryset.updateUI();
+				categorySet.model.id = data.id;
+				categorySet.model.name = data.name;
+				categorySet.model.categories = data.categories;
+				// console.log("TCL: updateCategorySet -> categorySet.updateUI()");
+				categorySet.updateUI();
 			})
 			.fail(function(error) {
 				console.error("ERROR: ", error);
@@ -365,10 +433,10 @@
 			});
 		},
 
-		// deleteCategorySet(categoryset) {
-		// 	console.log("TCL: deleteCategorySet -> categoryset", categoryset);
+		// deleteCategorySet(categorySet) {
+		// 	console.log("TCL: deleteCategorySet -> categorySet", categorySet);
 		// 	jQuery.ajax({
-		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categoryset.model.id,
+		// 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySet.model.id,
 		// 		type:"DELETE",
 		// 		contentType:"application/json; charset=utf-8",
 		// 		beforeSend: function (xhr) {
