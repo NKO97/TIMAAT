@@ -30,10 +30,11 @@
 
       $(window).on('popstate', async function() {
         // console.log("TCL ~ $ ~ popstate");
-
-        //* get url hash and traverse through each segment to determine what to load and display
-        let currentUrlHash = window.location.hash;
-        await TIMAAT.URLHistory.setupView(currentUrlHash);
+        if (TIMAAT.Service.session) {
+          //* get url hash and traverse through each segment to determine what to load and display
+          let currentUrlHash = window.location.hash;
+          await TIMAAT.URLHistory.setupView(currentUrlHash);
+        }
       });
 
       $(window).on('hashchange', async function( e ) {
@@ -809,13 +810,15 @@
           }
           break;
           case 'settings': // #settings...
-            if (pathSegments.length > 1) {
-              this.redirectToDefaultView();
-            }
             if (TIMAAT.Service.session && TIMAAT.Service.session.displayName == "admin") {
 							$('.adminAccessOnly').show();
               TIMAAT.UI.showComponent('settings');
-              TIMAAT.Settings.loadSettings();
+              if (pathSegments[1] == 'bugfixes') {
+                TIMAAT.UI.displayComponent('settings', 'settingsBugfixesTab', 'settingsBugfixes');
+              } else {
+                TIMAAT.UI.displayComponent('settings', 'settingsAccountCreationTab', 'settingsAccountCreation');
+                TIMAAT.Settings.loadSettingsAccountCreation();
+              }
             } else {
               $('.adminAccessOnly').hide();
               this.redirectToDefaultView();

@@ -175,7 +175,6 @@ public class UserAccount implements Serializable {
 	// private List<UserAccessToken> userAccessTokens;
 
 	//bi-directional many-to-one association to UserPassword
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="user_password_id")
 	private UserPassword userPassword;

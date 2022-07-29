@@ -5319,29 +5319,107 @@
         <!-- Settings                                                       -->
         <!-------------------------------------------------------------------->
         <div class="container-fluid component" id="componentSettings">
+          <div class="modal fade" id="accountCreatedModal" role="dialog" tabindex="-1" aria-labelledby="accountCreated" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title alert alert-success" role="alert">New account creation successful!</h3>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="row pt-3">
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="settingsTabs" role="tablist">
-                <li class="nav-item active">
-                  <a class="nav-link navBarLinkTop active"  id="settingsGeneralTab" data-toggle="tab" role="tab" aria-controls="settingsGeneralTab" aria-selected="false">
-                    <i class="fas fa-cogs"></i> General
+                <li class="nav-item">
+                  <a class="nav-link navBarLinkTop active" id="settingsBugfixesTab" data-toggle="tab" role="tab" aria-controls="settingsBugfixesTab" aria-selected="false">
+                    <i class="fas fa-cogs"></i> Bugfixes
                   </a>
-                  <button type="button" class="btn btn-sm btn-primary" id="fixDurationButton">Fix duration
-                  </button>
-                  <button type="button" class="btn btn-sm btn-primary" id="fixNoPermissionSetButton">Fix missing permission
-                  </button>
-                  <button type="button" class="btn btn-sm btn-primary" id="fixAnnotationNoUUIDSetButton">Fix missing annotation uuids
-                  </button>
-                  <button type="button" class="btn btn-sm btn-primary" id="fixKeyframeTimeSecondsToMillisecondsButton">Fix old keyframe time data
-                  </button>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link navBarLinkTop" id="settingsAccountCreationTab" data-toggle="tab" role="tab" aria-controls="settingsAccountCreationTab" aria-selected="false">
+                    <i class="fas fa-users"></i> Account Creation
+                  </a>
                 </li>
               </ul>
               <div class="tabContent" id="settingsTabsContent">
                 <div class="tab-pane fade show" id="settings" role="tabpanel" aria-labelledby="settings">
                   <div class="row ui pt-3">
-                    <div class="col-lg-4">
-                    </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
+                      <div class="card dataTables" id="settingsBugfixes">
+                        <div class="card-header">
+                          Bugs that occurred due to changes in the database to meet new requirements can be fixed by pressing the corresponding button.
+                          It is not necessary to use them with a new FIP-OP installation (version 1.0.0 and up).
+                        </div>
+                        <div class="card-body">
+                          <button type="button" class="btn btn-sm btn-primary" id="fixDurationButton" title="Will check and write duration of video and music files and update database entries accordingly. This checks ALL media in the database which have a file uploaded (duration was not set automatically in the beginning of the project).">
+                            Fix duration
+                          </button>
+                          <button type="button" class="btn btn-sm btn-primary" id="fixNoPermissionSetButton" title="Will check all analysis lists and add the creator of the list as 'administrator', if the list has no assigned permissions (since lists existed before permission feature was added).">
+                            Fix missing permission
+                          </button>
+                          <button type="button" class="btn btn-sm btn-primary" id="fixAnnotationNoUUIDSetButton" title="Will check all annotations which have no UUID, creates a UUID and adds it to the annotation's dataset (UUIDs were added later in development when annotations already existed).">
+                            Fix missing annotation uuids
+                          </button>
+                          <button type="button" class="btn btn-sm btn-primary" id="fixKeyframeTimeSecondsToMillisecondsButton" title="Will check all annotations with animation keyframe data and stores times in milliseconds (early version stored them in seconds).">
+                            Fix old keyframe time data
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card dataTables" id="settingsAccountCreation">
+                        <div class="card-header">
+                          Create new user account
+                        </div>
+                        <div class="card-body">
+                          <form class="p-2" id="createNewAccountForm" novalidate>
+                            <div class="form-group row">
+                              <label for="newAccountUsername" class="col-sm-2 col-form-label">Username
+                                <sup><i class="fas fa-exclamation-circle text-info" title="Minimum length: 8 characters"></i></sup>
+                              </label>
+                              <div class="col-sm-4">
+                                <input class="form-control" id="newAccountUsername" name="newAccountUsername" placeholder="Enter username" minlength="8" maxlength="45" required>
+                                <div id="duplicateUsername"></div>
+                              </div>
+                              <div class="col-sm-6">
+                                Username is used to login to the website.
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="newAccountDisplayName" class="col-sm-2 col-form-label">Display name
+                                <sup><i class="fas fa-exclamation-circle text-info" title="Minimum length: 5 characters"></i></sup>
+                              </label>
+                              <div class="col-sm-4">
+                                <input class="form-control" id="newAccountDisplayName" name="newAccountDisplayName" placeholder="Enter display name" minlength="5" maxlength="45" required>
+                                <div id="duplicateDisplayName"></div>
+                              </div>
+                              <div class="col-sm-6">
+                                Display name is shown to other users on the platform.
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="newAccountPassword" class="col-sm-2 col-form-label">Initial password
+                                <sup><i class="fas fa-exclamation-circle text-info" title="Minimum length: 13 characters"></i></sup>
+                              </label>
+                              <div class="col-sm-4">
+                                <input type="text" class="form-control" id="newAccountPassword" name="newAccountPassword" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Password" minlength="13" maxlength="255" required>
+                              </div>
+                              <div class="col-sm-2">
+                                <button type="button" class="btn btn-small btn-primary" id="createRandomPassword">
+                                  Generate
+                                </button>
+                              </div>
+                              <div class="col-sm-4">
+                                Initial password. New users need to change this when they log in.
+                              </div>
+                            </div>
+                            <button type="submit" id="createAccountSubmitButton" class="btn btn-success">Create account</button>
+                          </form>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

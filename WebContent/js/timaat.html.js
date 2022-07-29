@@ -10,8 +10,12 @@ jQuery.validator.addMethod("greaterThanStart", function (value, element, params)
 },'Must be greater than recording start date.');
 
 jQuery.validator.addMethod("equals", function (value, element, params) {
-  return this.optional(element) || value == $(params).val();
+  return value == $(params).val();
 },'The retyped password does not match your new password.');
+
+jQuery.validator.addMethod("notEqualTo", function (value, element, params) {
+  return value != $(params).val();
+},'Username and display name cannot be identical.');
 
 var changeUserPassword = $('#changeUserPassword');
 var changeUserPasswordValidator = $('#changeUserPassword').validate({
@@ -51,6 +55,48 @@ var changeUserPasswordValidator = $('#changeUserPassword').validate({
   },
   submitHandler: function(changeUserPassword) {
     changeUserPassword.submit();
+  }
+});
+var createNewAccountForm = $('#createNewAccountForm');
+var createNewAccountFormValidator = $('#createNewAccountForm').validate({
+  rules: {
+    newAccountUsername: {
+      required: true,
+      minlength: 8,
+      maxlength: 45,
+    },
+    newAccountDisplayName: {
+      required: true,
+      minlength: 5,
+      maxlength: 45,
+      notEqualTo: '#newAccountUsername'
+    },
+    newAccountPassword: {
+      required: true,
+      minlength: 13,
+      maxlength: 255,
+    },
+  },
+  messages: {
+    newAccountUsername: {
+      required: "Please enter a valid login name",
+      minlength: "The login name has to be at least 8 characters long.",
+      maxlength: "The login name cannot be longer than 45 characters.",
+    },
+    newAccountDisplayName: {
+      required: "Please enter a new password",
+      minlength: "The display name has to be at least 5 characters long.",
+      maxlength: "The display name cannot be longer than 45 characters.",
+      notEqualTo: "Username and display name cannot be identical.",
+    },
+    newAccountPassword: {
+      required: "Please provide a temporary password",
+      minlength: "The password has to be at least 13 characters long.",
+      maxlength: "The password cannot be longer than 255 characters. That's enough entropy. :)",
+    },
+  },
+  submitHandler: function(createNewAccountForm) {
+    createNewAccountForm.submit();
   }
 });
 var mediumFormMetadata = $('#mediumFormMetadata');

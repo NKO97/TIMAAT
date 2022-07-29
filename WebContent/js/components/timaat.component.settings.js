@@ -23,19 +23,26 @@
 
 		init: function() {
       this.initSettings();
-      TIMAAT.UI.displayComponent('settings', 'settingsGeneralTab', null);
+      TIMAAT.UI.displayComponent('settings', 'settingsBugfixesTab', null);
 		},
 
     initSettingsComponent: function() {
       TIMAAT.UI.showComponent('settings');
-      $('#settingsGeneralTab').trigger('click');
+      $('#settingsAccountCreationTab').trigger('click');
     },
 
 		initSettings: function() {
       // nav-bar functionality
-			$('#settingsGeneralTab').on('click', function(event) {
-				TIMAAT.Settings.loadSettings();
-				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings');
+			$('#settingsBugfixesTab').on('click', function(event) {
+				TIMAAT.Settings.loadSettingsBugfixes();
+        TIMAAT.UI.displayComponent('settings', 'settingsBugfixesTab', 'settingsBugfixes');
+				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings/bugfixes');
+			});
+
+      $('#settingsAccountCreationTab').on('click', function(event) {
+				TIMAAT.Settings.loadSettingsAccountCreation();
+        TIMAAT.UI.displayComponent('settings', 'settingsAccountCreationTab', 'settingsAccountCreation');
+				TIMAAT.URLHistory.setURL(null, 'Settings', '#settings/accountCreation');
 			});
 
       $('#fixDurationButton').on('click', function(event) {
@@ -51,25 +58,135 @@
           TIMAAT.Settings.fixPermissions();
         }
       });
+
       $('#fixAnnotationNoUUIDSetButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           console.log("add missing annotation uuids");
           TIMAAT.Settings.fixAnnotationUUIDs();
         }
       });
+
       $('#fixKeyframeTimeSecondsToMillisecondsButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           console.log("fix annotation keyframe timestamps from s to ms");
           TIMAAT.Settings.fixKeyframeTimes();
         }
       });
+
+      $('#createRandomPassword').on('click', function(event) {
+        let randomPasswordString = '';
+        let passwordCharacters = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let passwordCharactersLength = passwordCharacters.length;
+        let i = 0;
+        for (; i < 20; i++) {  // generated random password is of length 20
+          randomPasswordString += passwordCharacters.charAt(Math.floor(Math.random()*passwordCharactersLength));
+        }
+        $('#newAccountPassword').val(randomPasswordString);
+      });
+
+      $('#createAccountSubmitButton').on('click', async function(event) {
+        event.preventDefault();
+        if (TIMAAT.Service.session.displayName != "admin") return;
+        if (!$('#createNewAccountForm').valid()) return;
+        let newAccountUsername = $('#newAccountUsername').val();
+        let newAccountDisplayName = $('#newAccountDisplayName').val();
+        let newAccountPassword = $('#newAccountPassword').val();
+        let isLoginNameInUse = await TIMAAT.Settings.isLoginNameInUse(newAccountUsername);
+        if (isLoginNameInUse) {
+          $('#newAccountUsername').addClass('is-invalid');
+          $('#duplicateUsername').addClass('invalid-feedback');
+          $('#duplicateUsername').html('This name already exists. Please choose another.');
+          $('#duplicateUsername').show();
+          return;
+        }
+        let isDisplayNameInUse = await TIMAAT.Settings.isDisplayNameInUse(newAccountDisplayName);
+        if (isDisplayNameInUse) {
+          $('#newAccountDisplayName').addClass('is-invalid');
+          $('#duplicateDisplayName').addClass('invalid-feedback');
+          $('#duplicateDisplayName').html('This name already exists. Please choose another.');
+          $('#duplicateDisplayName').show();
+          return;
+        }
+        let newAccountPasswordHash = TIMAAT.Util.getArgonHash(newAccountPassword, newAccountUsername + TIMAAT.Service.clientSalt);
+        let newUserPasswordDataSet = {
+          id: 0,
+          userPasswordHashType: {
+            id: 1
+          },
+          salt: 'salzigessalt',
+          keyStretchingIterations: 8,
+          stretchedHashEncrypted: newAccountPasswordHash
+        };
+        let userPasswordId = await TIMAAT.Service.createUserPassword(newUserPasswordDataSet);
+        let userAccountDataSet = {
+          id: 0,
+          userPassword: {
+            id: userPasswordId
+          },
+          userAccountStatus: 'active',
+          accountName: newAccountUsername,
+          displayName: newAccountDisplayName,
+          createdAt: Date.now(),
+          recoveryEmailEncrypted: 'foo@bar.de',
+          contentAccessRights: null,
+          userSettingsWebInterface: null
+        };
+        await TIMAAT.Service.createUserAccount(userAccountDataSet);
+        $('#createNewAccountForm').trigger('reset');
+        let modal = $('#accountCreatedModal');
+        modal.find('.modal-body').html(`
+          Login details for <b>`+newAccountDisplayName+`</b>:
+          <br>
+          <br>
+          <b>Username:</b> `+newAccountUsername+`<br>
+          <b>Password:</b> `+newAccountPassword+`<br>
+          <hr>
+          Please send these credentials to the corresponding person and urge them to change the initial password as soon as the log in for the first time.
+          <br>
+          <div class="alert-danger"><b>ATTENTION: Once you close this window, you cannot retrieve the password anymore. Make sure you have stored the credentials before closing!</b>
+          </div>
+        `);
+        modal.modal({backdrop: 'static', keyboard: false}, 'show');
+
+      });
+
+      $('#accountCreatedModal').on('hidden.bs.modal', function(event) {
+        $('#createNewAccountForm').trigger('reset');
+        $('#createRandomPassword').trigger('click');
+      });
+
+      $('#newAccountUsername').on('change input', function(event) {
+        $('#duplicateUsername').hide();
+        $('#duplicateUsername').removeClass('invalid-feedback');
+        $('#newAccountUsername').removeClass('is-invalid');
+      });
+
+      $('#newAccountDisplayName').on('change input', function(event) {
+        $('#duplicateDisplayName').hide();
+        $('#duplicateDisplayName').removeClass('invalid-feedback');
+        $('#newAccountDisplayName').removeClass('is-invalid');
+      });
     },
 
-    loadSettings: function() {
-			TIMAAT.UI.displayComponent('settings', 'settingsGeneralTab', null);
+    loadSettingsBugfixes: function() {
+			// TIMAAT.UI.displayComponent('settings', 'settingsBugfixesTab', null);
 			// TIMAAT.UI.addSelectedClassToSelectedItem('settings', null);
 			// TIMAAT.UI.subNavTab = 'dataSheet';
 		},
+
+    loadSettingsAccountCreation: function() {
+      $('#createRandomPassword').trigger('click');
+    },
+
+    isLoginNameInUse: async function(loginName) {
+      let isInUse = await TIMAAT.Service.loginNameExists(loginName);
+      return isInUse;
+    },
+
+    isDisplayNameInUse: async function(displayName) {
+      let isInUse = await TIMAAT.Service.displayNameExists(displayName);
+      return isInUse;
+    },
 
     fixLength: async function() {
       return new Promise(resolve => {

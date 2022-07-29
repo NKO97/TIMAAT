@@ -31,6 +31,7 @@
 			TIMAAT.Service.state = 2;
 			TIMAAT.Service.token = null;
 			TIMAAT.Service.session = null;
+			window.location.hash = "";
 			location.reload();
 			// TODO refactor
 			if ( TIMAAT.UI.notificationSocket ) TIMAAT.UI.notificationSocket.close();
@@ -75,6 +76,28 @@
 			});
 		},
 
+		async loginNameExists(loginName) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/accountNameExists'+'?name='+loginName,
+					type       : "GET",
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: loginNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
 		async displayNameExists(displayName) {
 			return new Promise(resolve => {
 				$.ajax({
@@ -86,7 +109,52 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: displayNameExists -> data", data);
+					// console.log("TCL: displayNameExists -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async createUserPassword(newUserPassword) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/password',
+					type       : "POST",
+					data       : JSON.stringify(newUserPassword),
+					contentType: "application/json; charset=utf-8",
+					dataType   : "json",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createUserPassword -> data", data);
+					resolve(data);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText: ", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
+		async createUserAccount(newUserAccount) {
+			return new Promise(resolve => {
+				$.ajax({
+					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/user/0',
+					type       : "POST",
+					data       : JSON.stringify(newUserAccount),
+					contentType: "application/json; charset=utf-8",
+					beforeSend : function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(data) {
+					// console.log("TCL: createUserAccount -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
