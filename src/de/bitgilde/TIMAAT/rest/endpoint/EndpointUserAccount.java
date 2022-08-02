@@ -60,7 +60,7 @@ public class EndpointUserAccount {
 	@Path("{id}")
 	@Secured
 	public Response createUserAccount(String jsonData) {
-		System.out.println("EndpointUserAccount: createUserAccount: " + jsonData);
+		// System.out.println("EndpointUserAccount: createUserAccount: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		UserAccount newUserAccount = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -100,7 +100,7 @@ public class EndpointUserAccount {
 	@Path("password")
 	@Secured
 	public Response createUserPassword(String jsonData) {
-		System.out.println("EndpointUserAccount: createUserPassword: " + jsonData);
+		// System.out.println("EndpointUserAccount: createUserPassword: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		UserPassword newUserPassword = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();

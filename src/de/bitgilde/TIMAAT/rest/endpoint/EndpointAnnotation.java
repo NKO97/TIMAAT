@@ -415,7 +415,6 @@ public class EndpointAnnotation {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, id);
 		List<Category> categoryList = annotation.getCategories();
-		// System.out.println("EndpointAnnotation: getSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -430,7 +429,7 @@ public class EndpointAnnotation {
 																				@QueryParam("dir") String direction,
 																				@QueryParam("search") String search)
 	{
-		System.out.println("EndpointAnnotation: getCategorySelectList - Id: "+ id);
+		// System.out.println("EndpointAnnotation: getCategorySelectList - Id: "+ id);
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Annotation annotation = entityManager.find(Annotation.class, id);
@@ -470,7 +469,6 @@ public class EndpointAnnotation {
 				}
 			}
 		} else {
-			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
@@ -622,8 +620,7 @@ public class EndpointAnnotation {
 		}
 		if ( updatedAnno == null ) return Response.notModified().build();
 
-		// System.out.println("EndpointAnnotation: updateAnnotation: update annotation data");
-    	// update annotation
+		// update annotation
 		if ( updatedAnno.getAnnotationTranslations().get(0).getTitle() != null ) annotation.getAnnotationTranslations().get(0).setTitle(updatedAnno.getAnnotationTranslations().get(0).getTitle());
 		annotation.getAnnotationTranslations().get(0).setComment(updatedAnno.getAnnotationTranslations().get(0).getComment());
 		annotation.setStartTime(updatedAnno.getStartTime());
@@ -645,7 +642,6 @@ public class EndpointAnnotation {
 		List<Tag> oldTags = annotation.getTags();
 		annotation.setTags(updatedAnno.getTags());
 
-		// System.out.println("EndpointAnnotation: updateAnnotation: update log metadata");
 		// update log metadata
 		annotation.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
@@ -654,7 +650,6 @@ public class EndpointAnnotation {
 			// DEBUG do nothing - production system should abort with internal server error
 		}
 
-		// System.out.println("EndpointAnnotation: updateAnnotation: persist data");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(annotation);
@@ -681,7 +676,6 @@ public class EndpointAnnotation {
 
 		// send notification action
 		NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"), "editAnnotation", annotation.getMediumAnalysisList().getId(), annotation);
-		// System.out.println("EndpointAnnotation: updateAnnotation - update complete");
 		return Response.ok().entity(annotation).build();
 	}
 

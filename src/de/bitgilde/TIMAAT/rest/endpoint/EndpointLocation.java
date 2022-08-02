@@ -153,7 +153,7 @@ public class EndpointLocation {
 	@Secured
 	@Path("all")
 	public Response getAllLocations() {
-		System.out.println("EndpointLocation: getAllLocations");
+		// System.out.println("EndpointLocation: getAllLocations");
 		List<Location> locations = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
@@ -168,7 +168,7 @@ public class EndpointLocation {
 	@Secured
 	@Path("locationType/all")
 	public Response getAllLocationTypes() {
-		System.out.println("EndpointLocation: getAllLocations");
+		// System.out.println("EndpointLocation: getAllLocations");
 		List<LocationType> locationTypes = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		try {
@@ -199,7 +199,7 @@ public class EndpointLocation {
 	@Secured
 	public Response createLocation(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createLocation: " + jsonData);
+		// System.out.println("EndpointLocation: createLocation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Location newLocation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -240,7 +240,6 @@ public class EndpointLocation {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newLocation.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.LOCATIONCREATED);
-		System.out.println("EndpointLocation: createLocation - done");
 
 		return Response.ok().entity(newLocation).build();
 
@@ -253,7 +252,7 @@ public class EndpointLocation {
 	@Secured
 	public Response updateLocation(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: UPDATE LOCATION - jsonData"+ jsonData);
+		// System.out.println("EndpointLocation: UPDATE LOCATION - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Location updatedLocation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -289,7 +288,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONEDITED);
-		System.out.println("EndpointLocation: UPDATE LOCATION - update complete");
 
 		return Response.ok().entity(location).build();
 
@@ -300,8 +298,7 @@ public class EndpointLocation {
 	@Path("{id}")
 	@Secured
 	public Response deleteLocation(@PathParam("id") int id) {
-
-		System.out.println("EndpointLocation: deleteLocation");
+		// System.out.println("EndpointLocation: deleteLocation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 		if ( location == null ) return Response.status(Status.NOT_FOUND).build();
@@ -315,7 +312,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONDELETED);
-		System.out.println("EndpointLocation: deleteLocation - delete complete");
 
 		return Response.ok().build();
 
@@ -328,7 +324,7 @@ public class EndpointLocation {
 	@Path("{locationId}/translation/{id}")
 	public Response createLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createLocationTranslation jsonData: "+jsonData);
+		// System.out.println("EndpointLocation: createLocationTranslation jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		LocationTranslation newTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -365,7 +361,6 @@ public class EndpointLocation {
 		// add log entry (always in conjunction with location creation)
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.LOCATIONCREATED);
-		System.out.println("EndpointLocation: location translation created with id "+newTranslation.getId());
 
 		return Response.ok().entity(newTranslation).build();
 
@@ -378,7 +373,7 @@ public class EndpointLocation {
 	@Path("{locationId}/translation/{id}")
 	public Response updateLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: updateLocationTranslation - jsonData"+ jsonData);
+		// System.out.println("EndpointLocation: updateLocationTranslation - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		LocationTranslation updatedTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -407,7 +402,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.LOCATIONEDITED);
-		System.out.println("EndpointLocation: updateLocationTranslation - updated");
 
 		return Response.ok().entity(locationTranslation).build();
 
@@ -420,7 +414,7 @@ public class EndpointLocation {
 	@Secured
 	public Response deleteLocationTranslation(@PathParam("locationId") int locationId, @PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteLocationTranslation");
+		// System.out.println("EndpointLocation: deleteLocationTranslation");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		LocationTranslation locationTranslation = entityManager.find(LocationTranslation.class, id);
 
@@ -450,7 +444,7 @@ public class EndpointLocation {
 	@Secured
 	public Response createCountry(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createCountry jsonData: "+jsonData);
+		// System.out.println("EndpointLocation: createCountry jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Country newCountry = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -482,7 +476,6 @@ public class EndpointLocation {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCountry.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.COUNTRYCREATED);
-		System.out.println("EndpointLocation: country created with id "+newCountry.getLocationId());
 
 		return Response.ok().entity(newCountry).build();
 
@@ -495,7 +488,7 @@ public class EndpointLocation {
 	@Secured
 	public Response updateCountry(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: UPDATE COUNTRY - jsonData: " + jsonData);
+		// System.out.println("EndpointLocation: UPDATE COUNTRY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Country updatedCountry = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -537,7 +530,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTRYEDITED);
-		System.out.println("EndpointLocation: UPDATE COUNTRY - update complete");
 
 		return Response.ok().entity(country).build();
 
@@ -549,7 +541,7 @@ public class EndpointLocation {
 	@Secured
 	public Response deleteCountry(@PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteCountry with id: "+ id);
+		// System.out.println("EndpointLocation: deleteCountry with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 
@@ -567,7 +559,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTRYDELETED);
-		System.out.println("EndpointLocation: deleteCountry - country deleted");
 
 		return Response.ok().build();
 
@@ -580,7 +571,7 @@ public class EndpointLocation {
 	@Secured
 	public Response createProvince(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createProvince jsonData: "+jsonData);
+		// System.out.println("EndpointLocation: createProvince jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Province newProvince = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -612,7 +603,6 @@ public class EndpointLocation {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newProvince.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.PROVINCECREATED);
-		System.out.println("EndpointLocation: province created with id "+newProvince.getLocationId());
 
 		return Response.ok().entity(newProvince).build();
 
@@ -625,7 +615,7 @@ public class EndpointLocation {
 	@Secured
 	public Response updateProvince(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: UPDATE PROVINCE - jsonData: " + jsonData);
+		// System.out.println("EndpointLocation: UPDATE PROVINCE - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Province updatedProvince = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -662,7 +652,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.PROVINCEEDITED);
-		System.out.println("EndpointLocation: UPDATE PROVINCE - update complete");
 
 		return Response.ok().entity(province).build();
 
@@ -674,7 +663,7 @@ public class EndpointLocation {
 	@Secured
 	public Response deleteProvince(@PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteProvince with id: "+ id);
+		// System.out.println("EndpointLocation: deleteProvince with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 
@@ -692,7 +681,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.PROVINCEDELETED);
-		System.out.println("EndpointLocation: deleteProvince - province deleted");
 
 		return Response.ok().build();
 
@@ -705,7 +693,7 @@ public class EndpointLocation {
 	@Secured
 	public Response createCounty(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createCounty jsonData: "+jsonData);
+		// System.out.println("EndpointLocation: createCounty jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		County newCounty = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -737,7 +725,6 @@ public class EndpointLocation {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCounty.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.COUNTYCREATED);
-		System.out.println("EndpointLocation: county created with id "+newCounty.getLocationId());
 
 		return Response.ok().entity(newCounty).build();
 
@@ -750,7 +737,7 @@ public class EndpointLocation {
 	@Secured
 	public Response updateCounty(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: UPDATE COUNTY - jsonData: " + jsonData);
+		// System.out.println("EndpointLocation: UPDATE COUNTY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		County updatedCounty = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -787,7 +774,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTYEDITED);
-		System.out.println("EndpointLocation: UPDATE COUNTY - update complete");
 
 		return Response.ok().entity(county).build();
 
@@ -799,7 +785,7 @@ public class EndpointLocation {
 	@Secured
 	public Response deleteCounty(@PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteCounty with id: "+ id);
+		// System.out.println("EndpointLocation: deleteCounty with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 
@@ -817,7 +803,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.COUNTYDELETED);
-		System.out.println("EndpointLocation: deleteCounty - county deleted");
 
 		return Response.ok().build();
 
@@ -830,7 +815,7 @@ public class EndpointLocation {
 	@Secured
 	public Response createCity(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createCity jsonData: "+jsonData);
+		// System.out.println("EndpointLocation: createCity jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		City newCity = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -862,7 +847,6 @@ public class EndpointLocation {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newCity.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.CITYCREATED);
-		System.out.println("EndpointLocation: city created with id "+newCity.getLocationId());
 
 		return Response.ok().entity(newCity).build();
 
@@ -875,7 +859,7 @@ public class EndpointLocation {
 	@Secured
 	public Response updateCity(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: UPDATE CITY - jsonData: " + jsonData);
+		// System.out.println("EndpointLocation: UPDATE CITY - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		City updatedCity = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -912,7 +896,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.CITYEDITED);
-		System.out.println("EndpointLocation: UPDATE CITY - update complete");
 
 		return Response.ok().entity(city).build();
 
@@ -924,7 +907,7 @@ public class EndpointLocation {
 	@Secured
 	public Response deleteCity(@PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteCity with id: "+ id);
+		// System.out.println("EndpointLocation: deleteCity with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 
@@ -942,7 +925,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.CITYDELETED);
-		System.out.println("EndpointLocation: deleteCity - city deleted");
 
 		return Response.ok().build();
 
@@ -955,7 +937,7 @@ public class EndpointLocation {
 	@Secured
 	public Response createStreet(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: createStreet jsonData: "+jsonData);
+		// System.out.println("EndpointLocation: createStreet jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Street newStreet = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -987,7 +969,6 @@ public class EndpointLocation {
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry(newStreet.getLocation().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.STREETCREATED);
-		System.out.println("EndpointLocation: street created with id "+newStreet.getLocationId());
 
 		return Response.ok().entity(newStreet).build();
 
@@ -1000,7 +981,7 @@ public class EndpointLocation {
 	@Secured
 	public Response updateStreet(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointLocation: UPDATE STREET - jsonData: " + jsonData);
+		// System.out.println("EndpointLocation: UPDATE STREET - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Street updatedStreet = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1037,7 +1018,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.STREETEDITED);
-		System.out.println("EndpointLocation: UPDATE STREET - update complete");
 
 		return Response.ok().entity(street).build();
 
@@ -1049,7 +1029,7 @@ public class EndpointLocation {
 	@Secured
 	public Response deleteStreet(@PathParam("id") int id) {
 
-		System.out.println("EndpointLocation: deleteStreet with id: "+ id);
+		// System.out.println("EndpointLocation: deleteStreet with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Location location = entityManager.find(Location.class, id);
 
@@ -1067,7 +1047,6 @@ public class EndpointLocation {
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																						UserLogManager.LogEvents.STREETDELETED);
-		System.out.println("EndpointLocation: deleteStreet - street deleted");
 
 		return Response.ok().build();
 

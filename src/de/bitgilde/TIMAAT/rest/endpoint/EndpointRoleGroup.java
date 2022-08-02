@@ -126,7 +126,7 @@ public class EndpointRoleGroup {
 	@Secured
 	@Path("{id}")
 	public Response getRoleGroup(@PathParam("id") Integer id) {
-		System.out.println("EndpointRole: getRoleGroup with id "+ id);
+		// System.out.println("EndpointRole: getRoleGroup with id "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleGroup roleGroup = entityManager.find(RoleGroup.class, id);
 
@@ -142,19 +142,16 @@ public class EndpointRoleGroup {
 																				 @QueryParam("per_page") Integer per_page,
 																				 @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all role groups
-		System.out.println("EndpointRole: getRoleGroupSelectList - search string: "+ search);
+		// System.out.println("EndpointRole: getRoleGroupSelectList - search string: "+ search);
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
 
-		// System.out.println("EndpointRole: getRoleGroupSelectListForId - create query");
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("EndpointRole: getRoleGroupSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rgt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rgt.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("EndpointRole: getRoleGroupSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT rgt FROM RoleGroupTranslation rgt WHERE rgt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rgt.name ASC");
 		}
@@ -178,7 +175,7 @@ public class EndpointRoleGroup {
 	@Path("{id}/hasList")
 	public Response getRoleGroupHasRoleList(@PathParam("id") Integer roleGroupId)
 	{
-		System.out.println("EndpointRole: getRoleGroupHasRoleList - ID: "+ roleGroupId);
+		// System.out.println("EndpointRole: getRoleGroupHasRoleList - ID: "+ roleGroupId);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleGroup roleGroup = entityManager.find(RoleGroup.class, roleGroupId);
 		List<Role> roleList = roleGroup.getRoles();
@@ -193,7 +190,7 @@ public class EndpointRoleGroup {
 	@Secured
 	public Response createRoleGroup(@PathParam("id") int id,
 																	String jsonData) {
-		System.out.println("EndpointRole: createRoleGroup " + jsonData);
+		// System.out.println("EndpointRole: createRoleGroup " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -238,7 +235,6 @@ public class EndpointRoleGroup {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ROLEGROUPCREATED);
-		System.out.println("EndpointRole: createRoleGroup - done");
 		return Response.ok().entity(roleGroup).build();
 	}
 
@@ -249,7 +245,7 @@ public class EndpointRoleGroup {
 	@Secured
 	public Response updateRoleGroup(@PathParam("id") int id,
 																	String jsonData) {
-		System.out.println("EndpointRole: updateRoleGroup - jsonData: "+ jsonData);
+		// System.out.println("EndpointRole: updateRoleGroup - jsonData: "+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		RoleGroup updatedRoleGroup = null;
@@ -288,12 +284,10 @@ public class EndpointRoleGroup {
 			entityManager.refresh(role);
 		}
 
-		System.out.println("EndpointRole: updateRoleGroup - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ROLEGROUPEDITED);
-		System.out.println("EndpointRole: updateRoleGroup - update complete");
 
 		return Response.ok().entity(roleGroup).build();
 	}
@@ -303,7 +297,7 @@ public class EndpointRoleGroup {
 	@Path("{id}")
 	@Secured
 	public Response deleteRoleGroup(@PathParam("id") int id) {
-		System.out.println("EndpointRole: deleteRoleGroup");
+		// System.out.println("EndpointRole: deleteRoleGroup");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		RoleGroup roleGroup = entityManager.find(RoleGroup.class, id);
 
@@ -324,7 +318,6 @@ public class EndpointRoleGroup {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPDELETED);
-		System.out.println("EndpointRole: deleteRoleGroup - delete complete");
 		return Response.ok().build();
 	}
 
@@ -336,8 +329,7 @@ public class EndpointRoleGroup {
 	public Response createRoleGroupTranslation(@PathParam("id") int id,
 																						 @PathParam("roleGroupId") int roleGroupId,
 																						 String jsonData) {
-
-		System.out.println("EndpointRole: createRoleGroupTranslation: jsonData: "+jsonData);
+		// System.out.println("EndpointRole: createRoleGroupTranslation: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		RoleGroupTranslation newRoleGroupTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -354,7 +346,6 @@ public class EndpointRoleGroup {
 			System.out.println("EndpointRole: createRoleGroupTranslation: newRoleGroupTranslation == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointRole: createRoleGroupTranslation: language id: "+newRoleGroupTranslation.getLanguage().getId());
 		// sanitize object data
 		newRoleGroupTranslation.setId(0);
 		Language language = entityManager.find(Language.class, newRoleGroupTranslation.getLanguage().getId());
@@ -364,7 +355,6 @@ public class EndpointRoleGroup {
 
 		// update log metadata
 		// Not necessary, a translation will always be created in conjunction with a medium
-		System.out.println("EndpointRole: createRoleGroupTranslation: persist translation");
 
 		// persist translation
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -379,14 +369,10 @@ public class EndpointRoleGroup {
 		entityManager.refresh(language);
 		entityManager.refresh(roleGroup);
 
-		// System.out.println("EndpointRole: createRoleGroupTranslation: add log entry");
 		// add log entry
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext
 		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPCREATED);
-
-		System.out.println("EndpointRole: create translation: translation created with id "+newRoleGroupTranslation.getId());
-		System.out.println("EndpointRole: create translation: translation created with language id "+newRoleGroupTranslation.getLanguage().getId());
 
 		return Response.ok().entity(newRoleGroupTranslation).build();
 	}
@@ -398,7 +384,7 @@ public class EndpointRoleGroup {
 	@Secured
 	public Response updateRoleGroupTranslation(@PathParam("id") int id,
 																						 String jsonData) {
-		System.out.println("EndpointRole: update translation - jsonData: " + jsonData);
+		// System.out.println("EndpointRole: update translation - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		RoleGroupTranslation updatedRoleGroupTranslation = null;
@@ -408,7 +394,6 @@ public class EndpointRoleGroup {
 		if ( roleGroupTranslation == null ) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		// System.out.println("EndpointRole: update translation - old translation :"+translation.getName());
 		// parse JSON data
 		try {
 			updatedRoleGroupTranslation = mapper.readValue(jsonData, RoleGroupTranslation.class);
@@ -422,11 +407,9 @@ public class EndpointRoleGroup {
 		}
 
 		// update translation
-		System.out.println("EndpointRole: update translation - language id:"+updatedRoleGroupTranslation.getLanguage().getId());
 		if ( updatedRoleGroupTranslation.getName() != null ) roleGroupTranslation.setName(updatedRoleGroupTranslation.getName());
 		if ( updatedRoleGroupTranslation.getLanguage() != null ) roleGroupTranslation.setLanguage(updatedRoleGroupTranslation.getLanguage());
 
-		System.out.println("EndpointRole: update translation - start transaction");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(roleGroupTranslation);
@@ -434,12 +417,10 @@ public class EndpointRoleGroup {
 		entityTransaction.commit();
 		entityManager.refresh(roleGroupTranslation);
 
-		System.out.println("EndpointRole: update translation - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEGROUPEDITED);
-		System.out.println("EndpointRole: update translation - update complete");
 		return Response.ok().entity(roleGroupTranslation).build();
 	}
 

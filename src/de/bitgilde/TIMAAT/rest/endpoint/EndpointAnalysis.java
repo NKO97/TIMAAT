@@ -149,7 +149,6 @@ public class EndpointAnalysis {
 		Query countQuery = entityManager.createQuery("SELECT COUNT(amt) FROM AnalysisMethodType amt WHERE "+includedMethodTypeIds+ " "+ analysesBasedOnLayer);
 		long recordsTotal = (long) countQuery.getSingleResult();
 		long recordsFiltered = recordsTotal;
-		// System.out.println("records total: " + recordsTotal);
 
 		// search
 		Query query;
@@ -171,7 +170,6 @@ public class EndpointAnalysis {
 				if ( start != null && start > 0 ) query.setFirstResult(start);
 				if ( length != null && length > 0 ) query.setMaxResults(length);
 				analysisMethodTypeList = castList(AnalysisMethodType.class, query.getResultList());
-				// System.out.println("analysisMethodTypeList size: " + analysisMethodTypeList.size());
 		}
 		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, analysisMethodTypeList)).build();
   }
@@ -1074,7 +1072,7 @@ public class EndpointAnalysis {
 																 @PathParam("analysisMethodId") int analysisMethodId,
 																 String jsonData,
 																 @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysis: createAnalysis: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysis: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1130,7 +1128,6 @@ public class EndpointAnalysis {
 		// newAnalysis.setCreatedAt(creationDate);
 		// newAnalysis.setLastEditedAt(creationDate);
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
@@ -1150,7 +1147,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysis - done");
 		return Response.ok().entity(newAnalysis).build();
 	}
 
@@ -1160,7 +1156,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response deleteAnalysis(@PathParam("analysisId") int analysisId,
 																 @QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysis: deleteAnalysis");
+		// System.out.println("EndpointAnalysis: deleteAnalysis");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Analysis analysis = entityManager.find(Analysis.class, analysisId);
@@ -1191,7 +1187,6 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.ANALYSISDELETED);
-		System.out.println("EndpointAnalysis: deleteAnalysis - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1201,7 +1196,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response deleteAnalysisAndAnalysisMethod(@PathParam("analysisMethodId") int analysisMethodId,
 																									@QueryParam("authToken") String authToken) {
-		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod");
+		// System.out.println("EndpointAnalysis: deleteAnalysisAndMethod");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		AnalysisMethod analysisMethod = entityManager.find(AnalysisMethod.class, analysisMethodId);
@@ -1234,7 +1229,6 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.ANALYSISDELETED);
-		System.out.println("EndpointAnalysis: deleteAnalysisAndMethod - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1244,7 +1238,7 @@ public class EndpointAnalysis {
 	@Path("audioPostProduction/{id}")
 	@Secured
 	public Response createAudioPostProduction(@PathParam("id") int id) {
-		System.out.println("EndpointAnalysis: createAudioPostProduction: ");
+		// System.out.println("EndpointAnalysis: createAudioPostProduction: ");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		// parse JSON data
@@ -1264,7 +1258,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAudioPostProduction - done");
 		return Response.ok().entity(audioPostProduction).build();
 	}
 
@@ -1273,7 +1266,7 @@ public class EndpointAnalysis {
 	@Path("audioPostProduction/{id}")
 	@Secured
 	public Response deleteAudioPostProduction(@PathParam("id") int id) {
-		System.out.println("EndpointAnalysis: deleteAudioPostProduction");
+		// System.out.println("EndpointAnalysis: deleteAudioPostProduction");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AudioPostProduction audioPostProduction = entityManager.find(AudioPostProduction.class, id);
 
@@ -1289,7 +1282,6 @@ public class EndpointAnalysis {
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext
 		// 							.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ROLEDELETED);
-		System.out.println("EndpointAnalysis: deleteAudioPostProduction - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1300,7 +1292,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAudioPostProductionTranslation(@PathParam("id") int id,
 																											 String jsonData) {
-		System.out.println("EndpointAnalysis: createAudioPostProductionTranslation: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAudioPostProductionTranslation: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		AudioPostProductionTranslation audioPostProductionTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1330,7 +1322,6 @@ public class EndpointAnalysis {
 		// newAnalysis.setCreatedAt(creationDate);
 		// newAnalysis.setLastEditedAt(creationDate);
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
@@ -1354,7 +1345,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAudioPostProductionTranslation - done");
 		return Response.ok().entity(audioPostProductionTranslation).build();
 	}
 
@@ -1365,7 +1355,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodAnalysisMusic(@PathParam("analysisMethodId") int analysisMethodId,
 																										String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1396,7 +1386,6 @@ public class EndpointAnalysis {
 		// newAnalysis.setCreatedAt(creationDate);
 		// newAnalysis.setLastEditedAt(creationDate);
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
@@ -1415,7 +1404,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisMusic - done");
 		return Response.ok().entity(analysisMusic).build();
 	}
 
@@ -1426,7 +1414,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodAnalysisSpeech(@PathParam("analysisMethodId") int analysisMethodId,
 																										 String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1453,7 +1441,6 @@ public class EndpointAnalysis {
 		// newAnalysis.setCreatedAt(creationDate);
 		// newAnalysis.setLastEditedAt(creationDate);
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
@@ -1472,7 +1459,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisSpeech - done");
 		return Response.ok().entity(analysisSpeech).build();
 	}
 
@@ -1483,7 +1469,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodSoundEffectDescriptive(@PathParam("analysisMethodId") int analysisMethodId,
 																														 String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1510,7 +1496,6 @@ public class EndpointAnalysis {
 		// newAnalysis.setCreatedAt(creationDate);
 		// newAnalysis.setLastEditedAt(creationDate);
 		// if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-		// 	// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 		// 	newAnalysis.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 		// 	newAnalysis.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		// } else {
@@ -1529,7 +1514,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodSoundEffectDescriptive - done");
 		return Response.ok().entity(soundEffectDescriptive).build();
 	}
 
@@ -1540,7 +1524,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodCameraMovement(@PathParam("analysisMethodId") int analysisMethodId,
 																										 String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1570,7 +1554,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodCameraMovement - done");
 		return Response.ok().entity(cameraMovement).build();
 	}
 
@@ -1581,7 +1564,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodTakeLength(@PathParam("analysisMethodId") int analysisMethodId,
 																								 String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1623,7 +1606,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodTakeLength - done");
 		return Response.ok().entity(takeLength).build();
 	}
 
@@ -1634,7 +1616,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodEditingMontage(@PathParam("analysisMethodId") int analysisMethodId,
 																										 String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1664,7 +1646,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodEditingMontage - done");
 		return Response.ok().entity(editingMontage).build();
 	}
 
@@ -1675,7 +1656,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createConceptCameraPositionAndPerspective(@PathParam("analysisMethodId") int analysisMethodId,
 																										 				String jsonData) {
-		System.out.println("EndpointAnalysis: conceptCameraPositionAndPerspective: " + jsonData);
+		// System.out.println("EndpointAnalysis: conceptCameraPositionAndPerspective: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1719,7 +1700,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: conceptCameraPositionAndPerspective - done");
 		return Response.ok().entity(conceptCameraPositionAndPerspective).build();
 	}
 
@@ -1730,7 +1710,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodAnalysisActor(@PathParam("analysisMethodId") int analysisMethodId,
 																							 			String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1760,7 +1740,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodAnalysisActor - done");
 		return Response.ok().entity(analysisActor).build();
 	}
 
@@ -1771,7 +1750,7 @@ public class EndpointAnalysis {
 	@Secured
 	public Response createAnalysisMethodLighting(@PathParam("analysisMethodId") int analysisMethodId,
 																							 String jsonData) {
-		System.out.println("EndpointAnalysis: createAnalysisMethodLighting: " + jsonData);
+		// System.out.println("EndpointAnalysis: createAnalysisMethodLighting: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1801,7 +1780,6 @@ public class EndpointAnalysis {
 
 		// add log entry
 		// UserLogManager.getLogger().addLogEntry(newAnalysis.getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ANALYSISCREATED);
-		System.out.println("EndpointAnalysis: createAnalysisMethodLighting - done");
 		return Response.ok().entity(lighting).build();
 	}
 

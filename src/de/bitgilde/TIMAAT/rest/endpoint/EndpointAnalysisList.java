@@ -172,7 +172,6 @@ public class EndpointAnalysisList {
 		List<Category> categoryList = segment.getCategories();
 		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 
-		// System.out.println("EndPointAnalysisList: getSegmentSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -242,7 +241,6 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisSequence sequence = entityManager.find(AnalysisSequence.class, id);
 		List<Category> categoryList = sequence.getCategories();
-		// System.out.println("EndPointAnalysisList: getSequenceSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -292,7 +290,6 @@ public class EndpointAnalysisList {
 				}
 			}
 		} else {
-			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
@@ -312,7 +309,6 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisScene scene = entityManager.find(AnalysisScene.class, id);
 		List<Category> categoryList = scene.getCategories();
-		// System.out.println("EndPointAnalysisList: getSceneSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -362,7 +358,6 @@ public class EndpointAnalysisList {
 				}
 			}
 		} else {
-			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
@@ -456,7 +451,6 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisAction action = entityManager.find(AnalysisAction.class, id);
 		List<Category> categoryList = action.getCategories();
-		// System.out.println("EndPointAnalysisList: getActionSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -506,7 +500,6 @@ public class EndpointAnalysisList {
 				}
 			}
 		} else {
-			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
@@ -526,7 +519,6 @@ public class EndpointAnalysisList {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		AnalysisTake take = entityManager.find(AnalysisTake.class, id);
 		List<Category> categoryList = take.getCategories();
-		// System.out.println("EndPointAnalysisList: getTakeSelectedCategories - num categories: "+ categoryList.size());
 		return Response.ok().entity(categoryList).build();
 	}
 
@@ -576,7 +568,6 @@ public class EndpointAnalysisList {
 				}
 			}
 		} else {
-			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
 				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
@@ -801,7 +792,6 @@ public class EndpointAnalysisList {
 				return Response.notModified().build();
 			}
 		}
-		// System.out.println("EndpointMediumAnalysisList: addMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
 
 		// add log entry
 		UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ANALYSISLISTEDITED);
@@ -856,7 +846,6 @@ public class EndpointAnalysisList {
 		entityTransaction.commit();
 		entityManager.refresh(uahmal);
 
-		// System.out.println("EndpointMediumAnalysisList: updateMediumAnalysisListHasUserAccountWithPermissionTypes: entity transaction complete");
 
 		// add log entry
 		UserLogManager.getLogger()
@@ -2956,14 +2945,11 @@ public class EndpointAnalysisList {
 			return Response.status(Status.FORBIDDEN).build();
 		}
 
-		System.out.println("user authenticated. Retrieving keyframes.");
-
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		String exclude1 = "\"\"";
 		String exclude2 = "\"{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}\"";
 		String exclude3 = "\"[]\"";
 		String sql = "SELECT s FROM SelectorSvg s WHERE s.svgData <> :exclude1 AND s.svgData <> :exclude2 AND s.svgData <> :exclude3";
-		System.out.println("query: " + sql);
 		Query query = entityManager.createQuery(sql)
 															 .setParameter("exclude1", exclude1)
 															 .setParameter("exclude2", exclude2)
@@ -3015,7 +3001,6 @@ public class EndpointAnalysisList {
 			entityManager.refresh(selectorSvg);
 		}
 
-		System.out.println("Completed updating all keyframe time values.");
 		return Response.ok().build();
 }
 

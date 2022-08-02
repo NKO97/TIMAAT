@@ -208,7 +208,6 @@ public class EndpointPublication {
 
 		MediumAnalysisList mediumAnalysisList = em.find(MediumAnalysisList.class, mediumAnalysisListId);
 		if ( mediumAnalysisList == null ) {
-			// System.out.println("createPublicationByMediumAnalysisList - no analysisList found");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
@@ -242,7 +241,7 @@ public class EndpointPublication {
 	@Path("analysisList/{mediumAnalysisListId}")
 	public Response updatePublicationByMediumAnalysisList(@PathParam("mediumAnalysisListId") int mediumAnalysisListId,
 																												String jsonData) {
-		System.out.println("updatePublicationByMediumAnalysisList");
+		// System.out.println("updatePublicationByMediumAnalysisList");
 
 		ObjectMapper mapper = new ObjectMapper();
 		EntityManager em = TIMAATApp.emf.createEntityManager();

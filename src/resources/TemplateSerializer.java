@@ -15,7 +15,7 @@ public class TemplateSerializer {
 			System.out.println("Usage: TemplateSerializer <TIMAAT App Directory>... Assuming current directory");
 		} else dir = args[0];
 
-		System.out.print("Serializing Offline Publication Templates (publication.offline.single.template)...");
+		System.out.println("Serializing Offline Publication Templates (publication.offline.single.template)...");
 		String content = "";
 		String cssBootstrap = "", cssFAFonts = "", cssLeaflet = "", jsJQuery = "", jsJQueryUI = "", jsBootstrap = "", jsLeaflet = "";
 		String cssTIMAAT = "", jsTIMAAT = "";

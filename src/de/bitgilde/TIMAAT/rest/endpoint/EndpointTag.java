@@ -96,18 +96,15 @@ public class EndpointTag {
 																	 @QueryParam("page") Integer page,
 																	 @QueryParam("per_page") Integer per_page) {
 		// returns list of id and name combinations of all tags
-		// System.out.println("EndpointTag: getTagSelectList");
 		// System.out.println("EndpointTag: getTagSelectList - search string: "+ search);
 
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			// System.out.println("EndpointTag: getTagSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT t FROM Tag t WHERE lower(t.name) LIKE lower(concat('%', :name,'%')) ORDER BY t.name ASC");
 				query.setParameter("name", search);
 		} else {
-			// System.out.println("EndpointTag: getTagSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				"SELECT t FROM Tag t ORDER BY t.name ASC");
 		}

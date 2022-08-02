@@ -25,7 +25,7 @@ public class RangeResponseFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
 
-    	System.out.println("filter called");
+    	// System.out.println("filter called");
         responseContext.getHeaders().add(ACCEPT_RANGES, BYTES_RANGE);
 
         if (!requestContext.getHeaders().containsKey(RANGE)) {

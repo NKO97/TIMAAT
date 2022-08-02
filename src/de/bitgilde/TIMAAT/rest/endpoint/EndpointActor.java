@@ -642,7 +642,6 @@ public class EndpointActor {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Role role = entityManager.find(Role.class, roleId);
 		List<Actor> actorList = role.getActors();
-		System.out.println("Number of actors found: "+ actorList.size());
 
 		return Response.ok().entity(actorList).build();
 	}
@@ -702,7 +701,6 @@ public class EndpointActor {
 		for (SexTranslation sexTranslation : sexTranslationList) {
 			sexSelectList.add(new SelectElement(sexTranslation.getSex().getId(),
 																					sexTranslation.getType()));
-			// System.out.println("sex select list entry - id: "+ sexTranslation.getSex().getId() + " type: " + sexTranslation.getType());
 		}
 		return Response.ok().entity(sexSelectList).build();
 	}
@@ -713,7 +711,7 @@ public class EndpointActor {
 	@Path("{id}")
 	@Secured
 	public Response createActor(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: createActor: " + jsonData);
+		// System.out.println("EndpointActor: createActor: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -744,7 +742,6 @@ public class EndpointActor {
 		newActor.setCreatedAt(creationDate);
 		newActor.setLastEditedAt(creationDate);
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			// System.out.println("containerRequestContext.getProperty('TIMAAT.userID') " + containerRequestContext.getProperty("TIMAAT.userID"));
 			newActor.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
 			newActor.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
 		} else {
@@ -766,7 +763,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry(newActor.getCreatedByUserAccount().getId(),
 															 UserLogManager.LogEvents.ACTORCREATED);
-		System.out.println("EndpointActor: createActor - done");
 		return Response.ok().entity(newActor).build();
 	}
 
@@ -798,7 +794,7 @@ public class EndpointActor {
 	@Path("{id}")
 	@Secured
 	public Response updateActor(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: updateActor - jsonData"+ jsonData);
+		// System.out.println("EndpointActor: updateActor - jsonData"+ jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -861,7 +857,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ACTOREDITED);
-		System.out.println("EndpointActor: updateActor - update complete");
 		return Response.ok().entity(actor).build();
 	}
 
@@ -870,7 +865,7 @@ public class EndpointActor {
 	@Path("{id}")
 	@Secured
 	public Response deleteActor(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteActor");
+		// System.out.println("EndpointActor: deleteActor");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
 		if ( actor == null ) return Response.status(Status.NOT_FOUND).build();
@@ -884,7 +879,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.ACTORDELETED);
-		System.out.println("EndpointActor: deleteActor - delete complete");
 		return Response.ok().build();
 	}
 
@@ -894,8 +888,7 @@ public class EndpointActor {
 	@Path("person/{id}")
 	@Secured
 	public Response createPerson(@PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: createPerson jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createPerson jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ActorPerson newPerson = null;
@@ -914,7 +907,6 @@ public class EndpointActor {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
-		System.out.println("EndpointActor: createPerson sanitize object data");
 		// sanitize object data
 		// TODO link to locations
 		// Location placeOfBirth = entityManager.find(Location.class, newPerson.getPlaceOfBirth().getLocationId());
@@ -925,7 +917,6 @@ public class EndpointActor {
 		// update log metadata
 		// Not necessary, a person will always be created in conjunction with an actor
 
-		System.out.println("EndpointActor: createPerson persist person");
 		// persist person
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -939,12 +930,10 @@ public class EndpointActor {
 		// entityManager.refresh(placeOfDeath);
 		entityManager.refresh(newPerson.getActor());
 
-		System.out.println("EndpointActor: createPerson add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PERSONCREATED);
-		System.out.println("EndpointActor: person created with id "+newPerson.getActorId());
 		return Response.ok().entity(newPerson).build();
 	}
 
@@ -955,7 +944,7 @@ public class EndpointActor {
 	@Secured
 	public Response updatePerson(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointActor: updatePerson jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updatePerson jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ActorPerson updatedPerson = null;
@@ -977,7 +966,6 @@ public class EndpointActor {
 		}
 
 		// update person
-		System.out.println("EndpointActor: updatePerson update data");
 		person.setTitle(updatedPerson.getTitle());
 		person.setCitizenship(updatedPerson.getCitizenship());
 		person.setDateOfBirth(updatedPerson.getDateOfBirth());
@@ -989,7 +977,6 @@ public class EndpointActor {
 		person.setSex(updatedPerson.getSex());
 		// TODO update person is member of collective
 
-		System.out.println("EndpointActor: updatePerson update log entry");
 		// update log metadata
 		person.getActor().setLastEditedAt(new Timestamp(System.currentTimeMillis()));
 		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
@@ -998,7 +985,6 @@ public class EndpointActor {
 			// DEBUG do nothing - production system should abort with internal server error
 		}
 
-		System.out.println("EndpointActor: updatePerson persist person");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(person);
@@ -1010,7 +996,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PERSONEDITED);
-		System.out.println("EndpointActor: updatePerson - update complete");
 		return Response.ok().entity(person).build();
 	}
 
@@ -1019,7 +1004,7 @@ public class EndpointActor {
 	@Path("person/{id}")
 	@Secured
 	public Response deletePerson(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deletePerson with id: "+ id);
+		// System.out.println("EndpointActor: deletePerson with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Actor actor = entityManager.find(Actor.class, id);
@@ -1038,7 +1023,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PERSONDELETED);
-		System.out.println("EndpointActor: deletePerson - person deleted");
 		return Response.ok().build();
 	}
 
@@ -1086,7 +1070,6 @@ public class EndpointActor {
 		// add log entry (always in conjunction with person)
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.PERSONCREATED);
-		// System.out.println("PersonEndpoint: person translation created with id "+newTranslation.getId());
 
 		return Response.ok().entity(newTranslation).build();
 	}
@@ -1127,7 +1110,6 @@ public class EndpointActor {
 		// add log entry (always in conjunction with person)
 		// UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 																				UserLogManager.LogEvents.PERSONEDITED);
-		// System.out.println("ActorPersonEndpoint: updateActorPersonTranslation - updated");
 
 		return Response.ok().entity(personTranslation).build();
 
@@ -1169,7 +1151,7 @@ public class EndpointActor {
 	@Secured
 	public Response createCollective(@PathParam("id") int id, String jsonData) {
 
-		System.out.println("EndpointActor: createCollective jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createCollective jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorCollective newCollective = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1204,7 +1186,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.COLLECTIVECREATED);
-		System.out.println("EndpointActor: collective created with id "+newCollective.getActorId());
 		return Response.ok().entity(newCollective).build();
 	}
 
@@ -1214,8 +1195,7 @@ public class EndpointActor {
 	@Path("collective/{id}")
 	@Secured
 	public Response updateCollective(@PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: updateCollective - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateCollective - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorCollective updatedCollective = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1232,7 +1212,6 @@ public class EndpointActor {
 		if ( updatedCollective == null ) return Response.notModified().build();
 
 		// update collective
-		// System.out.println("EndpointActor: updateCollective - collective.id:"+collective.getActorId());
 		collective.setFounded(updatedCollective.getFounded());
 		collective.setDisbanded(updatedCollective.getDisbanded());
 
@@ -1254,7 +1233,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.COLLECTIVEEDITED);
-		System.out.println("EndpointActor: updateCollective - update complete");
 		return Response.ok().entity(collective).build();
 	}
 
@@ -1263,7 +1241,7 @@ public class EndpointActor {
 	@Path("collective/{id}")
 	@Secured
 	public Response deleteCollective(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteCollective with id: "+ id);
+		// System.out.println("EndpointActor: deleteCollective with id: "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Actor actor = entityManager.find(Actor.class, id);
@@ -1282,7 +1260,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.COLLECTIVEDELETED);
-		System.out.println("EndpointActor: deleteCollective - collective deleted");
 		return Response.ok().build();
 	}
 
@@ -1293,8 +1270,7 @@ public class EndpointActor {
 	@Path("name/{id}")
 	@Secured
 	public Response createName(@PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: createName: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createName: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorName newName = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1311,7 +1287,6 @@ public class EndpointActor {
 			System.out.println("EndpointActor: createName: newName == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: createName: language id: "+newName.getActor().getId());
 		// sanitize object data
 		newName.setId(0);
 		Actor actor = entityManager.find(Actor.class, newName.getActor().getId());
@@ -1319,7 +1294,6 @@ public class EndpointActor {
 
 		// update log metadata
 		// Not necessary, a name will always be created in conjunction with a actor
-		System.out.println("EndpointActor: createName: persist name");
 
 		// persist name
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1333,15 +1307,11 @@ public class EndpointActor {
 		entityManager.refresh(newName);
 		entityManager.refresh(actor);
 
-		System.out.println("EndpointActor: createName: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newName.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORNAMECREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.ACTORNAMECREATED);
-
-		System.out.println("EndpointActor: create name: name created with id "+newName.getId());
-		// System.out.println("EndpointActor: create name: name created with language id "+newName.getLanguage().getId());
 
 		return Response.ok().entity(newName).build();
 	}
@@ -1355,7 +1325,7 @@ public class EndpointActor {
 													@PathParam("id") int id,
 													String jsonData) {
 
-		System.out.println("EndpointActor: addName: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: addName: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorName newName = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1372,7 +1342,6 @@ public class EndpointActor {
 			System.out.println("EndpointActor: addName: newName == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addName: name: "+newName.getName());
 		// sanitize object data
 		newName.setId(0);
 		// Language language = entityManager.find(Language.class, newName.getLanguage().getId());
@@ -1382,7 +1351,6 @@ public class EndpointActor {
 
 		// update log metadata
 		// Not necessary, a name will always be created in conjunction with a actor
-		System.out.println("EndpointActor: addName: persist name");
 
 		// persist name
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1407,15 +1375,11 @@ public class EndpointActor {
 		// entityManager.refresh(actor);
 		// entityManager.refresh(newName);
 
-		System.out.println("EndpointActor: addName: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newName.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ACTORNAMECREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.ACTORNAMECREATED);
-
-		System.out.println("EndpointActor: addName: name added with id "+newName.getId());
-		// System.out.println("EndpointActor: addName: name added with language id "+newName.getLanguage().getId());
 
 		return Response.ok().entity(newName).build();
 	}
@@ -1426,13 +1390,12 @@ public class EndpointActor {
 	@Path("name/{id}")
 	@Secured
 	public Response updateName(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: updateName - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateName - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		ActorName updatedName = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		ActorName name = entityManager.find(ActorName.class, id);
 		if ( name == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor: updateName - old name :"+name.getName());
 		// parse JSON data
 		try {
 			updatedName = mapper.readValue(jsonData, ActorName.class);
@@ -1442,7 +1405,6 @@ public class EndpointActor {
 		}
 		if ( updatedName == null ) return Response.notModified().build();
 		// update name
-		// System.out.println("EndpointActor: updateName - language id:"+updatedName.getLanguage().getId());
 		if ( updatedName.getName() != null ) name.setName(updatedName.getName());
 		name.setUsedFrom(updatedName.getUsedFrom());
 		name.setUsedUntil(updatedName.getUsedUntil());
@@ -1454,12 +1416,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(name);
 
-		// System.out.println("EndpointActor: update NAME - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.ACTORNAMEEDITED);
-		System.out.println("EndpointActor: updateName - update complete");
 		return Response.ok().entity(name).build();
 	}
 
@@ -1468,7 +1428,7 @@ public class EndpointActor {
 	@Path("name/{id}")
 	@Secured
 	public Response deleteName(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteName");
+		// System.out.println("EndpointActor: deleteName");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		ActorName name = entityManager.find(ActorName.class, id);
@@ -1481,7 +1441,6 @@ public class EndpointActor {
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ACTORNAMEDELETED);
-		System.out.println("EndpointActor: deleteName - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1491,8 +1450,7 @@ public class EndpointActor {
 	@Path("address/{id}")
 	@Secured
 	public Response createAddress(@PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: createAddress: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address newAddress = null;
@@ -1510,13 +1468,11 @@ public class EndpointActor {
 			System.out.println("EndpointActor: createAddress: newAddress == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: createAddress: language id: "+newAddress.getLanguage().getId());
 		// sanitize object data
 		newAddress.setId(0);
 
 		// update log metadata
 		// Not necessary, a address will always be created in conjunction with a actor
-		System.out.println("EndpointActor: createAddress: persist address");
 
 		// persist address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1526,15 +1482,11 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(newAddress);
 
-		// System.out.println("EndpointActor: createAddress: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.ADDRESSCREATED);
-
-		System.out.println("EndpointActor: create address: address created with id "+newAddress.getId());
-		// System.out.println("EndpointActor: create address: address created with language id "+newAddress.getLanguage().getId());
 
 		return Response.ok().entity(newAddress).build();
 	}
@@ -1545,8 +1497,7 @@ public class EndpointActor {
 	@Path("{actorId}/address/{id}")
 	@Secured
 	public Response addAddress(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: addAddress: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: addAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		// mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address address = null;
@@ -1573,7 +1524,6 @@ public class EndpointActor {
 
 		// update log metadata
 		// Not necessary, an address will always be created in conjunction with a actor
-		// System.out.println("EndpointActor: addAddress: persist address");
 
 		// persist address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1586,7 +1536,6 @@ public class EndpointActor {
 		entityManager.refresh(address);
 		// entityManager.refresh(street);
 
-		// System.out.println("EndpointActor: addAddress: persist actorHasAddress");
 		// create actor_has_address-table entries
 		ActorHasAddress actorHasAddress = new ActorHasAddress(actor, address);
 		entityTransaction.begin();
@@ -1600,14 +1549,11 @@ public class EndpointActor {
 		entityManager.refresh(actor);
 		entityManager.refresh(address);
 
-		// System.out.println("EndpointActor: addAddress: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.ADDRESSCREATED);
-
-		// System.out.println("EndpointActor: addAddress: address added with id "+address.getId());
 
 		return Response.ok().entity(address).build();
 	}
@@ -1618,14 +1564,13 @@ public class EndpointActor {
 	@Path("address/{id}")
 	@Secured
 	public Response updateAddress(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: updateAddress - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateAddress - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Address updatedAddress = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Address address = entityManager.find(Address.class, id);
 		if ( address == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor: updateAddress - old address :"+address.getAddress());
 		// parse JSON data
 		try {
 			updatedAddress = mapper.readValue(jsonData, Address.class);
@@ -1651,12 +1596,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(address);
 
-		// System.out.println("EndpointActor: updateAddress - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ADDRESSEDITED);
-		System.out.println("EndpointActor: updateAddress - update complete");
 		return Response.ok().entity(address).build();
 	}
 
@@ -1666,8 +1609,7 @@ public class EndpointActor {
 	@Path("{actorId}/address/{addressId}")
 	@Secured
 	public Response updateActorHasAddress(@PathParam("actorId") int actorId, @PathParam("addressId") int addressId, String jsonData) {
-
-		System.out.println("EndpointActor: updateActorHasAddress - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateActorHasAddress - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1678,9 +1620,6 @@ public class EndpointActor {
 		Address address = entityManager.find(Address.class, addressId);
 		ActorHasAddress ahakey = new ActorHasAddress(actor, address);
 		ActorHasAddress actorHasAddress = entityManager.find(ActorHasAddress.class, ahakey.getId());
-		// System.out.println("EndpointActor: updateActorHasAddress - actorId :"+actorHasAddress.getActor().getId());
-		// System.out.println("EndpointActor: updateActorHasAddress - addressId :"+actorHasAddress.getAddress().getId());
-		// System.out.println("EndpointActor: updateActorHasAddress - parse json data");
 
 		// parse JSON data
 		try {
@@ -1691,14 +1630,11 @@ public class EndpointActor {
 		}
 		if ( updatedActorHasAddress == null ) return Response.notModified().build();
 
-		// System.out.println("EndpointActor: updateActorHasAddress - update data");
 		// update actorHasAddress
 		actorHasAddress.setUsedFrom(updatedActorHasAddress.getUsedFrom());
 		actorHasAddress.setUsedUntil(updatedActorHasAddress.getUsedUntil());
 		actorHasAddress.setAddressType(updatedActorHasAddress.getAddressType());
-		// System.out.println("EndpointActor: updateActorHasAddress - addressTypeId :"+actorHasAddress.getAddressType().getId());
 
-		// System.out.println("EndpointActor: updateActorHasAddress - persist");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(actorHasAddress);
@@ -1706,12 +1642,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(actorHasAddress);
 
-		// System.out.println("EndpointActor: updateActorHasAddress - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ADDRESSEDITED);
-		System.out.println("EndpointActor: updateActorHasAddress - update complete");
 		return Response.ok().entity(actorHasAddress).build();
 	}
 
@@ -1720,7 +1654,7 @@ public class EndpointActor {
 	@Path("address/{id}")
 	@Secured
 	public Response deleteAddress(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteAddress");
+		// System.out.println("EndpointActor: deleteAddress");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Address address = entityManager.find(Address.class, id);
@@ -1734,7 +1668,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.ADDRESSDELETED);
-		System.out.println("EndpointActor: deleteAddress - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1744,8 +1677,7 @@ public class EndpointActor {
 	@Path("emailAddress/{id}")
 	@Secured
 	public Response createEmailAddress(@PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: createEmailAddress: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createEmailAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		EmailAddress newEmailAddress = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1762,13 +1694,11 @@ public class EndpointActor {
 			System.out.println("EndpointActor: createEmailAddress: newEmailAddress == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: createEmailAddress: language id: "+newEmailAddress.getLanguage().getId());
 		// sanitize object data
 		newEmailAddress.setId(0);
 
 		// update log metadata
 		// Not necessary, an email address will always be created in conjunction with an actor
-		System.out.println("EndpointActor: createEmailAddress: persist email address");
 
 		// persist email address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1778,15 +1708,11 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(newEmailAddress);
 
-		// System.out.println("EndpointActor: createEmailAddress: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newEmailAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.EMAILCREATED);
-
-		System.out.println("EndpointActor: create email address: email address created with id "+newEmailAddress.getId());
-		// System.out.println("EndpointActor: create email address: email address created with language id "+newEmailAddress.getLanguage().getId());
 
 		return Response.ok().entity(newEmailAddress).build();
 	}
@@ -1797,8 +1723,7 @@ public class EndpointActor {
 	@Path("{actorId}/emailAddress/{id}")
 	@Secured
 	public Response addEmailAddress(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: addEmailAddress: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: addEmailAddress: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		EmailAddress emailAddress = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -1812,20 +1737,17 @@ public class EndpointActor {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( emailAddress == null ) {
-			// System.out.println("EndpointActor: addEmailAddress: emailAddress == null !");
+			System.out.println("EndpointActor: addEmailAddress: emailAddress == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addEmailAddress: emailAddress: "+emailAddress.getEmailAddress());
 		// sanitize object data
 		emailAddress.setId(0);
 
-		// System.out.println("EndpointActor: addEmailAddress: street: "+emailAddress.getStreet().getLocationId());
 		Actor actor = entityManager.find(Actor.class, actorId);
 		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
 		// Not necessary, a emailAddress will always be created in conjunction with a actor
-		// System.out.println("EndpointActor: addEmailAddress: persist emailAddress");
 
 		// persist emailAddress
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -1835,7 +1757,6 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(emailAddress);
 
-		// System.out.println("EndpointActor: addEmailAddress: persist actorHasEmailAddress");
 		// create actor_has_emailAddress-table entries
 		ActorHasEmailAddress actorHasEmailAddress = new ActorHasEmailAddress(actor, emailAddress);
 		entityTransaction.begin();
@@ -1849,14 +1770,11 @@ public class EndpointActor {
 		entityManager.refresh(actor);
 		entityManager.refresh(emailAddress);
 
-		// System.out.println("EndpointActor: addEmailAddress: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newEmailAddress.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.EMAILCREATED);
-
-		// System.out.println("EndpointActor: addEmailAddress: emailAddress added with id "+emailAddress.getId());
 
 		return Response.ok().entity(emailAddress).build();
 	}
@@ -1867,14 +1785,13 @@ public class EndpointActor {
 	@Path("emailAddress/{id}")
 	@Secured
 	public Response updateEmailAddress(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: updateEmailAddress - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateEmailAddress - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EmailAddress updatedEmailAddress = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		EmailAddress emailAddress = entityManager.find(EmailAddress.class, id);
 		if ( emailAddress == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor: updateEmailAddress - old emailAddress :"+emailAddress.getEmailAddress());
 		// parse JSON data
 		try {
 			updatedEmailAddress = mapper.readValue(jsonData, EmailAddress.class);
@@ -1893,12 +1810,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(emailAddress);
 
-		// System.out.println("EndpointActor: updateEmailAddress - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILEDITED);
-		System.out.println("EndpointActor: updateEmailAddress - update complete");
 		return Response.ok().entity(emailAddress).build();
 	}
 
@@ -1908,8 +1823,7 @@ public class EndpointActor {
 	@Path("{actorId}/emailAddress/{emailAddressId}")
 	@Secured
 	public Response updateActorHasEmailAddress(@PathParam("actorId") int actorId, @PathParam("emailAddressId") int emailAddressId, String jsonData) {
-
-		System.out.println("EndpointActor: updateActorHasEmailAddress - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateActorHasEmailAddress - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -1920,9 +1834,6 @@ public class EndpointActor {
 		EmailAddress emailAddress = entityManager.find(EmailAddress.class, emailAddressId);
 		ActorHasEmailAddress aheakey = new ActorHasEmailAddress(actor, emailAddress);
 		ActorHasEmailAddress actorHasEmailAddress = entityManager.find(ActorHasEmailAddress.class, aheakey.getId());
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - actorId :"+actorHasEmailAddress.getActor().getId());
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - emailAddressId :"+actorHasEmailAddress.getEmailAddress().getId());
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - parse json data");
 
 		// parse JSON data
 		try {
@@ -1933,12 +1844,9 @@ public class EndpointActor {
 		}
 		if ( updatedActorHasEmailAddress == null ) return Response.notModified().build();
 
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - update data");
 		// update actorHasEmailAddress
 		actorHasEmailAddress.setEmailAddressType(updatedActorHasEmailAddress.getEmailAddressType());
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - emailAddressTypeId :"+actorHasEmailAddress.getEmailAddressType().getId());
 
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - persist");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(actorHasEmailAddress);
@@ -1946,12 +1854,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(actorHasEmailAddress);
 
-		// System.out.println("EndpointActor: updateActorHasEmailAddress - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILEDITED);
-		System.out.println("EndpointActor: updateActorHasEmailAddress - update complete");
 		return Response.ok().entity(actorHasEmailAddress).build();
 	}
 
@@ -1960,7 +1866,7 @@ public class EndpointActor {
 	@Path("emailAddress/{id}")
 	@Secured
 	public Response deleteEmailAddress(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteEmailAddress");
+		// System.out.println("EndpointActor: deleteEmailAddress");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		EmailAddress emailAddress = entityManager.find(EmailAddress.class, id);
@@ -1974,7 +1880,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.EMAILDELETED);
-		System.out.println("EndpointActor: deleteEmailAddress - delete complete");
 		return Response.ok().build();
 	}
 
@@ -1984,8 +1889,7 @@ public class EndpointActor {
 	@Path("phoneNumber/{id}")
 	@Secured
 	public Response createPhoneNumber(@PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: createPhoneNumber: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createPhoneNumber: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		PhoneNumber newPhoneNumber = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2002,13 +1906,11 @@ public class EndpointActor {
 			System.out.println("EndpointActor: createPhoneNumber: newPhoneNumber == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: createPhoneNumber: language id: "+newPhoneNumber.getLanguage().getId());
 		// sanitize object data
 		newPhoneNumber.setId(0);
 
 		// update log metadata
 		// Not necessary, an email address will always be created in conjunction with an actor
-		System.out.println("EndpointActor: createPhoneNumber: persist email address");
 
 		// persist email address
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -2018,15 +1920,11 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(newPhoneNumber);
 
-		// System.out.println("EndpointActor: createPhoneNumber: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newPhoneNumber.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PHONENUMBERCREATED);
-
-		System.out.println("EndpointActor: create email address: email address created with id "+newPhoneNumber.getId());
-		// System.out.println("EndpointActor: create email address: email address created with language id "+newPhoneNumber.getLanguage().getId());
 
 		return Response.ok().entity(newPhoneNumber).build();
 	}
@@ -2037,8 +1935,7 @@ public class EndpointActor {
 	@Path("{actorId}/phoneNumber/{id}")
 	@Secured
 	public Response addPhoneNumber(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: addPhoneNumber: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: addPhoneNumber: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		PhoneNumber phoneNumber = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2052,20 +1949,17 @@ public class EndpointActor {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( phoneNumber == null ) {
-			// System.out.println("EndpointActor: addPhoneNumber: phoneNumber == null !");
+			System.out.println("EndpointActor: addPhoneNumber: phoneNumber == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addPhoneNumber: phoneNumber: "+phoneNumber.getPhoneNumber());
 		// sanitize object data
 		phoneNumber.setId(0);
 
-		// System.out.println("EndpointActor: addPhoneNumber: street: "+phoneNumber.getStreet().getLocationId());
 		Actor actor = entityManager.find(Actor.class, actorId);
 		// Actor actor = entityManager.find(Actor.class, actorId);
 
 		// update log metadata
 		// Not necessary, a phoneNumber will always be created in conjunction with a actor
-		// System.out.println("EndpointActor: addPhoneNumber: persist phoneNumber");
 
 		// persist phoneNumber
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -2075,7 +1969,6 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(phoneNumber);
 
-		// System.out.println("EndpointActor: addPhoneNumber: persist actorHasPhoneNumber");
 		// create actor_has_phoneNumber-table entries
 		ActorHasPhoneNumber actorHasPhoneNumber = new ActorHasPhoneNumber(actor, phoneNumber);
 		entityTransaction.begin();
@@ -2089,14 +1982,11 @@ public class EndpointActor {
 		entityManager.refresh(actor);
 		entityManager.refresh(phoneNumber);
 
-		// System.out.println("EndpointActor: addPhoneNumber: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newPhoneNumber.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PHONENUMBERCREATED);
-
-		// System.out.println("EndpointActor: addPhoneNumber: phoneNumber added with id "+phoneNumber.getId());
 
 		return Response.ok().entity(phoneNumber).build();
 	}
@@ -2107,14 +1997,13 @@ public class EndpointActor {
 	@Path("phoneNumber/{id}")
 	@Secured
 	public Response updatePhoneNumber(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: updatePhoneNumber - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updatePhoneNumber - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		PhoneNumber updatedPhoneNumber = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, id);
 		if ( phoneNumber == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor: updatePhoneNumber - old phoneNumber :"+phoneNumber.getPhoneNumber());
 		// parse JSON data
 		try {
 			updatedPhoneNumber = mapper.readValue(jsonData, PhoneNumber.class);
@@ -2133,12 +2022,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(phoneNumber);
 
-		// System.out.println("EndpointActor: updatePhoneNumber - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PHONENUMBEREDITED);
-		System.out.println("EndpointActor: updatePhoneNumber - update complete");
 		return Response.ok().entity(phoneNumber).build();
 	}
 
@@ -2148,8 +2035,7 @@ public class EndpointActor {
 	@Path("{actorId}/phoneNumber/{phoneNumberId}")
 	@Secured
 	public Response updateActorHasPhoneNumber(@PathParam("actorId") int actorId, @PathParam("phoneNumberId") int phoneNumberId, String jsonData) {
-
-		System.out.println("EndpointActor: updateActorHasPhoneNumber - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateActorHasPhoneNumber - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -2160,9 +2046,6 @@ public class EndpointActor {
 		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, phoneNumberId);
 		ActorHasPhoneNumber ahpnkey = new ActorHasPhoneNumber(actor, phoneNumber);
 		ActorHasPhoneNumber actorHasPhoneNumber = entityManager.find(ActorHasPhoneNumber.class, ahpnkey.getId());
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - actorId :"+actorHasPhoneNumber.getActor().getId());
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - phoneNumberId :"+actorHasPhoneNumber.getPhoneNumber().getId());
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - parse json data");
 
 		// parse JSON data
 		try {
@@ -2173,12 +2056,9 @@ public class EndpointActor {
 		}
 		if ( updatedActorHasPhoneNumber == null ) return Response.notModified().build();
 
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - update data");
 		// update actorHasPhoneNumber
 		actorHasPhoneNumber.setPhoneNumberType(updatedActorHasPhoneNumber.getPhoneNumberType());
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - phoneNumberTypeId :"+actorHasPhoneNumber.getPhoneNumberType().getId());
 
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - persist");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(actorHasPhoneNumber);
@@ -2186,12 +2066,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(actorHasPhoneNumber);
 
-		// System.out.println("EndpointActor: updateActorHasPhoneNumber - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PHONENUMBEREDITED);
-		System.out.println("EndpointActor: updateActorHasPhoneNumber - update complete");
 		return Response.ok().entity(actorHasPhoneNumber).build();
 	}
 
@@ -2200,7 +2078,7 @@ public class EndpointActor {
 	@Path("phoneNumber/{id}")
 	@Secured
 	public Response deletePhoneNumber(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deletePhoneNumber");
+		// System.out.println("EndpointActor: deletePhoneNumber");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		PhoneNumber phoneNumber = entityManager.find(PhoneNumber.class, id);
@@ -2214,7 +2092,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.PHONENUMBERDELETED);
-		System.out.println("EndpointActor: deletePhoneNumber - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2225,8 +2102,7 @@ public class EndpointActor {
 	@Secured
 	public Response addPersonIsMemberOfCollective(@PathParam("actorId") int actorId,
 																								@PathParam("collectiveId") int collectiveId) throws IOException {
-
-		System.out.println("EndpointActor: addPersonIsMemberOfCollective:");
+		// System.out.println("EndpointActor: addPersonIsMemberOfCollective:");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2247,7 +2123,6 @@ public class EndpointActor {
 
 		// update log metadata
 
-		System.out.println("EndpointActor: addPersonIsMemberOfCollective: persist actorPersonIsMemberOfActorCollective");
 		// create actor_has_address-table entries
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -2261,13 +2136,10 @@ public class EndpointActor {
 		entityManager.refresh(person);
 		entityManager.refresh(collective);
 
-		System.out.println("EndpointActor: addPersonIsMemberOfCollective: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.MEMBERSHIPCREATED);
-
-		// System.out.println("EndpointActor: addPersonIsMemberOfCollective: created");
 
 		return Response.ok().entity(apimoac).build();
 	}
@@ -2280,8 +2152,7 @@ public class EndpointActor {
 	public Response updatePersonIsMemberOfCollective(@PathParam("actorId") int actorId,
 																									 @PathParam("collectiveId") int collectiveId,
 																									 String jsonData) {
-
-		System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		// mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
@@ -2294,7 +2165,6 @@ public class EndpointActor {
 
 		ActorPersonIsMemberOfActorCollective apimoacKey = new ActorPersonIsMemberOfActorCollective(person, collective);
 		ActorPersonIsMemberOfActorCollective apimoac = entityManager.find(ActorPersonIsMemberOfActorCollective.class, apimoacKey.getId());
-		// System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - parse json data");
 		// parse JSON data
 		try {
 			updatedActorPersonIsMemberOfActorCollective = mapper.readValue(jsonData, ActorPersonIsMemberOfActorCollective.class);
@@ -2304,11 +2174,9 @@ public class EndpointActor {
 		}
 		if ( updatedActorPersonIsMemberOfActorCollective == null ) return Response.notModified().build();
 
-		// System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - update data");
 		// update actorPersonIsMemberOfActorCollective
 		apimoac.setActorCollective(collective);
 
-		// System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - persist");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		entityManager.merge(apimoac);
@@ -2316,12 +2184,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(apimoac);
 
-		// System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																			UserLogManager.LogEvents.MEMBERSHIPEDITED);
-		System.out.println("EndpointActor: updateActorPersonIsMemberOfActorCollective - update complete");
 		return Response.ok().entity(apimoac).build();
 	}
 
@@ -2331,7 +2197,7 @@ public class EndpointActor {
 	@Secured
 	public Response deletePersonIsMemberOfCollective(@PathParam("personId") int personId,
 																									 @PathParam("collectiveId") int collectiveId) {
-		System.out.println("EndpointActor: deletePersonIsMemberOfCollective");
+		// System.out.println("EndpointActor: deletePersonIsMemberOfCollective");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		ActorPerson person = entityManager.find(ActorPerson.class, personId);
@@ -2352,7 +2218,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.MEMBERSHIPDELETED);
-		System.out.println("EndpointActor: deletePersonIsMemberOfCollective - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2365,8 +2230,7 @@ public class EndpointActor {
 																			@PathParam("collectiveId") int collectiveId,
 																			@PathParam("id") int id,
 																			String jsonData) {
-
-		System.out.println("EndpointActor: addMembership: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: addMembership: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MembershipDetail newMembershipDetail = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2382,7 +2246,6 @@ public class EndpointActor {
 			System.out.println("EndpointActor: addMembership: newMembership == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addMembership: membership: "+newMembership.getMembership());
 		// sanitize object data
 		newMembershipDetail.setId(0);
 		// Language language = entityManager.find(Language.class, newMembership.getLanguage().getId());
@@ -2395,7 +2258,6 @@ public class EndpointActor {
 
 		// update log metadata
 		// Not necessary, a membership will always be created in conjunction with a actor
-		System.out.println("EndpointActor: addMembership: persist membership");
 
 		// persist membership
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -2408,14 +2270,11 @@ public class EndpointActor {
 		entityManager.refresh(newMembershipDetail);
 		entityManager.refresh(apimoac);
 
-		System.out.println("EndpointActor: addMembership: add log entry");
 		// add log entry
 		// always in conjunction with personIsMemberOfCollective
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.MEMBERSHIPCREATED);
-
-		System.out.println("EndpointActor: addMembership: membership added with id "+newMembershipDetail.getId());
 
 		return Response.ok().entity(newMembershipDetail).build();
 	}
@@ -2427,13 +2286,12 @@ public class EndpointActor {
 	@Secured
 	public Response updateMembershipDetail(@PathParam("id") int id,
 																	 			 String jsonData) {
-		System.out.println("EndpointActor: updateMembership - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateMembership - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		MembershipDetail updatedMembership = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MembershipDetail membershipDetail = entityManager.find(MembershipDetail.class, id);
 		if ( membershipDetail == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor: updateMembership - old membership :"+membership.getMembership());
 		// parse JSON data
 		try {
 			updatedMembership = mapper.readValue(jsonData, MembershipDetail.class);
@@ -2443,7 +2301,6 @@ public class EndpointActor {
 		}
 		if ( updatedMembership == null ) return Response.notModified().build();
 		// update membership
-		// System.out.println("EndpointActor: updateMembership - language id:"+updatedMembership.getLanguage().getId());
 		// membership.setRole(updatedMembership.getRole()); // TODO connect role
 		membershipDetail.setJoinedAt(updatedMembership.getJoinedAt());
 		membershipDetail.setLeftAt(updatedMembership.getLeftAt());
@@ -2455,12 +2312,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(membershipDetail);
 
-		// System.out.println("EndpointActor: update NAME - only logging remains");
 		// add log entry
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 		// 														UserLogManager.LogEvents.MEMBERSHIPEDITED);
-		System.out.println("EndpointActor: updateMembership - update complete");
 		return Response.ok().entity(membershipDetail).build();
 	}
 
@@ -2469,7 +2324,7 @@ public class EndpointActor {
 	@Path("membershipDetails/{id}")
 	@Secured
 	public Response deleteMembershipDetail(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteMembership");
+		// System.out.println("EndpointActor: deleteMembership");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		MembershipDetail membershipDetail = entityManager.find(MembershipDetail.class, id);
@@ -2482,7 +2337,6 @@ public class EndpointActor {
 		// add log entry
 		// UserLogManager.getLogger()
 		// 							.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.MEMBERSHIPDELETED);
-		System.out.println("EndpointActor: deleteMembership - delete complete");
 		return Response.ok().build();
 	}
 
@@ -2492,8 +2346,7 @@ public class EndpointActor {
 	@Path("citizenship/{id}/{languageId}")
 	@Secured
 	public Response createCitizenship(@PathParam("id") int id, String jsonData, @PathParam("languageId") int languageId) {
-
-		System.out.println("EndpointActor: createCitizenship: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: createCitizenship: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Citizenship newCitizenship = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2512,13 +2365,11 @@ public class EndpointActor {
 			System.out.println("EndpointActor: createCitizenship: newCitizenship == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: createCitizenship: language id: "+newCitizenship.getLanguage().getId());
 		// sanitize object data
 		newCitizenship.setId(0);
 
 		// update log metadata
 		// Not necessary, a citizenship will always be created in conjunction with a actor
-		System.out.println("EndpointActor: createCitizenship: persist citizenship");
 
 		// persist citizenship
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -2527,8 +2378,6 @@ public class EndpointActor {
 		entityManager.flush();
 		entityTransaction.commit();
 		entityManager.refresh(newCitizenship);
-
-		// System.out.println("EndpointActor: createCitizenship: persist citizenship_translation");
 
 		// CitizenshipTranslation citizenshipTranslation = entityManager.find(CitizenshipTranslation.class, languageId);
 		// Language language = entityManager.find(Language.class, citizenshipTranslation.getLanguage().getId());
@@ -2549,15 +2398,11 @@ public class EndpointActor {
 		// entityManager.refresh(citizenshipTranslation);
 		// entityManager.refresh(language);
 
-		// System.out.println("EndpointActor: createCitizenship: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newCitizenship.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.CITIZENSHIPCREATED);
-
-		System.out.println("EndpointActor: createCitizenship: citizenship created with id "+newCitizenship.getId());
-		// System.out.println("EndpointActor: create citizenship: citizenship created with language id "+newCitizenship.getLanguage().getId());
 
 		return Response.ok().entity(newCitizenship).build();
 	}
@@ -2568,8 +2413,7 @@ public class EndpointActor {
 	@Path("{actorId}/citizenship/{id}")
 	@Secured
 	public Response addCitizenship(@PathParam("actorId") int actorId, @PathParam("id") int id, String jsonData) {
-
-		System.out.println("EndpointActor: addCitizenship: jsonData: "+jsonData);
+		// System.out.println("EndpointActor: addCitizenship: jsonData: "+jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		Citizenship citizenship = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
@@ -2583,10 +2427,9 @@ public class EndpointActor {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		if ( citizenship == null ) {
-			// System.out.println("EndpointActor: addCitizenship: citizenship == null !");
+			System.out.println("EndpointActor: addCitizenship: citizenship == null !");
 			return Response.status(Status.BAD_REQUEST).build();
 		}
-		// System.out.println("EndpointActor: addCitizenship: citizenship: "+citizenship.getCitizenship());
 		// sanitize object data
 		citizenship.setId(0);
 
@@ -2595,7 +2438,6 @@ public class EndpointActor {
 
 		// update log metadata
 		// Not necessary, a citizenship will always be created in conjunction with a actor
-		System.out.println("EndpointActor: addCitizenship: persist citizenship");
 
 		// persist citizenship
 		EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -2605,7 +2447,6 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(citizenship);
 
-		System.out.println("EndpointActor: addCitizenship: persist actor_person_has_citizenship");
 		ActorPerson actorPerson = entityManager.find(ActorPerson.class, actorId);
 		citizenship.getPersons().add(actorPerson);
 
@@ -2622,14 +2463,11 @@ public class EndpointActor {
 		entityManager.refresh(actorPerson);
 		entityManager.refresh(citizenship);
 
-		// System.out.println("EndpointActor: addCitizenship: add log entry");
 		// add log entry
 		UserLogManager.getLogger()
 									// .addLogEntry(newCitizenship.getActor().getCreatedByUserAccount().getId(), UserLogManager.LogEvents.ADDRESSCREATED);
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 																UserLogManager.LogEvents.CITIZENSHIPCREATED);
-
-		// System.out.println("EndpointActor: addCitizenship: citizenship added with id "+citizenship.getId());
 
 		return Response.ok().entity(citizenship).build();
 	}
@@ -2640,14 +2478,13 @@ public class EndpointActor {
 	@Path("citizenship/{id}")
 	@Secured
 	public Response updateCitizenship(@PathParam("id") int id, String jsonData) {
-		System.out.println("EndpointActor: update citizenship - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: update citizenship - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Citizenship updatedCitizenship = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Citizenship citizenship = entityManager.find(Citizenship.class, id);
 		if ( citizenship == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor:update citizenship - old citizenship :"+citizenship.getCitizenship());
 		// parse JSON data
 		try {
 			updatedCitizenship = mapper.readValue(jsonData, Citizenship.class);
@@ -2665,12 +2502,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(citizenship);
 
-		// System.out.println("EndpointActor: update citizenship - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CITIZENSHIPEDITED);
-		System.out.println("EndpointActor: update citizenship - update complete");
 		return Response.ok().entity(citizenship).build();
 	}
 
@@ -2680,14 +2515,13 @@ public class EndpointActor {
 	@Path("citizenship/{id}/{languageId}")
 	@Secured
 	public Response updateCitizenshipTranslation(@PathParam("id") int id, @PathParam("languageId") int languageId, String jsonData) {
-		System.out.println("EndpointActor: updateCitizenshipTranslation - jsonData: " + jsonData);
+		// System.out.println("EndpointActor: updateCitizenshipTranslation - jsonData: " + jsonData);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		CitizenshipTranslation updatedCitizenshipTranslation = null;
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		CitizenshipTranslation citizenshipTranslation = entityManager.find(CitizenshipTranslation.class, id);
 		if ( citizenshipTranslation == null ) return Response.status(Status.NOT_FOUND).build();
-		// System.out.println("EndpointActor:update citizenship - old citizenship :"+citizenship.getCitizenship());
 
 		// parse JSON data
 		try {
@@ -2708,12 +2542,10 @@ public class EndpointActor {
 		entityTransaction.commit();
 		entityManager.refresh(citizenshipTranslation);
 
-		// System.out.println("EndpointActor: update citizenship - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CITIZENSHIPEDITED);
-		System.out.println("EndpointActor: update citizenship - update complete");
 		return Response.ok().entity(citizenshipTranslation).build();
 	}
 
@@ -2722,7 +2554,7 @@ public class EndpointActor {
 	@Path("citizenship/{id}")
 	@Secured
 	public Response deleteCitizenship(@PathParam("id") int id) {
-		System.out.println("EndpointActor: deleteCitizenship");
+		// System.out.println("EndpointActor: deleteCitizenship");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 
 		Citizenship citizenship = entityManager.find(Citizenship.class, id);
@@ -2736,7 +2568,6 @@ public class EndpointActor {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.ADDRESSDELETED);
-		System.out.println("EndpointActor: deleteCitizenship - delete complete");
 		return Response.ok().build();
 	}
 

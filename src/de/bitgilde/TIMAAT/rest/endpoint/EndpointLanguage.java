@@ -112,7 +112,6 @@ public class EndpointLanguage {
                                         @QueryParam("per_page") Integer per_page,
                                         @QueryParam("language") String languageCode) {
 		// returns list of id and name combinations of all Languages
-		// System.out.println("EndpointLanguage: getLanguageSelectList");
 		// System.out.println("EndpointLanguage: getLanguageSelectList - search string: "+ search);
 
 		if ( languageCode == null) languageCode = "default"; // as long as multi-language is not implemented yet, use the 'default' language entry
@@ -120,13 +119,11 @@ public class EndpointLanguage {
 		// search
 		Query query;
 		if (search != null && search.length() > 0) {
-			System.out.println("EndpointLanguage: getLanguageSelectList - with search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				// "SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') AND lower(rt.name) LIKE lower(concat('%', :name,'%')) ORDER BY rt.name ASC");
 				"SELECT l FROM Language l WHERE lower(l.name) LIKE lower(concat('%', :name,'%')) ORDER BY l.name ASC");
 				query.setParameter("name", search);
 		} else {
-			System.out.println("EndpointLanguage: getLanguageSelectList - no search string");
 			query = TIMAATApp.emf.createEntityManager().createQuery(
 				// "SELECT rt FROM Language rt WHERE rt.language.id = (SELECT l.id FROM Language l WHERE l.code = '"+languageCode+"') ORDER BY rt.name ASC");
 				"SELECT l FROM Language l ORDER BY l.name ASC");
@@ -136,7 +133,6 @@ public class EndpointLanguage {
 		for (Language language : languageList) {
 			languageSelectList.add(new SelectElement(language.getId(),
 																					 		 language.getName()));
-			// System.out.println("language select list entry - id: "+ language.getId() + " type: " + language.getName());
 		}
 		return Response.ok().entity(languageSelectList).build();
 	}
@@ -146,7 +142,7 @@ public class EndpointLanguage {
 	@Secured
 	@Path("{id}")
 	public Response getLanguage(@PathParam("id") Integer id) {
-		System.out.println("EndpointLanguage: getLanguage with id "+ id);
+		// System.out.println("EndpointLanguage: getLanguage with id "+ id);
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Language language = entityManager.find(Language.class, id);
 
@@ -160,7 +156,7 @@ public class EndpointLanguage {
 	@Secured
 	public Response createLanguage(@PathParam("id") int id,
 																 String jsonData) {
-		System.out.println("EndpointLanguage: createLanguage: " + jsonData);
+		// System.out.println("EndpointLanguage: createLanguage: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		Language newLanguage = null;
@@ -181,7 +177,6 @@ public class EndpointLanguage {
 
 		newLanguage.setId(0);
 
-		System.out.println("EndpointLanguage: createLanguage - persist Language");
 		// persist Language
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
@@ -194,7 +189,6 @@ public class EndpointLanguage {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.LANGUAGECREATED);
-		System.out.println("EndpointLanguage: createLanguage - done");
 		return Response.ok().entity(newLanguage).build();
 	}
 
@@ -205,7 +199,7 @@ public class EndpointLanguage {
 	@Secured
 	public Response updateLanguage(@PathParam("id") int id,
 																				String jsonData) {
-		System.out.println("EndpointLanguage: update translation - jsonData: " + jsonData);
+		// System.out.println("EndpointLanguage: update translation - jsonData: " + jsonData);
 
 		ObjectMapper mapper = new ObjectMapper();
 		Language updatedLanguage = null;
@@ -215,7 +209,6 @@ public class EndpointLanguage {
 		if ( Language == null ) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		// System.out.println("EndpointLanguage: update translation - old translation :"+translation.getName());
 		// parse JSON data
 		try {
 			updatedLanguage = mapper.readValue(jsonData, Language.class);
@@ -229,11 +222,9 @@ public class EndpointLanguage {
 		}
 
 		// update translation
-		System.out.println("EndpointLanguage: update translation - language id: " + updatedLanguage.getId());
 		if ( updatedLanguage.getName() != null ) Language.setName(updatedLanguage.getName());
 		if ( updatedLanguage.getCode() != null ) Language.setCode(updatedLanguage.getCode());
 
-		System.out.println("EndpointLanguage: update translation - start transaction");
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		// update Language translation
 		entityTransaction.begin();
@@ -242,12 +233,10 @@ public class EndpointLanguage {
 		entityTransaction.commit();
 		entityManager.refresh(Language);
 
-		System.out.println("EndpointLanguage: update translation - only logging remains");
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.LANGUAGEEDITED);
-		System.out.println("EndpointLanguage: update translation - update complete");
 		return Response.ok().entity(Language).build();
 	}
 
@@ -256,7 +245,7 @@ public class EndpointLanguage {
 	@Path("{id}")
 	@Secured
 	public Response deleteLanguage(@PathParam("id") int id) {
-		System.out.println("EndpointLanguage: deleteLanguage");
+		// System.out.println("EndpointLanguage: deleteLanguage");
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Language Language = entityManager.find(Language.class, id);
 
@@ -271,7 +260,6 @@ public class EndpointLanguage {
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.LANGUAGEDELETED);
-		System.out.println("EndpointLanguage: deleteLanguage - delete complete");
 		return Response.ok().build();
 	}
 
@@ -282,13 +270,12 @@ public class EndpointLanguage {
 	@Secured
 	public Response languageCheckForDuplicateName(@PathParam ("id") int id,
 																							  String name) {
-		System.out.println("EndpointLanguage: languageDuplicateNameCheck - name: "+name);
+		// System.out.println("EndpointLanguage: languageDuplicateNameCheck - name: "+name);
 
 		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(l) FROM Language l WHERE l.name = "+name+" AND l.id != "+ id);
 		long count = (long) query.getSingleResult();
 		boolean duplicate = false;
 		if (count != 0) duplicate = true;
-		System.out.println("EndpointLanguage: languageDuplicateNameCheck - done");
 		return Response.ok().entity(duplicate).build();
 	}
 
@@ -299,13 +286,12 @@ public class EndpointLanguage {
 	@Secured
 	public Response languageCheckForDuplicateCode(@PathParam ("id") int id,
 																								String code) {
-		System.out.println("EndpointLanguage: languageDuplicateNameCheck - code: "+code);
+		// System.out.println("EndpointLanguage: languageDuplicateNameCheck - code: "+code);
 
 		Query query = TIMAATApp.emf.createEntityManager().createQuery("SELECT COUNT(l) FROM Language l WHERE l.code = "+code+" AND l.id != "+ id);
 		long count = (long) query.getSingleResult();
 		boolean duplicate = false;
 		if (count != 0) duplicate = true;
-		System.out.println("EndpointLanguage: languageDuplicateCodeCheck - done");
 		return Response.ok().entity(duplicate).build();
 	}
 
