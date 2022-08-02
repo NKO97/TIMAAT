@@ -55,7 +55,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getActor -> data", data);
+					// console.log("TCL: getActor -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					if (error.status = "409") { // password change declined because it was already used in the past by this user

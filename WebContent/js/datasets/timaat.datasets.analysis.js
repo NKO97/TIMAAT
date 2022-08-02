@@ -2059,7 +2059,7 @@
     },
 
     displayAnalysisDetails: function(data) {
-      console.log("TCL: displayAnalysisDetails - data: ", data);
+      // console.log("TCL: displayAnalysisDetails - data: ", data);
       let cameraShotType;
       var details =
         `<div>

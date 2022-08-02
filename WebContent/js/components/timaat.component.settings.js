@@ -47,28 +47,28 @@
 
       $('#fixDurationButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
-          console.log("length fix button clicked");
+          // console.log("length fix button clicked");
           TIMAAT.Settings.fixLength();
         }
       });
 
       $('#fixNoPermissionSetButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
-          console.log("add missing permissions");
+          // console.log("add missing permissions");
           TIMAAT.Settings.fixPermissions();
         }
       });
 
       $('#fixAnnotationNoUUIDSetButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
-          console.log("add missing annotation uuids");
+          // console.log("add missing annotation uuids");
           TIMAAT.Settings.fixAnnotationUUIDs();
         }
       });
 
       $('#fixKeyframeTimeSecondsToMillisecondsButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
-          console.log("fix annotation keyframe timestamps from s to ms");
+          // console.log("fix annotation keyframe timestamps from s to ms");
           TIMAAT.Settings.fixKeyframeTimes();
         }
       });
@@ -209,7 +209,7 @@
     },
 
     fixPermissions: async function() {
-      console.log("fix permissions");
+      // console.log("fix permissions");
       return new Promise(resolve => {
         $.ajax({
           url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/user/permissionFix"+'?authToken='+TIMAAT.Service.session.token,
@@ -230,7 +230,7 @@
     },
 
     fixAnnotationUUIDs: async function() {
-      console.log("fix annotation uuids");
+      // console.log("fix annotation uuids");
       return new Promise(resolve => {
         $.ajax({
           url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/uuidFix"+'?authToken='+TIMAAT.Service.session.token,
@@ -251,37 +251,37 @@
     },
 
     fixKeyframeTimes: async function() {
-      console.log("fix keyframe timestamps");
+      // console.log("fix keyframe timestamps");
       let selectorSvgList = await this.getSelectorSvgData();
-      console.log("selectorSvgList", selectorSvgList);
+      // console.log("selectorSvgList", selectorSvgList);
       let svgDataList = [];
       selectorSvgList.forEach(function(selectorSvg) {
         svgDataList.push(JSON.parse(selectorSvg.svgData));
       });
-      console.log("svgDataList: ", svgDataList);
+      // console.log("svgDataList: ", svgDataList);
       let i = selectorSvgList.length -1;
       for (; i >= 0; i--) {
         if (svgDataList[i].keyframes && svgDataList[i].keyframes.length > 1) { // fix time data s -> ms
           svgDataList[i].keyframes.forEach(function(keyframe) {
-            console.log("TCL: fix value from ", keyframe.time);
+            // console.log("TCL: fix value from ", keyframe.time);
             if (keyframe.time < 50) {
               keyframe.time *= 1000;
             }
             keyframe.time = Math.floor(keyframe.time);
-            console.log("TCL: to ", keyframe.time);
+            // console.log("TCL: to ", keyframe.time);
           });
         } else { // reduce list to entries which have animation data
           selectorSvgList.splice(i,1);
           svgDataList.splice(i,1);
         }
       }
-      console.log("svgDataList: ", svgDataList);
+      // console.log("svgDataList: ", svgDataList);
       i = 0;
       for (; i < selectorSvgList.length; i++) {
         selectorSvgList[i].svgData = JSON.stringify(svgDataList[i]);
 
       }
-      console.log("selectorSvgList", selectorSvgList);
+      // console.log("selectorSvgList", selectorSvgList);
       await this.setFixedSelectorSvgData(selectorSvgList);
     },
 

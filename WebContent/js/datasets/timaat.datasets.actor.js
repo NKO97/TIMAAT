@@ -658,11 +658,11 @@
 				var isDisplayName = $(this).closest('.form-group').find('input[name=isDisplayName]:checked').val();
 				if (isDisplayName == "on") {
 					// TODO modal informing that display name entry cannot be deleted
-					console.log("CANNOT DELETE DISPLAY NAME");
+					console.error("CANNOT DELETE DISPLAY NAME");
 				}
 				else {
 					// TODO consider undo function or popup asking if user really wants to delete a name
-					console.log("DELETE NAME ENTRY");
+					console.info("DELETE NAME ENTRY");
 					$(this).closest('.form-group').remove();
 				}
 			});
@@ -4388,7 +4388,7 @@
 		},
 
 		updateActorHasPhoneNumber: async function(actorHasPhoneNumber, actor) {
-			console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
+			// console.log("TCL: updateActorHasPhoneNumber: async function -> actorHasPhoneNumber at beginning of update process: ", actorHasPhoneNumber, actor);
 			try {
 				// update address
 				var tempActorHasPhoneNumber = actorHasPhoneNumber;

@@ -398,7 +398,7 @@
 		},
 
 		async addTitle(mediumId, title) {
-      console.log("TCL: addTitle -> mediumId, title", mediumId, title);
+      // console.log("TCL: addTitle -> mediumId, title", mediumId, title);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/title/"+title.id,
@@ -437,7 +437,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
-					console.log( "ajax call fail - error: ", error.responseText );
+					console.error( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -445,7 +445,7 @@
 		},
 
 		async addMediumHasActorWithRoles(mediumId, actorId, roleId) {
-    	console.log("TCL: addMediumHasActorWithRoles -> mediumId, actorId, roleIds", mediumId, actorId, roleId);
+    	// console.log("TCL: addMediumHasActorWithRoles -> mediumId, actorId, roleIds", mediumId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRole/"+roleId,
@@ -461,7 +461,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
-					console.log( "ajax call fail - error: ", error.responseText );
+					console.error( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -524,7 +524,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: removeCategorySet -> data", data);
+        	// console.log("TCL: removeCategorySet -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -714,7 +714,7 @@
 					});
 				}).catch((error) => {
 					console.error("ERROR: ", error);
-					console.log(error.responseText);
+					console.error(error.responseText);
 				});
 			// }, Math.round(30000+(Math.random()*15000)));
 		},
@@ -737,7 +737,7 @@
 					});
 				}).catch((error) => {
 					console.error("ERROR: ", error);
-					console.log(error.responseText);
+					console.error(error.responseText);
 				});
 		},
 
@@ -851,7 +851,7 @@
 		},
 
 		async removeActorFromMediumHasActorWithRoles(mediumId, actorId) {
-      console.log("TCL: removeActorFromMediumHasActorWithRoles -> mediumId, actorId", mediumId, actorId);
+      // console.log("TCL: removeActorFromMediumHasActorWithRoles -> mediumId, actorId", mediumId, actorId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId,
@@ -872,7 +872,7 @@
 		},
 
 		async removeRoleFromMediumHasActorWithRoles(mediumId, actorId, roleId) {
-      console.log("TCL: removeRoleFromMediumHasActorWithRoles -> mediumId, actorId, roleId", mediumId, actorId, roleId);
+      // console.log("TCL: removeRoleFromMediumHasActorWithRoles -> mediumId, actorId, roleId", mediumId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId+"/hasActor/"+actorId+"/withRole/"+roleId,

@@ -784,7 +784,7 @@
 				}
 				else {
 					// TODO consider undo function or popup asking if user really wants to delete a title
-					console.log("DELETE TITLE ENTRY");
+					// console.log("DELETE TITLE ENTRY");
 					$(this).closest('.form-group').remove();
 				}
 			});
@@ -3087,7 +3087,7 @@
 		},
 
 		createMusicModel: async function(formDataObject, type) {
-    	console.log("TCL: formDataObject, type", formDataObject, type);
+    	// console.log("TCL: formDataObject, type", formDataObject, type);
 			let typeId = 0;
 			switch (type) {
 				case 'nashid':

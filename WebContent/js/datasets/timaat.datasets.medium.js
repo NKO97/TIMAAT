@@ -1112,7 +1112,7 @@
 				}
 				else {
 					// TODO consider undo function or popup asking if user really wants to delete a title
-					console.log("DELETE TITLE ENTRY");
+					console.info("DELETE TITLE ENTRY");
 					$(this).closest('.form-group').remove();
 				}
 			});
@@ -1141,7 +1141,7 @@
 
 				// Create/Edit medium window submitted data
 				var formData = $('#mediumFormTitles').serializeArray();
-        console.log("TCL: $ -> formData", formData);
+        // console.log("TCL: $ -> formData", formData);
 				var formTitleList = [];
 				var i = 0;
 				while ( i < formData.length) {
@@ -1604,14 +1604,14 @@
 					// var newActorId = newFormEntry[0];
 					var newActorSelectData = $('#mediumHasActorWithRoleActorId').select2('data');
 					var newActorId = newActorSelectData[0].id;
-          console.log("TCL: $ -> newActorId", newActorId);
+          // console.log("TCL: $ -> newActorId", newActorId);
 					var newRoleSelectData = $('#mediumActorWithRolesMultiSelectDropdown').select2('data');
 					// var actorHasRoleIds = newFormEntry[1];
 					$('#mediumDynamicActorWithRoleFields').append(TIMAAT.MediumDatasets.appendActorWithRolesDataset(existingEntriesIdList.length, newActorId));
 					TIMAAT.MediumDatasets.getMediumHasActorWithRoleData(newActorId);
 					// select actor for new entry
 					await TIMAAT.ActorService.getActor(newActorId).then(function (data) {
-            console.log("TCL: newActorId", newActorId);
+            // console.log("TCL: newActorId", newActorId);
 						var actorSelect = $('#mediumHasActorWithRoleActorId-'+newActorId);
 						// console.log("TCL: actorSelect", actorSelect);
 						// console.log("TCL: then: data", data);
@@ -2926,7 +2926,7 @@
 		},
 
 		updateMedium: async function(mediumSubtype, medium) {
-			console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
+			// console.log("TCL: updateMedium: async function -> medium at beginning of update process: ", mediumSubtype, medium);
 			try { // update display title
 				var tempDisplayTitle = await TIMAAT.MediumService.updateTitle(medium.model.displayTitle);
         // console.log("tempDisplayTitle", tempDisplayTitle);
@@ -3520,7 +3520,7 @@
 		},
 
 		appendActorWithRolesDataset: function(i, actorId) {
-    	console.log("TCL: appendActorWithRolesDataset (i, actorId): ", i, actorId);
+    	// console.log("TCL: appendActorWithRolesDataset (i, actorId): ", i, actorId);
 			var entryToAppend =
 				`<div class="form-group" data-role="mediumHasActorWithRoleEntry" data-id="`+i+`" data-actor-id=`+actorId+`>
 					<div class="form-row">
@@ -3747,7 +3747,7 @@
 		},
 
 		getMediumHasActorWithRoleData: function(id) {
-    	console.log("TCL: getMediumHasActorWithRoleData:function -> id", id);
+    	// console.log("TCL: getMediumHasActorWithRoleData:function -> id", id);
 			$('#mediumHasActorWithRoleActorId-'+id).select2({
 				closeOnSelect: true,
 				scrollAfterSelect: true,

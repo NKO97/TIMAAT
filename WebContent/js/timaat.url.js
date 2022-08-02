@@ -884,7 +884,7 @@
     },
 
     redirectToDefaultView: function() {
-      console.log("TCL: redirectToDefaultView", );
+      // console.log("TCL: redirectToDefaultView", );
       // redirect if invalid url path is entered
       TIMAAT.URLHistory.setupView('#medium/list');
       TIMAAT.URLHistory.setURL(null, 'Media Library', '#medium/list');

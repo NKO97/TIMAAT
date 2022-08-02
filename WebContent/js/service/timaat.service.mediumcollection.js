@@ -169,7 +169,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: addCollectionItem -> data", data);
+        	// console.log("TCL: addCollectionItem -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -302,7 +302,7 @@
 		},
 
 		async getDisplayNamesAndPermissions(mediaCollectionId) {
-      console.log("TCL: getDisplayNamesAndPermissions -> mediaCollectionId", mediaCollectionId);
+      // console.log("TCL: getDisplayNamesAndPermissions -> mediaCollectionId", mediaCollectionId);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+'/TIMAAT/api/mediumCollection/'+mediaCollectionId+'/displayNames/'+'?authToken='+TIMAAT.Service.session.token,
@@ -313,7 +313,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: getDisplayNamesAndPermissions -> data", data);
+					// console.log("TCL: getDisplayNamesAndPermissions -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {

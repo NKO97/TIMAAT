@@ -211,7 +211,7 @@
 		},
 
 		async createMusic(musicModel, mediumId) {
-			console.log("TCL: async createMusic -> musicModel", musicModel);
+			// console.log("TCL: async createMusic -> musicModel", musicModel);
 			delete musicModel.titles; //* titles are added in a separate step
 			return new Promise(resolve => {
 				$.ajax({
@@ -320,7 +320,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
-					console.log( "ajax call fail - error: ", error.responseText );
+					console.error( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -328,7 +328,7 @@
 		},
 
 		async addMusicHasActorWithRoles(musicId, actorId, roleId) {
-    	console.log("TCL: addMusicHasActorWithRoles -> musicId, actorId, roleIds", musicId, actorId, roleId);
+    	// console.log("TCL: addMusicHasActorWithRoles -> musicId, actorId, roleIds", musicId, actorId, roleId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/hasActor/"+actorId+"/withRole/"+roleId,
@@ -344,7 +344,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
-					console.log( "ajax call fail - error: ", error.responseText );
+					console.error( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -407,7 +407,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-        	console.log("TCL: removeCategorySet -> data", data);
+        	// console.log("TCL: removeCategorySet -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -479,7 +479,7 @@
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
-					console.log( "ajax call fail - error: ", error.responseText );
+					console.error( "ajax call fail - error: ", error.responseText );
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
@@ -572,7 +572,7 @@
 		},
 
 		async updateMusic(musicModel) {
-			console.log("TCL: MusicService: async updateMusic -> musicModel", musicModel);
+			// console.log("TCL: MusicService: async updateMusic -> musicModel", musicModel);
 			var model = musicModel;
 			delete model.ui;
 			delete model.mediumHasMusicList;
@@ -587,7 +587,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(updateData) {
-					console.log("TCL: async updateMusic -> returning updateData", updateData);
+					// console.log("TCL: async updateMusic -> returning updateData", updateData);
 					resolve(updateData);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
@@ -890,7 +890,7 @@
 		},
 
 		async createMusicChangeInTempoElement(model, musicId) {
-			console.log("TCL: createMusicChangeInTempoElement -> model, musicId", model, musicId);
+			// console.log("TCL: createMusicChangeInTempoElement -> model, musicId", model, musicId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/musicChangeInTempoElement/"+model.changeInTempo.id,
@@ -902,7 +902,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: }).done -> data", data);
+					// console.log("TCL: }).done -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -984,7 +984,7 @@
 		},
 
 		async createMusicArticulationElement(model, musicId) {
-			console.log("TCL: createMusicArticulationElement -> model, musicId", model, musicId);
+			// console.log("TCL: createMusicArticulationElement -> model, musicId", model, musicId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/musicArticulationElement/"+model.articulation.id,
@@ -996,7 +996,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: }).done -> data", data);
+					// console.log("TCL: }).done -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -1078,7 +1078,7 @@
 		},
 
 		async createMusicTextSettingElement(model, musicId) {
-			console.log("TCL: createMusicTextSettingElement -> model, musicId", model, musicId);
+			// console.log("TCL: createMusicTextSettingElement -> model, musicId", model, musicId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/musicTextSettingElement/",
@@ -1090,7 +1090,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: }).done -> data", data);
+					// console.log("TCL: }).done -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {
@@ -1172,7 +1172,7 @@
 		},
 
 		async createMusicDynamicsElement(model, musicId) {
-			console.log("TCL: createMusicDynamicsElement -> model, musicId", model, musicId);
+			// console.log("TCL: createMusicDynamicsElement -> model, musicId", model, musicId);
 			return new Promise(resolve => {
 				$.ajax({
 					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/"+musicId+"/musicDynamicsElement/",
@@ -1184,7 +1184,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: }).done -> data", data);
+					// console.log("TCL: }).done -> data", data);
 					resolve(data);
 				})
 				.fail(function(error) {

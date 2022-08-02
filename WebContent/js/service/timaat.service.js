@@ -176,7 +176,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: displayNameExists -> data", data);
+					// console.log("TCL: displayNameExists -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);
@@ -198,7 +198,7 @@
 						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
 					},
 				}).done(function(data) {
-					console.log("TCL: displayNameExists -> data", data);
+					// console.log("TCL: displayNameExists -> data", data);
 					resolve(data);
 				}).fail(function(error) {
 					console.error("ERROR: ", error);

@@ -506,7 +506,7 @@
 		},
 
 		async addAddress(actorId, address) {
-      console.log("TCL: addAddress -> actorId, address", actorId, address);
+      // console.log("TCL: addAddress -> actorId, address", actorId, address);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorId+"/address/"+address.id,
@@ -858,7 +858,7 @@
 		},
 
 		async updateActorSubtype(actorSubtype, subtypeModel) {
-			console.log("TCL: updateActorSubtype -> actorSubtype, subtypeModel", actorSubtype, subtypeModel);
+			// console.log("TCL: updateActorSubtype -> actorSubtype, subtypeModel", actorSubtype, subtypeModel);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/"+actorSubtype+"/"+subtypeModel.actorId,

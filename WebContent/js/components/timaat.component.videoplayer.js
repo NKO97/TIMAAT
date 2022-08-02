@@ -2294,7 +2294,7 @@
 
 		managePublication: function() {
 			TIMAAT.PublicationService.getSinglePublication(TIMAAT.VideoPlayer.curAnalysisList.id).then(publication => {
-      	console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
+      	// console.log("TCL: TIMAAT.VideoPlayer.viewer.on -> publication", publication);
 				let modal = $('#analysisListPublicationModal');
 				TIMAAT.VideoPlayer.publication = publication;
 				TIMAAT.VideoPlayer._setupPublicationDialog(publication !=null, publication !=null && publication.access == 'protected');
@@ -3111,7 +3111,7 @@
 		},
 
 		_musicChangeInTempoElementAdded: function(musicChangeInTempoElement, openInspector=true) {
-			console.log("TCL: _musicChangeInTempoElementAdded: function(musicChangeInTempoElement): ", musicChangeInTempoElement);
+			// console.log("TCL: _musicChangeInTempoElementAdded: function(musicChangeInTempoElement): ", musicChangeInTempoElement);
 			// TODO refactor for persistent music form data display independent from analysislist
 			if (!TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI) {
 				TIMAAT.VideoPlayer.curMusic.musicChangeInTempoElementsUI = [];
@@ -3135,7 +3135,7 @@
 		},
 
 		_musicArticulationElementAdded: function(musicArticulationElement, openInspector=true) {
-			console.log("TCL: _musicArticulationElementAdded: function(musicArticulationElement): ", musicArticulationElement);
+			// console.log("TCL: _musicArticulationElementAdded: function(musicArticulationElement): ", musicArticulationElement);
 			// TODO refactor for persistent music form data display independent from analysislist
 			if (!TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI) {
 				TIMAAT.VideoPlayer.curMusic.musicArticulationElementsUI = [];
@@ -3159,7 +3159,7 @@
 		},
 
 		_musicDynamicsElementAdded: function(musicDynamicsElement, openInspector=true) {
-			console.log("TCL: _musicDynamicsElementAdded: function(musicDynamicsElement): ", musicDynamicsElement);
+			// console.log("TCL: _musicDynamicsElementAdded: function(musicDynamicsElement): ", musicDynamicsElement);
 			// TODO refactor for persistent music form data display independent from analysislist
 			if (!TIMAAT.VideoPlayer.curMusic.musicDynamicsElementsUI) {
 				TIMAAT.VideoPlayer.curMusic.musicDynamicsElementsUI = [];
@@ -3183,7 +3183,7 @@
 		},
 
 		_musicTextSettingElementAdded: function(musicTextSettingElement, openInspector=true) {
-			console.log("TCL: _musicTextSettingElementAdded: function(musicTextSettingElement): ", musicTextSettingElement);
+			// console.log("TCL: _musicTextSettingElementAdded: function(musicTextSettingElement): ", musicTextSettingElement);
 			// TODO refactor for persistent music form data display independent from analysislist
 			if (!TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI) {
 				TIMAAT.VideoPlayer.curMusic.musicTextSettingElementsUI = [];
