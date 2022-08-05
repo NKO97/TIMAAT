@@ -1,3 +1,7 @@
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -36,7 +40,7 @@
 			}).fail(function(error) {
 				console.error("ERROR responseText: ", error.responseText);
 				console.error("ERROR: ", error);
-			});			
+			});
 		},
 
 		async getEventDatasetsTotal() {
@@ -55,10 +59,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getEvent(id) {
@@ -77,10 +81,10 @@
 				}).fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getTagList(eventId) {
@@ -101,10 +105,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async createEvent(eventModel) {
@@ -172,7 +176,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-		});		
+		});
 		},
 
 		async updateEvent(eventModel) {
@@ -267,12 +271,12 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
-		},	
+			});
+		},
 
 	}
-	
+
 }, window));

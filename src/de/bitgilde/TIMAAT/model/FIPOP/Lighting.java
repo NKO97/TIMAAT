@@ -16,6 +16,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 /**
  * The persistent class for the lighting database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Lighting.findAll", query="SELECT l FROM Lighting l")

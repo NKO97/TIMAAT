@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the editing_rhythm database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="editing_rhythm")

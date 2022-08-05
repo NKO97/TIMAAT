@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the change_in_dynamics_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="change_in_dynamics_translation")

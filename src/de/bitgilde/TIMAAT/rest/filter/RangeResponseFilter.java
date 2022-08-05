@@ -11,6 +11,9 @@ import jakarta.ws.rs.core.Response.Status;
 
 /**
  * A {@link ContainerResponseFilter} capable to handle ranged requests.
+ *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 public class RangeResponseFilter implements ContainerResponseFilter {
 

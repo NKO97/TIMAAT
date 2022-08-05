@@ -1,3 +1,6 @@
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -39,7 +42,7 @@
 		// 	.fail(function(error) {
 		// 		console.error("ERROR: ", error);
 		// 	});
-			
+
 		// },
 
 		async getSelectedCategories(annotationId) {
@@ -60,10 +63,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getTagList(annotationId) {
@@ -84,10 +87,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		createAnnotation(model, analysisListId, callback) {
@@ -107,7 +110,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
-			});			
+			});
 		},
 
 		// updateAnnotation(annotation) {
@@ -130,7 +133,7 @@
 		// 		console.error("ERROR responseText:", error.responseText);
 		// 	});
     // },
-    
+
     async updateAnnotation(model) {
 			// console.log("TCL: updateAnnotation -> model", model);
 			return new Promise(resolve => {
@@ -152,7 +155,7 @@
 				});
 				}).catch((error) => {
 					console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		removeAnnotation(annotation) {
@@ -172,7 +175,7 @@
 				console.error("ERROR responseText:", error.responseText);
 			});
 		},
-		
+
 		addAnnotationActor(annotationId, actorId) {
       // console.log("TCL: addAnnotationActor -> annotationId, actorId", annotationId, actorId);
 			return jQuery.ajax({
@@ -270,7 +273,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeCategory(annotationId, categoryId) {
@@ -289,10 +292,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async addTag(annotationId, tagId) {
@@ -314,7 +317,7 @@
 				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async removeTag(annotationId, tagId) {
@@ -333,10 +336,10 @@
 				.fail(function(error) {
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText:", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 

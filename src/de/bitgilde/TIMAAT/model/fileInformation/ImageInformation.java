@@ -2,6 +2,8 @@ package de.bitgilde.TIMAAT.model.fileInformation;
 
 /**
  * Image information automatically determined by ffmpeg when uploading a new image file
+ *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 public class ImageInformation {
 

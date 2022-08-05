@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the church_musical_key database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="church_musical_key")

@@ -28,6 +28,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the annotation database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Annotation.findAll", query="SELECT a FROM Annotation a")

@@ -8,6 +8,7 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the medium_video_has_medium_image database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class MediumVideoHasMediumImagePK implements Serializable {

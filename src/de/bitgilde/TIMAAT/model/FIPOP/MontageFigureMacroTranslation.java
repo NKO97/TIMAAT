@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the montage_figure_macro_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="montage_figure_macro_translation")

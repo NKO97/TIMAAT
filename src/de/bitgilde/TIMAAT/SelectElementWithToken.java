@@ -1,7 +1,10 @@
 package de.bitgilde.TIMAAT;
 
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class SelectElementWithToken {
-  public int id; 
+  public int id;
 
   public String text;
 
@@ -11,7 +14,7 @@ public class SelectElementWithToken {
     this.id = id;
     this.text = text;
     this.token = token;
-  }; 
+  };
 
   // public int getId() {
   //   return id;

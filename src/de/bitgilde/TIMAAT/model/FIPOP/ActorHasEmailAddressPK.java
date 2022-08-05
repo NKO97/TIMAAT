@@ -8,6 +8,7 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the actor_has_email_address database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class ActorHasEmailAddressPK implements Serializable {

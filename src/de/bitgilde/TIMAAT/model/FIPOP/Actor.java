@@ -26,9 +26,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
 
+
 /**
  * The persistent class for the actor database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")

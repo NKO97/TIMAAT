@@ -18,6 +18,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the media_type database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="media_type")

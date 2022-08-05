@@ -30,6 +30,7 @@ import jakarta.ws.rs.core.Application;
 * TIMAAT Main Application
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
+* @author Mirko Scherf <mscherf@uni-mainz.de>
 */
 
 @jakarta.ws.rs.ApplicationPath("timaatapp")

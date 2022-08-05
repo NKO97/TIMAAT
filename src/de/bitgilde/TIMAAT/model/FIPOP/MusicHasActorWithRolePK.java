@@ -8,6 +8,7 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the music_has_actor_with_role database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class MusicHasActorWithRolePK implements Serializable {

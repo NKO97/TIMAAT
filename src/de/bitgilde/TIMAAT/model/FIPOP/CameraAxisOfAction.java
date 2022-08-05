@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the camera_axis_of_action database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="camera_axis_of_action")

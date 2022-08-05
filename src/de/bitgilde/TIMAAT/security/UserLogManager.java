@@ -13,9 +13,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 /**
-*
-* @author Jens-Martin Loebel <loebel@bitgilde.de>
-*/
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class UserLogManager {
 
 	public static enum LogEvents {

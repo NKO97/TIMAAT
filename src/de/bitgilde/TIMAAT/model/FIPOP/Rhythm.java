@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the rhythm database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Rhythm.findAll", query="SELECT r FROM Rhythm r")

@@ -1,14 +1,17 @@
 package de.bitgilde.TIMAAT;
 
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class SelectElement {
-  public int id; 
+  public int id;
 
   public String text;
 
   public SelectElement(int id, String text) {
     this.id = id;
     this.text = text;
-  }; 
+  };
 
   // public int getId() {
   //   return id;

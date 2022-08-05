@@ -18,6 +18,7 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the analysis database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Analysis.findAll", query="SELECT a FROM Analysis a")

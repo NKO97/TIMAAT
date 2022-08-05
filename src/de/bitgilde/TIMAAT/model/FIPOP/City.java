@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the city database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="city")

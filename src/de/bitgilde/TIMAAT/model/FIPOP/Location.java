@@ -27,6 +27,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the location database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Location.findAll", query="SELECT l FROM Location l")

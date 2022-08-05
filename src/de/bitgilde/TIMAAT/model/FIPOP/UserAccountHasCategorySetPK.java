@@ -8,6 +8,8 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the user_account_has_category_set database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class UserAccountHasCategorySetPK implements Serializable {

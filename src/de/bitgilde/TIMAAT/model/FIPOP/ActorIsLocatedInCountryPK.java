@@ -8,6 +8,7 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the actor_is_located_in_country database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class ActorIsLocatedInCountryPK implements Serializable {

@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 import jakarta.ws.rs.NameBinding;
 
 /**
-*
-* @author Jens-Martin Loebel <loebel@bitgilde.de>
-*/
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 @NameBinding
 @Retention(RUNTIME)
 @Target({ TYPE, METHOD })

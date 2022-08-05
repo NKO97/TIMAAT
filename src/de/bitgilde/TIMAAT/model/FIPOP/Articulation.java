@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the articulation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Articulation.findAll", query="SELECT a FROM Articulation a")

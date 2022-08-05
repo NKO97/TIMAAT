@@ -20,6 +20,7 @@ import jakarta.ws.rs.ext.Provider;
 
 /**
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  *
  */
 @SecurePublication

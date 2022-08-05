@@ -80,6 +80,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 @Service
 @Path("/music")
 public class EndpointMusic {

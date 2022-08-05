@@ -45,9 +45,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
-*
-* @author Jens-Martin Loebel <loebel@bitgilde.de>
-*/
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 
 @Service
 @Path("/user")

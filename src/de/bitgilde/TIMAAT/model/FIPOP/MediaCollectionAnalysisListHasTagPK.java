@@ -8,6 +8,8 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the media_collection_analysis_list_has_tag database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class MediaCollectionAnalysisListHasTagPK implements Serializable {

@@ -8,6 +8,7 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the actor_relates_to_actor database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class ActorRelatesToActorPK implements Serializable {

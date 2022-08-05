@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the role_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="role_translation")

@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the music_type_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="music_dynamics_element_type_translation")

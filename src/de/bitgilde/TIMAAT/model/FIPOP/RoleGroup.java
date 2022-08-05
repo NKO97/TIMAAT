@@ -20,6 +20,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the role_group database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="role_group")

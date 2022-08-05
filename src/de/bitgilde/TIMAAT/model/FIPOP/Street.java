@@ -15,6 +15,8 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 /**
  * The persistent class for the street database table.
  *
+ @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Street.findAll", query="SELECT s FROM Street s")

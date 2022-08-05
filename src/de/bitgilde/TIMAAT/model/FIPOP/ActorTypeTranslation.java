@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the actor_type_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="actor_type_translation")

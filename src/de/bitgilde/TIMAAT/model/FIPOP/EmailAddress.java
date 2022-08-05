@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the email_address database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="email_address")

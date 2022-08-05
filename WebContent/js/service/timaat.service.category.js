@@ -1,3 +1,6 @@
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -62,12 +65,12 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
-		
+
 		async getCategoryHasCategorySetList(id) {
 			// console.log("TCL: getCategoryHasCategorySetList -> id: ", id);
 			return new Promise(resolve => {
@@ -86,10 +89,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getCategoryHasCategorySet(categoryId, categorySetId) {
@@ -110,10 +113,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		/** updates categories belonging to categorysets */
@@ -183,5 +186,5 @@
 			});
 		},
 	}
-	
+
 }, window));

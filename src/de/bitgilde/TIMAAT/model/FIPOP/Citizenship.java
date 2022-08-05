@@ -22,6 +22,8 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the citizenship database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Citizenship.findAll", query="SELECT c FROM Citizenship c")

@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the song_structure_element_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="song_structure_element_translation")

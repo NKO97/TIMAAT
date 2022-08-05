@@ -1,3 +1,7 @@
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/

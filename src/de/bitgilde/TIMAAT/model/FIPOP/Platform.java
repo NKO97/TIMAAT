@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the platform database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Platform.findAll", query="SELECT p FROM Platform p")

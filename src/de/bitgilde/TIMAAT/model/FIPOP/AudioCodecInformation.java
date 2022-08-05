@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the audio_codec_information database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="audio_codec_information")

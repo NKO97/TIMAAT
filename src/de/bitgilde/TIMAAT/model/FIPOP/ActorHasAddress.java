@@ -17,6 +17,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the actor_has_address database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="actor_has_address")

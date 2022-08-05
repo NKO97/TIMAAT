@@ -18,6 +18,7 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the instrument database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Instrument.findAll", query="SELECT i FROM Instrument i")

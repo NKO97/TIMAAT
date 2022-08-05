@@ -20,6 +20,8 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the source database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Source.findAll", query="SELECT s FROM Source s")

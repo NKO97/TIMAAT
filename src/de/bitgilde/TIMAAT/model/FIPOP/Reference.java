@@ -22,6 +22,8 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the reference database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Reference.findAll", query="SELECT r FROM Reference r")

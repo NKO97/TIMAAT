@@ -21,6 +21,8 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the title database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Title.findAll", query="SELECT t FROM Title t")

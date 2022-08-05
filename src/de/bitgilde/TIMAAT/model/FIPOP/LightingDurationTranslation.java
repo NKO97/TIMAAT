@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the lighting_duration_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="lighting_duration_translation")

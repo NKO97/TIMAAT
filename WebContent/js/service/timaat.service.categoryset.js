@@ -1,3 +1,6 @@
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -43,7 +46,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-		
+
 		async getCategorySetHasCategoryList(id) {
 			// console.log("TCL: getCategorySetHasCategoryList -> id: ", id);
 			return new Promise(resolve => {
@@ -62,10 +65,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async getCategorySet(id) {
@@ -86,10 +89,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		/** updates categories belonging to categorysets */
@@ -203,7 +206,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-		
+
     async deleteCategorySetHasCategory(categorySetId, categoryId) {
     // console.log("TCL: deleteCategorySetHasCategory -> categorySetId, categoryId", categorySetId, categoryId);
 			return new Promise(resolve => {
@@ -223,7 +226,7 @@
 				console.error("ERROR: ", error);
 			});
 		},
-		
+
 		async checkForDuplicate(name) {
       // console.log("TCL: checkForDuplicate -> name", name);
 			return new Promise(resolve => {
@@ -243,12 +246,12 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 	}
-	
+
 }, window));

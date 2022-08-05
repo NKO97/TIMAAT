@@ -20,6 +20,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the category database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="category")

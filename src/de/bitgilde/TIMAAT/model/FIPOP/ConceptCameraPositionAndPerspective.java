@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the editing_montage database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="concept_camera_position_and_perspective")

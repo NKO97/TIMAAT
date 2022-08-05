@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the actor_person_is_member_of_actor_collective database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="actor_person_is_member_of_actor_collective")

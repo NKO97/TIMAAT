@@ -6,6 +6,10 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 
 
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class TemplateSerializer {
 
 	public static void main(String[] args) {

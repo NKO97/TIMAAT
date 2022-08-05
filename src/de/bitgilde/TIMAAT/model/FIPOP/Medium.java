@@ -32,6 +32,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the medium database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Medium.findAll", query="SELECT m FROM Medium m")

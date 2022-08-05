@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the musical_notation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="musical_notation")

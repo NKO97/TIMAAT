@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the voice_leading_pattern_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="voice_leading_pattern_translation")

@@ -2,6 +2,8 @@ package de.bitgilde.TIMAAT.model.fileInformation;
 
 /**
  * Audio information automatically determined by ffmpeg when uploading a new audio file
+ *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 public class AudioInformation {
 

@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the email_address_type_translation database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="email_address_type_translation")

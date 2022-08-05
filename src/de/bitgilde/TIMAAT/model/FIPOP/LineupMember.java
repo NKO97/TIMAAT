@@ -21,6 +21,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the lineup_member database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="lineup_member")

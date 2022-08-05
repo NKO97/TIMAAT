@@ -17,6 +17,8 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the bibliography database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Bibliography.findAll", query="SELECT b FROM Bibliography b")

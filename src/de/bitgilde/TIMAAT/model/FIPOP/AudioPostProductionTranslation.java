@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the audio_post_production_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="audio_post_production_translation")

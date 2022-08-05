@@ -20,6 +20,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the analysis_voice database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="analysis_voice")

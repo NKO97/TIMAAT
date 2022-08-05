@@ -27,6 +27,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the media_collection database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="media_collection")

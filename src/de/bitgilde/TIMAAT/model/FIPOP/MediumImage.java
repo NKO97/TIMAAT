@@ -20,6 +20,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the medium_image database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="medium_image")

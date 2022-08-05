@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the timbre database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Timbre.findAll", query="SELECT t FROM Timbre t")

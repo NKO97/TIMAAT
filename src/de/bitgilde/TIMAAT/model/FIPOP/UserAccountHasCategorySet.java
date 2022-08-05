@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the user_account_has_category_set database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="user_account_has_category_set")

@@ -14,6 +14,8 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the sex database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Sex.findAll", query="SELECT s FROM Sex s")

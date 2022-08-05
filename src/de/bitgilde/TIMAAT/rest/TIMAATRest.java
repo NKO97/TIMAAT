@@ -14,9 +14,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 
 /**
-*
-* @author Jens-Martin Loebel <loebel@bitgilde.de>
-*/
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 @Path("/")
 public class TIMAATRest {
 

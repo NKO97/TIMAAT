@@ -1,3 +1,7 @@
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 class AnalysisSegment {
 	constructor(model) {
 		// setup model

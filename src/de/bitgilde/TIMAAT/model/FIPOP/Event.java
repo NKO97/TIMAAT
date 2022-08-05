@@ -27,6 +27,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the event database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Event.findAll", query="SELECT e FROM Event e")

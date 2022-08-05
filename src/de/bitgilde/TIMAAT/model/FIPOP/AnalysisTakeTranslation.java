@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the analysis_take_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="analysis_take_translation")

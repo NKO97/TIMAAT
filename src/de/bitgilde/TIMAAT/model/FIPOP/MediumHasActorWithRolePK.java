@@ -8,6 +8,8 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the medium_has_actor_with_role database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class MediumHasActorWithRolePK implements Serializable {

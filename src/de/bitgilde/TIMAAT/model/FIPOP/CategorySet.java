@@ -29,6 +29,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the category_set database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="category_set")

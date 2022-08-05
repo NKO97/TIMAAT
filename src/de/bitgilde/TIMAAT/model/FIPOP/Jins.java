@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the jins database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Jins.findAll", query="SELECT j FROM Jins j")

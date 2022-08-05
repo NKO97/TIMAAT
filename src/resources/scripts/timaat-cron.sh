@@ -3,6 +3,8 @@
 # Copyright 2019 bitGilde IT Solutions UG (haftungsbeschränkt)
 # All Rights Reserved.
 
+# @author Jens-Martin Loebel <loebel@bitgilde.de>
+
 # ---- CHECK ARGUMENTS -----
 if [ -z "$1" ]; then
   echo "TIMAAT::Cron:no TIMAAT config file supplied"

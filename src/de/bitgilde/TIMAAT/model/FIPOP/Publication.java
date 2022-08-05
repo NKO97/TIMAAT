@@ -20,6 +20,8 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the province database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Publication.findAll", query="SELECT p FROM Publication p")

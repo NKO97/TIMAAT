@@ -5,6 +5,10 @@ import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
 import jakarta.ws.rs.ext.Provider;
 
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 @Provider
 public class CORSFilter implements ContainerResponseFilter {
 
@@ -23,5 +27,5 @@ public class CORSFilter implements ContainerResponseFilter {
         response.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type");
         */
     }
-    
+
 }

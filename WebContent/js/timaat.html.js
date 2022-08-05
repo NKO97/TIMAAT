@@ -1,3 +1,7 @@
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 //  <!-- focus username field in login mask -->
 $('#loginModal').on('shown.bs.modal', function() {
   $('#logInUserName').focus();

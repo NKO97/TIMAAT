@@ -8,6 +8,8 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the media_collection_has_medium database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class MediaCollectionHasMediumPK implements Serializable {

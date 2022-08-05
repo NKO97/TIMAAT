@@ -15,6 +15,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 /**
  * The persistent class for the province database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Province.findAll", query="SELECT p FROM Province p")

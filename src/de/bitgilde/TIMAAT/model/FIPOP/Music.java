@@ -25,6 +25,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
+/**
+ * The persistent class for the music database table.
+ *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 @Entity
 @NamedQuery(name="Music.findAll", query="SELECT m FROM Music m")
 public class Music implements Serializable {

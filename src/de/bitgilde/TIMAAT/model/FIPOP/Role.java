@@ -19,6 +19,8 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the role database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")

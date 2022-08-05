@@ -16,6 +16,8 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the tag database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Tag.findAll", query="SELECT t FROM Tag t")

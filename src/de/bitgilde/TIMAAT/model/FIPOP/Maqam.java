@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the maqam database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Maqam.findAll", query="SELECT m FROM Maqam m")

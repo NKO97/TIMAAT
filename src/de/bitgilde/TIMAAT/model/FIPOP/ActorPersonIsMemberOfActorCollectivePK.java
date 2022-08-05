@@ -9,6 +9,7 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the _is_member_of_actor_collective database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class ActorPersonIsMemberOfActorCollectivePK implements Serializable {

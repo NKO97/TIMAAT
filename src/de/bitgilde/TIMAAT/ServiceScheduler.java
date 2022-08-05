@@ -1,12 +1,12 @@
 /*
  * Copyright 2019,2020 bitGilde IT Solutions UG (haftungsbeschränkt)
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,13 +25,17 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 @Deprecated
 public class ServiceScheduler implements ServletContextListener {
-	
+
     private static Thread t = null;
     private ServletContext context;
     private int mins = 1;
-    
+
     public void contextInitialized(ServletContextEvent servletContextEvent) {
     	if ( System.getProperty("os.name").startsWith("Windows") ) TIMAATApp.systemExt=".exe";
     	else TIMAATApp.systemExt = "";
@@ -44,9 +48,9 @@ public class ServiceScheduler implements ServletContextListener {
     	}
 
     	context = servletContextEvent.getServletContext();
-		
+
 		t =  new Thread() {
-            public void run() {                
+            public void run() {
                 try {
                     while (true) {
                     	String cronScript = context.getRealPath("/scripts/timaat-cron.sh");
@@ -58,7 +62,7 @@ public class ServiceScheduler implements ServletContextListener {
                 		String[] commandLine = {cronScript, TIMAATApp.timaatProps.propertyPath};
                 		ProcessBuilder pb = new ProcessBuilder(commandLine);
                 		int time = 0;
-                		
+
                 		try {
                 			p = pb.start();
                 			BufferedReader is = new BufferedReader(new InputStreamReader(p.getErrorStream()));
@@ -70,22 +74,22 @@ public class ServiceScheduler implements ServletContextListener {
                 					sleep(500);
                 					time += 500;
                 				}
-                						
+
                 			} catch (InterruptedException e) {
                 				System.err.println(e);  // "can't happen"
                 			}
                 		} catch (IOException e1) {
                 			e1.printStackTrace();
                 		}
-                		
+
                 		int sleep = 60000 * mins; // TODO move to config
-                		
+
                 		System.out.println("TIMAAT::Scheduler:cron execution time "+time+"ms");
-                		
-                		if ( sleep > time ) Thread.sleep(sleep - time); 
+
+                		if ( sleep > time ) Thread.sleep(sleep - time);
                     }
                 } catch (InterruptedException e) {}
-            }            
+            }
         };
         t.setName("TIMAATCron");
         t.start();
@@ -93,7 +97,7 @@ public class ServiceScheduler implements ServletContextListener {
 
         context.setAttribute("TEST", "TEST_VALUE");
 	}
-	
+
 	public void contextDestroyed(ServletContextEvent contextEvent) {
         // context is destroyed interrupts the thread
         t.interrupt();

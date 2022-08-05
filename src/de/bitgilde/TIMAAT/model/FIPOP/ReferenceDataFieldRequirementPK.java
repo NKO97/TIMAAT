@@ -8,6 +8,8 @@ import jakarta.persistence.Embeddable;
 /**
  * The primary key class for the reference_data_field_requirements database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Embeddable
 public class ReferenceDataFieldRequirementPK implements Serializable {

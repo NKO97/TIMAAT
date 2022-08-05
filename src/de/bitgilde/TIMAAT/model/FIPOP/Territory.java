@@ -17,6 +17,8 @@ import jakarta.persistence.OneToMany;
 /**
  * The persistent class for the territory database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Territory.findAll", query="SELECT t FROM Territory t")

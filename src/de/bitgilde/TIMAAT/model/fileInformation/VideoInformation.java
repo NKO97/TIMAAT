@@ -2,6 +2,8 @@ package de.bitgilde.TIMAAT.model.fileInformation;
 
 /**
  * Video information automatically determined by ffmpeg when uploading and converting a new video file
+ *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 public class VideoInformation {
 

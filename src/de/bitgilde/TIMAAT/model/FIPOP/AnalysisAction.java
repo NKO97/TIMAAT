@@ -25,6 +25,7 @@ import jakarta.persistence.Transient;
 /**
  * The persistent class for the analysis_action database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="analysis_action")

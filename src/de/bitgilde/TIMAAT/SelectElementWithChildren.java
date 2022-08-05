@@ -2,13 +2,16 @@ package de.bitgilde.TIMAAT;
 
 import java.util.List;
 
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class SelectElementWithChildren {
   public String text;
 
 	public List<SelectElement> children;
 
   public SelectElementWithChildren(String text, List<SelectElement> children) {
-    this.text = text; 
+    this.text = text;
     this.children = children;
   };
 

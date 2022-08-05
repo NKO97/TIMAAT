@@ -1,3 +1,6 @@
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -18,7 +21,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.LanguageService = {
 
 		async createLanguage(model) {
@@ -62,12 +65,12 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
-    
+
 		async updateLanguage(language) {
       // console.log("TCL: updateLanguage -> language data: ", language);
 			return new Promise(resolve => {
@@ -131,7 +134,7 @@
         console.error("ERROR: ", error);
       });
     },
-		
+
 		async checkForDuplicateName(name, id) {
 			return new Promise(resolve => {
 				jQuery.ajax({
@@ -150,10 +153,10 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 		async checkForDuplicateCode(code, id) {
@@ -174,12 +177,12 @@
 				.fail(function(error) {
 					console.error("ERROR responseText: ", error.responseText);
 					console.error("ERROR: ", error);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});	
+			});
 		},
 
 	}
-	
+
 }, window));

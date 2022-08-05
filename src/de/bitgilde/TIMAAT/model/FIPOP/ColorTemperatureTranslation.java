@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the color_temperature_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="color_temperature_translation")

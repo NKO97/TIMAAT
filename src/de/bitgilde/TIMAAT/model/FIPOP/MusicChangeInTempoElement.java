@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the music_change_in_tempo_element database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="music_change_in_tempo_element")

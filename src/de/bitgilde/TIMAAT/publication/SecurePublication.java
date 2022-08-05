@@ -12,6 +12,7 @@ import jakarta.ws.rs.NameBinding;
 /**
 *
 * @author Jens-Martin Loebel <loebel@bitgilde.de>
+* @author Mirko Scherf <mscherf@uni-mainz.de>
 */
 @NameBinding
 @Retention(RUNTIME)

@@ -1,7 +1,10 @@
 package de.bitgilde.TIMAAT;
 
+/**
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class DisplayElementNameAndPermission {
-  public int userAccountId; 
+  public int userAccountId;
 
   public String displayName;
 

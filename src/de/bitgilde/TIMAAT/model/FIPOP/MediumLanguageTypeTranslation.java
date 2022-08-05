@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the medium_language_type_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="medium_language_type_translation")

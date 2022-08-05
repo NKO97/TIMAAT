@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the image_cadre_editing database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="image_cadre_editing")

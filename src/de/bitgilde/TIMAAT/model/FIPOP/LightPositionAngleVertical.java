@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the light_position_angle_vertical database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="light_position_angle_vertical")

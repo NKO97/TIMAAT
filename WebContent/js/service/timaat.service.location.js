@@ -1,3 +1,7 @@
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -18,7 +22,7 @@
     }
 
 }(function (TIMAAT) {
-	
+
 	TIMAAT.LocationService = {
 
 		listLocationTypes(callback) {
@@ -36,7 +40,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText: ", error.responseText);
-			});			
+			});
 		},
 
 		listLocations(callback) {
@@ -54,7 +58,7 @@
 			.fail(function(error) {
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText: ", error.responseText);
-			});			
+			});
 		},
 
 		listLocationSubtype(locationSubtype, callback) {
@@ -75,7 +79,7 @@
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText: ", error.responseText);
 			});
-			
+
 		},
 
 		async createLocation(locationModel) {
@@ -254,8 +258,8 @@
 				console.error("ERROR: ", error);
 				console.error("ERROR responseText:", error.responseText);
 			});
-		},	
+		},
 
 	}
-	
+
 }, window));

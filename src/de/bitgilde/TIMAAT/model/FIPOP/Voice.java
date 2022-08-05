@@ -19,6 +19,7 @@ import jakarta.persistence.NamedQuery;
 /**
  * The persistent class for the voice database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Voice.findAll", query="SELECT v FROM Voice v")

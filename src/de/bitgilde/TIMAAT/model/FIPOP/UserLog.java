@@ -19,6 +19,8 @@ import jakarta.persistence.TemporalType;
 /**
  * The persistent class for the user_log database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="user_log")

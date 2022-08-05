@@ -1,3 +1,7 @@
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 'use strict';
 (function (factory, window) {
     /*globals define, module, require*/
@@ -39,12 +43,12 @@
 					// resolve(null);
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
-		
+
 		async createSinglePublication(publication) {
       // console.log("TCL: updateSinglePublication -> publication", publication);
 			return new Promise(resolve => {
@@ -62,10 +66,10 @@
 					resolve(data);
 				}).fail(function(error) {
 					resolve(null);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async updateSinglePublication(publication) {
@@ -85,10 +89,10 @@
 					resolve(data);
 				}).fail(function(error) {
 					resolve(null);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async deleteSinglePublication(mediumAnalysisListId) {
@@ -106,10 +110,10 @@
 					resolve(data);
 				}).fail(function(error) {
 					resolve(null);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async getCollectionPublication(colID) {
@@ -129,12 +133,12 @@
 					// resolve(null);
 					console.error("ERROR: ", error);
 					console.error("ERROR responseText: ", error.responseText);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
-		
+
 		async updateCollectionPublication(publication) {
 			return new Promise(resolve => {
 				$.ajax({
@@ -151,10 +155,10 @@
 					resolve(data);
 				}).fail(function(error) {
 					resolve(null);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 		async deleteCollectionPublication(colID) {
@@ -172,10 +176,10 @@
 					resolve(data);
 				}).fail(function(error) {
 					resolve(null);
-				});	
+				});
 			}).catch((error) => {
 				console.error("ERROR: ", error);
-			});		
+			});
 		},
 
 	}

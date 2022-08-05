@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the martinez_scheffel_unreliable_narration_translation database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="martinez_scheffel_unreliable_narration_translation")

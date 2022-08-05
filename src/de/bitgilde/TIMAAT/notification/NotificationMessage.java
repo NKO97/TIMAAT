@@ -3,20 +3,23 @@ package de.bitgilde.TIMAAT.notification;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ */
 public class NotificationMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public String username;
 	public long timestamp;
 	public String message;
 	public int dataID;
 	public Object data;
-	
+
 	public NotificationMessage() {
-		
+
 	}
-	
+
 	public NotificationMessage(String username, String message, int dataID) {
 		this(username, message, dataID, null);
 	}
@@ -28,22 +31,22 @@ public class NotificationMessage implements Serializable {
 		this.dataID = dataID;
 		this.data = data;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
 	public NotificationMessage setUsername(String username) {
 		this.username = username;
-		
+
 		return this;
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}
 	public NotificationMessage setMessage(String message) {
 		this.message = message;
-		
+
 		return this;
 	}
 
@@ -52,7 +55,7 @@ public class NotificationMessage implements Serializable {
 	}
 	public NotificationMessage setDataID(int dataID) {
 		this.dataID = dataID;
-		
+
 		return this;
 	}
 
@@ -61,7 +64,7 @@ public class NotificationMessage implements Serializable {
 	}
 	public NotificationMessage setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
-		
+
 		return this;
 	}
 
@@ -70,10 +73,10 @@ public class NotificationMessage implements Serializable {
 	}
 	public NotificationMessage setData(Object data) {
 		this.data = data;
-		
+
 		return this;
 	}
-	
-	
+
+
 
 }

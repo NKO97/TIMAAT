@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the medium_video_has_medium_image database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="medium_video_has_medium_image")

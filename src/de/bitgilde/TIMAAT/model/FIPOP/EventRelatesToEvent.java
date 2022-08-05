@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the event_relates_to_event database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="event_relates_to_event")

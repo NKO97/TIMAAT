@@ -42,10 +42,9 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 
 /**
-*
-* @author Jens-Martin Loebel <loebel@bitgilde.de>
-* @author Mirko Scherf <mscherf@uni-mainz.de>
-*/
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 
 @Service
 @Path("/location")

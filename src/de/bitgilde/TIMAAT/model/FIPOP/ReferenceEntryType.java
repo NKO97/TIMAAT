@@ -17,6 +17,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the reference_entry_type database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="reference_entry_type")

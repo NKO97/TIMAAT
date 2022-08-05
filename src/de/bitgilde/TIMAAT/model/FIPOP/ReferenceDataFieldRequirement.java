@@ -16,6 +16,8 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the reference_data_field_requirements database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="reference_data_field_requirements")

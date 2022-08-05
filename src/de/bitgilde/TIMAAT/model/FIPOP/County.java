@@ -15,6 +15,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 /**
  * The persistent class for the county database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="County.findAll", query="SELECT c FROM County c")

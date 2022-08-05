@@ -19,6 +19,8 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 /**
  * The persistent class for the country database table.
  *
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @NamedQuery(name="Country.findAll", query="SELECT c FROM Country c")

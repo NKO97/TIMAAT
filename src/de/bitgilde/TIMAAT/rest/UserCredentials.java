@@ -2,6 +2,10 @@ package de.bitgilde.TIMAAT.rest;
 
 import java.io.Serializable;
 
+/**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class UserCredentials implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -10,7 +14,7 @@ public class UserCredentials implements Serializable {
 	private String password;
 	private String newPassword;
 
-	
+
 	public String getUsername() {
 		return username;
 	}

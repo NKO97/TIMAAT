@@ -22,6 +22,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the analysis_music database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="analysis_music")

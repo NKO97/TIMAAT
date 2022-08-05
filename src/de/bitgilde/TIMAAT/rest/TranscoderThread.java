@@ -9,8 +9,8 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 
 /**
- *
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Deprecated
 public class TranscoderThread extends Thread {
@@ -23,7 +23,7 @@ public class TranscoderThread extends Thread {
 		this.filename = filename;
 	}
 
-	public void run(){		
+	public void run(){
 		Process p;
 		Process pFrames;
 
@@ -33,7 +33,7 @@ public class TranscoderThread extends Thread {
 		File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/video/" + id + "/frames");
 		if ( !frameDir.exists() ) frameDir.mkdirs();
-		
+
 		String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
 		"-i", filename, "-c:v", "libx264",
 		"-crf", "23", // transcoded quality setting
@@ -44,7 +44,7 @@ public class TranscoderThread extends Thread {
 //		pb.inheritIO();
 
 		String[] commandLineFrames = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
-		"-i", filename, "-vf", 
+		"-i", filename, "-vf",
 		"fps=1,scale=240:-1,pad=max(iw\\,ih)",
 		TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 			+ "medium/video/" + id + "/frames/" + id + "-frame-%05d.jpg" };
@@ -61,28 +61,28 @@ public class TranscoderThread extends Thread {
 					String line = is.readLine();
 					if ( line != null && line.startsWith("frame") ) System.out.println(id+": Transcoding "+line);
 				}
-				
+
 			} catch (InterruptedException e) {
 				System.err.println(e);  // "can't happen"
 			}
 
 			File transcodedVideo = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + id + "/" + id + "-video-transcoding.mp4");
-			
+
 			if ( !transcodedVideo.exists() || !transcodedVideo.canRead() ) {
 				// TODO handle transcoding error
 			} else if ( transcodedVideo.length() == 0 ) {
 				transcodedVideo.delete();
 			} else transcodedVideo.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 				+ "medium/video/" + id + "/" + id + "-video.mp4"));
-			
+
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
+
+
 		// TODO put in separate thread
 		// create frame preview
 		try {
@@ -95,7 +95,7 @@ public class TranscoderThread extends Thread {
 					String line = is.readLine();
 					System.out.println(id+": "+line);
 				}
-				
+
 			} catch (InterruptedException e) {
 				System.err.println(e);  // "can't happen"
 			}

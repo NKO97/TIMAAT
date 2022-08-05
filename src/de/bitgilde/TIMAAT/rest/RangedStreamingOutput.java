@@ -9,9 +9,9 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.StreamingOutput;
 
 /**
-*
-* @author Jens-Martin Loebel <loebel@bitgilde.de>
-*/
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
 public class RangedStreamingOutput implements StreamingOutput {
 
 	private File file;
@@ -30,7 +30,7 @@ public class RangedStreamingOutput implements StreamingOutput {
 		try {
 			rangedFile = new RandomAccessFile(file, "r");
 			rangedFile.seek(from);
-			byte[] bytes = new byte[10240]; // new byte[to-from+1];	    				  
+			byte[] bytes = new byte[10240]; // new byte[to-from+1];
 			int count = to-from+1;
 
 			while ( count > 0 ) {
@@ -50,6 +50,6 @@ public class RangedStreamingOutput implements StreamingOutput {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	          
+		}
 	}
 }

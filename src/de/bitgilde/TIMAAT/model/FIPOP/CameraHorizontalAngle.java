@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the camera_horizontal_angle database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="camera_horizontal_angle")

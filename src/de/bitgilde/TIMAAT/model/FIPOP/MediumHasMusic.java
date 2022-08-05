@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 /**
  * The persistent class for the medium_has_music database table.
  *
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 @Entity
 @Table(name="medium_has_music")
