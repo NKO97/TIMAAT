@@ -371,7 +371,7 @@
 			if (data.model.beganAt != null && !(isNaN(data.model.beganAt)))
 				$('#eventDatasetsMetadataEventBeganAt').val(moment.utc(data.model.beganAt).format('YYYY-MM-DD'));
 				else $('#eventDatasetsMetadataEventBeganAt').val('');
-			if (data.model.endedAt != null && !(isNaN(data.endedAt)))
+			if (data.model.endedAt != null && !(isNaN(data.model.endedAt)))
 				$('#eventDatasetsMetadataEventEndedAt').val(moment.utc(data.model.endedAt).format('YYYY-MM-DD'));
 				else $('#eventDatasetsMetadataEventEndedAt').val('');
 
