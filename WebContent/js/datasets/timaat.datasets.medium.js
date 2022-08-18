@@ -978,7 +978,7 @@
 
 			// Add title button click
 			// $(document).on('click','[data-role="mediumNewTitleFields"] > .form-group [data-role="add"]', function(event) {
-			$(document).on('click','.addActorHasRolesButton', function(event) {
+			$(document).on('click','.addTitleButton', function(event) {
 					event.preventDefault();
 				// console.log("TCL: add title to list");
 				var listEntry = $(this).closest('[data-role="mediumNewTitleFields"]');
