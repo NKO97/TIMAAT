@@ -403,7 +403,7 @@
 
 			$(document).on('click','[data-role="removeUserPermissionMediumCollection"] > [data-role="remove"]', async function (event) {
 				event.preventDefault();
-				let userId = $(this).closest('.permissionContainer').data('userid');
+				let userId = $(this).closest('.permissionContainer')[0].dataset.userId;
 				let index = TIMAAT.MediumCollectionDatasets.userPermissionList.findIndex(({userAccountId}) => userAccountId == userId);
 				let userPermissionId = TIMAAT.MediumCollectionDatasets.userPermissionList[index].permissionId;
 				if (!userPermissionId) return;
