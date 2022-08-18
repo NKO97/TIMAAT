@@ -145,7 +145,7 @@
           <b>Username:</b> `+newAccountUsername+`<br>
           <b>Password:</b> `+newAccountPassword+`<br>
           <hr>
-          Please send these credentials to the corresponding person and urge them to change the initial password as soon as the log in for the first time.
+          Please send these credentials to the corresponding person and urge them to change the initial password as soon as they log in for the first time.
           <br>
           <div class="alert-danger"><b>ATTENTION: Once you close this window, you cannot retrieve the password anymore. Make sure you have stored the credentials before closing!</b>
           </div>
