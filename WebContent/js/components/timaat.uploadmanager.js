@@ -32,7 +32,7 @@
 							<button type="button" class="cancelUpload btn float-right btn-outline-danger ml-2"><i class="fas fa-times-circle"></i></button>
 							<span class="filename text-dark">[FILENAME]</span><br>
 							<div class="progress">
-								<div class="progressBar bg-secondary width--100" role="progressbar">In queue...</div>
+								<div class="progressBar progress-bar bg-secondary width--100" role="progressbar">In queue...</div>
 							</div>
 						</li>
 			`);
