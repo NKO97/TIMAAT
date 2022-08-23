@@ -28,8 +28,6 @@ import jakarta.ws.rs.core.MultivaluedMap;
 /**
  * An {@link OutputStream} which support ranges.
  *
- * @author Jens-Martin Loebel <loebel@bitgilde.de>
- * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 public class RangedOutputStream extends OutputStream {
 

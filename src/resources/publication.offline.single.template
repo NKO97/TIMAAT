@@ -733,7 +733,12 @@ this._delay(function(){n===this.counter&&this.refreshPositions(!s)})},_clear:fun
 	<!-- TIMAAT Publication Module -->
     <!-- Main CSS -->
     <style type="text/css">
-      .sidebar {
+      /**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
+
+.sidebar {
 	height: 100%;
 	width: 0;
 	position: fixed;
@@ -1024,7 +1029,11 @@ body {
 }
     </style>
     <script type="text/javascript">
-      class AnalysisSegment {
+      /**
+ * @author Jens-Martin Loebel <loebel@bitgilde.de>
+ * @author Mirko Scherf <mscherf@uni-mainz.de>
+ */
+class AnalysisSegment {
 	constructor(model) {
 		// setup model
 		this.model = model;
