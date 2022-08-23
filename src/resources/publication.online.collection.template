@@ -14,28 +14,28 @@
 
     <!-- Bootstrap Core CSS -->
     <link
-      href="../../vendor/bootstrap/css/bootstrap.min.css"
+      href="../../third-party/bootstrap/css/bootstrap.min.css"
       rel="stylesheet"
       type="text/css"
     />
 
     <!-- JQuery UI CSS -->
     <link
-      href="../../vendor/jquery/plugins/jquery-ui/jquery-ui.min.css"
+      href="../../third-party/jquery/plugins/jquery-ui/jquery-ui.min.css"
       rel="stylesheet"
       type="text/css"
     />
 
     <!-- FontAwesome -->
     <link
-      href="../../vendor/fontawesome/css/all.css"
+      href="../../third-party/fontawesome/css/all.css"
       rel="stylesheet"
       type="text/css"
     />
 
     <!-- Leaflet CSS -->
     <link
-      href="../../vendor/leaflet/leaflet.css"
+      href="../../third-party/leaflet/leaflet.css"
       rel="stylesheet"
       type="text/css"
     />
@@ -43,15 +43,15 @@
     <!-- ***************************************************************************************************************** -->
 
     <!-- JQuery -->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../third-party/jquery/jquery.min.js"></script>
 
     <!-- JQuery UI -->
 
     <!-- Bootstrap -->
-    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../third-party/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Leaflet -->
-    <script src="../../vendor/leaflet/leaflet.js"></script>
+    <script src="../../third-party/leaflet/leaflet.js"></script>
 
     <!-- ***************************************************************************************************************** -->
 

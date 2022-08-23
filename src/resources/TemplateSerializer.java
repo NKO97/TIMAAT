@@ -41,13 +41,13 @@ public class TemplateSerializer {
 		try {
 			content = new String(Files.readAllBytes(Paths.get(dir+"src/resources/publication.template.src")));
 
-			cssBootstrap = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/bootstrap/css/bootstrap.min.css")));
+			cssBootstrap = new String(Files.readAllBytes(Paths.get(dir+"WebContent/third-party/bootstrap/css/bootstrap.min.css")));
 			cssFAFonts = new String(Files.readAllBytes(Paths.get(dir+"src/resources/template-includes/fontawesome-fonts.css")));
-			cssLeaflet = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/leaflet/leaflet.css")));
-			jsJQuery = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/jquery/jquery.min.js")));
-			jsJQueryUI = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/jquery/plugins/jquery-ui/jquery-ui.min.js")));
-			jsBootstrap = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/bootstrap/js/bootstrap.bundle.min.js")));
-			jsLeaflet = new String(Files.readAllBytes(Paths.get(dir+"WebContent/vendor/leaflet/leaflet.js")));
+			cssLeaflet = new String(Files.readAllBytes(Paths.get(dir+"WebContent/third-party/leaflet/leaflet.css")));
+			jsJQuery = new String(Files.readAllBytes(Paths.get(dir+"WebContent/third-party/jquery/jquery.min.js")));
+			jsJQueryUI = new String(Files.readAllBytes(Paths.get(dir+"WebContent/third-party/jquery/plugins/jquery-ui/jquery-ui.min.js")));
+			jsBootstrap = new String(Files.readAllBytes(Paths.get(dir+"WebContent/third-party/bootstrap/js/bootstrap.bundle.min.js")));
+			jsLeaflet = new String(Files.readAllBytes(Paths.get(dir+"WebContent/third-party/leaflet/leaflet.js")));
 			cssTIMAAT = new String(Files.readAllBytes(Paths.get(dir+"WebContent/css/publication.css")));
 			jsTIMAAT = new String(Files.readAllBytes(Paths.get(dir+"WebContent/js/publication/TIMAATPublication.js")));
 
