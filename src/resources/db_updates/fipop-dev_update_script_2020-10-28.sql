@@ -1,1 +1,0 @@
-ALTER TABLE `FIPOP`.`event` CHANGE `location_id` `location_id` INT(11) NULL;

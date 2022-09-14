@@ -1,1 +1,0 @@
-UPDATE `FIPOP`.`analysis_method_type_translation` SET `name` = 'Sound Effect' WHERE `analysis_method_type_translation`.`id` = 20;
