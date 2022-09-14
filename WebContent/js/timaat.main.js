@@ -22,7 +22,7 @@
 	(factory((global.TIMAAT = {})));
 }(this, (function (exports) { 'use strict';
 
-	var version = 'v0.15.3d-dev (2022-08-23)';
+	var version = 'v1.0.0';
 
 	document.title = 'TIMAAT - Client ' + version;
 	$('#versionInfo').text(version);
