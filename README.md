@@ -21,49 +21,49 @@ git clone https://github.com/mirkoscherf/FIPOP/ new-project
 
 - Download the repository and extract the source code to a folder of your choice
 - Download and install [XAMPP-Stack](https://www.apachefriends.org/)
-- - Start Apache and MySQL (via Control Panel)
+  - Start Apache and MySQL (via Control Panel)
 - Open [PHPMyAdmin](http://localhost/phpmyadmin) in your browser and create a database 'FIPOP' and make sure the collation is set to 'utf8mb4_general_ci'
-- - Create a user account and set a password for this database
-- - Import the fipop.sql file located at \src\resources\
-- - - Disable 'Enable foreign key checks' flag
+  - Create a user account and set a password for this database
+  - Import the fipop.sql file located at \src\resources\
+    - Disable 'Enable foreign key checks' flag
 - Download and install [ffmpeg](https://ffmpeg.org/download.html)
-- - ffmpeg is used to convert video and audio files and to create preview thumbnails for the video progress bar. This feature is not implemented for Windows as it is currently only triggered via cron.job on Linux. This Software works without, as the original medium file is used when uploaded as long as the converted files are not available, but there are no preview thumbnails available.
+  - ffmpeg is used to convert video and audio files and to create preview thumbnails for the video progress bar. This feature is not implemented for Windows as it is currently only triggered via cron.job on Linux. This Software works without, as the original medium file is used when uploaded as long as the converted files are not available, but there are no preview thumbnails available.
 - Download and install [maven](https://maven.apache.org/download.cgi)
-- - Run `mvn package` in console while in the root folder of the extracted source code
-- - - This creates a TIMAAT.war file located in \target subfolder
-- - Copy the war-file to the 'webapps' folder of your tomcat installation (e.g. C:\xampp\tomcat\webapps)
+  - Run `mvn package` in console while in the root folder of the extracted source code
+    - This creates a TIMAAT.war file located in \target subfolder
+  - Copy the war-file to the 'webapps' folder of your tomcat installation (e.g. C:\xampp\tomcat\webapps)
 - Copy 'timaat-default.properties' from \src\resources\ and save it as 'timaat.properties' in a new folder named '.timaat' in '%HOMEDRIVE%%HOMEPATH%'
 - Edit and adjust timaat.properties parameters:
-- - Remember to use \\ instead of \ when determining directory paths
-- - Set 'storage.location' to the path where you want your uploaded media files to be stored
-- - Set your 'database.user' and 'database.password' credentials
-- - Adjust your 'database.url' if your database is not called FIPOP
-- - Set 'app.ffmpeg.location' to the path of your ffmpeg installation's bin folder (e.g. C:\\ffmpeg\\bin\\)
+  - Remember to use \\ instead of \ when determining directory paths
+  - Set 'storage.location' to the path where you want your uploaded media files to be stored
+  - Set your 'database.user' and 'database.password' credentials
+  - Adjust your 'database.url' if your database is not called FIPOP
+  - Set 'app.ffmpeg.location' to the path of your ffmpeg installation's bin folder (e.g. C:\\ffmpeg\\bin\\)
 - Start Tomcat (via Control Panel)
-- - Tomcat will extract the TIMAAT.war file and creates a TIMAAT folder in the tomcat's webapps folder. This will take a couple of seconds.
+  - Tomcat will extract the TIMAAT.war file and creates a TIMAAT folder in the tomcat's webapps folder. This will take a couple of seconds.
 
 ## Local installation (using software as end user) - Linux
 
 - Download the repository and extract the source code to a folder of your choice
 - Download and install [LAMPP-Stack](https://www.apachefriends.org/)
-- - Start Apache and MySQL services
+  - Start Apache and MySQL services
 - Create a database 'FIPOP' and make sure the collation is set to 'utf8mb4_general_ci'
-- - Create a user account and set a password for this database
-- - Import the fipop.sql file located at /src/resources
+  - Create a user account and set a password for this database
+  - Import the fipop.sql file located at /src/resources
 - Download and install [ffmpeg](https://ffmpeg.org/download.html)
-- - ffmpeg is used to convert video and audio files and to create preview thumbnails for the video progress bar.
+  - ffmpeg is used to convert video and audio files and to create preview thumbnails for the video progress bar.
 - Download and install [maven](https://maven.apache.org/download.cgi)
-- - Run `mvn package` in the root folder of the extracted source code
-- - - This creates a TIMAAT.war file located in /target subfolder
-- - Copy the war-file to the 'webapps' folder of your tomcat installation
+  - Run `mvn package` in the root folder of the extracted source code
+    - This creates a TIMAAT.war file located in /target subfolder
+  - Copy the war-file to the 'webapps' folder of your tomcat installation
 - Copy 'timaat-default.properties' from /src/resources and save it as 'timaat.properties' in '/root/.timaat'
 - Edit and adjust timaat.properties parameters:
-- - Set 'storage.location' to the path where you want your uploaded media files to be stored
-- - Set your 'database.user' and 'database.password' credentials
-- - Adjust your 'database.url' if your database is not called FIPOP
-- - Set 'app.ffmpeg.location' to the path of your ffmpeg installation's bin folder
+  - Set 'storage.location' to the path where you want your uploaded media files to be stored
+  - Set your 'database.user' and 'database.password' credentials
+  - Adjust your 'database.url' if your database is not called FIPOP
+  - Set 'app.ffmpeg.location' to the path of your ffmpeg installation's bin folder
 - Start Tomcat service
-- - Tomcat will extract the TIMAAT.war file and creates a TIMAAT folder in the tomcat's webapps folder. This will take a couple of seconds.
+  - Tomcat will extract the TIMAAT.war file and creates a TIMAAT folder in the tomcat's webapps folder. This will take a couple of seconds.
 
 ## First Steps (Windows + Linux)
 
@@ -77,21 +77,21 @@ git clone https://github.com/mirkoscherf/FIPOP/ new-project
 
 - git clone the project
 - You need to install
-- - Apache2
-- - Tomcat 10
-- - MySQL or MariaDB
-- - ffmpeg
-- - maven
+  - Apache2
+  - Tomcat 10
+  - MySQL or MariaDB
+  - ffmpeg
+  - maven
 - Create a database 'FIPOP' and make sure the collation is set to 'utf8mb4_general_ci'
-- - Create a user account and set a password for this database
-- - Import the fipop.sql file located at /src/resources
+  - Create a user account and set a password for this database
+  - Import the fipop.sql file located at /src/resources
 - Copy 'timaat-default.properties' from /src/resources and save it as 'timaat.properties' in '/root/.timaat'
 - Edit and adjust timaat.properties parameters:
-- - Set 'storage.location' to the path where you want your uploaded media files to be stored
-- - Set your 'database.user' and 'database.password' credentials
-- - Adjust your 'database.url' if your database is not called FIPOP
-- - Set 'app.ffmpeg.location' to the path of your ffmpeg installation's bin folder
+  - Set 'storage.location' to the path where you want your uploaded media files to be stored
+  - Set your 'database.user' and 'database.password' credentials
+  - Adjust your 'database.url' if your database is not called FIPOP
+  - Set 'app.ffmpeg.location' to the path of your ffmpeg installation's bin folder
 - Build your war file with `mvn package`
-- - Make sure that tomcat knows where to look for the war file
+  - Make sure that tomcat knows where to look for the war file
 - In /src/resources/scripts you can find two scripts for converting uploaded files to HTML5 compatible mp4 files and to create batch screenshots
-- - you can use cron.job to run scripts regularly to check for finish any pending processes
+  - you can use cron.job to run scripts regularly to check for finish any pending processes
