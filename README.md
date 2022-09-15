@@ -1,6 +1,6 @@
 # Forschungs- und Informationsplattform: Online-Propaganda
 
-by Mirko Scherf (Johannes Gutenberg University Mainz) and Dr. Jens-Martin Loebel (bitGilde IT Solutions UG)
+by Mirko Scherf (Johannes Gutenberg University Mainz) and Prof. Dr. Jens-Martin Loebel (bitGilde IT Solutions UG)
 
 [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0)
 
