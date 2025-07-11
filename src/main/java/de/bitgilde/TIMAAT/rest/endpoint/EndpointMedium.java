@@ -390,7 +390,6 @@ public class EndpointMedium {
 	@Secured
 	@Path("mediaType/list")
 	public Response getMediaTypeList() {
-		// System.out.println("EndpointMedium: getMediaTypeList");
 		List<MediaType> mediaTypeList = castList(MediaType.class,TIMAATApp.emf.createEntityManager().createNamedQuery("MediaType.findAll").getResultList());
 		return Response.ok().entity(mediaTypeList).build();
 	}
@@ -3153,13 +3152,14 @@ public class EndpointMedium {
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Video file already exists").build();
 
 		try {
+
 			// TODO assume MP4 upload only
 			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
 				+ "-upload.mp4";
 			File uploadTempFile = new File(
 				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
 					+ "medium/video/" + tempName);
-
+			//TODO: Use Path api + create sub directories when necessary
 			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
 			byte[] bytes = new byte[1024];
 			int sizeRead;
@@ -3731,7 +3731,6 @@ public class EndpointMedium {
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
 		if ( categorySet == null ) return Response.status(Status.NOT_FOUND).build();
-
 		// TODO delete categories from media of matching categorySets
 		List<Category> categoryList = new ArrayList<>();
 		Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();

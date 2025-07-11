@@ -306,6 +306,7 @@ public class EndpointAuthentication {
 		if ( user.getUserAccountStatus() == UserAccountStatus.suspended )
 			throw new AccountSuspendedException();
 		// hash user password hash using server user account salt
+		//TODO: Put inside a thread local
 		Argon2Advanced argon2 = Argon2Factory.createAdvanced(Argon2Types.ARGON2id);
 		String hash = argon2.hash(
 			8, 		// iterations

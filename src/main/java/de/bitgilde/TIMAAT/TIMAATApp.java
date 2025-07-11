@@ -66,7 +66,7 @@ public class TIMAATApp extends Application {
      * @throws InstantiationException
      */
     private void initEntityManager() throws InstantiationException {
-    	Logger.getGlobal().log(Level.INFO, "[TIMAAT::Persistence Unit Init]");
+        Logger.getGlobal().log(Level.INFO, "[TIMAAT::Persistence Unit Init]");
         HashMap<String, String> dbProps = new HashMap<String, String>();
         dbProps.put("jakarta.persistence.jdbc.url", timaatProps.getProp(PropertyConstants.DATABASE_URL));
         dbProps.put("jakarta.persistence.jdbc.driver", timaatProps.getProp(PropertyConstants.DATABASE_DRIVER));

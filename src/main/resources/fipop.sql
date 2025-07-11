@@ -10749,7 +10749,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `FIPOP`;
-INSERT INTO `FIPOP`.`user_password` (`id`, `user_password_hash_type_id`, `salt`, `key_stretching_iterations`, `stretched_hash_encrypted`) VALUES (1, 1, 'salzigessalt', 8, 'db9a357002a3a2fdc5d7e93d95dbc601632c9bc1f30ef6776d1e8cea0b60a86c');
+INSERT INTO `FIPOP`.`user_password` (`id`, `user_password_hash_type_id`, `salt`, `key_stretching_iterations`, `stretched_hash_encrypted`) VALUES (1, 1, 'salzigessalt', 8, '4f9fe63b45763166abc3dcb7b9efb48845396790aeac92a1b5aa906c35a14764');
 
 COMMIT;
 

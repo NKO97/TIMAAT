@@ -39,7 +39,7 @@ public class PropertyManagement {
     private final Path pathTIMAATDir;
     private final Path pathDefaultTIMAATProperties;
     private final Path pathModifiedTIMAATProperties;
-    private final String strTIMAATResource = "resources/timaat-default.properties";
+    private final String strTIMAATResource = "timaat-default.properties";
     private final String strDefaultTIMAATProperties = "timaat.properties.example";
     private final String strModifiedTIMAATProperties = "timaat.properties";
     private final Properties props;

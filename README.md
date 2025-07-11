@@ -102,7 +102,7 @@ Des Weiteren werden rechtliche Vorgaben in Anbetracht des zu annotierenden Mater
   - Create a user account and set a password for this database
   - Import the fipop.sql file located at /src/resources
 - Copy 'timaat-default.properties' from /src/resources and save it as 'timaat.properties' in '/root/.timaat'
-- Edit and adjust timaat.properties parameters:
+- Edit and adjust timaat.properties parameters
   - Set 'storage.location' to the path where you want your uploaded media files to be stored
   - Set your 'database.user' and 'database.password' credentials
   - Adjust your 'database.url' if your database is not called FIPOP
