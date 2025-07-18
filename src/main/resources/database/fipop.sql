@@ -17,6 +17,19 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 CREATE SCHEMA IF NOT EXISTS `FIPOP` DEFAULT CHARACTER SET utf8 ;
 USE `FIPOP` ;
 
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`db_version`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`db_version` (
+  `major_version` INT NOT NULL,
+  `minor_version` INT NOT NULL,
+  `patch_version` INT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`major_version`, `minor_version`, `patch_version`))
+ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- Table `FIPOP`.`acting_technique`
 -- -----------------------------------------------------
@@ -2108,20 +2121,6 @@ ENGINE = InnoDB;
 CREATE INDEX `fk_audience_translation_audience1_idx` ON `FIPOP`.`audience_translation` (`audience_id` ASC);
 
 CREATE INDEX `fk_audience_translation_language1_idx` ON `FIPOP`.`audience_translation` (`language_id` ASC);
-
-
--- -----------------------------------------------------
--- Table `FIPOP`.`audio_codec_information`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `FIPOP`.`audio_codec_information` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `audio_codec` VARCHAR(45) NOT NULL,
-  `channels` VARCHAR(10) NOT NULL,
-  `sample_rate` VARCHAR(6) NOT NULL,
-  `bitrate` VARCHAR(5) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `FIPOP`.`audio_post_production`
@@ -5442,15 +5441,9 @@ CREATE INDEX `fk_medium_analysis_list_translation_language1_idx` ON `FIPOP`.`med
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_audio` (
   `medium_id` INT NOT NULL,
-  `audio_codec_information_id` INT NULL,
   `audio_post_production_id` INT NULL,
   `length` INT(11) NOT NULL,
   PRIMARY KEY (`medium_id`),
-  CONSTRAINT `fk_medium_audio_audio_codec_information1`
-    FOREIGN KEY (`audio_codec_information_id`)
-    REFERENCES `FIPOP`.`audio_codec_information` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_medium_audio_medium1`
     FOREIGN KEY (`medium_id`)
     REFERENCES `FIPOP`.`medium` (`id`)
@@ -5462,8 +5455,6 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_audio` (
     ON DELETE SET NULL
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_medium_audio_audio_codec_information1_idx` ON `FIPOP`.`medium_audio` (`audio_codec_information_id` ASC);
 
 CREATE INDEX `fk_medium_audio_medium1_idx` ON `FIPOP`.`medium_audio` (`medium_id` ASC);
 
@@ -5999,7 +5990,6 @@ CREATE INDEX `fk_medium_text_medium1_idx` ON `FIPOP`.`medium_text` (`medium_id` 
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_video` (
   `medium_id` INT NOT NULL,
-  `audio_codec_information_id` INT NOT NULL,
   `length` INT(11) NOT NULL,
   `video_codec` VARCHAR(45) NOT NULL,
   `width` SMALLINT UNSIGNED NOT NULL,
@@ -6009,19 +5999,12 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_video` (
   `total_bitrate` SMALLINT UNSIGNED NOT NULL,
   `is_episode` TINYINT(1) NOT NULL,
   PRIMARY KEY (`medium_id`),
-  CONSTRAINT `fk_medium_video_audio_codec_information1`
-    FOREIGN KEY (`audio_codec_information_id`)
-    REFERENCES `FIPOP`.`audio_codec_information` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_medium_video_medium1`
     FOREIGN KEY (`medium_id`)
     REFERENCES `FIPOP`.`medium` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_medium_video_audio_codec_information1_idx` ON `FIPOP`.`medium_video` (`audio_codec_information_id` ASC);
 
 CREATE INDEX `fk_medium_video_medium1_idx` ON `FIPOP`.`medium_video` (`medium_id` ASC);
 
@@ -8755,6 +8738,90 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`audio_analysis`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`audio_analysis` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `audio_codec` VARCHAR(45) NOT NULL,
+  `channels` int NOT NULL,
+  `sample_rate` int NOT NULL,
+  `bitrate` int NOT NULL,
+  `sample_count` bigint NOT NULL,
+  `waveform_path` varchar(4000) NOT NULL,
+  `frequency_information_path` varchar(4000) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`audio_analysis_state`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`audio_analysis_state` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`audio_analysis_state_translation`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`audio_analysis_state_translation` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `audio_analysis_state_id` INT NOT NULL,
+  `language_id` INT NOT NULL,
+  `state` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_audio_analysis_state_translation_audio_analysis_state1`
+      FOREIGN KEY (`audio_analysis_state_id`)
+          REFERENCES `FIPOP`.`audio_analysis_state` (`id`)
+          ON DELETE CASCADE
+          ON UPDATE NO ACTION,
+  CONSTRAINT `fk_audio_analysis_state_translation_language`
+      FOREIGN KEY (`language_id`)
+          REFERENCES `FIPOP`.`language`(`id`)
+          ON DELETE CASCADE
+          ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX fk_audio_analysis_state_translation_audio_analysis_state1_idx ON `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id asc);
+CREATE INDEX fk_audio_analysis_state_translation_language ON `FIPOP`.`audio_analysis_state_translation` (language_id);
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`medium_audio_analysis`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_audio_analysis` (
+  `medium_id` INT NOT NULL PRIMARY KEY,
+  `audio_analysis_state_id` INT NOT NULL,
+  `audio_analysis_id` INT,
+   CONSTRAINT `fk_medium_audio_analysis_medium1`
+       FOREIGN KEY (`medium_id`)
+           REFERENCES `FIPOP`.`medium`(`id`)
+           ON DELETE CASCADE
+           ON UPDATE NO ACTION,
+   CONSTRAINT `fk_medium_audio_analysis_audio_analysis_state1`
+       FOREIGN KEY (`audio_analysis_state_id`)
+           REFERENCES `FIPOP`.`audio_analysis_state`(`id`)
+           ON DELETE CASCADE
+           ON UPDATE NO ACTION,
+   CONSTRAINT `fk_medium_audio_analysis_audio_analysis1`
+       FOREIGN KEY (`audio_analysis_id`)
+           REFERENCES `FIPOP`.`audio_analysis`(`id`)
+           ON DELETE SET NULL
+           ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX fk_medium_audio_analysis_medium1_idx ON `FIPOP`.`medium_audio_analysis`(medium_id ASC);
+CREATE INDEX fk_medium_audio_analysis_audio_analysis_state1_idx ON `FIPOP`.`medium_audio_analysis`(audio_analysis_state_id ASC);
+CREATE INDEX fk_medium_audio_analysis_audio_analysis1_idx ON `FIPOP`.`medium_audio_analysis`(audio_analysis_id ASC);
+
+-- -----------------------------------------------------
+-- Data for table `FIPOP`.`db_version`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `FIPOP`;
+INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version) VALUES (0, 14, 0);
+COMMIT;
+
 -- -----------------------------------------------------
 -- Data for table `FIPOP`.`analysis_method_type`
 -- -----------------------------------------------------
@@ -9304,16 +9371,6 @@ USE `FIPOP`;
 INSERT INTO `FIPOP`.`articulation_translation` (`id`, `articulation_id`, `language_id`, `type`) VALUES (1, 1, 1, 'staccato');
 INSERT INTO `FIPOP`.`articulation_translation` (`id`, `articulation_id`, `language_id`, `type`) VALUES (2, 2, 1, 'legato');
 INSERT INTO `FIPOP`.`articulation_translation` (`id`, `articulation_id`, `language_id`, `type`) VALUES (3, 3, 1, 'portato');
-
-COMMIT;
-
-
--- -----------------------------------------------------
--- Data for table `FIPOP`.`audio_codec_information`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `FIPOP`;
-INSERT INTO `FIPOP`.`audio_codec_information` (`id`, `audio_codec`, `channels`, `sample_rate`, `bitrate`) VALUES (1, 'PLACEHOLDER [AUDIO_CODEC_INFORMATION]', '0', '0', '0');
 
 COMMIT;
 
@@ -14301,3 +14358,24 @@ INSERT INTO `FIPOP`.`work` (`id`, `title`) VALUES (1, 'PLACEHOLDER [WORK]');
 
 COMMIT;
 
+-- -----------------------------------------------------
+-- Data for table `FIPOP`.`audio_analysis_state`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `FIPOP`;
+INSERT INTO `FIPOP`.`audio_analysis_state` (`id`) VALUES (1);
+INSERT INTO `FIPOP`.`audio_analysis_state` (`id`) VALUES (2);
+INSERT INTO `FIPOP`.`audio_analysis_state` (`id`) VALUES (3);
+INSERT INTO `FIPOP`.`audio_analysis_state` (`id`) VALUES (4);
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `FIPOP`.`audio_analysis_state_translation`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `FIPOP`;
+INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state) VALUES (1, 1, 'pending');
+INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state) VALUES (2, 1, 'running');
+INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state) VALUES (3, 1, 'failed');
+INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state) VALUES (4, 1, 'done');
+COMMIT;
