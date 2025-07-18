@@ -1,10 +1,6 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+
+import java.io.Serializable;
+import java.util.List;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -113,6 +112,10 @@ public class Language implements Serializable {
 	@OneToMany(mappedBy="language")
 	@JsonIgnore
 	private List<AnalysisTakeTranslation> analysisTakeTranslations;
+
+	@OneToMany(mappedBy = "language")
+	@JsonIgnore //// Avoid circular json serializing
+	private List<AudioAnalysisStateTranslation> audioAnalysisStateTranslations;
 
 	// //bi-directional many-to-one association to AnnotationTextualBodyTranslation
 	// @OneToMany(mappedBy="language")
@@ -2316,26 +2319,11 @@ public class Language implements Serializable {
 		return voiceTypeTranslation;
 	}
 
-	// public List<WorkAnalysisListTranslation> getWorkAnalysisListTranslations() {
-	// 	return this.workAnalysisListTranslations;
-	// }
+	public List<AudioAnalysisStateTranslation> getAudioAnalysisStateTranslations() {
+		return audioAnalysisStateTranslations;
+	}
 
-	// public void setWorkAnalysisListTranslations(List<WorkAnalysisListTranslation> workAnalysisListTranslations) {
-	// 	this.workAnalysisListTranslations = workAnalysisListTranslations;
-	// }
-
-	// public WorkAnalysisListTranslation addWorkAnalysisListTranslation(WorkAnalysisListTranslation workAnalysisListTranslation) {
-	// 	getWorkAnalysisListTranslations().add(workAnalysisListTranslation);
-	// 	workAnalysisListTranslation.setLanguage(this);
-
-	// 	return workAnalysisListTranslation;
-	// }
-
-	// public WorkAnalysisListTranslation removeWorkAnalysisListTranslation(WorkAnalysisListTranslation workAnalysisListTranslation) {
-	// 	getWorkAnalysisListTranslations().remove(workAnalysisListTranslation);
-	// 	workAnalysisListTranslation.setLanguage(null);
-
-	// 	return workAnalysisListTranslation;
-	// }
-
+	public void setAudioAnalysisStateTranslations(List<AudioAnalysisStateTranslation> audioAnalysisStateTranslations) {
+		this.audioAnalysisStateTranslations = audioAnalysisStateTranslations;
+	}
 }

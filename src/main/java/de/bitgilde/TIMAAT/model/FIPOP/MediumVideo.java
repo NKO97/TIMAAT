@@ -1,17 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import java.io.Serializable;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,9 +35,6 @@ public class MediumVideo implements Serializable {
 	@Id
 	@Column(name="medium_id")
 	private int mediumId;
-
-	@JoinColumn(name="audio_codec_information_id")
-	private AudioCodecInformation audioCodecInformation;
 
 	@Column(name="data_rate")
 	private int dataRate;
@@ -90,14 +79,6 @@ public class MediumVideo implements Serializable {
 	public void setMediumId(int mediumId) {
 		this.mediumId = mediumId;
 	}
-
-  public AudioCodecInformation getAudioCodecInformation() {
-		return this.audioCodecInformation;
-	}
-
-	public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
-		this.audioCodecInformation = audioCodecInformation;
-  }
 
 	public int getDataRate() {
 		return this.dataRate;

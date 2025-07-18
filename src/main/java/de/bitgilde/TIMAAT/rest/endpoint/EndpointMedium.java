@@ -1439,8 +1439,6 @@ public class EndpointMedium {
 
 		// update audio
 		if ( updatedAudio.getLength() > 0) audio.setLength(updatedAudio.getLength());
-		if ( updatedAudio.getAudioCodecInformation() != null ) audio.setAudioCodecInformation(updatedAudio.getAudioCodecInformation());
-		// if ( updatedAudio.getAudioPostProduction().getAudioPostProductionTranslations() != null ) audio.getAudioPostProduction().setAudioPostProductionTranslations(updatedAudio.getAudioPostProduction().getAudioPostProductionTranslations());
 
 		// update log metadata
 		audio.getMedium().setLastEditedAt(new Timestamp(System.currentTimeMillis()));

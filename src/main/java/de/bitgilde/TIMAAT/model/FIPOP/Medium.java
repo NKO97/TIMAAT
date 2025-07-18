@@ -1,16 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -27,6 +20,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PostLoad;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -300,6 +299,9 @@ public class Medium implements Serializable {
 	// @JsonIgnore
 	@JsonManagedReference(value="Medium-MediumHasMusic")
 	private List<MediumHasMusic> mediumHasMusicList;
+
+    @OneToOne(mappedBy = "medium")
+    private MediumAudioAnalysis mediumAudioAnalysis;
 
 	@Transient
 	private String fileStatus;
@@ -845,6 +847,22 @@ public class Medium implements Serializable {
 
 	public void setViewToken(String viewToken) {
 		this.viewToken = viewToken;
+	}
+
+	public MediumAudioAnalysis getMediumAudioAnalysis() {
+		return mediumAudioAnalysis;
+	}
+
+	public void setMediumAudioAnalysis(MediumAudioAnalysis mediumAudioAnalysis) {
+		this.mediumAudioAnalysis = mediumAudioAnalysis;
+	}
+
+	public void setLastEditedByUserAccountId(int lastEditedByUserAccountId) {
+		this.lastEditedByUserAccountId = lastEditedByUserAccountId;
+	}
+
+	public void setCreatedByUserAccountId(int createdByUserAccountId) {
+		this.createdByUserAccountId = createdByUserAccountId;
 	}
 
 	@PostLoad

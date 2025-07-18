@@ -47,15 +47,6 @@ public class MediumAudio implements Serializable {
 	@Column(columnDefinition = "INT")
 	private long length;
 
-	//bi-directional many-to-one association to MediaCollectionAlbumHasMediumAudio
-	// @OneToMany(mappedBy="mediumAudio")
-	// private Set<MediaCollectionAlbumHasMediumAudio> mediaCollectionAlbumHasMediumAudios;
-
-	//bi-directional many-to-one association to AudioCodecInformation
-	@ManyToOne
-	@JoinColumn(name="audio_codec_information_id")
-	private AudioCodecInformation audioCodecInformation;
-
 	//bi-directional many-to-one association to AudioPostProduction
 	@ManyToOne
 	@JoinColumn(name="audio_post_production_id")
@@ -84,36 +75,6 @@ public class MediumAudio implements Serializable {
 
 	public void setLength(long length) {
 		this.length = length;
-	}
-
-	// public Set<MediaCollectionAlbumHasMediumAudio> getMediaCollectionAlbumHasMediumAudios() {
-	// 	return this.mediaCollectionAlbumHasMediumAudios;
-	// }
-
-	// public void setMediaCollectionAlbumHasMediumAudios(Set<MediaCollectionAlbumHasMediumAudio> mediaCollectionAlbumHasMediumAudios) {
-	// 	this.mediaCollectionAlbumHasMediumAudios = mediaCollectionAlbumHasMediumAudios;
-	// }
-
-	// public MediaCollectionAlbumHasMediumAudio addMediaCollectionAlbumHasMediumAudio(MediaCollectionAlbumHasMediumAudio mediaCollectionAlbumHasMediumAudio) {
-	// 	getMediaCollectionAlbumHasMediumAudios().add(mediaCollectionAlbumHasMediumAudio);
-	// 	mediaCollectionAlbumHasMediumAudio.setMediumAudio(this);
-
-	// 	return mediaCollectionAlbumHasMediumAudio;
-	// }
-
-	// public MediaCollectionAlbumHasMediumAudio removeMediaCollectionAlbumHasMediumAudio(MediaCollectionAlbumHasMediumAudio mediaCollectionAlbumHasMediumAudio) {
-	// 	getMediaCollectionAlbumHasMediumAudios().remove(mediaCollectionAlbumHasMediumAudio);
-	// 	mediaCollectionAlbumHasMediumAudio.setMediumAudio(null);
-
-	// 	return mediaCollectionAlbumHasMediumAudio;
-	// }
-
-	public AudioCodecInformation getAudioCodecInformation() {
-		return this.audioCodecInformation;
-	}
-
-	public void setAudioCodecInformation(AudioCodecInformation audioCodecInformation) {
-		this.audioCodecInformation = audioCodecInformation;
 	}
 
 	public AudioPostProduction getAudioPostProduction() {

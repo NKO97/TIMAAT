@@ -54,7 +54,9 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Articulation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation</class>
-		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioCodecInformation</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysis</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysisState</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysisStateTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AudioPostProductionTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Bibliography</class>
@@ -178,6 +180,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisListTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAudio</class>
+		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumDocument</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MediumEventRelationshipTypeTranslation</class>
