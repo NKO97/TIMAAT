@@ -96,9 +96,9 @@ BEGIN
                     ON UPDATE NO ACTION
         )
             ENGINE = InnoDB;
-        CREATE INDEX fk_medium_audio_analysis_medium1_idx ON `FIPOP`.`medium_audio_analysis`(medium_id ASC);
-        CREATE INDEX fk_medium_audio_analysis_audio_analysis_state1_idx ON `FIPOP`.`medium_audio_analysis`(audio_analysis_state_id ASC);
-        CREATE INDEX fk_medium_audio_analysis_audio_analysis1_idx ON `FIPOP`.`medium_audio_analysis`(audio_analysis_id ASC);
+        CREATE INDEX fk_medium_audio_analysis_medium1_idx ON `FIPOP`.`medium_audio_analysis` (medium_id ASC);
+        CREATE INDEX fk_medium_audio_analysis_audio_analysis_state1_idx ON `FIPOP`.`medium_audio_analysis` (audio_analysis_state_id ASC);
+        CREATE INDEX fk_medium_audio_analysis_audio_analysis1_idx ON `FIPOP`.`medium_audio_analysis` (audio_analysis_id ASC);
 
         START TRANSACTION;
         INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version) VALUES (0, 14, 0);
@@ -121,18 +121,22 @@ BEGIN
         INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state)
         VALUES (2, 1, 'running');
         INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state)
-        VALUES (3, 1, 'running');
+        VALUES (3, 1, 'failed');
         INSERT INTO `FIPOP`.`audio_analysis_state_translation` (audio_analysis_state_id, language_id, state)
-        VALUES (4, 1, 'running');
+        VALUES (4, 1, 'done');
         COMMIT;
 
         SELECT 'finished update to 0.14.0' AS log_message;
 
         # TODO: Remove audio_codec_information and referencing columns on medium_audio and medium_video
-        ALTER TABLE medium_audio DROP FOREIGN KEY fk_medium_audio_audio_codec_information1;
-        ALTER TABLE medium_audio DROP COLUMN audio_codec_information_id;
-        ALTER TABLE medium_video DROP FOREIGN KEY fk_medium_video_audio_codec_information1;
-        ALTER TABLE medium_video DROP COLUMN audio_codec_information_id;
+        ALTER TABLE medium_audio
+            DROP FOREIGN KEY fk_medium_audio_audio_codec_information1;
+        ALTER TABLE medium_audio
+            DROP COLUMN audio_codec_information_id;
+        ALTER TABLE medium_video
+            DROP FOREIGN KEY fk_medium_video_audio_codec_information1;
+        ALTER TABLE medium_video
+            DROP COLUMN audio_codec_information_id;
 
         DROP TABLE audio_codec_information;
     END IF;

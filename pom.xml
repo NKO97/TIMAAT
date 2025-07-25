@@ -12,7 +12,7 @@
     <jersey.version>3.1.10</jersey.version>
   </properties>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <!-- <directory>${buildDirectory}</directory> -->
     <finalName>TIMAAT</finalName>
     <plugins>
@@ -24,16 +24,24 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>3.3.2</version>
         <configuration>
-          <warSourceDirectory>WebContent</warSourceDirectory>
+          <warSourceDirectory>src/main/webapp</warSourceDirectory>
           <webResources>
             <resource>
-              <directory>src/resources</directory>
+              <directory>src/main/resources</directory>
               <targetPath>WEB-INF/classes/resources</targetPath>
               <includes>
                 <include>**/*.template</include>
               </includes>
             </resource>
           </webResources>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>16</source>
+          <target>16</target>
         </configuration>
       </plugin>
     </plugins>

@@ -1,40 +1,7 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.security.Key;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.ImageInputStream;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.json.JSONObject;
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithToken;
@@ -73,9 +40,15 @@ import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.AudioFileStorage;
+import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.TemporaryFileStorage.TemporaryFile;
+import de.bitgilde.TIMAAT.storage.VideoFileStorage;
+import de.bitgilde.TIMAAT.task.TaskService;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -96,7 +69,35 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.json.JSONObject;
+import org.jvnet.hk2.annotations.Service;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.Key;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -121,11 +122,18 @@ import jakarta.ws.rs.core.UriInfo;
 public class EndpointMedium {
 
 	@Context
-	private UriInfo uriInfo;
-	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
 	ServletContext servletContext;
+	@Inject
+	private TaskService taskService;
+	@Inject
+	private VideoFileStorage videoFileStorage;
+	@Inject
+	private TemporaryFileStorage temporaryFileStorage;
+	@Inject
+	private AudioFileStorage audioFileStorage;
+
 
 	@GET
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -2941,39 +2949,26 @@ public class EndpointMedium {
 
 		try {
 			// TODO assume MP3 upload only
-			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
-				+ "-upload.mp3";
-			File uploadTempFile = new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/audio/" + tempName);
+			java.nio.file.Path mediumFilePath;
+			try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(temporaryFile.getTemporaryFilePath().toFile()));
+				byte[] bytes = new byte[1024];
+				int sizeRead;
+				while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
+					stream.write(bytes, 0, sizeRead);
+				}
+				stream.flush();
+				stream.close();
 
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
-			byte[] bytes = new byte[1024];
-			int sizeRead;
-			while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
-				stream.write(bytes, 0, sizeRead);
+				mediumFilePath = audioFileStorage.persistAudioFile(temporaryFile.getTemporaryFilePath(), id);
 			}
-			stream.flush();
-			stream.close();
 
 			// get data from ffmpeg
 			AudioInformation info = getAudioFileInfo(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/audio/" + tempName);
+				mediumFilePath);
 			// mediumAudio.setAudioCodec("");
 			mediumAudio.setLength(info.getDuration());
-
-			// rename file with medium
-			int mediumId = mediumAudio.getMediumId();
-			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + tempName);
-			File mediumDirectory = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + mediumId);
-			mediumDirectory.mkdir();
-			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + mediumId + "/" + mediumId + "-audio.mp3")); // TODO assume mp3 upload only
-			mediumAudio.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + mediumId	+ "/" + mediumId + "-audio.mp3");
+			mediumAudio.getMedium().setFilePath(mediumFilePath.toString());
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
@@ -3043,7 +3038,6 @@ public class EndpointMedium {
 			// mediumImage.setBitDepth(info.getBitdepth());
 			// mediumImage.getMedium().setFileExtension(info.getFileExtension());
 			// rename file with medium
-			String fileExtension = "png";
 			// convert and store jpeg image previews as png
 			int mediumId = mediumImage.getMediumId();
 			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
@@ -3140,81 +3134,39 @@ public class EndpointMedium {
 	@Secured
 	public Response uploadVideo(@PathParam("id") int id,
 															@FormDataParam("file") InputStream uploadedInputStream,
-															@FormDataParam("file") FormDataContentDisposition fileDetail) {
+															@FormDataParam("file") FormDataContentDisposition fileDetail) throws Exception {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumVideo mediumVideo = entityManager.find(MediumVideo.class, id);
+        int mediumId = mediumVideo.getMediumId();
 		if (mediumVideo == null) return Response.status(Status.NOT_FOUND).build();
 
 		if ( mediumVideo.getMedium().getFileStatus().compareTo("noFile") != 0 )
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Video file already exists").build();
 
 		try {
-
 			// TODO assume MP4 upload only
-			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
-				+ "-upload.mp4";
-			File uploadTempFile = new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + tempName);
-			//TODO: Use Path api + create sub directories when necessary
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
-			byte[] bytes = new byte[1024];
-			int sizeRead;
-			while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
-				stream.write(bytes, 0, sizeRead);
+			java.nio.file.Path originalVideoFilePath;
+			try(TemporaryFile uploadTempFile = temporaryFileStorage.createTemporaryFile()){
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile.getTemporaryFilePath().toFile()));
+				byte[] bytes = new byte[1024];
+				int sizeRead;
+				while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
+					stream.write(bytes, 0, sizeRead);
+				}
+				stream.flush();
+				stream.close();
+
+                originalVideoFilePath = videoFileStorage.persistOriginalVideoFile(uploadTempFile.getTemporaryFilePath(), mediumId);
 			}
-			stream.flush();
-			stream.close();
-			/*
-			 * int read = 0; byte[] bytes = new byte[1024];
-			 *
-			 * while ((read = uploadedInputStream.read(bytes)) != -1) { out.write(bytes, 0,
-			 * read); out.flush(); } out.close();
-			 */
-			// persist mediumVideo changes
-			// TODO load from config
-			// MediaType mt = entityManager.find(MediaType.class, 6);
-			// Language lang = entityManager.find(Language.class, 1);
-
-			/*
-			Title title = new Title();
-			title.setLanguage(lang);
-			title.setName(fileDetail.getFileName().substring(0, fileDetail.getFileName().length() - 4));
-			*/
-
-			// mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "medium/video/" + tempName);
-			// mediumVideo.getMedium().setMediaType(mt);
 
 			// get data from ffmpeg
-			VideoInformation info = getVideoFileInfo(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + tempName
-			);
+			VideoInformation info = getVideoFileInfo(originalVideoFilePath);
 			mediumVideo.setWidth(info.getWidth());
 			mediumVideo.setHeight(info.getHeight());
 			mediumVideo.setFrameRate(info.getFramerate());
 			mediumVideo.setVideoCodec("");
-			mediumVideo.setLength(info.getDuration());
 
-			/*
-			EntityTransaction entityTransaction = entityManager.getTransaction();
-			entityTransaction.begin();
-			entityManager.persist(mediumVideo);
-			entityManager.persist(mediumVideo.getMedium());
-			entityManager.flush();
-			entityTransaction.commit();
-			entityManager.refresh(mediumVideo);
-			*/
-
-			// rename file with medium
-			int mediumId = mediumVideo.getMediumId();
-			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + tempName);
-			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + mediumId + "-video-original.mp4")); // TODO assume mp4 upload only
-			mediumVideo.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + mediumId	+ "-video-original.mp4");
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
@@ -3226,19 +3178,9 @@ public class EndpointMedium {
 			entityTransaction.commit();
 			entityManager.refresh(mediumVideo);
 
-			createVideoThumbnails(mediumId, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + mediumId + "-video-original.mp4");
+			createVideoThumbnails(mediumId, originalVideoFilePath);
 
-			// start transcoding video
-			// TODO refactor
-			// transcoding now done by external cron job
-//			newMedium.setStatus("transcoding");
-//			newMedium.setViewToken(issueFileToken(newMedium.getId()));
-/*			TranscoderThread videoTranscoder = new TranscoderThread(mediumVideo.getMediumId(),
-					TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION) + "medium/video/" + mediumVideo.getMediumId()
-							+ "-video-original.mp4");
-			videoTranscoder.start();
-*/
+			taskService.executeMediumAudioAnalysisTask(mediumId);
 			// add log entry
 			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 					UserLogManager.LogEvents.MEDIUMCREATED);
@@ -3478,6 +3420,7 @@ public class EndpointMedium {
 		return Response.ok().entity(image).build();
 	}
 
+	// TODO: Usage of MediumFileStorage to access image files
 	@HEAD
 	@Path("image/{id}/download")
 	@Produces({"image/png","image/jpeg"})
@@ -3601,7 +3544,7 @@ public class EndpointMedium {
 	 * @return
 	 */
 	@GET
-  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+    @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}/analysisLists")
 	@Secured
 	public Response getMediumAnalysisLists(@PathParam("id") int mediumId,
@@ -3634,7 +3577,7 @@ public class EndpointMedium {
 	}
 
 	@POST
-  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+    @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{mediumId}/tag/{tagId}")
 	@Secured
 	public Response addExistingTag(@PathParam("mediumId") int mediumId,
@@ -4005,7 +3948,7 @@ public class EndpointMedium {
 		return fileStatus;
 	}
 
-	private AudioInformation getAudioFileInfo(String filename) throws IOException {
+	private AudioInformation getAudioFileInfo(java.nio.file.Path mediumFilePath) throws IOException {
 		Runtime r = Runtime.getRuntime();
 		Process p;     // Process tracks one external native process
 		BufferedReader is;  // reader for output of process
@@ -4015,7 +3958,7 @@ public class EndpointMedium {
 		"-v", "error", "-select_streams", "v:0",
 		"-show_entries", "stream=r_frame_rate,codec_name",
 		"-show_entries", "format=duration", "-sexagesimal",
-		"-of", "json", filename };
+		"-of", "json", mediumFilePath.toString() };
 		AudioInformation audioInfo = new AudioInformation(0, "");
 
 		try {
@@ -4122,7 +4065,7 @@ public class EndpointMedium {
 		// return imageInfo;
 }
 
-	private VideoInformation getVideoFileInfo(String filename) {
+	private VideoInformation getVideoFileInfo(java.nio.file.Path mediumFilePath) throws IOException {
 		Runtime r = Runtime.getRuntime();
 		Process p;     // Process tracks one external native process
 		BufferedReader is;  // reader for output of process
@@ -4132,7 +4075,7 @@ public class EndpointMedium {
 		"-v", "error", "-select_streams", "v:0",
 		"-show_entries", "stream=width,height,r_frame_rate,codec_name",
 		"-show_entries", "format=duration", "-sexagesimal",
-		"-of", "json", filename };
+		"-of", "json", mediumFilePath.toString() };
 		VideoInformation videoInfo = new VideoInformation(0, 0, 25, 0, "");
 
 		try {
@@ -4179,32 +4122,29 @@ public class EndpointMedium {
 		return resizedImage;
 	}
 
-	private void createVideoThumbnails(int id, String filename) {
-		File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/video/" + id);
-		if ( !videoDir.exists() ) videoDir.mkdirs();
-
+	private void createVideoThumbnails(int mediumId, java.nio.file.Path mediumFilePath) throws Exception {
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
 
-	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
-	    "-i", filename,
-	    "-ss", "00:00:01.000", // timecode of thumbnail
-	    "-vframes", "1", "-y",
-			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "/" + id + "-thumb.png" };
+        try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
+            String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
+                    "-i", mediumFilePath.toString(),
+                    "-ss", "00:00:01.000", // timecode of thumbnail
+                    "-vframes", "1", "-y",
+                    temporaryFile.toString()};
 
-	    try {
-			p = r.exec(commandLine);
-		    try {
-			      p.waitFor();  // wait for process to complete
-			    } catch (InterruptedException e) {
-			      System.err.println(e);  // "Can'tHappen"
-			    }
-		    } catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+            p = r.exec(commandLine);
+            try {
+                p.waitFor();  // wait for process to complete
+            } catch (InterruptedException e) {
+                System.err.println(e);  // "Can'tHappen"
+            }
+
+			videoFileStorage.persistThumbnailFile(temporaryFile.getTemporaryFilePath(), mediumId);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 	}
 
 	private void createAudioWaveform(int id, String filename, String mediumType) {

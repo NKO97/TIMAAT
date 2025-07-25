@@ -16,9 +16,6 @@
 
 package de.bitgilde.TIMAAT;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Contains the constant values for the yenda.properties file.
  *
@@ -26,44 +23,26 @@ import java.util.List;
  * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
 public enum PropertyConstants {
-    STORAGE_LOCATION ("storage.location"),
-    DATABASE_DRIVER ("database.driver"),
-    DATABASE_URL ("database.url"),
-    DATABASE_USER ("database.user"),
-    DATABASE_PASSWORD ("database.password"),
-    FFMPEG_LOCATION ("app.ffmpeg.location"),
+    STORAGE_LOCATION("storage.location"),
+    STORAGE_TEMP_LOCATION("storage.temp.location"),
+    DATABASE_DRIVER("database.driver"),
+    DATABASE_URL("database.url"),
+    DATABASE_USER("database.user"),
+    DATABASE_PASSWORD("database.password"),
+    FFMPEG_LOCATION("app.ffmpeg.location"),
     IMAGEMAGICK_LOCATION("app.imagemagic.location"),
-	SERVER_NAME ("server.name");
+    TASK_MAX_PARALLEL_COUNT("app.task.maxParallelCount"),
+    TASK_CORE_PARALLEL_COUNT("app.task.coreParallelCount"),
+    TASK_QUEUE_SIZE("app.task.queueSize"),
+    SERVER_NAME("server.name");
 
     private final String propertyKey;
-    private final List<String> permissibleValues;
 
-    PropertyConstants( String propertyKey ) {
+    PropertyConstants(String propertyKey) {
         this.propertyKey = propertyKey;
-        this.permissibleValues = null;
-    }
-
-    /**
-     * With this constructor it is possible to set a list of permissible
-     * values for a particular property.
-     *
-     * @param propertyKey
-     * @param permissibleValues
-     */
-    PropertyConstants( String propertyKey , String[] permissibleValues ) {
-        this.propertyKey = propertyKey;
-        this.permissibleValues = Arrays.asList(permissibleValues);
     }
 
     public String key() {
         return propertyKey;
-    }
-
-    public Boolean isPermissibleValue(String strValue) {
-        if( permissibleValues != null ){
-            return permissibleValues.contains(strValue);
-        }
-        else
-            return false;
     }
 }

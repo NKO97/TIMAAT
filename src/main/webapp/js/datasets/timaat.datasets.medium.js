@@ -3388,9 +3388,6 @@
 				case 'audio':
 					model = {
 						mediumId: 0,
-						audioCodecInformation: { // TODO get correct audio codec information
-							id: 1,
-						},
 						audioPostProduction: {
 							id: 0,
 							audioPostProductionTranslations: [{
@@ -3428,9 +3425,6 @@
 				case 'video':
 					model = {
 						mediumId: 0,
-						audioCodecInformation: { // TODO get correct audio codec information
-							id: 1,
-						},
 						length: formDataObject.length,
 						videoCodec: "", // TODO video codec neither implemented nor displayed in UI
 						width: formDataObject.width,
