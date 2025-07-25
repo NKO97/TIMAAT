@@ -35,7 +35,7 @@ public class VideoFileStorage {
     private final Path videoStoragePath;
 
     public VideoFileStorage(Path storageRootPath) {
-        this.videoStoragePath = storageRootPath.resolve("video");
+        this.videoStoragePath = storageRootPath.resolve("medium").resolve("video");
     }
 
     /**

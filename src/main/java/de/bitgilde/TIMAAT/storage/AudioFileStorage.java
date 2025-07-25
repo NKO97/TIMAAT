@@ -34,7 +34,7 @@ public class AudioFileStorage {
     private final Path audioStoragePath;
 
     public AudioFileStorage(Path rootStoragePath) {
-        this.audioStoragePath = rootStoragePath.resolve("audio");
+        this.audioStoragePath = rootStoragePath.resolve("medium").resolve("audio");
     }
 
     /**
@@ -64,7 +64,7 @@ public class AudioFileStorage {
      * @param mediumId which audiofile path path will be returned
      * @return an {@link Optional} containing the {@link Path} if file is existing
      */
-    public Optional<Path> getPathToOriginalVideoFile(int mediumId) {
+    public Optional<Path> getPathToAudioFile(int mediumId) {
         Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
         Path mediumFilePath = createAudioFilePath(mediumDirectoryPath, mediumId);
 

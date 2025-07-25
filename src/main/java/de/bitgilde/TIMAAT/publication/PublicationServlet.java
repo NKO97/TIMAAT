@@ -1,16 +1,7 @@
 package de.bitgilde.TIMAAT.publication;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.FIPOP.MediaCollectionHasMedium;
@@ -18,7 +9,10 @@ import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.Publication;
 import de.bitgilde.TIMAAT.model.publication.PublicationSettings;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
-import de.bitgilde.TIMAAT.rest.endpoint.EndpointMedium;
+import de.bitgilde.TIMAAT.storage.AudioFileStorage;
+import de.bitgilde.TIMAAT.storage.ImageFileStorage;
+import de.bitgilde.TIMAAT.storage.VideoFileStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.GET;
@@ -35,6 +29,14 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,6 +66,15 @@ public class PublicationServlet {
 	ContainerRequestContext containerRequestContext;
 	@Context
 	ServletContext servletContext;
+
+	@Inject
+	private AudioFileStorage audioFileStorage;
+
+	@Inject
+	private ImageFileStorage imageFileStorage;
+
+	@Inject
+	private VideoFileStorage videoFileStorage;
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -323,24 +334,32 @@ public class PublicationServlet {
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
 		if (medium.getMediumVideo() != null) {
-			if ( EndpointMedium.mediumFileStatus(itemID, "video").compareTo("waiting") == 0 || EndpointMedium.mediumFileStatus(itemID, "video").compareTo("transcoding") == 0 )
-				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + itemID + "-video-original.mp4", headers, itemID+".mp4");
-			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + itemID + "/" + itemID + "-video.mp4", headers, "video/mp4");
+			Optional<java.nio.file.Path> convertedFilePath = videoFileStorage.getPathToConvertedVideoFile(itemID);
+			if (convertedFilePath.isPresent()) {
+				return downloadFile(convertedFilePath.get(), headers);
+			}
+
+			Optional<java.nio.file.Path> originalFilePath = videoFileStorage.getPathToOriginalVideoFile(itemID);
+			if (originalFilePath.isPresent()) {
+				return downloadFile(originalFilePath.get(), headers);
+			}
 		} else if (medium.getMediumImage() != null) {
-			if ( EndpointMedium.mediumFileStatus(itemID, "image").compareTo("ready") != 0 )
-				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + itemID + "-image-original.png", headers, itemID+".png");
-			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + itemID + "/" + itemID + "-image-scaled.png", headers, itemID+".png");
+			Optional<java.nio.file.Path> scaledImageFilePath = imageFileStorage.getPathToScaledImage(itemID);
+			if (scaledImageFilePath.isPresent()) {
+				return downloadFile(scaledImageFilePath.get(), headers);
+			}
+
+			Optional<java.nio.file.Path> originalImageFilePath = imageFileStorage.getPathToOriginalImage(itemID);
+			if (originalImageFilePath.isPresent()) {
+				return downloadFile(originalImageFilePath.get(), headers);
+			}
 		} else if (medium.getMediumAudio() != null) {
-			if ( EndpointMedium.mediumFileStatus(itemID, "audio").compareTo("ready") != 0 )
-				return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/audio/" + itemID + "-audio.mp3", headers, itemID+".mp3");
-			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + itemID + "/" + itemID + "-audio.mp3", headers, itemID+".mp3");
-		} else return Response.status(Status.NOT_FOUND).build();
+			Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToAudioFile(itemID);
+			if (audioFilePath.isPresent()) {
+				return downloadFile(audioFilePath.get(), headers);
+			}
+		}
+		return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -374,11 +393,11 @@ public class PublicationServlet {
 		return Response.ok().entity(thumbnail).build();
 	}
 
-	private Response downloadFile(String fileName, HttpHeaders headers, String mimeType) {
+	private Response downloadFile(java.nio.file.Path path, HttpHeaders headers) {
 		Response response = null;
 
 		// Retrieve the file
-		File file = new File(fileName);
+		File file = path.toFile();
 
 		if (file.exists()) {
 			ResponseBuilder builder = Response.ok();

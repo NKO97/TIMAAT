@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.storage.AudioFileStorage;
+import de.bitgilde.TIMAAT.storage.ImageFileStorage;
 import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.VideoFileStorage;
 import de.bitgilde.TIMAAT.task.TaskService;
@@ -43,6 +44,7 @@ public class TIMAATBinder extends AbstractBinder {
             Path storageRootPath = Path.of(timaatProps.getProp(PropertyConstants.STORAGE_LOCATION));
             VideoFileStorage videoFileStorage = new VideoFileStorage(storageRootPath);
             AudioFileStorage audioFileStorage = new AudioFileStorage(storageRootPath);
+            ImageFileStorage imageFileStorage = new ImageFileStorage(storageRootPath);
 
             Path storageTempPath = Path.of(timaatProps.getProp(PropertyConstants.STORAGE_TEMP_LOCATION));
             TemporaryFileStorage temporaryFileStorage = new TemporaryFileStorage(storageTempPath);
@@ -51,6 +53,7 @@ public class TIMAATBinder extends AbstractBinder {
             bind(videoFileStorage).to(VideoFileStorage.class);
             bind(temporaryFileStorage).to(TemporaryFileStorage.class);
             bind(audioFileStorage).to(AudioFileStorage.class);
+            bind(imageFileStorage).to(ImageFileStorage.class);
         } catch (InstantiationException e) {
             logger.log(Level.SEVERE, "Error during instantiating necessary components", e);
             throw new RuntimeException(e);

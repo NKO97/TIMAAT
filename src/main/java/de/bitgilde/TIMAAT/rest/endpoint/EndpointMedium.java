@@ -41,6 +41,8 @@ import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.AudioFileStorage;
+import de.bitgilde.TIMAAT.storage.ImageFileStorage;
+import de.bitgilde.TIMAAT.storage.ImageFileStorage.ImageFileType;
 import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.TemporaryFileStorage.TemporaryFile;
 import de.bitgilde.TIMAAT.storage.VideoFileStorage;
@@ -95,8 +97,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /*
@@ -133,6 +135,8 @@ public class EndpointMedium {
 	private TemporaryFileStorage temporaryFileStorage;
 	@Inject
 	private AudioFileStorage audioFileStorage;
+	@Inject
+	private ImageFileStorage imageFileStorage;
 
 
 	@GET
@@ -3008,44 +3012,26 @@ public class EndpointMedium {
 			return Response.status(Status.FORBIDDEN).entity("ERROR::Image file already exists").build();
 
 		try {
-			boolean isJPG = fileDetail.getFileName().toLowerCase().endsWith(".jpg");
+			ImageFileType imageFileType = fileDetail.getFileName().toLowerCase().endsWith(".jpg") ? ImageFileType.JPG : ImageFileType.PNG;
 
-			String tempExtension = ".png";
-			if ( isJPG ) tempExtension = ".jpg";
+            java.nio.file.Path mediumFilePath;
+            try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(temporaryFile.getTemporaryFilePath().toFile()));
+                byte[] bytes = new byte[1024];
+                int sizeRead;
+                while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
+                    stream.write(bytes, 0, sizeRead);
+                }
+                stream.flush();
+                stream.close();
 
-			String tempName = ThreadLocalRandom.current().nextInt(1, 65535) + System.currentTimeMillis()
-					+ "-upload"+tempExtension;
-			File uploadTempFile = new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + tempName);
-
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadTempFile));
-			byte[] bytes = new byte[1024];
-			int sizeRead;
-			while ((sizeRead = uploadedInputStream.read(bytes, 0, 1024)) > 0) {
-				stream.write(bytes, 0, sizeRead);
-			}
-			stream.flush();
-			stream.close();
+                mediumFilePath = imageFileStorage.persistOriginalImageFile(temporaryFile.getTemporaryFilePath(), id, imageFileType);
+            }
 
 			// get image metadata
-			ImageInformation info = getImageFileInfo( new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + tempName)
-			);
+			ImageInformation info = getImageFileInfo(mediumFilePath, imageFileType);
 			mediumImage.setWidth(info.getWidth());
 			mediumImage.setHeight(info.getHeight());
-			// mediumImage.setBitDepth(info.getBitdepth());
-			// mediumImage.getMedium().setFileExtension(info.getFileExtension());
-			// rename file with medium
-			// convert and store jpeg image previews as png
-			int mediumId = mediumImage.getMediumId();
-			File tempFile = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + tempName);
-			tempFile.renameTo(new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumId + "-image-original" + tempExtension));
-			mediumImage.getMedium().setFilePath(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumId + "-image-original" + tempExtension);
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
 			entityTransaction.begin();
@@ -3056,10 +3042,6 @@ public class EndpointMedium {
 			entityManager.flush();
 			entityTransaction.commit();
 			entityManager.refresh(mediumImage);
-
-			File imageDirectory =	new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/image/" + mediumId);
-			imageDirectory.mkdir();
 
 			double width = mediumImage.getWidth();
 			double height = mediumImage.getHeight();
@@ -3078,18 +3060,17 @@ public class EndpointMedium {
 				targetWidth = (int)Math.floor(width * scaleFactor);
 				targetHeight = 90;
 			}
-			if (targetHeight > 0 && targetWidth > 0) {
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
-				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
-				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
-			} else { // original image is smaller than thumbnail dimensions
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
-				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "/" + mediumId + "-image-thumb.png"));
-			}
+
+            try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
+                BufferedImage bufferedImage = ImageIO.read(mediumFilePath.toFile());
+                if (targetHeight > 0 && targetWidth > 0) {
+                    bufferedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
+                }
+                ImageIO.write(bufferedImage, "png", temporaryFile.getTemporaryFilePath().toFile());
+                imageFileStorage.persistThumbnailImageFile(temporaryFile.getTemporaryFilePath(), id);
+            }
+
+
 			targetHeight = 0;
 			targetWidth = 0;
 			// create scaled image for default view
@@ -3102,18 +3083,15 @@ public class EndpointMedium {
 				targetWidth = (int)Math.floor(width * scaleFactor);
 				targetHeight = 480;
 			}
-			if (targetHeight > 0 && targetWidth > 0) {
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
-				BufferedImage resizedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
-				ImageIO.write(resizedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
-			} else { // original image is smaller than 480p dimensions
-				BufferedImage bufferedImage = ImageIO.read(new File (TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "-image-original" + tempExtension));
-				ImageIO.write(bufferedImage, "png", new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + mediumId + "/" + mediumId + "-image-scaled.png"));
-			}
+
+            try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
+                BufferedImage bufferedImage = ImageIO.read(mediumFilePath.toFile());
+                if (targetHeight > 0 && targetWidth > 0) {
+                    bufferedImage = resizeImage(bufferedImage, targetWidth, targetHeight);
+                }
+                ImageIO.write(bufferedImage, "png", temporaryFile.getTemporaryFilePath().toFile());
+                imageFileStorage.persistScaledImageFile(temporaryFile.getTemporaryFilePath(), id);
+            }
 
 			mediumImage.getMedium().setViewToken(issueFileToken(mediumImage.getMediumId()));
 			// add log entry
@@ -3206,17 +3184,20 @@ public class EndpointMedium {
 		} catch (Exception e) {
 			return Response.status(401).build();
 		}
-		if ( tokenMediumID != id ) return Response.status(401).build();
-			if ( mediumFileStatus(id, "audio").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-			File file = new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/audio/" + id + "/" + id + "-audio.mp4");
 
-		return Response.ok()
-			.status( Response.Status.PARTIAL_CONTENT )
-			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
-			.header( "Accept-Ranges", "bytes" )
-			.build();
+		if ( tokenMediumID != id ) return Response.status(401).build();
+
+        Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToAudioFile(id);
+        if(audioFilePath.isPresent()) {
+            File audioFile  = audioFilePath.get().toFile();
+            return Response.ok()
+                    .status( Response.Status.PARTIAL_CONTENT )
+                    .header( HttpHeaders.CONTENT_LENGTH, audioFile.length() )
+                    .header( "Accept-Ranges", "bytes" )
+                    .build();
+        }
+
+        return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@HEAD
@@ -3234,16 +3215,27 @@ public class EndpointMedium {
 			return Response.status(401).build();
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
-			if ( mediumFileStatus(id, "video").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-			File file = new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + id + "/" + id + "-video.mp4");
+        Optional<java.nio.file.Path> convertedVideoFilePath = videoFileStorage.getPathToConvertedVideoFile(id);
+        if ( convertedVideoFilePath.isPresent() ) {
+            File file = convertedVideoFilePath.get().toFile();
+            return Response.ok()
+                    .status( Response.Status.PARTIAL_CONTENT )
+                    .header( HttpHeaders.CONTENT_LENGTH, file.length() )
+                    .header( "Accept-Ranges", "bytes" )
+                    .build();
+        }
 
-		return Response.ok()
-			.status( Response.Status.PARTIAL_CONTENT )
-			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
-			.header( "Accept-Ranges", "bytes" )
-			.build();
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalVideoFile(id);
+        if(originalVideoFilePath.isPresent()) {
+            File file = originalVideoFilePath.get().toFile();
+            return Response.ok()
+                    .status( Response.Status.PARTIAL_CONTENT )
+                    .header( HttpHeaders.CONTENT_LENGTH, file.length() )
+                    .header( "Accept-Ranges", "bytes" )
+                    .build();
+        }
+
+        return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -3271,14 +3263,12 @@ public class EndpointMedium {
 		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
-		if ( mediumFileStatus(id, "audio").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
+        Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToAudioFile(id);
+        if(audioFilePath.isPresent()) {
+            return downloadFile(audioFilePath.get(), headers, id + ".mp3");
+        }
 
-		if ( mediumFileStatus(id, "audio").compareTo("ready") != 0 )
-			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/audio/" + id + "-audio.mp3", headers, id+".mp3");
-
-		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/audio/" + id + "/" + id + "-audio.mp3", headers, id+".mp3"); // currently no mp3 conversion
+        return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -3302,27 +3292,16 @@ public class EndpointMedium {
 		Medium m = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
 		if ( m == null ) return Response.status(Status.NOT_FOUND).build();
 
-		if ( mediumFileStatus(id, "video").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
+		Optional<java.nio.file.Path> convertedVideoFilePath = videoFileStorage.getPathToConvertedVideoFile(id);
+		if ( convertedVideoFilePath.isPresent() ) {
+			return downloadFile(convertedVideoFilePath.get(), headers, id+".mp3");
+		}
 
-		if ( mediumFileStatus(id, "video").compareTo("waiting") == 0 || mediumFileStatus(id, "video").compareTo("transcoding") == 0 )
-			return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "-video-original.mp4", headers, id+".mp4");
-
-		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/video/" + id + "/" + id + "-video.mp4", headers, id+".mp4");
-	}
-
-	@GET
-	@Path("{type}/{id}/status")
-	@Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
-	@Secured
-	public Response updateFileStatus(@PathParam("type") String type,
-																	 @PathParam("id") int id) {
-		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/" + type + "/" + id);
-		// if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
-
-		return Response.ok().entity(mediumFileStatus(id, type)).build();
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalVideoFile(id);
+        if(originalVideoFilePath.isPresent()) {
+            return downloadFile(originalVideoFilePath.get(), headers, id+".mp3");
+        }
+        return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -3413,11 +3392,10 @@ public class EndpointMedium {
 			return Response.status(401).build();
 		}
 
-		File image = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/image/" + id + "/" + id + "-image-thumb.png");
-		if ( !image.exists() || !image.canRead() ) image = new File(servletContext.getRealPath("img/preview-placeholder.png"));
+        Optional<java.nio.file.Path> videoThumbnail = videoFileStorage.getPathToThumbnailFile(id);
+        java.nio.file.Path thumbnailPath = videoThumbnail.orElse(java.nio.file.Path.of(servletContext.getRealPath("img/preview-placeholder.png")));
 
-		return Response.ok().entity(image).build();
+        return Response.ok().entity(thumbnailPath.toFile()).build();
 	}
 
 	// TODO: Usage of MediumFileStorage to access image files
@@ -3436,16 +3414,27 @@ public class EndpointMedium {
 			return Response.status(401).build();
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
-			if ( mediumFileStatus(id, "image").compareTo("ready") != 0 ) return Response.status(Status.NOT_FOUND).build();
-			File file = new File(
-				TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + id + "/" + id + "-image-scaled.png");
 
-		return Response.ok()
-			.status( Response.Status.PARTIAL_CONTENT )
-			.header( HttpHeaders.CONTENT_LENGTH, file.length() )
-			.header( "Accept-Ranges", "bytes" )
-			.build();
+		Optional<java.nio.file.Path> scaledImagePath = imageFileStorage.getPathToScaledImage(id);
+		if(scaledImagePath.isPresent()) {
+			File file =  scaledImagePath.get().toFile();
+			return Response.ok()
+					.status( Response.Status.PARTIAL_CONTENT )
+					.header( HttpHeaders.CONTENT_LENGTH, file.length() )
+					.header( "Accept-Ranges", "bytes" )
+					.build();
+		}
+
+		Optional<java.nio.file.Path> originalImagePath =  imageFileStorage.getPathToOriginalImage(id);
+		if(originalImagePath.isPresent()) {
+			File file =  originalImagePath.get().toFile();
+			return Response.ok()
+					.status( Response.Status.PARTIAL_CONTENT )
+					.header( HttpHeaders.CONTENT_LENGTH, file.length() )
+					.header( "Accept-Ranges", "bytes" )
+					.build();
+		}
+		return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -3473,19 +3462,16 @@ public class EndpointMedium {
 		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
-		if ( mediumFileStatus(id, "image").compareTo("noFile") == 0 ) return Response.status(Status.NOT_FOUND).build();
-
-		if ( mediumFileStatus(id, "image").compareTo("ready") != 0 ) {
-			if ( new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + id + "-image-original.png").exists() ) return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + id + "-image-original.png", headers, id+".png");
-			else return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/image/" + id + "-image-original.jpg", headers, id+".jpg");
-
+		Optional<java.nio.file.Path> scaledImagePath = imageFileStorage.getPathToScaledImage(id);
+		if(scaledImagePath.isPresent()) {
+			return downloadFile(scaledImagePath.get(), headers, id + ".png");
 		}
 
-		return downloadFile(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/image/" + id + "/" + id + "-image-scaled.png", headers, id+".png");
+		Optional<java.nio.file.Path> originalImagePath =  imageFileStorage.getPathToOriginalImage(id);
+		if(originalImagePath.isPresent()) {
+			return downloadFile(originalImagePath.get(), headers, id + ".png");
+		}
+		return Response.status(Status.NOT_FOUND).build();
 	}
 
 	@GET
@@ -3493,8 +3479,7 @@ public class EndpointMedium {
 	@Produces("image/jpg")
 	public Response getVideoThumbnail(
 			@PathParam("id") int id,
-			@QueryParam("token") String fileToken,
-			@QueryParam("time") String milliseconds) {
+			@QueryParam("token") String fileToken) {
 
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -3506,36 +3491,10 @@ public class EndpointMedium {
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
-		int seconds = -1;
-		if ( milliseconds != null ) try {
-			seconds = (int) (Integer.parseInt(milliseconds) / 1000);
-		} catch (NumberFormatException e) { seconds = -1; };
-		if ( seconds >= 0 ) seconds++;
+		Optional<java.nio.file.Path> videoThumbnail = videoFileStorage.getPathToThumbnailFile(id);
+		java.nio.file.Path thumbnailPath = videoThumbnail.orElse(java.nio.file.Path.of(servletContext.getRealPath("img/preview-placeholder.png")));
 
-		if ( seconds < 0 ) {
-			// load thumbnail from storage
-/*
-			File videoDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "medium/video/" +id);
-			if ( !videoDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
- */
-			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "/" + id + "-thumb.png");
-			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
-
-			return Response.ok().entity(thumbnail).build();
-		} else {
-			// load timecode thumbnail from storage
-/*
-			File frameDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)+ "medium/video/" +id+"/frames");
-			if ( !frameDir.exists() ) return Response.status(Status.NOT_FOUND).build(); // save DB lookup
-*/
-
-			File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/video/" + id + "/frames/" + id + "-frame-" + String.format("%05d", seconds) + ".jpg");
-			if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
-
-			return Response.ok().entity(thumbnail).build();
-		}
+		return Response.ok().entity(thumbnailPath.toFile()).build();
 	}
 
 	/**
@@ -3846,15 +3805,11 @@ public class EndpointMedium {
 		return Response.ok().build();
 }
 
-	private Response downloadFile(String fileName, HttpHeaders headers) {
-		return downloadFile(fileName, headers, null);
-	}
-
-	private Response downloadFile(String fileName, HttpHeaders headers, String asFile) {
+	private Response downloadFile(java.nio.file.Path filePath, HttpHeaders headers, String asFile) {
 		Response response = null;
 
 		// Retrieve the file
-		File file = new File(fileName);
+		File file = filePath.toFile();
 
 		if (file.exists()) {
 			String fileExtension = file.getName().substring(file.getName().lastIndexOf('.')+1);
@@ -3914,7 +3869,7 @@ public class EndpointMedium {
 
 		return response;
 	}
-
+	//TODO: In future versions another mechanism should be found for that, so the storages are the only components knowing the paths to the files
 	public static String mediumFileStatus(int id, String type) {
 		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)	+ "medium/" + type + "/" + id);
 		String fileStatus = "noFile";
@@ -3932,12 +3887,12 @@ public class EndpointMedium {
 				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
 			break;
 			case "image":
-				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() || new File(mediumDir + "-" + type + "-original." + "jpg" ).exists() ) fileStatus = "uploaded";
+				if ( new File(mediumDir + "/" + id + "-" + type + "-original." + fileExtension ).exists() || new File(mediumDir + "-" + type + "-original." + "jpg" ).exists() ) fileStatus = "uploaded";
 				if ( new File(mediumDir + "/" + id + "-" + type + "-thumb." + fileExtension ).exists() ) fileStatus = "thumbCreated";
 				if ( new File(mediumDir + "/" + id + "-" + type + "-scaled." + fileExtension ).exists() ) fileStatus = "ready";
 			break;
 			case "video":
-				if ( new File(mediumDir + "-" + type + "-original." + fileExtension ).exists() ) fileStatus = "waiting";
+				if ( new File(mediumDir + "/" + id + "-" +  type + "-original." + fileExtension ).exists() ) fileStatus = "waiting";
 				if ( new File(mediumDir + "/" + id + "-" + type + "." + fileExtension ).exists() ) fileStatus = "ready";
 				if ( new File(mediumDir + "/" + id + "-transcoding.pid" ).exists() ) fileStatus = "transcoding";
 			break;
@@ -3992,17 +3947,14 @@ public class EndpointMedium {
 		return audioInfo;
 	}
 
-	private ImageInformation getImageFileInfo(File imgFile) throws IOException {
-		int pos = imgFile.getName().lastIndexOf(".");
-		if (pos == -1)
-			throw new IOException("No extension for file: " + imgFile.getAbsolutePath());
-		String suffix = imgFile.getName().substring(pos + 1);
+	private ImageInformation getImageFileInfo(java.nio.file.Path imagePath, ImageFileType imageFileType) throws IOException {
+		String suffix = imageFileType.getFileSuffix();
 		ImageInformation imageInfo = new ImageInformation(0, 0, "0", "");
 		Iterator<ImageReader> iter = ImageIO.getImageReadersBySuffix(suffix);
 		while(iter.hasNext()) {
 			ImageReader reader = iter.next();
 			try {
-				ImageInputStream stream = new FileImageInputStream(imgFile);
+				ImageInputStream stream = new FileImageInputStream(imagePath.toFile());
 				reader.setInput(stream);
 				int width = reader.getWidth(reader.getMinIndex());
 				int height = reader.getHeight(reader.getMinIndex());
@@ -4019,12 +3971,12 @@ public class EndpointMedium {
 				// imageInfo.setBitDepth(bitDepth);
 				return imageInfo;
 			} catch (IOException e) {
-				System.out.println("Error reading: " + imgFile.getAbsolutePath() + e);
+				System.out.println("Error reading: " + imagePath + e);
 			} finally {
 				reader.dispose();
 			}
 		}
-		throw new IOException("Not a known image file: " + imgFile.getAbsolutePath());
+		throw new IOException("Not a known image file: " + imagePath);
 		// Runtime r = Runtime.getRuntime();
 		// Process p;     // Process tracks one external native process
 		// BufferedReader is;  // reader for output of process
