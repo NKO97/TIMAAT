@@ -5,7 +5,7 @@ import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysisState;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis;
-import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask;
+import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskState;
 import de.bitgilde.TIMAAT.task.exception.TaskStorageException;
@@ -61,8 +61,8 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
         logger.log(Level.FINE, "Start persisting task of type {0}", task.getTaskType());
         try {
             switch (task.getTaskType()) {
-                case MEDIUM_AUDIO_ANALYSIS:
-                    persistMediumAudioAnalysisTask((MediumAudioAnalysisTask) task);
+                case VIDEO_AUDIO_ANALYSIS:
+                    persistMediumAudioAnalysisTask((VideoAudioAnalysisTask) task);
                     break;
             }
         } catch (Exception e) {
@@ -76,8 +76,8 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
         logger.log(Level.FINE, "Start updating task state to {0}", taskState);
         try {
             switch (task.getTaskType()) {
-                case MEDIUM_AUDIO_ANALYSIS:
-                    updateMediumAudioAnalysisTaskState((MediumAudioAnalysisTask) task, taskState);
+                case VIDEO_AUDIO_ANALYSIS:
+                    updateMediumAudioAnalysisTaskState((VideoAudioAnalysisTask) task, taskState);
                     break;
             }
         } catch (Exception e) {
@@ -86,23 +86,23 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
 
     }
 
-    private Stream<MediumAudioAnalysisTask> loadUnfinishedMediumAudioAnalysisTasks() throws DbTransactionExecutionException {
+    private Stream<VideoAudioAnalysisTask> loadUnfinishedMediumAudioAnalysisTasks() throws DbTransactionExecutionException {
         logger.log(Level.FINE, "Loading unfinished medium audio analysis tasks");
         EntityManager entityManager = emf.createEntityManager();
         return entityManager.createQuery("select mediumAudioAnalysis.mediumId from MediumAudioAnalysis mediumAudioAnalysis where mediumAudioAnalysis.audioAnalysisState.id in :audioAnalysisStates", Integer.class)
                 .setParameter("audioAnalysisStates", Set.of(TaskState.RUNNING.getDatabaseId(), TaskState.PENDING.getDatabaseId()))
                 .getResultStream()
                 .onClose(entityManager::close)
-                .map(MediumAudioAnalysisTask::new);
+                .map(VideoAudioAnalysisTask::new);
     }
 
-    private void persistMediumAudioAnalysisTask(MediumAudioAnalysisTask mediumAudioAnalysisTask) throws DbTransactionExecutionException {
-        logger.log(Level.FINE, "Persist medium analysis task for medium having id {0}", mediumAudioAnalysisTask.getMediumId());
+    private void persistMediumAudioAnalysisTask(VideoAudioAnalysisTask videoAudioAnalysisTask) throws DbTransactionExecutionException {
+        logger.log(Level.FINE, "Persist medium analysis task for medium having id {0}", videoAudioAnalysisTask.getMediumId());
 
         executeDbTransaction(entityManager -> {
             //TODO: Work with ids instead of references to avoid get by id queries
             AudioAnalysisState audioAnalysisState = entityManager.find(AudioAnalysisState.class, TaskState.PENDING.getDatabaseId());
-            Medium medium = entityManager.find(Medium.class, mediumAudioAnalysisTask.getMediumId());
+            Medium medium = entityManager.find(Medium.class, videoAudioAnalysisTask.getMediumId());
 
             MediumAudioAnalysis mediumAudioAnalysis = new MediumAudioAnalysis();
             mediumAudioAnalysis.setMedium(medium);
@@ -113,11 +113,11 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
         });
     }
 
-    private void updateMediumAudioAnalysisTaskState(MediumAudioAnalysisTask mediumAudioAnalysisTask, TaskState taskState) throws DbTransactionExecutionException {
+    private void updateMediumAudioAnalysisTaskState(VideoAudioAnalysisTask videoAudioAnalysisTask, TaskState taskState) throws DbTransactionExecutionException {
         logger.log(Level.FINER, "Updating task state of medium analysis task to {0}", taskState);
 
         executeDbTransaction(entityManager -> {
-            MediumAudioAnalysis mediumAudioAnalysis = entityManager.find(MediumAudioAnalysis.class, mediumAudioAnalysisTask.getMediumId());
+            MediumAudioAnalysis mediumAudioAnalysis = entityManager.find(MediumAudioAnalysis.class, videoAudioAnalysisTask.getMediumId());
             AudioAnalysisState audioAnalysisState = entityManager.getReference(AudioAnalysisState.class, taskState.getDatabaseId());
             mediumAudioAnalysis.setAudioAnalysisState(audioAnalysisState);
 

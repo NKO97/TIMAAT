@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.di.binder;
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.storage.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.ImageFileStorage;
 import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
@@ -40,21 +41,30 @@ public class TIMAATBinder extends AbstractBinder {
             //TODO: Put the emf into the DI network instead of offering it as static varibale
             TIMAATApp.emf = initEntityManager();
 
-            TaskService taskService = initTaskService();
             Path storageRootPath = Path.of(timaatProps.getProp(PropertyConstants.STORAGE_LOCATION));
             VideoFileStorage videoFileStorage = new VideoFileStorage(storageRootPath);
             AudioFileStorage audioFileStorage = new AudioFileStorage(storageRootPath);
             ImageFileStorage imageFileStorage = new ImageFileStorage(storageRootPath);
 
+            Path pathToFfmpeg = Path.of(timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION));
+            FfmpegAudioEngine ffmpegAudioEngine = new FfmpegAudioEngine(pathToFfmpeg, pathToFfmpeg);
+
             Path storageTempPath = Path.of(timaatProps.getProp(PropertyConstants.STORAGE_TEMP_LOCATION));
             TemporaryFileStorage temporaryFileStorage = new TemporaryFileStorage(storageTempPath);
+
+            TaskStorage taskStorage = new DbTaskStorage(TIMAATApp.emf);
+            TaskExecutorFactory taskExecutorFactory = new TaskExecutorFactory(temporaryFileStorage, videoFileStorage, ffmpegAudioEngine);
+            TaskExecutorService taskExecutorService = new TaskExecutorService(Integer.parseInt(timaatProps.getProp(PropertyConstants.TASK_CORE_PARALLEL_COUNT)),
+                    Integer.parseInt(timaatProps.getProp(PropertyConstants.TASK_MAX_PARALLEL_COUNT)), Integer.parseInt(timaatProps.getProp(PropertyConstants.TASK_QUEUE_SIZE)),
+                    taskStorage, taskExecutorFactory);
+            TaskService taskService = new TaskService(taskStorage, taskExecutorService);
 
             bind(taskService).to(TaskService.class);
             bind(videoFileStorage).to(VideoFileStorage.class);
             bind(temporaryFileStorage).to(TemporaryFileStorage.class);
             bind(audioFileStorage).to(AudioFileStorage.class);
             bind(imageFileStorage).to(ImageFileStorage.class);
-        } catch (InstantiationException e) {
+        } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during instantiating necessary components", e);
             throw new RuntimeException(e);
         }
@@ -85,20 +95,5 @@ public class TIMAATBinder extends AbstractBinder {
             Logger.getLogger(PropertyManagement.class.getName()).log(Level.SEVERE, "TIMAAT::DB Init Error", e);
             throw new InstantiationException("TIMAAT::DB Error:Could not connect to DB. See server log for details.");
         }
-    }
-
-    private TaskService initTaskService() throws InstantiationException {
-        logger.log(Level.INFO, "Initializing task service");
-        try {
-            TaskStorage taskStorage = new DbTaskStorage(TIMAATApp.emf);
-            TaskExecutorFactory taskExecutorFactory = new TaskExecutorFactory();
-            TaskExecutorService taskExecutorService = new TaskExecutorService(Integer.parseInt(timaatProps.getProp(PropertyConstants.TASK_CORE_PARALLEL_COUNT)), Integer.parseInt(timaatProps.getProp(PropertyConstants.TASK_MAX_PARALLEL_COUNT)), Integer.parseInt(timaatProps.getProp(PropertyConstants.TASK_QUEUE_SIZE)), taskStorage, taskExecutorFactory);
-
-            return new TaskService(taskStorage, taskExecutorService);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error during initializing task service", e);
-            throw new InstantiationException("Error during initializing task service");
-        }
-
     }
 }

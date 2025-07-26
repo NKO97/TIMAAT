@@ -20,12 +20,12 @@ package de.bitgilde.TIMAAT.task.api;
  * @author Nico Kotlenga
  * @since 20.07.25
  */
-public class MediumAudioAnalysisTask extends Task {
+public class VideoAudioAnalysisTask extends Task {
 
     private final int mediumId;
 
-    public MediumAudioAnalysisTask(int mediumId) {
-        super(TaskType.MEDIUM_AUDIO_ANALYSIS);
+    public VideoAudioAnalysisTask(int mediumId) {
+        super(TaskType.VIDEO_AUDIO_ANALYSIS);
         this.mediumId = mediumId;
     }
 

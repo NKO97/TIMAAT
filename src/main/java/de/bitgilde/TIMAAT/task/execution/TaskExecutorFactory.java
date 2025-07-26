@@ -1,6 +1,9 @@
 package de.bitgilde.TIMAAT.task.execution;
 
-import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask;
+import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.VideoFileStorage;
+import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskType;
 
@@ -26,10 +29,20 @@ import de.bitgilde.TIMAAT.task.api.TaskType;
  */
 public class TaskExecutorFactory {
 
+    private final TemporaryFileStorage temporaryFileStorage;
+    private final VideoFileStorage videoFileStorage;
+    private final FfmpegAudioEngine audioEngine;
+
+    public TaskExecutorFactory(TemporaryFileStorage temporaryFileStorage, VideoFileStorage videoFileStorage, FfmpegAudioEngine audioEngine) {
+        this.temporaryFileStorage = temporaryFileStorage;
+        this.videoFileStorage = videoFileStorage;
+        this.audioEngine = audioEngine;
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends Task> TaskExecutor<T> createTaskExecutor(T task) {
-        if (TaskType.MEDIUM_AUDIO_ANALYSIS.equals(task.getTaskType())) {
-            return (TaskExecutor<T>) new MediumAudioAnalysisTaskExecutor((MediumAudioAnalysisTask) task);
+        if (TaskType.VIDEO_AUDIO_ANALYSIS.equals(task.getTaskType())) {
+            return (TaskExecutor<T>) new VideoAudioAnalysisTaskExecutor(temporaryFileStorage, (VideoAudioAnalysisTask) task, videoFileStorage, audioEngine);
         }
         return null;
     }

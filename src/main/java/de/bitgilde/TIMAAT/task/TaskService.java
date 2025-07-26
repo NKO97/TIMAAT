@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.task;
 
-import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask;
+import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.exception.TaskServiceException;
 import de.bitgilde.TIMAAT.task.exception.TaskStorageException;
@@ -52,7 +52,7 @@ public class TaskService {
     }
 
     /**
-     * Triggers the execution of a {@link MediumAudioAnalysisTask} for the specified {@link de.bitgilde.TIMAAT.model.FIPOP.Medium}
+     * Triggers the execution of a {@link VideoAudioAnalysisTask} for the specified {@link de.bitgilde.TIMAAT.model.FIPOP.Medium}
      *
      * @param mediumId for which the tasks will be executed
      */
@@ -60,9 +60,9 @@ public class TaskService {
         logger.log(Level.FINE, "Trigger execution of medium audio analysis task for medium having id {0}", mediumId);
 
         try {
-            MediumAudioAnalysisTask mediumAudioAnalysisTask = new MediumAudioAnalysisTask(mediumId);
-            taskStorage.persistTask(mediumAudioAnalysisTask);
-            taskExecutorService.executeTask(mediumAudioAnalysisTask);
+            VideoAudioAnalysisTask videoAudioAnalysisTask = new VideoAudioAnalysisTask(mediumId);
+            taskStorage.persistTask(videoAudioAnalysisTask);
+            taskExecutorService.executeTask(videoAudioAnalysisTask);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error while trigger the execution of a medium audio analysis task", e);
             throw new TaskServiceException("Error during trigger the execution of a medium audio analysis task", e);
