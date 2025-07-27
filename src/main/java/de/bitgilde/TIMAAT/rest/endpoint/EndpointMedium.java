@@ -3144,6 +3144,7 @@ public class EndpointMedium {
 			mediumVideo.setHeight(info.getHeight());
 			mediumVideo.setFrameRate(info.getFramerate());
 			mediumVideo.setVideoCodec("");
+            mediumVideo.setLength(info.getDuration());
 
 
 			EntityTransaction entityTransaction = entityManager.getTransaction();
@@ -4091,9 +4092,6 @@ public class EndpointMedium {
             p = r.exec(commandLine);
             try {
                 p.waitFor();  // wait for process to complete
-				byte[] bytes = p.getErrorStream().readAllBytes();
-				String errorStream = new String(bytes);
-				System.out.println(errorStream);
             } catch (InterruptedException e) {
                 System.err.println(e);  // "Can'tHappen"
             }
