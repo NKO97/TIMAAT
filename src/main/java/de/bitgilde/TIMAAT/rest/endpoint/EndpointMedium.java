@@ -4083,11 +4083,17 @@ public class EndpointMedium {
                     "-i", mediumFilePath.toString(),
                     "-ss", "00:00:01.000", // timecode of thumbnail
                     "-vframes", "1", "-y",
-                    temporaryFile.toString()};
+					"-f", "image2",
+					"-vcodec", "png",
+					"-update", "1",
+                    temporaryFile.getTemporaryFilePath().toString() };
 
             p = r.exec(commandLine);
             try {
                 p.waitFor();  // wait for process to complete
+				byte[] bytes = p.getErrorStream().readAllBytes();
+				String errorStream = new String(bytes);
+				System.out.println(errorStream);
             } catch (InterruptedException e) {
                 System.err.println(e);  // "Can'tHappen"
             }
