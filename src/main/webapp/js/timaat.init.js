@@ -24,6 +24,7 @@ requirejs.config({
 		"popper"                          : '../third-party/popper/popper.min',
 		"select2"                         : '../third-party/select2/js/select2.min',
 		"summernote"                      : '../third-party/summernote/summernote.min',
+		"wavesurfer"					  : '../third-party/wavesurferjs/wavesurfer.min',
 		"TIMAAT"                          : 'timaat.main',
 		"TIMAAT-html"                     : 'timaat.html',
 		"TIMAAT-URLHistory"               : 'timaat.url',
@@ -222,7 +223,7 @@ require(['domReady',
 			'TIMAAT-roleLists',
 			'TIMAAT-roleService',
 			'TIMAAT-tagLists',
-		  ], function (moment) {
+		  ], function (moment, wavesurfer) {
 		  console.info("TIMAAT::Setup");
 		  window.moment = moment;
 		  // init UI
