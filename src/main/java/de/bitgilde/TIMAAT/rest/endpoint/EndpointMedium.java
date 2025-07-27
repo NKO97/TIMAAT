@@ -4074,7 +4074,7 @@ public class EndpointMedium {
 		return resizedImage;
 	}
 
-	private void createVideoThumbnails(int mediumId, java.nio.file.Path mediumFilePath) throws Exception {
+	private void createVideoThumbnails(int mediumId, java.nio.file.Path mediumFilePath) {
 		Runtime r = Runtime.getRuntime();
 	    Process p;     // Process tracks one external native process
 

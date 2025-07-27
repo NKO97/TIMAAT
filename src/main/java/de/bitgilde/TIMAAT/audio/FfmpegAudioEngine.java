@@ -1,10 +1,17 @@
 package de.bitgilde.TIMAAT.audio;
 
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
+import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
+import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileWriter;
+import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.TemporaryFileStorage.TemporaryFile;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
@@ -37,14 +44,17 @@ public class FfmpegAudioEngine {
 
     private static final Logger logger = Logger.getLogger(FfmpegAudioEngine.class.getName());
 
-    private static final int WAVEFORM_DATA_POINT_COUNT = 40000;
+    private static final int SAMPLE_RATE = 44100;
+    private static final int WAVEFORM_SEGMENT_COUNT = 40000;
 
     private final Path pathToFfmpeg;
     private final Path pathToFfprobe;
+    private final TemporaryFileStorage temporaryFileStorage;
 
-    public FfmpegAudioEngine(Path pathToFfmpeg, Path pathToFfprobe) {
+    public FfmpegAudioEngine(Path pathToFfmpeg, Path pathToFfprobe, TemporaryFileStorage temporaryFileStorage) {
         this.pathToFfmpeg = pathToFfmpeg.resolve("ffmpeg");
         this.pathToFfprobe = pathToFfprobe.resolve("ffprobe");
+        this.temporaryFileStorage = temporaryFileStorage;
     }
 
     public AudioMetaInformation extractAudioMetaInformation(Path pathToAudioFile) throws AudioEngineException {
@@ -69,26 +79,81 @@ public class FfmpegAudioEngine {
         }
     }
 
-    public void convertAudioChannelsToMono(Path pathToAudioFile, Path monoFileResultPath) throws AudioEngineException {
+    private void convertAudioChannelsTo16BitLittleEndian(Path pathToAudioFile, Path monoFileResultPath) throws AudioEngineException {
         logger.log(Level.FINE, "Converting file {0} to mono", pathToAudioFile);
 
-        String[] commandLine = {pathToFfmpeg.toString(), "-i", pathToAudioFile.toString(), "-ac", "1", monoFileResultPath.toString()};
-        try{
+        String[] commandLine = {pathToFfmpeg.toString(), "-i", pathToAudioFile.toString(), "-ac", "1", "-ar", String.valueOf(SAMPLE_RATE), "-f", "s16le", monoFileResultPath.toString()};
+        try {
             syncExecuteProcess(commandLine);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new AudioEngineException("Error during converting file to mono", e);
         }
     }
 
-    public void createWaveformBinary(AudioMetaInformation audioMetaInformation, Path pathToAudioFile, Path waveformBinaryResultPath) throws AudioEngineException {
+    public void createWaveformBinary(Path pathToAudioFile, Path waveformBinaryResultPath) throws AudioEngineException {
         logger.log(Level.FINE, "Creating waveform binary for audio file located at {0}", pathToAudioFile);
+        try (TemporaryFile temporaryMonoFile = temporaryFileStorage.createTemporaryFile()) {
+            convertAudioChannelsTo16BitLittleEndian(pathToAudioFile, temporaryMonoFile.getTemporaryFilePath());
 
+            try (WaveformBinaryFileWriter waveformBinaryFileWriter = new WaveformBinaryFileWriter(waveformBinaryResultPath)) {
+                extractWaveformInformationFrom16BitLittleEndian(temporaryMonoFile.getTemporaryFilePath(), waveformBinaryFileWriter);
+            }
+        } catch (Exception e) {
+            throw new AudioEngineException("Error during creating waveform binary for audio file", e);
+        }
 
     }
 
-    public void createFrequencyBinary(AudioMetaInformation audioMetaInformation, Path pathToAudioFile, Path frequencyBinaryResultPath) throws AudioEngineException {
+    private static WaveformDataPoint createWaveformDataPoint(DataInputStream dataInputStream, long numberOfSamples) throws IOException {
+        long numberOfReadSamples = 0;
+        float currentNormalizedMinValue = Float.MAX_VALUE;
+        float currentNormalizedMaxValue = Float.MIN_VALUE;
+        float summedNormalizedValues = 0;
 
+        while (numberOfReadSamples < numberOfSamples && dataInputStream.available() >= Short.BYTES) {
+            short currentSample = dataInputStream.readShort();
+            float normalizedValue = Math.abs((float) currentSample / 32768.0f);
+            if (currentNormalizedMinValue > normalizedValue) {
+                currentNormalizedMinValue = normalizedValue;
+            }
+
+            if (currentNormalizedMaxValue < normalizedValue) {
+                currentNormalizedMaxValue = normalizedValue;
+            }
+
+            summedNormalizedValues += normalizedValue;
+            numberOfReadSamples++;
+        }
+
+        float averageNormalizedValues = summedNormalizedValues / numberOfReadSamples;
+        return new WaveformDataPoint(currentNormalizedMinValue, currentNormalizedMaxValue, averageNormalizedValues);
     }
+
+    private static void extractWaveformInformationFrom16BitLittleEndian(Path monoFilePath, WaveformBinaryFileWriter waveformBinaryFileWriter) throws AudioEngineException {
+        File monoFile = monoFilePath.toFile();
+        long fileLength = monoFile.length();
+        long sampleCount = fileLength / 2; // 2 Bytes per sample
+
+        long numberOfSamplesPerWaveformDataPoint;
+        long waveformSegmentCount;
+        if(sampleCount >= WAVEFORM_SEGMENT_COUNT){
+            waveformSegmentCount = WAVEFORM_SEGMENT_COUNT;
+            numberOfSamplesPerWaveformDataPoint = Math.round((float)sampleCount / WAVEFORM_SEGMENT_COUNT);
+        }else {
+            numberOfSamplesPerWaveformDataPoint = 1;
+            waveformSegmentCount = sampleCount;
+        }
+
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(monoFilePath.toFile()))) {
+            for (int i = 0; i < waveformSegmentCount; i++) {
+                WaveformDataPoint waveformDataPoint = FfmpegAudioEngine.createWaveformDataPoint(dataInputStream, numberOfSamplesPerWaveformDataPoint);
+                waveformBinaryFileWriter.writeValues(waveformDataPoint);
+            }
+        } catch (Exception e) {
+            throw new AudioEngineException("Error during extracting Waveform information from mono file", e);
+        }
+    }
+
 
     private static JSONObject executeJsonResponseCommand(String[] commandLine) throws IOException, InterruptedException {
         Process process = syncExecuteProcess(commandLine);

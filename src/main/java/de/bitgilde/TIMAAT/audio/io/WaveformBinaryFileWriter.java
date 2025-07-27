@@ -1,5 +1,7 @@
 package de.bitgilde.TIMAAT.audio.io;
 
+import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
+
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,10 +22,10 @@ public class WaveformBinaryFileWriter implements AutoCloseable {
         this.stream = new DataOutputStream(new FileOutputStream(waveformBinaryPath.toFile()));
     }
 
-    public void writeValues(float minValue, float averageValue, float maxValue)  throws IOException {
-        stream.writeFloat(minValue);
-        stream.writeFloat(averageValue);
-        stream.writeFloat(maxValue);
+    public void writeValues(WaveformDataPoint waveformDataPoint)  throws IOException {
+        stream.writeFloat(waveformDataPoint.getNormalizedMinValue());
+        stream.writeFloat(waveformDataPoint.getNormalizedAverageValue());
+        stream.writeFloat(waveformDataPoint.getNormalizedMaxValue());
     }
 
     @Override

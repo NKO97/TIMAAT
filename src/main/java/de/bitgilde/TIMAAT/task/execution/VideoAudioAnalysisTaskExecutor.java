@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
 import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.TemporaryFileStorage.TemporaryFile;
 import de.bitgilde.TIMAAT.storage.VideoFileStorage;
 import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.exception.TaskExecutionException;
@@ -57,7 +58,7 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
         Optional<Path> pathToOriginalVideoFile = videoFileStorage.getPathToOriginalVideoFile(mediumId);
         if (pathToOriginalVideoFile.isPresent()) {
             AudioMetaInformation audioMetaInformation = executeAudioFileMetaInformationExtraction(pathToOriginalVideoFile.get());
-
+            executeWaveformFileGeneration(pathToOriginalVideoFile.get());
         } else {
             throw new TaskExecutionException("Medium with id " + mediumId + " has no original video file");
         }
@@ -68,6 +69,15 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
             return audioEngine.extractAudioMetaInformation(pathToOriginalVideoFile);
         } catch (AudioEngineException e) {
             throw new TaskExecutionException("Error while extracting audio meta data from file", e);
+        }
+    }
+
+    private Path executeWaveformFileGeneration(Path pathToAudioFile) throws TaskExecutionException {
+        try (TemporaryFile temporaryWaveformFile = temporaryFileStorage.createTemporaryFile()) {
+            audioEngine.createWaveformBinary(pathToAudioFile, temporaryWaveformFile.getTemporaryFilePath());
+            return videoFileStorage.persistWaveformFile(temporaryWaveformFile.getTemporaryFilePath(), task.getMediumId());
+        } catch (Exception e) {
+            throw new TaskExecutionException("Error during executing waveform file generation", e);
         }
     }
 }

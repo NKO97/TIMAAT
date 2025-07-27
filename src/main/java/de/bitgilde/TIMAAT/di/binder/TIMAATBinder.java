@@ -46,11 +46,12 @@ public class TIMAATBinder extends AbstractBinder {
             AudioFileStorage audioFileStorage = new AudioFileStorage(storageRootPath);
             ImageFileStorage imageFileStorage = new ImageFileStorage(storageRootPath);
 
-            Path pathToFfmpeg = Path.of(timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION));
-            FfmpegAudioEngine ffmpegAudioEngine = new FfmpegAudioEngine(pathToFfmpeg, pathToFfmpeg);
-
             Path storageTempPath = Path.of(timaatProps.getProp(PropertyConstants.STORAGE_TEMP_LOCATION));
             TemporaryFileStorage temporaryFileStorage = new TemporaryFileStorage(storageTempPath);
+
+
+            Path pathToFfmpeg = Path.of(timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION));
+            FfmpegAudioEngine ffmpegAudioEngine = new FfmpegAudioEngine(pathToFfmpeg, pathToFfmpeg, temporaryFileStorage);
 
             TaskStorage taskStorage = new DbTaskStorage(TIMAATApp.emf);
             TaskExecutorFactory taskExecutorFactory = new TaskExecutorFactory(temporaryFileStorage, videoFileStorage, ffmpegAudioEngine);

@@ -59,6 +59,18 @@ public class VideoFileStorage {
         return mediumFilePath;
     }
 
+    public Path persistWaveformFile(Path srcWaveformFile, int mediumId) throws IOException {
+        logger.log(Level.FINE, "Persisting waveform file of medium having id {0}", mediumId);
+
+        Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
+        Files.createDirectories(mediumDirectoryPath);
+
+        Path waveformFilePath = createWaveFormFilePath(mediumDirectoryPath, mediumId);
+        Files.move(srcWaveformFile, waveformFilePath);
+
+        return waveformFilePath;
+    }
+
     /**
      * This method will persist the src thumbnail file into the {@link VideoFileStorage}
      * <br/>
@@ -138,6 +150,10 @@ public class VideoFileStorage {
 
     private static Path createThumbnailFilePath(Path mediumDirectoryPath, int mediumId) {
         return mediumDirectoryPath.resolve(mediumId + "-thumb.png");
+    }
+
+    private static Path createWaveFormFilePath(Path mediumDirectoryPath, int mediumId) throws IOException {
+        return mediumDirectoryPath.resolve(mediumId + "-waveform.waveform");
     }
 
     private Path createMediumDirectoryPath(int mediumId) {

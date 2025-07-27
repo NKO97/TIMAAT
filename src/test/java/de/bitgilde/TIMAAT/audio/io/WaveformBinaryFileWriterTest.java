@@ -1,5 +1,6 @@
 package de.bitgilde.TIMAAT.audio.io;
 
+import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,9 @@ public class WaveformBinaryFileWriterTest {
     public void testSuccessfulWritingOfWaveformData() throws Exception {
         Path waveformFilePath = TEST_OUTPUT_DIRECTORY.resolve("1.waveform");
         try (WaveformBinaryFileWriter writer = new WaveformBinaryFileWriter(waveformFilePath)) {
-            writer.writeValues(1, 2, 3);
-            writer.writeValues(4, 5, 6);
-            writer.writeValues(7, 8, 9);
+            writer.writeValues(new WaveformDataPoint(1,2,3));
+            writer.writeValues(new WaveformDataPoint(1,2,3));
+            writer.writeValues(new WaveformDataPoint(1,2,3));
         }
 
         File createdWaveformFile = waveformFilePath.toFile();
