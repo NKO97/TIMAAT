@@ -3,9 +3,10 @@ package de.bitgilde.TIMAAT.task.execution;
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
-import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
-import de.bitgilde.TIMAAT.storage.TemporaryFileStorage.TemporaryFile;
-import de.bitgilde.TIMAAT.storage.VideoFileStorage;
+import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
+import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
 import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.exception.TaskExecutionException;
 
@@ -41,13 +42,16 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
     private final VideoFileStorage videoFileStorage;
     private final FfmpegAudioEngine audioEngine;
     private final TemporaryFileStorage temporaryFileStorage;
+    private final AudioAnalysisResultStorage audioAnalysisResultStorage;
 
     public VideoAudioAnalysisTaskExecutor(TemporaryFileStorage temporaryFileStorage, VideoAudioAnalysisTask audioAnalysisTask,
-                                          VideoFileStorage videoFileStorage, FfmpegAudioEngine audioEngine) {
+                                          VideoFileStorage videoFileStorage, FfmpegAudioEngine audioEngine,
+                                          AudioAnalysisResultStorage audioAnalysisResultStorage) {
         super(audioAnalysisTask);
         this.videoFileStorage = videoFileStorage;
         this.audioEngine = audioEngine;
         this.temporaryFileStorage = temporaryFileStorage;
+        this.audioAnalysisResultStorage = audioAnalysisResultStorage;
     }
 
     @Override
@@ -58,7 +62,8 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
         Optional<Path> pathToOriginalVideoFile = videoFileStorage.getPathToOriginalVideoFile(mediumId);
         if (pathToOriginalVideoFile.isPresent()) {
             AudioMetaInformation audioMetaInformation = executeAudioFileMetaInformationExtraction(pathToOriginalVideoFile.get());
-            executeWaveformFileGeneration(pathToOriginalVideoFile.get());
+            Path waveformPath = executeWaveformFileGeneration(pathToOriginalVideoFile.get());
+            persistAudioAnalysisResult(audioMetaInformation, waveformPath);
         } else {
             throw new TaskExecutionException("Medium with id " + mediumId + " has no original video file");
         }
@@ -78,6 +83,14 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
             return videoFileStorage.persistWaveformFile(temporaryWaveformFile.getTemporaryFilePath(), task.getMediumId());
         } catch (Exception e) {
             throw new TaskExecutionException("Error during executing waveform file generation", e);
+        }
+    }
+
+    private void persistAudioAnalysisResult(AudioMetaInformation audioMetaInformation, Path pathToWaveformFile) throws TaskExecutionException {
+        try {
+            audioAnalysisResultStorage.persistAudioAnalysisResult(audioMetaInformation, pathToWaveformFile, pathToWaveformFile);
+        } catch (Exception e) {
+            throw new TaskExecutionException("Error while persisting audio analysis result", e);
         }
     }
 }

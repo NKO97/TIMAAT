@@ -1,11 +1,14 @@
 package de.bitgilde.TIMAAT.audio;
 
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
 import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
 import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileWriter;
-import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
-import de.bitgilde.TIMAAT.storage.TemporaryFileStorage.TemporaryFile;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
+import jakarta.inject.Inject;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -51,9 +54,11 @@ public class FfmpegAudioEngine {
     private final Path pathToFfprobe;
     private final TemporaryFileStorage temporaryFileStorage;
 
-    public FfmpegAudioEngine(Path pathToFfmpeg, Path pathToFfprobe, TemporaryFileStorage temporaryFileStorage) {
-        this.pathToFfmpeg = pathToFfmpeg.resolve("ffmpeg");
-        this.pathToFfprobe = pathToFfprobe.resolve("ffprobe");
+    @Inject
+    public FfmpegAudioEngine(PropertyManagement propertyManagement, TemporaryFileStorage temporaryFileStorage) {
+        Path baseFfmpegPath = Path.of(propertyManagement.getProp(PropertyConstants.FFMPEG_LOCATION));
+        this.pathToFfmpeg = baseFfmpegPath.resolve("ffmpeg");
+        this.pathToFfprobe = baseFfmpegPath.resolve("ffprobe");
         this.temporaryFileStorage = temporaryFileStorage;
     }
 
@@ -136,10 +141,10 @@ public class FfmpegAudioEngine {
 
         long numberOfSamplesPerWaveformDataPoint;
         long waveformSegmentCount;
-        if(sampleCount >= WAVEFORM_SEGMENT_COUNT){
+        if (sampleCount >= WAVEFORM_SEGMENT_COUNT) {
             waveformSegmentCount = WAVEFORM_SEGMENT_COUNT;
-            numberOfSamplesPerWaveformDataPoint = Math.round((float)sampleCount / WAVEFORM_SEGMENT_COUNT);
-        }else {
+            numberOfSamplesPerWaveformDataPoint = Math.round((float) sampleCount / WAVEFORM_SEGMENT_COUNT);
+        } else {
             numberOfSamplesPerWaveformDataPoint = 1;
             waveformSegmentCount = sampleCount;
         }

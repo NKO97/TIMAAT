@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.file;
 
 import de.bitgilde.TIMAAT.model.MediumType;
 

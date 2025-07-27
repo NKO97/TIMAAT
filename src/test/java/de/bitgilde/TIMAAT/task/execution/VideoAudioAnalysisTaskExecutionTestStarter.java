@@ -1,8 +1,8 @@
 package de.bitgilde.TIMAAT.task.execution;
 
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
-import de.bitgilde.TIMAAT.storage.TemporaryFileStorage;
-import de.bitgilde.TIMAAT.storage.VideoFileStorage;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
 import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.exception.TaskExecutionException;
 

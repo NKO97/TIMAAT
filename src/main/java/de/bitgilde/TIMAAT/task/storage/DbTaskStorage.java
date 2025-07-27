@@ -9,6 +9,7 @@ import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskState;
 import de.bitgilde.TIMAAT.task.exception.TaskStorageException;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -42,6 +43,7 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
 
     private static final Logger logger = Logger.getLogger(DbTaskStorage.class.getName());
 
+    @Inject
     public DbTaskStorage(EntityManagerFactory emf) {
         super(emf);
     }

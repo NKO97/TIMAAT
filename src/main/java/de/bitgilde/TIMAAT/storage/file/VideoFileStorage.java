@@ -1,4 +1,8 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.file;
+
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.PropertyManagement;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,8 +38,9 @@ public class VideoFileStorage {
 
     private final Path videoStoragePath;
 
-    public VideoFileStorage(Path storageRootPath) {
-        this.videoStoragePath = storageRootPath.resolve("medium").resolve("video");
+    @Inject
+    public VideoFileStorage(PropertyManagement propertyManagement) {
+        this.videoStoragePath = Path.of(propertyManagement.getProp(PropertyConstants.STORAGE_LOCATION)).resolve("medium").resolve("video");
     }
 
     /**

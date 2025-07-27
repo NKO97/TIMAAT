@@ -1,8 +1,11 @@
 package de.bitgilde.TIMAAT.task.execution;
 
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskState;
 import de.bitgilde.TIMAAT.task.storage.TaskStateUpdater;
+import jakarta.inject.Inject;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -50,11 +53,16 @@ public class TaskExecutorService {
     private final TaskExecutorFactory taskExecutorFactory;
 
 
-    public TaskExecutorService(int coreParallelTask, int maxParallelTask, int maximumQueueSize, TaskStateUpdater taskStateUpdater, TaskExecutorFactory taskExecutorFactory) {
-        logger.log(Level.INFO, "Initializing task executor service with {0} parallel worker threads and a queue size of {1}", new Object[]{maxParallelTask, maximumQueueSize});
+    @Inject
+    public TaskExecutorService(PropertyManagement propertyManagement, TaskStateUpdater taskStateUpdater, TaskExecutorFactory taskExecutorFactory) {
         this.taskStateUpdater = taskStateUpdater;
         this.taskExecutorFactory = taskExecutorFactory;
-        executor = new ThreadPoolExecutor(coreParallelTask, maxParallelTask, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(maximumQueueSize), runnable -> {
+        int coreParallelTask = Integer.parseInt(propertyManagement.getProp(PropertyConstants.TASK_CORE_PARALLEL_COUNT));
+        int maxParallelTask = Integer.parseInt(propertyManagement.getProp(PropertyConstants.TASK_MAX_PARALLEL_COUNT));
+        int queueSize = Integer.parseInt(propertyManagement.getProp(PropertyConstants.TASK_QUEUE_SIZE));
+
+        logger.log(Level.INFO, "Initializing task executor service with core pool size {0}, max pool size {1} and a queue size of {2}", new Object[]{coreParallelTask, maxParallelTask, queueSize});
+        executor = new ThreadPoolExecutor(coreParallelTask, maxParallelTask, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(queueSize), runnable -> {
             Thread thread = new Thread(runnable);
             thread.setDaemon(true);
             thread.setName("task-executor-thread[" + THREAD_COUNTER.getAndIncrement() + "]");
@@ -99,6 +107,7 @@ public class TaskExecutorService {
                 taskStateUpdater.updateTaskState(task, TaskState.RUNNING);
                 taskExecutor.execute();
                 taskStateUpdater.updateTaskState(task, TaskState.DONE);
+                logger.log(Level.FINE, "Finished task of type {0}", task.getTaskType());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Error while executing task of type {0}", new Object[]{task.getTaskType(), ex});
                 taskStateUpdater.updateTaskState(task, TaskState.FAILED);

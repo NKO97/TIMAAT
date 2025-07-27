@@ -1,9 +1,14 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.file;
+
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.PropertyManagement;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -32,9 +37,10 @@ public class TemporaryFileStorage {
 
     private final Path tempDirectoryPath;
 
-    public TemporaryFileStorage(Path tempDirectoryPath) throws InstantiationException {
+    @Inject
+    public TemporaryFileStorage(PropertyManagement propertyManagement) throws InstantiationException {
         try {
-            this.tempDirectoryPath = Files.createDirectories(tempDirectoryPath);
+            this.tempDirectoryPath = Files.createDirectories(Path.of(propertyManagement.getProp(PropertyConstants.STORAGE_TEMP_LOCATION))).toAbsolutePath();
         } catch (IOException e) {
             throw new InstantiationException(e.getMessage());
         }
@@ -42,6 +48,7 @@ public class TemporaryFileStorage {
 
     public TemporaryFile createTemporaryFile() {
         Path temporaryFilePath = tempDirectoryPath.resolve(UUID.randomUUID().toString());
+        logger.log(Level.FINE,"Creating temporary file: {0}", temporaryFilePath);
         return new TemporaryFile(temporaryFilePath);
     }
 

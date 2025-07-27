@@ -1,5 +1,9 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.file;
 
+
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.PropertyManagement;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,8 +38,9 @@ public class ImageFileStorage {
 
     private final Path imageStoragePath;
 
-    public ImageFileStorage(Path rootStoragePath) {
-        this.imageStoragePath = rootStoragePath.resolve("medium").resolve("image");
+    @Inject
+    public ImageFileStorage(PropertyManagement propertyManagement) {
+        this.imageStoragePath = Path.of(propertyManagement.getProp(PropertyConstants.STORAGE_LOCATION)).resolve("medium").resolve("image");
     }
 
     /**

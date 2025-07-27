@@ -1,4 +1,8 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.file;
+
+import de.bitgilde.TIMAAT.PropertyConstants;
+import de.bitgilde.TIMAAT.PropertyManagement;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,8 +37,9 @@ public class AudioFileStorage {
 
     private final Path audioStoragePath;
 
-    public AudioFileStorage(Path rootStoragePath) {
-        this.audioStoragePath = rootStoragePath.resolve("medium").resolve("audio");
+    @Inject
+    public AudioFileStorage(PropertyManagement propertyManagement) {
+        this.audioStoragePath = Path.of(propertyManagement.getProp(PropertyConstants.STORAGE_LOCATION)).resolve("medium").resolve("audio");
     }
 
     /**
