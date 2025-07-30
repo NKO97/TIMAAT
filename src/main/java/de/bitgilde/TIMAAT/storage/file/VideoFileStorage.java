@@ -144,6 +144,17 @@ public class VideoFileStorage {
         return Optional.empty();
     }
 
+    public Optional<Path> getPathToWaveformFile(int mediumId) {
+        Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
+        Path waveformFilePath = createWaveFormFilePath(mediumDirectoryPath, mediumId);
+
+        if (Files.exists(waveformFilePath)) {
+            return Optional.of(waveformFilePath);
+        }
+
+        return Optional.empty();
+    }
+
 
     private static Path createOrginalVideoFilePath(Path mediumDirectoryPath, int mediumId) {
         return mediumDirectoryPath.resolve(mediumId + "-video-original.mp4");
@@ -157,7 +168,7 @@ public class VideoFileStorage {
         return mediumDirectoryPath.resolve(mediumId + "-thumb.png");
     }
 
-    private static Path createWaveFormFilePath(Path mediumDirectoryPath, int mediumId) throws IOException {
+    private static Path createWaveFormFilePath(Path mediumDirectoryPath, int mediumId) {
         return mediumDirectoryPath.resolve(mediumId + "-waveform.waveform");
     }
 

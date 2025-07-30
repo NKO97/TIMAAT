@@ -6,6 +6,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithToken;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileReader;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
@@ -3307,9 +3308,9 @@ public class EndpointMedium {
 
 	@GET
 	@Path("{id}/audio/combined")
-	@Produces("image/png")
+	@Produces("application/json")
 	public Response getAudioWaveform(@PathParam("id") int id,
-																	 @QueryParam("token") String fileToken) {
+																	 @QueryParam("token") String fileToken) throws IOException {
 
 		// verify token
 		if ( fileToken == null ) return Response.status(401).build();
@@ -3323,29 +3324,20 @@ public class EndpointMedium {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
-		String type = medium.getMediaType().getMediaTypeTranslations().get(0).getType();
 
-		// load audio waveform image from storage
-		File thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-			+ "medium/"+type+"/" + id + "/" + id + "-audio-all.png");
-		if ( !thumbnail.exists() ) {
-			// try to create waveform
-			switch (type) {
-				case "audio":
-					createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/audio/" + id + "/" + id + "-audio.mp3", "audio");
-				break;
-				case "video":
-					createAudioWaveform(id, TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-					+ "medium/video/" + id + "-video-original.mp4", "video");
-				break;
-			}
-			thumbnail = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/"+type+"/" + id + "/" + id + "-audio-all.png");
+		Optional<WaveformBinaryFileReader> waveformBinaryFileReader = Optional.empty();
+		if(medium.getMediumAudio() != null){
+			//TODO: Implement for audio
+		}else if(medium.getMediumVideo() != null){
+			waveformBinaryFileReader = videoFileStorage.getPathToWaveformFile(id).map(WaveformBinaryFileReader::new);
 		}
-		if ( !thumbnail.exists() || !thumbnail.canRead() ) thumbnail = new File(servletContext.getRealPath("img/preview-placeholder.png"));
 
-		return Response.ok().entity(thumbnail).build();
+		if(waveformBinaryFileReader.isPresent()) {
+			List<Float> averageValues = waveformBinaryFileReader.get().readAverageValues();
+			return Response.ok(averageValues).build();
+		}else {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 
 	@GET
@@ -4101,35 +4093,6 @@ public class EndpointMedium {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-	}
-
-	private void createAudioWaveform(int id, String filename, String mediumType) {
-		File mediumDirectory = null;
-			mediumDirectory = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/"+mediumType+"/" + id);
-		if ( !mediumDirectory.exists() ) mediumDirectory.mkdirs();
-
-		Runtime r = Runtime.getRuntime();
-	    Process p;     // Process tracks one external native process
-
-	    String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
-	    "-i", filename,
-	    "-filter_complex", "aformat=channel_layouts=mono,showwavespic=s=5000x300:colors=395C8D", // waveform settings
-	    "-frames:v", "1", "-y",
-			TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)
-				+ "medium/"+mediumType+"/" + id + "/" + id + "-audio-all.png" };
-
-	    try {
-			p = r.exec(commandLine);
-		    try {
-					p.waitFor();  // wait for process to complete
-				} catch (InterruptedException e) {
-			    System.err.println(e);  // "Can'tHappen"
-			  }
-		  } catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	public static String issueFileToken(int mediumID) {

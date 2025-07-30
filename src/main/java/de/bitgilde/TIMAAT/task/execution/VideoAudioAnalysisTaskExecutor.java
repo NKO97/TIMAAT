@@ -57,7 +57,7 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
     @Override
     public void execute() throws TaskExecutionException {
         int mediumId = this.task.getMediumId();
-        logger.log(Level.INFO, "Executing medium audio analysis task for medium having id {}", mediumId);
+        logger.log(Level.INFO, "Executing medium audio analysis task for medium having id {0}", mediumId);
 
         Optional<Path> pathToOriginalVideoFile = videoFileStorage.getPathToOriginalVideoFile(mediumId);
         if (pathToOriginalVideoFile.isPresent()) {
@@ -88,7 +88,7 @@ public class VideoAudioAnalysisTaskExecutor extends TaskExecutor<VideoAudioAnaly
 
     private void persistAudioAnalysisResult(AudioMetaInformation audioMetaInformation, Path pathToWaveformFile) throws TaskExecutionException {
         try {
-            audioAnalysisResultStorage.persistAudioAnalysisResult(audioMetaInformation, pathToWaveformFile, pathToWaveformFile);
+            audioAnalysisResultStorage.persistAudioAnalysisResult(audioMetaInformation, pathToWaveformFile, pathToWaveformFile, task.getMediumId());
         } catch (Exception e) {
             throw new TaskExecutionException("Error while persisting audio analysis result", e);
         }

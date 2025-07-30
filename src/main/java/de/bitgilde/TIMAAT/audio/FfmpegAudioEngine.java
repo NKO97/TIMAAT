@@ -116,8 +116,10 @@ public class FfmpegAudioEngine {
         float summedNormalizedValues = 0;
 
         while (numberOfReadSamples < numberOfSamples && dataInputStream.available() >= Short.BYTES) {
-            short currentSample = dataInputStream.readShort();
-            float normalizedValue = Math.abs((float) currentSample / 32768.0f);
+            short bigEndianCurrentSample = dataInputStream.readShort();
+            short littleEndianCurrentSample = Short.reverseBytes(bigEndianCurrentSample);
+
+            float normalizedValue = Math.abs((float) littleEndianCurrentSample / 32768.0f);
             if (currentNormalizedMinValue > normalizedValue) {
                 currentNormalizedMinValue = normalizedValue;
             }

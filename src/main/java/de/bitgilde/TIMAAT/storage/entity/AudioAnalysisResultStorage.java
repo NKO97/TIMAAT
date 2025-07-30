@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
 import de.bitgilde.TIMAAT.db.DbStorage;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysis;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -40,7 +41,7 @@ public class AudioAnalysisResultStorage extends DbStorage {
         super(emf);
     }
 
-    public AudioAnalysis persistAudioAnalysisResult(AudioMetaInformation audioMetaInformation, Path pathToWaveformFile, Path pathToFrequencyFile) throws DbTransactionExecutionException {
+    public AudioAnalysis persistAudioAnalysisResult(AudioMetaInformation audioMetaInformation, Path pathToWaveformFile, Path pathToFrequencyFile, int mediumId) throws DbTransactionExecutionException {
         logger.log(Level.FINE, "Start persisting audio analysis result");
         AudioAnalysis audioAnalysis = new AudioAnalysis();
 
@@ -53,7 +54,9 @@ public class AudioAnalysisResultStorage extends DbStorage {
         audioAnalysis.setFrequencyInformationPath(pathToWaveformFile.toString());
 
         executeDbTransaction(entityManager -> {
+            MediumAudioAnalysis mediumAudioAnalysis = entityManager.getReference(MediumAudioAnalysis.class, mediumId);
             entityManager.persist(audioAnalysis);
+            mediumAudioAnalysis.setAudioAnalysis(audioAnalysis);
             return Void.TYPE;
         });
 
