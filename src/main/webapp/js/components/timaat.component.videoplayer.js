@@ -1499,32 +1499,42 @@
 					this.overlay = L.videoOverlay(mediumUrl, this.mediumBounds, { autoplay: false, loop: false} ).addTo(TIMAAT.VideoPlayer.viewer);
 					this.medium = this.overlay.getElement();
 
+					$('.timeline-loading-content__generation_in_progress').hide()
+					$('.timeline-error-content').hide()
+					$('.timeline-loading-content').show()
+					$('.timeline__audio-waveform').empty()
 
-
-					if(medium.mediumAudioAnalysis?.audioAnalysis){
-						//Integration of wavesurfer js
-						console.log("Wavesurfer creation")
-						console.log(medium)
-                        let token = TIMAAT.VideoPlayer.model.medium.viewToken;
-						fetch("/TIMAAT/api/medium/" + medium.id + "/audio/combined?token=" + token)
-                            .then(response => response.json())
-                            .then(waveformData => {
-                                console.log(waveformData)
-                                const wavesurfer = WaveSurfer.create({
-                                    container: ".timeline__audio-waveform",
-                                    waveColor: 'rgb(200, 0, 200)',
-                                    fillParent: true,
-                                    media: this.overlay.getElement(),
-                                    height: 50,
-                                    peaks: waveformData
-                                })
-                            }).catch(error => {
+					switch(medium.mediumAudioAnalysis?.audioAnalysisState.id){
+                        case 1:
+                        case 2:
+                            $('.timeline-loading-content__generation_in_progress').show()
+                            break
+                        case 3:
+							$('.timeline-error-content').show()
+							$('.timeline-loading-content').hide()
+                            break
+                        case 4:
+                            //Integration of wavesurfer js
+                            console.log("Wavesurfer creation")
+                            console.log(medium)
+                            let token = TIMAAT.VideoPlayer.model.medium.viewToken;
+                            fetch("/TIMAAT/api/medium/" + medium.id + "/audio/combined?token=" + token)
+                                .then(response => response.json())
+                                .then(waveformData => {
+                                    $('.timeline-loading-content').hide()
+                                    console.log(waveformData)
+                                    const wavesurfer = WaveSurfer.create({
+                                        container: ".timeline__audio-waveform",
+                                        waveColor: 'rgb(200, 0, 200)',
+                                        fillParent: true,
+                                        height: "auto",
+                                        media: this.overlay.getElement(),
+                                        peaks: waveformData
+                                    })
+                                }).catch(error => {
                                 console.error("Error during loading waveform. Reason:", error)
                             })
-                        }
-
-
-
+                    }
 
 					// setup viewer controls
 					TIMAAT.VideoPlayer.viewer.dragging.disable();

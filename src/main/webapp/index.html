@@ -1610,8 +1610,19 @@
                             </div>
                           </div>
                           <div class="timeline__section-content bg-light border-bottom border-dark">
-                            <div class="timeline__audio-waveform--background">
-                              <div class="timeline__audio-waveform">
+                              <div class="timeline__audio-waveform h-100"></div>
+                              <div class="timeline-loading-content h-100">
+                                <div class="h-100 d-flex align-items-center">
+                                  <div class="spinner-border js-timeline__movable_content mr-2" role="status">
+                                    <span class="sr-only"></span>
+                                  </div>
+                                  <strong class="timeline-loading-content__generation_in_progress">Waveform generation in progress</strong>
+                                </div>
+                              </div>
+                            <div class="timeline-error-content h-100">
+                              <div class="h-100 d-flex flex-row align-items-center js-timeline__movable_content">
+                                <strong>Error during creating waveform</strong>
+                                <button type="button" class=" ml-2 btn btn-secondary btn-sm" id="retryWaveformGenerationButton">Retry</button>
                               </div>
                             </div>
                           </div>

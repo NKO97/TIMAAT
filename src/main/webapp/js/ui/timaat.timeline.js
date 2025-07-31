@@ -75,6 +75,10 @@
 				timeline.ui.pane.find('.js-timeline__section-header').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
 			});
 
+			this.ui.pane.on('scroll', function(ev) {
+				timeline.ui.pane.find('.js-timeline__movable_content').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
+			});
+
 			this.ui.pane.find('.timelineSortableSections').sortable({
 				axis: 'y',
 				handle: '.js-timeline__section-header',
