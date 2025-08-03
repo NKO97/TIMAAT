@@ -5,8 +5,11 @@ import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskState;
 import de.bitgilde.TIMAAT.task.storage.TaskStateUpdater;
+import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -43,7 +46,7 @@ import java.util.logging.Logger;
  * @author Nico Kotlenga
  * @since 18.07.25
  */
-public class TaskExecutorService {
+public class TaskExecutorService implements Closeable {
 
     private static final Logger logger = Logger.getLogger(TaskExecutorService.class.getName());
     private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(0);
@@ -85,6 +88,13 @@ public class TaskExecutorService {
     public void shutdown() {
         logger.log(Level.INFO, "Shutting down task executor service");
         executor.shutdown();
+    }
+
+    @PreDestroy
+    @Override
+    public void close() throws IOException {
+        logger.info("Shutting down task executor service");
+        executor.shutdownNow();
     }
 
     private static class TaskExecutorRunnable implements Runnable {
