@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage;
@@ -50,12 +51,14 @@ public class TIMAATBinder extends AbstractBinder {
             bindAsContract(AudioFileStorage.class).in(Singleton.class);
             bindAsContract(AudioAnalysisResultStorage.class).in(Singleton.class);
 
+            bindAsContract(EntityUpdateEventService.class).in(Singleton.class);
             bindAsContract(TemporaryFileStorage.class).in(Singleton.class);
             bindAsContract(FfmpegAudioEngine.class).in(Singleton.class);
             bind(DbTaskStorage.class).to(TaskStateUpdater.class).to(TaskStorage.class).in(Singleton.class);
             bindAsContract(TaskExecutorFactory.class).in(Singleton.class);
             bindAsContract(TaskExecutorService.class).in(Singleton.class);
             bindAsContract(TaskService.class).in(Singleton.class);
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during instantiating necessary components", e);
             throw new RuntimeException(e);

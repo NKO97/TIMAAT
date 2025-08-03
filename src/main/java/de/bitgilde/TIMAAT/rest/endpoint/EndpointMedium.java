@@ -3307,6 +3307,15 @@ public class EndpointMedium {
 	}
 
 	@GET
+	@Path("{type}/{id}/status")
+	@Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
+	@Secured
+	public Response updateFileStatus(@PathParam("type") String type,
+									 @PathParam("id") int id) {
+		return Response.ok().entity(mediumFileStatus(id, type)).build();
+	}
+
+	@GET
 	@Path("{id}/audio/combined")
 	@Produces("application/json")
 	public Response getAudioWaveform(@PathParam("id") int id,

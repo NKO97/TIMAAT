@@ -5,9 +5,10 @@ import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysisState;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis;
-import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
+import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskState;
+import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.exception.TaskStorageException;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -43,9 +44,12 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
 
     private static final Logger logger = Logger.getLogger(DbTaskStorage.class.getName());
 
+    private final EntityUpdateEventService entityUpdateEventService;
+
     @Inject
-    public DbTaskStorage(EntityManagerFactory emf) {
+    public DbTaskStorage(EntityManagerFactory emf, EntityUpdateEventService entityUpdateEventService) {
         super(emf);
+        this.entityUpdateEventService = entityUpdateEventService;
     }
 
     @Override
@@ -118,12 +122,14 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
     private void updateMediumAudioAnalysisTaskState(VideoAudioAnalysisTask videoAudioAnalysisTask, TaskState taskState) throws DbTransactionExecutionException {
         logger.log(Level.FINER, "Updating task state of medium analysis task to {0}", taskState);
 
-        executeDbTransaction(entityManager -> {
+        MediumAudioAnalysis updatedMediumAudioAnalyses = executeDbTransaction(entityManager -> {
             MediumAudioAnalysis mediumAudioAnalysis = entityManager.find(MediumAudioAnalysis.class, videoAudioAnalysisTask.getMediumId());
             AudioAnalysisState audioAnalysisState = entityManager.getReference(AudioAnalysisState.class, taskState.getDatabaseId());
             mediumAudioAnalysis.setAudioAnalysisState(audioAnalysisState);
 
-            return Void.TYPE;
+            return mediumAudioAnalysis;
         });
+
+        entityUpdateEventService.sendEntityUpdateMessage(MediumAudioAnalysis.class, updatedMediumAudioAnalyses);
     }
 }

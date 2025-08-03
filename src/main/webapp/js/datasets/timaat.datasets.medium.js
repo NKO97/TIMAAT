@@ -60,6 +60,8 @@
 			this.initTitles();
 			this.initLanguageTracks();
 			this.initActorRoles();
+
+			TIMAAT.EntityUpdate.registerEntityUpdateListener("MediumAudioAnalysis", this.handleMediumAudioAnalysisChanged.bind(this))
 		},
 
 		initMediaComponent: function() {
@@ -6463,7 +6465,19 @@
 				},
 			});
 		},
+		handleMediumAudioAnalysisChanged: function (mediumAudioAnalysis) {
+			const mediumVideoRow = this.dataTableVideo?.row('#' + mediumAudioAnalysis.mediumId);
 
+			if(mediumVideoRow){
+				const currentData = mediumVideoRow.data()
+				currentData.mediumAudioAnalysis = mediumAudioAnalysis
+			}
+			const currentVideo = this.videos?.find(video => video.model.id === mediumAudioAnalysis.mediumId)
+			if(currentVideo){
+				currentVideo.model.mediumAudioAnalysis = mediumAudioAnalysis
+			}
+
+		},
 		setupVideogameDataTable: function() {
 			// console.log("TCL: setupDataTable");
 			// setup dataTable

@@ -71,6 +71,7 @@
 			}
 
 			// init components
+			TIMAAT.EntityUpdate.init()
 			TIMAAT.Datasets.init();
 			TIMAAT.Lists.init();
 			TIMAAT.UploadManager.init();
@@ -375,6 +376,7 @@
 						// $('#userInfo').html(e.accountName);
 						$('#userInfo').html(e.displayName);
 
+						TIMAAT.EntityUpdate.initEntityUpdate()
 						TIMAAT.MediumDatasets.loadRequiredRoleIds();
 						TIMAAT.Datasets.load();
 						TIMAAT.Datasets.loadDataTables();

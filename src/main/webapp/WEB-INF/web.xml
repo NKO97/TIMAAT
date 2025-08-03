@@ -21,6 +21,7 @@
         <param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature;de.bitgilde.TIMAAT.di.binder.TIMAATBinder;de.bitgilde.TIMAAT.rest.feature.EagerInitializerFeature</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
+    <async-supported>true</async-supported>
     <!-- <multipart-config>
       <max-file-size>2097152000</max-file-size>
       <max-request-size>2097152000</max-request-size>

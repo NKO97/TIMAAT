@@ -26,6 +26,7 @@ requirejs.config({
 		"summernote"                      : '../third-party/summernote/summernote.min',
 		"wavesurfer"					  : '../third-party/wavesurferjs/wavesurfer.min',
 		"TIMAAT"                          : 'timaat.main',
+		"TIMAAT-entityupdate"			  : 'timaat.entityupdate',
 		"TIMAAT-html"                     : 'timaat.html',
 		"TIMAAT-URLHistory"               : 'timaat.url',
 		"TIMAAT-ui"                       : 'ui/timaat.ui',
@@ -150,6 +151,7 @@ require(['domReady',
 			'moment',
 			'dataTables',
 			'TIMAAT',
+			'TIMAAT-entityupdate',
 			'TIMAAT-html',
 			'TIMAAT-URLHistory',
 			'TIMAAT-ui',
@@ -223,7 +225,7 @@ require(['domReady',
 			'TIMAAT-roleLists',
 			'TIMAAT-roleService',
 			'TIMAAT-tagLists',
-		  ], function (moment, wavesurfer) {
+		  ], function (moment) {
 		  console.info("TIMAAT::Setup");
 		  window.moment = moment;
 		  // init UI
