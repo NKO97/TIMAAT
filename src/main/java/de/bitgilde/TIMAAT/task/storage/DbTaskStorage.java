@@ -110,11 +110,18 @@ public class DbTaskStorage extends DbStorage implements TaskStorage {
             AudioAnalysisState audioAnalysisState = entityManager.find(AudioAnalysisState.class, TaskState.PENDING.getDatabaseId());
             Medium medium = entityManager.find(Medium.class, videoAudioAnalysisTask.getMediumId());
 
-            MediumAudioAnalysis mediumAudioAnalysis = new MediumAudioAnalysis();
-            mediumAudioAnalysis.setMedium(medium);
-            mediumAudioAnalysis.setAudioAnalysisState(audioAnalysisState);
+            MediumAudioAnalysis currentMediumAudioAnalysis = medium.getMediumAudioAnalysis();
+            if(currentMediumAudioAnalysis != null) {
+                currentMediumAudioAnalysis.setAudioAnalysisState(audioAnalysisState);
+                entityManager.persist(currentMediumAudioAnalysis);
+            }else {
+                MediumAudioAnalysis mediumAudioAnalysis = new MediumAudioAnalysis();
+                mediumAudioAnalysis.setMedium(medium);
+                mediumAudioAnalysis.setAudioAnalysisState(audioAnalysisState);
 
-            entityManager.persist(mediumAudioAnalysis);
+                entityManager.persist(mediumAudioAnalysis);
+            }
+
             return Void.TYPE;
         });
     }

@@ -54,7 +54,12 @@ public class AudioAnalysisResultStorage extends DbStorage {
         audioAnalysis.setFrequencyInformationPath(pathToWaveformFile.toString());
 
         executeDbTransaction(entityManager -> {
-            MediumAudioAnalysis mediumAudioAnalysis = entityManager.getReference(MediumAudioAnalysis.class, mediumId);
+            MediumAudioAnalysis mediumAudioAnalysis = entityManager.find(MediumAudioAnalysis.class, mediumId);
+            AudioAnalysis currentAudioAnalysis = mediumAudioAnalysis.getAudioAnalysis();
+            if(currentAudioAnalysis != null) {
+                entityManager.remove(currentAudioAnalysis);
+            }
+
             entityManager.persist(audioAnalysis);
             mediumAudioAnalysis.setAudioAnalysis(audioAnalysis);
             return Void.TYPE;

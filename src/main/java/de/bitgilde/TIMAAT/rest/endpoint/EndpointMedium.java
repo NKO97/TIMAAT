@@ -19,6 +19,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediaType;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudio;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumDocument;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage;
@@ -48,6 +49,8 @@ import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
 import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
 import de.bitgilde.TIMAAT.task.TaskService;
+import de.bitgilde.TIMAAT.task.api.TaskState;
+import de.bitgilde.TIMAAT.task.exception.TaskServiceException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -3105,6 +3108,34 @@ public class EndpointMedium {
 
 		return Response.ok().entity(mediumImage).build();
 	}
+    @POST
+    @Path("/{id}/mediumAudioAnalysis/start")
+    @Consumes(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
+    public Response triggerMediumVideoAudioAnalysis(@PathParam("id") int id, String fileToken) throws TaskServiceException {
+        // verify token
+        if ( fileToken == null ) return Response.status(401).build();
+        int tokenMediumID = 0;
+        try {
+            tokenMediumID = validateFileToken(fileToken);
+        } catch (Exception e) {
+            return Response.status(401).build();
+        }
+        if ( tokenMediumID != id ) return Response.status(401).build();
+
+
+        EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+        MediumAudioAnalysis mediumAudioAnalysis = entityManager.find(MediumAudioAnalysis.class, id);
+
+        if (mediumAudioAnalysis == null ||
+                TaskState.FAILED.getDatabaseId() == mediumAudioAnalysis.getAudioAnalysisState().getId() ||
+                TaskState.DONE.getDatabaseId() == mediumAudioAnalysis.getAudioAnalysisState().getId()) {
+            taskService.executeMediumAudioAnalysisTask(id);
+
+            return Response.noContent().build();
+        }
+
+        return Response.status(Status.PRECONDITION_FAILED).build();
+    }
 
 	@POST
 	@Path("video/{id}/upload")

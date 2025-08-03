@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +59,7 @@ public class AudioFileStorage {
         Files.createDirectories(mediumDirectoryPath);
 
         Path mediumFilePath = createAudioFilePath(mediumDirectoryPath, mediumId);
-        Files.move(srcMediumFile, mediumFilePath);
+        Files.move(srcMediumFile, mediumFilePath, StandardCopyOption.REPLACE_EXISTING);
 
         return mediumFilePath;
     }

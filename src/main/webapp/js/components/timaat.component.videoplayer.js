@@ -152,6 +152,7 @@
 			this.initVideoPlayerControls();
 
 			TIMAAT.EntityUpdate.registerEntityUpdateListener("MediumAudioAnalysis", this.handleMediumAudioAnalysisChanged.bind(this))
+			$('#retryWaveformGenerationButton').attr('onclick', 'TIMAAT.VideoPlayer.triggerWaveformGeneration()');
 		},
 
 		initNotifications: function() {
@@ -1641,7 +1642,16 @@
 				TIMAAT.VideoPlayer.updateUI();
 			});
 		},
-
+		triggerWaveformGeneration: function () {
+			if(TIMAAT.VideoPlayer.model.medium){
+				const mediumId = TIMAAT.VideoPlayer.model.medium.id
+				const token = TIMAAT.VideoPlayer.model.medium.viewToken;
+				fetch("/TIMAAT/api/medium/" + mediumId + "/mediumAudioAnalysis/start", {
+					method: "POST",
+					body: token
+				})
+			}
+		},
 		drawWaveform: function () {
 			if(TIMAAT.VideoPlayer.model.medium){
 				$('.timeline-loading-content__generation_in_progress').hide()
@@ -1659,7 +1669,7 @@
 						break
 					case 4:
 						//Integration of wavesurfer js
-						let token = TIMAAT.VideoPlayer.model.medium.viewToken;
+						const token = TIMAAT.VideoPlayer.model.medium.viewToken;
 						const mediumId = TIMAAT.VideoPlayer.model.medium.id
 						fetch("/TIMAAT/api/medium/" + mediumId + "/audio/combined?token=" + token)
 							.then(response => response.json())

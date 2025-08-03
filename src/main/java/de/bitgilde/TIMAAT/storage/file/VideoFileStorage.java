@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,7 +60,7 @@ public class VideoFileStorage {
         Files.createDirectories(mediumDirectoryPath);
 
         Path mediumFilePath = createOrginalVideoFilePath(mediumDirectoryPath, mediumId);
-        Files.move(srcMediumFile, mediumFilePath);
+        Files.move(srcMediumFile, mediumFilePath, StandardCopyOption.REPLACE_EXISTING);
 
         return mediumFilePath;
     }
@@ -71,7 +72,7 @@ public class VideoFileStorage {
         Files.createDirectories(mediumDirectoryPath);
 
         Path waveformFilePath = createWaveFormFilePath(mediumDirectoryPath, mediumId);
-        Files.move(srcWaveformFile, waveformFilePath);
+        Files.move(srcWaveformFile, waveformFilePath, StandardCopyOption.REPLACE_EXISTING);
 
         return waveformFilePath;
     }
@@ -91,7 +92,7 @@ public class VideoFileStorage {
         Files.createDirectories(mediumDirectoryPath);
 
         Path thumbnailFilePath = createThumbnailFilePath(mediumDirectoryPath, mediumId);
-        Files.move(srcMediumFile, thumbnailFilePath);
+        Files.move(srcMediumFile, thumbnailFilePath, StandardCopyOption.REPLACE_EXISTING);
 
         return thumbnailFilePath;
     }

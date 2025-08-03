@@ -119,7 +119,7 @@ public class TaskExecutorService implements Closeable {
                 taskStateUpdater.updateTaskState(task, TaskState.DONE);
                 logger.log(Level.FINE, "Finished task of type {0}", task.getTaskType());
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Error while executing task of type {0}", new Object[]{task.getTaskType(), ex});
+                logger.log(Level.SEVERE, "Error while executing task of type {0}. Reason: {1}", new Object[]{task.getTaskType(), ex});
                 taskStateUpdater.updateTaskState(task, TaskState.FAILED);
             }
         }
