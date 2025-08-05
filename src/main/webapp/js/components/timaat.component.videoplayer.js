@@ -1677,7 +1677,8 @@
 								$('.timeline-loading-content').hide()
 								const wavesurfer = WaveSurfer.create({
 									container: ".timeline__audio-waveform",
-									waveColor: 'rgb(200, 0, 200)',
+									waveColor: 'rgb(237, 30, 36)',
+                                    cursorWidth: 0,
 									fillParent: true,
 									height: "auto",
 									media: this.overlay.getElement(),
