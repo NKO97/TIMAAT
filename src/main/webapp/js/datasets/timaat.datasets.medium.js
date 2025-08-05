@@ -3933,6 +3933,10 @@
 					});
 
 					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
+                        let currentMedium = rowItem.data('medium');
+                        console.log(currentMedium)
+                        console.log(medium)
+                        console.log(rowItem)
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio
@@ -6466,17 +6470,58 @@
 			});
 		},
 		handleMediumAudioAnalysisChanged: function (mediumAudioAnalysis) {
-			const mediumVideoRow = this.dataTableVideo?.row('#' + mediumAudioAnalysis.mediumId);
+			const allMediumVideoRow = this.dataTableAllVideosList?.row('#' + mediumAudioAnalysis.mediumId);
+			const allAudioRow = this.dataTableAllAudiosList?.row('#' + mediumAudioAnalysis.mediumId)
+			const allMediaRow = this.dataTableAllMediaList?.row('#' + mediumAudioAnalysis.mediumId)
+            const mediumVideoRow = this.dataTableVideo?.row('#' + mediumAudioAnalysis.mediumId)
+            const mediumAudioRow = this.dataTableAudio?.row('#' + mediumAudioAnalysis.mediumId)
+            const mediaRow = this.dataTableMedia?.row('#' + mediumAudioAnalysis.mediumId)
 
-			if(mediumVideoRow){
-				const currentData = mediumVideoRow.data()
+			if(allMediumVideoRow?.length){
+				const currentData = allMediumVideoRow.data()
 				currentData.mediumAudioAnalysis = mediumAudioAnalysis
 			}
+			if(allAudioRow?.length){
+				const currentData = allAudioRow.data()
+				currentData.mediumAudioAnalysis = mediumAudioAnalysis
+			}
+			if(allMediaRow?.length){
+				const currentData = allMediaRow.data()
+				currentData.mediumAudioAnalysis = mediumAudioAnalysis
+			}
+
+            if(mediumVideoRow?.length){
+                const currentData = mediumVideoRow.data()
+                currentData.mediumAudioAnalysis = mediumAudioAnalysis
+            }
+            if(mediumAudioRow?.length){
+                const currentData = mediumAudioRow.data()
+                currentData.mediumAudioAnalysis = mediumAudioAnalysis
+            }
+            if(mediaRow?.length){
+                const currentData = mediaRow.data()
+                currentData.mediumAudioAnalysis = mediumAudioAnalysis
+            }
+
+
 			const currentVideo = this.videos?.find(video => video.model.id === mediumAudioAnalysis.mediumId)
 			if(currentVideo){
 				currentVideo.model.mediumAudioAnalysis = mediumAudioAnalysis
 			}
 
+			const currentMedia = this.media?.find(media => media.model.id === mediumAudioAnalysis.mediumId)
+			if(currentMedia){
+				currentMedia.model.mediumAudioAnalysis = mediumAudioAnalysis
+			}
+			const currentAudio = this.audios?.find(audio => audio.model.id === mediumAudioAnalysis.mediumId)
+			if(currentAudio){
+				currentAudio.model.mediumAudioAnalysis = mediumAudioAnalysis
+			}
+
+			const mediumFormMetadataMedium = $('#mediumFormMetadata').data('medium')
+            if(mediumFormMetadataMedium?.model.id === mediumAudioAnalysis.mediumId){
+                mediumFormMetadataMedium.model.mediumAudioAnalysis = mediumAudioAnalysis
+            }
 		},
 		setupVideogameDataTable: function() {
 			// console.log("TCL: setupDataTable");

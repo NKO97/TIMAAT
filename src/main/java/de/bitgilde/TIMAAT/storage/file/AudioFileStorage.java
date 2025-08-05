@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * @author Nico Kotlenga
  * @since 23.07.25
  */
-public class AudioFileStorage {
+public class AudioFileStorage implements AudioContainingMediumFileStorage {
 
     private static final Logger logger = Logger.getLogger(AudioFileStorage.class.getName());
 
@@ -52,7 +52,7 @@ public class AudioFileStorage {
      * @param mediumId      of the related medium entry
      * @return the {@link Path} to the persisted original video file
      */
-    public Path persistAudioFile(Path srcMediumFile, int mediumId) throws IOException {
+    public Path persistOriginalFile(Path srcMediumFile, int mediumId) throws IOException {
         logger.log(Level.FINE, "Persisting audiofile of medium having id {0}", mediumId);
 
         Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
@@ -70,7 +70,7 @@ public class AudioFileStorage {
      * @param mediumId which audiofile path path will be returned
      * @return an {@link Optional} containing the {@link Path} if file is existing
      */
-    public Optional<Path> getPathToAudioFile(int mediumId) {
+    public Optional<Path> getPathToOriginalFile(int mediumId) {
         Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
         Path mediumFilePath = createAudioFilePath(mediumDirectoryPath, mediumId);
 
@@ -80,8 +80,36 @@ public class AudioFileStorage {
         return Optional.empty();
     }
 
+    public Optional<Path> getPathToWaveformFile(int mediumId) {
+        Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
+        Path waveformFilePath = createWaveFormFilePath(mediumDirectoryPath, mediumId);
+
+        if (Files.exists(waveformFilePath)) {
+            return Optional.of(waveformFilePath);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Path persistWaveformFile(Path srcWaveformFile, int mediumId) throws IOException {
+        logger.log(Level.FINE, "Persisting waveform file of medium having id {0}", mediumId);
+
+        Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
+        Files.createDirectories(mediumDirectoryPath);
+
+        Path waveformFilePath = createWaveFormFilePath(mediumDirectoryPath, mediumId);
+        Files.move(srcWaveformFile, waveformFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return waveformFilePath;
+    }
+
     private static Path createAudioFilePath(Path mediumDirectoryPath, int mediumId) {
         return mediumDirectoryPath.resolve(mediumId + "-audio.mp3");
+    }
+
+    private static Path createWaveFormFilePath(Path mediumDirectoryPath, int mediumId) {
+        return mediumDirectoryPath.resolve(mediumId + "-waveform.waveform");
     }
 
     private Path createMediumDirectoryPath(int mediumId) {

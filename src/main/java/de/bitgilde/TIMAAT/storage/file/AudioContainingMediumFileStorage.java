@@ -1,4 +1,8 @@
-package de.bitgilde.TIMAAT.task.api;
+package de.bitgilde.TIMAAT.storage.file;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +19,14 @@ package de.bitgilde.TIMAAT.task.api;
  */
 
 /**
- * {@link Task} responsible to execute the audio analysis for {@link de.bitgilde.TIMAAT.model.FIPOP.Medium}s
+ * File storage of a specific medium which original file can have an audio channel
  *
  * @author Nico Kotlenga
- * @since 20.07.25
+ * @since 03.08.25
  */
-public class VideoAudioAnalysisTask extends Task {
+public interface AudioContainingMediumFileStorage {
 
-    private final int mediumId;
+    Optional<Path> getPathToOriginalFile(int mediumId);
 
-    public VideoAudioAnalysisTask(int mediumId) {
-        super(TaskType.VIDEO_AUDIO_ANALYSIS);
-        this.mediumId = mediumId;
-    }
-
-    public int getMediumId() {
-        return mediumId;
-    }
+    Path persistWaveformFile(Path srcWaveformFile, int mediumId) throws IOException;
 }

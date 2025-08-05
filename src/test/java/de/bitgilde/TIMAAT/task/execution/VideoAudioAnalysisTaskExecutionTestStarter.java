@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.task.execution;
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
-import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
+import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.exception.TaskExecutionException;
 
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * This is a starter class to test the execution of the {@link VideoAudioAnalysisTaskExecutor}
+ * This is a starter class to test the execution of the {@link MediumAudioAnalysisTaskExecutor}
  * The path to ffmpeg and the path to the video file will be passed as program argument.
  *
  * @author Nico Kotlenga
@@ -29,7 +29,7 @@ public class VideoAudioAnalysisTaskExecutionTestStarter {
         Path pathToFffmpeg = Path.of(args[0]);
         Path pathToVideoFile = Path.of(args[1]);
         VideoFileStorage videFileStorage = mock(VideoFileStorage.class);
-        when(videFileStorage.getPathToOriginalVideoFile(anyInt())).thenReturn(Optional.of(pathToVideoFile));
+        when(videFileStorage.getPathToOriginalFile(anyInt())).thenReturn(Optional.of(pathToVideoFile));
 
 
         System.out.println("Class location: " + FfmpegAudioEngine.class.getProtectionDomain().getCodeSource().getLocation());
@@ -38,7 +38,7 @@ public class VideoAudioAnalysisTaskExecutionTestStarter {
         FfmpegAudioEngine ffmpegAudioEngine = new FfmpegAudioEngine(pathToFffmpeg, pathToFffmpeg, temporaryFileStorage);
 
 
-        VideoAudioAnalysisTaskExecutor executor = new VideoAudioAnalysisTaskExecutor(temporaryFileStorage, new VideoAudioAnalysisTask(1), videFileStorage, ffmpegAudioEngine);
+        MediumAudioAnalysisTaskExecutor executor = new MediumAudioAnalysisTaskExecutor(temporaryFileStorage, new MediumAudioAnalysisTask(1), videFileStorage, ffmpegAudioEngine);
         executor.execute();
 
     }

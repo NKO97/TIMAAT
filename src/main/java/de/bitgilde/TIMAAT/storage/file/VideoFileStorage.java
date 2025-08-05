@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  * @author Nico Kotlenga
  * @since 22.07.25
  */
-public class VideoFileStorage {
+public class VideoFileStorage implements AudioContainingMediumFileStorage {
     private static final Logger logger = Logger.getLogger(VideoFileStorage.class.getName());
 
     private final Path videoStoragePath;
@@ -53,7 +53,7 @@ public class VideoFileStorage {
      * @param mediumId      of the related medium entry
      * @return the {@link Path} to the persisted original video file
      */
-    public Path persistOriginalVideoFile(Path srcMediumFile, int mediumId) throws IOException {
+    public Path persistOriginalFile(Path srcMediumFile, int mediumId) throws IOException {
         logger.log(Level.FINE, "Persisting original video file of medium having id {0}", mediumId);
 
         Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
@@ -103,7 +103,7 @@ public class VideoFileStorage {
      * @param mediumId which original video file path will be returned
      * @return an {@link Optional} containing the {@link Path} if file is existing
      */
-    public Optional<Path> getPathToOriginalVideoFile(int mediumId) {
+    public Optional<Path> getPathToOriginalFile(int mediumId) {
         Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
         Path mediumFilePath = createOrginalVideoFilePath(mediumDirectoryPath, mediumId);
 

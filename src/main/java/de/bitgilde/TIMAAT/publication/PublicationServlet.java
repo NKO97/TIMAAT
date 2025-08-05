@@ -339,7 +339,7 @@ public class PublicationServlet {
 				return downloadFile(convertedFilePath.get(), headers);
 			}
 
-			Optional<java.nio.file.Path> originalFilePath = videoFileStorage.getPathToOriginalVideoFile(itemID);
+			Optional<java.nio.file.Path> originalFilePath = videoFileStorage.getPathToOriginalFile(itemID);
 			if (originalFilePath.isPresent()) {
 				return downloadFile(originalFilePath.get(), headers);
 			}
@@ -354,7 +354,7 @@ public class PublicationServlet {
 				return downloadFile(originalImageFilePath.get(), headers);
 			}
 		} else if (medium.getMediumAudio() != null) {
-			Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToAudioFile(itemID);
+			Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToOriginalFile(itemID);
 			if (audioFilePath.isPresent()) {
 				return downloadFile(audioFilePath.get(), headers);
 			}

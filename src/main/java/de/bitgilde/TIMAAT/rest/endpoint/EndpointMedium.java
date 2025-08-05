@@ -49,6 +49,7 @@ import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
 import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
 import de.bitgilde.TIMAAT.task.TaskService;
+import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask.SupportedMediumType;
 import de.bitgilde.TIMAAT.task.api.TaskState;
 import de.bitgilde.TIMAAT.task.exception.TaskServiceException;
 import io.jsonwebtoken.JwtBuilder;
@@ -2945,8 +2946,7 @@ public class EndpointMedium {
 	@Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Secured
 	public Response uploadAudio(@PathParam("id") int id,
-															@FormDataParam("file") InputStream uploadedInputStream,
-															@FormDataParam("file") FormDataContentDisposition fileDetail) {
+															@FormDataParam("file") InputStream uploadedInputStream) throws TaskServiceException {
 
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		MediumAudio mediumAudio = entityManager.find(MediumAudio.class, id);
@@ -2968,7 +2968,7 @@ public class EndpointMedium {
 				stream.flush();
 				stream.close();
 
-				mediumFilePath = audioFileStorage.persistAudioFile(temporaryFile.getTemporaryFilePath(), id);
+				mediumFilePath = audioFileStorage.persistOriginalFile(temporaryFile.getTemporaryFilePath(), id);
 			}
 
 			// get data from ffmpeg
@@ -2988,6 +2988,7 @@ public class EndpointMedium {
 			entityTransaction.commit();
 			entityManager.refresh(mediumAudio);
 
+			taskService.executeMediumAudioAnalysisTask(id, SupportedMediumType.AUDIO);
 			// add log entry
 			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 					UserLogManager.LogEvents.MEDIUMCREATED);
@@ -3129,7 +3130,17 @@ public class EndpointMedium {
         if (mediumAudioAnalysis == null ||
                 TaskState.FAILED.getDatabaseId() == mediumAudioAnalysis.getAudioAnalysisState().getId() ||
                 TaskState.DONE.getDatabaseId() == mediumAudioAnalysis.getAudioAnalysisState().getId()) {
-            taskService.executeMediumAudioAnalysisTask(id);
+			SupportedMediumType mediumType = null;
+			int mediumTypeId = mediumAudioAnalysis.getMedium().getMediaType().getId();
+
+			if(mediumTypeId == 1){
+				mediumType = SupportedMediumType.AUDIO;
+			}else if(mediumTypeId == 6){
+				mediumType = SupportedMediumType.VIDEO;
+			} else {
+				return Response.status(Status.BAD_REQUEST).build();
+			}
+            taskService.executeMediumAudioAnalysisTask(id, mediumType);
 
             return Response.noContent().build();
         }
@@ -3167,7 +3178,7 @@ public class EndpointMedium {
 				stream.flush();
 				stream.close();
 
-                originalVideoFilePath = videoFileStorage.persistOriginalVideoFile(uploadTempFile.getTemporaryFilePath(), mediumId);
+                originalVideoFilePath = videoFileStorage.persistOriginalFile(uploadTempFile.getTemporaryFilePath(), mediumId);
 			}
 
 			// get data from ffmpeg
@@ -3191,7 +3202,7 @@ public class EndpointMedium {
 
 			createVideoThumbnails(mediumId, originalVideoFilePath);
 
-			taskService.executeMediumAudioAnalysisTask(mediumId);
+			taskService.executeMediumAudioAnalysisTask(mediumId, SupportedMediumType.VIDEO);
 			// add log entry
 			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 					UserLogManager.LogEvents.MEDIUMCREATED);
@@ -3220,7 +3231,7 @@ public class EndpointMedium {
 
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
-        Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToAudioFile(id);
+        Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToOriginalFile(id);
         if(audioFilePath.isPresent()) {
             File audioFile  = audioFilePath.get().toFile();
             return Response.ok()
@@ -3258,7 +3269,7 @@ public class EndpointMedium {
                     .build();
         }
 
-        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalVideoFile(id);
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalFile(id);
         if(originalVideoFilePath.isPresent()) {
             File file = originalVideoFilePath.get().toFile();
             return Response.ok()
@@ -3296,7 +3307,7 @@ public class EndpointMedium {
 		Medium medium = TIMAATApp.emf.createEntityManager().find(Medium.class, id);
 		if ( medium == null ) return Response.status(Status.NOT_FOUND).build();
 
-        Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToAudioFile(id);
+        Optional<java.nio.file.Path> audioFilePath = audioFileStorage.getPathToOriginalFile(id);
         if(audioFilePath.isPresent()) {
             return downloadFile(audioFilePath.get(), headers, id + ".mp3");
         }
@@ -3330,7 +3341,7 @@ public class EndpointMedium {
 			return downloadFile(convertedVideoFilePath.get(), headers, id+".mp3");
 		}
 
-        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalVideoFile(id);
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalFile(id);
         if(originalVideoFilePath.isPresent()) {
             return downloadFile(originalVideoFilePath.get(), headers, id+".mp3");
         }
@@ -3367,7 +3378,7 @@ public class EndpointMedium {
 
 		Optional<WaveformBinaryFileReader> waveformBinaryFileReader = Optional.empty();
 		if(medium.getMediumAudio() != null){
-			//TODO: Implement for audio
+			waveformBinaryFileReader = audioFileStorage.getPathToWaveformFile(id).map(WaveformBinaryFileReader::new);
 		}else if(medium.getMediumVideo() != null){
 			waveformBinaryFileReader = videoFileStorage.getPathToWaveformFile(id).map(WaveformBinaryFileReader::new);
 		}

@@ -2,12 +2,17 @@ package de.bitgilde.TIMAAT.task.execution;
 
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
+import de.bitgilde.TIMAAT.storage.file.AudioContainingMediumFileStorage;
+import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
-import de.bitgilde.TIMAAT.task.api.VideoAudioAnalysisTask;
+import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask;
+import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask.SupportedMediumType;
 import de.bitgilde.TIMAAT.task.api.Task;
 import de.bitgilde.TIMAAT.task.api.TaskType;
 import jakarta.inject.Inject;
+
+import java.util.Map;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,23 +37,23 @@ import jakarta.inject.Inject;
 public class TaskExecutorFactory {
 
     private final TemporaryFileStorage temporaryFileStorage;
-    private final VideoFileStorage videoFileStorage;
     private final FfmpegAudioEngine audioEngine;
     private final AudioAnalysisResultStorage audioAnalysisResultStorage;
+    private final Map<SupportedMediumType, AudioContainingMediumFileStorage> audioContainingMediumFileStorageBySupportedMediumType;
 
     @Inject
-    public TaskExecutorFactory(TemporaryFileStorage temporaryFileStorage, VideoFileStorage videoFileStorage, FfmpegAudioEngine audioEngine, AudioAnalysisResultStorage audioAnalysisResultStorage) {
+    public TaskExecutorFactory(TemporaryFileStorage temporaryFileStorage, VideoFileStorage videoFileStorage, AudioFileStorage audioFileStorage, FfmpegAudioEngine audioEngine, AudioAnalysisResultStorage audioAnalysisResultStorage) {
         this.temporaryFileStorage = temporaryFileStorage;
-        this.videoFileStorage = videoFileStorage;
         this.audioEngine = audioEngine;
         this.audioAnalysisResultStorage = audioAnalysisResultStorage;
+        this.audioContainingMediumFileStorageBySupportedMediumType = Map.of(SupportedMediumType.AUDIO, audioFileStorage, SupportedMediumType.VIDEO, videoFileStorage);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Task> TaskExecutor<T> createTaskExecutor(T task) {
-        if (TaskType.VIDEO_AUDIO_ANALYSIS.equals(task.getTaskType())) {
-            return (TaskExecutor<T>) new VideoAudioAnalysisTaskExecutor(temporaryFileStorage, (VideoAudioAnalysisTask) task,
-                    videoFileStorage, audioEngine, audioAnalysisResultStorage);
+        if (TaskType.MEDIUM_AUDIO_ANALYSIS.equals(task.getTaskType())) {
+            return (TaskExecutor<T>) new MediumAudioAnalysisTaskExecutor(temporaryFileStorage, (MediumAudioAnalysisTask) task,
+                    audioContainingMediumFileStorageBySupportedMediumType, audioEngine, audioAnalysisResultStorage);
         }
         return null;
     }
