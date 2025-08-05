@@ -3934,9 +3934,6 @@
 
 					rowItem.on('click', '.mediumItemAnnotateButton', async function(event) {
                         let currentMedium = rowItem.data('medium');
-                        console.log(currentMedium)
-                        console.log(medium)
-                        console.log(rowItem)
 						event.stopPropagation();
 						TIMAAT.UI.hidePopups();
 						if ( !medium.mediumVideo && !medium.mediumImage && !medium.mediumAudio) return; //* allow annotating only for videos, images and audio

@@ -190,7 +190,11 @@
 	left: 150px;
 	bottom: 1px;
 	cursor: pointer;
-	transition: margin-left 0.1s;
+	transition: margin-left 0.05s;
+}
+
+.timeline__position-indicator:hover {
+    width: 5px;
 }
 
 .timeline__scale-segment {

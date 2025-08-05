@@ -52,6 +52,7 @@
 			this.ui.track     = $('.timelineTrack');
 			this.ui.tracking  = false;
 			this.ui.zoom      = 1;
+            this.ui.indicatorTracking = false;
 			this.ui.zoomIn    = $('.timelineZoomIn');
 			this.ui.zoomIn.prop('disabled', true);
 			this.ui.zoomOut   = $('.timelineZoomOut');
@@ -75,18 +76,28 @@
 				timeline.ui.pane.find('.js-timeline__section-header').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
 			});
 
-            this.ui.pane.on('wheel', TIMAAT.Util.throttle(function(ev) {
-                //Check if the scroll event is a vertical scrolling on touch pads
-                if(Math.abs(ev.originalEvent.deltaY) > Math.abs(ev.originalEvent.deltaX)){
-                    if(ev.originalEvent.deltaY > 0){
-                        const newZoom = this.ui.zoom + 1
-                        this.setZoom(newZoom)
-                    }else if(ev.originalEvent.deltaY < 0) {
-                        const newZoom = this.ui.zoom - 1
-                        this.setZoom(newZoom)
-                    }
+            const throttledZoomHandler = TIMAAT.Util.throttle(function(ev) {
+                if(ev.originalEvent.deltaY > 0){
+                    const newZoom = this.ui.zoom + 1
+                    this.setZoom(newZoom)
+                }else if(ev.originalEvent.deltaY < 0) {
+                    const newZoom = this.ui.zoom - 1
+                    this.setZoom(newZoom)
                 }
-            }.bind(this), 50));
+            }.bind(this), 50);
+
+            this.ui.pane.on('wheel', ev => {
+                if(Math.abs(ev.originalEvent.deltaY) > Math.abs(ev.originalEvent.deltaX)) {
+                    ev.preventDefault();
+                    throttledZoomHandler(ev)
+                }
+            });
+
+            this.ui.indicator.on('mousedown', ev => {
+                this.ui.pane.on('mousemove.indicator', this.handleIndicatorTracking.bind(this))
+                this.ui.pane.on('mouseup.indicator', this.stopIndicatorTracking.bind(this))
+                TIMAAT.VideoPlayer.pause()
+            })
 
 			this.ui.pane.on('scroll', function(ev) {
 				timeline.ui.pane.find('.js-timeline__movable_content').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
@@ -143,6 +154,27 @@
 			}
 		}
 
+        handleIndicatorTracking(ev) {
+            // Position relativ zum Pane berechnen
+            const paneRect = this.ui.pane[0].getBoundingClientRect();
+            const relativeX = ev.clientX - paneRect.left + this.ui.pane.scrollLeft() - 150;
+
+            // Auf Timeline-Breite begrenzen
+            const clampedX = Math.max(0, Math.min(this.ui.width, relativeX));
+
+            this.ui.indicator.css('margin-left', clampedX + 'px');
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
+
+        stopIndicatorTracking(ev) {
+            this.ui.pane.off('.indicator');
+            const currentIndicatorPosition = parseFloat(this.ui.indicator.css('margin-left'));
+            const newPlaybackPositionMs = (currentIndicatorPosition / this.ui.width) * this.durationSec * 1000
+
+            TIMAAT.VideoPlayer.jumpTo(newPlaybackPositionMs);
+        }
+
 		reset() {
 			this.invalidateSize();
 		}
@@ -166,8 +198,11 @@
 
 		updateIndicator() {
 			if ( !TIMAAT.VideoPlayer.medium || !TIMAAT.VideoPlayer.medium.currentTime ) return;
-			let pos = (TIMAAT.VideoPlayer.medium.currentTime / this.durationSec) * this.ui.width;
-			this.ui.indicator.css('margin-left', pos + 'px');
+
+            if(!this.ui.indicatorTracking){
+                let pos = (TIMAAT.VideoPlayer.medium.currentTime / this.durationSec) * this.ui.width;
+                this.ui.indicator.css('margin-left', pos + 'px');
+            }
 
 			if ( this.ui.tracking ) {
 				// keep time indicator visible
