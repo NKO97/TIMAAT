@@ -39,7 +39,16 @@
 
 	TIMAAT.Util = {
 		serverPrefix: "",
-
+        throttle: function (func, delay) {
+          let inThrottle;
+          return function(...args) {
+              if(!inThrottle){
+                  func.apply(this, arguments);
+                  inThrottle = true;
+                  setTimeout(() => inThrottle = false, delay);
+              }
+          }
+        },
 		formatTime: function(timeInMilliseconds, withFraction = false) {
     	// console.log("TCL: timeInMilliseconds, withFraction ", timeInMilliseconds, withFraction );
 			let timeInSeconds = timeInMilliseconds / 1000;

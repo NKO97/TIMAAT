@@ -75,15 +75,18 @@
 				timeline.ui.pane.find('.js-timeline__section-header').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
 			});
 
-            this.ui.pane.on('wheel', function(ev) {
-                if(ev.originalEvent.deltaY > 0){
-                    const newZoom = this.ui.zoom + 1
-                    this.setZoom(newZoom)
-                }else if(ev.originalEvent.deltaY < 0) {
-                    const newZoom = this.ui.zoom - 1
-                    this.setZoom(newZoom)
+            this.ui.pane.on('wheel', TIMAAT.Util.throttle(function(ev) {
+                //Check if the scroll event is a vertical scrolling on touch pads
+                if(Math.abs(ev.originalEvent.deltaY) > Math.abs(ev.originalEvent.deltaX)){
+                    if(ev.originalEvent.deltaY > 0){
+                        const newZoom = this.ui.zoom + 1
+                        this.setZoom(newZoom)
+                    }else if(ev.originalEvent.deltaY < 0) {
+                        const newZoom = this.ui.zoom - 1
+                        this.setZoom(newZoom)
+                    }
                 }
-            }.bind(this));
+            }.bind(this), 50));
 
 			this.ui.pane.on('scroll', function(ev) {
 				timeline.ui.pane.find('.js-timeline__movable_content').css('margin-left', timeline.ui.pane.scrollLeft()+'px');
@@ -145,7 +148,6 @@
 		}
 
 		setZoom(zoom) {
-            console.log(this.ui.minZoom)
 			let newZoom = Math.min(this.ui.minZoom, Math.max(this.ui.maxZoom, zoom));
 			if ( newZoom == this.ui.zoom ) return;
 
