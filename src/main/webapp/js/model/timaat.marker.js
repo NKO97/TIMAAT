@@ -259,5 +259,39 @@
 			return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
 		}
 	}
+    TIMAAT.TemporaryWaveformMarker = class TemporaryWaveformMarker {
 
+        constructor(startXPercentage, parent) {
+            this._startXPercentage = startXPercentage
+            this._endXPercentage = startXPercentage;
+
+            this.ui = $(`<div class="temporary_waveform_marker"></div>`);
+            parent.append(this.ui)
+            this.updateUI();
+        }
+
+        set endXPercentage(endXPercentage) {
+            this._endXPercentage = endXPercentage;
+            this.updateUI();
+        }
+
+        updateUI() {
+            let left;
+            let width;
+            if(this._startXPercentage > this._endXPercentage){
+                left = this._endXPercentage
+                width = this._startXPercentage - this._endXPercentage
+            }else {
+                left = this._startXPercentage
+                width = this._endXPercentage - this._startXPercentage
+            }
+
+            this.ui.css('width', width * 100+ '%');
+            this.ui.css('left', left  * 100+ '%');
+        }
+
+        removeFromUi(){
+            this.ui.remove();
+        }
+    }
 }, window));

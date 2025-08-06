@@ -331,3 +331,10 @@
 #retryWaveformGenerationButton{
 	z-index: 1000;
 }
+
+.temporary_waveform_marker{
+    position: absolute;
+    background-color: rgba(245, 39, 50, 0.2);
+    height: 100%;
+    top: 0;
+}

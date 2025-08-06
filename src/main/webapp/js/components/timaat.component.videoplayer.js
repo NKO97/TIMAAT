@@ -66,6 +66,7 @@
 		tagAutocomplete             : [],
 		userPermissionList          : null,
 		volume                      : 1,
+        currentTemporaryWaveformMarker  : null,
 
 		init: function() {
 			// init UI
@@ -150,6 +151,9 @@
 			this.initInspectorControls();
 			this.initTimeLineControls();
 			this.initVideoPlayerControls();
+
+            this.waveformContainer = $(".timeline__audio-waveform")
+            this.waveformContainer.one("mousedown", TIMAAT.VideoPlayer.handleTemporaryWaveformDragStart)
 
 			TIMAAT.EntityUpdate.registerEntityUpdateListener("MediumAudioAnalysis", this.handleMediumAudioAnalysisChanged.bind(this))
 			$('#retryWaveformGenerationButton').attr('onclick', 'TIMAAT.VideoPlayer.triggerWaveformGeneration()');
@@ -1672,7 +1676,8 @@
 									fillParent: true,
 									height: "auto",
 									media: this.overlay.getElement(),
-									peaks: waveformData
+									peaks: waveformData,
+                                    interact: false
 								})
 							}).catch(error => {
 							console.error("Error during loading waveform. Reason:", error)
@@ -1680,6 +1685,28 @@
 				}
 			}
 		},
+
+        handleTemporaryWaveformDragStart: function (ev) {
+            if(TIMAAT.VideoPlayer.currentTemporaryWaveformMarker){
+                TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.removeFromUi();
+            }
+
+            const waveformContainerRect = ev.originalEvent.target.getBoundingClientRect();
+            const relativeX = (ev.clientX - waveformContainerRect.left + TIMAAT.VideoPlayer.waveformContainer.scrollLeft()) / TIMAAT.VideoPlayer.waveformContainer.width();
+            TIMAAT.VideoPlayer.currentTemporaryWaveformMarker = new TIMAAT.TemporaryWaveformMarker(relativeX, TIMAAT.VideoPlayer.waveformContainer)
+            TIMAAT.VideoPlayer.waveformContainer.on("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
+            $(document).one("mouseup", function(ev) {
+                TIMAAT.VideoPlayer.waveformContainer.off("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
+                TIMAAT.VideoPlayer.waveformContainer.one("mousedown", TIMAAT.VideoPlayer.handleTemporaryWaveformDragStart)
+            })
+        },
+
+        handleTemporaryWaveformDrag: function (ev) {
+            const waveformContainerRect = ev.originalEvent.target.getBoundingClientRect();
+            const relativeX = (ev.clientX - waveformContainerRect.left + TIMAAT.VideoPlayer.waveformContainer.scrollLeft()) / TIMAAT.VideoPlayer.waveformContainer.width();
+
+            TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.endXPercentage = relativeX
+        },
 
 		setupMediumAnalysisLists: async function (lists) {
 			// console.log("TCL: setupMediumAnalysisLists: ", lists);
