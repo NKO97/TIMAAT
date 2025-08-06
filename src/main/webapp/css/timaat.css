@@ -178,6 +178,7 @@
 	background: #333;
 	overflow-y: hidden;
 	position: relative;
+    user-select: none;
 }
 
 .timeline__position-indicator {
