@@ -29,4 +29,6 @@ public interface AudioContainingMediumFileStorage {
     Optional<Path> getPathToOriginalFile(int mediumId);
 
     Path persistWaveformFile(Path srcWaveformFile, int mediumId) throws IOException;
+
+    Path persistFrequencyFile(Path srcFrequencyFile, int mediumId) throws IOException;
 }

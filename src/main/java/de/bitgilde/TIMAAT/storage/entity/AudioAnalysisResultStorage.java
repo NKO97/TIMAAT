@@ -51,7 +51,7 @@ public class AudioAnalysisResultStorage extends DbStorage {
         audioAnalysis.setAudioCodec(audioMetaInformation.getCodecName());
         audioAnalysis.setSampleCount(0L);
         audioAnalysis.setWaveformPath(pathToWaveformFile.toString());
-        audioAnalysis.setFrequencyInformationPath(pathToWaveformFile.toString());
+        audioAnalysis.setFrequencyInformationPath(pathToFrequencyFile.toString());
 
         executeDbTransaction(entityManager -> {
             MediumAudioAnalysis mediumAudioAnalysis = entityManager.find(MediumAudioAnalysis.class, mediumId);

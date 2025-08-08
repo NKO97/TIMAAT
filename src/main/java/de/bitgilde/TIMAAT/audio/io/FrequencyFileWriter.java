@@ -1,9 +1,7 @@
 package de.bitgilde.TIMAAT.audio.io;
 
-import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
-
+import java.io.Closeable;
 import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,27 +21,30 @@ import java.nio.file.Path;
  */
 
 /**
- * Writer responsible to create a waveform binary file
+ * Class responsible to read frequency files
  *
  * @author Nico Kotlenga
- * @since 25.07.25
+ * @since 08.08.25
  */
-public class WaveformBinaryFileWriter implements AutoCloseable {
+public class FrequencyFileWriter implements Closeable {
 
     private final DataOutputStream stream;
 
-    public WaveformBinaryFileWriter(Path waveformBinaryPath) throws FileNotFoundException {
-        this.stream = new DataOutputStream(new FileOutputStream(waveformBinaryPath.toFile()));
+    public FrequencyFileWriter(Path frequencyBinaryPath, int timespanMsPerDataPoint) throws IOException {
+        this.stream = new DataOutputStream(new FileOutputStream(frequencyBinaryPath.toFile()));
+        writeHeader(timespanMsPerDataPoint);
     }
 
-    public void writeValues(WaveformDataPoint waveformDataPoint)  throws IOException {
-        stream.writeFloat(waveformDataPoint.getNormalizedMinValue());
-        stream.writeFloat(waveformDataPoint.getNormalizedAverageValue());
-        stream.writeFloat(waveformDataPoint.getNormalizedMaxValue());
+    public void writeFrequencyDataPoint(double frequency) throws IOException {
+        stream.writeDouble(frequency);
+    }
+
+    private void writeHeader(int timespanMsPerDataPoint) throws IOException {
+        this.stream.writeInt(timespanMsPerDataPoint);
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         stream.close();
     }
 }

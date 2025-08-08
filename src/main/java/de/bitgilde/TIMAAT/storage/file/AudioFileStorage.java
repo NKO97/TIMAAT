@@ -104,12 +104,29 @@ public class AudioFileStorage implements AudioContainingMediumFileStorage {
         return waveformFilePath;
     }
 
+    @Override
+    public Path persistFrequencyFile(Path srcFrequencyFile, int mediumId) throws IOException {
+        logger.log(Level.FINE, "Persisting frequency file of medium having id {0}", mediumId);
+
+        Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
+        Files.createDirectories(mediumDirectoryPath);
+
+        Path frequencyFilePath = createFrequencyFilePath(mediumDirectoryPath, mediumId);
+        Files.move(srcFrequencyFile, frequencyFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return frequencyFilePath;
+    }
+
     private static Path createAudioFilePath(Path mediumDirectoryPath, int mediumId) {
         return mediumDirectoryPath.resolve(mediumId + "-audio.mp3");
     }
 
     private static Path createWaveFormFilePath(Path mediumDirectoryPath, int mediumId) {
         return mediumDirectoryPath.resolve(mediumId + "-waveform.waveform");
+    }
+
+    private static Path createFrequencyFilePath(Path mediumDirectoryPath, int mediumId) {
+        return mediumDirectoryPath.resolve(mediumId + "-frequency.frequency");
     }
 
     private Path createMediumDirectoryPath(int mediumId) {

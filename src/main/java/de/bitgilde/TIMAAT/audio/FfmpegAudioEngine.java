@@ -3,8 +3,10 @@ package de.bitgilde.TIMAAT.audio;
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
+import de.bitgilde.TIMAAT.audio.api.Complex;
 import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
+import de.bitgilde.TIMAAT.audio.io.FrequencyFileWriter;
 import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileWriter;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
@@ -18,6 +20,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -49,6 +53,8 @@ public class FfmpegAudioEngine {
 
     private static final int SAMPLE_RATE = 44100;
     private static final int WAVEFORM_SEGMENT_COUNT = 40000;
+    private static final int FREQUENCY_EXTRACTION_INTERVAL_MS = 500;
+    private static final int SAMPLES_PER_FREQUENCY_DATA_POINT = SAMPLE_RATE * FREQUENCY_EXTRACTION_INTERVAL_MS / 1000;
 
     private final Path pathToFfmpeg;
     private final Path pathToFfprobe;
@@ -107,6 +113,20 @@ public class FfmpegAudioEngine {
             throw new AudioEngineException("Error during creating waveform binary for audio file", e);
         }
 
+    }
+
+    public void createFrequencyBinary(Path pathToAudioFile, Path frequencyBinaryResultPath) throws AudioEngineException {
+        logger.log(Level.FINE, "Extracting frequency information from file {0}", pathToAudioFile);
+        //TODO: Add convertion to mono file one layer up to avoid redundant execution
+        try(TemporaryFile temporaryMonoFile = temporaryFileStorage.createTemporaryFile()){
+            convertAudioChannelsTo16BitLittleEndian(pathToAudioFile, temporaryMonoFile.getTemporaryFilePath());
+
+            try(FrequencyFileWriter frequencyFileWriter = new FrequencyFileWriter(frequencyBinaryResultPath, FREQUENCY_EXTRACTION_INTERVAL_MS)){
+                extractFrequencyInformationFrom16BitLittleEndian(temporaryMonoFile.getTemporaryFilePath(), frequencyFileWriter);
+            }
+        }catch (Exception e){
+            throw new AudioEngineException("Error during extracting frequency information from file", e);
+        }
     }
 
     private static WaveformDataPoint createWaveformDataPoint(DataInputStream dataInputStream, long numberOfSamples) throws IOException {
@@ -177,5 +197,111 @@ public class FfmpegAudioEngine {
         process.waitFor();
 
         return process;
+    }
+
+    private static List<Double> readNextNormalizedSampleValuesFrom16BitLittleEndian(DataInputStream dataInputStream, int numberOfSamples) throws IOException {
+        List<Double> result = new ArrayList<>(numberOfSamples);
+
+        for(int i = 0; i < numberOfSamples; i++) {
+            if(dataInputStream.available() >= Short.BYTES) {
+                short bigEndianCurrentSample = dataInputStream.readShort();
+                short littleEndianCurrentSample = Short.reverseBytes(bigEndianCurrentSample);
+                double normalizedValue = littleEndianCurrentSample / 32768.0;
+
+                result.add(normalizedValue);
+            }else {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    private static void extractFrequencyInformationFrom16BitLittleEndian(Path monoFilePath, FrequencyFileWriter frequencyFileWriter) throws AudioEngineException {
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(monoFilePath.toFile()))) {
+            while(dataInputStream.available() > 0){
+                List<Double> currentSamples =  readNextNormalizedSampleValuesFrom16BitLittleEndian(dataInputStream, SAMPLES_PER_FREQUENCY_DATA_POINT);
+                double dominantFrequency = findDominantFrequency(currentSamples.stream().mapToDouble(Double::doubleValue).toArray());
+                frequencyFileWriter.writeFrequencyDataPoint(dominantFrequency);
+            }
+        } catch (Exception e) {
+            throw new AudioEngineException("Error during extracting frequency information from mono file", e);
+        }
+    }
+
+    private static double findDominantFrequency(double[] samples) throws AudioEngineException {
+        int fftSize = nextPowerOfTwo(samples.length);
+
+        double[] paddedSamples = new double[fftSize];
+        System.arraycopy(samples, 0, paddedSamples, 0, samples.length);
+
+        applyHammingWindow(paddedSamples, samples.length);
+
+        Complex[] fftResult = fft(paddedSamples);
+
+        double[] magnitudes = new double[fftResult.length / 2];
+        for (int i = 0; i < magnitudes.length; i++) {
+            magnitudes[i] = fftResult[i].magnitude();
+        }
+
+        int maxIndex = 1;
+        for (int i = 2; i < magnitudes.length; i++) {
+            if (magnitudes[i] > magnitudes[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+
+        return (double) maxIndex * SAMPLE_RATE / fftSize;
+    }
+
+    private static void applyHammingWindow(double[] samples, int actualLength) {
+        for (int i = 0; i < actualLength; i++) {
+            double window = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / (actualLength - 1));
+            samples[i] *= window;
+        }
+    }
+
+    private static int nextPowerOfTwo(int n) {
+        return Integer.highestOneBit(n - 1) << 1;
+    }
+
+    private static Complex[] fft(double[] samples) throws AudioEngineException {
+        int n = samples.length;
+        Complex[] x = new Complex[n];
+
+        // Input in Complex Array konvertieren
+        for (int i = 0; i < n; i++) {
+            x[i] = new Complex(samples[i], 0);
+        }
+
+        return fft(x);
+    }
+
+    private static Complex[] fft(Complex[] x) throws AudioEngineException {
+        int n = x.length;
+
+        if (n == 1) return x;
+        if (n % 2 != 0) throw new AudioEngineException("n has to be multiple of 2");
+
+        Complex[] even = new Complex[n/2];
+        Complex[] odd = new Complex[n/2];
+        for (int i = 0; i < n/2; i++) {
+            even[i] = x[2*i];
+            odd[i] = x[2*i + 1];
+        }
+
+        Complex[] evenFFT = fft(even);
+        Complex[] oddFFT = fft(odd);
+
+        Complex[] result = new Complex[n];
+        for (int k = 0; k < n/2; k++) {
+            double angle = -2 * Math.PI * k / n;
+            Complex wk = new Complex(Math.cos(angle), Math.sin(angle));
+            Complex t = wk.multiply(oddFFT[k]);
+            result[k] = evenFFT[k].add(t);
+            result[k + n/2] = evenFFT[k].subtract(t);
+        }
+
+        return result;
     }
 }

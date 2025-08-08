@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: Add javadoc
+ * Class responsible to read waveform binary files
  *
  * @author Nico Kotlenga
  * @since 26.07.25

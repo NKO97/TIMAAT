@@ -61,11 +61,13 @@ public class MediumAudioAnalysisTaskExecutor extends TaskExecutor<MediumAudioAna
         int mediumId = this.task.getMediumId();
         logger.log(Level.INFO, "Executing medium audio analysis task for medium having id {0}", mediumId);
 
-        Optional<Path> pathToOriginalVideoFile = audioContainingMediumFileStorage.getPathToOriginalFile(mediumId);
-        if (pathToOriginalVideoFile.isPresent()) {
-            AudioMetaInformation audioMetaInformation = executeAudioFileMetaInformationExtraction(pathToOriginalVideoFile.get());
-            Path waveformPath = executeWaveformFileGeneration(pathToOriginalVideoFile.get());
-            persistAudioAnalysisResult(audioMetaInformation, waveformPath);
+        Optional<Path> pathToOriginalMediumFile = audioContainingMediumFileStorage.getPathToOriginalFile(mediumId);
+        if (pathToOriginalMediumFile.isPresent()) {
+            AudioMetaInformation audioMetaInformation = executeAudioFileMetaInformationExtraction(pathToOriginalMediumFile.get());
+            Path waveformPath = executeWaveformFileGeneration(pathToOriginalMediumFile.get());
+            Path frequencyPath = executeFrequencyFileGeneration(pathToOriginalMediumFile.get());
+
+            persistAudioAnalysisResult(audioMetaInformation, waveformPath, frequencyPath);
 
             logger.log(Level.INFO, "Finished medium audio analysis task for medium having id {0}", mediumId);
         } else {
@@ -90,9 +92,18 @@ public class MediumAudioAnalysisTaskExecutor extends TaskExecutor<MediumAudioAna
         }
     }
 
-    private void persistAudioAnalysisResult(AudioMetaInformation audioMetaInformation, Path pathToWaveformFile) throws TaskExecutionException {
+    private Path executeFrequencyFileGeneration(Path pathToAudioFile) throws TaskExecutionException {
+        try(TemporaryFile temporaryFrequencyFile = temporaryFileStorage.createTemporaryFile()){
+            audioEngine.createFrequencyBinary(pathToAudioFile, temporaryFrequencyFile.getTemporaryFilePath());
+            return audioContainingMediumFileStorage.persistFrequencyFile(temporaryFrequencyFile.getTemporaryFilePath(), task.getMediumId());
+        }catch (Exception e){
+            throw new TaskExecutionException("Error during executing frequency file generation", e);
+        }
+    }
+
+    private void persistAudioAnalysisResult(AudioMetaInformation audioMetaInformation, Path pathToWaveformFile, Path pathToFrequencyFile) throws TaskExecutionException {
         try {
-            audioAnalysisResultStorage.persistAudioAnalysisResult(audioMetaInformation, pathToWaveformFile, pathToWaveformFile, task.getMediumId());
+            audioAnalysisResultStorage.persistAudioAnalysisResult(audioMetaInformation, pathToWaveformFile, pathToFrequencyFile, task.getMediumId());
         } catch (Exception e) {
             throw new TaskExecutionException("Error while persisting audio analysis result", e);
         }
