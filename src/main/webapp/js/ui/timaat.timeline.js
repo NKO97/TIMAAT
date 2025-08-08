@@ -95,7 +95,7 @@
 
             this.ui.indicator.on('mousedown', ev => {
                 this.ui.pane.on('mousemove.indicator', this.handleIndicatorTracking.bind(this))
-                this.ui.pane.on('mouseup.indicator', this.stopIndicatorTracking.bind(this))
+                $(document).one('mouseup', this.stopIndicatorTracking.bind(this))
                 TIMAAT.VideoPlayer.pause()
             })
 
