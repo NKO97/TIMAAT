@@ -275,6 +275,22 @@
             this.updateUI();
         }
 
+        get startXPercentage() {
+            if(this._startXPercentage < this._endXPercentage) {
+                return this._startXPercentage
+            }else {
+                return this._endXPercentage;
+            }
+        }
+
+        get endXPercentage() {
+            if(this._startXPercentage > this._endXPercentage) {
+                return this._startXPercentage
+            }else {
+                return this._endXPercentage;
+            }
+        }
+
         updateUI() {
             let left;
             let width;

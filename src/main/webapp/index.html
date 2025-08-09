@@ -1450,20 +1450,22 @@
             <div class="col-lg-12 pb-2">
               <div class="card">
                 <div class="card-body m-1">
-                	<div class="d-flex justify-content-between align-items-end mt-2 mb-2">
-                    <div>
-                      <div class="btn-group btn-group-sm mr-2">
-                        <button title="zoom in timeline" class="btn btn-sm btn-dark small timelineZoomIn">
-                          <i class="fas fa-search-plus fa-fw"></i>
-                        </button>
-                        <button title="zoom out timeline" class="btn btn-sm btn-dark small timelineZoomOut">
-                          <i class="fas fa-search-minus fa-fw"></i>
-                        </button>
-                      </div>
-                      <button title="track playback bar in timeline on/off" class="btn btn-sm btn-outline-secondary small timelineTrack">
-                        <i class="fas fa-map-pin fa-fw"></i>
-                      </button>
-                    </div>
+                	<div class="d-flex justify-content-center align-items-end mt-2 mb-2">
+                        <div class="d-flex align-items-center mr-auto w-50">
+                          <div class="btn-group btn-group-sm mr-2">
+                            <button title="zoom in timeline" class="btn btn-sm btn-dark small timelineZoomIn">
+                              <i class="fas fa-search-plus fa-fw"></i>
+                            </button>
+                            <button title="zoom out timeline" class="btn btn-sm btn-dark small timelineZoomOut">
+                              <i class="fas fa-search-minus fa-fw"></i>
+                            </button>
+                          </div>
+                          <button title="track playback bar in timeline on/off" class="btn btn-sm btn-outline-secondary small timelineTrack mr-2">
+                            <i class="fas fa-map-pin fa-fw"></i>
+                          </button>
+                          <i class="fas fa-music fa-fw mr-1"></i>
+                          <span id="timelineFrequencyInformation"></span>
+                        </div>
                     <div id="timelineLayerCheckboxes" class="input-group-sm mb-1 form-inline">
                       <label class="sr-only">Timeline layer(s):</label>
                       <div class="input-group-prepend mr-sm-4">
@@ -1488,7 +1490,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Button group">
+                    <div class="w-50 d-flex justify-content-end">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Button group">
                       <div class="dropdown">
                         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" title="Segment structure" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-layer-group fa-fw fa-lg"></i>
@@ -1517,7 +1520,8 @@
                         </div>
                       </div>
                     </div>
-                	</div>
+                    </div>
+                    </div>
                 	<div class="timeline bg-dark">
                     <div class="timeline__layer-pane js-timeline__layer-pane">
                       <div class="timeline__position-indicator js-timeline__position-indicator bg-warning"></div>

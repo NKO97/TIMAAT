@@ -67,6 +67,8 @@
 		userPermissionList          : null,
 		volume                      : 1,
         currentTemporaryWaveformMarker  : null,
+        mediumFrequencyInformation : null,
+        selectionFrequencyInformation: null,
 
 		init: function() {
 			// init UI
@@ -1389,6 +1391,7 @@
 			if(TIMAAT.VideoPlayer.model.medium?.id === mediumAudioAnalysis.mediumId){
 				TIMAAT.VideoPlayer.model.medium.mediumAudioAnalysis = mediumAudioAnalysis
 				TIMAAT.VideoPlayer.drawWaveform()
+                TIMAAT.VideoPlayer.loadMediumFrequencyInformation()
 			}
 		},
 
@@ -1399,6 +1402,11 @@
 			// setup model
 			this.curFrameRate = 25; // required for step forward and step backward functionality
 			this.model.medium = medium;
+            this.mediumFrequencyInformation = null;
+
+            TIMAAT.VideoPlayer.drawFrequencyInformation()
+            TIMAAT.VideoPlayer.loadMediumFrequencyInformation()
+
 			// remove all annotations and markers
 			this.annotationList.forEach(function(annotation) {annotation.remove()});
 			this.annotationList = [];
@@ -1685,7 +1693,60 @@
 				}
 			}
 		},
+        drawFrequencyInformation: function () {
+            if(TIMAAT.VideoPlayer.mediumFrequencyInformation){
+                const minimumFrequency = Math.round(TIMAAT.VideoPlayer.mediumFrequencyInformation.minimumFrequency);
+                const maximumFrequency = Math.round(TIMAAT.VideoPlayer.mediumFrequencyInformation.maximumFrequency);
 
+                let frequencyText = `${minimumFrequency} - ${maximumFrequency} HZ`
+                if(TIMAAT.VideoPlayer.selectionFrequencyInformation){
+                    const selectionMinimumFrequency = Math.round(TIMAAT.VideoPlayer.selectionFrequencyInformation.minimumFrequency);
+                    const selectionMaximumFrequency = Math.round(TIMAAT.VideoPlayer.selectionFrequencyInformation.maximumFrequency);
+
+                    frequencyText += ` [${selectionMinimumFrequency} - ${selectionMaximumFrequency} HZ]`;
+                }
+
+                $('#timelineFrequencyInformation').html(frequencyText);
+            }else {
+                $('#timelineFrequencyInformation').html("")
+            }
+        },
+        loadMediumFrequencyInformation: function () {
+            const token = TIMAAT.VideoPlayer.model.medium.viewToken;
+            const mediumId = TIMAAT.VideoPlayer.model.medium.id
+
+            if(TIMAAT.VideoPlayer.mediumFrequencyInformation == null && TIMAAT.VideoPlayer.model.medium.mediumAudioAnalysis?.audioAnalysisState?.id === 4){
+                fetch("/TIMAAT/api/medium/" + mediumId + "/mediumAudioAnalysis/frequencyInformation?token=" + token)
+                    .then(response => response.json())
+                    .then(frequencyInformation => {
+                        console.log(frequencyInformation);
+                        TIMAAT.VideoPlayer.mediumFrequencyInformation = frequencyInformation;
+                        TIMAAT.VideoPlayer.drawFrequencyInformation()
+                    })
+            }
+        },
+        loadSelectionMediumFrequencyInformation: function () {
+            if(TIMAAT.VideoPlayer.currentTemporaryWaveformMarker){
+                const token = TIMAAT.VideoPlayer.model.medium.viewToken;
+                const mediumId = TIMAAT.VideoPlayer.model.medium.id
+                const startXPercentage = TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.startXPercentage
+                const endXPercentage = TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.endXPercentage
+                const startPositionMs = Math.round(TIMAAT.VideoPlayer.duration * startXPercentage)
+                const endPositionMs = Math.round(TIMAAT.VideoPlayer.duration * endXPercentage)
+
+                if(TIMAAT.VideoPlayer.model.medium.mediumAudioAnalysis?.audioAnalysisState?.id === 4){
+                    fetch("/TIMAAT/api/medium/" + mediumId + "/mediumAudioAnalysis/frequencyInformation?token=" + token + "&startPositionMs=" + startPositionMs + "&endPositionMs=" + endPositionMs)
+                        .then(response => response.json())
+                        .then(frequencyInformation => {
+                            if(TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.startXPercentage === startXPercentage && TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.endXPercentage === endXPercentage){
+                                TIMAAT.VideoPlayer.selectionFrequencyInformation = frequencyInformation;
+                                TIMAAT.VideoPlayer.drawFrequencyInformation()
+                            }
+                        })
+                }
+            }
+
+        },
         handleTemporaryWaveformDragStart: function (ev) {
             if(TIMAAT.VideoPlayer.currentTemporaryWaveformMarker){
                 TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.removeFromUi();
@@ -1694,10 +1755,14 @@
             const waveformContainerRect = ev.originalEvent.target.getBoundingClientRect();
             const relativeX = (ev.clientX - waveformContainerRect.left + TIMAAT.VideoPlayer.waveformContainer.scrollLeft()) / TIMAAT.VideoPlayer.waveformContainer.width();
             TIMAAT.VideoPlayer.currentTemporaryWaveformMarker = new TIMAAT.TemporaryWaveformMarker(relativeX, TIMAAT.VideoPlayer.waveformContainer)
+            TIMAAT.VideoPlayer.selectionFrequencyInformation = null;
             TIMAAT.VideoPlayer.waveformContainer.on("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
+            TIMAAT.VideoPlayer.drawFrequencyInformation()
+
             $(document).one("mouseup", function(ev) {
                 TIMAAT.VideoPlayer.waveformContainer.off("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
                 TIMAAT.VideoPlayer.waveformContainer.one("mousedown", TIMAAT.VideoPlayer.handleTemporaryWaveformDragStart)
+                TIMAAT.VideoPlayer.loadSelectionMediumFrequencyInformation()
             })
         },
 

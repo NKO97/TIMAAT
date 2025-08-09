@@ -19,7 +19,7 @@ public class FrequencyFileReaderTest {
     public void testSuccessfulReadingOfCompleteFrequencyFile() throws IOException {
         Path frequencyFilePath = Path.of(WaveformBinaryFileReaderTest.class.getResource("/frequency-files/1.frequency").getPath());
         FrequencyFileReader reader = new FrequencyFileReader(frequencyFilePath);
-        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(null, null);
+        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(null, null).get();
 
         Assertions.assertEquals(10.0, frequencyInformation.getMaximumFrequency(), 0.01);
         Assertions.assertEquals(1.0, frequencyInformation.getMinimumFrequency(), 0.01);
@@ -33,7 +33,7 @@ public class FrequencyFileReaderTest {
     public void testSuccessfulReadingOfFrequencyFileWithStartTimeLimit()  throws IOException {
         Path frequencyFilePath = Path.of(WaveformBinaryFileReaderTest.class.getResource("/frequency-files/1.frequency").getPath());
         FrequencyFileReader reader = new FrequencyFileReader(frequencyFilePath);
-        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(5000, null);
+        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(5000, null).get();
 
 
         Assertions.assertEquals(10.0, frequencyInformation.getMaximumFrequency(), 0.01);
@@ -48,7 +48,7 @@ public class FrequencyFileReaderTest {
     public void testSuccessfulReadingOfFrequencyFileWithEndTimeLimit() throws IOException {
         Path frequencyFilePath = Path.of(WaveformBinaryFileReaderTest.class.getResource("/frequency-files/1.frequency").getPath());
         FrequencyFileReader reader = new FrequencyFileReader(frequencyFilePath);
-        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(null, 5000);
+        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(null, 5000).get();
 
         Assertions.assertEquals(2.0, frequencyInformation.getMaximumFrequency(), 0.01);
         Assertions.assertEquals(1.0, frequencyInformation.getMinimumFrequency(), 0.01);
@@ -62,7 +62,7 @@ public class FrequencyFileReaderTest {
     public void testSuccessfulReadingOfFrequencyFileWithStartAndEndTimeLimit() throws IOException {
         Path frequencyFilePath = Path.of(WaveformBinaryFileReaderTest.class.getResource("/frequency-files/1.frequency").getPath());
         FrequencyFileReader reader = new FrequencyFileReader(frequencyFilePath);
-        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(5000, 12000);
+        FrequencyInformation frequencyInformation = reader.getFrequencyInformation(5000, 12000).get();
 
         Assertions.assertEquals(4.0, frequencyInformation.getMaximumFrequency(), 0.01);
         Assertions.assertEquals(3.0, frequencyInformation.getMinimumFrequency(), 0.01);

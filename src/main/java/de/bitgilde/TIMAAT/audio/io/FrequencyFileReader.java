@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Reader responsible to read a frequency file
@@ -41,10 +42,10 @@ public class FrequencyFileReader {
      * Reads frequency information
      * @param startPositionMs optional parameter which will reads frequency information which are after or equal specified time
      * @param endPositionMs optional parameter which will reads frequency information which are before or equal specified time
-     * @return the read {@link FrequencyInformation}
+     * @return the read {@link FrequencyInformation} if present. If the defined timespan doesn't have frequency information, no information will be returned
      * @throws IOException when error occurred during accessing frequency file
      */
-    public FrequencyInformation getFrequencyInformation(@Nullable Integer startPositionMs,@Nullable Integer endPositionMs) throws IOException {
+    public Optional<FrequencyInformation> getFrequencyInformation(@Nullable Integer startPositionMs, @Nullable Integer endPositionMs) throws IOException {
         try(DataInputStream stream = new DataInputStream(new FileInputStream(frequencyFile))) {
             stream.skipBytes(FREQUENCY_FILE_HEADER_SIZE); //skip header
 
@@ -87,8 +88,10 @@ public class FrequencyFileReader {
 
                 currentPositionMs += timeSpanMsPerDataPoint;
             }
-
-            return new FrequencyInformation(minimumFrequency, maximumFrequency, minimumFrequencyTimeSpans, maximumFrequencyTimeSpans);
+            if(minimumFrequencyTimeSpans.isEmpty() || maximumFrequencyTimeSpans.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(new FrequencyInformation(minimumFrequency, maximumFrequency, minimumFrequencyTimeSpans, maximumFrequencyTimeSpans));
         }
     }
 }

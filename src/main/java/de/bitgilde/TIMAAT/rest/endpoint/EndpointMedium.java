@@ -66,7 +66,6 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HEAD;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -3116,15 +3115,31 @@ public class EndpointMedium {
     @GET
     @Path("/{id}/mediumAudioAnalysis/frequencyInformation")
     @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
-    public FrequencyInformation getVideoFrequencyInformation(@PathParam("id") int id, @QueryParam("startPositionMs") Integer startPositionMs, @QueryParam("endPositionMs") Integer endPositionMs) throws IOException {
+    public Response getVideoFrequencyInformation(@PathParam("id") int id, @QueryParam("startPositionMs") Integer startPositionMs, @QueryParam("endPositionMs") Integer endPositionMs, @QueryParam("token") String fileToken) throws IOException {
+        // verify token
+        if ( fileToken == null ) return Response.status(401).build();
+        int tokenMediumID = 0;
+        try {
+            tokenMediumID = validateFileToken(fileToken);
+        } catch (Exception e) {
+            return Response.status(401).build();
+        }
+        if ( tokenMediumID != id ) return Response.status(401).build();
+
+
         Optional<java.nio.file.Path> frequencyFilePath = videoFileStorage.getPathToFrequencyFile(id).or(() -> audioFileStorage.getPathToOriginalFile(id));
 
         if(frequencyFilePath.isPresent()) {
             FrequencyFileReader frequencyFileReader = new FrequencyFileReader(frequencyFilePath.get());
-            return frequencyFileReader.getFrequencyInformation(startPositionMs, endPositionMs);
+            Optional<FrequencyInformation> frequencyInformation = frequencyFileReader.getFrequencyInformation(startPositionMs, endPositionMs);
+            if(frequencyInformation.isPresent()) {
+                return Response.ok().entity(frequencyInformation.get()).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).build();
+            }
         }
 
-        throw new NotFoundException("No frequency file available");
+        return Response.status(Status.NOT_FOUND).build();
     }
 
 
