@@ -158,12 +158,35 @@ public class VideoFileStorage implements AudioContainingMediumFileStorage {
         return Optional.empty();
     }
 
+    /**
+     * Returns the path to the waveform file for the specified medium
+     *
+     * @param mediumId which original video file path will be returned
+     * @return an {@link Optional} containing the {@link Path} if file is existing
+     */
     public Optional<Path> getPathToWaveformFile(int mediumId) {
         Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
         Path waveformFilePath = createWaveFormFilePath(mediumDirectoryPath, mediumId);
 
         if (Files.exists(waveformFilePath)) {
             return Optional.of(waveformFilePath);
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the path to the frequency file for the specified medium
+     *
+     * @param mediumId which original video file path will be returned
+     * @return an {@link Optional} containing the {@link Path} if file is existing
+     */
+    public Optional<Path> getPathToFrequencyFile(int mediumId) {
+        Path mediumDirectoryPath = createMediumDirectoryPath(mediumId);
+        Path frequencyFilePath = createFrequencyFilePath(mediumDirectoryPath, mediumId);
+
+        if (Files.exists(frequencyFilePath)) {
+            return Optional.of(frequencyFilePath);
         }
 
         return Optional.empty();

@@ -6,6 +6,8 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithToken;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.audio.api.FrequencyInformation;
+import de.bitgilde.TIMAAT.audio.io.FrequencyFileReader;
 import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileReader;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
@@ -64,6 +66,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HEAD;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -3109,6 +3112,22 @@ public class EndpointMedium {
 
 		return Response.ok().entity(mediumImage).build();
 	}
+
+    @GET
+    @Path("/{id}/mediumAudioAnalysis/frequencyInformation")
+    @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+    public FrequencyInformation getVideoFrequencyInformation(@PathParam("id") int id, @QueryParam("startPositionMs") Integer startPositionMs, @QueryParam("endPositionMs") Integer endPositionMs) throws IOException {
+        Optional<java.nio.file.Path> frequencyFilePath = videoFileStorage.getPathToFrequencyFile(id).or(() -> audioFileStorage.getPathToOriginalFile(id));
+
+        if(frequencyFilePath.isPresent()) {
+            FrequencyFileReader frequencyFileReader = new FrequencyFileReader(frequencyFilePath.get());
+            return frequencyFileReader.getFrequencyInformation(startPositionMs, endPositionMs);
+        }
+
+        throw new NotFoundException("No frequency file available");
+    }
+
+
     @POST
     @Path("/{id}/mediumAudioAnalysis/start")
     @Consumes(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
