@@ -32,8 +32,8 @@ fi
 FFMPEG_DIR=$(awk '/^app.ffmpeg.location/{print $3}' $CFG_FILE)
 FFPROBE=$FFMPEG_DIR"ffprobe"
 FFMPEG=$FFMPEG_DIR"ffmpeg"
-VIDEO="${TIMAAT_STORAGE}${FILE_ID}-video-original.mp4"
-
+VIDEO="${TIMAAT_STORAGE}${FILE_ID}/${FILE_ID}-video-original.mp4"
+echo ${VIDEO}
 # ---- CHECK ENCODING STATUS -----
 echo "TIMAAT::Encoder:Processing $VIDEO ..." >>"${TIMAAT_STORAGE}timaat-cron.log"
 mkdir -p "${TIMAAT_STORAGE}$FILE_ID/frames"
@@ -57,6 +57,8 @@ fi
 
 # ---- ENCODE VIDEO -----
 if [ "$START_ENCODING" = "1" ]; then
+  echo  $VIDEO >> "${TIMAAT_STORAGE}timaat-cron.log"
+  #echo "${TIMAAT_STORAGE}${FILE_ID}/${FILE_ID}-video.mp4" >> "${TIMAAT_STORAGE}timaat-cron.log"
   echo "TIMAAT::Encoder:Starting Encoder Thread..." >>"${TIMAAT_STORAGE}timaat-cron.log"
   ( $FFMPEG -nostdin -loglevel error -i $VIDEO -c:v libx264 -crf 23 -c:a aac -movflags faststart -movflags rtphint -y "${TIMAAT_STORAGE}${FILE_ID}/${FILE_ID}-video.mp4" 2>>"${TIMAAT_STORAGE}timaat-cron.log" 2>&1 ; rm "$TIMAAT_STORAGE$FILE_ID/$FILE_ID-transcoding.pid" ) &
   echo "$!" >"$TIMAAT_STORAGE$FILE_ID/$FILE_ID-transcoding.pid"

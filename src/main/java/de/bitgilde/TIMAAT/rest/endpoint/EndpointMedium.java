@@ -3949,7 +3949,7 @@ public class EndpointMedium {
 	}
 	//TODO: In future versions another mechanism should be found for that, so the storages are the only components knowing the paths to the files
 	public static String mediumFileStatus(int id, String type) {
-		File mediumDir = new File(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)	+ "medium/" + type + "/" + id);
+		File mediumDir = java.nio.file.Path.of(TIMAATApp.timaatProps.getProp(PropertyConstants.STORAGE_LOCATION)).resolve("medium").resolve(type).resolve(String.valueOf(id)).toFile();
 		String fileStatus = "noFile";
 		if ( !mediumDir.exists() ) {
 			return fileStatus;
