@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
 import de.bitgilde.TIMAAT.audio.api.Complex;
+import de.bitgilde.TIMAAT.audio.api.PcmMono16BitLittleEndian;
 import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
 import de.bitgilde.TIMAAT.audio.io.FrequencyFileWriter;
@@ -90,41 +91,34 @@ public class FfmpegAudioEngine {
         }
     }
 
-    private void convertAudioChannelsTo16BitLittleEndian(Path pathToAudioFile, Path monoFileResultPath) throws AudioEngineException {
+    public PcmMono16BitLittleEndian convertAudioChannelsTo16BitLittleEndian(Path pathToAudioFile) throws AudioEngineException {
         logger.log(Level.FINE, "Converting file {0} to mono", pathToAudioFile);
-
-        String[] commandLine = {pathToFfmpeg.toString(), "-i", pathToAudioFile.toString(), "-ac", "1", "-ar", String.valueOf(SAMPLE_RATE), "-f", "s16le", monoFileResultPath.toString()};
         try {
+            TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile();
+            String[] commandLine = {pathToFfmpeg.toString(), "-i", pathToAudioFile.toString(), "-ac", "1", "-ar", String.valueOf(SAMPLE_RATE), "-f", "s16le", temporaryFile.getTemporaryFilePath().toString()};
             syncExecuteProcess(commandLine);
+
+            return new PcmMono16BitLittleEndian(temporaryFile);
         } catch (Exception e) {
             throw new AudioEngineException("Error during converting file to mono", e);
         }
     }
 
-    public void createWaveformBinary(Path pathToAudioFile, Path waveformBinaryResultPath) throws AudioEngineException {
-        logger.log(Level.FINE, "Creating waveform binary for audio file located at {0}", pathToAudioFile);
-        try (TemporaryFile temporaryMonoFile = temporaryFileStorage.createTemporaryFile()) {
-            convertAudioChannelsTo16BitLittleEndian(pathToAudioFile, temporaryMonoFile.getTemporaryFilePath());
-
-            try (WaveformBinaryFileWriter waveformBinaryFileWriter = new WaveformBinaryFileWriter(waveformBinaryResultPath)) {
-                extractWaveformInformationFrom16BitLittleEndian(temporaryMonoFile.getTemporaryFilePath(), waveformBinaryFileWriter);
-            }
+    public void createWaveformBinary(PcmMono16BitLittleEndian audioFile, Path waveformBinaryResultPath) throws AudioEngineException {
+        logger.log(Level.FINE, "Creating waveform binary for audio file located at {0}", audioFile.getAudioFilePath());
+        try (WaveformBinaryFileWriter waveformBinaryFileWriter = new WaveformBinaryFileWriter(waveformBinaryResultPath)) {
+            extractWaveformInformationFrom16BitLittleEndian(audioFile, waveformBinaryFileWriter);
         } catch (Exception e) {
             throw new AudioEngineException("Error during creating waveform binary for audio file", e);
         }
-
     }
 
-    public void createFrequencyBinary(Path pathToAudioFile, Path frequencyBinaryResultPath) throws AudioEngineException {
-        logger.log(Level.FINE, "Extracting frequency information from file {0}", pathToAudioFile);
-        //TODO: Add convertion to mono file one layer up to avoid redundant execution
-        try(TemporaryFile temporaryMonoFile = temporaryFileStorage.createTemporaryFile()){
-            convertAudioChannelsTo16BitLittleEndian(pathToAudioFile, temporaryMonoFile.getTemporaryFilePath());
+    public void createFrequencyBinary(PcmMono16BitLittleEndian audioFile, Path frequencyBinaryResultPath) throws AudioEngineException {
+        logger.log(Level.FINE, "Extracting frequency information from file {0}", audioFile.getAudioFilePath());
 
-            try(FrequencyFileWriter frequencyFileWriter = new FrequencyFileWriter(frequencyBinaryResultPath, FREQUENCY_EXTRACTION_INTERVAL_MS)){
-                extractFrequencyInformationFrom16BitLittleEndian(temporaryMonoFile.getTemporaryFilePath(), frequencyFileWriter);
-            }
-        }catch (Exception e){
+        try (FrequencyFileWriter frequencyFileWriter = new FrequencyFileWriter(frequencyBinaryResultPath, FREQUENCY_EXTRACTION_INTERVAL_MS)) {
+            extractFrequencyInformationFrom16BitLittleEndian(audioFile, frequencyFileWriter);
+        } catch (Exception e) {
             throw new AudioEngineException("Error during extracting frequency information from file", e);
         }
     }
@@ -156,8 +150,8 @@ public class FfmpegAudioEngine {
         return new WaveformDataPoint(currentNormalizedMinValue, currentNormalizedMaxValue, averageNormalizedValues);
     }
 
-    private static void extractWaveformInformationFrom16BitLittleEndian(Path monoFilePath, WaveformBinaryFileWriter waveformBinaryFileWriter) throws AudioEngineException {
-        File monoFile = monoFilePath.toFile();
+    private static void extractWaveformInformationFrom16BitLittleEndian(PcmMono16BitLittleEndian pcmFile, WaveformBinaryFileWriter waveformBinaryFileWriter) throws AudioEngineException {
+        File monoFile = pcmFile.getAudioFilePath().toFile();
         long fileLength = monoFile.length();
         long sampleCount = fileLength / 2; // 2 Bytes per sample
 
@@ -171,7 +165,7 @@ public class FfmpegAudioEngine {
             waveformSegmentCount = sampleCount;
         }
 
-        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(monoFilePath.toFile()))) {
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(monoFile))) {
             for (int i = 0; i < waveformSegmentCount; i++) {
                 WaveformDataPoint waveformDataPoint = FfmpegAudioEngine.createWaveformDataPoint(dataInputStream, numberOfSamplesPerWaveformDataPoint);
                 waveformBinaryFileWriter.writeValues(waveformDataPoint);
@@ -202,14 +196,14 @@ public class FfmpegAudioEngine {
     private static List<Double> readNextNormalizedSampleValuesFrom16BitLittleEndian(DataInputStream dataInputStream, int numberOfSamples) throws IOException {
         List<Double> result = new ArrayList<>(numberOfSamples);
 
-        for(int i = 0; i < numberOfSamples; i++) {
-            if(dataInputStream.available() >= Short.BYTES) {
+        for (int i = 0; i < numberOfSamples; i++) {
+            if (dataInputStream.available() >= Short.BYTES) {
                 short bigEndianCurrentSample = dataInputStream.readShort();
                 short littleEndianCurrentSample = Short.reverseBytes(bigEndianCurrentSample);
                 double normalizedValue = littleEndianCurrentSample / 32768.0;
 
                 result.add(normalizedValue);
-            }else {
+            } else {
                 break;
             }
         }
@@ -217,10 +211,10 @@ public class FfmpegAudioEngine {
         return result;
     }
 
-    private static void extractFrequencyInformationFrom16BitLittleEndian(Path monoFilePath, FrequencyFileWriter frequencyFileWriter) throws AudioEngineException {
-        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(monoFilePath.toFile()))) {
-            while(dataInputStream.available() > 0){
-                List<Double> currentSamples =  readNextNormalizedSampleValuesFrom16BitLittleEndian(dataInputStream, SAMPLES_PER_FREQUENCY_DATA_POINT);
+    private static void extractFrequencyInformationFrom16BitLittleEndian(PcmMono16BitLittleEndian pcmFile, FrequencyFileWriter frequencyFileWriter) throws AudioEngineException {
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(pcmFile.getAudioFilePath().toFile()))) {
+            while (dataInputStream.available() > 0) {
+                List<Double> currentSamples = readNextNormalizedSampleValuesFrom16BitLittleEndian(dataInputStream, SAMPLES_PER_FREQUENCY_DATA_POINT);
                 double dominantFrequency = findDominantFrequency(currentSamples.stream().mapToDouble(Double::doubleValue).toArray());
                 frequencyFileWriter.writeFrequencyDataPoint(dominantFrequency);
             }
@@ -283,23 +277,23 @@ public class FfmpegAudioEngine {
         if (n == 1) return x;
         if (n % 2 != 0) throw new AudioEngineException("n has to be multiple of 2");
 
-        Complex[] even = new Complex[n/2];
-        Complex[] odd = new Complex[n/2];
-        for (int i = 0; i < n/2; i++) {
-            even[i] = x[2*i];
-            odd[i] = x[2*i + 1];
+        Complex[] even = new Complex[n / 2];
+        Complex[] odd = new Complex[n / 2];
+        for (int i = 0; i < n / 2; i++) {
+            even[i] = x[2 * i];
+            odd[i] = x[2 * i + 1];
         }
 
         Complex[] evenFFT = fft(even);
         Complex[] oddFFT = fft(odd);
 
         Complex[] result = new Complex[n];
-        for (int k = 0; k < n/2; k++) {
+        for (int k = 0; k < n / 2; k++) {
             double angle = -2 * Math.PI * k / n;
             Complex wk = new Complex(Math.cos(angle), Math.sin(angle));
             Complex t = wk.multiply(oddFFT[k]);
             result[k] = evenFFT[k].add(t);
-            result[k + n/2] = evenFFT[k].subtract(t);
+            result[k + n / 2] = evenFFT[k].subtract(t);
         }
 
         return result;

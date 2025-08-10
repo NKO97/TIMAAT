@@ -1654,6 +1654,16 @@
 				TIMAAT.VideoPlayer.updateUI();
 			});
 		},
+        triggerWaveformGeneration: function () {
+            if(TIMAAT.VideoPlayer.model.medium){
+                const mediumId = TIMAAT.VideoPlayer.model.medium.id
+                const token = TIMAAT.VideoPlayer.model.medium.viewToken;
+                fetch("/TIMAAT/api/medium/" + mediumId + "/mediumAudioAnalysis/start", {
+                    method: "POST",
+                    body: token
+                })
+            }
+        },
 		drawWaveform: function () {
 			if(TIMAAT.VideoPlayer.model.medium){
 				$('.timeline-loading-content__generation_in_progress').hide()

@@ -2,6 +2,7 @@ package de.bitgilde.TIMAAT.task.execution;
 
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
+import de.bitgilde.TIMAAT.audio.api.PcmMono16BitLittleEndian;
 import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioContainingMediumFileStorage;
@@ -11,6 +12,7 @@ import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask;
 import de.bitgilde.TIMAAT.task.api.MediumAudioAnalysisTask.SupportedMediumType;
 import de.bitgilde.TIMAAT.task.exception.TaskExecutionException;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
@@ -64,10 +66,15 @@ public class MediumAudioAnalysisTaskExecutor extends TaskExecutor<MediumAudioAna
         Optional<Path> pathToOriginalMediumFile = audioContainingMediumFileStorage.getPathToOriginalFile(mediumId);
         if (pathToOriginalMediumFile.isPresent()) {
             AudioMetaInformation audioMetaInformation = executeAudioFileMetaInformationExtraction(pathToOriginalMediumFile.get());
-            Path waveformPath = executeWaveformFileGeneration(pathToOriginalMediumFile.get());
-            Path frequencyPath = executeFrequencyFileGeneration(pathToOriginalMediumFile.get());
 
-            persistAudioAnalysisResult(audioMetaInformation, waveformPath, frequencyPath);
+            try(PcmMono16BitLittleEndian pcmAudioFile  = audioEngine.convertAudioChannelsTo16BitLittleEndian(pathToOriginalMediumFile.get())){
+                Path waveformPath = executeWaveformFileGeneration(pcmAudioFile);
+                Path frequencyPath = executeFrequencyFileGeneration(pcmAudioFile);
+
+                persistAudioAnalysisResult(audioMetaInformation, waveformPath, frequencyPath);
+            }catch (Exception e){
+                throw new TaskExecutionException(e.getMessage());
+            }
 
             logger.log(Level.INFO, "Finished medium audio analysis task for medium having id {0}", mediumId);
         } else {
@@ -83,21 +90,17 @@ public class MediumAudioAnalysisTaskExecutor extends TaskExecutor<MediumAudioAna
         }
     }
 
-    private Path executeWaveformFileGeneration(Path pathToAudioFile) throws TaskExecutionException {
+    private Path executeWaveformFileGeneration(PcmMono16BitLittleEndian pcmAudioFile) throws IOException, AudioEngineException {
         try (TemporaryFile temporaryWaveformFile = temporaryFileStorage.createTemporaryFile()) {
-            audioEngine.createWaveformBinary(pathToAudioFile, temporaryWaveformFile.getTemporaryFilePath());
+            audioEngine.createWaveformBinary(pcmAudioFile, temporaryWaveformFile.getTemporaryFilePath());
             return audioContainingMediumFileStorage.persistWaveformFile(temporaryWaveformFile.getTemporaryFilePath(), task.getMediumId());
-        } catch (Exception e) {
-            throw new TaskExecutionException("Error during executing waveform file generation", e);
         }
     }
 
-    private Path executeFrequencyFileGeneration(Path pathToAudioFile) throws TaskExecutionException {
+    private Path executeFrequencyFileGeneration(PcmMono16BitLittleEndian pcmAudioFile) throws IOException, AudioEngineException {
         try(TemporaryFile temporaryFrequencyFile = temporaryFileStorage.createTemporaryFile()){
-            audioEngine.createFrequencyBinary(pathToAudioFile, temporaryFrequencyFile.getTemporaryFilePath());
+            audioEngine.createFrequencyBinary(pcmAudioFile, temporaryFrequencyFile.getTemporaryFilePath());
             return audioContainingMediumFileStorage.persistFrequencyFile(temporaryFrequencyFile.getTemporaryFilePath(), task.getMediumId());
-        }catch (Exception e){
-            throw new TaskExecutionException("Error during executing frequency file generation", e);
         }
     }
 
