@@ -1768,19 +1768,23 @@
             TIMAAT.VideoPlayer.selectionFrequencyInformation = null;
             TIMAAT.VideoPlayer.waveformContainer.on("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
             TIMAAT.VideoPlayer.drawFrequencyInformation()
+            TIMAAT.VideoPlayer.timeline.indicatorHidden = true
 
             $(document).one("mouseup", function(ev) {
                 TIMAAT.VideoPlayer.waveformContainer.off("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
                 TIMAAT.VideoPlayer.waveformContainer.one("mousedown", TIMAAT.VideoPlayer.handleTemporaryWaveformDragStart)
                 TIMAAT.VideoPlayer.loadSelectionMediumFrequencyInformation()
+                TIMAAT.VideoPlayer.timeline.indicatorHidden = false
             })
         },
 
         handleTemporaryWaveformDrag: function (ev) {
             const waveformContainerRect = ev.originalEvent.target.getBoundingClientRect();
             const relativeX = (ev.clientX - waveformContainerRect.left + TIMAAT.VideoPlayer.waveformContainer.scrollLeft()) / TIMAAT.VideoPlayer.waveformContainer.width();
+            const playbackTimeMs = TIMAAT.VideoPlayer.duration * relativeX
 
             TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.endXPercentage = relativeX
+            TIMAAT.VideoPlayer.jumpTo(playbackTimeMs)
         },
 
 		setupMediumAnalysisLists: async function (lists) {

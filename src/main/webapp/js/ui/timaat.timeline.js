@@ -126,6 +126,14 @@
 
 		}
 
+        set indicatorHidden(hidden) {
+            if(hidden) {
+                this.ui.indicator.css("visibility", "hidden");
+            }else {
+                this.ui.indicator.css("visibility", "visible");
+            }
+        }
+
 		get isTacking() {
 			return this.ui.tracking;
 		}
@@ -161,6 +169,9 @@
 
             // Auf Timeline-Breite begrenzen
             const clampedX = Math.max(0, Math.min(this.ui.width, relativeX));
+
+            const newPlaybackPositionMs = (clampedX / this.ui.width) * this.durationSec * 1000
+            TIMAAT.VideoPlayer.jumpTo(newPlaybackPositionMs);
 
             this.ui.indicator.css('margin-left', clampedX + 'px');
             ev.preventDefault();
