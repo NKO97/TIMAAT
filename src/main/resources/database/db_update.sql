@@ -126,7 +126,10 @@ BEGIN
         VALUES (4, 1, 'done');
         COMMIT;
 
-        SELECT 'finished update to 0.14.0' AS log_message;
+        START TRANSACTION;
+        INSERT INTO `FIPOP`.`medium_audio_analysis` (medium_id, audio_analysis_state_id)
+            SELECT id, 1 FROM medium where media_type_id in (1,6);
+        COMMIT ;
 
         # TODO: Remove audio_codec_information and referencing columns on medium_audio and medium_video
         ALTER TABLE medium_audio
@@ -139,6 +142,8 @@ BEGIN
             DROP COLUMN audio_codec_information_id;
 
         DROP TABLE audio_codec_information;
+
+        SELECT 'finished update to 0.14.0' AS log_message;
     END IF;
 END$$
 DELIMITER ;
