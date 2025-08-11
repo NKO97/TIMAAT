@@ -1,5 +1,6 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
+import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -40,6 +41,7 @@ public class EndpointEntityUpdateEvents {
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
+    @Secured
     public void getEntityUpdateEvents(@Context SseEventSink eventSink) {
         entityUpdateEventService.registerConsumer(sse, eventSink);
     }

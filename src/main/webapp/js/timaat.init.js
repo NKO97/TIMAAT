@@ -25,6 +25,7 @@ requirejs.config({
 		"select2"                         : '../third-party/select2/js/select2.min',
 		"summernote"                      : '../third-party/summernote/summernote.min',
 		"wavesurfer"					  : '../third-party/wavesurferjs/wavesurfer.min',
+        "eventsource"                     : '../third-party/eventsource/eventsource.min',
 		"TIMAAT"                          : 'timaat.main',
 		"TIMAAT-entityupdate"			  : 'timaat.entityupdate',
 		"TIMAAT-html"                     : 'timaat.html',
@@ -118,6 +119,7 @@ requirejs.config({
 		'leaflet-pathtransform' : { deps: [ 'leaflet', 'leaflet-pathdrag' ], },
 		'leaflet-customcontrol' : { deps: [ 'leaflet' ], },
 		'leaflet-sidebar'       : { deps: [ 'leaflet' ], },
+        'eventsource'           : { exports: 'EventSourcePolyfill' }
 	},
 	packages: [{
 		name    : 'moment',

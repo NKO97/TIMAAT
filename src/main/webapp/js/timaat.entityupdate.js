@@ -22,27 +22,31 @@
 
     // define an AMD module that relies on 'TIMAAT'
     if (typeof define === 'function' && define.amd) {
-        define(['TIMAAT'], factory);
+        define(['TIMAAT', 'eventsource'], factory);
 
 
         // define a Common JS module that relies on 'TIMAAT'
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('TIMAAT'));
+        module.exports = factory(require('TIMAAT'), require('eventsource'));
     }
 
     // attach your plugin to the global 'TIMAAT' variable
     if(typeof window !== 'undefined' && window.TIMAAT){
-        factory(window.TIMAAT);
+        factory(window.TIMAAT, window.eventsource);
     }
 
-}(function (TIMAAT) {
+}(function (TIMAAT, eventsource) {
     TIMAAT.EntityUpdate = {
         eventSource: null,
         entityUpdateListener: [],
         init: function (){
         },
         initEntityUpdate : function() {
-            this.eventSource = new EventSource("api/entity-update-events")
+            this.eventSource = new eventsource.EventSourcePolyfill("api/entity-update-events", {
+                headers: {
+                    'Authorization': 'Bearer '+TIMAAT.Service.token
+                }
+            })
             for(const currentRegisteredEntityUpdateListener of this.entityUpdateListener){
                 const eventName = currentRegisteredEntityUpdateListener[0]
                 const handler = currentRegisteredEntityUpdateListener[1]
