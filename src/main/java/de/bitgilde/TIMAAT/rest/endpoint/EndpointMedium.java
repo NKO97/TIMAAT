@@ -3557,6 +3557,7 @@ public class EndpointMedium {
 	@Produces("image/jpg")
 	public Response getVideoThumbnail(
 			@PathParam("id") int id,
+            @QueryParam("time") Long timeMs,
 			@QueryParam("token") String fileToken) {
 
 		// verify token
@@ -3569,9 +3570,16 @@ public class EndpointMedium {
 		}
 		if ( tokenMediumID != id ) return Response.status(401).build();
 
-		Optional<java.nio.file.Path> videoThumbnail = videoFileStorage.getPathToThumbnailFile(id);
-		java.nio.file.Path thumbnailPath = videoThumbnail.orElse(java.nio.file.Path.of(servletContext.getRealPath("img/preview-placeholder.png")));
+        Optional<java.nio.file.Path> videoThumbnail = Optional.empty();
+        if(timeMs != null){
+            videoThumbnail = videoFileStorage.getPathToFrameFile(id, timeMs);
+        }
 
+        if(videoThumbnail.isEmpty()) {
+            videoThumbnail = videoFileStorage.getPathToThumbnailFile(id);
+        }
+
+		java.nio.file.Path thumbnailPath = videoThumbnail.orElse(java.nio.file.Path.of(servletContext.getRealPath("img/preview-placeholder.png")));
 		return Response.ok().entity(thumbnailPath.toFile()).build();
 	}
 
