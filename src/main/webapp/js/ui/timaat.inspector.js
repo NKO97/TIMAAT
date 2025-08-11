@@ -1621,7 +1621,25 @@
 			}
 		}
 
-		setItem(item, type=null) {
+        /**
+         * Changes the represented element inside the inspector. This function is used to create or edit a specific element.
+         * A creation can be triggered by passing null as item
+         *
+         * <strong>Note</strong>
+         * I had to add an overwrite for values to make it possible to define initial values
+         * This is not the cleanest solution, but the only one which is practicable for the given time.
+         * My recommendation:
+         * <ul>
+         *     <li>Separate this function in one responsible to prepare the interface for create an element and one for edit an element</li>
+         *     <li>For each element type create a function doing basic preparation of the ui for that type</li>
+         *     <li>Call these functions based on the selected type inside the create and update functions</li>
+         * </ul>
+         *
+         * @param item
+         * @param type
+         * @param valueOverwrites
+         */
+		setItem(item, type=null, valueOverwrites=null) {
       // console.log("TCL: Inspector -> setItem -> item, type", item, type);
 			this.state.item = item;
 			this.state.type = type;
@@ -1716,26 +1734,28 @@
 					var heading = (anno) ? "Edit annotation" : "Add annotation";
 					var submit = (anno) ? "Save" : "Add";
 					var colorHex = (anno) ? anno.svg.colorHex : this.cp.colorHex.substring(1);
-					var title = (anno) ? anno.model.annotationTranslations[0].title : "";
-					var opacity = (anno) ? anno.opacity : 0.3;
-					var stroke = (anno) ? anno.stroke : 2;
+					var title = (valueOverwrites?.title) ? valueOverwrites?.title : (anno) ? anno.model.annotationTranslations[0].title : "";
+					var opacity = (valueOverwrites?.opacity) ? valueOverwrites?.opacity : (anno) ? anno.opacity : 0.3;
+					var stroke = (valueOverwrites?.stroke) ? valueOverwrites?.stroke : (anno) ? anno.stroke : 2;
+
 					let layerVisual = false;
 					let layerAudio = false;
 					switch (TIMAAT.VideoPlayer.curAnalysisList.mediumType) {
 						case 'audio':
-							layerAudio = (anno) ? anno.layerAudio : true;
+							layerAudio = (valueOverwrites?.layerAudio) ? valueOverwrites?.layerAudio : (anno) ? anno.layerAudio : true;
 						break;
 						case 'image':
-							layerVisual = (anno) ? anno.layerVisual : true;
+							layerVisual = (valueOverwrites?.layerVisual !== undefined) ? valueOverwrites?.layerVisual : (anno) ? anno.layerVisual : true;
 						break;
 						case 'video':
-							layerVisual = (anno) ? anno.layerVisual : true;
-							layerAudio = (anno) ? anno.layerAudio : true;
+							layerVisual = (valueOverwrites?.layerVisual !== undefined) ? valueOverwrites?.layerVisual : (anno) ? anno.layerVisual : true;
+							layerAudio = (valueOverwrites?.layerAudio !== undefined) ? valueOverwrites?.layerAudio : (anno) ? anno.layerAudio : true;
 						break;
 					}
-					var comment = (anno) ? anno.model.annotationTranslations[0].comment : "";
-					var start = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (anno) ? TIMAAT.Util.formatTime(anno.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.medium.currentTime * 1000, true);
-					var end = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (anno) ? TIMAAT.Util.formatTime(anno.model.endTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.medium.currentTime * 1000, true);
+
+					var comment = (valueOverwrites?.comment) ? valueOverwrites?.comment :  (anno) ? anno.model.annotationTranslations[0].comment : "";
+					var start = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (valueOverwrites?.start) ? TIMAAT.Util.formatTime(valueOverwrites?.start, true) :(anno) ? TIMAAT.Util.formatTime(anno.model.startTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.medium.currentTime * 1000, true);
+					var end = ( TIMAAT.VideoPlayer.duration == 0 ) ? TIMAAT.Util.formatTime(0, true) : (valueOverwrites?.end) ? TIMAAT.Util.formatTime(valueOverwrites?.end, true) : (anno) ? TIMAAT.Util.formatTime(anno.model.endTime, true) : TIMAAT.Util.formatTime(TIMAAT.VideoPlayer.medium.currentTime * 1000, true);
 
 
 					// setup UI from Video Player state
@@ -1924,8 +1944,8 @@
 					if ( !list ) this.open('inspectorMetadata');
 					var heading = (list) ? '<i class="fas fa-list-alt"></i> Edit analysis' : '<i class="fas fa-list-alt"></i> Add analysis';
 					var submit = (list) ? "Save" : "Add";
-					var title = (list) ? TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'title') : "";
-					var comment = (list) ? TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'text') : "";
+					var title = (valueOverwrites?.title) ? valueOverwrites.title : (list) ? TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'title') : "";
+					var comment = (valueOverwrites?.comment) ? valueOverwrites.comment : (list) ? TIMAAT.Util.getDefaultTranslation(list, 'mediumAnalysisListTranslations', 'text') : "";
 					// setup UI from Video Player state
 					$('#inspectorTitle').html(heading);
 					$('#inspectorSubmitButton').html(submit);
@@ -2173,6 +2193,16 @@
 							break;
 						}
 					}
+
+                    if(valueOverwrites){
+                        model.name             = (valueOverwrites.name) ? valueOverwrites.name : model.name
+                        model.shortDescription = (valueOverwrites.shortDescription) ? valueOverwrites.shortDescription : model.shortDescription;
+                        model.comment          = (valueOverwrites.comment) ? valueOverwrites.comment : model.comment;
+                        model.transcript       = (valueOverwrites.transcript) ? valueOverwrites.transcript : model.transcript;
+                        model.start = (valueOverwrites.start) ? valueOverwrites.start : model.start;
+                        model.end = (valueOverwrites.end) ? valueOverwrites.end : model.end;
+                    }
+
 					this.fillInspectorSegmentElements(model);
 
 					if (item) {

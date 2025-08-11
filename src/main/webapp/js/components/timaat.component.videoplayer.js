@@ -2202,6 +2202,21 @@
 			TIMAAT.VideoPlayer.inspector.setItem(null, 'annotation');
 		},
 
+        addAnnotationWithTemporaryMarkerInformation(){
+            TIMAAT.VideoPlayer.pause();
+
+            let overrides = undefined
+            if(TIMAAT.VideoPlayer.currentTemporaryWaveformMarker){
+                const start = TIMAAT.VideoPlayer.duration * TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.startXPercentage
+                const end = TIMAAT.VideoPlayer.duration * TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.endXPercentage
+                overrides = {
+                    start,
+                    end
+                }
+            }
+            TIMAAT.VideoPlayer.inspector.setItem(null, 'annotation', overrides);
+        },
+
 		updateAnnotation: function(annotation) {
 			// console.log("TCL: updateAnnotation: annotation", annotation);
 			// sync to server
@@ -2868,7 +2883,7 @@
 			$('#analysisChooser').append('<option>No analyses available or accessible. You can create a new one.</option>');
 			$('#analysisChooser').addClass("item--disabled");
 			$('.addAnnotation').addClass("item--disabled");
-			$('.addAnnotation').removeAttr('onclick');
+
 			$('#analysisSegmentOptions').addClass("item--disabled");
 			$('#analysisSegmentOptions').removeClass("dropdown-toggle");
 			$('.addSegmentElement').addClass("item--disabled");
@@ -2898,7 +2913,7 @@
 				$('.addSegment').attr('onclick', 'TIMAAT.VideoPlayer.addAnalysisSegmentElement("segment")');
 				if (this.mediaType != 'video') $('.addSegment').attr('onclick','');
 				$('.addAnnotation').removeClass("item--disabled");
-				$('.addAnnotation').attr('onclick', 'TIMAAT.VideoPlayer.addAnnotation()');
+
 				$('#analysisSegmentOptions').removeClass("item--disabled");
 				$('#analysisSegmentOptions').addClass("dropdown-toggle");
 				$('#analysisEdit').removeClass("item--disabled");
