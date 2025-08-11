@@ -5,7 +5,9 @@
 * A database 'FIPOP' with collation set to 'utf8mb4_general_ci'
 
 ## Installation
+* Create a database 'FIPOP' and make sure the collation is set to 'utf8mb4_general_ci'
 * To install the database schema execute the sql-file [fipop.sql](../src/main/resources/database/fipop.sql)
+* The default application username and password are admin/admin
 
 ## Update
 * Create a dump of the current database as backup

@@ -63,9 +63,7 @@ Des Weiteren werden rechtliche Vorgaben in Anbetracht des zu annotierenden Mater
 - Download the repository and extract the source code to a folder of your choice
 - Download and install [LAMPP-Stack](https://www.apachefriends.org/)
   - Start Apache and MySQL services
-- Create a database 'FIPOP' and make sure the collation is set to 'utf8mb4_general_ci'
-  - Create a user account and set a password for this database
-  - Import the fipop.sql file located at /src/resources
+- Install database according to our [database documentation](docs/database.md)
 - Download and install [ffmpeg](https://ffmpeg.org/download.html)
   - ffmpeg is used to convert video and audio files and to create preview thumbnails for the video progress bar.
 - Download and install [maven](https://maven.apache.org/download.cgi)
@@ -84,7 +82,7 @@ Des Weiteren werden rechtliche Vorgaben in Anbetracht des zu annotierenden Mater
 ## First Steps (Windows + Linux)
 
 - Open http://localhost:8080/TIMAAT in web browser
-- Log in as 'admin' with password 'ChangeMeAfterYourFirstLogin!'
+- Log in as 'admin' with password 'admin'
 - Change admin password
 - Create a new user
 - Log out and log in as the newly created user
@@ -98,9 +96,7 @@ Des Weiteren werden rechtliche Vorgaben in Anbetracht des zu annotierenden Mater
   - MySQL or MariaDB
   - ffmpeg
   - maven
-- Create a database 'FIPOP' and make sure the collation is set to 'utf8mb4_general_ci'
-  - Create a user account and set a password for this database
-  - Import the fipop.sql file located at /src/resources
+- Install database according to our [database documentation](docs/database.md)
 - Copy 'timaat-default.properties' from /src/resources and save it as 'timaat.properties' in '/root/.timaat'
 - Edit and adjust timaat.properties parameters
   - Set 'storage.location' to the path where you want your uploaded media files to be stored
