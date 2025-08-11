@@ -20,7 +20,6 @@ public class WaveformBinaryFileReaderTest {
     public void testSuccessfulReadingOfWaveformData() throws IOException {
         Path waveformFilePath = Path.of(WaveformBinaryFileReaderTest.class.getResource("/waveform-files/1.waveform").getPath());
         WaveformBinaryFileReader reader = new WaveformBinaryFileReader(waveformFilePath);
-        System.out.println(waveformFilePath);
         List<Float> expectedMinValues = List.of(1f, 4f, 7f);
         List<Float> expectedAverageValues = List.of(2f, 5f, 8f);
         List<Float> expectedMaxValues = List.of(3f, 6f, 9f);

@@ -61,7 +61,6 @@ public class FrequencyFileReaderTest {
     @Test
     public void testSuccessfulReadingOfFrequencyFileWithStartAndEndTimeLimit() throws IOException {
         Path frequencyFilePath = Path.of(WaveformBinaryFileReaderTest.class.getResource("/frequency-files/1.frequency").getPath());
-        System.out.println(frequencyFilePath);
         FrequencyFileReader reader = new FrequencyFileReader(frequencyFilePath);
         FrequencyInformation frequencyInformation = reader.getFrequencyInformation(5000, 12000).get();
 
