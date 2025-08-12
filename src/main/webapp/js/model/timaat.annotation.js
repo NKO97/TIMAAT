@@ -158,8 +158,14 @@
 			});
 
 			// create marker with UI
-			this.marker = new TIMAAT.Marker(this);
-			this.marker.updateView();
+            if(this.model.layerVisual){
+                this.audioMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
+                this.audioMarker.updateView()
+            }
+            if(this.model.layerAudio){
+                this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
+                this.videoMarker.updateView()
+            }
 
 			this.changed = false;
 
@@ -317,6 +323,17 @@
 		set layerVisual(layerVisual) {
 			this._layerVisual = layerVisual;
 			this.setChanged();
+
+            if(layerVisual && !this.videoMarker){
+                this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
+                this.videoMarker.updateView()
+            }
+
+            if(!layerVisual  && this.videoMarker){
+                this.videoMarker.remove()
+                this.videoMarker = null
+            }
+
 			TIMAAT.VideoPlayer.updateUI();
 			this.updateUI();
 		};
@@ -328,6 +345,17 @@
 		set layerAudio(layerAudio) {
 			this._layerAudio = layerAudio;
 			this.setChanged();
+
+            if(layerAudio && !this.audioMarker){
+                this.audioMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
+                this.audioMarker.updateView()
+            }
+
+            if(!layerAudio  && this.audioMarker){
+                this.audioMarker.remove()
+                this.audioMarker = null
+            }
+
 			TIMAAT.VideoPlayer.updateUI();
 			this.updateUI();
 		};
@@ -417,7 +445,8 @@
 			};
 
 			// update marker
-			if ( this.marker ) this.marker.updateView();
+			this.audioMarker?.updateView()
+            this.videoMarker?.updateView()
 		}
 
 		_updateAnnotationType() {
@@ -442,7 +471,8 @@
 		remove() {
 			// remove annotation from UI
 			this.listView.remove();
-			this.marker.remove();
+			this.audioMarker?.remove();
+            this.videoMarker?.remove();
 			this.svg.layer.remove();
 			this.selected = false;
 			this._destroyed = true;
@@ -475,7 +505,8 @@
 
 			// update UI
 			this._updateAnnotationType();
-			if ( this.marker ) this.marker.updateView();
+			this.audioMarker?.updateView()
+            this.videoMarker?.updateView();
 
 			// attach item event handlers
 			let anno = this;
@@ -513,7 +544,8 @@
 			// update UI
 			if ( this.svg.items.length == 0 ) {
 				this._updateAnnotationType();
-				if ( this.marker ) this.marker.updateView();
+				this.audioMarker?.updateView();
+                this.videoMarker?.updateView();
 			}
 		}
 
@@ -654,7 +686,8 @@
 */
 			}
 			// update marker
-			if ( this.marker ) this.marker.updateView();
+			this.videoMarker?.updateView();
+            this.audioMarker?.updateView();
 			// update keyframe UI
 			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
 			// update editing UI

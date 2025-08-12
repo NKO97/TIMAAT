@@ -162,6 +162,7 @@
 	left: 0px;
 	opacity: 0.6;
 	position: absolute;
+    z-index: 1000;
 	top: 0px;
 	width: 100%;
 }
@@ -345,4 +346,14 @@
 
 #timelineFrequencyInformation{
     font-size: 12px;
+}
+
+.timeline__audio_annotation{
+    position: absolute;
+    height: 25%;
+    width: 100%;
+}
+
+.timeline__marker {
+    z-index: 1001;
 }

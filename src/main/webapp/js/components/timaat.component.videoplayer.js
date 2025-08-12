@@ -1762,16 +1762,16 @@
                 TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.removeFromUi();
             }
 
-            const waveformContainerRect = ev.originalEvent.target.getBoundingClientRect();
+            const waveformContainerRect = TIMAAT.VideoPlayer.waveformContainer.get(0).getBoundingClientRect();
             const relativeX = (ev.clientX - waveformContainerRect.left + TIMAAT.VideoPlayer.waveformContainer.scrollLeft()) / TIMAAT.VideoPlayer.waveformContainer.width();
             TIMAAT.VideoPlayer.currentTemporaryWaveformMarker = new TIMAAT.TemporaryWaveformMarker(relativeX, TIMAAT.VideoPlayer.waveformContainer)
             TIMAAT.VideoPlayer.selectionFrequencyInformation = null;
-            TIMAAT.VideoPlayer.waveformContainer.on("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
+            $(document).on("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
             TIMAAT.VideoPlayer.drawFrequencyInformation()
             TIMAAT.VideoPlayer.timeline.indicatorHidden = true
 
             $(document).one("mouseup", function(ev) {
-                TIMAAT.VideoPlayer.waveformContainer.off("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
+                $(document).off("mousemove", TIMAAT.VideoPlayer.handleTemporaryWaveformDrag)
                 TIMAAT.VideoPlayer.waveformContainer.one("mousedown", TIMAAT.VideoPlayer.handleTemporaryWaveformDragStart)
                 TIMAAT.VideoPlayer.loadSelectionMediumFrequencyInformation()
                 TIMAAT.VideoPlayer.timeline.indicatorHidden = false
@@ -1779,7 +1779,7 @@
         },
 
         handleTemporaryWaveformDrag: function (ev) {
-            const waveformContainerRect = ev.originalEvent.target.getBoundingClientRect();
+            const waveformContainerRect = TIMAAT.VideoPlayer.waveformContainer.get(0).getBoundingClientRect();
             const relativeX = (ev.clientX - waveformContainerRect.left + TIMAAT.VideoPlayer.waveformContainer.scrollLeft()) / TIMAAT.VideoPlayer.waveformContainer.width();
             const playbackTimeMs = TIMAAT.VideoPlayer.duration * relativeX
 
@@ -2508,51 +2508,50 @@
 				return 0;
 			}).appendTo('#analysisList');
 
+            const annotationSortFunction = (a,b) => {
+                if ( b.startTime < a.startTime ) return 1;
+                if ( b.startTime > a.startTime ) return -1;
+                return 0;
+            }
+
 			// sort annotation markers in timeline
-			var sortedList = TIMAAT.VideoPlayer.annotationList.concat();
-			if ( sortedList.length > 0 ) {
-				// sort and display only annotations of the active layer
-				let i = sortedList.length -1;
-				if ($('#timelineVisualLayer').is(':checked') && !$('#timelineAudioLayer').is(':checked')) {
-					for (; i >= 0; i--) {
-						if (!sortedList[i].model.layerVisual)
-							sortedList.splice(i, 1);
-					}
-				} else if (!$('#timelineVisualLayer').is(':checked') && $('#timelineAudioLayer').is(':checked')) {
-					for (; i >= 0; i--) {
-						if (!sortedList[i].model.layerAudio)
-							sortedList.splice(i, 1);
-					}
-				}
-			}
-			sortedList.sort(function (a, b) {
-				if ( b.startTime < a.startTime ) return 1;
-				if ( b.startTime > a.startTime ) return -1;
-				return 0;
-			});
+            const sortedVideoAnnotationList = TIMAAT.VideoPlayer.annotationList.filter(currentAnnotation => currentAnnotation.layerVisual).sort(annotationSortFunction)
+            const sortedAudioAnnotationList = TIMAAT.VideoPlayer.annotationList.filter(currentAnnotation => currentAnnotation.layerAudio).sort(annotationSortFunction)
+
+            const positionAnnotationMarker = (videoAnnotationList, markerFunction) => {
+                let maxOffset = 0;
+                if ( videoAnnotationList.length > 0 ) {
+                    const marker = markerFunction(videoAnnotationList[0])
+                    marker.UIOffset = 0;
+                    for (let i = 1; i < videoAnnotationList.length; i++) {
+                        const iMarker = markerFunction(videoAnnotationList[i]);
+                        let curOffset = 0;
+                        let occupiedOffsets = [];
+
+                        for (var a = 0; a < i; a++) {
+                            if (videoAnnotationList[a].endTime >= videoAnnotationList[i].startTime ) {
+                                const aMarker = markerFunction(videoAnnotationList[a]);
+                                occupiedOffsets.push(aMarker.UIOffset);
+                                while ( occupiedOffsets.indexOf(curOffset) >= 0 ) curOffset++;
+                            }
+                        }
+                        iMarker.UIOffset = curOffset;
+                        if ( curOffset > maxOffset ) maxOffset = curOffset;
+                        iMarker.updateView();
+                    }
+                }
+                let minHeight = 30 + (maxOffset * 12);
+                if (minHeight < 50) minHeight = 50;
+
+                return minHeight
+            }
 
 			// position annotation markers in timeline
-			let maxOffset = 0;
-			if ( sortedList.length > 0 ) {
-				sortedList[0].marker.UIOffset = 0;
-				for (let i = 1; i < sortedList.length; i++) {
-					let curOffset = 0;
-					let occupiedOffsets = [];
-					// TODO
-					for (var a = 0; a < i; a++) {
-						if (sortedList[a].endTime >= sortedList[i].startTime ) {
-							occupiedOffsets.push(sortedList[a].marker.UIOffset);
-							while ( occupiedOffsets.indexOf(curOffset) >= 0 ) curOffset++;
-						}
-					}
-					sortedList[i].marker.UIOffset = curOffset;
-					if ( curOffset > maxOffset ) maxOffset = curOffset;
-					sortedList[i].marker.updateView();
-				}
-			}
-			let minHeight = 30 + (maxOffset * 12);
-			if (minHeight < 50) minHeight = 50;
-			$('#timelineMarkerPane').css('min-height', minHeight + 'px');
+            const minHeightVideoAnnotationContainer = positionAnnotationMarker(sortedVideoAnnotationList, annotation => annotation.videoMarker)
+            const minHeightAudioAnnotationContainer = positionAnnotationMarker(sortedAudioAnnotationList, annotation => annotation.audioMarker)
+
+            $('#timelineMarkerPane').css('min-height', minHeightVideoAnnotationContainer + 'px');
+            $('.timeline__audio_annotation').css('min-height', minHeightAudioAnnotationContainer + 'px');
 		},
 
 		updateListUI: function(viaTimeUpdate = null) {

@@ -38,7 +38,7 @@
 }(function (TIMAAT) {
 
 	TIMAAT.Marker = class Marker {
-		constructor(annotation) {
+		constructor(annotation, containerSelector) {
 			// console.log("TCL: Marker -> constructor -> annotation", annotation);
 			this.parent = annotation;
 			this.annotation = annotation;
@@ -70,7 +70,7 @@
 			var _markerLength;
 			this.regionStart.draggable({
 				axis: "x",
-				containment: "#timelineMarkerPane",
+				containment: containerSelector,
 				start: function(ev,ui) {
 					_markerLength = Math.max(0.0, marker.regionEnd.position().left);
 					if (_markerLength > 0 ) _markerLength += 1;
@@ -101,7 +101,7 @@
 			});
 			this.regionEnd.draggable({
 				axis: "x",
-				containment: "#timelineMarkerPane",
+				containment: containerSelector,
 				start: function(ev,ui) {
 					TIMAAT.VideoPlayer.pause();
 					_markerLength = -Math.max(0.0, $(this).position().left);
@@ -134,7 +134,7 @@
 
 			this._updateElementColor();
 			this._updateElementOffset();
-			$('#timelineMarkerPane').append(this.ui.element);
+			$(containerSelector).append(this.ui.element);
 			TIMAAT.VideoPlayer.markerList.push(this);
 
 			// add events
@@ -236,8 +236,7 @@
 //			  this.ui.element.css('width', length+'px');
 //			  this.ui.element.css('margin-left', (offset+magicOffset)+'px');
 
-			var startOffset = 20;
-//			  if ( TIMAAT.VideoPlayer.activeLayer == 'audio' ) startOffset += 37; // compensate for audio waveform
+			var startOffset = 5;
 			this.ui.element.find('.timeline__marker-bar').css('margin-top', (startOffset + (this.ui.offset * 12)) + 'px' );
 		}
 
