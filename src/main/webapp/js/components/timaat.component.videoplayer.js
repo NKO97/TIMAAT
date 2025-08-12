@@ -60,7 +60,7 @@
 		markerList                  : [],
 		model                       : Object(),
 		overlay                     : null,
-		repeatSection               : false,
+		repeatMode                  : "NONE", //one of NONE | ANNOTATION | SELECTION
 		selectedElementType         : null,
 		selectedMedium              : null,
 		tagAutocomplete             : [],
@@ -1177,7 +1177,7 @@
 					break;
 				case "r":
 					ev.preventDefault();
-					$('.repeatButton').click();
+					$('.repeatButtonSelection').click();
 					break;
 				case "m":
 					ev.preventDefault();
@@ -1187,6 +1187,10 @@
 					ev.preventDefault();
 					$('#mediumPlayerPlaybackSpeed').click();
 					break;
+                case "a":
+                    ev.preventDefault();
+                    $('.repeatButtonAnnotation').click();
+                    break;
 				}
 			});
 
@@ -1214,13 +1218,48 @@
 				TIMAAT.VideoPlayer.jumpTo( Math.min(TIMAAT.VideoPlayer.medium.duration * 1000, (Math.round(TIMAAT.VideoPlayer.medium.currentTime * 1000 / frameTime) * frameTime) + frameTime) );
 			});
 
-			$('.repeatButton').on('click', function(ev) {
+            const updateRepeatButtonStates = () => {
+                $(".repeatButtonAnnotation, .repeatButtonSelection").removeClass('btn-outline-secondary').removeClass('btn-primary');
+                switch (TIMAAT.VideoPlayer.repeatMode){
+                    case "NONE":
+                        $(".repeatButtonAnnotation, .repeatButtonSelection").addClass('btn-outline-secondary')
+                        break;
+                    case "ANNOTATION":
+                        $(".repeatButtonAnnotation").addClass('btn-primary')
+                        $(".repeatButtonSelection").addClass('btn-outline-secondary')
+                        break
+                    case "SELECTION":
+                        $('.repeatButtonAnnotation').addClass('btn-outline-secondary')
+                        $('.repeatButtonSelection').addClass('btn-primary')
+                        break
+                }
+            }
+
+			$('.repeatButtonAnnotation').on('click', function(ev) {
 				ev.preventDefault();
 				ev.stopPropagation();
-				TIMAAT.VideoPlayer.repeatSection = !TIMAAT.VideoPlayer.repeatSection;
-				$(this).removeClass('btn-outline-secondary').removeClass('btn-primary');
-				if ( TIMAAT.VideoPlayer.repeatSection ) $(this).addClass('btn-primary'); else $(this).addClass('btn-outline-secondary');
+
+                if(TIMAAT.VideoPlayer.repeatMode === "ANNOTATION"){
+                    TIMAAT.VideoPlayer.repeatMode = "NONE";
+                }else {
+                    TIMAAT.VideoPlayer.repeatMode = "ANNOTATION";
+                }
+
+				updateRepeatButtonStates()
 			});
+
+            $('.repeatButtonSelection').on('click', function(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                if(TIMAAT.VideoPlayer.repeatMode === "SELECTION"){
+                    TIMAAT.VideoPlayer.repeatMode = "NONE";
+                }else {
+                    TIMAAT.VideoPlayer.repeatMode = "SELECTION";
+                }
+
+                updateRepeatButtonStates()
+            });
 
 			$('.volumeControlInput').on('input change', function() {
 				if ( !TIMAAT.VideoPlayer.medium ) return;
@@ -3013,10 +3052,10 @@
 		},
 
 		_updateAnimations: function() {
-			if ( !TIMAAT.VideoPlayer.medium || TIMAAT.VideoPlayer.medium.paused || !TIMAAT.VideoPlayer.annotationList || !TIMAAT.VideoPlayer.curAnalysisList ) return;
+			if ( !TIMAAT.VideoPlayer.medium || TIMAAT.VideoPlayer.medium.paused || !TIMAAT.VideoPlayer.annotationList || !TIMAAT.VideoPlayer.curAnalysisList ) return;
 
 			// repeat video section if control activated
-			if ( TIMAAT.VideoPlayer.repeatSection ) {
+			if ( TIMAAT.VideoPlayer.repeatMode === "ANNOTATION" ) {
 				if ( TIMAAT.VideoPlayer.curAnnotation ) {
 					// repeat annotation
 					if ( TIMAAT.VideoPlayer.medium.currentTime < TIMAAT.VideoPlayer.curAnnotation.startTime / 1000
@@ -3037,14 +3076,22 @@
 					}
 				}
 			// TODO: repeat music structure element
-		}
+		} else if ( TIMAAT.VideoPlayer.repeatMode === "SELECTION"){
+            if(TIMAAT.VideoPlayer.currentTemporaryWaveformMarker){
+                const startTime = TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.startXPercentage * TIMAAT.VideoPlayer.duration
+                const endTime = TIMAAT.VideoPlayer.currentTemporaryWaveformMarker.endXPercentage * TIMAAT.VideoPlayer.duration
+                const currentTime = TIMAAT.VideoPlayer.medium.currentTime * 1000
+
+                if ( currentTime < startTime || currentTime > endTime )
+                    TIMAAT.VideoPlayer.jumpTo(startTime);
+            }
+        }
 
 			for (let annotation of TIMAAT.VideoPlayer.annotationList)
 				if ( TIMAAT.VideoPlayer.duration > 0 ) annotation.updateStatus(TIMAAT.VideoPlayer.medium.currentTime);
 
 			// update timeline
 			TIMAAT.VideoPlayer.timeline.updateIndicator();
-
 		},
 
 		_analysisListAdded: function(analysisList) {
