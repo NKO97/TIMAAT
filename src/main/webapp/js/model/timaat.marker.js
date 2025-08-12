@@ -93,7 +93,6 @@
 					var newFrom = TIMAAT.VideoPlayer.duration * newOffset / width;
 
 					marker.parent.startTime = newFrom;
-					marker.updateView();
 					TIMAAT.VideoPlayer.inspector.updateItem();
 
 					$(this).attr('style', 'position:relative');
@@ -125,7 +124,6 @@
 
 					marker.parent.endTime = newLength;
 					TIMAAT.VideoPlayer.jumpTo(newLength);
-					marker.updateView();
 					TIMAAT.VideoPlayer.inspector.updateItem();
 
 					$(this).attr('style', 'position:relative');

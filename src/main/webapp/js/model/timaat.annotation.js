@@ -385,10 +385,8 @@
 			if ( this._startTime != this.model.startTime ) {
 				this.setChanged();
 				TIMAAT.VideoPlayer.updateUI();
-			}
-			if ( this._endTime != this.model.endTime ) {
-				this.setChanged();
-				TIMAAT.VideoPlayer.updateUI();
+                this.audioMarker?.updateView();
+                this.videoMarker?.updateView();
 			}
 			this.svg.keyframes[0].updateTimeUI();
 		};
@@ -403,6 +401,9 @@
 			if ( this._endTime != this.model.endTime ) {
 				this.setChanged();
 				TIMAAT.VideoPlayer.updateUI();
+
+                this.audioMarker?.updateView();
+                this.videoMarker?.updateView();
 			}
 		};
 
