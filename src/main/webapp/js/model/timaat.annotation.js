@@ -159,12 +159,12 @@
 
 			// create marker with UI
             if(this.model.layerVisual){
-                this.audioMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
-                this.audioMarker.updateView()
+                this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
+                this.videoMarker.updateView()
             }
             if(this.model.layerAudio){
-                this.videoMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
-                this.videoMarker.updateView()
+                this.audioMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
+                this.audioMarker.updateView()
             }
 
 			this.changed = false;
@@ -323,7 +323,6 @@
 		set layerVisual(layerVisual) {
 			this._layerVisual = layerVisual;
 			this.setChanged();
-            console.log(layerVisual)
 
             if(layerVisual && !this.videoMarker){
                 this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
@@ -567,8 +566,8 @@
 			if ( !this.changed ) return;
 			this.svg.layer.clearLayers();
 			this.svg.items = Array();
-			this._layerVisual = this.model.layerVisual;
-			this._layerAudio = this.model.layerAudio;
+			this.layerVisual = this.model.layerVisual;
+			this.layerAudio = this.model.layerAudio;
 			this._startTime = this.model.startTime;
 			this._endTime = this.model.endTime;
 			this.svg.colorHex = this.model.selectorSvgs[0].colorHex;
@@ -838,8 +837,8 @@
 			// this.model.layerAudio = this._layerAudio;
 			this._startTime = this.model.startTime;
 			this._endTime = this.model.endTime;
-			this._layerVisual = this.model.layerVisual;
-			this._layerAudio = this.model.layerAudio;
+			this.layerVisual = this.model.layerVisual;
+			this.layerAudio = this.model.layerAudio;
 
 			let width = 0;
 			let height = 0;
