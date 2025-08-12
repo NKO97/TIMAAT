@@ -2568,10 +2568,19 @@
 
 			// position annotation markers in timeline
             const minHeightVideoAnnotationContainer = positionAnnotationMarker(sortedVideoAnnotationList, annotation => annotation.videoMarker)
-            const minHeightAudioAnnotationContainer = positionAnnotationMarker(sortedAudioAnnotationList, annotation => annotation.audioMarker)
+            let minHeightAudioAnnotationContainer = positionAnnotationMarker(sortedAudioAnnotationList, annotation => annotation.audioMarker)
+
+            if(!$('#timelineAudioLayer').is(':checked')){
+                minHeightAudioAnnotationContainer = 50
+            }
 
             $('#timelineMarkerPane').css('min-height', minHeightVideoAnnotationContainer + 'px');
-            $('.timeline__audio_annotation').css('min-height', minHeightAudioAnnotationContainer + 'px');
+
+            let currentAudioMinHeight = parseInt($('.timeline__section--audio-waveform').css('min-height'))
+            if(currentAudioMinHeight !== minHeightAudioAnnotationContainer){
+                $('.timeline__section--audio-waveform').css('min-height', minHeightAudioAnnotationContainer + 'px');
+                this.drawWaveform()
+            }
 		},
 
 		updateListUI: function(viaTimeUpdate = null) {
