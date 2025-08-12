@@ -159,11 +159,11 @@
 
 			// create marker with UI
             if(this.model.layerVisual){
-                this.audioMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
+                this.audioMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
                 this.audioMarker.updateView()
             }
             if(this.model.layerAudio){
-                this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
+                this.videoMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
                 this.videoMarker.updateView()
             }
 
@@ -323,6 +323,7 @@
 		set layerVisual(layerVisual) {
 			this._layerVisual = layerVisual;
 			this.setChanged();
+            console.log(layerVisual)
 
             if(layerVisual && !this.videoMarker){
                 this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
@@ -330,6 +331,7 @@
             }
 
             if(!layerVisual  && this.videoMarker){
+                console.log("Removing video marker")
                 this.videoMarker.remove()
                 this.videoMarker = null
             }
