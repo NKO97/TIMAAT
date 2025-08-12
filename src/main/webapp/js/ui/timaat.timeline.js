@@ -209,9 +209,8 @@
 
 		updateIndicator() {
 			if ( !TIMAAT.VideoPlayer.medium || !TIMAAT.VideoPlayer.medium.currentTime ) return;
-
+            let pos = (TIMAAT.VideoPlayer.medium.currentTime / this.durationSec) * this.ui.width;
             if(!this.ui.indicatorTracking){
-                let pos = (TIMAAT.VideoPlayer.medium.currentTime / this.durationSec) * this.ui.width;
                 this.ui.indicator.css('margin-left', pos + 'px');
             }
 
