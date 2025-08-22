@@ -228,6 +228,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicNashid</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicType</class>
+        <class>de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.MusicTypeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PermissionType</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.PhoneNumber</class>

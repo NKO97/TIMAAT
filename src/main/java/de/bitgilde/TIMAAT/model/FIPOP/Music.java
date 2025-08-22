@@ -1,15 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +18,11 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -238,6 +237,10 @@ public class Music implements Serializable {
 	@OneToMany(mappedBy="music")
 	@JsonManagedReference(value = "Music-MusicDynamicsElement")
 	private List<MusicDynamicsElement> musicDynamicsElementList;
+
+    @OneToMany(mappedBy="music")
+    @JsonManagedReference(value = "Music-MusicTranslation")
+    private List<MusicTranslation> musicTranslationList;
 
 	//bi-directional many-to-one association to MediumHasMusic
 	@OneToMany(mappedBy="music")
