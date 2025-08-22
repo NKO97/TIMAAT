@@ -128,8 +128,10 @@ BEGIN
 
         START TRANSACTION;
         INSERT INTO `FIPOP`.`medium_audio_analysis` (medium_id, audio_analysis_state_id)
-            SELECT id, 1 FROM medium where media_type_id in (1,6);
-        COMMIT ;
+        SELECT id, 1
+        FROM medium
+        where media_type_id in (1, 6);
+        COMMIT;
 
         # TODO: Remove audio_codec_information and referencing columns on medium_audio and medium_video
         ALTER TABLE medium_audio
@@ -145,15 +147,58 @@ BEGIN
 
         SELECT 'finished update to 0.14.0' AS log_message;
     END IF;
-END$$
+END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE update_to_0_14_1()
+BEGIN
+    DECLARE db_major_version int;
+    DECLARE db_minor_version int;
+    DECLARE db_patch_version int;
+
+    SELECT major_version, minor_version, patch_version
+    INTO db_major_version, db_minor_version, db_patch_version
+    FROM db_version
+    LIMIT 1;
+
+    IF db_major_version = 0 AND db_minor_version = 14 AND db_patch_version = 0 THEN
+        SELECT 'execute update to 0.14.1' AS log_message;
+        DELETE FROM db_version;
+        INSERT INTO db_version (major_version, minor_version, patch_version) VALUES (0, 14, 1);
+
+        CREATE TABLE `FIPOP`.`music_translation`
+        (
+            `music_id`    INT NOT NULL,
+            `language_id` INT NOT NULL,
+            `translation` TEXT,
+            CONSTRAINT `fk_music_translation_music1`
+                FOREIGN KEY (`music_id`)
+                    REFERENCES `FIPOP`.`music` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `fk_music_translation_language1`
+                FOREIGN KEY (`language_id`)
+                    REFERENCES `FIPOP`.`language` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `pk_music_translation1` PRIMARY KEY (music_id, language_id)
+        ) ENGINE = InnoDB;
+        CREATE INDEX fk_music_translation_music1_idx ON `FIPOP`.`music_translation` (music_id ASC);
+        CREATE INDEX fk_music_translation_language1_idx ON `FIPOP`.`music_translation` (language_id ASC);
+
+        SELECT 'finished update to 0.14.1' AS log_message;
+    END IF;
+END $$
+DELIMITER ;
 /**
  * Call update functions
  */
 CALL update_to_0_14_0();
+CALL update_to_0_14_1();
 
 /*
  * Delete update functions after finishing update script
  */
 DROP PROCEDURE update_to_0_14_0;
+DROP PROCEDURE update_to_0_14_1;

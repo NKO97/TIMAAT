@@ -8815,11 +8815,35 @@ CREATE INDEX fk_medium_audio_analysis_audio_analysis_state1_idx ON `FIPOP`.`medi
 CREATE INDEX fk_medium_audio_analysis_audio_analysis1_idx ON `FIPOP`.`medium_audio_analysis`(audio_analysis_id ASC);
 
 -- -----------------------------------------------------
+-- Table `FIPOP`.`music_translation`
+-- -----------------------------------------------------
+CREATE TABLE `FIPOP`.`music_translation`
+(
+    `music_id`    INT NOT NULL,
+    `language_id` INT NOT NULL,
+    `translation` TEXT,
+    CONSTRAINT `fk_music_translation_music1`
+        FOREIGN KEY (`music_id`)
+            REFERENCES `FIPOP`.`music` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_music_translation_language1`
+        FOREIGN KEY (`language_id`)
+            REFERENCES `FIPOP`.`language` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `pk_music_translation1` PRIMARY KEY (music_id, language_id)
+) ENGINE = InnoDB;
+
+CREATE INDEX fk_music_translation_music1_idx ON `FIPOP`.`music_translation` (music_id ASC);
+CREATE INDEX fk_music_translation_language1_idx ON `FIPOP`.`music_translation` (language_id ASC);
+
+-- -----------------------------------------------------
 -- Data for table `FIPOP`.`db_version`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `FIPOP`;
-INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version) VALUES (0, 14, 0);
+INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version) VALUES (0, 14, 1);
 COMMIT;
 
 -- -----------------------------------------------------

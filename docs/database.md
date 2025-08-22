@@ -28,3 +28,8 @@ The versioning of the database schema follows the following pattern:
 * Added table `db_version` to persist the current database schema version
 * Added tables `audio_analysis`, `medium_audio_analysis`, `audio_analysis_state`, `audio_analysis_state_translation` which are used to persist the state and results of async audio analysis tasks
   ![db_update_0_14_0_async_audio_analysis.png](img/db_update_0_14_0_async_audio_analysis.png)
+
+### 0.14.1
+
+* Added table `music_translation` responsible to persist the lyrics or spoken text of music entries
+![db_update_0_14_1_transcription_for.png](img/db_update_0_14_1_transcription_for.png)
