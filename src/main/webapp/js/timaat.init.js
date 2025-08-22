@@ -130,6 +130,7 @@ requirejs.config({
 });
 
 require(['domReady',
+    'eventsource',
 	'jquery',
 	'jquery-ui',
 	'jquery-validate',
