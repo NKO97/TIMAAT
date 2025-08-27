@@ -1,23 +1,12 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithChildren;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Articulation;
@@ -50,6 +39,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MusicNashid;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementType;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementTypeTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Role;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
@@ -58,17 +48,22 @@ import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPatternTranslation;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTranslationList;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -79,6 +74,16 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,6 +111,8 @@ public class EndpointMusic {
   ContainerRequestContext containerRequestContext;
   @Context
   ServletContext servletContext;
+	@Inject
+	MusicStorage musicStorage;
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -2793,6 +2800,14 @@ public class EndpointMusic {
     if (musicDynamicsElementType == null) return Response.status(Status.NOT_FOUND).build();
     return Response.ok().entity(musicDynamicsElementType).build();
   }
+
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@Path("{musicId}/musicTranslationList")
+	public List<MusicTranslation> updateMusicTranslationList(@PathParam("musicId") int musicId, @Valid UpdateMusicTranslationList updateMusicTranslationList) throws DbTransactionExecutionException {
+    return musicStorage.updateTranslationListOfMusic(musicId, updateMusicTranslationList.getTranslationsByLanguageId());
+	}
 
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
 		List<T> r = new ArrayList<T>(c.size());
