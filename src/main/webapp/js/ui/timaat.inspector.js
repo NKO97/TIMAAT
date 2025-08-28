@@ -1672,6 +1672,7 @@
 			this.disablePanel('inspectorCategoriesAndTags');
 			this.disablePanel('inspectorActors');
 			this.disablePanel('inspectorEvents');
+            this.disablePanel('inspectorMusic')
 			// this.disablePanel('inspectorLocations');
 			this.disablePanel('inspectorAnalysisGuidelines');
 			this.ui.keyframeList.children().detach();
@@ -1705,6 +1706,7 @@
 					if ( item != null ) {
 						this.enablePanel('inspectorActors');
 						this.enablePanel('inspectorEvents');
+                        this.enablePanel('inspectorMusic');
 						// this.enablePanel('inspectorLocations');
 						this.enablePanel('inspectorAnalysisGuidelines');
 						this.enablePanel('inspectorCategoriesAndTags');

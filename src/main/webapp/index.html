@@ -849,6 +849,7 @@
                 <li><a title="Animation settings (only for video annotations)" href="#inspectorAnimation" role="tab"><i class="fa fa-running"></i></a></li>
                 <li><a title="Link categories and tags" href="#inspectorCategoriesAndTags" role="tab"><i class="fas fa-tags"></i></a></li>
                 <li><a title="Link actors (only for annotations)" href="#inspectorActors" role="tab"><i class="fas fa-users"></i></a></li>
+                <li><a title="Link music (only for annotations)" href="#inspectorMusic" role="tab"><i class="fas fa-music"></i></a></li>
                 <li><a title="Link events (only for annotations)" href="#inspectorEvents" role="tab"><i class="fas fa-calendar-alt"></i></a></li>
                 <!-- <li><a title="Link locations (only for annotations)" href="#inspectorLocations" role="tab"><i class="fas fa-globe-americas"></i></a></li> -->
                 <li><a title="Link analysis guidelines (only for annotations)" href="#inspectorAnalysisGuidelines" role="tab"><i class="fas fa-clipboard-list"></i></a></li>
@@ -1227,6 +1228,45 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="leaflet-sidebar-pane" id="inspectorMusic">
+                  <h1 class="leaflet-sidebar-header border-bottom border-dark">Music
+                      <div class="leaflet-sidebar-close">
+                          <i class="fas fa-caret-up"></i>
+                      </div>
+                  </h1>
+                  <div id="inspectorMusicPane" class="inspector__pane">
+                      <button class="btn-block text-left btn btn-outline-secondary mt-2" type="button" data-toggle="collapse" data-target="#musicAnnotationWrapper">
+                          <i class="collapse-icon fas fa-fw"></i> Linked Music
+                      </button>
+                      <div class="p-2 border border-light bg-light collapse show" id="musicAnnotationWrapper" aria-expanded="true">
+                          <table class="table table-striped table-bordered table-hover" id="annotationMusicTable">
+                              <thead class="thead-light">
+                              <tr>
+                                  <th>Title</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+
+                              </tbody>
+                          </table>
+                      </div>
+                      <div id="inspectorAddMusic">
+                          <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#addMusicWrapper">
+                              <i class="collapse-icon fas fa-fw"></i> Add Music
+                          </button>
+                          <div class="p-2 border border-light bg-light collapse show" id="addMusicWrapper">
+                              <table class="table table-striped table-bordered table-hover" id="availableMusicTable">
+                                  <thead class="thead-dark">
+                                  <tr>
+                                      <th>Title</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
               </div>
               <div class="leaflet-sidebar-pane" id="inspectorEvents">
                 <h1 class="leaflet-sidebar-header border-bottom border-dark">Events
