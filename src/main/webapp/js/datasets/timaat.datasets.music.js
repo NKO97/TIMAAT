@@ -45,10 +45,11 @@
 		titles            : null,
 
 		init: function() {
-      this.initMusic();
+            this.initMusic();
 			this.initTitles();
 			this.initActorRoles();
 			this.initMediumHasMusicList();
+            this.initTranscriptions();
 		},
 
     initMusicComponent: function() {
@@ -635,7 +636,52 @@
 				}
 			});
     },
+        initTranscriptions: function () {
+			console.log("Init transcriptions")
+          $('#musicTabTranscription').on('click', function(event) {
+              let music = $('#musicFormMetadata').data('music');
+              // let type = $('#musicFormMetadata').data('type');
+              let type = music.model.musicType.musicTypeTranslations[0].type;
+              let name = music.model.displayTitle.name;
+              let id = music.model.id;
 
+
+              TIMAAT.UI.displayDataSetContentArea('musicFormTranscription');
+              TIMAAT.UI.displayDataSetContent('musicFormTranscription', music, 'music');
+
+              if ( type == 'music') {
+                  TIMAAT.URLHistory.setURL(null, name + ' · Transcription · ' + type[0].toUpperCase() + type.slice(1), '#music/' + id + '/transcriptions');
+              } else {
+                  TIMAAT.URLHistory.setURL(null, name + ' · Transcription · ' + type[0].toUpperCase() + type.slice(1), '#music/' + type + '/' + id + '/transcriptions');
+              }
+          })
+			$('#musicFormTranscriptionDismissButton').on('click', function(event) {
+				let music = $('#musicFormMetadata').data('music');
+				TIMAAT.UI.displayDataSetContent('musicFormTranscription', music, 'music');
+			});
+
+			$('#musicFormAddTranscriptionBtn').on('click', function(event) {
+				const currentSelectedLanguage = $('#musicTranscriptionLanguageId').select2('data')[0]
+				const currentTranscriptionText = $('#addMusicTranscriptionTranscriptionText').val()
+				const currentTranslationsByLanguageId = TIMAAT.MusicDatasets.readTranslationsByLanguageIdFromUI()
+
+				if(currentTranslationsByLanguageId.has(parseInt(currentSelectedLanguage.id))){
+					$('#musicTranscriptionLanguageDuplicateModal').modal('show');
+				}else {
+					$('#addMusicTranscriptionTranscriptionText').val("")
+					$('#musicTranscriptionLanguageId').val(null).trigger('change');
+					$('#musicDynamicTranscriptionFields').append(TIMAAT.MusicDatasets.appendTranscription(currentSelectedLanguage.id,currentSelectedLanguage.text, currentTranscriptionText));
+					TIMAAT.MusicDatasets.sortTranscriptions()
+				}
+			})
+
+			// remove music transcription button click
+			$(document).on('click','.removeMusicTranscriptionButton', function(event) {
+				// console.log("TCL: remove actor with role(s)");
+				event.preventDefault();
+				$(this).closest('.music-transcription-entry').remove();
+			});
+        },
 		initTitles: function() {
 			$('#musicTabTitles').on('click', function(event) {
 				let music = $('#musicFormMetadata').data('music');
@@ -2294,6 +2340,85 @@
 			}
 		},
 
+		musicFormTranscriptions: async function(action, music){
+			TIMAAT.MusicDatasets.drawMusicDynamicTranscriptions(music)
+			$('#musicFormTranscriptionSubmitButton').off()
+
+			if(action === 'show') {
+				$('.musicFormDataSheetEditButton').show();
+				$('.musicFormEditComponent').hide();
+				$('.removeMusicTranscriptionButton').hide();
+				$('.transcription-textarea').attr('readonly', true);
+			}else if(action === 'edit') {
+				$('#addMusicTranscriptionTranscriptionText').val("")
+				$('#musicTranscriptionLanguageId').val(null).trigger('change');
+				$('.musicFormDataSheetEditButton').hide();
+				$('.musicFormEditComponent').show();
+
+				$('#musicFormTranscriptionSubmitButton').on('click', async function(event) {
+					event.preventDefault();
+					const musicTranslationsByLanguageId = TIMAAT.MusicDatasets.readTranslationsByLanguageIdFromUI()
+					await TIMAAT.MusicDatasets.updateMusicTranslations(musicTranslationsByLanguageId, music);
+					TIMAAT.MusicDatasets.musicFormTranscriptions("show", music)
+				})
+
+				$('#musicTranscriptionLanguageId').select2({
+					closeOnSelect: true,
+					scrollAfterSelect: true,
+					allowClear: true,
+					required: true,
+					width: '100%',
+					ajax: {
+						url: 'api/language/selectList/',
+						type: 'GET',
+						dataType: 'json',
+						delay: 250,
+						headers: {
+							"Authorization": "Bearer "+TIMAAT.Service.token,
+							"Content-Type": "application/json",
+						},
+						// additional parameters
+						data: function(params) {
+							// console.log("TCL: data: params", params);
+							return {
+								search: params.term,
+								page: params.page
+							};
+						},
+						processResults: function(data, params) {
+							// console.log("TCL: processResults: data", data);
+							params.page = params.page || 1;
+							return {
+								results: data
+							};
+						},
+						cache: false
+					},
+					minimumInputLength: 0,
+				});
+			}
+		},
+		readTranslationsByLanguageIdFromUI: function () {
+			const result = new Map()
+
+			$('.music-transcription-entry').each((index, element) => {
+				const $element = $(element);
+				const languageId = $element.data("languageid");
+				const transcription = $element.find('.transcription-textarea').val();
+
+				result.set(languageId, transcription);
+			});
+			return result;
+		},
+		drawMusicDynamicTranscriptions: function (music) {
+			$('#musicDynamicTranscriptionFields').empty()
+			const transcriptionCount = music.model.musicTranslationList.length
+			for(let i = 0; i < transcriptionCount; i++) {
+				const currentTranscription = music.model.musicTranslationList[i]
+				$('#musicDynamicTranscriptionFields').append(TIMAAT.MusicDatasets.appendTranscription(currentTranscription.language.id,currentTranscription.language.name,currentTranscription.translation));
+			}
+			TIMAAT.MusicDatasets.sortTranscriptions()
+		},
 		musicFormMediumHasMusicList: async function(action, music) {
 			// console.log("TCL: musicFormMediumHasMusicList: action, music", action, music);
 			// TIMAAT.UI.addSelectedClassToSelectedItem(music.model.musicType.musicTypeTranslations[0].type, music.model.id);
@@ -2746,6 +2871,33 @@
 			} catch(error) {
 				console.error("ERROR: ", error);
 			};
+		},
+
+		updateMusicTranslations: async function(musicTranslationsByLanguageId, music) {
+			try {
+				const updatedMusicTranslations = await TIMAAT.MusicService.updateTranslations(music.model.id, musicTranslationsByLanguageId);
+				music.model.musicTranslationList = updatedMusicTranslations;
+
+				const musicDataTable = TIMAAT.MusicDatasets.dataTableMusic?.row('#' + music.model.id);
+				if(musicDataTable?.length){
+					const currentData = musicDataTable.data()
+					currentData.musicTranslationList = updatedMusicTranslations
+				}
+
+				const dataTableChurch = TIMAAT.MusicDatasets.dataTableChurchMusic?.row('#' + music.model.id);
+				if(dataTableChurch?.length){
+					const currentData = dataTableChurch.data()
+					currentData.musicTranslationList = updatedMusicTranslations
+				}
+
+				const dataTableAnash = TIMAAT.MusicDatasets.dataTableNashid?.row('#' + music.model.id);
+				if(dataTableAnash?.length){
+					const currentData = dataTableAnash.data()
+					currentData.musicTranslationList = updatedMusicTranslations
+				}
+			}catch (error){
+				console.error("Error during updating music translations", error)
+			}
 		},
 
 		updateMusicHasCategorySetsList: async function(musicModel, categorySetIdList) {
@@ -3233,7 +3385,35 @@
 			</div>`;
 			return titleToAppend;
 		},
+		appendTranscription: function (languageId, languageName, transcriptionText) {
+			const entryToAppend = `<div class="form-row mb-1 music-transcription-entry" data-role="transcriptionEntry" data-languageid="${languageId}" data-languagename="${languageName}">
+                                    <div class="col-md-3 d-flex align-items-center">
+                                 		${languageName}    
+                                    </div>
+                                    <div class="col-md-8">
+                                      <label class="sr-only">Transcription</label>
+                                      <textarea class="form-control transcription-textarea" placeholder="Enter transcription" rows="3" required>${transcriptionText}</textarea>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-center">
+										<button class="form-group__button js-form-group__button removeMusicTranscriptionButton btn btn-danger" data-role="remove">
+											<i class="fas fa-trash-alt"></i>
+										</button>
+									</div>
+                                  </div>`
 
+			return entryToAppend;
+		},
+		sortTranscriptions: function (){
+			const musicDynamicTranscription = $('#musicDynamicTranscriptionFields')
+			const transcriptionEntries = musicDynamicTranscription.children(".music-transcription-entry")
+
+			transcriptionEntries.sort((a,b) => {
+				return $(a).text().localeCompare($(b).text());
+			})
+
+			musicDynamicTranscription.empty()
+			musicDynamicTranscription.append(transcriptionEntries)
+		},
 		appendActorWithRolesDataset: function(i, actorId) {
     	// console.log("TCL: i, actorId", i, actorId);
 			var entryToAppend =
@@ -3273,7 +3453,6 @@
 				</div>`;
 			return entryToAppend;
 		},
-
 		appendNewActorHasRolesField: function() {
 			let entryToAppend =
 				`<div class="form-group" data-role="musicHasActorWithRoleEntry" data-id="-1">

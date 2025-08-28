@@ -18,14 +18,14 @@ public class UpdateMusicTranslationList {
 
   @JsonProperty(TRANSLATIONS_BY_LANUGAGE_ID_FIELD_NAME)
   @NotNull
-  private final Map<Long, String> translationsByLanguageId;
+  private final Map<Integer, String> translationsByLanguageId;
 
   @JsonCreator
-  public UpdateMusicTranslationList(@JsonProperty(TRANSLATIONS_BY_LANUGAGE_ID_FIELD_NAME) Map<Long, String> translationsByLanguageId) {
+  public UpdateMusicTranslationList(@JsonProperty(TRANSLATIONS_BY_LANUGAGE_ID_FIELD_NAME) Map<Integer, String> translationsByLanguageId) {
     this.translationsByLanguageId = translationsByLanguageId;
   }
 
-  public Map<Long, String> getTranslationsByLanguageId() {
+  public Map<Integer, String> getTranslationsByLanguageId() {
     return translationsByLanguageId;
   }
 }

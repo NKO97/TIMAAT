@@ -656,6 +656,9 @@
 							this.setDataSetContentActiveNavTab('musicTabMediumHasMusicList');
 							TIMAAT.MusicDatasets.musicFormMediumHasMusicList(mode, data);
 						break;
+						case 'musicFormTranscription':
+							this.setDataSetContentActiveNavTab('musicTabTranscription');
+							TIMAAT.MusicDatasets.musicFormTranscriptions(mode, data);
 					}
 				break;
 				case 'event':

@@ -47,18 +47,18 @@ public class MusicStorage extends DbStorage {
   }
 
 
-  public List<MusicTranslation> updateTranslationListOfMusic(int musicId, Map<Long, String> translationByMusicId) throws DbTransactionExecutionException {
+  public List<MusicTranslation> updateTranslationListOfMusic(int musicId, Map<Integer, String> translationByMusicId) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Updating translation list of music with id " + musicId);
     return executeDbTransaction((entityManager) -> {
       Music music = entityManager.getReference(Music.class, musicId);
 
-      Map<Long, MusicTranslation> existingMusicTranslationsByLanguageId = entityManager.createQuery("select musicTranslation from MusicTranslation musicTranslation where musicTranslation.id.musicId = :musicId", MusicTranslation.class)
+      Map<Integer, MusicTranslation> existingMusicTranslationsByLanguageId = entityManager.createQuery("select musicTranslation from MusicTranslation musicTranslation where musicTranslation.id.musicId = :musicId", MusicTranslation.class)
               .setParameter("musicId", musicId)
               .getResultStream()
-              .collect(Collectors.toMap(musicTranslation -> musicTranslation.getId().getLanguageId(), musicTranslation -> musicTranslation));
+              .collect(Collectors.toMap(musicTranslation -> musicTranslation.getLanguage().getId(), musicTranslation -> musicTranslation));
 
       List<MusicTranslation> musicTranslations = new ArrayList<>();
-      for(Map.Entry<Long, String> currentUpdatedTranscriptionByLanguageId : translationByMusicId.entrySet()) {
+      for(Map.Entry<Integer, String> currentUpdatedTranscriptionByLanguageId : translationByMusicId.entrySet()) {
         if(existingMusicTranslationsByLanguageId.containsKey(currentUpdatedTranscriptionByLanguageId.getKey())) {
           MusicTranslation existingMusicTranslation = existingMusicTranslationsByLanguageId.get(currentUpdatedTranscriptionByLanguageId.getKey());
           existingMusicTranslation.setTranslation(currentUpdatedTranscriptionByLanguageId.getValue());
@@ -76,13 +76,15 @@ public class MusicStorage extends DbStorage {
         }
       }
 
-      Set<Long> deletableLanguageIds = new HashSet<>(existingMusicTranslationsByLanguageId.keySet());
+      Set<Integer> deletableLanguageIds = new HashSet<>(existingMusicTranslationsByLanguageId.keySet());
       deletableLanguageIds.removeAll(translationByMusicId.keySet());
-      entityManager.createQuery("delete from MusicTranslation where id.musicId = :musicId and id.languageId in :languageIds")
-              .setParameter("musicId", musicId)
-              .setParameter("languageIds", deletableLanguageIds)
-              .executeUpdate();
 
+      if(!deletableLanguageIds.isEmpty()) {
+        entityManager.createQuery("delete from MusicTranslation where id.musicId = :musicId and id.languageId in :languageIds")
+                .setParameter("musicId", musicId)
+                .setParameter("languageIds", deletableLanguageIds)
+                .executeUpdate();
+      }
       return musicTranslations;
     });
   }

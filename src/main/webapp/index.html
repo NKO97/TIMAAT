@@ -4762,6 +4762,24 @@
                   </div>
                 </div>
               </div>
+              <div class="modal fade" id="musicTranscriptionLanguageDuplicateModal" tabindex="-1" role="dialog" aria-labelledby="actorWithRoleDuplicateLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Transcription with language already exists</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      A transcription with the provided language already exists.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="modal fade" id="musicDatasetsEditMusicCategorySetsModal" tabindex="-1" role="dialog" aria-labelledby="musicCategorySetLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
@@ -4909,6 +4927,9 @@
                           </li>
                           <li class="nav-item titleDataTab">
                             <a class="nav-link navBarLinkContent" id="musicTabTitles">Music titles</a>
+                          </li>
+                          <li class="nav-item titleDataTab">
+                            <a class="nav-link navBarLinkContent" id="musicTabTranscription">Transcriptions</a>
                           </li>
                           <li class="nav-item musicActorWithRoleDataTab">
                             <a class="nav-link navBarLinkContent" id="musicTabActorWithRoles">Actors</a>
@@ -5283,6 +5304,65 @@
                           </div>
                           <button type="submit" class="btn btn-primary" id="musicFormActorWithRolesSubmitButton" name="submit">Save</button>
                           <button type="button" class="btn btn-secondary" id="musicFormActorWithRolesDismissButton" name="dismiss">Cancel</button>
+                        </form>
+                        <form class="form datasetContent" role="form" id="musicFormTranscription" name="musicFormTranscription" method="POST" novalidate>
+                          <div class="form-header">
+                            <div class="form-row">
+                              <div class="col-md-9">
+                                <h5 class="form-title capitalize--first-letter" id="musicTranscriptionLabel">Transcriptions</h5>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                  <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                    <button type="button" class="btn btn-outline btn-secondary btn-sm musicFormDataSheetEditButton formButtons" title="Edit data sheet" name="edit">
+                                      <i class="fas fa-edit"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                <h6 class="form-header">Language</h6>
+                              </div>
+                              <div class="col-md-7">
+                                <h6 class="form-header">Transcription</h6>
+                              </div>
+                            </div>
+                          </div>
+                          <div data-role="musicDynamicTranscriptionFields" id="musicDynamicTranscriptionFields"></div>
+                          <div class="form-group musicFormEditComponent mb-2 mt-2" data-role="musicTranscriptionEntry" data-id="-1">
+                            <div class="form-row">
+                              <div class="col-md-11">
+                                <fieldset>
+                                  <legend>Add new transcription(s):</legend>
+                                  <div class="form-row">
+                                    <div class="col-md-5 d-flex align-items-center">
+                                      <label class="sr-only" for="musicTranscriptionLanguageId">Language</label>
+                                      <select class="form-control musicTranscriptionLanguageId"
+                                              id="musicTranscriptionLanguageId"
+                                              name=""
+                                              data-placeholder="Select language"
+                                              data-role="musicTranscriptionLanguageId"
+                                              required>
+                                      </select>
+                                    </div>
+                                    <div class="col-md-7">
+                                      <label class="sr-only">Transcription</label>
+                                      <textarea id="addMusicTranscriptionTranscriptionText" class="form-control" placeholder="Enter transcription" rows="3" required></textarea>
+                                    </div>
+                                  </div>
+                                </fieldset>
+                              </div>
+                              <div class="col-md-1 align-items--vertically">
+                                <button type="button" class="form-group__button addMusicTranscriptionButton btn btn-primary" data-role="add" id="musicFormAddTranscriptionBtn">
+                                  <i class="fas fa-plus"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-primary musicFormEditComponent" id="musicFormTranscriptionSubmitButton" name="submit">Save</button>
+                          <button type="button" class="btn btn-secondary musicFormEditComponent" id="musicFormTranscriptionDismissButton" name="dismiss">Cancel</button>
                         </form>
                         <!-- medium has music list form -->
                         <form class="form datasetContent" role="form" id="musicFormMediumHasMusicList" name="musicFormMediumHasMusicList" method="POST" novalidate>

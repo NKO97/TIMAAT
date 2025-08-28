@@ -18,31 +18,31 @@ public class MusicTranslationPK implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "music_id", updatable = false, nullable = false, insertable = false)
-    private Long musicId;
+    private Integer musicId;
     @Column(name = "language_id", updatable = false, nullable = false, insertable = false)
-    private Long languageId;
+    private Integer languageId;
 
     public MusicTranslationPK() {
     }
 
-    public MusicTranslationPK(Long musicId, Long languageId) {
+    public MusicTranslationPK(Integer musicId, Integer languageId) {
         this.musicId = musicId;
         this.languageId = languageId;
     }
 
-    public Long getLanguageId() {
+    public Integer getLanguageId() {
         return languageId;
     }
 
-    public void setLanguageId(Long languageId) {
+    public void setLanguageId(Integer languageId) {
         this.languageId = languageId;
     }
 
-    public Long getMusicId() {
+    public Integer getMusicId() {
         return musicId;
     }
 
-    public void setMusicId(Long musicId) {
+    public void setMusicId(Integer musicId) {
         this.musicId = musicId;
     }
 

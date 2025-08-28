@@ -663,6 +663,32 @@
 			});
 		},
 
+		updateTranslations(musicId, translationsByLanguageId) {
+			const payload = {
+				translationsByLanguageId: Object.fromEntries(translationsByLanguageId)
+			}
+			return new Promise(resolve => {
+				$.ajax({
+					url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/music/" + musicId + "/musicTranslationList",
+					type:"PUT",
+					data: JSON.stringify(payload),
+					contentType:"application/json; charset=utf-8",
+					dataType:"json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+					},
+				}).done(function(updateData) {
+					// console.log("TCL: async updateTitle -> updateData", updateData);
+					resolve(updateData);
+				}).fail(function(error) {
+					console.error("ERROR: ", error);
+					console.error("ERROR responseText:", error.responseText);
+				});
+			}).catch((error) => {
+				console.error("ERROR: ", error);
+			});
+		},
+
 		async removeMusic(music) {
 			// console.log("TCL: removeMusic -> music", music);
 			return new Promise(resolve => {

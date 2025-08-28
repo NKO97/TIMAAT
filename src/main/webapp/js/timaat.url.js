@@ -547,6 +547,9 @@
                   TIMAAT.UI.displayComponent('music', 'musicTab', 'musicDataTable', 'musicTabMediumHasMusicList', 'musicFormMediumHasMusicList');
                   TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
                 break;
+                case 'transcriptions': //* #music/:id/transcriptions
+                  TIMAAT.UI.displayComponent('music', type + 'Tab', type+'DataTable', 'musicTabTranscription', 'musicFormTranscription');
+                  TIMAAT.UI.displayDataSetContent('musicFormTranscription', music, 'music');
                 default:
                   this.redirectToDefaultView();
                 break;
@@ -592,6 +595,10 @@
                       case 'mediumHasMusicList': //* #music/:type/:id/mediumHasMusicList
                         TIMAAT.UI.displayComponent('music', type+'Tab', type+'DataTable', 'musicTabMediumHasMusicList', 'musicFormMediumHasMusicList');
                         TIMAAT.UI.displayDataSetContent('mediumHasMusicList', music, 'music');
+                      break;
+                      case 'transcriptions': //* #music/:type/:id/transcriptions
+                        TIMAAT.UI.displayComponent('music', type + 'Tab', type+'DataTable', 'musicTabTranscription', 'musicFormTranscription');
+                        TIMAAT.UI.displayDataSetContent('musicFormTranscription', music, 'music');
                       break;
                       default:
                         this.redirectToDefaultView();
