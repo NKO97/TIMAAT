@@ -637,7 +637,6 @@
 			});
     },
         initTranscriptions: function () {
-			console.log("Init transcriptions")
           $('#musicTabTranscription').on('click', function(event) {
               let music = $('#musicFormMetadata').data('music');
               // let type = $('#musicFormMetadata').data('type');
@@ -3172,11 +3171,6 @@
 		},
 
 		_musicRemoved: async function(music) {
-			// console.log("TCL: _musicRemoved", music);
-			// to update removed musicId from medium information
-			let mediumModel = {};
-			mediumModel = await TIMAAT.MusicService.getMediumByMusicId(music.model.id);
-			mediumModel.music = null;
 			// sync to server
 			try {
 				await TIMAAT.MusicService.removeMusic(music);
@@ -3193,13 +3187,6 @@
 				}
 			}
 			$('#musicFormMetadata').data('music', null);
-
-			try {
-				// TODO: This is a workaround so that musicId is removed from the medium data, which should be possible without an updateMedium call
-				await TIMAAT.MediumService.updateMedium(mediumModel);
-			} catch(error) {
-				console.error("ERROR: ", error);
-			}
 		},
 
     updateMusicModelData: async function(model, formDataObject) {
