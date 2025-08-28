@@ -191,14 +191,57 @@ BEGIN
     END IF;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE update_to_0_14_2()
+BEGIN
+    DECLARE db_major_version int;
+    DECLARE db_minor_version int;
+    DECLARE db_patch_version int;
+
+    SELECT major_version, minor_version, patch_version
+    INTO db_major_version, db_minor_version, db_patch_version
+    FROM db_version
+    LIMIT 1;
+
+    IF db_major_version = 0 AND db_minor_version = 14 AND db_patch_version = 1 THEN
+        SELECT 'execute update to 0.14.2' AS log_message;
+        DELETE FROM db_version;
+        INSERT INTO db_version (major_version, minor_version, patch_version) VALUES (0, 14, 2);
+
+        CREATE TABLE `FIPOP`.`annotation_has_music`
+        (
+            `music_id`    INT NOT NULL,
+            `annotation_id` INT NOT NULL,
+            CONSTRAINT `fk_annotation_has_music_music1`
+                FOREIGN KEY (`music_id`)
+                    REFERENCES `FIPOP`.`music` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `fk_annotation_has_music_annotation1`
+                FOREIGN KEY (`annotation_id`)
+                    REFERENCES `FIPOP`.`annotation` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `pk_annotation_has_music1` PRIMARY KEY (music_id, annotation_id)
+        ) ENGINE = InnoDB;
+        CREATE INDEX fk_annotation_has_music_music1_idx ON `FIPOP`.`annotation_has_music` (music_id ASC);
+        CREATE INDEX fk_annotation_has_music_annotation1_idx ON `FIPOP`.`annotation_has_music` (annotation_id ASC);
+
+        SELECT 'finished update to 0.14.2' AS log_message;
+    END IF;
+END $$
+DELIMITER ;
 /**
  * Call update functions
  */
 CALL update_to_0_14_0();
 CALL update_to_0_14_1();
+CALL update_to_0_14_2();
 
 /*
  * Delete update functions after finishing update script
  */
 DROP PROCEDURE update_to_0_14_0;
 DROP PROCEDURE update_to_0_14_1;
+DROP PROCEDURE update_to_0_14_2;
