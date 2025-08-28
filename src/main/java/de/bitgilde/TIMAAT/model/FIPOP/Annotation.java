@@ -1,15 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +17,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -167,6 +166,19 @@ public class Annotation implements Serializable {
 			}
 		)
 	private List<Category> categories;
+
+	@ManyToMany
+	@JoinTable(
+          name = "annotation_has_music",
+          inverseJoinColumns = {
+                  @JoinColumn(name = "music_id")
+          },
+          joinColumns = {
+                  @JoinColumn(name = "annotation_id")
+          }
+	)
+  @JsonManagedReference(value = "Annotation-Music")
+	private List<Music> musics;
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany
@@ -325,7 +337,15 @@ public class Annotation implements Serializable {
 		this.analysis = analysis;
 	}
 
-	public Analysis addAnalysis(Analysis analysis) {
+  public List<Music> getMusics() {
+    return musics;
+  }
+
+  public void setMusics(List<Music> musics) {
+    this.musics = musics;
+  }
+
+  public Analysis addAnalysis(Analysis analysis) {
 		getAnalysis().add(analysis);
 		analysis.setAnnotation(this);
 

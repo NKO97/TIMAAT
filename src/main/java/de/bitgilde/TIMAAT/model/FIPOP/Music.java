@@ -253,6 +253,19 @@ public class Music implements Serializable {
 	// @JsonManagedReference(value="Medium-Music")
 	private Medium medium;
 
+  @ManyToMany
+  @JoinTable(
+          name = "annotation_has_music",
+          joinColumns = {
+                  @JoinColumn(name = "music_id")
+          },
+          inverseJoinColumns = {
+                  @JoinColumn(name = "annotation_id")
+          }
+  )
+  @JsonBackReference("Annotation-Music")
+  private List<Annotation> annotationList;
+
 	public Music() {
 	}
 
@@ -634,4 +647,11 @@ public class Music implements Serializable {
 		return mediumHasMusic;
 	}
 
+  public List<Annotation> getAnnotationList() {
+    return annotationList;
+  }
+
+  public void setAnnotationList(List<Annotation> annotationList) {
+    this.annotationList = annotationList;
+  }
 }
