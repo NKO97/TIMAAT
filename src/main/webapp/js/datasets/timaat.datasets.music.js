@@ -645,8 +645,8 @@
               let id = music.model.id;
 
 
-              TIMAAT.UI.displayDataSetContentArea('musicFormTranscription');
-              TIMAAT.UI.displayDataSetContent('musicFormTranscription', music, 'music');
+              TIMAAT.UI.displayDataSetContentArea('transcriptions');
+              TIMAAT.UI.displayDataSetContent('transcriptions', music, 'music');
 
               if ( type == 'music') {
                   TIMAAT.URLHistory.setURL(null, name + ' · Transcription · ' + type[0].toUpperCase() + type.slice(1), '#music/' + id + '/transcriptions');
@@ -656,7 +656,7 @@
           })
 			$('#musicFormTranscriptionDismissButton').on('click', function(event) {
 				let music = $('#musicFormMetadata').data('music');
-				TIMAAT.UI.displayDataSetContent('musicFormTranscription', music, 'music');
+				TIMAAT.UI.displayDataSetContent('transcriptions', music, 'music');
 			});
 
 			$('#musicFormAddTranscriptionBtn').on('click', function(event) {

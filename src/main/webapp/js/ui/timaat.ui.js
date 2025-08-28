@@ -656,7 +656,7 @@
 							this.setDataSetContentActiveNavTab('musicTabMediumHasMusicList');
 							TIMAAT.MusicDatasets.musicFormMediumHasMusicList(mode, data);
 						break;
-						case 'musicFormTranscription':
+						case 'transcriptions':
 							this.setDataSetContentActiveNavTab('musicTabTranscription');
 							TIMAAT.MusicDatasets.musicFormTranscriptions(mode, data);
 					}
