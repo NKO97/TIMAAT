@@ -665,9 +665,13 @@
 				const currentTranscriptionText = $('#addMusicTranscriptionTranscriptionText').val()
 				const currentTranslationsByLanguageId = TIMAAT.MusicDatasets.readTranslationsByLanguageIdFromUI()
 
-				if(currentTranslationsByLanguageId.has(parseInt(currentSelectedLanguage.id))){
+				if(!currentSelectedLanguage){
+					$('.musicFormTranscriptionErrorMessage').show()
+				}else if(currentTranslationsByLanguageId.has(parseInt(currentSelectedLanguage.id))){
+					$('.musicFormTranscriptionErrorMessage').hide()
 					$('#musicTranscriptionLanguageDuplicateModal').modal('show');
 				}else {
+					$('.musicFormTranscriptionErrorMessage').hide()
 					$('#addMusicTranscriptionTranscriptionText').val("")
 					$('#musicTranscriptionLanguageId').val(null).trigger('change');
 					$('#musicDynamicTranscriptionFields').append(TIMAAT.MusicDatasets.appendTranscription(currentSelectedLanguage.id,currentSelectedLanguage.text, currentTranscriptionText));
@@ -2350,6 +2354,7 @@
 				$('.removeMusicTranscriptionButton').hide();
 				$('.transcription-textarea').attr('readonly', true);
 			}else if(action === 'edit') {
+				$('.musicFormTranscriptionErrorMessage').hide()
 				$('#addMusicTranscriptionTranscriptionText').val("")
 				$('#musicTranscriptionLanguageId').val(null).trigger('change');
 				$('.musicFormDataSheetEditButton').hide();
