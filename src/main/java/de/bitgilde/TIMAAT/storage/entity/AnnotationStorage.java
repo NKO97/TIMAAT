@@ -3,6 +3,8 @@ package de.bitgilde.TIMAAT.storage.entity;
 import de.bitgilde.TIMAAT.db.DbStorage;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicPK;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
@@ -46,11 +48,17 @@ public class AnnotationStorage extends DbStorage {
   public boolean addMusicToAnnotation(int annotationId, int musicId) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Adding music {0} to annotation {1}", new Object[]{musicId, annotationId});
     return this.executeDbTransaction(entityManager -> {
-      Annotation annotation = entityManager.find(Annotation.class, annotationId);
+      AnnotationHasMusic existingAnnotationHasMusic = entityManager.find(AnnotationHasMusic.class, new AnnotationHasMusicPK(annotationId, musicId));
       Music music = entityManager.getReference(Music.class, musicId);
+      Annotation annotation = entityManager.getReference(Annotation.class, annotationId);
 
-      if (!annotation.getMusics().contains(music)) {
-        annotation.getMusics().add(music);
+
+      if (existingAnnotationHasMusic == null) {
+        AnnotationHasMusic annotationHasMusic = new AnnotationHasMusic();
+        annotationHasMusic.setAnnotation(annotation);
+        annotationHasMusic.setMusic(music);
+
+        entityManager.persist(annotationHasMusic);
         return true;
       }
 
@@ -61,10 +69,13 @@ public class AnnotationStorage extends DbStorage {
   public boolean removeMusicFromAnnotation(int annotationId, int musicId) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Remove music {0} from annotation {1}", new Object[]{musicId, annotationId});
     return this.executeDbTransaction(entityManager -> {
-      Annotation annotation = entityManager.find(Annotation.class, annotationId);
-      Music music = entityManager.getReference(Music.class, musicId);
+      AnnotationHasMusic annotationHasMusic = entityManager.find(AnnotationHasMusic.class, new AnnotationHasMusicPK(annotationId, musicId));
+      if(annotationHasMusic != null) {
+        entityManager.remove(annotationHasMusic);
+        return true;
+      }
 
-      return annotation.getMusics().remove(music);
+      return false;
     });
   }
 

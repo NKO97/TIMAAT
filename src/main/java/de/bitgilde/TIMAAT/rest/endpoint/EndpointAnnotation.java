@@ -15,7 +15,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
-import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
@@ -298,13 +297,6 @@ public class EndpointAnnotation {
 
 		return Response.ok().entity(true).build();
 	}
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Secured
-  @Path("{id}/music")
-  public List<Music> getAnnotationMusic(@PathParam("id") int id) throws DbTransactionExecutionException {
-    return annotationStorage.getAnnotationById(id).getMusics();
-  }
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

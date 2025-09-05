@@ -51,6 +51,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisTakeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisVoice</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
+        <class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic</class>
+        <class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Articulation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation</class>

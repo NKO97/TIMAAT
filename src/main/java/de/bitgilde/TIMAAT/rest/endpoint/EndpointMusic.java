@@ -184,7 +184,7 @@ public class EndpointMusic {
 		List<Music> musicList = new ArrayList<>();
 		if ((search != null && !search.isEmpty())  || excludedAnnotationId != null) {
 			// find all matching titles
-			sql = "SELECT DISTINCT m FROM Music m, Title t WHERE t IN (m.titleList) and (:excludedAnnotationId is null or m.id not in (select m2.id from Music m2 left join m2.annotationList annotation where annotation.id = :excludedAnnotationId))" +
+			sql = "SELECT DISTINCT m FROM Music m, Title t WHERE t IN (m.titleList) and (:excludedAnnotationId is null or m.id not in (select m2.id from Music m2 left join m2.annotationHasMusic annotationHasMusic where annotationHasMusic.annotation.id = :excludedAnnotationId))" +
               "AND  (:search is null or lower(t.name) LIKE lower(concat('%', :search, '%'))) ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
 													 .setParameter("search", search)

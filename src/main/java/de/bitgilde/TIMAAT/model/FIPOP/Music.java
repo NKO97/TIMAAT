@@ -1,9 +1,12 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,6 +48,9 @@ import java.util.Objects;
  */
 @Entity
 @NamedQuery(name="Music.findAll", query="SELECT m FROM Music m")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Music implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -253,18 +259,9 @@ public class Music implements Serializable {
 	// @JsonManagedReference(value="Medium-Music")
 	private Medium medium;
 
-  @ManyToMany
-  @JoinTable(
-          name = "annotation_has_music",
-          joinColumns = {
-                  @JoinColumn(name = "music_id")
-          },
-          inverseJoinColumns = {
-                  @JoinColumn(name = "annotation_id")
-          }
-  )
-  @JsonBackReference("Annotation-Music")
-  private List<Annotation> annotationList;
+  @OneToMany(mappedBy = "music")
+  @JsonIgnoreProperties("annotation")
+  private List<AnnotationHasMusic> annotationHasMusic;
 
 	public Music() {
 	}
@@ -647,11 +644,15 @@ public class Music implements Serializable {
 		return mediumHasMusic;
 	}
 
-  public List<Annotation> getAnnotationList() {
-    return annotationList;
+  public void setCreatedByUserAccountId(int createdByUserAccountId) {
+    this.createdByUserAccountId = createdByUserAccountId;
   }
 
-  public void setAnnotationList(List<Annotation> annotationList) {
-    this.annotationList = annotationList;
+  public List<AnnotationHasMusic> getAnnotationHasMusic() {
+    return annotationHasMusic;
+  }
+
+  public void setAnnotationHasMusic(List<AnnotationHasMusic> annotationHasMusic) {
+    this.annotationHasMusic = annotationHasMusic;
   }
 }
