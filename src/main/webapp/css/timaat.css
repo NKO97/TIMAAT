@@ -357,3 +357,38 @@
 .timeline__marker {
     z-index: 1001;
 }
+
+.inspectorMusicPaneLinkedMusicPane {
+    margin-left: 2em;
+    margin-bottom: 1em;
+}
+
+.linked-music-music-translation-language-list, .musicTranslationAudibleRangePaneSection{
+    min-width: 120px;
+}
+
+.musicTranslationAudibleRangePane{
+    margin-left: 1em;
+}
+
+.musicTranslationAudibleRangePaneSection{
+    overflow-y: auto;
+}
+
+.transcriptionSelectionArea{
+    overflow: auto;
+    user-select: none;
+    cursor: text;
+}
+
+.musicTranslationAudibleRangePaneFlexContainer{
+    height: 200px;
+}
+
+.transcriptionSelectionExplainText{
+    font-size: 12px;
+}
+
+.text-highlighted{
+    background-color: yellow;
+}

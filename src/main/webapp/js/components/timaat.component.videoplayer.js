@@ -1749,7 +1749,6 @@
                 fetch("/TIMAAT/api/medium/" + mediumId + "/mediumAudioAnalysis/frequencyInformation?token=" + token)
                     .then(response => response.json())
                     .then(frequencyInformation => {
-                        console.log(frequencyInformation);
                         TIMAAT.VideoPlayer.mediumFrequencyInformation = frequencyInformation;
                         TIMAAT.VideoPlayer.drawFrequencyInformation()
                     })
