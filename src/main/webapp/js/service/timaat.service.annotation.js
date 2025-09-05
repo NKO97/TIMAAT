@@ -83,6 +83,30 @@
 			});
 		},
 
+        async getMusicList(annotationId){
+            // console.log("TCL: getTagList -> for annotationId", annotationId);
+            return new Promise(resolve => {
+                $.ajax({
+                    url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/music",
+                    type       : "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType   : "json",
+                    beforeSend : function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(data) {
+                    // console.log("TCL: getTagList -> data", data);
+                    resolve(data);
+                })
+                    .fail(function(error) {
+                        console.error("ERROR responseText: ", error.responseText);
+                        console.error("ERROR: ", error);
+                    });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
+
 		async getTagList(annotationId) {
       // console.log("TCL: getTagList -> for annotationId", annotationId);
 			return new Promise(resolve => {
@@ -228,6 +252,43 @@
 				return false;
 			});
 		},
+
+        addAnnotationMusic(annotationId, musicId) {
+            return jQuery.ajax({
+                url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/music/"+ musicId +'/?authToken='+TIMAAT.Service.session.token,
+                type       : "POST",
+                contentType: "application/json; charset=utf-8",
+                beforeSend : function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                },
+            }).done(function(data) {
+                return data;
+            })
+                .fail(function(error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                    return false;
+                });
+        },
+
+        removeAnnotationMusic(annotationId, musicId) {
+            // console.log("TCL: removeAnnotationActor -> annotationId, actorId", annotationId, actorId);
+            return jQuery.ajax({
+                url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/music/"+musicId+'/?authToken='+TIMAAT.Service.session.token,
+                type       : "DELETE",
+                contentType: "application/json; charset=utf-8",
+                beforeSend : function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                },
+            }).done(function(data) {
+                return data;
+            })
+            .fail(function(error) {
+                console.error("ERROR: ", error);
+                console.error("ERROR responseText:", error.responseText);
+                return false;
+            });
+        },
 
 		addAnnotationEvent(annotationId, eventId) {
       // console.log("TCL: addAnnotationEvent -> annotationId, eventId", annotationId, eventId);

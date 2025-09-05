@@ -160,6 +160,7 @@ public class EndpointMusic {
 															 @QueryParam("length") Integer length,
 															 @QueryParam("orderby") String orderby,
 															 @QueryParam("dir") String direction,
+                               @QueryParam("exclude_annotation") Integer excludedAnnotationId,
 															 @QueryParam("search") String search ) {
 		// System.out.println("EndpointMusic: getMusicList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
 		if ( draw == null ) draw = 0;
@@ -181,11 +182,13 @@ public class EndpointMusic {
 		Query query;
 		String sql;
 		List<Music> musicList = new ArrayList<>();
-		if (search != null && search.length() > 0 ) {
+		if ((search != null && !search.isEmpty())  || excludedAnnotationId != null) {
 			// find all matching titles
-			sql = "SELECT DISTINCT m FROM Music m, Title t WHERE t IN (m.titleList) AND lower(t.name) LIKE lower(concat('%', :search, '%')) ORDER BY "+column+" "+direction;
+			sql = "SELECT DISTINCT m FROM Music m, Title t WHERE t IN (m.titleList) and (:excludedAnnotationId is null or m.id not in (select m2.id from Music m2 left join m2.annotationList annotation where annotation.id = :excludedAnnotationId))" +
+              "AND  (:search is null or lower(t.name) LIKE lower(concat('%', :search, '%'))) ORDER BY "+column+" "+direction;
 			query = entityManager.createQuery(sql)
-													 .setParameter("search", search);
+													 .setParameter("search", search)
+                           .setParameter("excludedAnnotationId", excludedAnnotationId);
 			musicList = castList(Music.class, query.getResultList());
 			// find all music belonging to those titles
 			if ( start != null && start > 0 ) query.setFirstResult(start);

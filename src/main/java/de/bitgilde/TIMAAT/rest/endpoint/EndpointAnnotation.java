@@ -1,23 +1,10 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
@@ -28,6 +15,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
@@ -36,6 +24,8 @@ import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -53,6 +43,18 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,6 +79,7 @@ import jakarta.ws.rs.core.Response.Status;
 public class EndpointAnnotation {
 
 	@Context ContainerRequestContext containerRequestContext;
+  @Inject AnnotationStorage annotationStorage;
 
 	@GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -179,6 +182,36 @@ public class EndpointAnnotation {
 		return Response.ok().entity(true).build();
 	}
 
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{annotationId}/music/{musicId}")
+  public Response addMusic(@PathParam("annotationId") int annotationId,
+                           @PathParam("musicId") int musicId,
+                           @QueryParam("authToken") String authToken) throws DbTransactionExecutionException {
+    if (!verifyUserHasAccessToAnnotation(authToken, annotationId)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+
+    boolean musicRelationAdded = annotationStorage.addMusicToAnnotation(annotationId, musicId);
+    return Response.ok().entity(musicRelationAdded).build();
+  }
+
+  @DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{annotationId}/music/{musicId}")
+  public Response removeMusic(@PathParam("annotationId") int annotationId,
+                              @PathParam("musicId") int musicId,
+                              @QueryParam("authToken") String authToken) throws DbTransactionExecutionException {
+    if (!verifyUserHasAccessToAnnotation(authToken, annotationId)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+
+    boolean musicRelationRemoved = annotationStorage.removeMusicFromAnnotation(annotationId, musicId);
+    return Response.ok().entity(musicRelationRemoved).build();
+  }
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
@@ -265,6 +298,13 @@ public class EndpointAnnotation {
 
 		return Response.ok().entity(true).build();
 	}
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/music")
+  public List<Music> getAnnotationMusic(@PathParam("id") int id) throws DbTransactionExecutionException {
+    return annotationStorage.getAnnotationById(id).getMusics();
+  }
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -1010,6 +1050,13 @@ public class EndpointAnnotation {
     for(Object o: c)
       r.add(clazz.cast(o));
     return r;
+  }
+
+  private boolean verifyUserHasAccessToAnnotation(String authToken, int annotationId) throws DbTransactionExecutionException {
+    int userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+    int mediumAnalysisListId = annotationStorage.getMediumAnalysisListId(annotationId);
+
+    return EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) >= 2;
   }
 
 }
