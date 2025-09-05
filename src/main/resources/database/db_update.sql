@@ -211,7 +211,7 @@ BEGIN
 
         CREATE TABLE `FIPOP`.`annotation_has_music`
         (
-            `music_id`    INT NOT NULL,
+            `music_id`      INT NOT NULL,
             `annotation_id` INT NOT NULL,
             CONSTRAINT `fk_annotation_has_music_music1`
                 FOREIGN KEY (`music_id`)
@@ -227,6 +227,30 @@ BEGIN
         ) ENGINE = InnoDB;
         CREATE INDEX fk_annotation_has_music_music1_idx ON `FIPOP`.`annotation_has_music` (music_id ASC);
         CREATE INDEX fk_annotation_has_music_annotation1_idx ON `FIPOP`.`annotation_has_music` (annotation_id ASC);
+
+
+        CREATE TABLE `FIPOP`.`annotation_has_music_translation_area`
+        (
+            `music_id`      INT NOT NULL,
+            `annotation_id` INT NOT NULL,
+            `language_id`   INT NOT NULL,
+            `start_index`   INT NOT NULL,
+            `end_index`     INT NOT NULL,
+            CONSTRAINT `fk_annotation_has_music_translation_area_annotation_has_music1`
+                FOREIGN KEY (`music_id`, `annotation_id`)
+                    REFERENCES `FIPOP`.`annotation_has_music` (`music_id`, `annotation_id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `fk_annotation_has_music_translation_area_music_translation1`
+                FOREIGN KEY (`music_id`, `language_id`)
+                    REFERENCES `FIPOP`.`music_translation` (`music_id`, `language_id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `pk_annotation_has_music_translation_area1` PRIMARY KEY (music_id, annotation_id, language_id)
+        ) ENGINE = InnoDB;
+        CREATE INDEX fk_annotation_has_music_translation_area_music1_idx ON `FIPOP`.`annotation_has_music_translation_area` (music_id ASC);
+        CREATE INDEX fk_annotation_has_music_translation_area_annotation1_idx ON `FIPOP`.`annotation_has_music_translation_area` (annotation_id ASC);
+        CREATE INDEX fk_annotation_has_music_translation_area_language1_idx ON `FIPOP`.`annotation_has_music_translation_area` (language_id ASC);
 
         SELECT 'finished update to 0.14.2' AS log_message;
     END IF;
