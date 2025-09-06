@@ -1,12 +1,10 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,9 +46,6 @@ import java.util.Objects;
  */
 @Entity
 @NamedQuery(name="Music.findAll", query="SELECT m FROM Music m")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Music implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -260,7 +255,7 @@ public class Music implements Serializable {
 	private Medium medium;
 
   @OneToMany(mappedBy = "music")
-  @JsonIgnoreProperties("annotation")
+  @JsonIgnoreProperties("music")
   private List<AnnotationHasMusic> annotationHasMusic;
 
 	public Music() {

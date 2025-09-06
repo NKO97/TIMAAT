@@ -1,5 +1,6 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -39,10 +40,12 @@ public class AnnotationHasMusic {
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "music_id")
+  @JsonIgnoreProperties("annotationHasMusic")
   private Music music;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "annotation_id")
+  @JsonIgnoreProperties("annotationHasMusic")
   private Annotation annotation;
 
   @OneToMany(mappedBy = "annotationHasMusic")
@@ -70,5 +73,13 @@ public class AnnotationHasMusic {
 
   public void setId(AnnotationHasMusicPK id) {
     this.id = id;
+  }
+
+  public Set<AnnotationHasMusicTranslationArea> getAnnotationHasMusicTranslationAreas() {
+    return annotationHasMusicTranslationAreas;
+  }
+
+  public void setAnnotationHasMusicTranslationAreas(Set<AnnotationHasMusicTranslationArea> annotationHasMusicTranslationAreas) {
+    this.annotationHasMusicTranslationAreas = annotationHasMusicTranslationAreas;
   }
 }

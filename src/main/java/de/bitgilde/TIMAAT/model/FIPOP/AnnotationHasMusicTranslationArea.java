@@ -19,7 +19,6 @@ import jakarta.persistence.Table;
 @Table(name = "annotation_has_music_translation_area")
 public class AnnotationHasMusicTranslationArea {
   @EmbeddedId
-  @JsonIgnore
   private AnnotationHasMusicTranslationAreaPK id;
 
   @Column(name = "start_index", nullable = false)
