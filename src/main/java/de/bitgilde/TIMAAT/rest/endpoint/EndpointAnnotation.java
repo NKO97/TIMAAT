@@ -9,6 +9,7 @@ import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
@@ -192,8 +193,8 @@ public class EndpointAnnotation {
       return Response.status(Status.FORBIDDEN).build();
     }
 
-    boolean musicRelationAdded = annotationStorage.addMusicToAnnotation(annotationId, musicId);
-    return Response.ok().entity(musicRelationAdded).build();
+    AnnotationHasMusic createdAnnotationHasMusic = annotationStorage.addMusicToAnnotation(annotationId, musicId);
+    return Response.ok(createdAnnotationHasMusic).build();
   }
 
   @DELETE

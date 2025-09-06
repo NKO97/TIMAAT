@@ -45,24 +45,24 @@ public class AnnotationStorage extends DbStorage {
             .setParameter("id", annotationId).getSingleResult());
   }
 
-  public boolean addMusicToAnnotation(int annotationId, int musicId) throws DbTransactionExecutionException {
+  public AnnotationHasMusic addMusicToAnnotation(int annotationId, int musicId) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Adding music {0} to annotation {1}", new Object[]{musicId, annotationId});
     return this.executeDbTransaction(entityManager -> {
       AnnotationHasMusic existingAnnotationHasMusic = entityManager.find(AnnotationHasMusic.class, new AnnotationHasMusicPK(annotationId, musicId));
-      Music music = entityManager.getReference(Music.class, musicId);
-      Annotation annotation = entityManager.getReference(Annotation.class, annotationId);
 
 
       if (existingAnnotationHasMusic == null) {
+        Music music = entityManager.find(Music.class, musicId);
+        Annotation annotation = entityManager.find(Annotation.class, annotationId);
         AnnotationHasMusic annotationHasMusic = new AnnotationHasMusic();
         annotationHasMusic.setAnnotation(annotation);
         annotationHasMusic.setMusic(music);
 
         entityManager.persist(annotationHasMusic);
-        return true;
+        return annotationHasMusic;
       }
 
-      return false;
+      return existingAnnotationHasMusic;
     });
   }
 

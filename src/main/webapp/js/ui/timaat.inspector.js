@@ -37,7 +37,8 @@
 
 }(function (TIMAAT) {
     TIMAAT.LinkedMusic = class LinkedMusic {
-        constructor(parentContainerSelector, annotationMusicRelation){
+        constructor(parentContainerSelector, annotationMusicRelation, inspector){
+            this._inspector = inspector;
             this._parentContainerSelector = parentContainerSelector;
             this._annotationMusicRelation = annotationMusicRelation;
             this._linkedMusicContainerSelector = "#inspectorMusicPaneLinkedMusicPane-" + annotationMusicRelation.music.id
@@ -98,8 +99,7 @@
 
             const linkedMusicObject = this
             $(`${this._linkedMusicContainerSelector} .removeMusicRelationBtn`).on('click', async () => {
-                //await TIMAAT.AnnotationService.removeAnnotationMusic(this._annotationMusicRelation.annotation.id, this._annotationMusicRelation.music.id)
-                linkedMusicObject.remove()
+                linkedMusicObject._inspector.removeAnnotationMusic(linkedMusicObject._annotationMusicRelation)
             })
 
             if(this._annotationMusicRelation.music.musicTranslationList.length){
@@ -382,12 +382,7 @@
                     // console.log("TCL: Inspector -> constructor -> data", data);
                     let $row = $(row);
                     $row.on('click', function(ev) {
-                        const currentAnnotation = TIMAAT.VideoPlayer.curAnnotation
-                        if(currentAnnotation){
-                            TIMAAT.AnnotationService.addAnnotationMusic(currentAnnotation.model.id, music.id).then(() => {
-                                inspector.ui.dataTableMusic.ajax.reload()
-                            });
-                        }
+                        inspector.addAnnotationMusic(music)
                     })
                 }
             })
@@ -1912,11 +1907,16 @@
 			this.ui.dataTableEvents.ajax.reload();
             this.ui.dataTableMusic.clear()
             this.ui.dataTableMusic.ajax.reload();
-            this.resetLinkedMusicArea()
+            this.reloadLinkedMusicArea()
 		}
 
-        resetLinkedMusicArea() {
+        reloadLinkedMusicArea() {
             $("#musicAnnotationWrapper").empty()
+            if(this.state.type === "annotation" && this.state.item){
+                for(const currentAnnotationHasMusic of this.state.item.model.annotationHasMusic){
+                    new TIMAAT.LinkedMusic("#musicAnnotationWrapper", currentAnnotationHasMusic, this)
+                }
+            }
         }
 
 		switchPosition() {
@@ -1930,6 +1930,30 @@
 				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-left');
 			}
 		}
+
+        async removeAnnotationMusic(annotationMusicRelation){
+            const currentItem = this.state.item
+            if(this.state.type === "annotation" && currentItem.model.id === annotationMusicRelation.id.annotationId){
+                await TIMAAT.AnnotationService.removeAnnotationMusic(annotationMusicRelation.id.annotationId, annotationMusicRelation.music.id)
+                const indexOfRemovedAnnotationHasMusic = currentItem.model.annotationHasMusic.indexOf(annotationMusicRelation);
+                if(indexOfRemovedAnnotationHasMusic > -1){
+                    currentItem.model.annotationHasMusic.splice(indexOfRemovedAnnotationHasMusic, 1);
+                }
+                this.ui.dataTableMusic.ajax.reload();
+                this.reloadLinkedMusicArea()
+            }
+        }
+
+        async addAnnotationMusic(music){
+            const currentItem = this.state.item
+            if(this.state.type === "annotation" && currentItem){
+                const annotationHasMusic = await TIMAAT.AnnotationService.addAnnotationMusic(currentItem.model.id, music.id)
+                console.log(annotationHasMusic)
+                currentItem.model.annotationHasMusic.push(annotationHasMusic)
+                this.reloadLinkedMusicArea()
+                this.ui.dataTableMusic.ajax.reload()
+            }
+        }
 
         /**
          * Changes the represented element inside the inspector. This function is used to create or edit a specific element.
@@ -2109,10 +2133,7 @@
 
                         // music panel
                         this.ui.dataTableMusic.ajax.reload();
-                        this.resetLinkedMusicArea()
-                        for(const currentAnnotationHasMusic of item.model.annotationHasMusic){
-                            new TIMAAT.LinkedMusic("#musicAnnotationWrapper", currentAnnotationHasMusic)
-                        }
+                        this.reloadLinkedMusicArea()
 
                         if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
                             $('#inspectorAddActors').hide();
