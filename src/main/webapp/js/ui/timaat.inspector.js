@@ -252,7 +252,7 @@
                             }
                         }else {
                             const finalStartIndex = Math.min(startIndex, endIndex);
-                            const finalEndIndex = Math.min(endIndex, endIndex);
+                            const finalEndIndex = Math.max(endIndex, endIndex);
                             const updatedAnnotationMusicTranslationArea = await TIMAAT.AnnotationService.updateAnnotationMusicTranslationAreaForLanguage(linkedMusicObject._annotationMusicRelation.id.annotationId, linkedMusicObject._annotationMusicRelation.music.id, linkedMusicObject._selectedMusicTranslation.language.id, finalStartIndex, finalEndIndex)
                             if(musicTranslationArea){
                                 //Update transcription area
