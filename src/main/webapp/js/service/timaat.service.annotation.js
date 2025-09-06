@@ -252,7 +252,45 @@
 				return false;
 			});
 		},
-
+        updateAnnotationMusicTranslationAreaForLanguage(annotationId, musicId, languageId, startIndex, endIndex) {
+            const indexBasedRange = {
+                startIndex,
+                endIndex
+            }
+            return jQuery.ajax({
+                url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/music/"+ musicId + "/translationArea/" + languageId  +'/?authToken='+TIMAAT.Service.session.token,
+                type       : "PUT",
+                data       : JSON.stringify(indexBasedRange),
+                contentType: "application/json; charset=utf-8",
+                beforeSend : function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                },
+            }).done(function(data) {
+                return data;
+            })
+            .fail(function(error) {
+                console.error("ERROR: ", error);
+                console.error("ERROR responseText:", error.responseText);
+                return false;
+            });
+        },
+        removeAnnotationMusicTranslationAreaForLanguage(annotationId, musicId, languageId) {
+            return jQuery.ajax({
+                url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/music/"+ musicId + "/translationArea/" + languageId  +'/?authToken='+TIMAAT.Service.session.token,
+                type       : "DELETE",
+                contentType: "application/json; charset=utf-8",
+                beforeSend : function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                },
+            }).done(function(data) {
+                return data;
+            })
+                .fail(function(error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                    return false;
+                });
+        },
         addAnnotationMusic(annotationId, musicId) {
             return jQuery.ajax({
                 url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+annotationId+"/music/"+ musicId +'/?authToken='+TIMAAT.Service.session.token,

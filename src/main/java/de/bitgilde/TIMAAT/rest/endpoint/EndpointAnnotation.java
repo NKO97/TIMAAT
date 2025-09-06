@@ -10,6 +10,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.Analysis;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
@@ -20,6 +21,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.IndexBasedRange;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
@@ -34,6 +36,7 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -181,6 +184,22 @@ public class EndpointAnnotation {
 
 		return Response.ok().entity(true).build();
 	}
+
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{annotationId}/music/{musicId}/translationArea/{languageId}")
+  public AnnotationHasMusicTranslationArea updateAnnotationHasMusicTranslationArea(@PathParam("annotationId") int annotationId, @PathParam("musicId") int musicId, @PathParam("languageId") int languageId, IndexBasedRange indexBasedRange) throws DbTransactionExecutionException {
+    return annotationStorage.setTranscriptionAreaToAnnotationHasMusicForLanguage(annotationId, musicId, languageId, indexBasedRange);
+  }
+
+  @DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{annotationId}/music/{musicId}/translationArea/{languageId}")
+  public boolean removeAnnotationHasMusicTranslationArea(@PathParam("annotationId") int annotationId, @PathParam("musicId") int musicId, @PathParam("languageId") int languageId) throws DbTransactionExecutionException {
+    return annotationStorage.removeTranscriptionAreaFromAnnotationHasMusicForLanguage(annotationId, musicId, languageId);
+  }
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)

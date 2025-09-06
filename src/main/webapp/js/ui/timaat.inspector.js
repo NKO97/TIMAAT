@@ -47,7 +47,7 @@
             this._musicTranslationAreasByLanguageId = new Map()
 
             for(const currentMusicTranslationArea of annotationMusicRelation.annotationHasMusicTranslationAreas){
-                this._musicTranslationAreasByLanguageId.set(currentMusicTranslationArea.language.id, currentMusicTranslationArea)
+                this._musicTranslationAreasByLanguageId.set(currentMusicTranslationArea.id.languageId, currentMusicTranslationArea)
             }
 
             this.draw()
@@ -238,23 +238,29 @@
 
                     const saveButton = $(`${this._linkedMusicContainerSelector} .transcriptionSelectionPersistenceSaveButton`)
                     saveButton.off("click")
-                    saveButton.on("click", () => {
+                    saveButton.on("click", async () => {
                         if(startIndex === null || endIndex === null || (startIndex === 0 && endIndex === 0)){
                             //Remove transcription area
-                            linkedMusicObject._musicTranslationAreasByLanguageId.delete(linkedMusicObject._selectedMusicTranslation.language.id)
+                            await TIMAAT.AnnotationService.removeAnnotationMusicTranslationAreaForLanguage(linkedMusicObject._annotationMusicRelation.id.annotationId, linkedMusicObject._annotationMusicRelation.music.id, linkedMusicObject._selectedMusicTranslation.language.id)
+                            const existingMusicTranslationArea = linkedMusicObject._musicTranslationAreasByLanguageId.get(linkedMusicObject._selectedMusicTranslation.language.id)
+                            if(existingMusicTranslationArea) {
+                                linkedMusicObject._musicTranslationAreasByLanguageId.delete(linkedMusicObject._selectedMusicTranslation.language.id)
+                                const indexOfAnnotationHasMusicTranslationArea = linkedMusicObject._annotationMusicRelation.annotationHasMusicTranslationAreas.indexOf(existingMusicTranslationArea)
+                                if (indexOfAnnotationHasMusicTranslationArea > -1) {
+                                    linkedMusicObject._annotationMusicRelation.annotationHasMusicTranslationAreas.splice(indexOfAnnotationHasMusicTranslationArea, 1)
+                                }
+                            }
                         }else {
+                            const finalStartIndex = Math.min(startIndex, endIndex);
+                            const finalEndIndex = Math.min(endIndex, endIndex);
+                            const updatedAnnotationMusicTranslationArea = await TIMAAT.AnnotationService.updateAnnotationMusicTranslationAreaForLanguage(linkedMusicObject._annotationMusicRelation.id.annotationId, linkedMusicObject._annotationMusicRelation.music.id, linkedMusicObject._selectedMusicTranslation.language.id, finalStartIndex, finalEndIndex)
                             if(musicTranslationArea){
                                 //Update transcription area
-                                musicTranslationArea.startIndex = Math.min(startIndex, endIndex);
-                                musicTranslationArea.endIndex = Math.max(startIndex, endIndex);
+                                musicTranslationArea.startIndex = updatedAnnotationMusicTranslationArea.startIndex;
+                                musicTranslationArea.endIndex = updatedAnnotationMusicTranslationArea.endIndex;
                             }else {
-                                //Add transcription area
-                                const createdMusicTranslationArea = {
-                                    language: linkedMusicObject._selectedMusicTranslation.language,
-                                    startIndex: Math.min(startIndex, endIndex),
-                                    endIndex: Math.max(startIndex, endIndex)
-                                }
-                                linkedMusicObject._musicTranslationAreasByLanguageId.set(createdMusicTranslationArea.language.id, createdMusicTranslationArea)
+                                linkedMusicObject._musicTranslationAreasByLanguageId.set(updatedAnnotationMusicTranslationArea.id.languageId, updatedAnnotationMusicTranslationArea)
+                                linkedMusicObject._annotationMusicRelation.annotationHasMusicTranslationAreas.push(updatedAnnotationMusicTranslationArea)
                             }
                         }
 
@@ -1913,6 +1919,7 @@
         reloadLinkedMusicArea() {
             $("#musicAnnotationWrapper").empty()
             if(this.state.type === "annotation" && this.state.item){
+                this.state.item.model.annotationHasMusic.sort((a,b) => a.music.originalTitle.name.localeCompare(b.music.originalTitle.name));
                 for(const currentAnnotationHasMusic of this.state.item.model.annotationHasMusic){
                     new TIMAAT.LinkedMusic("#musicAnnotationWrapper", currentAnnotationHasMusic, this)
                 }
@@ -1948,7 +1955,6 @@
             const currentItem = this.state.item
             if(this.state.type === "annotation" && currentItem){
                 const annotationHasMusic = await TIMAAT.AnnotationService.addAnnotationMusic(currentItem.model.id, music.id)
-                console.log(annotationHasMusic)
                 currentItem.model.annotationHasMusic.push(annotationHasMusic)
                 this.reloadLinkedMusicArea()
                 this.ui.dataTableMusic.ajax.reload()

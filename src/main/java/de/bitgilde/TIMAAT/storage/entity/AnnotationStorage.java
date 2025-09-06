@@ -5,7 +5,12 @@ import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicPK;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationAreaPK;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslationPK;
+import de.bitgilde.TIMAAT.model.IndexBasedRange;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -45,6 +50,47 @@ public class AnnotationStorage extends DbStorage {
             .setParameter("id", annotationId).getSingleResult());
   }
 
+  public boolean removeTranscriptionAreaFromAnnotationHasMusicForLanguage(int annotationId, int musicId, int languageId) throws DbTransactionExecutionException {
+    logger.log(Level.INFO, "Removing transcription area from annotation {0} for music {1} in language {2} ", new Object[]{annotationId, musicId, languageId});
+    return this.executeDbTransaction(entityManager -> {
+      AnnotationHasMusicTranslationArea existingMusicTranslationArea = entityManager.find(AnnotationHasMusicTranslationArea.class, new AnnotationHasMusicTranslationAreaPK(musicId, annotationId, languageId));
+      if(existingMusicTranslationArea != null) {
+        entityManager.remove(existingMusicTranslationArea);
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  public AnnotationHasMusicTranslationArea setTranscriptionAreaToAnnotationHasMusicForLanguage(int annotationId, int musicId, int languageId, IndexBasedRange indexBasedRange) throws DbTransactionExecutionException {
+    logger.log(Level.FINE, "Adding transcription area to annotation {0} for music {1} in language {2}", new Object[]{annotationId, musicId, languageId});
+    return this.executeDbTransaction(entityManager -> {
+      AnnotationHasMusicTranslationArea existingAnnotationHasMusicTranslationArea = entityManager.find(AnnotationHasMusicTranslationArea.class, new AnnotationHasMusicTranslationAreaPK(musicId, annotationId, languageId));
+
+      if (existingAnnotationHasMusicTranslationArea == null) {
+        AnnotationHasMusic annotationHasMusic = entityManager.find(AnnotationHasMusic.class, new AnnotationHasMusicPK(annotationId, musicId));
+        MusicTranslation musicTranslation = entityManager.find(MusicTranslation.class, new MusicTranslationPK(musicId, languageId));
+
+        AnnotationHasMusicTranslationArea createdAnnotationHasMusicTranslationArea = new AnnotationHasMusicTranslationArea();
+        createdAnnotationHasMusicTranslationArea.setAnnotationHasMusic(annotationHasMusic);
+        createdAnnotationHasMusicTranslationArea.setMusicTranslation(musicTranslation);
+        createdAnnotationHasMusicTranslationArea.setStartIndex(indexBasedRange.getStartIndex());
+        createdAnnotationHasMusicTranslationArea.setEndIndex(indexBasedRange.getEndIndex());
+
+        entityManager.persist(createdAnnotationHasMusicTranslationArea);
+        entityManager.flush();
+        entityManager.refresh(createdAnnotationHasMusicTranslationArea);
+        return createdAnnotationHasMusicTranslationArea;
+      } else {
+        existingAnnotationHasMusicTranslationArea.setStartIndex(indexBasedRange.getStartIndex());
+        existingAnnotationHasMusicTranslationArea.setEndIndex(indexBasedRange.getEndIndex());
+
+        return existingAnnotationHasMusicTranslationArea;
+      }
+    });
+  }
+
   public AnnotationHasMusic addMusicToAnnotation(int annotationId, int musicId) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Adding music {0} to annotation {1}", new Object[]{musicId, annotationId});
     return this.executeDbTransaction(entityManager -> {
@@ -59,6 +105,8 @@ public class AnnotationStorage extends DbStorage {
         annotationHasMusic.setMusic(music);
 
         entityManager.persist(annotationHasMusic);
+        entityManager.flush();
+        entityManager.refresh(annotationHasMusic);
         return annotationHasMusic;
       }
 
@@ -70,7 +118,7 @@ public class AnnotationStorage extends DbStorage {
     logger.log(Level.FINE, "Remove music {0} from annotation {1}", new Object[]{musicId, annotationId});
     return this.executeDbTransaction(entityManager -> {
       AnnotationHasMusic annotationHasMusic = entityManager.find(AnnotationHasMusic.class, new AnnotationHasMusicPK(annotationId, musicId));
-      if(annotationHasMusic != null) {
+      if (annotationHasMusic != null) {
         entityManager.remove(annotationHasMusic);
         return true;
       }
