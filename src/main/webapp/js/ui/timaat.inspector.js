@@ -45,7 +45,7 @@
             this._transcriptionSelectionEnabled = false;
             this._musicTranslationAreasByLanguageId = new Map()
 
-            for(const currentMusicTranslationArea of annotationMusicRelation.musicTranslationAreas){
+            for(const currentMusicTranslationArea of annotationMusicRelation.annotationHasMusicTranslationAreas){
                 this._musicTranslationAreasByLanguageId.set(currentMusicTranslationArea.language.id, currentMusicTranslationArea)
             }
 
@@ -55,11 +55,12 @@
         draw(){
             $(this._parentContainerSelector).append(`<div class="inspectorMusicPaneLinkedMusicPane" id=${"inspectorMusicPaneLinkedMusicPane-" + this._annotationMusicRelation.music.id}>
                               <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#linkedMusicWrapper${this._annotationMusicRelation.music.id}">
-                                  <i class="collapse-icon fas fa-fw"></i> ${this._annotationMusicRelation.music.originalTitle}
+                                  <i class="collapse-icon fas fa-fw"></i> ${this._annotationMusicRelation.music.originalTitle.name}
                               </button>
                               <div class="p-2 collapse" id="linkedMusicWrapper${this._annotationMusicRelation.music.id}">
                                  <div class="w-100 d-flex flex-column">
-                                     <div class="d-flex mb-2 musicTranslationAudibleRangePaneFlexContainer">
+                                     <div class="w-100 musicTranslationAudibleRangePaneContainer">
+                                      <div class="d-flex mb-2 musicTranslationAudibleRangePaneFlexContainer">
                                         <div class="musicTranslationAudibleRangePaneSection">
                                             <ul class="list-group list-group-flush mr-2 linked-music-music-translation-language-list">
                                             </ul>
@@ -80,7 +81,9 @@
                                                  </div>
                                                 </div>
                                              </div>
-                                         </div>
+                                           </div>
+                                     </div>
+                                     <div class="alert alert-secondary inspectorMusicPaneLinkedMusicNotTranscriptionAvailable mb-1">No transcription for music available</div>
                                      <button class="btn btn-danger btn-sm removeMusicRelationBtn">Remove linkage</button>
                                  </div>
                               </div>
@@ -99,8 +102,13 @@
                 linkedMusicObject.remove()
             })
 
-            this.updateMusicTranslationsLanguageList()
-            this.updateMusicTranslationAudibleRangePane()
+            if(this._annotationMusicRelation.music.musicTranslationList.length){
+                $(`${this._linkedMusicContainerSelector} .inspectorMusicPaneLinkedMusicNotTranscriptionAvailable`).hide()
+                this.updateMusicTranslationsLanguageList()
+                this.updateMusicTranslationAudibleRangePane()
+            }else {
+                $(`${this._linkedMusicContainerSelector} .musicTranslationAudibleRangePaneContainer`).hide()
+            }
         }
 
         updateMusicTranslationsLanguageList(){
@@ -1908,103 +1916,7 @@
 		}
 
         resetLinkedMusicArea() {
-            const testObject1 = {
-                musicTranslationAreas: [
-                    {
-                        language: {
-                            id: 2,
-                            name: "German"
-                        },
-                        startIndex: 0,
-                        endIndex: 10
-                    }
-                ],
-                music: {
-                    id: 1,
-                    originalTitle: "Cool track",
-                    musicTranslationList: [
-                        {
-                            language: {
-                                id: 1,
-                                name: "English"
-                            },
-                            translation: "English Translation \nEnglish TranslationEnglish TranslationEnglish TranslationEnglish TranslationEnglish TranslationEnglish TranslationEnglish Translation"
-                        },
-                        {
-                            language: {
-                                id: 2,
-                                name: "German"
-                            },
-                            translation: "German Translation"
-                        },
-                        {
-                            language: {
-                                id: 3,
-                                name: "French"
-                            },
-                            translation: "French Translation"
-                        },
-                        {
-                            language: {
-                                id: 4,
-                                name: "Chinese"
-                            },
-                            translation: "Chinese Translation"
-                        }
-                    ]
-                }
-            }
-            const testObject2 = {
-                musicTranslationAreas: [
-                    {
-                        language: {
-                            id: 2,
-                            name: "German"
-                        },
-                        startIndex: 0,
-                        endIndex: 10
-                    }
-                ],
-                music: {
-                    id: 2,
-                    originalTitle: "Cool track",
-                    musicTranslationList: [
-                        {
-                            language: {
-                                id: 1,
-                                name: "English"
-                            },
-                            translation: "English Translation \nEnglish TranslationEnglish TranslationEnglish TranslationEnglish TranslationEnglish TranslationEnglish TranslationEnglish Translation"
-                        },
-                        {
-                            language: {
-                                id: 2,
-                                name: "German"
-                            },
-                            translation: "German Translation"
-                        },
-                        {
-                            language: {
-                                id: 3,
-                                name: "French"
-                            },
-                            translation: "French Translation"
-                        },
-                        {
-                            language: {
-                                id: 4,
-                                name: "Chinese"
-                            },
-                            translation: "Chinese Translation"
-                        }
-                    ]
-                }
-            }
             $("#musicAnnotationWrapper").empty()
-
-
-            const testLinkedMusic1 = new TIMAAT.LinkedMusic("#musicAnnotationWrapper", testObject1);
-            const testLinkedMusic2 = new TIMAAT.LinkedMusic("#musicAnnotationWrapper", testObject2);
         }
 
 		switchPosition() {
@@ -2198,7 +2110,9 @@
                         // music panel
                         this.ui.dataTableMusic.ajax.reload();
                         this.resetLinkedMusicArea()
-                        //TODO: Reload current associated music
+                        for(const currentAnnotationHasMusic of item.model.annotationHasMusic){
+                            new TIMAAT.LinkedMusic("#musicAnnotationWrapper", currentAnnotationHasMusic)
+                        }
 
                         if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
                             $('#inspectorAddActors').hide();
