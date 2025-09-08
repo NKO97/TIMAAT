@@ -23,7 +23,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.Maqam;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
-import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicArticulationElement;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement;
@@ -47,7 +46,10 @@ import de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPatternTranslation;
+import de.bitgilde.TIMAAT.model.TimeRange;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicList;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicList.MediumHasMusicListEntry;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTranslationList;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
@@ -82,6 +84,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -1870,108 +1873,15 @@ public class EndpointMusic {
 		return Response.ok().build();
 	}
 
-	@POST
+  @PUT
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-	@Path("{musicId}/{mediumId}/mediumHasMusicDetail/{id}")
-	@Secured
-	public Response addMediumHasMusicDetail(@PathParam("musicId") int musicId,
-																					 @PathParam("mediumId") int mediumId,
-																					 @PathParam("id") int id,
-																					 String jsonData) {
-
-		// System.out.println("EndpointMusic: addMediumHasMusicDetail: jsonData: "+jsonData);
-		ObjectMapper mapper = new ObjectMapper();
-		MediumHasMusicDetail newMediumHasMusicDetail = null;
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		// parse JSON data
-		try {
-			newMediumHasMusicDetail = mapper.readValue(jsonData, MediumHasMusicDetail.class);
-		} catch (IOException e) {
-			System.out.println("EndpointMusic: addMediumHasMusicDetail: IOException e !");
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		if ( newMediumHasMusicDetail == null ) {
-			System.out.println("EndpointMusic: addMediumHasMusicDetail: newMediumHasMusicDetail == null !");
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		// sanitize object data
-		newMediumHasMusicDetail.setId(0);
-		Music music = entityManager.find(Music.class, musicId);
-		Medium medium = entityManager.find(Medium.class, mediumId);
-		MediumHasMusic mhmKey = new MediumHasMusic(medium, music);
-		MediumHasMusic mhm = entityManager.find(MediumHasMusic.class, mhmKey.getId());
-		newMediumHasMusicDetail.setMediumHasMusic(mhm);
-
-
-		// persist membership
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.persist(mhm);
-		entityManager.persist(newMediumHasMusicDetail);
-		entityManager.flush();
-		newMediumHasMusicDetail.setMediumHasMusic(mhm);
-		entityTransaction.commit();
-		entityManager.refresh(newMediumHasMusicDetail);
-		entityManager.refresh(mhm);
-
-		return Response.ok().entity(newMediumHasMusicDetail).build();
-	}
-
-	@PATCH
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("mediumHasMusicDetail/{id}")
-	@Secured
-	public Response updateMediumHasMusicDetail(@PathParam("id") int id,
-																	 String jsonData) {
-		// System.out.println("EndpointMusic: updateMediumHasMusicDetail - jsonData: " + jsonData);
-		ObjectMapper mapper = new ObjectMapper();
-		MediumHasMusicDetail updatedMediumHasMusicDetail = null;
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		MediumHasMusicDetail mediumHasMusicDetail = entityManager.find(MediumHasMusicDetail.class, id);
-		if ( mediumHasMusicDetail == null ) return Response.status(Status.NOT_FOUND).build();
-		// parse JSON data
-		try {
-			updatedMediumHasMusicDetail = mapper.readValue(jsonData, MediumHasMusicDetail.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		if ( updatedMediumHasMusicDetail == null ) return Response.notModified().build();
-		// update membership
-		mediumHasMusicDetail.setStartTime(updatedMediumHasMusicDetail.getStartTime());
-		mediumHasMusicDetail.setEndTime(updatedMediumHasMusicDetail.getEndTime());
-
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.merge(mediumHasMusicDetail);
-		entityManager.persist(mediumHasMusicDetail);
-		entityTransaction.commit();
-		entityManager.refresh(mediumHasMusicDetail);
-
-		return Response.ok().entity(mediumHasMusicDetail).build();
-	}
-
-	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("mediumHasMusicDetail/{id}")
-	@Secured
-	public Response deleteMediumHasMusicDetail(@PathParam("id") int id) {
-		// System.out.println("EndpointMusic: deleteMediumHasMusicDetail");
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-
-		MediumHasMusicDetail mediumHasMusicDetail = entityManager.find(MediumHasMusicDetail.class, id);
-		if ( mediumHasMusicDetail == null ) return Response.status(Status.NOT_FOUND).build();
-
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.remove(mediumHasMusicDetail);
-		entityTransaction.commit();
-
-		return Response.ok().build();
-	}
+  @Path("{musicId}/mediumHasMusicList")
+  @Secured
+  public List<MediumHasMusic> updateMediumHasMusicList(@PathParam("musicId") int musicId, UpdateMediumHasMusicList updateMediumHasMusicList) throws DbTransactionExecutionException {
+    Map<Integer, Collection<TimeRange>> timeRangesByMediumId = updateMediumHasMusicList.getMediumHasMusicListEntries().stream().collect(Collectors.toMap(MediumHasMusicListEntry::getMediumId, MediumHasMusicListEntry::getTimeRanges));
+    return musicStorage.updateMediumHasMusic(musicId, timeRangesByMediumId);
+  }
 
 	@POST
   @Produces(MediaType.APPLICATION_JSON)

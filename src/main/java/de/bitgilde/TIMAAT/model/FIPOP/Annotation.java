@@ -622,4 +622,8 @@ public class Annotation implements Serializable {
   public void setLastEditedByUserAccountId(int lastEditedByUserAccountId) {
     this.lastEditedByUserAccountId = lastEditedByUserAccountId;
   }
+
+  public int getMediumId(){
+    return this.mediumAnalysisList.getMedium().getId();
+  }
 }

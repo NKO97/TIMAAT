@@ -3,12 +3,17 @@ package de.bitgilde.TIMAAT.storage.entity;
 import de.bitgilde.TIMAAT.db.DbStorage;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
+import de.bitgilde.TIMAAT.model.TimeRange;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +91,41 @@ public class MusicStorage extends DbStorage {
                 .executeUpdate();
       }
       return musicTranslations;
+    });
+  }
+
+  public List<MediumHasMusic> updateMediumHasMusic(int musicId, Map<Integer, Collection<TimeRange>> timeRangesByMediumId) throws DbTransactionExecutionException {
+    logger.log(Level.FINE, "Updating medium has music list of music with id " + musicId);
+    return executeDbTransaction(entityManager -> {
+      Music music = entityManager.find(Music.class, musicId);
+
+      entityManager.createQuery("delete from MediumHasMusic where music.id= :musicId").setParameter("musicId", musicId).executeUpdate();
+      List<MediumHasMusic> updatedMediumHasMusic = new ArrayList<>();
+      for(Map.Entry<Integer, Collection<TimeRange>> currentTimeRangeByMediumId : timeRangesByMediumId.entrySet()) {
+        MediumHasMusic currentMediumHasMusic = new MediumHasMusic();
+        Medium currentMedium = entityManager.find(Medium.class, currentTimeRangeByMediumId.getKey());
+
+        currentMediumHasMusic.setMusic(music);
+        currentMediumHasMusic.setMedium(currentMedium);
+
+        entityManager.persist(currentMediumHasMusic);
+
+        for(TimeRange currentTimeRange : currentTimeRangeByMediumId.getValue()) {
+          MediumHasMusicDetail currentMediumHasMusicDetail = new MediumHasMusicDetail();
+
+          currentMediumHasMusicDetail.setStartTime(currentTimeRange.getStartTime());
+          currentMediumHasMusicDetail.setEndTime(currentTimeRange.getEndTime());
+          currentMediumHasMusicDetail.setMediumHasMusic(currentMediumHasMusic);
+
+          entityManager.persist(currentMediumHasMusicDetail);
+        }
+
+        updatedMediumHasMusic.add(currentMediumHasMusic);
+      }
+      entityManager.flush();
+      updatedMediumHasMusic.forEach(entityManager::refresh);
+
+      return updatedMediumHasMusic;
     });
   }
 }
