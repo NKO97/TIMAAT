@@ -2,31 +2,42 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>TIMAATTest</groupId>
   <artifactId>TIMAATTest</artifactId>
-  <version>0.13.0-SNAPSHOT</version>
+  <version>0.14.0-SNAPSHOT</version>
   <packaging>war</packaging>
   <properties>
     <!-- <buildDirectory>c:\xampp\tomcat-1\webapps</buildDirectory> -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- <maven.compiler.release>17</maven.compiler.release> -->
     <maven.compiler.release>11</maven.compiler.release>
+    <jersey.version>3.1.10</jersey.version>
   </properties>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <!-- <directory>${buildDirectory}</directory> -->
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <finalName>TIMAAT</finalName>
+
     <plugins>
+      <!-- Maven Compiler Plugin - SINGLE DECLARATION -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.11.0</version>
+        <configuration>
+          <release>11</release>
+          <!-- Remove the conflicting source/target settings -->
+        </configuration>
       </plugin>
+
+      <!-- Maven War Plugin -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <version>3.3.2</version>
         <configuration>
-          <warSourceDirectory>WebContent</warSourceDirectory>
+          <warSourceDirectory>src/main/webapp</warSourceDirectory>
           <webResources>
             <resource>
-              <directory>src/resources</directory>
+              <directory>src/main/resources</directory>
               <targetPath>WEB-INF/classes/resources</targetPath>
               <includes>
                 <include>**/*.template</include>
@@ -35,6 +46,13 @@
           </webResources>
         </configuration>
       </plugin>
+
+      <!-- Maven Surefire Plugin for running tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.1.2</version>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -42,37 +60,42 @@
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-servlet</artifactId>
-      <version>3.0.4</version>
+      <version>${jersey.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-server</artifactId>
-      <version>3.0.4</version>
+      <version>${jersey.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-client</artifactId>
-      <version>3.0.4</version>
+      <version>${jersey.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.inject/jersey-hk2 -->
     <dependency>
       <groupId>org.glassfish.jersey.inject</groupId>
       <artifactId>jersey-hk2</artifactId>
-      <version>3.0.4</version>
+      <version>${jersey.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-json-jackson -->
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-json-jackson</artifactId>
-      <version>3.0.4</version>
+      <version>${jersey.version}</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-multipart -->
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-multipart</artifactId>
-      <version>3.0.4</version>
+      <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-sse</artifactId>
+      <version>${jersey.version}</version> <!-- oder eine andere Jersey-Version, passend zu deinem Projekt -->
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
     <dependency>
@@ -191,6 +214,25 @@
       <groupId>org.im4java</groupId>
       <artifactId>im4java</artifactId>
       <version>1.4.0</version>
+    </dependency>
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.9.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.27.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.18.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

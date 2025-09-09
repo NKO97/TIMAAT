@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>TIMAAT</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>TIMAAT</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>de.bitgilde.TIMAAT.rest</param-value>
+    </init-param>
+    <init-param>
+        <param-name>jersey.config.server.provider.classnames</param-name>
+        <param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature;de.bitgilde.TIMAAT.di.binder.TIMAATBinder;de.bitgilde.TIMAAT.rest.feature.EagerInitializerFeature</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+    <async-supported>true</async-supported>
+    <!-- <multipart-config>
+      <max-file-size>2097152000</max-file-size>
+      <max-request-size>2097152000</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config> -->
+  </servlet>
+
+  <servlet>
+    <servlet-name>TIMAATPublication</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>de.bitgilde.TIMAAT.publication</param-value>
+    </init-param>
+    <init-param>
+        <param-name>jersey.config.server.provider.classnames</param-name>
+        <param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+    <!-- <multipart-config>
+      <max-file-size>2097152000</max-file-size>
+      <max-request-size>2097152000</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config> -->
+  </servlet>
+
+  
+   <!-- <listener>
+    <listener-class>
+            de.bitgilde.TIMAAT.ServiceScheduler
+        </listener-class>
+  </listener> -->
+  
+  <servlet-mapping>
+    <servlet-name>TIMAAT</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TIMAATPublication</servlet-name>
+    <url-pattern>/publication/*</url-pattern>
+  </servlet-mapping>
+
+<!--
+  <security-constraint>
+        <display-name>TIMAAT API Security</display-name>
+        <web-resource-collection>
+            <web-resource-name>TIMAAT API</web-resource-name>
+            <description/>
+            <url-pattern>/api/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+             <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
+        </user-data-constraint>
+    </security-constraint>
+ -->
+ <!-- Require HTTPS for everything except /img (favicon) and /css. -->
+  <!-- <security-constraint>
+    <web-resource-collection>
+        <web-resource-name>HTTPSOnly</web-resource-name>
+        <url-pattern>api/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+        <web-resource-name>HTTPSOrHTTP</web-resource-name>
+        <url-pattern>*.ico</url-pattern>
+        <url-pattern>/img/*</url-pattern>
+        <url-pattern>/css/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint> -->
+</web-app>
