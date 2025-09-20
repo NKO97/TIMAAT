@@ -583,7 +583,7 @@ public class EndpointMediumCollection {
 		List<SelectElement> typeSelectList = new ArrayList<>();
 		List<MediaCollectionTypeTranslation> typeTranslationList = castList(MediaCollectionTypeTranslation.class, query.getResultList());
 		for (MediaCollectionTypeTranslation typeTranslation : typeTranslationList) {
-			typeSelectList.add(new SelectElement(typeTranslation.getId(),
+			typeSelectList.add(new SelectElement<Integer>(typeTranslation.getId(),
 																					typeTranslation.getType()));
 		}
 		return Response.ok().entity(typeSelectList).build();

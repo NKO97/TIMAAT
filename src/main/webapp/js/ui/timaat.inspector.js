@@ -341,7 +341,7 @@
 
             this.ui.dataTableMusic = $("#availableMusicTable").DataTable({
                 lengthChange    : false,
-                dom				: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
+                dom				: 'rft<"row"<"col-sm-12 "p>>',
                 pageLength		: 3,
                 deferLoading	: 0,
                 pagingType		: 'full',

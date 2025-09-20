@@ -247,7 +247,7 @@ public class EndpointActor {
 		List<Actor> actorList = castList(Actor.class, query.getResultList());
 		List<SelectElement> actorSelectList = new ArrayList<>();
 		for (Actor actor : actorList) {
-			actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+			actorSelectList.add(new SelectElement<Integer>(actor.getId(), actor.getDisplayName().getName()));
 		}
 
 		return Response.ok().entity(actorSelectList).build();
@@ -269,7 +269,7 @@ public class EndpointActor {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Actor actor = entityManager.find(Actor.class, id);
 		List<SelectElement> actorSelectList = new ArrayList<>();
-		actorSelectList.add(new SelectElement(id, actor.getDisplayName().getName()));
+		actorSelectList.add(new SelectElement<Integer>(id, actor.getDisplayName().getName()));
 
 		return Response.ok().entity(actorSelectList).build();
 
@@ -420,7 +420,7 @@ public class EndpointActor {
 		List<SelectElement> actorSelectList = new ArrayList<>();
 		for (Actor actor : actorList) {
 			if (actor.getActorPerson() != null) {
-				actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+				actorSelectList.add(new SelectElement<Integer>(actor.getId(), actor.getDisplayName().getName()));
 			}
 		}
 		return Response.ok().entity(actorSelectList).build();
@@ -550,7 +550,7 @@ public class EndpointActor {
 			List<SelectElement> actorSelectList = new ArrayList<>();
 			for (Actor actor : actorList) {
 				if (actor.getActorCollective() != null) {
-					actorSelectList.add(new SelectElement(actor.getId(), actor.getDisplayName().getName()));
+					actorSelectList.add(new SelectElement<Integer>(actor.getId(), actor.getDisplayName().getName()));
 				}
 			}
 			return Response.ok().entity(actorSelectList).build();
@@ -711,7 +711,7 @@ public class EndpointActor {
 		List<SelectElement> sexSelectList = new ArrayList<>();
 		List<SexTranslation> sexTranslationList = castList(SexTranslation.class, query.getResultList());
 		for (SexTranslation sexTranslation : sexTranslationList) {
-			sexSelectList.add(new SelectElement(sexTranslation.getSex().getId(),
+			sexSelectList.add(new SelectElement<Integer>(sexTranslation.getSex().getId(),
 																					sexTranslation.getType()));
 		}
 		return Response.ok().entity(sexSelectList).build();

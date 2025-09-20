@@ -173,7 +173,7 @@
 				$(formData).each(function(i, field){
 					formDataObject[field.name] = field.value;
 				});
-				// console.log("TCL: formDataObject", formDataObject);
+
 				var formSelectData = formData;
 				var voiceLeadingPatternIdList = [];
 				let i = 0;
@@ -185,65 +185,49 @@
 				// console.log("TCL: voiceLeadingPatternIdList: ", voiceLeadingPatternIdList);
 				// sanitize form data
 				var formDataSanitized = formDataObject;
-				formDataSanitized.churchMusicalKeyId            = Number(formDataObject.churchMusicalKeyId);
 				formDataSanitized.dynamicMarkingId              = Number(formDataObject.dynamicMarkingId);
 				formDataSanitized.displayTitleLanguageId        = Number(formDataObject.displayTitleLanguageId);
-				formDataSanitized.jinsId                        = Number(formDataObject.jinsId);
-				formDataSanitized.maqamId                       = Number(formDataObject.maqamId);
 				formDataSanitized.musicalKeyId                  = Number(formDataObject.musicalKeyId);
-				formDataSanitized.mediumId                      = (isNaN(formDataObject.mediumId)) ? 0 : Number(formDataObject.mediumId);
+				formDataSanitized.mediumId                      = Number(formDataObject.mediumId);
 				formDataSanitized.tempoMarkingId                = Number(formDataObject.tempoMarkingId);
 				formDataSanitized.musicTextSettingElementTypeId = Number(formDataObject.musicTextSettingElementTypeId);
 				formDataSanitized.voiceLeadingPatternList       = voiceLeadingPatternIdList;
-        // console.log("TCL: formDataSanitized", formDataSanitized);
-				if (music) { // update music
-					// music data
-					music.model = await TIMAAT.MusicDatasets.updateMusicModelData(music.model, formDataSanitized);
-					// music subtype data
-					switch (type) {
-						case 'nashid':
-							if (!isNaN(formDataSanitized.jinsId)) {
-								if (!music.model.musicNashid.jins) {
-									music.model.musicNashid.jins = {};
-								}
-								music.model.musicNashid.jins.id = formDataSanitized.jinsId;
-							} else {
-								delete music.model.musicNashid.jins;
-							}
-							if (!isNaN(formDataSanitized.maqamId)) {
-								if (!music.model.musicNashid.maqam) {
-									music.model.musicNashid.maqam = {};
-								}
-								music.model.musicNashid.maqam.id = formDataSanitized.maqamId;
-							} else {
-								delete music.model.musicNashid.maqam;
-							}
-						break;
-						case 'churchMusic':
-							if (!isNaN(formDataSanitized.churchMusicalKeyId)) {
-								if (!music.model.musicChurchMusic.churchMusicalKey) {
-									music.model.musicChurchMusic.churchMusicalKey = {};
-								}
-								music.model.musicChurchMusic.churchMusicalKey.id = formDataSanitized.churchMusicalKeyId;
-							} else {
-								delete music.model.musicChurchMusic.churchMusicalKey;
-							}
-						break;
-					}
-					// music.model = await TIMAAT.MusicDatasets.updateMusic(type, music);
-					music.model = await TIMAAT.MusicDatasets.updateMusic(type, music, formDataSanitized.mediumId);
-					// music.updateUI();
-				} else { // create new music
-					var musicModel = await TIMAAT.MusicDatasets.createMusicModel(formDataSanitized, type);
-					var displayTitleModel = await TIMAAT.MusicDatasets.createDisplayTitleModel(formDataSanitized);
-					var musicSubtypeModel = await TIMAAT.MusicDatasets.createMusicSubtypeModel(formDataSanitized, type);
 
-					var newMusic = await TIMAAT.MusicDatasets.createMusic(type, musicModel, musicSubtypeModel, displayTitleModel, formDataSanitized.mediumId);
-					music = new TIMAAT.Music(newMusic, type);
-					// music.model.fileStatus = 'noFile';
-					$('#musicFormMetadata').data('music', music);
-					TIMAAT.UI.displayDataSetContentContainer('musicDataTab', 'musicFormMetadata', 'music');
-					$('#musicTabMetadata').trigger('click');
+                const musicBaseInformation = {
+                    title: {
+                        languageId: formDataSanitized.displayTitleLanguageId,
+                        name: formDataSanitized.displayTitle,
+                    },
+                    tempo: formDataSanitized.tempo,
+                    tempoMarkingId: isNaN(formDataSanitized.tempoMarkingId) ? null : formDataSanitized.tempoMarkingId,
+                    beat: formDataSanitized.beat,
+                    musicalKeyId: isNaN(formDataSanitized.musicalKeyId) ? null : formDataSanitized.musicalKeyId,
+                    dynamicMarkingId: isNaN(formDataSanitized.dynamicMarkingId) ? null : formDataSanitized.dynamicMarkingId,
+                    musicTextSettingElementTypeId: isNaN(formDataSanitized.musicTextSettingElementTypeId) ? null : formDataSanitized.musicTextSettingElementTypeId,
+                    instrumentation: formDataSanitized.instrumentation,
+                    voiceLeadingPatternIds: formDataSanitized.voiceLeadingPatternList.map(currentVoiceLeadingPattern => currentVoiceLeadingPattern.id),
+                    remark: formDataSanitized.remark,
+                    mediumId: isNaN(formDataSanitized.mediumId) ? null : formDataSanitized.mediumId,
+                }
+				if (music) { // update music
+                    musicBaseInformation.musicTypeId = music.model.musicType.id;
+					const updatedMusic =  await TIMAAT.MusicService.updateMusic(music.model.id, musicBaseInformation)
+                    music.model = updatedMusic
+				} else { // create new music
+                    //TODO: The types should not statically defined and have different properties. A better solution would be a dynamic definition of types
+                    let typeId = 0;
+                    switch (type) {
+                        case 'nashid':
+                            typeId = 1;
+                            break;
+                        case 'churchMusic':
+                            typeId = 2;
+                            break;
+                    }
+                    musicBaseInformation.musicTypeId = typeId;
+
+                    const createdMusic = await TIMAAT.MusicService.createMusic(musicBaseInformation)
+					music = new TIMAAT.Music(createdMusic, type);
 				}
 				TIMAAT.MusicDatasets.showAddMusicButton();
 				if ($('#musicTab').hasClass('active')) {
@@ -259,7 +243,7 @@
 			$('#musicFormMetadataDismissButton').on('click', async function(event) {
 				TIMAAT.MusicDatasets.showAddMusicButton();
 				let currentUrlHash = window.location.hash;
-        await TIMAAT.URLHistory.setupView(currentUrlHash);
+                await TIMAAT.URLHistory.setupView(currentUrlHash);
 			});
 
 			// category set button handler
@@ -351,21 +335,11 @@
 				// console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
 				var categorySetIdList = [];
-				var newCategorySetList = [];
 				for (; i < formDataRaw.length; i++) {
-					if (isNaN(Number(formDataRaw[i].value))) {
-						newCategorySetList.push( { id: 0, name: formDataRaw[i].value} ); // new category sets that have to be added to the system first
-					} else {
-						categorySetIdList.push( {id: formDataRaw[i].value} );
-					}
+                    categorySetIdList.push(Number(formDataRaw[i].value));
 				}
-				music.model = await TIMAAT.MusicDatasets.updateMusicHasCategorySetsList(music.model, categorySetIdList);
-				if (newCategorySetList.length > 0) {
-					var updatedMusicModel = await TIMAAT.MusicDatasets.addCategorySetsToMusic(music.model, newCategorySetList);
-					// console.log("TCL: updatedMusicModel", updatedMusicModel);
-					music.model.categorySets = updatedMusicModel.categorySets;
-				}
-				$('#musicFormMetadata').data('music', music);
+
+				music.model.categorySets = await TIMAAT.MusicService.updateCategorySets(music.model.id, categorySetIdList);
 				modal.modal('hide');
 			});
 
@@ -460,21 +434,10 @@
 				// console.log("TCL: formDataRaw", formDataRaw);
 				var i = 0;
 				var categoryIdList = [];
-				var newCategoryList = [];
 				for (; i < formDataRaw.length; i++) {
-					if (isNaN(Number(formDataRaw[i].value))) {
-						newCategoryList.push( { id: 0, name: formDataRaw[i].value} ); // new categories that have to be added to the system first
-					} else {
-						categoryIdList.push( {id: formDataRaw[i].value} );
-					}
+                    categoryIdList.push( Number(formDataRaw[i].value));
 				}
-				music.model = await TIMAAT.MusicDatasets.updateMusicHasCategoriesList(music.model, categoryIdList);
-				if (newCategoryList.length > 0) {
-					var updatedMusicModel = await TIMAAT.MusicDatasets.addCategoriesToMusic(music.model, newCategoryList);
-					// console.log("TCL: updatedMusicModel", updatedMusicModel);
-					music.model.categories = updatedMusicModel.categories;
-				}
-				$('#musicFormMetadata').data('music', music);
+				music.model.categories = await TIMAAT.MusicService.updateCategories(music.model.id, categoryIdList);
 				modal.modal('hide');
 			});
 
@@ -493,8 +456,8 @@
 								<select class="form-control form-control-md multi-select-dropdown"
 												style="width:100%;"
 												id="musicTagsMultiSelectDropdown"
-												name="tagId"
-												data-role="tagId"
+												name="tagName"
+												data-role="tagName"
 												data-placeholder="Select music tags"
 												multiple="multiple">
 								</select>
@@ -541,7 +504,7 @@
 						// create the options and append to Select2
 						var i = 0;
 						for (; i < data.length; i++) {
-							var option = new Option(data[i].name, data[i].id, true, true);
+							var option = new Option(data[i].name, data[i].value, true, true);
 							tagSelect.append(option).trigger('change');
 						}
 						// manually trigger the 'select2:select' event
@@ -559,27 +522,19 @@
 			// submit tag modal button functionality
 			$('#musicDatasetsMusicTagsModalSubmitButton').on('click', async function(event) {
 				event.preventDefault();
-				var modal = $('#musicDatasetsMusicTagsModal');
+				let modal = $('#musicDatasetsMusicTagsModal');
 				if (!$('#musicTagsForm').valid())
 					return false;
-				var music = modal.data('music');
-				var formDataRaw = $('#musicTagsForm').serializeArray();
-				var i = 0;
-				var tagIdList = [];
-				var newTagList = [];
+				let music = modal.data('music');
+				let formDataRaw = $('#musicTagsForm').serializeArray();
+				let i = 0;
+
+                const tagNames = []
 				for (; i < formDataRaw.length; i++) {
-					if (isNaN(Number(formDataRaw[i].value))) {
-						newTagList.push( { id: 0, name: formDataRaw[i].value} ); // new tags that have to be added to the system first
-					} else {
-						tagIdList.push( {id: formDataRaw[i].value} );
-					}
+                    tagNames.push(formDataRaw[i].value);
 				}
-				music.model = await TIMAAT.MusicDatasets.updateMusicHasTagsList(music.model, tagIdList);
-				if (newTagList.length > 0) {
-					var updatedMusicModel = await TIMAAT.MusicDatasets.createNewTagsAndAddToMusic(music.model, newTagList);
-					// console.log("TCL: updatedMusicModel", updatedMusicModel);
-					music.model.tags = updatedMusicModel.tags;
-				}
+
+                music.model.tags = TIMAAT.MusicService.updateTags(music.model.id, tagNames);
 				$('#musicFormMetadata').data('music', music);
 				modal.modal('hide');
 			});
@@ -1965,38 +1920,6 @@
       });
 			// display-title data
 			$('#musicDatasetsMetadataMusicTitle').val(data.model.displayTitle.name);
-
-			// music subtype specific data
-			switch (type) {
-				case 'nashid':
-					// set jins data
-					if (data.model.musicNashid.jins) {
-						var jinsSelect = $('#musicNashidJinsSelectDropdown');
-						var option = new Option(data.model.musicNashid.jins.jinsTranslations[0].type, data.model.musicNashid.jins.id, true, true);
-						jinsSelect.append(option).trigger('change');
-					} else {
-						$('#musicNashidJinsSelectDropdown').empty().trigger('change');
-					}
-					// set maqam data
-					if (data.model.musicNashid.maqam) {
-						let maqamSelect = $('#musicNashidMaqamSelectDropdown');
-						var option = new Option(data.model.musicNashid.maqam.maqamSubtype.maqamSubtypeTranslations[0].subtype, data.model.musicNashid.maqam.id, true, true);
-						maqamSelect.append(option).trigger('change');
-					} else {
-						$('#musicNashidMaqamSelectDropdown').empty().trigger('change');
-					}
-				break;
-				case 'churchMusic':
-					// set church music data
-					if (data.model.musicChurchMusic.churchMusicalKey) {
-						var churchMusicSelect = $('#musicChurchMusicMusicalKeySelectDropdown');
-						var option = new Option(data.model.musicChurchMusic.churchMusicalKey.churchMusicalKeyTranslations[0].type, data.model.musicChurchMusic.churchMusicalKey.id, true, true);
-						churchMusicSelect.append(option).trigger('change');
-					} else {
-						$('#musicChurchMusicMusicalKeySelectDropdown').empty().trigger('change');
-					}
-				break;
-			}
 			$('#musicFormMetadata').data('music', data);
     },
 
@@ -2633,43 +2556,6 @@
 			}
 		},
 
-    createMusic: async function(musicSubtype, musicModel, musicSubtypeModel, title, mediumId) {
-    	// console.log("TCL: createMusic: musicSubtype, musicModel, musicSubtypeModel, title, mediumId: ", musicSubtype, musicModel, musicSubtypeModel, title, mediumId);
-			try { // TODO needs to be called after createMusic once m-n-table is refactored to 1-n table (sure?)
-				// create display title
-				var newDisplayTitle = await TIMAAT.MusicService.createTitle(title);
-			} catch(error) {
-				console.error("ERROR: ", error);
-			};
-
-			try {
-				// create music
-				var tempMusicModel = musicModel;
-				tempMusicModel.displayTitle = newDisplayTitle;
-				tempMusicModel.originalTitle = newDisplayTitle;
-				var newMusicModel = await TIMAAT.MusicService.createMusic(tempMusicModel, mediumId);
-			} catch(error) {
-				console.error("ERROR: ", error);
-			};
-
-			try {
-				// create musicSubtype with music id
-				musicSubtypeModel.musicId = newMusicModel.id;
-				let newMusicSubtypeModel = await TIMAAT.MusicService.createMusicSubtype(musicSubtype, newMusicModel, musicSubtypeModel);
-				switch (musicSubtype) {
-					case 'nashid':
-						newMusicModel.musicNashid = newMusicSubtypeModel;
-					break;
-					case 'churchMusic':
-						newMusicModel.musicChurchMusic = newMusicSubtypeModel;
-					break;
-				}
-			} catch(error) {
-				console.error("ERROR: ", error);
-			};
-			return newMusicModel;
-		},
-
 		createTitle: async function(titleModel) {
 			// console.log("TCL: createTitle: async function -> titleModel", titleModel);
 			try {
@@ -2811,171 +2697,7 @@
 			}
 		},
 
-		updateMusicHasCategorySetsList: async function(musicModel, categorySetIdList) {
-    	// console.log("TCL: musicModel, categorySetIdList", musicModel, categorySetIdList);
-			try {
-				var existingMusicHasCategorySetsEntries = await TIMAAT.MusicService.getCategorySetList(musicModel.id);
-        // console.log("TCL: existingMusicHasCategorySetsEntries", existingMusicHasCategorySetsEntries);
-				if (categorySetIdList == null) { //* all entries will be deleted
-					musicModel.categorySets = [];
-					await TIMAAT.MusicService.updateMusic(musicModel);
-				} else if (existingMusicHasCategorySetsEntries.length == 0) { //* all entries will be added
-					musicModel.categorySets = categorySetIdList;
-					await TIMAAT.MusicService.updateMusic(musicModel);
-				} else { //* delete removed entries
-					var entriesToDelete = [];
-					var i = 0;
-					for (; i < existingMusicHasCategorySetsEntries.length; i++) {
-						var deleteId = true;
-						var j = 0;
-						for (; j < categorySetIdList.length; j++) {
-							if (existingMusicHasCategorySetsEntries[i].id == categorySetIdList[j].id) {
-								deleteId = false;
-								break; // no need to check further if match was found
-							}
-						}
-						if (deleteId) { // id is in existingMusicHasCategorySetEntries but not in categorySetIdList
-              // console.log("TCL: deleteId", deleteId);
-							entriesToDelete.push(existingMusicHasCategorySetsEntries[i]);
-							existingMusicHasCategorySetsEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
-							i--; // so the next list item is not jumped over due to the splicing
-						}
-					}
-					if (entriesToDelete.length > 0) { // anything to delete?
-						var i = 0;
-						for (; i < entriesToDelete.length; i++) {
-							var index = musicModel.categorySets.findIndex(({id}) => id === entriesToDelete[i].id);
-							musicModel.categorySets.splice(index,1);
-							await TIMAAT.MusicService.removeCategorySet(musicModel.id, entriesToDelete[i].id);
-						}
-					}
-					//* add existing categorySets
-					var idsToCreate = [];
-          i = 0;
-          for (; i < categorySetIdList.length; i++) {
-            var idExists = false;
-            var item = { id: 0 };
-            var j = 0;
-            for (; j < existingMusicHasCategorySetsEntries.length; j++) {
-              if (categorySetIdList[i].id == existingMusicHasCategorySetsEntries[j].id) {
-                idExists = true;
-                break; // no need to check further if match was found
-              }
-            }
-            if (!idExists) {
-              item.id = categorySetIdList[i].id;
-              idsToCreate.push(item);
-            }
-          }
-          // console.log("TCL: idsToCreate", idsToCreate);
-          if (idsToCreate.length > 0) { // anything to add?
-            // console.log("TCL: idsToCreate", idsToCreate);
-						var i = 0;
-						for (; i < idsToCreate.length; i++) {
-							musicModel.categorySets.push(idsToCreate[i]);
-							await TIMAAT.MusicService.addCategorySet(musicModel.id, idsToCreate[i].id);
-						}
-          }
-				}
-			} catch(error) {
-				console.error("ERROR: ", error);
-			}
-			return musicModel;
-		},
-
-		addCategorySetsToMusic: async function(musicModel, newCategorySetList) {
-      // console.log("TCL: addCategorySetsToMusic:function -> musicModel, newCategorySetList", musicModel, newCategorySetList);
-			var i = 0;
-			for (; i < newCategorySetList.length; i++) {
-				await TIMAAT.MusicService.addCategorySet(musicModel.id, newCategorySetList[i].id);
-				musicModel.categorySets.push(newCategorySetList[i]);
-			}
-			return musicModel;
-		},
-
-		updateMusicHasCategoriesList: async function(musicModel, categoryIdList) {
-    	// console.log("TCL: musicModel, categoryIdList", musicModel, categoryIdList);
-			try {
-				var existingMusicHasCategoriesEntries = await TIMAAT.MusicService.getSelectedCategories(musicModel.id);
-        // console.log("TCL: existingMusicHasCategoriesEntries", existingMusicHasCategoriesEntries);
-				if (categoryIdList == null) { //* all entries will be deleted
-					musicModel.categories = [];
-					await TIMAAT.MusicService.updateMusic(musicModel);
-				} else if (existingMusicHasCategoriesEntries.length == 0) { //* all entries will be added
-					musicModel.categories = categoryIdList;
-					await TIMAAT.MusicService.updateMusic(musicModel);
-				} else { //* delete removed entries
-					var entriesToDelete = [];
-					var i = 0;
-					for (; i < existingMusicHasCategoriesEntries.length; i++) {
-						var deleteId = true;
-						var j = 0;
-						for (; j < categoryIdList.length; j++) {
-							if (existingMusicHasCategoriesEntries[i].id == categoryIdList[j].id) {
-								deleteId = false;
-								break; // no need to check further if match was found
-							}
-						}
-						if (deleteId) { // id is in existingMusicHasCategoryEntries but not in categoryIdList
-              // console.log("TCL: deleteId", deleteId);
-							entriesToDelete.push(existingMusicHasCategoriesEntries[i]);
-							existingMusicHasCategoriesEntries.splice(i,1); // remove entry so it won't have to be checked again in the next step when adding new ids
-							i--; // so the next list item is not jumped over due to the splicing
-						}
-					}
-					if (entriesToDelete.length > 0) { // anything to delete?
-						var i = 0;
-						for (; i < entriesToDelete.length; i++) {
-							var index = musicModel.categories.findIndex(({id}) => id === entriesToDelete[i].id);
-							musicModel.categories.splice(index,1);
-							await TIMAAT.MusicService.removeCategory(musicModel.id, entriesToDelete[i].id);
-						}
-					}
-					//* add existing categories
-					var idsToCreate = [];
-          i = 0;
-          for (; i < categoryIdList.length; i++) {
-            var idExists = false;
-            var item = { id: 0 };
-            var j = 0;
-            for (; j < existingMusicHasCategoriesEntries.length; j++) {
-              if (categoryIdList[i].id == existingMusicHasCategoriesEntries[j].id) {
-                idExists = true;
-                break; // no need to check further if match was found
-              }
-            }
-            if (!idExists) {
-              item.id = categoryIdList[i].id;
-              idsToCreate.push(item);
-            }
-          }
-          // console.log("TCL: idsToCreate", idsToCreate);
-          if (idsToCreate.length > 0) { // anything to add?
-            // console.log("TCL: idsToCreate", idsToCreate);
-						var i = 0;
-						for (; i < idsToCreate.length; i++) {
-							musicModel.categories.push(idsToCreate[i]);
-							await TIMAAT.MusicService.addCategory(musicModel.id, idsToCreate[i].id);
-						}
-          }
-				}
-			} catch(error) {
-				console.error("ERROR: ", error);
-			}
-			return musicModel;
-		},
-
-		addCategoriesToMusic: async function(musicModel, newCategoryList) {
-      // console.log("TCL: addCategoriesToMusic:function -> musicModel, newCategoryList", musicModel, newCategoryList);
-			var i = 0;
-			for (; i < newCategoryList.length; i++) {
-				await TIMAAT.MusicService.addCategory(musicModel.id, newCategoryList[i].id);
-				musicModel.categories.push(newCategoryList[i]);
-			}
-			return musicModel;
-		},
-
-		updateMusicHasTagsList: async function(musicModel, tagIdList) {
+		updateMusicHasTagsList: async function(musicModel, tagNames) {
     	// console.log("TCL: musicModel, tagIdList", musicModel, tagIdList);
 			try {
 				var existingMusicHasTagsEntries = await TIMAAT.MusicService.getTagList(musicModel.id);
@@ -3076,155 +2798,6 @@
 			}
 			$('#musicFormMetadata').data('music', null);
 		},
-
-    updateMusicModelData: async function(model, formDataObject) {
-    	// console.log("TCL: model, formDataObject", model, formDataObject);
-			// music data
-			if (!isNaN(formDataObject.dynamicMarkingId)) {
-				if (model.dynamicMarking) {
-					model.dynamicMarking.id = formDataObject.dynamicMarkingId;
-				} else {
-					model.dynamicMarking = {};
-					model.dynamicMarking.id = formDataObject.dynamicMarkingId;
-				}
-			} else model.dynamicMarking = null;
-			if (!isNaN(formDataObject.musicalKeyId)) {
-				if (model.musicalKey) {
-					model.musicalKey.id = formDataObject.musicalKeyId;
-				} else {
-					model.musicalKey = {};
-					model.musicalKey.id = formDataObject.musicalKeyId;
-				}
-			} else model.musicalKey = null;
-			if (!isNaN(formDataObject.tempoMarkingId)) {
-				if (model.tempoMarking) {
-					model.tempoMarking.id = formDataObject.tempoMarkingId;
-				} else {
-					model.tempoMarking = {};
-					model.tempoMarking.id = formDataObject.tempoMarkingId;
-				}
-			} else model.tempoMarking = null;
-			if (!isNaN(formDataObject.musicTextSettingElementTypeId)) {
-				if (model.musicTextSettingElementType) {
-					model.musicTextSettingElementType.id = formDataObject.musicTextSettingElementTypeId;
-				} else {
-					model.musicTextSettingElementType = {};
-					model.musicTextSettingElementType.id = formDataObject.musicTextSettingElementTypeId;
-				}
-			} else model.musicTextSettingElementType = null;
-			if (formDataObject.voiceLeadingPatternList.length > 0) {
-				model.voiceLeadingPatternList = formDataObject.voiceLeadingPatternList;
-			} else {
-				model.voiceLeadingPatternList = [];
-			}
-			model.beat            = formDataObject.beat;
-			model.tempo           = formDataObject.tempo;
-			model.remark          = formDataObject.remark;
-			model.instrumentation = formDataObject.instrumentation;
-			// display-title data
-			model.displayTitle.name = formDataObject.displayTitle;
-			model.displayTitle.language.id = formDataObject.displayTitleLanguageId;
-			var i = 0;
-			for (; i < model.titles.length; i++) {
-				if (model.displayTitle.id == model.titles[i].id) {
-					model.titles[i] = model.displayTitle;
-					break;
-				}
-			}
-      // console.log("TCL: updateMusicModelData:function -> model", model);
-			return model;
-		},
-
-		createMusicModel: async function(formDataObject, type) {
-    	// console.log("TCL: formDataObject, type", formDataObject, type);
-			let typeId = 0;
-			switch (type) {
-				case 'nashid':
-					typeId = 1;
-				break;
-				case 'churchMusic':
-					typeId = 2;
-				break;
-			}
-			var model = {
-				id             : 0,
-				beat           : formDataObject.beat,
-				tempo          : formDataObject.tempo,
-				remark         : formDataObject.remark,
-				instrumentation: formDataObject.instrumentation,
-				musicType      : {
-					id: typeId,
-				},
-				titles: [{
-					id      : 0,
-					language: {
-						id: formDataObject.displayTitleLanguageId,
-					},
-					name: formDataObject.displayTitle,
-				}],
-			};
-			if (formDataObject.dynamicMarkingId > 0) {
-				model.dynamicMarking = {};
-				model.dynamicMarking.id = formDataObject.dynamicMarkingId;
-			}
-			if (formDataObject.musicalKeyId > 0) {
-				model.musicalKey = {};
-				model.musicalKey.id = formDataObject.musicalKeyId;
-			}
-			if (formDataObject.tempoMarkingId > 0) {
-				model.tempoMarking = {};
-				model.tempoMarking.id = formDataObject.tempoMarkingId;
-			}
-			if (formDataObject.musicTextSettingElementTypeId > 0) {
-				model.musicTextSettingElementType = {};
-				model.musicTextSettingElementType.id = formDataObject.musicTextSettingElementTypeId;
-			}
-			if (formDataObject.voiceLeadingPatternList.length > 0) {
-				model.voiceLeadingPatternList = formDataObject.voiceLeadingPatternList;
-			}
-			return model;
-		},
-
-		createMusicSubtypeModel: async function(formDataObject, musicType) {
-			var model = {};
-			switch(musicType) {
-				case 'nashid':
-					model = {
-						musicId: 0
-					};
-					if (formDataObject.jinsId) {
-						model.jins = {};
-						model.jins.id = formDataObject.jinsId;
-					}
-					if (formDataObject.maqamId) {
-						model.maqam = {};
-						model.maqam.id = formDataObject.maqamId;
-					}
-				break;
-				case 'churchMusic':
-					model = {
-						musicId: 0
-					};
-					if (formDataObject.churchMusicalKeyId) {
-						model.churchMusicalKey = {};
-						model.churchMusicalKey.id = formDataObject.churchMusicalKeyId;
-					}
-				break;
-			}
-			return model;
-		},
-
-		createDisplayTitleModel: async function(formDataObject) {
-			var model = {
-				id: 0,
-				language: {
-					id: formDataObject.displayTitleLanguageId,
-				},
-				name: formDataObject.displayTitle,
-			};
-			return model;
-		},
-
     titleFormTitleToAppend: function() {
 			var titleToAppend =
 			`<div class="form-group" data-role="titleEntry">
@@ -4289,7 +3862,7 @@
 							}
 							let noFileIcon = ' ';
 							let commentIcon = ' ';
-							if (music.remark.length > 0) {
+							if (music.remark != null && music.remark.length > 0) {
 								commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
 							}
 							let titleDisplay = `<p>` + displayMusicTypeIcon + noFileIcon + commentIcon + music.displayTitle.name + `</p>`;
@@ -4341,7 +3914,7 @@
 				"rowId"					: 'id',
 				"serverSide"    : true,
 				"ajax"          : {
-					"url"        : "api/music/nashid/list",
+					"url"        : "api/music/list",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
 					"data"       : function(data) {
@@ -4351,7 +3924,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// musicSubtype: 'nashid'
+                            musicTypeId : 1
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4427,7 +4000,7 @@
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
 						let commentIcon = ' ';
-						if (music.remark.length > 0) {
+						if (music.remark != null && music.remark.length > 0) {
 							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
 						}
 						let titleDisplay = `<p>` + noFileIcon + commentIcon + music.displayTitle.name +`</p>`;
@@ -4478,7 +4051,7 @@
 				"rowId"					: 'id',
 				"serverSide"    : true,
 				"ajax"          : {
-					"url"        : "api/music/churchMusic/list",
+					"url"        : "api/music/list",
 					"contentType": "application/json; charset=utf-8",
 					"dataType"   : "json",
 					"data"       : function(data) {
@@ -4488,7 +4061,7 @@
 							length : data.length,
 							orderby: data.columns[data.order[0].column].name,
 							dir    : data.order[0].dir,
-							// musicSubtype: 'churchMusic'
+                            musicTypeId: 2
 						}
 						if ( data.search && data.search.value && data.search.value.length > 0 )
 							serverData.search = data.search.value;
@@ -4564,7 +4137,7 @@
 						// console.log("TCL: music.fileStatus", music.fileStatus);
 						let noFileIcon = '';
 						let commentIcon = ' ';
-						if (music.remark.length > 0) {
+						if (music.remark != null && music.remark.length > 0) {
 							commentIcon = '<i class="fas fa-comment-alt" title="Remark available"></i> ';
 						}
 						let titleDisplay = `<p>` + noFileIcon + commentIcon + music.displayTitle.name +`</p>`;

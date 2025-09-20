@@ -508,12 +508,12 @@ public class EndpointAnnotation {
 			Set<CategorySetHasCategory> cshc = categorySet.getCategorySetHasCategories();
 			Iterator<CategorySetHasCategory> itr = cshc.iterator();
 			while (itr.hasNext()) {
-				// categorySelectList.add(new SelectElement(itr.next().getCategory().getId(), itr.next().getCategory().getName()));
+				// categorySelectList.add(new SelectElement<Integer>(itr.next().getCategory().getId(), itr.next().getCategory().getName()));
 				categoryList.add(itr.next().getCategory());
 			}
 		}
 		// for (Category category : categoryList) {
-		// 	categorySelectList.add(new SelectElement(category.getId(), category.getName()))
+		// 	categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()))
 		// }
 
 		// search
@@ -530,13 +530,13 @@ public class EndpointAnnotation {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 

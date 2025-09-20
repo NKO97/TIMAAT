@@ -61,7 +61,7 @@ public class Music implements Serializable {
 
 	private String melody;
 
-	private short tempo;
+	private Short tempo;
 
 	private String remark;
 
@@ -342,11 +342,11 @@ public class Music implements Serializable {
 		this.melody = melody;
 	}
 
-	public short getTempo() {
+	public Short getTempo() {
 		return this.tempo;
 	}
 
-	public void setTempo(short tempo) {
+	public void setTempo(Short tempo) {
 		this.tempo = tempo;
 	}
 
@@ -650,4 +650,8 @@ public class Music implements Serializable {
   public void setAnnotationHasMusic(List<AnnotationHasMusic> annotationHasMusic) {
     this.annotationHasMusic = annotationHasMusic;
   }
+
+    public void setMusicTextSettingElementType(MusicTextSettingElementType musicTextSettingElementType) {
+        this.musicTextSettingElementType = musicTextSettingElementType;
+    }
 }

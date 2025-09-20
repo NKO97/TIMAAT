@@ -273,7 +273,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 		List<SelectElement> mediumSelectList = new ArrayList<>();
 		for (Medium medium : mediumList) {
-			mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+			mediumSelectList.add(new SelectElement<Integer>(medium.getId(), medium.getDisplayTitle().getName()));
 		}
 
 		return Response.ok().entity(mediumSelectList).build();
@@ -295,7 +295,7 @@ public class EndpointMedium {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		List<SelectElement> mediumSelectList = new ArrayList<>();
-		mediumSelectList.add(new SelectElement(id, medium.getDisplayTitle().getName()));
+		mediumSelectList.add(new SelectElement<Integer>(id, medium.getDisplayTitle().getName()));
 
 		return Response.ok().entity(mediumSelectList).build();
 	}
@@ -382,7 +382,7 @@ public class EndpointMedium {
 		List<SelectElement> mediumSelectList = new ArrayList<>();
 		for (Medium medium : mediumList) {
 			if (medium.getMediumVideo() != null) {
-				mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+				mediumSelectList.add(new SelectElement<Integer>(medium.getId(), medium.getDisplayTitle().getName()));
 			}
 		}
 
@@ -982,11 +982,11 @@ public class EndpointMedium {
 		for (Role role: roleList) {
 			if (search != null && search.length() > 0) {
 				if (role.getRoleTranslations().get(0).getName().toLowerCase().contains(search.toLowerCase())) {
-					roleSelectList.add(new SelectElement(role.getId(),
+					roleSelectList.add(new SelectElement<Integer>(role.getId(),
 																							 role.getRoleTranslations().get(0).getName()));
 				}
 			} else {
-				roleSelectList.add(new SelectElement(role.getId(),
+				roleSelectList.add(new SelectElement<Integer>(role.getId(),
 																						 role.getRoleTranslations().get(0).getName()));
 			}
 		}
@@ -1102,12 +1102,12 @@ public class EndpointMedium {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 

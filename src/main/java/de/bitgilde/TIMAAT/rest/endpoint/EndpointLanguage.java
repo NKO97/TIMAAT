@@ -149,7 +149,7 @@ public class EndpointLanguage {
         List<SelectElement> languageSelectList = new ArrayList<>();
         List<Language> languageList = castList(Language.class, query.getResultList());
         for (Language language : languageList) {
-            languageSelectList.add(new SelectElement(language.getId(),
+            languageSelectList.add(new SelectElement<Integer>(language.getId(),
                     language.getName()));
         }
         return Response.ok().entity(languageSelectList).build();

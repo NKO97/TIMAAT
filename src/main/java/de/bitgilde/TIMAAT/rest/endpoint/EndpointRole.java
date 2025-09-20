@@ -191,7 +191,7 @@ public class EndpointRole {
 		List<SelectElement> roleSelectList = new ArrayList<>();
 		List<RoleTranslation> roleTranslationList = castList(RoleTranslation.class, query.getResultList());
 		for (RoleTranslation roleTranslation : roleTranslationList) {
-			roleSelectList.add(new SelectElement(roleTranslation.getRole().getId(),
+			roleSelectList.add(new SelectElement<Integer>(roleTranslation.getRole().getId(),
 																					 roleTranslation.getName()));
 		}
 		return Response.ok().entity(roleSelectList).build();

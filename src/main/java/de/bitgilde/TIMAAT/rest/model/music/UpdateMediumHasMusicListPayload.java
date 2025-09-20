@@ -26,7 +26,7 @@ import java.util.List;
  * @author Nico Kotlenga
  * @since 08.09.25
  */
-public class UpdateMediumHasMusicList {
+public class UpdateMediumHasMusicListPayload {
 
   private static final String MEDIUM_HAS_MUSIC_LIST_ENTRIES_FIELD_NAME = "mediumHasMusicListEntries";
 
@@ -35,7 +35,7 @@ public class UpdateMediumHasMusicList {
 
 
   @JsonCreator
-  public UpdateMediumHasMusicList(@JsonProperty(MEDIUM_HAS_MUSIC_LIST_ENTRIES_FIELD_NAME) List<MediumHasMusicListEntry> mediumHasMusicListEntries) {
+  public UpdateMediumHasMusicListPayload(@JsonProperty(MEDIUM_HAS_MUSIC_LIST_ENTRIES_FIELD_NAME) List<MediumHasMusicListEntry> mediumHasMusicListEntries) {
     this.mediumHasMusicListEntries = mediumHasMusicListEntries;
   }
 
