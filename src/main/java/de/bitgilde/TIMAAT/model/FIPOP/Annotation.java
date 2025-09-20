@@ -626,4 +626,8 @@ public class Annotation implements Serializable {
   public int getMediumId(){
     return this.mediumAnalysisList.getMedium().getId();
   }
+
+  public int getMediumAnalysisListId(){
+    return this.mediumAnalysisList.getId();
+  }
 }

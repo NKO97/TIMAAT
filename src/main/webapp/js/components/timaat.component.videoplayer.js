@@ -1321,6 +1321,25 @@
 			TIMAAT.VideoPlayer.loadAnalysisList(0);
 		},
 
+        initializeAnnotationModeWithAnnotationByIds: async function(mediumId, annotationId){
+            const mediumPromise = TIMAAT.MediumService.getMedium(mediumId)
+            const annotationPromise = TIMAAT.AnnotationService.getAnnotation(annotationId)
+
+            const [medium, annotation] = await Promise.all([mediumPromise, annotationPromise])
+            if(medium && annotation){
+                await TIMAAT.VideoPlayer.initializeAnnotationMode(medium)
+                const mediumAnalysisListId = annotation.mediumAnalysisListId
+
+                await TIMAAT.VideoPlayer.loadAnalysisList(mediumAnalysisListId);
+                const requiredAnnotation = TIMAAT.VideoPlayer.annotationList.find(currentAnnotation => currentAnnotation.model.id === annotationId)
+
+                if(requiredAnnotation){
+                    TIMAAT.VideoPlayer.selectAnnotation(requiredAnnotation)
+                    TIMAAT.Inspector
+                }
+            }
+        },
+
 		sort: function(elements) {
 			if ( !elements ) return;
 			elements.sort(function (a, b) {

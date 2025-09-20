@@ -2277,6 +2277,7 @@
 
                 mediumTimeRangeDetails.push({
                     type: "annotation",
+                    id: currentAnnotationHasMusic.annotation.id,
                     startTime: currentAnnotationHasMusic.annotation.startTime,
                     endTime: currentAnnotationHasMusic.annotation.endTime,
                 })
@@ -2301,6 +2302,13 @@
                     else $('[data-role="endTime[' + currentMediumId + '][' + j + ']"]').val('00:00:00.000');
                 }
             }
+
+            $('#musicDynamicMediumHasMusicFields .musicDatasetsMusicMediumHasMusicListAnnotationIndicator').on("click", async (event) => {
+                const annotationId = $(event.target).data("id")
+                const mediumId = $(event.target).closest("[data-role='musicIsInMediumEntry']").data("medium-id")
+
+                await TIMAAT.VideoPlayer.initializeAnnotationModeWithAnnotationByIds(mediumId, annotationId);
+            })
 
 			if ( action == 'show') {
 				$('#musicFormMediumHasMusicList :input').prop('disabled', true);
@@ -3092,7 +3100,7 @@
 						<div class="col-md-2 align-items--vertically">`
 
                 if(mediumHasMusicData.type === "annotation") {
-                    mediumHasMusicDetailList += `<i class="fas fa-draw-polygon fa-fw" title="Linked by annotation"></i>`
+                    mediumHasMusicDetailList += `<i class="fas fa-draw-polygon fa-fw musicDatasetsMusicMediumHasMusicListAnnotationIndicator" data-id="${mediumHasMusicData.id}" title="Open linked annotation"></i>`
                 } else {
                     mediumHasMusicDetailList += `<button type="button" class="btn btn-danger" data-role="removeMediumHasMusicDetail">
 								<i class="fas fa-trash-alt"></i>

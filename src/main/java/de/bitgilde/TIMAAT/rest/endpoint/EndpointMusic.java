@@ -6,11 +6,52 @@ import de.bitgilde.TIMAAT.SelectElementWithChildren;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
-import de.bitgilde.TIMAAT.model.FIPOP.*;
+import de.bitgilde.TIMAAT.model.FIPOP.Actor;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.Articulation;
+import de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
+import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempo;
+import de.bitgilde.TIMAAT.model.FIPOP.ChangeInTempoTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarkingTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.Music;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicArticulationElement;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicChangeInTempoElement;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicChurchMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicDynamicsElement;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicDynamicsElementType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicDynamicsElementTypeTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElement;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicFormElementTypeTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicHasActorWithRole;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicNashid;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElement;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementTypeTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicalKeyTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Role;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
+import de.bitgilde.TIMAAT.model.FIPOP.TempoMarkingTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Title;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPatternTranslation;
 import de.bitgilde.TIMAAT.model.TimeRange;
 import de.bitgilde.TIMAAT.rest.Secured;
-import de.bitgilde.TIMAAT.rest.model.music.*;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.music.CreateUpdateMusicPayload;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicListPayload;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicListPayload.MediumHasMusicListEntry;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicCategoriesPayload;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicCategorySetsPayload;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTagsPayload;
+import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTranslationListPayload;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
 import jakarta.inject.Inject;
@@ -20,9 +61,19 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -31,7 +82,13 @@ import org.jvnet.hk2.annotations.Service;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /*
@@ -67,10 +124,20 @@ public class EndpointMusic {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @Path("{id}")
-    public Response getMusic(@PathParam("id") int id) {
-        EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+    public Response getMusic(@PathParam("id") int id, @Context HttpHeaders httpHeaders) {
+      String authToken = httpHeaders.getHeaderString("Authorization").substring(7);
+      int userId = 0;
+      if (AuthenticationFilter.isTokenValid(authToken)) {
+        userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+
+
+      EntityManager entityManager = TIMAATApp.emf.createEntityManager();
         Music music = entityManager.find(Music.class, id);
         if (music == null) return Response.status(Status.NOT_FOUND).build();
+        filterAnnotationReferencesByPermission(userId, Collections.singleton(music));
         return Response.ok().entity(music).build();
     }
 
@@ -101,9 +168,17 @@ public class EndpointMusic {
     @Produces(MediaType.APPLICATION_JSON)
     @Secured
     @Path("list")
-    public Response getMusicList(@QueryParam("draw") Integer draw, @QueryParam("start") Integer start, @QueryParam("length") Integer length, @QueryParam("orderby") String orderby, @QueryParam("dir") String direction, @QueryParam("exclude_annotation") Integer excludedAnnotationId, @QueryParam("search") String search, @QueryParam("musicTypeId") Integer musicTypeId) {
+    public Response getMusicList(@QueryParam("draw") Integer draw, @QueryParam("start") Integer start, @QueryParam("length") Integer length, @QueryParam("orderby") String orderby, @QueryParam("dir") String direction, @QueryParam("exclude_annotation") Integer excludedAnnotationId, @QueryParam("search") String search, @QueryParam("musicTypeId") Integer musicTypeId, @Context HttpHeaders httpHeaders) {
         // System.out.println("EndpointMusic: getMusicList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
-        if (draw == null) draw = 0;
+      String authToken = httpHeaders.getHeaderString("Authorization").substring(7);
+      int userId = 0;
+      if (AuthenticationFilter.isTokenValid(authToken)) {
+        userId = AuthenticationFilter.getTokenClaimUserId(authToken);
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+
+      if (draw == null) draw = 0;
 
         // sanitize user input
         if (direction != null && direction.equalsIgnoreCase("desc")) direction = "DESC";
@@ -147,6 +222,7 @@ public class EndpointMusic {
             for (; i < end; i++) {
                 filteredMusicList.add(musicList.get(i));
             }
+            filterAnnotationReferencesByPermission(userId, filteredMusicList);
             return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMusicList)).build();
         } else {
             sql = "SELECT m FROM Music m ORDER BY " + column + " " + direction;
@@ -156,6 +232,7 @@ public class EndpointMusic {
             musicList = castList(Music.class, query.getResultList());
         }
 
+        filterAnnotationReferencesByPermission(userId, musicList);
         return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, musicList)).build();
     }
 
@@ -2064,4 +2141,16 @@ public class EndpointMusic {
         return r;
     }
 
+    private static void filterAnnotationReferencesByPermission(int userId, Collection<Music> music){
+      EntityManager entityManager = TIMAATApp.emf.createEntityManager();
+      Set<Integer> allowedMediumAnalysisList = entityManager.createQuery("select us.mediumAnalysisList.id from UserAccountHasMediumAnalysisList us where us.userAccount.id = :userId and us.permissionType.id >= 1", Integer.class)
+                   .setParameter("userId", userId)
+                   .getResultStream()
+                   .collect(Collectors.toSet());
+
+      music.forEach(currentMusic -> {
+        List<AnnotationHasMusic> filteredAnnotationHasMusic = currentMusic.getAnnotationHasMusic().stream().filter(currentAnnotationHasMusic -> allowedMediumAnalysisList.contains(currentAnnotationHasMusic.getAnnotation().getMediumAnalysisListId())).collect(Collectors.toList());
+        currentMusic.setAnnotationHasMusic(filteredAnnotationHasMusic);
+      });
+    }
 }
