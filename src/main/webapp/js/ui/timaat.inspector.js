@@ -2272,7 +2272,7 @@
 								// create the options and append to Select2
 								var i = 0;
 								for (; i < data.length; i++) {
-									var option = new Option(data[i].name, data[i].id, true, true);
+									var option = new Option(data[i].name, data[i].name, true, true);
 									tagSelect.append(option).trigger('change');
 								}
 								// manually trigger the 'select2:select' event

@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest.model.music;
+package de.bitgilde.TIMAAT.rest.model.tags;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * This payload is used to update the tags of a {@link de.bitgilde.TIMAAT.model.FIPOP.Music} entry
+ * This payload is used to update the assignment of tags to an entity
  *
  * @author Nico Kotlenga
  * @since 20.09.25
  */
-public class UpdateMusicTagsPayload {
+public class UpdateAssignedTagsPayload {
 
     private static final String TAG_NAMES_FIELD_NAME = "tagNames";
 
@@ -19,7 +19,7 @@ public class UpdateMusicTagsPayload {
     private final List<String> tagNames;
 
     @JsonCreator
-    public UpdateMusicTagsPayload(@JsonProperty(TAG_NAMES_FIELD_NAME) List<String> tagNames) {
+    public UpdateAssignedTagsPayload(@JsonProperty(TAG_NAMES_FIELD_NAME) List<String> tagNames) {
         this.tagNames = tagNames;
     }
 

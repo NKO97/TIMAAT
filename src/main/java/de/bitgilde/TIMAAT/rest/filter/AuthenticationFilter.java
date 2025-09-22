@@ -1,8 +1,5 @@
 package de.bitgilde.TIMAAT.rest.filter;
 
-import java.io.IOException;
-import java.security.Key;
-
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.AccountSuspendedException;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
@@ -22,6 +19,9 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
+import java.io.IOException;
+import java.security.Key;
+
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -37,13 +37,22 @@ import jakarta.ws.rs.ext.Provider;
  */
 
 /**
+ * This filter is performing the authentication for a user token passed through an authorization header.
+ * After validating the token the userId, username and userAccount object will be provided inside
+ * the {@link ContainerRequestContext}.
+ *
  * @author Jens-Martin Loebel <loebel@bitgilde.de>
  * @author Mirko Scherf <mscherf@uni-mainz.de>
+ * @author Nico Kotlenga <nico@kotlenga.dev>
  */
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
+
+  public static final String USER_ID_PROPERTY_NAME = "TIMAAT.userID";
+  public static final String USER_NAME_PROPERTY_NAME = "TIMAAT.userName";
+  public static final String USER_ACCOUNT_PROPERTY_NAME = "TIMAAT.user";
 
 	private static final String REALM = "TIMAAT";
   private static final String AUTHENTICATION_SCHEME = "Bearer";
@@ -74,9 +83,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         UserAccount user = validateAccountStatus(username);
 
         // Authentication succeeded, set request context
-        requestContext.setProperty("TIMAAT.userID", user.getId());
-        requestContext.setProperty("TIMAAT.userName", user.getAccountName());
-        requestContext.setProperty("TIMAAT.user", user);
+        requestContext.setProperty(USER_ID_PROPERTY_NAME, user.getId());
+        requestContext.setProperty(USER_NAME_PROPERTY_NAME, user.getAccountName());
+        requestContext.setProperty(USER_ACCOUNT_PROPERTY_NAME, user);
 
       } catch (AccountSuspendedException e) {
         abortWithForbidden(requestContext, "This account has been suspended.");

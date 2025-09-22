@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.storage.entity;
 
-import de.bitgilde.TIMAAT.db.DbStorage;
+import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import jakarta.inject.Inject;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author Nico Kotlenga
  * @since 20.09.25
  */
-public class TagStorage extends DbStorage {
+public class TagStorage extends DbAccessComponent {
 
   @Inject
   public TagStorage(EntityManagerFactory emf) {

@@ -72,8 +72,6 @@ public class Annotation implements Serializable {
 	@Column(name="end_time", columnDefinition = "INT")
 	private long endTime;
 
-	private String uuid;
-
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
 	@JsonManagedReference(value= "Annotation-Analysis")
@@ -385,14 +383,6 @@ public class Annotation implements Serializable {
 		return this.getLastEditedByUserAccount().getId();
 	}
 
-	public String getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
 	public List<Actor> getActors() {
 		return this.actors;
 	}
@@ -510,20 +500,6 @@ public class Annotation implements Serializable {
 	public void setAnnotationTranslations(List<AnnotationTranslation> annotationTranslations) {
 		this.annotationTranslations = annotationTranslations;
 	}
-
-	// public AnnotationTranslation addAnnotationTranslation(AnnotationTranslation annotationTranslation) {
-	// 	getAnnotationTranslations().add(annotationTranslation);
-	// 	annotationTranslation.setAnnotation(this);
-
-	// 	return annotationTranslation;
-	// }
-
-	// public AnnotationTranslation removeAnnotationTranslation(AnnotationTranslation annotationTranslation) {
-	// 	getAnnotationTranslations().remove(annotationTranslation);
-	// 	annotationTranslation.setAnnotation(null);
-
-	// 	return annotationTranslation;
-	// }
 
 	public List<SelectorSvg> getSelectorSvgs() {
 		return this.selectorSvgs;

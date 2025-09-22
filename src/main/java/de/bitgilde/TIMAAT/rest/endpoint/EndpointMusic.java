@@ -50,7 +50,7 @@ import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicListPayload;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicListPayload.MediumHasMusicListEntry;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicCategoriesPayload;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicCategorySetsPayload;
-import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTagsPayload;
+import de.bitgilde.TIMAAT.rest.model.tags.UpdateAssignedTagsPayload;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTranslationListPayload;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
@@ -768,8 +768,8 @@ public class EndpointMusic {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{musicId}/tags")
     @Secured
-    public List<Tag> updateTags(@PathParam("musicId")int musicId, UpdateMusicTagsPayload updateMusicTagsPayload) throws DbTransactionExecutionException {
-        return musicStorage.updateTagsOfMusic(musicId, updateMusicTagsPayload.getTagNames());
+    public List<Tag> updateTags(@PathParam("musicId")int musicId, UpdateAssignedTagsPayload updateAssignedTagsPayload) throws DbTransactionExecutionException {
+        return musicStorage.updateTagsOfMusic(musicId, updateAssignedTagsPayload.getTagNames());
     }
 
     @DELETE

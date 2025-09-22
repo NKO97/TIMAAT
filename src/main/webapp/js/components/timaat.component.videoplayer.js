@@ -2255,11 +2255,10 @@
             TIMAAT.VideoPlayer.inspector.setItem(null, 'annotation', overrides);
         },
 
-		updateAnnotation: function(annotation) {
+		updateAnnotation: async function(annotation) {
 			// console.log("TCL: updateAnnotation: annotation", annotation);
 			// sync to server
-			TIMAAT.AnnotationService.updateAnnotation(annotation.model);
-			// update UI list view
+            await TIMAAT.VideoPlayer.persistAnnotation(annotation);
 			annotation.updateUI();
 			this.updateUI();
 			this.updateListUI();
@@ -2272,7 +2271,7 @@
 			this.annotationList.forEach(function(annotation) {
 				if ( annotation.isSelected() && annotation.hasChanges() ) {
 					annotation.saveChanges();
-					TIMAAT.AnnotationService.updateAnnotation(annotation.model);
+					TIMAAT.VideoPlayer.persistAnnotation(annotation);
 					// update UI
 					annotation.updateUI();
 					// console.log("TCL: annotation.updateUI()");
@@ -2284,6 +2283,24 @@
 			this.sortListUI();
 			this.updateUI();
 		},
+
+        persistAnnotation: async function(annotation){
+            const annotationBaseInformation = {
+                title: annotation.model.annotationTranslations[0].title,
+                comment: annotation.model.annotationTranslations[0].comment,
+                startTime: annotation.model.startTime,
+                endTime: annotation.model.endTime,
+                layerVisual: annotation.model.layerVisual,
+                layerAudio: annotation.model.layerAudio,
+                selectorSvg: {
+                    colorHex: annotation.model.selectorSvgs[0].colorHex,
+                    opacity: annotation.model.selectorSvgs[0].opacity,
+                    strokeWidth: annotation.model.selectorSvgs[0].strokeWidth,
+                    svgData: annotation.model.selectorSvgs[0].svgData
+                }
+            }
+            annotation.model = await TIMAAT.AnnotationService.updateAnnotation(annotation.model.id, annotationBaseInformation)
+        },
 
 		removeAnnotation: function() {
 			// console.log("TCL: removeAnnotation: function()");

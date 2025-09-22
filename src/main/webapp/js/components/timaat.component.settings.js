@@ -77,13 +77,6 @@
         }
       });
 
-      $('#fixAnnotationNoUUIDSetButton').on('click', function(event) {
-        if (TIMAAT.Service.session.displayName == "admin") {
-          // console.log("add missing annotation uuids");
-          TIMAAT.Settings.fixAnnotationUUIDs();
-        }
-      });
-
       $('#fixKeyframeTimeSecondsToMillisecondsButton').on('click', function(event) {
         if (TIMAAT.Service.session.displayName == "admin") {
           // console.log("fix annotation keyframe timestamps from s to ms");

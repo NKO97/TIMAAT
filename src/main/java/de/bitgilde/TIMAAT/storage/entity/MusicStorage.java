@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.storage.entity;
 
-import de.bitgilde.TIMAAT.db.DbStorage;
+import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.*;
 import de.bitgilde.TIMAAT.model.TimeRange;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * @author Nico Kotlenga
  * @since 27.08.25
  */
-public class MusicStorage extends DbStorage {
+public class MusicStorage extends DbAccessComponent {
 
   private static final Logger logger = Logger.getLogger(MusicStorage.class.getName());
 
