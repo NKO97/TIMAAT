@@ -9,6 +9,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicPK;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationAreaPK;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslationPK;
@@ -21,6 +22,8 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,13 +75,25 @@ public class AnnotationStorage extends DbAccessComponent {
     });
   }
 
-  public List<Tag> updateTagsOfAnnotation(int annotationId, List<String> tagNames) throws DbTransactionExecutionException {
+  public List<Tag> updateTagsOfAnnotation(int annotationId, Collection<String> tagNames) throws DbTransactionExecutionException {
     return executeDbTransaction(entityManager -> {
       Annotation annotation = entityManager.find(Annotation.class, annotationId);
       List<Tag> updatedTagList = tagStorage.getOrCreateTagsHavingNames(tagNames);
 
       annotation.setTags(updatedTagList);
       return updatedTagList;
+    });
+  }
+
+  public List<Category> updateCategoriesOfAnnotation(int annotationId, Collection<Integer> categoryIds) throws DbTransactionExecutionException {
+    return executeDbTransaction(entityManager -> {
+      Annotation currentAnnotation = entityManager.find(Annotation.class, annotationId);
+      List<Category> categories = categoryIds.isEmpty() ? Collections.emptyList() : entityManager.createQuery(
+              "select category from Category category where category.id in :categoryIds", Category.class).setParameter(
+              "categoryIds", categoryIds).getResultList();
+
+      currentAnnotation.setCategories(categories);
+      return categories;
     });
   }
 

@@ -219,6 +219,31 @@
                 console.error("ERROR: ", error);
             });
         },
+        async updateAnnotationCategories(annotationId, categoryIds){
+            const updateCategoriesPayload = {
+                categoryIds
+            }
+            return new Promise(resolve => {
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/" + annotationId + "/categories",
+                    type: "PUT",
+                    data: JSON.stringify(updateCategoriesPayload),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
+                    },
+                }).done(function (data) {
+                    // console.log("TCL: updateAnnotation -> data", data);
+                    resolve(data);
+                }).fail(function (error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
         async updateAnnotation(annotationId, updatedAnnotationBaseInformation) {
             // console.log("TCL: updateAnnotation -> model", model);
             return new Promise(resolve => {
@@ -412,50 +437,6 @@
                     console.error("ERROR responseText:", error.responseText);
                     return false;
                 });
-        },
-
-        async addCategory(annotationId, categoryId) {
-            // console.log("TCL: addCategory -> annotationId, categoryId", annotationId, categoryId);
-            return new Promise(resolve => {
-                $.ajax({
-                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/" + annotationId + "/category/" + categoryId + '/?authToken=' + TIMAAT.Service.session.token,
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
-                    },
-                }).done(function (data) {
-                    resolve(data);
-                }).fail(function (error) {
-                    console.error("ERROR: ", error);
-                    console.error("ERROR responseText:", error.responseText);
-                });
-            }).catch((error) => {
-                console.error("ERROR: ", error);
-            });
-        },
-
-        async removeCategory(annotationId, categoryId) {
-            // console.log("TCL: removeCategory -> annotationId, categoryName", annotationId, categoryName);
-            return new Promise(resolve => {
-                $.ajax({
-                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/" + annotationId + "/category/" + categoryId + '/?authToken=' + TIMAAT.Service.session.token,
-                    type: "DELETE",
-                    contentType: "application/json; charset=utf-8",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
-                    },
-                }).done(function (data) {
-                    resolve(data);
-                })
-                    .fail(function (error) {
-                        console.error("ERROR: ", error);
-                        console.error("ERROR responseText:", error.responseText);
-                    });
-            }).catch((error) => {
-                console.error("ERROR: ", error);
-            });
         },
 
         async addTag(annotationId, tagId) {

@@ -25,6 +25,7 @@ import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.rest.model.annotation.CreateUpdateAnnotationPayload;
+import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAssignedCategoriesPayload;
 import de.bitgilde.TIMAAT.rest.model.tags.UpdateAssignedTagsPayload;
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.PermissionType;
@@ -225,8 +226,8 @@ public class EndpointAnnotation {
   @Secured
   @Path("{annotationId}/music/{musicId}")
   public AnnotationHasMusic addMusic(@PathParam("annotationId") int annotationId, @PathParam("musicId") int musicId) throws DbTransactionExecutionException {
-    verifyAuthorizationToAnnotationHavingId(annotationId);
-     return annotationStorage.addMusicToAnnotation(annotationId, musicId);
+    verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.WRITE);
+    return annotationStorage.addMusicToAnnotation(annotationId, musicId);
   }
 
   @DELETE
@@ -234,7 +235,7 @@ public class EndpointAnnotation {
   @Secured
   @Path("{annotationId}/music/{musicId}")
   public boolean removeMusic(@PathParam("annotationId") int annotationId, @PathParam("musicId") int musicId) throws DbTransactionExecutionException {
-    verifyAuthorizationToAnnotationHavingId(annotationId);
+    verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.WRITE);
     return annotationStorage.removeMusicFromAnnotation(annotationId, musicId);
   }
 
@@ -763,9 +764,10 @@ public class EndpointAnnotation {
   @Path("{id}")
   @Secured
   public Annotation updateAnnotation(@PathParam("id") int id, @Valid CreateUpdateAnnotationPayload createUpdateAnnotationPayload) {
-    verifyAuthorizationToAnnotationHavingId(id);
+    verifyAuthorizationToAnnotationHavingId(id, PermissionType.WRITE);
 
-    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
     UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(
             createUpdateAnnotationPayload.getSelectorSvg().getColorHex(),
@@ -793,9 +795,20 @@ public class EndpointAnnotation {
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("{id}/tags")
   @Secured
-  public List<Tag> updateTags(@PathParam("id") int annotationId, UpdateAssignedTagsPayload updateAssignedTagsPayload){
-    verifyAuthorizationToAnnotationHavingId(annotationId);
+  public List<Tag> updateTags(@PathParam("id") int annotationId, UpdateAssignedTagsPayload updateAssignedTagsPayload) {
+    verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.WRITE);
     return annotationStorage.updateTagsOfAnnotation(annotationId, updateAssignedTagsPayload.getTagNames());
+  }
+
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Path("{id}/categories")
+  @Secured
+  public List<Category> updateCategories(@PathParam("id") int annotationId, UpdateAssignedCategoriesPayload updateAssignedCategoriesPayload) {
+    verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.WRITE);
+    return annotationStorage.updateCategoriesOfAnnotation(annotationId,
+            updateAssignedCategoriesPayload.getCategoryIds());
   }
 
   @DELETE
@@ -803,7 +816,7 @@ public class EndpointAnnotation {
   @Path("{id}")
   @Secured
   public Response deleteAnnotation(@PathParam("id") int id) {
-    verifyAuthorizationToAnnotationHavingId(id);
+    verifyAuthorizationToAnnotationHavingId(id, PermissionType.WRITE);
 
     EntityManager entityManager = TIMAATApp.emf.createEntityManager();
     Annotation annotation = entityManager.find(Annotation.class, id);
@@ -833,94 +846,6 @@ public class EndpointAnnotation {
     return Response.ok().build();
   }
 
-  @POST
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("{annotationId}/category/{categoryId}")
-  @Secured
-  public Response addExistingCategory(@PathParam("annotationId") int annotationId, @PathParam("categoryId") int categoryId, @QueryParam("authToken") String authToken) {
-
-    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    Annotation annotation = entityManager.find(Annotation.class, annotationId);
-    if (annotation == null) {
-      return Response.status(Status.NOT_FOUND).build();
-    }
-    Category category = entityManager.find(Category.class, categoryId);
-    if (category == null) {
-      return Response.status(Status.NOT_FOUND).build();
-    }
-
-    // verify auth token
-    int userId = 0;
-    if (AuthenticationFilter.isTokenValid(authToken)) {
-      userId = AuthenticationFilter.getTokenClaimUserId(authToken);
-    }
-    else {
-      return Response.status(Status.UNAUTHORIZED).build();
-    }
-    // check for permission level
-    if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
-      return Response.status(Status.FORBIDDEN).build();
-    }
-
-    // attach category to annotation and vice versa
-    EntityTransaction entityTransaction = entityManager.getTransaction();
-    entityTransaction.begin();
-    annotation.getCategories().add(category);
-    category.getAnnotations().add(annotation);
-    entityManager.merge(category);
-    entityManager.merge(annotation);
-    entityManager.persist(annotation);
-    entityManager.persist(category);
-    entityTransaction.commit();
-    entityManager.refresh(annotation);
-
-    return Response.ok().entity(category).build();
-  }
-
-  @DELETE
-  @Produces(MediaType.APPLICATION_JSON)
-  @Path("{annotationId}/category/{categoryId}")
-  @Secured
-  public Response removeCategory(@PathParam("annotationId") int annotationId, @PathParam("categoryId") int categoryId, @QueryParam("authToken") String authToken) {
-
-    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    Annotation annotation = entityManager.find(Annotation.class, annotationId);
-    if (annotation == null) {
-      return Response.status(Status.NOT_FOUND).build();
-    }
-    Category category = entityManager.find(Category.class, categoryId);
-    if (category == null) {
-      return Response.status(Status.NOT_FOUND).build();
-    }
-
-    // verify auth token
-    int userId = 0;
-    if (AuthenticationFilter.isTokenValid(authToken)) {
-      userId = AuthenticationFilter.getTokenClaimUserId(authToken);
-    }
-    else {
-      return Response.status(Status.UNAUTHORIZED).build();
-    }
-    // check for permission level
-    if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, annotation.getMediumAnalysisList().getId()) < 2) {
-      return Response.status(Status.FORBIDDEN).build();
-    }
-
-    // attach category to annotation and vice versa
-    EntityTransaction entityTransaction = entityManager.getTransaction();
-    entityTransaction.begin();
-    annotation.getCategories().remove(category);
-    category.getAnnotations().remove(annotation);
-    entityManager.merge(category);
-    entityManager.merge(annotation);
-    entityManager.persist(annotation);
-    entityManager.persist(category);
-    entityTransaction.commit();
-    entityManager.refresh(annotation);
-
-    return Response.ok().build();
-  }
-
 
   public static <T> List<T> castList(Class<? extends T> clazz, Collection<?> c) {
     List<T> r = new ArrayList<T>(c.size());
@@ -930,11 +855,11 @@ public class EndpointAnnotation {
     return r;
   }
 
-  private void verifyAuthorizationToAnnotationHavingId(int annotationId) throws DbTransactionExecutionException, ForbiddenException {
+  private void verifyAuthorizationToAnnotationHavingId(int annotationId, PermissionType permissionType) throws DbTransactionExecutionException, ForbiddenException {
     int userId = (int) containerRequestContext.getProperty(AuthenticationFilter.USER_ID_PROPERTY_NAME);
 
 
-    if(!annotationAuthorizationVerifier.verifyAuthorizationToAnnotation(annotationId, userId, PermissionType.WRITE)){
+    if (!annotationAuthorizationVerifier.verifyAuthorizationToAnnotation(annotationId, userId, permissionType)) {
       throw new ForbiddenException("User has no access to annotation");
     }
   }

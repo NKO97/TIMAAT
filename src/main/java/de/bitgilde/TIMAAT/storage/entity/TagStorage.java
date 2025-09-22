@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,6 +27,9 @@ public class TagStorage extends DbAccessComponent {
   }
 
   public List<Tag> getOrCreateTagsHavingNames(Collection<String> tagNames) throws DbTransactionExecutionException {
+    if(tagNames.isEmpty()) {
+      return Collections.emptyList();
+    }
     return executeDbTransaction(entityManager -> {
       Map<String, Tag> tagsByName = entityManager.createQuery("SELECT t FROM Tag t WHERE t.name IN :tagNames", Tag.class)
                                                  .setParameter("tagNames", tagNames).getResultStream()

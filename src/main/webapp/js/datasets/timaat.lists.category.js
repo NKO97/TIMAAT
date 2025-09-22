@@ -179,22 +179,19 @@
           $('#analysisListNoPermissionModal').modal('show');
           return;
         }
-        // console.log("TCL: Submit Categories for analysis list");
-        // var modal = $('#annotationDatasetsAnnotationCategories');
+
         if (!$('#annotationCategoriesForm').valid())
           return false;
-        var annotation = TIMAAT.VideoPlayer.curAnnotation;
-        // console.log("TCL: Inspector -> constructor -> annotation", annotation);
-        var formDataRaw = $('#annotationCategoriesForm').serializeArray();
-        // console.log("TCL: formDataRaw", formDataRaw);
-        var i = 0;
-        var categoryIdList = [];
+        const annotation = TIMAAT.VideoPlayer.curAnnotation;
+        const formDataRaw = $('#annotationCategoriesForm').serializeArray();
+
+        let i = 0;
+        const categoryIdList = [];
         for (; i < formDataRaw.length; i++) {
-          categoryIdList.push( {id: formDataRaw[i].value} );
+          categoryIdList.push( formDataRaw[i].value);
         }
-        // console.log("TCL: categoryIdList", categoryIdList);
-        annotation.model = await TIMAAT.CategoryLists.updateElementHasCategoriesList(annotation.model, categoryIdList, 'annotation');
-        // $('#mediumFormMetadata').data('annotation', annotation);
+
+        annotation.model.categories = TIMAAT.AnnotationService.updateAnnotationCategories(annotation.model.id, categoryIdList)
       });
 
       // inspector event handler
