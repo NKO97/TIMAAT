@@ -60,6 +60,7 @@
 			this.initTitles();
 			this.initLanguageTracks();
 			this.initActorRoles();
+            this.initMusic();
 
 			TIMAAT.EntityUpdate.registerEntityUpdateListener("MediumAudioAnalysis", this.handleMediumAudioAnalysisChanged.bind(this))
 		},
@@ -964,6 +965,24 @@
 			});
 
 		},
+
+        initMusic: function() {
+          $('#mediumMusicTab').on('click', () => {
+              let medium = $('#mediumFormMetadata').data('medium');
+              let type = medium.model.mediaType.mediaTypeTranslations[0].type;
+              let name = medium.model.displayTitle.name;
+              let id = medium.model.id;
+
+              TIMAAT.UI.displayDataSetContentArea('mediumFormMusic')
+              TIMAAT.UI.displayDataSetContent('music', medium, 'medium');
+
+              if (type == 'medium') {
+                  TIMAAT.URLHistory.setURL(null, name + ' · Music · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + id + '/music');
+              } else {
+                  TIMAAT.URLHistory.setURL(null, name + ' · Music · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + type + '/' + id + '/music');
+              }
+          })
+        },
 
 		initTitles: function() {
 			$('#mediumTitlesTab').on('click', function(event) {
@@ -2619,6 +2638,10 @@
 				$('#mediumFormLanguageTracks').data('medium', medium);
 			}
 		},
+
+        mediumFormMusic: async function(action, medium) {
+            console.log("medium form music")
+        },
 
 		mediumFormActorRoles: async function(action, medium) {
 			// console.log("TCL: mediumFormActorRoles: action, medium", action, medium);
