@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.DbAnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
@@ -69,6 +70,7 @@ public class TIMAATBinder extends AbstractBinder {
             bindAsContract(TagStorage.class).in(Singleton.class);
 
             bind(DbAnnotationAuthorizationVerifier.class).to(AnnotationAuthorizationVerifier.class).in(Singleton.class);
+            bindAsContract(AnalysisListAuthorizationVerifier.class).in(Singleton.class);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during instantiating necessary components", e);
             throw new RuntimeException(e);

@@ -1,6 +1,5 @@
 package de.bitgilde.TIMAAT.storage.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
@@ -10,10 +9,13 @@ import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationAreaPK;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslationPK;
 import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
+import de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
@@ -94,6 +96,46 @@ public class AnnotationStorage extends DbAccessComponent {
 
       currentAnnotation.setCategories(categories);
       return categories;
+    });
+  }
+
+  public Annotation createAnnotation(CreateAnnotation createAnnotation, UserAccount userAccount) throws DbTransactionExecutionException {
+    logger.log(Level.FINE, "Creating new annotation");
+
+    return this.executeDbTransaction(entityManager -> {
+      MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, createAnnotation.analysisListId);
+      Language defaultLanguage = entityManager.find(Language.class, 1);
+      SvgShapeType polygonShapeType = entityManager.find(SvgShapeType.class, 5);
+
+      Annotation annotation = new Annotation();
+      annotation.setMediumAnalysisList(mediumAnalysisList);
+      annotation.setStartTime(createAnnotation.getStartTime());
+      annotation.setEndTime(createAnnotation.getEndTime());
+      annotation.setLayerVisual(createAnnotation.isLayerVisual());
+      annotation.setLayerAudio(createAnnotation.isLayerAudio());
+      annotation.setCreatedByUserAccount(userAccount);
+      annotation.setCreatedAt(Timestamp.from(Instant.now()));
+      entityManager.persist(annotation);
+
+      AnnotationTranslation annotationTranslation = new AnnotationTranslation();
+      annotationTranslation.setAnnotation(annotation);
+      annotationTranslation.setLanguage(defaultLanguage);
+      annotationTranslation.setTitle(createAnnotation.getTitle());
+      annotationTranslation.setComment(createAnnotation.getComment());
+      entityManager.persist(annotationTranslation);
+
+      SelectorSvg selectorSvg = new SelectorSvg();
+      selectorSvg.setAnnotation(annotation);
+      selectorSvg.setSvgData(createAnnotation.getSelectorSvg().getSvgData());
+      selectorSvg.setSvgShapeType(polygonShapeType);
+      selectorSvg.setOpacity(createAnnotation.getSelectorSvg().getOpacity());
+      selectorSvg.setStrokeWidth(createAnnotation.getSelectorSvg().getStrokeWidth());
+      selectorSvg.setColorHex(createAnnotation.getSelectorSvg().getColorHex());
+      entityManager.persist(selectorSvg);
+
+      entityManager.flush();
+      entityManager.refresh(annotation);
+      return annotation;
     });
   }
 
@@ -201,30 +243,16 @@ public class AnnotationStorage extends DbAccessComponent {
   }
 
   public static class CreateAnnotation {
-    private static final String TITLE_FIELD_NAME = "title";
-    private static final String COMMENT_FIELD_NAME = "comment";
-    private static final String START_TIME_FIELD_NAME = "startTime";
-    private static final String END_TIME_FIELD_NAME = "endTime";
-    private static final String LAYER_VISUAL_FIELD_NAME = "layerVisual";
-    private static final String LAYER_AUDIO_FIELD_NAME = "layerAudio";
-    private static final String SELECTOR_SVG_FIELD_NAME = "selectorSvg";
-
-    @JsonProperty(TITLE_FIELD_NAME)
     private final String title;
-    @JsonProperty(COMMENT_FIELD_NAME)
     private final String comment;
-    @JsonProperty(START_TIME_FIELD_NAME)
     private final long startTime;
-    @JsonProperty(END_TIME_FIELD_NAME)
     private final long endTime;
-    @JsonProperty(LAYER_VISUAL_FIELD_NAME)
     private final boolean layerVisual;
-    @JsonProperty(LAYER_AUDIO_FIELD_NAME)
     private final boolean layerAudio;
-    @JsonProperty(SELECTOR_SVG_FIELD_NAME)
     private final UpdateSelectorSvg selectorSvg;
+    private final int analysisListId;
 
-    public CreateAnnotation(String title, String comment, long startTime, long endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg) {
+    public CreateAnnotation(String title, String comment, long startTime, long endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg, int analysisListId) {
       this.title = title;
       this.comment = comment;
       this.startTime = startTime;
@@ -232,6 +260,7 @@ public class AnnotationStorage extends DbAccessComponent {
       this.layerVisual = layerVisual;
       this.layerAudio = layerAudio;
       this.selectorSvg = selectorSvg;
+      this.analysisListId = analysisListId;
     }
 
     public String getTitle() {
@@ -261,22 +290,63 @@ public class AnnotationStorage extends DbAccessComponent {
     public UpdateSelectorSvg getSelectorSvg() {
       return selectorSvg;
     }
+
+    public int getAnalysisListId() {
+      return analysisListId;
+    }
   }
 
-  public static final class UpdateAnnotation extends CreateAnnotation {
-
-    private static final String ID_FIELD_NAME = "id";
-
-    @JsonProperty(ID_FIELD_NAME)
+  public static final class UpdateAnnotation {
     private final int id;
+    private final String title;
+    private final String comment;
+    private final long startTime;
+    private final long endTime;
+    private final boolean layerVisual;
+    private final boolean layerAudio;
+    private final UpdateSelectorSvg selectorSvg;
 
     public UpdateAnnotation(int id, String title, String comment, long startTime, long endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg) {
-      super(title, comment, startTime, endTime, layerVisual, layerAudio, selectorSvg);
       this.id = id;
+      this.title = title;
+      this.comment = comment;
+      this.startTime = startTime;
+      this.endTime = endTime;
+      this.layerVisual = layerVisual;
+      this.layerAudio = layerAudio;
+      this.selectorSvg = selectorSvg;
     }
 
     public int getId() {
       return id;
+    }
+
+    public String getTitle() {
+      return title;
+    }
+
+    public long getStartTime() {
+      return startTime;
+    }
+
+    public String getComment() {
+      return comment;
+    }
+
+    public long getEndTime() {
+      return endTime;
+    }
+
+    public boolean isLayerVisual() {
+      return layerVisual;
+    }
+
+    public boolean isLayerAudio() {
+      return layerAudio;
+    }
+
+    public UpdateSelectorSvg getSelectorSvg() {
+      return selectorSvg;
     }
   }
 

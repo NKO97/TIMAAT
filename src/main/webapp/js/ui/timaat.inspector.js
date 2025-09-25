@@ -756,33 +756,18 @@
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 					} else {
 						let model = {
-							id: 0,
 							startTime: startTime,
 							endTime: endTime,
 							layerVisual: layerVisual,
 							layerAudio: layerAudio,
-							// actors: [],
-							// annotations1: [],
-							// annotations2: [],
-							// categories: [],
-							// events: [],
-							// locations: [],
-							// mediums: [],
-							annotationTranslations: [{
-								id: 0,
-								comment: comment,
-								title: title,
-							}],
-							selectorSvgs: [{
-								id: 0,
-								colorHex: color,
-								opacity: opacity * 100, //* 0..1 is stored as 0..100 (Byte)
-								svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
-								strokeWidth: 1,
-								svgShapeType: {
-									id: 5
-								}
-							}]
+                            comment: comment,
+                            title: title,
+                            selectorSvg: {
+                                opacity: opacity * 100,
+                                colorHex: color,
+                                svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
+                                strokeWidth: 1
+                            }
 						};
 						TIMAAT.AnnotationService.createAnnotation(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}

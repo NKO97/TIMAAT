@@ -154,12 +154,12 @@
             });
         },
 
-        createAnnotation(model, analysisListId, callback) {
+        createAnnotation(createAnnotation, analysisListId, callback) {
             // console.log("TCL: createAnnotation -> model", model);
             jQuery.ajax({
-                url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/mediumAnalysisList/" + analysisListId + '/?authToken=' + TIMAAT.Service.session.token,
+                url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/mediumAnalysisList/" + analysisListId,
                 type: "POST",
-                data: JSON.stringify(model),
+                data: JSON.stringify(createAnnotation),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 beforeSend: function (xhr) {
@@ -174,26 +174,6 @@
                 });
         },
 
-        // updateAnnotation(annotation) {
-        // 	console.log("TCL: updateAnnotation -> annotation", annotation);
-        // 	var anno = annotation;
-        // 	jQuery.ajax({
-        // 		url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+anno.model.id,
-        // 		type:"PATCH",
-        // 		data: JSON.stringify(annotation.getModel()),
-        // 		contentType:"application/json; charset=utf-8",
-        // 		dataType:"json",
-        // 		beforeSend: function (xhr) {
-        // 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-        // 		},
-        // 	}).done(function(data) {
-        // 		anno.model = data;
-        // 	})
-        // 	.fail(function(error) {
-        // 		console.error("ERROR: ", error);
-        // 		console.error("ERROR responseText:", error.responseText);
-        // 	});
-        // },
         async updateAnnotationTags(annotationId, tagNames) {
             const updateTagsPayload = {
                 tagNames

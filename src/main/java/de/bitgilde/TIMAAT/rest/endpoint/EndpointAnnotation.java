@@ -1,6 +1,5 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
@@ -14,10 +13,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.model.FIPOP.Event;
-import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
-import de.bitgilde.TIMAAT.model.FIPOP.SegmentSelectorType;
-import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
@@ -27,10 +23,12 @@ import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.rest.model.annotation.CreateUpdateAnnotationPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAssignedCategoriesPayload;
 import de.bitgilde.TIMAAT.rest.model.tags.UpdateAssignedTagsPayload;
+import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.PermissionType;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
+import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.CreateAnnotation;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateAnnotation;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateSelectorSvg;
 import jakarta.inject.Inject;
@@ -55,8 +53,6 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.jvnet.hk2.annotations.Service;
 
-import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -93,6 +89,8 @@ public class EndpointAnnotation {
   AnnotationStorage annotationStorage;
   @Inject
   AnnotationAuthorizationVerifier annotationAuthorizationVerifier;
+  @Inject
+  AnalysisListAuthorizationVerifier analysisListAuthorizationVerifier;
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -665,97 +663,23 @@ public class EndpointAnnotation {
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("mediumAnalysisList/{mediumAnalysisListId}")
   @Secured
-  public Response createAnnotation(@PathParam("mediumAnalysisListId") int mediumAnalysisListId, String jsonData, @QueryParam("authToken") String authToken) {
+  public Annotation createAnnotation(@PathParam("mediumAnalysisListId") int mediumAnalysisListId, CreateUpdateAnnotationPayload createUpdateAnnotationPayload) {
+    verifyAuthorizationToAnalysisList(mediumAnalysisListId, PermissionType.WRITE);
 
-    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, mediumAnalysisListId);
-    if (mediumAnalysisList == null) {
-      return Response.status(Status.NOT_FOUND).build();
-    }
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
-    // verify auth token
-    int userId = 0;
-    if (AuthenticationFilter.isTokenValid(authToken)) {
-      userId = AuthenticationFilter.getTokenClaimUserId(authToken);
-    }
-    else {
-      return Response.status(Status.UNAUTHORIZED).build();
-    }
-    // check for permission level
-    if (EndpointUserAccount.getPermissionLevelForAnalysisList(userId, mediumAnalysisListId) < 2) {
-      return Response.status(Status.FORBIDDEN).build();
-    }
+    UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(
+            createUpdateAnnotationPayload.getSelectorSvg().getColorHex(),
+            createUpdateAnnotationPayload.getSelectorSvg().getOpacity(),
+            createUpdateAnnotationPayload.getSelectorSvg().getStrokeWidth(),
+            createUpdateAnnotationPayload.getSelectorSvg().getSvgData());
+    CreateAnnotation createAnnotation = new CreateAnnotation(createUpdateAnnotationPayload.getTitle(),
+            createUpdateAnnotationPayload.getComment(), createUpdateAnnotationPayload.getStartTime(),
+            createUpdateAnnotationPayload.getEndTime(), createUpdateAnnotationPayload.isLayerVisual(),
+            createUpdateAnnotationPayload.isLayerAudio(), updateSelectorSvg, mediumAnalysisListId);
 
-    ObjectMapper mapper = new ObjectMapper();
-    Annotation annotation = null;
-    try {
-      annotation = mapper.readValue(jsonData, Annotation.class);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return Response.status(Status.BAD_REQUEST).build();
-    }
-    if (annotation == null) {
-      return Response.status(Status.BAD_REQUEST).build();
-    }
-
-    // sanitize object data
-    annotation.setId(0);
-    annotation.getSelectorSvgs().get(0).setId(0);
-    annotation.setMediumAnalysisList(mediumAnalysisList);
-
-    // set up metadata
-    annotation.getAnnotationTranslations().get(0).setId(0);
-    annotation.getAnnotationTranslations().get(0).setAnnotation(annotation);
-    annotation.getAnnotationTranslations().get(0).setLanguage(entityManager.find(Language.class, 1));
-
-    EntityTransaction entityTransaction = entityManager.getTransaction();
-
-    // update log metadata
-    Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-    annotation.setCreatedAt(creationDate);
-    annotation.setLastEditedAt(creationDate);
-    if (containerRequestContext.getProperty("TIMAAT.userID") != null) {
-      annotation.setCreatedByUserAccount(
-              (entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
-      annotation.setLastEditedByUserAccount(
-              (entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
-    }
-    else {
-      // DEBUG do nothing - production system should abort with internal server error
-    }
-
-    annotation.setSegmentSelectorType(entityManager.find(SegmentSelectorType.class, 1)); // TODO
-
-    SelectorSvg newSVG = annotation.getSelectorSvgs().get(0);
-    annotation.getSelectorSvgs().remove(0);
-    // newSVG.setSvgShapeType(entityManager.find(SvgShapeType.class, 5)); // TODO refactor
-
-    // persist annotation and polygons
-    entityTransaction = entityManager.getTransaction();
-    entityTransaction.begin();
-    entityManager.persist(annotation.getAnnotationTranslations().get(0));
-    entityManager.persist(annotation);
-    newSVG.setAnnotation(annotation);
-    entityManager.persist(newSVG);
-    annotation.addSelectorSvg(newSVG);
-    entityManager.persist(annotation);
-    mediumAnalysisList.getAnnotations().add(annotation);
-    entityManager.persist(mediumAnalysisList);
-    entityManager.flush();
-    entityTransaction.commit();
-    entityManager.refresh(annotation);
-    entityManager.refresh(mediumAnalysisList);
-    entityManager.refresh(newSVG);
-
-    // add log entry
-    UserLogManager.getLogger().addLogEntry(annotation.getCreatedByUserAccount().getId(),
-            UserLogManager.LogEvents.ANNOTATIONCREATED);
-
-    // send notification action
-    NotificationWebSocket.notifyUserAction((String) containerRequestContext.getProperty("TIMAAT.userName"),
-            "addAnnotation", mediumAnalysisListId, annotation);
-
-    return Response.ok().entity(annotation).build();
+    return annotationStorage.createAnnotation(createAnnotation, userAccount);
   }
 
   @PUT
@@ -864,4 +788,13 @@ public class EndpointAnnotation {
     }
   }
 
+  private void verifyAuthorizationToAnalysisList(int analysisListId, PermissionType permissionType) {
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+
+    if (!analysisListAuthorizationVerifier.verifyAuthorizationToAnalysisList(analysisListId, userAccount,
+            permissionType)) {
+      throw new ForbiddenException("User has no access to analysis list");
+    }
+  }
 }
