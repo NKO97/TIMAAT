@@ -982,6 +982,205 @@
                   TIMAAT.URLHistory.setURL(null, name + ' · Music · ' + type[0].toUpperCase() + type.slice(1), '#medium/' + type + '/' + id + '/music');
               }
           })
+
+            // add medium has music list button click
+            // $(document).on('click','[data-role="musicNewMediumHasMusicFields"] > .form-group [data-role="add"]', async function(event) {
+            $(document).on('click','.addMusicToMediumButton', async function(event) {
+                // console.log("TCL: add new medium with music(s)");
+                event.preventDefault();
+                const listEntry = $(this).closest('[data-role="mediumFormMusicNewMusicFields"]');
+                let newFormEntry = [];
+                let newEntryId = null;
+                if (listEntry.find('select').each(function(){
+                    newEntryId = Number($(this).val());
+                }));
+                if (listEntry.find('input').each(function(){
+                    newFormEntry.push($(this).val());
+                }));
+
+                if (!$('#mediumFormMusic').valid()) {
+                    return false;
+                }
+
+                const medium = $('#mediumFormMetadata').data('medium');
+
+                const existingEntryIds = new Set();
+                $('[data-role="musicIsInMediumEntry"]').each((index, currentMusicEntry) => {
+                    const currentId = $(currentMusicEntry).data('music-id');
+                    existingEntryIds.add(currentId);
+                })
+
+                if (!existingEntryIds.has(newEntryId)) {
+                    $('.disableOnSubmit').prop('disabled', false);
+                    let newEntryDetails = [];
+                    let j = 0;
+
+                    for (; j < newFormEntry.length -2; j += 2) {
+                        newEntryDetails.push({
+                            type: 'direct',
+                            mediumHasMusicMusicId : newEntryId,
+                            mediumHasMusicMediumId: medium.model.id,
+                            id                    : 0,
+                            startTime             : newFormEntry[j],
+                            endTime               : newFormEntry[j + 1]
+                        });
+                    }
+
+                    let musicName = await TIMAAT.MusicService.getDisplayTitle(newEntryId);
+                    let appendNewFormDataEntry = TIMAAT.MediumDatasets.appendMediumHasMusicDataset(newEntryId, musicName.name, newEntryDetails, true);
+                    $('#mediumFormMusicDynamicFields').append(appendNewFormDataEntry);
+                    $('.musicDatasetMusicMediumHasMusicMediumId').prop('disabled', true);
+
+                    if (listEntry.find('input').each(function(){
+                        $(this).val('');
+                    }));
+                    if (listEntry.find('select').each(function(){
+                        $(this).val(null).trigger('change');
+                    }));
+
+                    $('#mediumFormMusicNewMusicFields').empty()
+                    $('#mediumFormMusicNewMusicFields').append(TIMAAT.MediumDatasets.appendNewMediumHasMusicFields());
+
+                    $('#musicSelectDropdown').select2({
+                        closeOnSelect: true,
+                        scrollAfterSelect: true,
+                        allowClear: true,
+                        ajax: {
+                            url: 'api/music/selectList/',
+                            type: 'GET',
+                            dataType: 'json',
+                            delay: 250,
+                            headers: {
+                                "Authorization": "Bearer "+TIMAAT.Service.token,
+                                "Content-Type": "application/json",
+                            },
+                            // additional parameters
+                            data: function(params) {
+                                // console.log("TCL: data: params", params);
+                                return {
+                                    search: params.term,
+                                };
+                            },
+                            processResults: function(data, params) {
+                                // console.log("TCL: processResults: data", data);
+                                params.page = params.page || 1;
+                                return {
+                                    results: data
+                                };
+                            },
+                            cache: false
+                        },
+                        minimumInputLength: 0,
+                    });
+                }
+                else { // duplicate music
+                    $('#mediumDatasetsMediumHasMusicDuplicateModal').modal('show');
+                }
+            });
+
+            // add medium has music detail button click
+            // $(document).on('click', '.form-group +[data-role="addMediumHasMusicDetail"]', async function(event) {
+            $(document).on('click', '.mediumDatasetAddMediumHasMusicDetailButton', async function(event) {
+                event.preventDefault();
+                const listEntry = $(this).closest('[data-role="newMusicIsInMediumDetailFields"]');
+                let newMusicInMediumData = [];
+                const musicId = $(this).closest(('[data-role="musicIsInMediumEntry"]')).data('music-id');
+                if (listEntry.find('input').each(function(){
+                    newMusicInMediumData.push($(this).val());
+                }));
+
+                const newMediumHasMusicDetailEntry = {
+                    startTime: newMusicInMediumData[0],
+                    endTime: newMusicInMediumData[1],
+                    type: "direct"
+                };
+
+                $(this).closest('[data-role="newMusicIsInMediumDetailFields"]').before(TIMAAT.MediumDatasets.appendMediumHasMusicDetailFields(0, musicId, newMediumHasMusicDetailEntry));
+
+                if (listEntry.find('input').each(function(){
+                    $(this).val('');
+                }));
+                if (listEntry.find('select').each(function(){
+                    $(this).val('');
+                }));
+            });
+
+            // remove medium has music list button click
+            // $(document).on('click','[data-role="musicDynamicMediumHasMusicFields"] > .form-group [data-role="remove"]', async function(event) {
+            $(document).on('click','.removeMusicFromMediumButton', async function(event) {
+                event.preventDefault();
+                $(this).closest('.form-group').remove();
+            });
+
+            // remove medium has music detail button click
+            $(document).on('click','.form-group [data-role="mediumDatasetRemoveMediumHasMusicDetail"]', async function(event) {
+                event.preventDefault();
+                $(this).closest('.form-group').remove();
+            });
+
+            // submit medium has music list button functionality
+            $('#mediumFormMusicSubmitButton').on('click', async function(event) {
+                // console.log("TCL: MediumHasMusic form: submit");
+                // add rules to dynamically added form fields
+                const form = $('#mediumFormMusic')
+
+                event.preventDefault();
+                const newMusicNode = $('#mediumFormMusicNewMusicFields');
+                newMusicNode.empty()
+
+                if(!form.valid()){
+                    return false
+                }
+
+
+                let medium = $('#mediumFormMetadata').data('medium')
+                const mediumHasMusicList = []
+                $('#mediumFormMusicDynamicFields [data-role="musicIsInMediumEntry"]').each((index, element) => {
+                    const $element = $(element)
+                    const musicId = $element.data('music-id')
+                    const timeRanges = []
+
+                    $element.find('[data-role="mediumHasMusicDetailEntry"][data-type="direct"]').each((j, timeRangesDetailEntry) => {
+                        const $timeRangesDetailEntry = $(timeRangesDetailEntry);
+                        const currentStartTimeText = $timeRangesDetailEntry.find('.mediumDatasetsMusicMediumHasMusicListStartTime').val()
+                        const currentEndTimeText = $timeRangesDetailEntry.find('.mediumDatasetsMusicMediumHasMusicListEndTime').val()
+
+                        const parsedStartTime =  TIMAAT.Util.parseTime(currentStartTimeText)
+                        const parsedEndTime = TIMAAT.Util.parseTime(currentEndTimeText)
+
+                        timeRanges.push({
+                            startTime: parsedStartTime,
+                            endTime: parsedEndTime
+                        })
+                    })
+                    mediumHasMusicList.push({
+                        musicId,
+                        timeRanges
+                    })
+
+                })
+
+                const updatedMediumHasMusicList = await TIMAAT.MediumService.updateMediumHasMusicList(medium.model.id, mediumHasMusicList);
+                updatedMediumHasMusicList.sort((a,b) => a.id.musicId - b.id.musicId);
+
+                medium.model.mediumHasMusicList = updatedMediumHasMusicList;
+                TIMAAT.UI.displayDataSetContent("music", medium, "medium")
+
+                const type = medium.model.mediaType.mediaTypeTranslations[0].type;
+                if ($('#mediumTab').hasClass('active')) {
+                    await TIMAAT.UI.refreshDataTable('medium');
+                } else {
+                    await TIMAAT.UI.refreshDataTable(type);
+                }
+
+                await TIMAAT.UI.refreshDataTable('music')
+            });
+
+            // cancel add/edit button in titles form functionality
+            $('#mediumFormMusicDismissButton').on('click', function(event) {
+                let medium = $('#mediumFormMetadata').data('medium');
+                TIMAAT.UI.displayDataSetContent('music', medium, 'medium');
+            });
         },
 
 		initTitles: function() {
@@ -1175,7 +1374,6 @@
 
 				// the original medium model (in case of editing an existing medium)
 				var medium = $('#mediumFormTitles').data("medium");
-				var type = medium.model.mediaType.mediaTypeTranslations[0].type;
         // console.log("TCL: type", type);
 
 				// Create/Edit medium window submitted data
@@ -2640,7 +2838,316 @@
 		},
 
         mediumFormMusic: async function(action, medium) {
-            console.log("medium form music")
+            const mediumFormMusicDynamicFields = $('#mediumFormMusicDynamicFields')
+            const mediumFormMusicNewMusicFields = $('#mediumFormMusicNewMusicFields')
+            const editMode = action === 'edit';
+
+            mediumFormMusicDynamicFields.empty()
+            mediumFormMusicNewMusicFields.empty()
+
+            // Extract direct and indirect relations to music into a uniform format
+            const mediumTimeRangeDetailsByMusicId = new Map()
+            const musicTitlesByMusicId = new Map()
+            const musicIds = []
+
+            for(const currentMediumHasMusic of medium.model.mediumHasMusicList){
+                const currentMusicId = currentMediumHasMusic.id.musicId
+                const musicTitle = (await TIMAAT.MusicService.getDisplayTitle(currentMusicId)).name
+
+                musicIds.push(currentMusicId)
+                musicTitlesByMusicId.set(currentMusicId, musicTitle)
+
+                const mediumTimeRangeDetails = []
+                for(const currentMediumHasMusicDetail of currentMediumHasMusic.mediumHasMusicDetailList){
+                    mediumTimeRangeDetails.push({
+                        type: "direct",
+                        startTime: currentMediumHasMusicDetail.startTime,
+                        endTime: currentMediumHasMusicDetail.endTime
+                    })
+                }
+                mediumTimeRangeDetailsByMusicId.set(currentMusicId, mediumTimeRangeDetails)
+            }
+
+            // Because the analysisLists are not be delivered by the medium listing endpoint we need to load all analysis lists to receive annotation information
+            const mediumAnalysisList = await TIMAAT.AnalysisListService.getMediumAnalysisLists(medium.model.id)
+            const annotationsList = mediumAnalysisList.flatMap(currentAnalysis => currentAnalysis.annotations)
+
+            for(const currentAnnotation of annotationsList){
+                const currentStartTime = currentAnnotation.startTime
+                const currentEndTime = currentAnnotation.endTime
+                for(const currentAnnotationHasMusic of currentAnnotation.annotationHasMusic){
+                    const currentMusicId = currentAnnotationHasMusic.music.id
+                    if(!mediumTimeRangeDetailsByMusicId.has(currentMusicId)){
+                        const musicName = currentAnnotationHasMusic.music.displayTitle.name
+                        mediumTimeRangeDetailsByMusicId.set(currentMusicId, [])
+                        musicTitlesByMusicId.set(currentMusicId, musicName)
+                        musicIds.push(currentMusicId)
+                    }
+
+                    const currentMediumTimeRangeDetails = mediumTimeRangeDetailsByMusicId.get(currentMusicId)
+                    currentMediumTimeRangeDetails.push({
+                        type: "annotation",
+                        annotationId: currentAnnotation.id,
+                        startTime: currentStartTime,
+                        endTime: currentEndTime
+                    })
+                }
+            }
+            for(const currentMusicId of musicIds) {
+                const currentMusicTitle = musicTitlesByMusicId.get(currentMusicId)
+                const currentMediumTimeRangeDetails = mediumTimeRangeDetailsByMusicId.get(currentMusicId)
+
+                const mediumHasMusicFormData = this.appendMediumHasMusicDataset(currentMusicId, currentMusicTitle, currentMediumTimeRangeDetails, editMode);
+                mediumFormMusicDynamicFields.append(mediumHasMusicFormData);
+
+                let j = 0;
+                for (; j < currentMediumTimeRangeDetails.length; j++) {
+                    const currentMediumTimeRangeDetail = currentMediumTimeRangeDetails[j];
+                    if (currentMediumTimeRangeDetail.startTime != null && !(isNaN(currentMediumTimeRangeDetail.startTime)))
+                        $('[data-role="startTime[' + currentMusicId + '][' + j + ']"]').val(TIMAAT.Util.formatTime(currentMediumTimeRangeDetail.startTime, true));
+                    else $('[data-role="startTime[' + currentMusicId + '][' + j + ']"]').val('00:00:00.000');
+                    if (currentMediumTimeRangeDetail.endTime != null && !(isNaN(currentMediumTimeRangeDetail.endTime)))
+                        $('[data-role="endTime[' + currentMusicId + '][' + j + ']"]').val(TIMAAT.Util.formatTime(currentMediumTimeRangeDetail.endTime, true));
+                    else $('[data-role="endTime[' + currentMusicId + '][' + j + ']"]').val('00:00:00.000');
+                }
+            }
+
+            if(action === "show"){
+                $('#mediumFormMusicDynamicFields :input').prop('disabled', true);
+                $('#mediumFormMusicSubmitButton').hide();
+                $('#mediumFormMusicDismissButton').hide();
+                $('[data-role="mediumDatasetRemoveMediumHasMusicDetail"]').hide()
+                $('[data-role="musicNewMediumHasMusicFields"]').hide();
+                $('.mediumFormMusicFormDivider').hide();
+                $('[data-role="removeMediumHasMusicDetail"]').hide();
+                $('.js-form-group__button').hide();
+                $('#mediumMusicLabel').html("Music of medium");
+                $('.mediumDataSheetFormEditButton').attr("disabled", false);
+            }else if (action === "edit"){
+                $('[data-role="mediumFormMusicNewMusicFields"]').append(this.appendNewMediumHasMusicFields());
+                $('#mediumFormMusicSubmitButton').show();
+                $('#mediumFormMusicDismissButton').show();
+                $('[data-role="mediumDatasetRemoveMediumHasMusicDetail"]').show()
+                $('[data-role="musicNewMediumHasMusicFields"]').show();
+                $('.mediumFormMusicFormDivider').show();
+                $('[data-role="removeMediumHasMusicDetail"]').show();
+                $('.js-form-group__button').show();
+                $('#mediumMusicLabel').html("Edit music of medium");
+                $('.mediumDataSheetFormEditButton').attr("disabled", true);
+
+                $('#musicSelectDropdown').select2({
+                    closeOnSelect: true,
+                    scrollAfterSelect: true,
+                    allowClear: true,
+                    ajax: {
+                        url: 'api/music/selectList/',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        headers: {
+                            "Authorization": "Bearer "+TIMAAT.Service.token,
+                            "Content-Type": "application/json",
+                        },
+                        // additional parameters
+                        data: function(params) {
+                            // console.log("TCL: data: params", params);
+                            return {
+                                search: params.term,
+                            };
+                        },
+                        processResults: function(data, params) {
+                            // console.log("TCL: processResults: data", data);
+                            params.page = params.page || 1;
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: false
+                    },
+                    minimumInputLength: 0,
+                });
+            }
+        },
+        appendMediumHasMusicDataset: function(musicId, musicTitle, mediumHasMusicListData, editMode) {
+            let mediumHasMusicListFormData =
+                `<div class="form-group" data-role="musicIsInMediumEntry" data-music-id=`+musicId+`>
+				<div class="form-row">
+					<div class="col-md-11">
+						<fieldset>
+							<legend>`+ musicTitle +`</legend>
+							<div class="form-row">
+								<div class="hidden" aria-hidden="true">
+									<input type="hidden"
+												class="form-control form-control-sm"
+												name="mediumId"
+												value="`+musicId+`">
+								</div>
+								<div class="col-md-6">
+									<input type="text" class="form-control form-control-sm mediumDatasetMusicMediumHasMusicMediumId"
+													id="musicTitle`+ musicId+`"
+													name="musicTitle‚"
+													value="`+musicTitle+`"
+													data-role="musicId[`+ musicId +`]"
+													placeholder="Select music"
+													aria-describedby="Music name"
+													disabled
+													required>
+								</div>
+								<div class="col-md-6">
+									<div data-role="musicMediumHasMusicListDetailEntries">`;
+            // append list of time details
+            var j = 0;
+            let containsAnnotationReferences = false
+            for (; j < mediumHasMusicListData.length; j++) {
+                containsAnnotationReferences = containsAnnotationReferences || mediumHasMusicListData[j].type === "annotation"
+                mediumHasMusicListFormData +=	this.appendMediumHasMusicDetailFields(j, musicId, mediumHasMusicListData[j]);
+            }
+            mediumHasMusicListFormData +=
+                `</div>
+									<div class="form-group" data-role="newMusicIsInMediumDetailFields" data-detail-id="`+j+`">`;
+            if (editMode) {
+                mediumHasMusicListFormData += this.appendMediumHasMusicNewDetailFields();
+            }
+
+
+            const removeButtonContent = containsAnnotationReferences ? "" :
+                `<div class="col-md-1 align-items--vertically">
+                    <button type="button"
+                            class="form-group__button js-form-group__button removeMusicFromMediumButton btn btn-danger"
+                            data-role="remove">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>`
+            mediumHasMusicListFormData +=
+                `<!-- form sheet: one row for new medium has music list detail information that shall be added to the medium has music list -->
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					${removeButtonContent}
+				</div>
+			</div>`;
+
+
+            return mediumHasMusicListFormData;
+        },
+
+        /** adds empty fields for new mediumHasMusic dataset */
+        appendNewMediumHasMusicFields: function () {
+            // console.log("TCL: appendNewMediumHasMusicFields");
+            let mediumHasMusicToAppend =
+                `<div class="form-group" data-role="newMusicIsInMediumEntry" data-id=-1>
+				<div class="form-row">
+					<div class="col-md-11">
+						<fieldset>
+							<legend>Add new music:</legend>
+							<div class="form-row">
+								<div class="col-md-6">
+									<label class="sr-only">Music appears in medium</label>
+									<select class="form-control form-control-sm"
+													id="musicSelectDropdown"
+													name="musicId"
+													data-role="musicId"
+													data-placeholder="Select music"
+													required>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group"
+											 data-role="newMusicIsInMediumDetailFields"
+											 data-detail-id="0">`;
+            mediumHasMusicToAppend += this.appendMediumHasMusicNewDetailFields();
+            mediumHasMusicToAppend +=
+                `</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="col-md-1 align-items--vertically">
+						<button type="button" class="form-group__button js-form-group__button addMusicToMediumButton btn btn-primary" data-role="add">
+							<i class="fas fa-plus"></i>
+						</button>
+					</div>
+				</div>
+			</div>`;
+            return mediumHasMusicToAppend;
+        },
+
+        appendMediumHasMusicNewDetailFields: function() {
+            // console.log("TCL: appendMediumHasMusicNewDetailFields");
+            let newMediumHasMusicDetail =
+                `<div class="form-row">
+				<div class="col-md-5">
+					<label class="sr-only">Starts at</label>
+					<input type="text"
+								class="form-control disableOnSubmit form-control-sm mediumDatasetsMusicMediumHasMusicListStartTime"
+								name="startTime"
+								data-role="startTime"
+								placeholder="00:00:00.000"
+								value="00:00:00.000"
+								aria-describedby="Music starts at">
+				</div>
+				<div class="col-md-5">
+					<label class="sr-only">Ends at</label>
+					<input type="text"
+								class="form-control disableOnSubmit form-control-sm mediumDatasetsMusicMediumHasMusicListEndTime"
+								name="endTime"
+								data-role="endTime"
+								placeholder="00:00:00.000"
+								value="00:00:00.000"
+								aria-describedby="Music ends at">
+				</div>
+				<div class="col-md-2 align-items--vertically">
+					<button type="button" class="form-group__button js-form-group__button mediumDatasetAddMediumHasMusicDetailButton btn btn-primary" data-role="addMediumHasMusicDetail">
+						<i class="fas fa-plus"></i>
+					</button>
+				</div>
+			</div>`;
+            return newMediumHasMusicDetail;
+        },
+
+        /** adds fields for details of mediumHasMusic data */
+        appendMediumHasMusicDetailFields: function(j, musicId, mediumHasMusicData) {
+            let mediumHasMusicDetailList =
+                `<div class="form-group" data-role="mediumHasMusicDetailEntry" data-detail-id="`+j+`" data-type="${mediumHasMusicData.type}">
+					<div class="form-row">
+						<div class="col-md-5">
+							<label class="sr-only">Starts at</label>
+							<input type="text"
+										 class="form-control form-control-sm mediumDatasetsMusicMediumHasMusicListStartTime"
+										 name="startTime[`+musicId+`][`+j+`]"
+										 data-role="startTime[`+musicId+`][`+j+`]"`;
+            if (mediumHasMusicData != null) { mediumHasMusicDetailList += `value="`+mediumHasMusicData.startTime+`"`; }
+            mediumHasMusicDetailList +=
+                `placeholder="00:00:00.000"
+										aria-describedby="Music starts at">
+						</div>
+						<div class="col-md-5">
+							<label class="sr-only">Ends at</label>
+							<input type="text"
+										 class="form-control form-control-sm mediumDatasetsMusicMediumHasMusicListEndTime"
+										 name="endTime[`+musicId+`][`+j+`]"
+										 data-role="endTime[`+musicId+`][`+j+`]"`;
+            if (mediumHasMusicData != null) { mediumHasMusicDetailList += `value="`+mediumHasMusicData.endTime+`"`; }
+            mediumHasMusicDetailList +=
+                `placeholder="00:00:00.000"
+										aria-describedby="Music ends at">
+						</div>
+						<div class="col-md-2 align-items--vertically">`
+
+            if(mediumHasMusicData.type === "annotation") {
+                mediumHasMusicDetailList += `<i class="fas fa-draw-polygon fa-fw mediumDatasetMusicMediumHasMusicListAnnotationIndicator" data-id="${mediumHasMusicData.annotationId}" title="Open linked annotation"></i>`
+            } else {
+                mediumHasMusicDetailList += `<button type="button" class="btn btn-danger" data-role="mediumDatasetRemoveMediumHasMusicDetail">
+								<i class="fas fa-trash-alt"></i>
+							</button>`
+            }
+
+            mediumHasMusicDetailList += `</div>
+					</div>
+				</div>`;
+            return mediumHasMusicDetailList;
         },
 
 		mediumFormActorRoles: async function(action, medium) {

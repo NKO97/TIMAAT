@@ -2,17 +2,46 @@ package de.bitgilde.TIMAAT.storage.entity;
 
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
-import de.bitgilde.TIMAAT.model.FIPOP.*;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
+import de.bitgilde.TIMAAT.model.FIPOP.DynamicMarking;
+import de.bitgilde.TIMAAT.model.FIPOP.Language;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
+import de.bitgilde.TIMAAT.model.FIPOP.Music;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicalKey;
+import de.bitgilde.TIMAAT.model.FIPOP.Tag;
+import de.bitgilde.TIMAAT.model.FIPOP.TempoMarking;
+import de.bitgilde.TIMAAT.model.FIPOP.Title;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPattern;
 import de.bitgilde.TIMAAT.model.TimeRange;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +75,23 @@ public class MusicStorage extends DbAccessComponent {
     this.tagStorage = tagStorage;
   }
 
+  public Stream<Music> getMusicEntries(@Nullable String searchText) {
+    logger.log(Level.FINER, "Loading all currently defined music entries");
+    return executeDbTransaction(entityManager -> {
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+      CriteriaQuery<Music> musicQuery = criteriaBuilder.createQuery(Music.class);
+      Root<Music> musicRoot = musicQuery.from(Music.class);
+      musicQuery.select(musicRoot);
+
+      List<Predicate> predicates = new ArrayList<>();
+      if (searchText != null && !searchText.isEmpty()) {
+        predicates.add(criteriaBuilder.like(musicRoot.get("displayTitle").get("name"), "%" + searchText + "%"));
+      }
+
+      musicQuery.where(predicates.toArray(new Predicate[0]));
+      return entityManager.createQuery(musicQuery).getResultStream();
+    });
+  }
 
   public Music createMusic(CreateMusic createMusic, int executedByUserId) throws DbTransactionExecutionException {
     logger.log(Level.INFO, "Creating new music entry");
@@ -58,15 +104,22 @@ public class MusicStorage extends DbAccessComponent {
       entityManager.persist(originalTitle);
 
       MusicType musicType = entityManager.find(MusicType.class, createMusic.musicTypeId);
-      TempoMarking tempoMarking = createMusic.getTempoMarkingId() != null ? entityManager.getReference(TempoMarking.class, createMusic.tempoMarkingId) : null;
-      MusicalKey musicKey = createMusic.getMusicalKeyId() != null ? entityManager.getReference(MusicalKey.class, createMusic.getMusicalKeyId()) : null;
-      DynamicMarking dynamicMarking = createMusic.getDynamicMarkingId() != null ? entityManager.getReference(DynamicMarking.class, createMusic.getDynamicMarkingId()) : null;
-      MusicTextSettingElementType musicTextSettingElementType = createMusic.getMusicTextSettingElementTypeId() != null ? entityManager.getReference(MusicTextSettingElementType.class, createMusic.getMusicTextSettingElementTypeId()) : null;
+      TempoMarking tempoMarking = createMusic.getTempoMarkingId() != null ? entityManager.getReference(
+              TempoMarking.class, createMusic.tempoMarkingId) : null;
+      MusicalKey musicKey = createMusic.getMusicalKeyId() != null ? entityManager.getReference(MusicalKey.class,
+              createMusic.getMusicalKeyId()) : null;
+      DynamicMarking dynamicMarking = createMusic.getDynamicMarkingId() != null ? entityManager.getReference(
+              DynamicMarking.class, createMusic.getDynamicMarkingId()) : null;
+      MusicTextSettingElementType musicTextSettingElementType = createMusic.getMusicTextSettingElementTypeId() != null ? entityManager.getReference(
+              MusicTextSettingElementType.class, createMusic.getMusicTextSettingElementTypeId()) : null;
       List<VoiceLeadingPattern> voiceLeadingPatterns = createMusic.getVoiceLeadingPatternIds().stream()
-                                                                  .map(currentVoiceLeadingPatternId -> entityManager.getReference(VoiceLeadingPattern.class, currentVoiceLeadingPatternId))
+                                                                  .map(currentVoiceLeadingPatternId -> entityManager.getReference(
+                                                                          VoiceLeadingPattern.class,
+                                                                          currentVoiceLeadingPatternId))
                                                                   .collect(Collectors.toList());
       UserAccount userAccount = entityManager.find(UserAccount.class, executedByUserId);
-      Medium medium = createMusic.getMediumId() != null ? entityManager.getReference(Medium.class, createMusic.getMediumId()) : null;
+      Medium medium = createMusic.getMediumId() != null ? entityManager.getReference(Medium.class,
+              createMusic.getMediumId()) : null;
 
       Music music = new Music();
       music.setOriginalTitle(originalTitle);
@@ -107,31 +160,37 @@ public class MusicStorage extends DbAccessComponent {
 
       Integer currentTempoMarkingId = music.getTempoMarking() != null ? music.getTempoMarking().getId() : null;
       if (!Objects.equals(currentTempoMarkingId, updateMusic.getTempoMarkingId())) {
-        TempoMarking updatedTempoMarking = updateMusic.getTempoMarkingId() != null ? entityManager.getReference(TempoMarking.class, updateMusic.getTempoMarkingId()) : null;
+        TempoMarking updatedTempoMarking = updateMusic.getTempoMarkingId() != null ? entityManager.getReference(
+                TempoMarking.class, updateMusic.getTempoMarkingId()) : null;
         music.setTempoMarking(updatedTempoMarking);
       }
 
       Integer currentMusicalKeyId = music.getMusicalKey() != null ? music.getMusicalKey().getId() : null;
       if (!Objects.equals(currentMusicalKeyId, updateMusic.getMusicalKeyId())) {
-        MusicalKey updatedMusicalKey = updateMusic.getMusicalKeyId() != null ? entityManager.getReference(MusicalKey.class, updateMusic.getMusicalKeyId()) : null;
+        MusicalKey updatedMusicalKey = updateMusic.getMusicalKeyId() != null ? entityManager.getReference(
+                MusicalKey.class, updateMusic.getMusicalKeyId()) : null;
         music.setMusicalKey(updatedMusicalKey);
       }
 
       Integer currentDynamicMarkingId = music.getDynamicMarking() != null ? music.getDynamicMarking().getId() : null;
       if (!Objects.equals(currentDynamicMarkingId, updateMusic.getDynamicMarkingId())) {
-        DynamicMarking updatedDynamicMarking = updateMusic.getDynamicMarkingId() != null ? entityManager.getReference(DynamicMarking.class, updateMusic.getDynamicMarkingId()) : null;
+        DynamicMarking updatedDynamicMarking = updateMusic.getDynamicMarkingId() != null ? entityManager.getReference(
+                DynamicMarking.class, updateMusic.getDynamicMarkingId()) : null;
         music.setDynamicMarking(updatedDynamicMarking);
       }
 
       Integer currentMusicTextSettingElementTypeId = music.getMusicTextSettingElementType() != null ? music.getMusicTextSettingElementType()
                                                                                                            .getId() : null;
       if (!Objects.equals(currentMusicTextSettingElementTypeId, updateMusic.getMusicTextSettingElementTypeId())) {
-        MusicTextSettingElementType musicTextSettingElementType = updateMusic.getMusicTextSettingElementTypeId() != null ? entityManager.getReference(MusicTextSettingElementType.class, updateMusic.getMusicTextSettingElementTypeId()) : null;
+        MusicTextSettingElementType musicTextSettingElementType = updateMusic.getMusicTextSettingElementTypeId() != null ? entityManager.getReference(
+                MusicTextSettingElementType.class, updateMusic.getMusicTextSettingElementTypeId()) : null;
         music.setMusicTextSettingElementType(musicTextSettingElementType);
       }
 
       List<VoiceLeadingPattern> updatedVoiceLeadingPatterns = updateMusic.getVoiceLeadingPatternIds().stream()
-                                                                         .map(currentVoiceLeadingPatternId -> entityManager.getReference(VoiceLeadingPattern.class, currentVoiceLeadingPatternId))
+                                                                         .map(currentVoiceLeadingPatternId -> entityManager.getReference(
+                                                                                 VoiceLeadingPattern.class,
+                                                                                 currentVoiceLeadingPatternId))
                                                                          .collect(Collectors.toList());
       music.setVoiceLeadingPatternList(updatedVoiceLeadingPatterns);
 
@@ -153,22 +212,24 @@ public class MusicStorage extends DbAccessComponent {
     return executeDbTransaction((entityManager) -> {
       Music music = entityManager.getReference(Music.class, musicId);
 
-      Map<Integer, MusicTranslation> existingMusicTranslationsByLanguageId = entityManager.createQuery("select musicTranslation from MusicTranslation musicTranslation where musicTranslation.id.musicId = :musicId", MusicTranslation.class)
-                                                                                          .setParameter("musicId", musicId)
-                                                                                          .getResultStream()
-                                                                                          .collect(Collectors.toMap(musicTranslation -> musicTranslation.getLanguage()
-                                                                                                                                                        .getId(), musicTranslation -> musicTranslation));
+      Map<Integer, MusicTranslation> existingMusicTranslationsByLanguageId = entityManager.createQuery(
+              "select musicTranslation from MusicTranslation musicTranslation where musicTranslation.id.musicId = :musicId",
+              MusicTranslation.class).setParameter("musicId", musicId).getResultStream().collect(
+              Collectors.toMap(musicTranslation -> musicTranslation.getLanguage().getId(),
+                      musicTranslation -> musicTranslation));
 
       List<MusicTranslation> musicTranslations = new ArrayList<>();
       for (Map.Entry<Integer, String> currentUpdatedTranscriptionByLanguageId : translationByMusicId.entrySet()) {
         if (existingMusicTranslationsByLanguageId.containsKey(currentUpdatedTranscriptionByLanguageId.getKey())) {
-          MusicTranslation existingMusicTranslation = existingMusicTranslationsByLanguageId.get(currentUpdatedTranscriptionByLanguageId.getKey());
+          MusicTranslation existingMusicTranslation = existingMusicTranslationsByLanguageId.get(
+                  currentUpdatedTranscriptionByLanguageId.getKey());
           existingMusicTranslation.setTranslation(currentUpdatedTranscriptionByLanguageId.getValue());
 
           musicTranslations.add(existingMusicTranslation);
         }
         else {
-          Language language = entityManager.getReference(Language.class, currentUpdatedTranscriptionByLanguageId.getKey());
+          Language language = entityManager.getReference(Language.class,
+                  currentUpdatedTranscriptionByLanguageId.getKey());
           MusicTranslation createdMusicTranslation = new MusicTranslation();
           createdMusicTranslation.setMusic(music);
           createdMusicTranslation.setTranslation(currentUpdatedTranscriptionByLanguageId.getValue());
@@ -183,7 +244,8 @@ public class MusicStorage extends DbAccessComponent {
       deletableLanguageIds.removeAll(translationByMusicId.keySet());
 
       if (!deletableLanguageIds.isEmpty()) {
-        entityManager.createQuery("delete from MusicTranslation where id.musicId = :musicId and id.languageId in :languageIds")
+        entityManager.createQuery(
+                             "delete from MusicTranslation where id.musicId = :musicId and id.languageId in :languageIds")
                      .setParameter("musicId", musicId).setParameter("languageIds", deletableLanguageIds)
                      .executeUpdate();
       }
@@ -231,9 +293,8 @@ public class MusicStorage extends DbAccessComponent {
     logger.log(Level.FINE, "Updating category sets of music with id " + musicId);
     return executeDbTransaction(entityManager -> {
       Music music = entityManager.find(Music.class, musicId);
-      List<CategorySet> updatedCategorySets = categorySetIds.stream()
-                                                            .map(currentCategorySetId -> entityManager.find(CategorySet.class, currentCategorySetId))
-                                                            .collect(Collectors.toList());
+      List<CategorySet> updatedCategorySets = categorySetIds.stream().map(currentCategorySetId -> entityManager.find(
+              CategorySet.class, currentCategorySetId)).collect(Collectors.toList());
       music.setCategorySets(updatedCategorySets);
 
       return updatedCategorySets;
@@ -245,8 +306,8 @@ public class MusicStorage extends DbAccessComponent {
     return executeDbTransaction(entityManager -> {
       Music music = entityManager.find(Music.class, musicId);
       List<Category> updatedCategories = categoryIds.stream()
-                                                    .map(currentCategoryId -> entityManager.find(Category.class, categoryIds))
-                                                    .collect(Collectors.toList());
+                                                    .map(currentCategoryId -> entityManager.find(Category.class,
+                                                            categoryIds)).collect(Collectors.toList());
       music.setCategories(updatedCategories);
 
       return updatedCategories;
@@ -261,6 +322,25 @@ public class MusicStorage extends DbAccessComponent {
 
       music.setTags(tags);
       return tags;
+    });
+  }
+
+  /**
+   * Returns the display title of a {@link Music} entry
+   * @param musicId for which the display title will be loadedf
+   * @return an {@link Optional} containing the display title when a music entry with the specified id has been founde
+   * @throws DbTransactionExecutionException when an error occurred during executing the query
+   */
+  public Optional<Title> getDisplayTitleOfMusic(int musicId) throws DbTransactionExecutionException {
+    logger.log(Level.FINE, "Getting display title for music with id " + musicId);
+    return executeDbTransaction(entityManager -> {
+      Music music = entityManager.find(Music.class, musicId);
+      if (music == null) {
+        return Optional.empty();
+      }
+      else {
+        return Optional.of(music.getDisplayTitle());
+      }
     });
   }
 
@@ -354,7 +434,8 @@ public class MusicStorage extends DbAccessComponent {
     private final int id;
 
     public UpdateMusic(int id, int titleLanguageId, String title, Short tempo, Integer tempoMarkingId, String beat, Integer musicalKeyId, Integer dynamicMarkingId, Integer musicTextSettingElementTypeId, List<Integer> voiceLeadingPatternIds, String instrumentation, String remark, Integer mediumId, Integer musicTypeId) {
-      super(titleLanguageId, title, tempo, tempoMarkingId, beat, musicalKeyId, dynamicMarkingId, musicTextSettingElementTypeId, voiceLeadingPatternIds, instrumentation, remark, mediumId, musicTypeId);
+      super(titleLanguageId, title, tempo, tempoMarkingId, beat, musicalKeyId, dynamicMarkingId,
+              musicTextSettingElementTypeId, voiceLeadingPatternIds, instrumentation, remark, mediumId, musicTypeId);
       this.id = id;
     }
 

@@ -2297,6 +2297,24 @@
                   </div>
                 </div>
               </div>
+                <div class="modal fade" id="mediumDatasetsMediumHasMusicDuplicateModal" tabindex="-1" role="dialog" aria-labelledby="mediumHasMusicDuplicateLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Music already exists</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                This medium is already connected to this music.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
               <div class="modal fade" id="mediumCollectionDatasetsAddItemModal" tabindex="-1" role="dialog" aria-labelledby="mediaCollectionItemAddLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
@@ -3476,7 +3494,53 @@
                           <button type="button" class="btn btn-secondary" id="mediumFormActorWithRolesDismissButton" name="dismiss">Cancel</button>
                         </form>
                         <form class="form datasetContent" role="form" id="mediumFormMusic" name="mediumFormMusic" method="POST" novalidate>
-                            <p>Test</p>
+                            <div class="form-header">
+                                <div class="form-row">
+                                    <div class="col-md-9">
+                                        <h5 class="form-title capitalize--first-letter" id="mediumMusicLabel">Medium music</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                                            <div class="btn-group mr-2" role="group" aria-label="Button group">
+                                                <button type="button" class="btn btn-outline btn-secondary btn-sm mediumDataSheetFormEditButton formButtons" title="Edit data sheet" name="edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-5">
+                                        <h6 class="form-header">Music</h6>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="form-header">Start time</h6>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="form-header">End time</h6>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h6 class="form-header"></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-role="mediumFormMusicDynamicFields" id="mediumFormMusicDynamicFields">
+                                <div class="form-group">
+                                </div>
+                                <!-- additional actor role form content will be created dynamically -->
+                            </div>
+                            <div class="mediumFormMusicFormDivider">
+                                <br>
+                            </div>
+                            <div data-role="mediumFormMusicNewMusicFields" id="mediumFormMusicNewMusicFields">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                            <div class="mediumFormMusicFormDivider">
+                                <br>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="mediumFormMusicSubmitButton" name="submit">Save</button>
+                            <button type="button" class="btn btn-secondary" id="mediumFormMusicDismissButton" name="dismiss">Cancel</button>
                         </form>
                       </div>
                     </div>
@@ -5410,7 +5474,6 @@
                               <hr>
                             </div>
                             <div data-role="musicNewMediumHasMusicFields" id="musicNewMediumHasMusicFields">
-                              <!-- one row for new actor role information that shall be added to the actor role list -->
                               <div class="form-group">
                               </div>
                             </div>

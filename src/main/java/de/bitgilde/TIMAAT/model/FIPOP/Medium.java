@@ -300,8 +300,8 @@ public class Medium implements Serializable {
 	@JsonManagedReference(value="Medium-MediumHasMusic")
 	private List<MediumHasMusic> mediumHasMusicList;
 
-    @OneToOne(mappedBy = "medium")
-    private MediumAudioAnalysis mediumAudioAnalysis;
+  @OneToOne(mappedBy = "medium")
+  private MediumAudioAnalysis mediumAudioAnalysis;
 
 	@Transient
 	private String fileStatus;
