@@ -77,6 +77,8 @@ public class MediumStorage extends DbAccessComponent {
       entityManager.flush();
       updatedMediumHasMusic.forEach(entityManager::refresh);
 
+      invalidateCacheForEntityType(Medium.class);
+      invalidateCacheForEntityType(Music.class);
       return updatedMediumHasMusic;
     });
   }

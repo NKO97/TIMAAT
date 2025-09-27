@@ -43,6 +43,10 @@ public abstract class DbAccessComponent {
         }
     }
 
+    protected void invalidateCacheForEntityType(Class<?> entityType) {
+        emf.getCache().evict(entityType);
+    }
+
     @FunctionalInterface
     public interface DbTransactionOperation<RESULT_TYPE> {
         /**
