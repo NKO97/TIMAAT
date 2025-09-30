@@ -1,7 +1,7 @@
 package de.bitgilde.TIMAAT.storage.entity;
 
 import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
-import de.bitgilde.TIMAAT.db.DbStorage;
+import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysis;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis;
@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * @author Nico Kotlenga
  * @since 27.07.25
  */
-public class AudioAnalysisResultStorage extends DbStorage {
+public class AudioAnalysisResultStorage extends DbAccessComponent {
 
     private static final Logger logger = Logger.getLogger(AudioAnalysisResultStorage.class.getName());
 

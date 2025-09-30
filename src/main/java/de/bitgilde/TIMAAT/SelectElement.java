@@ -17,12 +17,12 @@ package de.bitgilde.TIMAAT;
 /**
  * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
-public class SelectElement {
-  public int id;
+public class SelectElement<ID_TYPE> {
+  public ID_TYPE id;
 
   public String text;
 
-  public SelectElement(int id, String text) {
+  public SelectElement(ID_TYPE id, String text) {
     this.id = id;
     this.text = text;
   };

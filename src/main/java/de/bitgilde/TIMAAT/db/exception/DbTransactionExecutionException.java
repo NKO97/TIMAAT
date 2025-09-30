@@ -21,7 +21,7 @@ package de.bitgilde.TIMAAT.db.exception;
  * @author Nico Kotlenga
  * @since 20.07.25
  */
-public class DbTransactionExecutionException extends Exception {
+public class DbTransactionExecutionException extends RuntimeException {
     public DbTransactionExecutionException(Throwable cause) {
         super("Error during executing db transaction", cause);
     }

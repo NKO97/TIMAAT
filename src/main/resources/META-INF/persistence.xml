@@ -51,6 +51,8 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisTakeTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisVoice</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Annotation</class>
+        <class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic</class>
+        <class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.Articulation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.ArticulationTranslation</class>
@@ -304,6 +306,7 @@
 			<property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/FIPOP?useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTCs"/>
 			<property name="jakarta.persistence.jdbc.user" value="root"/>
 			<property name="jakarta.persistence.jdbc.password" value="geheim123"/>
-		</properties>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+        </properties>
 	</persistence-unit>
 </persistence>

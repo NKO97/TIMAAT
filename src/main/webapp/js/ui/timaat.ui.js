@@ -608,6 +608,10 @@
 						case 'actorWithRoles':
 							this.setDataSetContentActiveNavTab('mediumActorWithRolesTab');
 							TIMAAT.MediumDatasets.mediumFormActorRoles(mode, data);
+                        break;
+                        case 'music':
+                            this.setDataSetContentActiveNavTab('mediumMusicTab');
+                            TIMAAT.MediumDatasets.mediumFormMusic(mode, data)
 						break;
 					}
         break;

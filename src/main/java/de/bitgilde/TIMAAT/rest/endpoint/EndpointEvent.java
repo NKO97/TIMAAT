@@ -231,7 +231,7 @@ public class EndpointEvent {
 		List<SelectElement> eventSelectList = new ArrayList<>();
 		List<EventTranslation> eventTranslationList = castList(EventTranslation.class, query.getResultList());
 		for (EventTranslation eventTranslation : eventTranslationList) {
-			eventSelectList.add(new SelectElement(eventTranslation.getEvent().getId(),
+			eventSelectList.add(new SelectElement<Integer>(eventTranslation.getEvent().getId(),
 																					  eventTranslation.getName()));
 		}
 		return Response.ok().entity(eventSelectList).build();
@@ -253,7 +253,7 @@ public class EndpointEvent {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Event event = entityManager.find(Event.class, id);
 		List<SelectElement> eventSelectList = new ArrayList<>();
-		eventSelectList.add(new SelectElement(id, event.getEventTranslations().get(0).getName()));
+		eventSelectList.add(new SelectElement<Integer>(id, event.getEventTranslations().get(0).getName()));
 
 		return Response.ok().entity(eventSelectList).build();
 

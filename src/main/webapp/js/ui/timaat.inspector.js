@@ -36,7 +36,270 @@
     }
 
 }(function (TIMAAT) {
+    TIMAAT.LinkedMusic = class LinkedMusic {
+        constructor(parentContainerSelector, annotationMusicRelation, inspector){
+            this._inspector = inspector;
+            this._parentContainerSelector = parentContainerSelector;
+            this._annotationMusicRelation = annotationMusicRelation;
+            this._linkedMusicContainerSelector = "#inspectorMusicPaneLinkedMusicPane-" + annotationMusicRelation.music.id
+            this._selectedMusicTranslation = null;
+            this._transcriptionSelectionEnabled = false;
+            this._musicTranslationAreasByLanguageId = new Map()
 
+            for(const currentMusicTranslationArea of annotationMusicRelation.annotationHasMusicTranslationAreas){
+                this._musicTranslationAreasByLanguageId.set(currentMusicTranslationArea.id.languageId, currentMusicTranslationArea)
+            }
+
+            this.draw()
+        }
+
+        draw(){
+            $(this._parentContainerSelector).append(`<div class="inspectorMusicPaneLinkedMusicPane" id=${"inspectorMusicPaneLinkedMusicPane-" + this._annotationMusicRelation.music.id}>
+                              <button class="btn-block text-left btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#linkedMusicWrapper${this._annotationMusicRelation.music.id}">
+                                  <i class="collapse-icon fas fa-fw"></i> ${this._annotationMusicRelation.music.originalTitle.name}
+                              </button>
+                              <div class="p-2 collapse" id="linkedMusicWrapper${this._annotationMusicRelation.music.id}">
+                                 <div class="w-100 d-flex flex-column">
+                                     <div class="w-100 musicTranslationAudibleRangePaneContainer">
+                                      <div class="d-flex mb-2 musicTranslationAudibleRangePaneFlexContainer">
+                                        <div class="musicTranslationAudibleRangePaneSection">
+                                            <ul class="list-group list-group-flush mr-2 linked-music-music-translation-language-list">
+                                            </ul>
+                                        </div>
+                                         <div class="flex-grow-1 musicTranslationAudibleRangePane">
+                                             <div class="d-flex flex-column w-100 h-100">
+                                                 <div class="d-flex w-100 align-items-center">
+                                                     <span class="flex-grow-1"><strong>Audible Range</strong></span>
+                                                     <button class="btn btn-sm btn-outline-secondary transcriptionSelectionEditButton" type="button">
+                                                         <i class="fa-pencil-alt fas"></i>
+                                                     </button>
+                                                 </div>
+                                                 <span class="transcriptionSelectionExplainText font-weight-lighter">Please select audible range</span>
+                                                 <div class="mb-1 transcriptionSelectionArea flex-grow-1 mt-1"></div>
+                                                 <div class="transcriptionSelectionPersistenceButtonsArea text-center">
+                                                     <button class="btn btn-sm btn-outline-primary transcriptionSelectionPersistenceSaveButton">Save</button>
+                                                     <button class="btn btn-sm btn-outline-secondary transcriptionSelectionPersistenceCancelButton">Cancel</button>
+                                                 </div>
+                                                </div>
+                                             </div>
+                                           </div>
+                                     </div>
+                                     <div class="alert alert-secondary inspectorMusicPaneLinkedMusicNotTranscriptionAvailable mb-1">No transcription for music available</div>
+                                     <button class="btn btn-danger btn-sm removeMusicRelationBtn">Remove linkage</button>
+                                 </div>
+                              </div>
+                          </div>`)
+            $(`${this._linkedMusicContainerSelector} .transcriptionSelectionEditButton`).on('click', () => {
+                this.transcriptionSelectionEnabled = true;
+            });
+
+            $(`${this._linkedMusicContainerSelector} .transcriptionSelectionPersistenceCancelButton`).on('click', () => {
+                this.transcriptionSelectionEnabled = false;
+            });
+
+            const linkedMusicObject = this
+            $(`${this._linkedMusicContainerSelector} .removeMusicRelationBtn`).on('click', async () => {
+                linkedMusicObject._inspector.removeAnnotationMusic(linkedMusicObject._annotationMusicRelation)
+            })
+
+            if(this._annotationMusicRelation.music.musicTranslationList.length){
+                $(`${this._linkedMusicContainerSelector} .inspectorMusicPaneLinkedMusicNotTranscriptionAvailable`).hide()
+                this.updateMusicTranslationsLanguageList()
+                this.updateMusicTranslationAudibleRangePane()
+            }else {
+                $(`${this._linkedMusicContainerSelector} .musicTranslationAudibleRangePaneContainer`).hide()
+            }
+        }
+
+        updateMusicTranslationsLanguageList(){
+            const linkedMusicTranslationLanguageListComponent = $(`${this._linkedMusicContainerSelector} .linked-music-music-translation-language-list`)
+            const musicTranslationsOrderedByName = this._annotationMusicRelation.music.musicTranslationList.sort((a,b) => a.language.name.localeCompare(b.language.name))
+            const linkedMusicObject = this
+
+            linkedMusicTranslationLanguageListComponent.empty()
+            for(const currentMusicTranslation of musicTranslationsOrderedByName){
+                const bgClass = this._selectedMusicTranslation === currentMusicTranslation ? "list-group-item-dark" : "bg-transparent"
+                const listElement = $(`<li class="list-group-item list-group-item-action ${bgClass}">${currentMusicTranslation.language.name}</li>`)
+                listElement.on('click', () => {
+                    linkedMusicObject.selectedMusicTranslation = currentMusicTranslation
+                })
+                linkedMusicTranslationLanguageListComponent.append(listElement)
+            }
+        }
+
+        set selectedMusicTranslation(selectedMusicTranslation){
+            this._selectedMusicTranslation = selectedMusicTranslation
+            this.transcriptionSelectionEnabled = false
+            this.updateMusicTranslationsLanguageList()
+            this.updateMusicTranslationAudibleRangePane()
+        }
+
+        set transcriptionSelectionEnabled(transcriptionSelectionEnabled){
+            this._transcriptionSelectionEnabled = transcriptionSelectionEnabled
+            this.updateMusicTranslationsLanguageList()
+            this.updateMusicTranslationAudibleRangePane()
+        }
+
+        updateMusicTranslationAudibleRangePane(){
+            const musicTranslationAudibleRangePane = $(`${this._linkedMusicContainerSelector} .musicTranslationAudibleRangePane`)
+            if(this._selectedMusicTranslation === null){
+                musicTranslationAudibleRangePane.hide()
+            }else {
+                musicTranslationAudibleRangePane.show()
+            }
+
+            const linkedMusicObject = this
+            const editButton = $(`${this._linkedMusicContainerSelector} .transcriptionSelectionEditButton`)
+            const transcriptionSelectionExplainText = $(`${this._linkedMusicContainerSelector} .transcriptionSelectionExplainText`)
+            const transcriptionSelectionPersistenceButtonsArea = $(`${this._linkedMusicContainerSelector} .transcriptionSelectionPersistenceButtonsArea`)
+            const musicTranslationArea = this._selectedMusicTranslation ? this._musicTranslationAreasByLanguageId.get(this._selectedMusicTranslation.language.id) : undefined
+            const transcriptionSelectionArea = $(`${this._linkedMusicContainerSelector} .transcriptionSelectionArea`)
+            transcriptionSelectionArea.empty()
+            transcriptionSelectionArea.off()
+
+
+            if(this._transcriptionSelectionEnabled){
+                editButton.hide()
+                transcriptionSelectionPersistenceButtonsArea.show()
+                transcriptionSelectionExplainText.show()
+
+                if(this._selectedMusicTranslation) {
+                    const text = this._selectedMusicTranslation.translation;
+                    const area = transcriptionSelectionArea;
+
+                    function htmlWithLineBreaks(str) {
+                        return str.replace(/\n/g, "<br>");
+                    }
+
+                    function renderHighlight(from, to) {
+                        const a = Math.min(from, to);
+                        const b = Math.max(from, to);
+                        area.html(
+                            htmlWithLineBreaks(text.substring(0, a)) +
+                            `<span class="text-highlighted">${htmlWithLineBreaks(text.substring(a, b))}</span>` +
+                            htmlWithLineBreaks(text.substring(b))
+                        );
+                    }
+
+                    let isSelecting = false;
+                    let startIndex = musicTranslationArea?.startIndex;
+                    let endIndex = musicTranslationArea?.endIndex;
+                    // initial highlight
+                    if (musicTranslationArea) {
+                        renderHighlight(musicTranslationArea.startIndex, musicTranslationArea.endIndex);
+                    } else {
+                        area.text(text);
+                    }
+
+                    // helper: global char index relative to text string
+                    const getIndex = (e) => {
+                        let range;
+
+                        if (document.caretRangeFromPoint) {
+                            // Chrome, Safari, Edge
+                            range = document.caretRangeFromPoint(e.clientX, e.clientY);
+                        } else if (document.caretPositionFromPoint) {
+                            // Firefox
+                            const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+                            if (pos) {
+                                range = document.createRange();
+                                range.setStart(pos.offsetNode, pos.offset);
+                                range.collapse(true);
+                            }
+                        }
+                        if (!range) return null;
+
+                        let idx = range.startOffset;
+                        let node = range.startContainer;
+
+                        // walk all previous text nodes to compute global index
+                        while (node && node !== area[0]) {
+                            let prev = node.previousSibling;
+                            while (prev) {
+                                if (prev.nodeType === Node.TEXT_NODE) idx += prev.nodeValue.length;
+                                else if (prev.textContent) idx += prev.textContent.length;
+                                prev = prev.previousSibling;
+                            }
+                            node = node.parentNode;
+                        }
+                        return idx;
+                    }
+
+                    const onMouseMove = (e) => {
+                        if (!isSelecting || startIndex === null) return;
+                        endIndex = getIndex(e);
+                        if (endIndex === null) return;
+                        renderHighlight(startIndex, endIndex);
+                    }
+
+                    const onMouseUp = (e) => {
+                        isSelecting = false;
+
+                        area.one("mousedown", onMouseDown);
+                        area.off("mousemove");
+                    }
+
+                    const onMouseDown = (e) => {
+                        isSelecting = true;
+                        startIndex = getIndex(e);
+                        e.preventDefault(); // prevent native selection
+
+                        $(document).one("mouseup", onMouseUp);
+                        area.on("mousemove", onMouseMove);
+                    }
+                    area.one("mousedown", onMouseDown);
+
+                    const saveButton = $(`${this._linkedMusicContainerSelector} .transcriptionSelectionPersistenceSaveButton`)
+                    saveButton.off("click")
+                    saveButton.on("click", async () => {
+                        if(startIndex === null || endIndex === null || (startIndex === 0 && endIndex === 0)){
+                            //Remove transcription area
+                            await TIMAAT.AnnotationService.removeAnnotationMusicTranslationAreaForLanguage(linkedMusicObject._annotationMusicRelation.id.annotationId, linkedMusicObject._annotationMusicRelation.music.id, linkedMusicObject._selectedMusicTranslation.language.id)
+                            const existingMusicTranslationArea = linkedMusicObject._musicTranslationAreasByLanguageId.get(linkedMusicObject._selectedMusicTranslation.language.id)
+                            if(existingMusicTranslationArea) {
+                                linkedMusicObject._musicTranslationAreasByLanguageId.delete(linkedMusicObject._selectedMusicTranslation.language.id)
+                                const indexOfAnnotationHasMusicTranslationArea = linkedMusicObject._annotationMusicRelation.annotationHasMusicTranslationAreas.indexOf(existingMusicTranslationArea)
+                                if (indexOfAnnotationHasMusicTranslationArea > -1) {
+                                    linkedMusicObject._annotationMusicRelation.annotationHasMusicTranslationAreas.splice(indexOfAnnotationHasMusicTranslationArea, 1)
+                                }
+                            }
+                        }else {
+                            const finalStartIndex = Math.min(startIndex, endIndex);
+                            const finalEndIndex = Math.max(startIndex, endIndex);
+                            const updatedAnnotationMusicTranslationArea = await TIMAAT.AnnotationService.updateAnnotationMusicTranslationAreaForLanguage(linkedMusicObject._annotationMusicRelation.id.annotationId, linkedMusicObject._annotationMusicRelation.music.id, linkedMusicObject._selectedMusicTranslation.language.id, finalStartIndex, finalEndIndex)
+                            if(musicTranslationArea){
+                                //Update transcription area
+                                musicTranslationArea.startIndex = updatedAnnotationMusicTranslationArea.startIndex;
+                                musicTranslationArea.endIndex = updatedAnnotationMusicTranslationArea.endIndex;
+                            }else {
+                                linkedMusicObject._musicTranslationAreasByLanguageId.set(updatedAnnotationMusicTranslationArea.id.languageId, updatedAnnotationMusicTranslationArea)
+                                linkedMusicObject._annotationMusicRelation.annotationHasMusicTranslationAreas.push(updatedAnnotationMusicTranslationArea)
+                            }
+                        }
+
+                        linkedMusicObject.transcriptionSelectionEnabled = false
+                    });
+                }
+            }else {
+                editButton.show()
+                transcriptionSelectionPersistenceButtonsArea.hide()
+                transcriptionSelectionExplainText.hide()
+
+                if(musicTranslationArea){
+                    const selectedTextArea = this._selectedMusicTranslation.translation.substring(musicTranslationArea.startIndex, musicTranslationArea.endIndex)
+                    transcriptionSelectionArea.append(selectedTextArea)
+                }else{
+                    //No music translation area is currently defined for this language
+                    transcriptionSelectionArea.append("No audible range defined.")
+                }
+            }
+
+        }
+
+        remove(){
+            $(this._linkedMusicContainerSelector).remove();
+        }
+    }
 	TIMAAT.Inspector = class Inspector {
 		constructor(viewer) {
 			// console.log('TCL: Inspector -> constructor');
@@ -88,6 +351,60 @@
 					"last"    : ">>"
 				}
 			};
+
+            this.ui.dataTableMusic = $("#availableMusicTable").DataTable({
+                lengthChange    : false,
+                dom				: 'rft<"row"<"col-sm-12 "p>>',
+                pageLength		: 3,
+                deferLoading	: 0,
+                pagingType		: 'full',
+                order		    : [[ 0, 'asc' ]],
+                processing		: true,
+                serverSide		: true,
+                ajax					: {
+                    "url"        : "api/music/list",
+                    "contentType": "application/json; charset=utf-8",
+                    "dataType"   : "json",
+                    "data"       : function(data) {
+                        let serverData = {
+                            draw   : data.draw,
+                            start  : data.start,
+                            length : data.length,
+                            orderby: data.columns[data.order[0].column].name,
+                            dir    : data.order[0].dir,
+                        }
+                        if ( data.search && data.search.value && data.search.value.length > 0 ){
+                            serverData.search = data.search.value;
+                        }
+
+                        if ( inspector.state.item && inspector.state.type === 'annotation' ){
+                            serverData.exclude_annotation = inspector.state.item.model.id;
+                        }
+
+                        return serverData;
+                    },
+                    "beforeSend": function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                    "dataSrc": function(data) { return data.data; }
+                },
+                "columns": [{
+                    data: 'id', name: 'name', className: 'name table--padding', render: function(data, type, music, meta) {
+                        let nameDisplay = `<p>`  + music.displayTitle.name +`
+								<span class="addAnnotationMusic badge btn btn-sm btn-success p-1 float-right"><i class="fas fa-plus fa-fw"></i></span>
+							</p>`;
+
+                        return nameDisplay
+                    }
+                }],
+                "createdRow": function(row, music, dataIndex) {
+                    // console.log("TCL: Inspector -> constructor -> data", data);
+                    let $row = $(row);
+                    $row.on('click', function(ev) {
+                        inspector.addAnnotationMusic(music)
+                    })
+                }
+            })
 
 			this.ui.dataTableActors = $('#annotationAvailableActorsTable').DataTable({
 				lengthChange	: false,
@@ -452,33 +769,18 @@
 						TIMAAT.AnalysisDatasets.dataTableAnalysisMethods.ajax.reload();
 					} else {
 						let model = {
-							id: 0,
 							startTime: startTime,
 							endTime: endTime,
 							layerVisual: layerVisual,
 							layerAudio: layerAudio,
-							// actors: [],
-							// annotations1: [],
-							// annotations2: [],
-							// categories: [],
-							// events: [],
-							// locations: [],
-							// mediums: [],
-							annotationTranslations: [{
-								id: 0,
-								comment: comment,
-								title: title,
-							}],
-							selectorSvgs: [{
-								id: 0,
-								colorHex: color,
-								opacity: opacity * 100, //* 0..1 is stored as 0..100 (Byte)
-								svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
-								strokeWidth: 1,
-								svgShapeType: {
-									id: 5
-								}
-							}]
+                            comment: comment,
+                            title: title,
+                            selectorSvg: {
+                                opacity: opacity * 100,
+                                colorHex: color,
+                                svgData: "{\"keyframes\":[{\"time\":0,\"shapes\":[]}]}",
+                                strokeWidth: 1
+                            }
 						};
 						TIMAAT.AnnotationService.createAnnotation(model, TIMAAT.VideoPlayer.curAnalysisList.id, TIMAAT.VideoPlayer._annotationAdded);
 					}
@@ -1607,7 +1909,20 @@
 			this.ui.dataTableActors.ajax.reload();
 			this.ui.dataTableEvents.clear();
 			this.ui.dataTableEvents.ajax.reload();
+            this.ui.dataTableMusic.clear()
+            this.ui.dataTableMusic.ajax.reload();
+            this.reloadLinkedMusicArea()
 		}
+
+        reloadLinkedMusicArea() {
+            $("#musicAnnotationWrapper").empty()
+            if(this.state.type === "annotation" && this.state.item){
+                this.state.item.model.annotationHasMusic.sort((a,b) => a.music.originalTitle.name.localeCompare(b.music.originalTitle.name));
+                for(const currentAnnotationHasMusic of this.state.item.model.annotationHasMusic){
+                    new TIMAAT.LinkedMusic("#musicAnnotationWrapper", currentAnnotationHasMusic, this)
+                }
+            }
+        }
 
 		switchPosition() {
 			if ( this.getPosition() == 'left' ) {
@@ -1620,6 +1935,29 @@
 				$('.leaflet-sidebar-close i').attr('class', 'fa fa-caret-left');
 			}
 		}
+
+        async removeAnnotationMusic(annotationMusicRelation){
+            const currentItem = this.state.item
+            if(this.state.type === "annotation" && currentItem.model.id === annotationMusicRelation.id.annotationId){
+                await TIMAAT.AnnotationService.removeAnnotationMusic(annotationMusicRelation.id.annotationId, annotationMusicRelation.music.id)
+                const indexOfRemovedAnnotationHasMusic = currentItem.model.annotationHasMusic.indexOf(annotationMusicRelation);
+                if(indexOfRemovedAnnotationHasMusic > -1){
+                    currentItem.model.annotationHasMusic.splice(indexOfRemovedAnnotationHasMusic, 1);
+                }
+                this.ui.dataTableMusic.ajax.reload();
+                this.reloadLinkedMusicArea()
+            }
+        }
+
+        async addAnnotationMusic(music){
+            const currentItem = this.state.item
+            if(this.state.type === "annotation" && currentItem){
+                const annotationHasMusic = await TIMAAT.AnnotationService.addAnnotationMusic(currentItem.model.id, music.id)
+                currentItem.model.annotationHasMusic.push(annotationHasMusic)
+                this.reloadLinkedMusicArea()
+                this.ui.dataTableMusic.ajax.reload()
+            }
+        }
 
         /**
          * Changes the represented element inside the inspector. This function is used to create or edit a specific element.
@@ -1672,6 +2010,7 @@
 			this.disablePanel('inspectorCategoriesAndTags');
 			this.disablePanel('inspectorActors');
 			this.disablePanel('inspectorEvents');
+            this.disablePanel('inspectorMusic')
 			// this.disablePanel('inspectorLocations');
 			this.disablePanel('inspectorAnalysisGuidelines');
 			this.ui.keyframeList.children().detach();
@@ -1705,6 +2044,7 @@
 					if ( item != null ) {
 						this.enablePanel('inspectorActors');
 						this.enablePanel('inspectorEvents');
+                        this.enablePanel('inspectorMusic');
 						// this.enablePanel('inspectorLocations');
 						this.enablePanel('inspectorAnalysisGuidelines');
 						this.enablePanel('inspectorCategoriesAndTags');
@@ -1789,20 +2129,28 @@
 						this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
 						this.ui.dataTableAnnoActors.ajax.reload();
 						this.ui.dataTableActors.ajax.reload();
-						if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
-							$('#inspectorAddActors').hide();
-							$('#inspectorAddEvents').hide();
-							$('#inspectorAddAnalysisGuidelines').hide();
-						} else {
-							$('#inspectorAddActors').show();
-							$('#inspectorAddEvents').show();
-							$('#inspectorAddAnalysisGuidelines').show();
-						}
 
 						// events panel
 						this.ui.dataTableAnnoEvents.ajax.url('api/annotation/'+item.model.id+'/events');
 						this.ui.dataTableAnnoEvents.ajax.reload();
 						this.ui.dataTableEvents.ajax.reload();
+
+                        // music panel
+                        this.ui.dataTableMusic.ajax.reload();
+                        this.reloadLinkedMusicArea()
+
+                        if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+                            $('#inspectorAddActors').hide();
+                            $('#inspectorAddEvents').hide();
+                            $('#inspectorAddMusic').hide();
+                            $('#inspectorAddAnalysisGuidelines').hide();
+                        } else {
+                            $('#inspectorAddActors').show();
+                            $('#inspectorAddEvents').show();
+                            $('#inspectorAddMusic').show();
+                            $('#inspectorAddAnalysisGuidelines').show();
+                        }
+
 
 						// analysis panel
 						TIMAAT.AnalysisDatasets.dataTableAnnoAnalysis.ajax.url('api/annotation/'+item.model.id+'/analysis');
@@ -1922,7 +2270,7 @@
 								// create the options and append to Select2
 								var i = 0;
 								for (; i < data.length; i++) {
-									var option = new Option(data[i].name, data[i].id, true, true);
+									var option = new Option(data[i].name, data[i].name, true, true);
 									tagSelect.append(option).trigger('change');
 								}
 								// manually trigger the 'select2:select' event

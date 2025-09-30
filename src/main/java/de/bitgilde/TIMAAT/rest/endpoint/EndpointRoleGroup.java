@@ -179,7 +179,7 @@ public class EndpointRoleGroup {
 		List<SelectElement> roleGroupSelectList = new ArrayList<>();
 		List<RoleGroupTranslation> roleGroupTranslationList = castList(RoleGroupTranslation.class, query.getResultList());
 		for (RoleGroupTranslation roleGroupTranslation : roleGroupTranslationList) {
-			roleGroupSelectList.add(new SelectElement(roleGroupTranslation.getRoleGroup().getId(),
+			roleGroupSelectList.add(new SelectElement<Integer>(roleGroupTranslation.getRoleGroup().getId(),
 																								roleGroupTranslation.getName()));
 		}
 		return Response.ok().entity(roleGroupSelectList).build();

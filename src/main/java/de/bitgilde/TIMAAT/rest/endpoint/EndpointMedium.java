@@ -25,6 +25,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumAudioAnalysis;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumDocument;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasActorWithRole;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasLanguage;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumImage;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumLanguageType;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware;
@@ -36,14 +37,18 @@ import de.bitgilde.TIMAAT.model.FIPOP.Source;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.TimeRange;
 import de.bitgilde.TIMAAT.model.fileInformation.AudioInformation;
 import de.bitgilde.TIMAAT.model.fileInformation.ImageInformation;
 import de.bitgilde.TIMAAT.model.fileInformation.VideoInformation;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumHasMusicListPayload;
+import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumHasMusicListPayload.MediumHasMusicListEntry;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.MediumStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage.ImageFileType;
@@ -68,6 +73,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HEAD;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -104,6 +110,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -144,6 +151,8 @@ public class EndpointMedium {
 	private AudioFileStorage audioFileStorage;
 	@Inject
 	private ImageFileStorage imageFileStorage;
+  @Inject
+  private MediumStorage mediumStorage;
 
 
 	@GET
@@ -235,7 +244,6 @@ public class EndpointMedium {
 				}
 			}
 
-
 			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, mediumList)).build();
 		}
 	}
@@ -273,7 +281,7 @@ public class EndpointMedium {
 		List<Medium> mediumList = castList(Medium.class, query.getResultList());
 		List<SelectElement> mediumSelectList = new ArrayList<>();
 		for (Medium medium : mediumList) {
-			mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+			mediumSelectList.add(new SelectElement<Integer>(medium.getId(), medium.getDisplayTitle().getName()));
 		}
 
 		return Response.ok().entity(mediumSelectList).build();
@@ -295,7 +303,7 @@ public class EndpointMedium {
 		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
 		Medium medium = entityManager.find(Medium.class, id);
 		List<SelectElement> mediumSelectList = new ArrayList<>();
-		mediumSelectList.add(new SelectElement(id, medium.getDisplayTitle().getName()));
+		mediumSelectList.add(new SelectElement<Integer>(id, medium.getDisplayTitle().getName()));
 
 		return Response.ok().entity(mediumSelectList).build();
 	}
@@ -382,7 +390,7 @@ public class EndpointMedium {
 		List<SelectElement> mediumSelectList = new ArrayList<>();
 		for (Medium medium : mediumList) {
 			if (medium.getMediumVideo() != null) {
-				mediumSelectList.add(new SelectElement(medium.getId(), medium.getDisplayTitle().getName()));
+				mediumSelectList.add(new SelectElement<Integer>(medium.getId(), medium.getDisplayTitle().getName()));
 			}
 		}
 
@@ -982,11 +990,11 @@ public class EndpointMedium {
 		for (Role role: roleList) {
 			if (search != null && search.length() > 0) {
 				if (role.getRoleTranslations().get(0).getName().toLowerCase().contains(search.toLowerCase())) {
-					roleSelectList.add(new SelectElement(role.getId(),
+					roleSelectList.add(new SelectElement<Integer>(role.getId(),
 																							 role.getRoleTranslations().get(0).getName()));
 				}
 			} else {
-				roleSelectList.add(new SelectElement(role.getId(),
+				roleSelectList.add(new SelectElement<Integer>(role.getId(),
 																						 role.getRoleTranslations().get(0).getName()));
 			}
 		}
@@ -1102,12 +1110,12 @@ public class EndpointMedium {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 
@@ -3620,6 +3628,17 @@ public class EndpointMedium {
 
 		return Response.ok().entity(mediumAnalysisLists).build();
 	}
+
+  @PUT
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Path("{mediumId}/mediumHasMusicList")
+  @Secured
+  public List<MediumHasMusic> updateMediumHasMusicList(@PathParam("mediumId") int mediumId, UpdateMediumHasMusicListPayload updateMediumHasMusicListPayload) {
+    Map<Integer, Collection<TimeRange>> timeRangesByMusicId = updateMediumHasMusicListPayload.getMediumHasMusicListEntries().stream().collect(Collectors.toMap(
+            MediumHasMusicListEntry::getMusicId, MediumHasMusicListEntry::getTimeRanges));
+    return mediumStorage.updateMediumHasMusicList(mediumId, timeRangesByMusicId);
+  }
+
 
 	@POST
     @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)

@@ -2,6 +2,7 @@ package de.bitgilde.TIMAAT.model.FIPOP;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
@@ -60,7 +61,7 @@ public class Music implements Serializable {
 
 	private String melody;
 
-	private short tempo;
+	private Short tempo;
 
 	private String remark;
 
@@ -253,6 +254,10 @@ public class Music implements Serializable {
 	// @JsonManagedReference(value="Medium-Music")
 	private Medium medium;
 
+  @OneToMany(mappedBy = "music")
+  @JsonIgnoreProperties("music")
+  private List<AnnotationHasMusic> annotationHasMusic;
+
 	public Music() {
 	}
 
@@ -337,11 +342,11 @@ public class Music implements Serializable {
 		this.melody = melody;
 	}
 
-	public short getTempo() {
+	public Short getTempo() {
 		return this.tempo;
 	}
 
-	public void setTempo(short tempo) {
+	public void setTempo(Short tempo) {
 		this.tempo = tempo;
 	}
 
@@ -634,4 +639,19 @@ public class Music implements Serializable {
 		return mediumHasMusic;
 	}
 
+  public void setCreatedByUserAccountId(int createdByUserAccountId) {
+    this.createdByUserAccountId = createdByUserAccountId;
+  }
+
+  public List<AnnotationHasMusic> getAnnotationHasMusic() {
+    return annotationHasMusic;
+  }
+
+  public void setAnnotationHasMusic(List<AnnotationHasMusic> annotationHasMusic) {
+    this.annotationHasMusic = annotationHasMusic;
+  }
+
+    public void setMusicTextSettingElementType(MusicTextSettingElementType musicTextSettingElementType) {
+        this.musicTextSettingElementType = musicTextSettingElementType;
+    }
 }

@@ -1,18 +1,7 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
@@ -40,6 +29,15 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -193,7 +191,7 @@ public class EndpointCategory {
 		List<Category> categoryList = castList(Category.class, query.getResultList());
 		Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 		for (Category category : categoryList) {
-			categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+			categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 		}
 		return Response.ok().entity(categorySelectList).build();
 	}
