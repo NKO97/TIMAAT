@@ -2912,6 +2912,13 @@
                 }
             }
 
+            $('.mediumDatasetMusicMediumHasMusicListAnnotationIndicator').on("click", async (event) => {
+                const annotationId = $(event.target).data("id")
+                const mediumId = $('#mediumFormMetadata').data('medium').model.id
+
+                await TIMAAT.VideoPlayer.initializeAnnotationModeWithAnnotationByIds(mediumId, annotationId);
+            })
+
             if(action === "show"){
                 $('#mediumFormMusicDynamicFields :input').prop('disabled', true);
                 $('#mediumFormMusicSubmitButton').hide();
