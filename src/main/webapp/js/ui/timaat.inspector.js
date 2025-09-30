@@ -193,7 +193,20 @@
 
                     // helper: global char index relative to text string
                     const getIndex = (e) => {
-                        const range = document.caretRangeFromPoint?.(e.clientX, e.clientY);
+                        let range;
+
+                        if (document.caretRangeFromPoint) {
+                            // Chrome, Safari, Edge
+                            range = document.caretRangeFromPoint(e.clientX, e.clientY);
+                        } else if (document.caretPositionFromPoint) {
+                            // Firefox
+                            const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+                            if (pos) {
+                                range = document.createRange();
+                                range.setStart(pos.offsetNode, pos.offset);
+                                range.collapse(true);
+                            }
+                        }
                         if (!range) return null;
 
                         let idx = range.startOffset;

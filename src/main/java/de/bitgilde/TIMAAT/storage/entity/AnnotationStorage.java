@@ -135,6 +135,7 @@ public class AnnotationStorage extends DbAccessComponent {
 
       entityManager.flush();
       entityManager.refresh(annotation);
+
       return annotation;
     });
   }
@@ -188,6 +189,7 @@ public class AnnotationStorage extends DbAccessComponent {
         entityManager.persist(createdAnnotationHasMusicTranslationArea);
         entityManager.flush();
         entityManager.refresh(createdAnnotationHasMusicTranslationArea);
+
         return createdAnnotationHasMusicTranslationArea;
       }
       else {
@@ -216,6 +218,7 @@ public class AnnotationStorage extends DbAccessComponent {
         entityManager.persist(annotationHasMusic);
         entityManager.flush();
         entityManager.refresh(annotationHasMusic);
+
         return annotationHasMusic;
       }
 
