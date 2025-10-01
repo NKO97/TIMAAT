@@ -334,7 +334,7 @@
 }
 
 #timelineLayerCheckboxes{
-    min-width: 360px;
+    min-width: 600px;
 }
 
 .temporary_waveform_marker{
@@ -391,4 +391,18 @@
 
 .text-highlighted{
     background-color: yellow;
+}
+
+#annotation_connection_layer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.marker_connection{
+    position: absolute;
+    z-index: 3;
+    background-color: rgba(67, 197, 238, 0.2);
 }

@@ -1101,6 +1101,15 @@
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
+            $('#timelineLayerConnection').on('click', function(ev) {
+                if ($('#timelineLayerConnection').is(':checked')) {
+                    $("#annotation_connection_layer").show()
+                } else {
+                    $("#annotation_connection_layer").hide()
+                }
+                TIMAAT.VideoPlayer.sortListUI();
+            });
+
 			// setup timeline preview
 			var preview = $('#videoSeekBarPreview');
 			preview.removeClass('show');

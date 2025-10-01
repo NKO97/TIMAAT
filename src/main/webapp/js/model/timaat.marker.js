@@ -256,6 +256,66 @@
 			return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
 		}
 	}
+
+    TIMAAT.MarkerConnection = class MarkerConnection {
+        constructor(videoMarker, audioMarker, targetContainerSelector) {
+            this.targetContainer = $(targetContainerSelector);
+            this.uiElement = $('<div class="marker_connection"></div>');
+            this.videoMarker = videoMarker
+            this.audioMarker = audioMarker
+
+
+            this.targetContainer.append(this.uiElement);
+            this.updateConnection()
+
+
+            this.resizeObserver = new ResizeObserver(() => this.updateConnection());
+            this.resizeObserver.observe(this.videoMarker.ui.element[0]);
+            this.resizeObserver.observe(this.audioMarker.ui.element[0]);
+            this.resizeObserver.observe(this.targetContainer[0])
+
+            this.updateConnection = this.updateConnection.bind(this);
+
+            $(document).on('timaat.timelineSortableSectionsUpdate', this.updateConnection)
+        }
+
+        updateConnection() {
+            const targetContainerBoundingBox = this.targetContainer[0].getBoundingClientRect();
+            const videoMarkerBoundingBox = this.videoMarker.ui.element[0].getBoundingClientRect();
+            const audioMarkerBoundingBox = this.audioMarker.ui.element[0].getBoundingClientRect();
+
+            /**
+             * Left and width should be always the same.
+             * So it doesn't matter from which marker we are reading this information
+             */
+            const left = videoMarkerBoundingBox.left - targetContainerBoundingBox.left;
+            const width = videoMarkerBoundingBox.width;
+
+            let top, height;
+            if(videoMarkerBoundingBox.top > audioMarkerBoundingBox.top){
+                //The video marker is below the audio marker
+                top = audioMarkerBoundingBox.bottom - targetContainerBoundingBox.top - 10;
+                height = (videoMarkerBoundingBox.bottom - targetContainerBoundingBox.top) - top
+            }else {
+                //The audio marker is below the video marker
+                top = videoMarkerBoundingBox.bottom - targetContainerBoundingBox.top - 10;
+                height = (audioMarkerBoundingBox.bottom - targetContainerBoundingBox.top) - top
+            }
+
+            this.uiElement.css('top', top + 'px');
+            this.uiElement.css('left', left + 'px');
+            this.uiElement.css('width', width + 'px');
+            this.uiElement.css('height', height + 'px');
+        }
+
+        remove() {
+            this.uiElement.remove();
+            this.resizeObserver.disconnect();
+            $(document).off('timaat.timelineSortableSectionsUpdate', this.updateConnection)
+
+            console.log("Remove marker connection")
+        }
+    }
     TIMAAT.TemporaryWaveformMarker = class TemporaryWaveformMarker {
 
         constructor(startXPercentage, parent) {

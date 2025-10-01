@@ -107,6 +107,9 @@
 				axis: 'y',
 				handle: '.js-timeline__section-header',
 				containment: 'parent',
+                update: function(ev) {
+                    $(document).trigger('timaat.timelineSortableSectionsUpdate');
+                }
 			});
 
 			this.tracking = this.ui.tracking;
