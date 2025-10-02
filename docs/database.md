@@ -33,3 +33,9 @@ The versioning of the database schema follows the following pattern:
 
 * Added table `music_translation` responsible to persist the lyrics or spoken text of music entries
 ![db_update_0_14_1_transcription_for.png](img/db_update_0_14_1_transcription_for.png)
+
+### 0.14.2
+
+* Added table `annotation_has_music` to persist reference between music and annotation
+* Added table `annotation_has_music_translation_area` to persist the hearable transcription range
+![db_update_0_14_2_annotation_to_music.png](img/db_update_0_14_2_annotation_to_music.png)

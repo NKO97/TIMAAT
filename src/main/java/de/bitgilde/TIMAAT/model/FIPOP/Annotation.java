@@ -1,15 +1,10 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +18,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,8 +71,6 @@ public class Annotation implements Serializable {
 
 	@Column(name="end_time", columnDefinition = "INT")
 	private long endTime;
-
-	private String uuid;
 
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
@@ -167,6 +166,10 @@ public class Annotation implements Serializable {
 			}
 		)
 	private List<Category> categories;
+
+  @OneToMany(mappedBy = "annotation")
+  @JsonIgnoreProperties("annotation")
+	private Set<AnnotationHasMusic> annotationHasMusic;
 
 	//bi-directional many-to-many association to Event
 	@ManyToMany
@@ -325,7 +328,7 @@ public class Annotation implements Serializable {
 		this.analysis = analysis;
 	}
 
-	public Analysis addAnalysis(Analysis analysis) {
+  public Analysis addAnalysis(Analysis analysis) {
 		getAnalysis().add(analysis);
 		analysis.setAnnotation(this);
 
@@ -378,14 +381,6 @@ public class Annotation implements Serializable {
 	public int getLastEditedByUserAccountId() {
 		if (Objects.isNull(this.getLastEditedByUserAccount())) return 0;
 		return this.getLastEditedByUserAccount().getId();
-	}
-
-	public String getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
 	}
 
 	public List<Actor> getActors() {
@@ -506,20 +501,6 @@ public class Annotation implements Serializable {
 		this.annotationTranslations = annotationTranslations;
 	}
 
-	// public AnnotationTranslation addAnnotationTranslation(AnnotationTranslation annotationTranslation) {
-	// 	getAnnotationTranslations().add(annotationTranslation);
-	// 	annotationTranslation.setAnnotation(this);
-
-	// 	return annotationTranslation;
-	// }
-
-	// public AnnotationTranslation removeAnnotationTranslation(AnnotationTranslation annotationTranslation) {
-	// 	getAnnotationTranslations().remove(annotationTranslation);
-	// 	annotationTranslation.setAnnotation(null);
-
-	// 	return annotationTranslation;
-	// }
-
 	public List<SelectorSvg> getSelectorSvgs() {
 		return this.selectorSvgs;
 	}
@@ -602,4 +583,27 @@ public class Annotation implements Serializable {
 		this.tags = tags;
 	}
 
+  public Set<AnnotationHasMusic> getAnnotationHasMusic() {
+    return annotationHasMusic;
+  }
+
+  public void setAnnotationHasMusic(Set<AnnotationHasMusic> annotationHasMusic) {
+    this.annotationHasMusic = annotationHasMusic;
+  }
+
+  public void setCreatedByUserAccountId(int createdByUserAccountId) {
+    this.createdByUserAccountId = createdByUserAccountId;
+  }
+
+  public void setLastEditedByUserAccountId(int lastEditedByUserAccountId) {
+    this.lastEditedByUserAccountId = lastEditedByUserAccountId;
+  }
+
+  public int getMediumId(){
+    return this.mediumAnalysisList.getMedium().getId();
+  }
+
+  public int getMediumAnalysisListId(){
+    return this.mediumAnalysisList.getId();
+  }
 }

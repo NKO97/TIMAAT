@@ -126,6 +126,10 @@
                     TIMAAT.UI.displayComponent('medium', 'mediumTab', 'mediumDataTable', 'mediumActorWithRolesTab', 'mediumFormActorWithRoles');
                     TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
                   break;
+                  case 'music': //* #medium/:id/music
+                    TIMAAT.UI.displayComponent('medium', 'mediumTab', 'mediumDataTable', 'mediumMusicTab', 'mediumFormMusic');
+                    TIMAAT.UI.displayDataSetContent('music', medium, 'medium')
+                  break
                   default:
                     this.redirectToDefaultView();
                   break;
@@ -185,6 +189,10 @@
                           TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumActorWithRolesTab', 'mediumFormActorWithRoles');
                           TIMAAT.UI.displayDataSetContent('actorWithRoles', medium, 'medium');
                         break;
+                        case 'music': //* #medium/:type/:id/music
+                          TIMAAT.UI.displayComponent('medium', type+'Tab', type+'DataTable', 'mediumMusicTab', 'mediumFormMusic');
+                          TIMAAT.UI.displayDataSetContent('music', medium, 'medium');
+                        break
                         default:
                           this.redirectToDefaultView();
                         break;

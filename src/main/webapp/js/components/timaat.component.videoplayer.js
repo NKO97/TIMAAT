@@ -1101,6 +1101,15 @@
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
+            $('#timelineLayerConnection').on('click', function(ev) {
+                if ($('#timelineLayerConnection').is(':checked')) {
+                    $("#annotation_connection_layer").show()
+                } else {
+                    $("#annotation_connection_layer").hide()
+                }
+                TIMAAT.VideoPlayer.sortListUI();
+            });
+
 			// setup timeline preview
 			var preview = $('#videoSeekBarPreview');
 			preview.removeClass('show');
@@ -1320,6 +1329,25 @@
 			await TIMAAT.VideoPlayer.setupMediumAnalysisLists(analysisLists);
 			TIMAAT.VideoPlayer.loadAnalysisList(0);
 		},
+
+        initializeAnnotationModeWithAnnotationByIds: async function(mediumId, annotationId){
+            const mediumPromise = TIMAAT.MediumService.getMedium(mediumId)
+            const annotationPromise = TIMAAT.AnnotationService.getAnnotation(annotationId)
+
+            const [medium, annotation] = await Promise.all([mediumPromise, annotationPromise])
+            if(medium && annotation){
+                await TIMAAT.VideoPlayer.initializeAnnotationMode(medium)
+                const mediumAnalysisListId = annotation.mediumAnalysisListId
+
+                await TIMAAT.VideoPlayer.loadAnalysisList(mediumAnalysisListId);
+                const requiredAnnotation = TIMAAT.VideoPlayer.annotationList.find(currentAnnotation => currentAnnotation.model.id === annotationId)
+
+                if(requiredAnnotation){
+                    TIMAAT.VideoPlayer.selectAnnotation(requiredAnnotation)
+                    TIMAAT.Inspector
+                }
+            }
+        },
 
 		sort: function(elements) {
 			if ( !elements ) return;
@@ -1749,7 +1777,6 @@
                 fetch("/TIMAAT/api/medium/" + mediumId + "/mediumAudioAnalysis/frequencyInformation?token=" + token)
                     .then(response => response.json())
                     .then(frequencyInformation => {
-                        console.log(frequencyInformation);
                         TIMAAT.VideoPlayer.mediumFrequencyInformation = frequencyInformation;
                         TIMAAT.VideoPlayer.drawFrequencyInformation()
                     })
@@ -2237,11 +2264,10 @@
             TIMAAT.VideoPlayer.inspector.setItem(null, 'annotation', overrides);
         },
 
-		updateAnnotation: function(annotation) {
+		updateAnnotation: async function(annotation) {
 			// console.log("TCL: updateAnnotation: annotation", annotation);
 			// sync to server
-			TIMAAT.AnnotationService.updateAnnotation(annotation.model);
-			// update UI list view
+            await TIMAAT.VideoPlayer.persistAnnotation(annotation);
 			annotation.updateUI();
 			this.updateUI();
 			this.updateListUI();
@@ -2254,7 +2280,7 @@
 			this.annotationList.forEach(function(annotation) {
 				if ( annotation.isSelected() && annotation.hasChanges() ) {
 					annotation.saveChanges();
-					TIMAAT.AnnotationService.updateAnnotation(annotation.model);
+					TIMAAT.VideoPlayer.persistAnnotation(annotation);
 					// update UI
 					annotation.updateUI();
 					// console.log("TCL: annotation.updateUI()");
@@ -2266,6 +2292,24 @@
 			this.sortListUI();
 			this.updateUI();
 		},
+
+        persistAnnotation: async function(annotation){
+            const annotationBaseInformation = {
+                title: annotation.model.annotationTranslations[0].title,
+                comment: annotation.model.annotationTranslations[0].comment,
+                startTime: annotation.model.startTime,
+                endTime: annotation.model.endTime,
+                layerVisual: annotation.model.layerVisual,
+                layerAudio: annotation.model.layerAudio,
+                selectorSvg: {
+                    colorHex: annotation.model.selectorSvgs[0].colorHex,
+                    opacity: annotation.model.selectorSvgs[0].opacity,
+                    strokeWidth: annotation.model.selectorSvgs[0].strokeWidth,
+                    svgData: annotation.model.selectorSvgs[0].svgData
+                }
+            }
+            annotation.model = await TIMAAT.AnnotationService.updateAnnotation(annotation.model.id, annotationBaseInformation)
+        },
 
 		removeAnnotation: function() {
 			// console.log("TCL: removeAnnotation: function()");

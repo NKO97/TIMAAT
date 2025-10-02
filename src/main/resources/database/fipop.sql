@@ -8839,11 +8839,60 @@ CREATE INDEX fk_music_translation_music1_idx ON `FIPOP`.`music_translation` (mus
 CREATE INDEX fk_music_translation_language1_idx ON `FIPOP`.`music_translation` (language_id ASC);
 
 -- -----------------------------------------------------
+-- Table `FIPOP`.`annotation_has_music`
+-- -----------------------------------------------------
+CREATE TABLE `FIPOP`.`annotation_has_music`
+(
+    `music_id`    INT NOT NULL,
+    `annotation_id` INT NOT NULL,
+    CONSTRAINT `fk_annotation_has_music_music1`
+        FOREIGN KEY (`music_id`)
+            REFERENCES `FIPOP`.`music` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_annotation_has_music_annotation1`
+        FOREIGN KEY (`annotation_id`)
+            REFERENCES `FIPOP`.`annotation` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `pk_annotation_has_music1` PRIMARY KEY (music_id, annotation_id)
+) ENGINE = InnoDB;
+CREATE INDEX fk_annotation_has_music_music1_idx ON `FIPOP`.`annotation_has_music` (music_id ASC);
+CREATE INDEX fk_annotation_has_music_annotation1_idx ON `FIPOP`.`annotation_has_music` (annotation_id ASC);
+
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`annotation_has_music_translation_area`
+-- -----------------------------------------------------
+CREATE TABLE `FIPOP`.`annotation_has_music_translation_area`
+(
+    `music_id`      INT NOT NULL,
+    `annotation_id` INT NOT NULL,
+    `language_id`   INT NOT NULL,
+    `start_index`   INT NOT NULL,
+    `end_index`     INT NOT NULL,
+    CONSTRAINT `fk_annotation_has_music_translation_area_annotation_has_music1`
+        FOREIGN KEY (`music_id`, `annotation_id`)
+            REFERENCES `FIPOP`.`annotation_has_music` (`music_id`, `annotation_id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_annotation_has_music_translation_area_music_translation1`
+        FOREIGN KEY (`music_id`, `language_id`)
+            REFERENCES `FIPOP`.`music_translation` (`music_id`, `language_id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `pk_annotation_has_music_translation_area1` PRIMARY KEY (music_id, annotation_id, language_id)
+) ENGINE = InnoDB;
+CREATE INDEX fk_annotation_has_music_translation_area_music1_idx ON `FIPOP`.`annotation_has_music_translation_area` (music_id ASC);
+CREATE INDEX fk_annotation_has_music_translation_area_annotation1_idx ON `FIPOP`.`annotation_has_music_translation_area` (annotation_id ASC);
+CREATE INDEX fk_annotation_has_music_translation_area_language1_idx ON `FIPOP`.`annotation_has_music_translation_area` (language_id ASC);
+
+-- -----------------------------------------------------
 -- Data for table `FIPOP`.`db_version`
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `FIPOP`;
-INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version) VALUES (0, 14, 1);
+INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version) VALUES (0, 14, 2);
 COMMIT;
 
 -- -----------------------------------------------------

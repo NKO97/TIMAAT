@@ -4,9 +4,15 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationVerifier;
+import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
+import de.bitgilde.TIMAAT.rest.security.authorization.DbAnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
+import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
+import de.bitgilde.TIMAAT.storage.entity.MediumStorage;
 import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
+import de.bitgilde.TIMAAT.storage.entity.TagStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
@@ -61,6 +67,12 @@ public class TIMAATBinder extends AbstractBinder {
             bindAsContract(TaskService.class).in(Singleton.class);
 
             bindAsContract(MusicStorage.class).in(Singleton.class);
+            bindAsContract(AnnotationStorage.class).in(Singleton.class);
+            bindAsContract(TagStorage.class).in(Singleton.class);
+            bindAsContract(MediumStorage.class).in(Singleton.class);
+
+            bind(DbAnnotationAuthorizationVerifier.class).to(AnnotationAuthorizationVerifier.class).in(Singleton.class);
+            bindAsContract(AnalysisListAuthorizationVerifier.class).in(Singleton.class);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error during instantiating necessary components", e);
             throw new RuntimeException(e);

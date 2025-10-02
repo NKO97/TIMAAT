@@ -1,12 +1,5 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
@@ -27,6 +20,12 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,7 +127,7 @@ public class EndpointTag {
 		List<SelectElement> tagSelectList = new ArrayList<>();
 		List<Tag> tagList = castList(Tag.class, query.getResultList());
 		for (Tag tag : tagList) {
-			tagSelectList.add(new SelectElement(tag.getId(), tag.getName()));
+			tagSelectList.add(new SelectElement<String>(tag.getName(), tag.getName()));
 		}
 		return Response.ok().entity(tagSelectList).build();
   }

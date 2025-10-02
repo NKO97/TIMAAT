@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.task.storage;
 
-import de.bitgilde.TIMAAT.db.DbStorage;
+import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysisState;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  * @author Nico Kotlenga
  * @since 18.07.25
  */
-public class DbTaskStorage extends DbStorage implements TaskStorage {
+public class DbTaskStorage extends DbAccessComponent implements TaskStorage {
 
     private static final Logger logger = Logger.getLogger(DbTaskStorage.class.getName());
 

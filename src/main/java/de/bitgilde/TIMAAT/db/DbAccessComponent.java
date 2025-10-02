@@ -8,18 +8,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Storage using the database to persist and read data
+ * Components which require database connectivity can extend to this class.
+ * It offers convenience functionalities to easily create database transactions
+ * performing a rollback on error.
  *
  * @author Nico Kotlenga
  * @since 20.07.25
  */
-public abstract class DbStorage {
+public abstract class DbAccessComponent {
 
-    private static final Logger logger = Logger.getLogger(DbStorage.class.getName());
+    private static final Logger logger = Logger.getLogger(DbAccessComponent.class.getName());
 
     protected final EntityManagerFactory emf;
 
-    public DbStorage(EntityManagerFactory emf) {
+    public DbAccessComponent(EntityManagerFactory emf) {
         this.emf = emf;
     }
 

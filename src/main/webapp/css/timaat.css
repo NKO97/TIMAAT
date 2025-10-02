@@ -334,7 +334,7 @@
 }
 
 #timelineLayerCheckboxes{
-    min-width: 360px;
+    min-width: 600px;
 }
 
 .temporary_waveform_marker{
@@ -356,4 +356,53 @@
 
 .timeline__marker {
     z-index: 1001;
+}
+
+.inspectorMusicPaneLinkedMusicPane {
+    margin-left: 2em;
+    margin-bottom: 1em;
+}
+
+.linked-music-music-translation-language-list, .musicTranslationAudibleRangePaneSection{
+    min-width: 120px;
+}
+
+.musicTranslationAudibleRangePane{
+    margin-left: 1em;
+}
+
+.musicTranslationAudibleRangePaneSection{
+    overflow-y: auto;
+}
+
+.transcriptionSelectionArea{
+    overflow: auto;
+    user-select: none;
+    cursor: text;
+}
+
+.musicTranslationAudibleRangePaneFlexContainer{
+    height: 200px;
+}
+
+.transcriptionSelectionExplainText{
+    font-size: 12px;
+}
+
+.text-highlighted{
+    background-color: yellow;
+}
+
+#annotation_connection_layer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.marker_connection{
+    position: absolute;
+    z-index: 3;
+    background-color: rgba(67, 197, 238, 0.2);
 }

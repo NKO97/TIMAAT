@@ -160,13 +160,12 @@
 			// create marker with UI
             if(this.model.layerVisual){
                 this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
-                this.videoMarker.updateView()
             }
             if(this.model.layerAudio){
                 this.audioMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
-                this.audioMarker.updateView()
             }
 
+            this.updateMarker()
 			this.changed = false;
 
 			if ( TIMAAT.VideoPlayer.duration == 0 ) this.updateStatus(0);
@@ -326,14 +325,13 @@
 
             if(layerVisual && !this.videoMarker){
                 this.videoMarker = new TIMAAT.Marker(this, "#timelineMarkerPane")
-                this.videoMarker.updateView()
             }
 
             if(!layerVisual  && this.videoMarker){
-                console.log("Removing video marker")
                 this.videoMarker.remove()
                 this.videoMarker = null
             }
+            this.updateMarker()
 
 			TIMAAT.VideoPlayer.updateUI();
 			this.updateUI();
@@ -349,7 +347,6 @@
 
             if(layerAudio && !this.audioMarker){
                 this.audioMarker = new TIMAAT.Marker(this, ".timeline__audio_annotation")
-                this.audioMarker.updateView()
             }
 
             if(!layerAudio  && this.audioMarker){
@@ -357,6 +354,7 @@
                 this.audioMarker = null
             }
 
+            this.updateMarker()
 			TIMAAT.VideoPlayer.updateUI();
 			this.updateUI();
 		};
@@ -385,8 +383,7 @@
 			if ( this._startTime != this.model.startTime ) {
 				this.setChanged();
 				TIMAAT.VideoPlayer.updateUI();
-                this.audioMarker?.updateView();
-                this.videoMarker?.updateView();
+                this.updateMarker()
 			}
 			this.svg.keyframes[0].updateTimeUI();
 		};
@@ -402,8 +399,7 @@
 				this.setChanged();
 				TIMAAT.VideoPlayer.updateUI();
 
-                this.audioMarker?.updateView();
-                this.videoMarker?.updateView();
+                this.updateMarker()
 			}
 		};
 
@@ -414,6 +410,19 @@
 		hasPolygons() {
 			return this.svg.items.length > 0;
 		}
+
+        updateMarker(){
+            this.audioMarker?.updateView()
+            this.videoMarker?.updateView()
+
+            this.markerConnection?.remove()
+            if(this.audioMarker && this.videoMarker){
+                this.markerConnection = new TIMAAT.MarkerConnection(this.videoMarker, this.audioMarker, "#annotation_connection_layer");
+            }else{
+                this.markerConnection = null
+            }
+        }
+
 
 		updateUI() {
 			// console.log("TCL: Annotation -> updateUI -> updateUI()");
@@ -447,8 +456,7 @@
 			};
 
 			// update marker
-			this.audioMarker?.updateView()
-            this.videoMarker?.updateView()
+            this.updateMarker()
 		}
 
 		_updateAnnotationType() {
@@ -507,8 +515,7 @@
 
 			// update UI
 			this._updateAnnotationType();
-			this.audioMarker?.updateView()
-            this.videoMarker?.updateView();
+			this.updateMarker()
 
 			// attach item event handlers
 			let anno = this;
@@ -546,8 +553,7 @@
 			// update UI
 			if ( this.svg.items.length == 0 ) {
 				this._updateAnnotationType();
-				this.audioMarker?.updateView();
-                this.videoMarker?.updateView();
+				this.updateMarker()
 			}
 		}
 
@@ -688,8 +694,7 @@
 */
 			}
 			// update marker
-			this.videoMarker?.updateView();
-            this.audioMarker?.updateView();
+			this.updateMarker()
 			// update keyframe UI
 			if ( this.isAnimation() ) for (let keyframe of this.svg.keyframes) keyframe.updateUI();
 			// update editing UI
@@ -870,5 +875,4 @@
 		}
 
 	}
-
 }, window));

@@ -647,35 +647,31 @@
 				console.error("ERROR: ", error);
 			});
 		},
+        async updateMediumHasMusicList(mediumId, mediumHasMusicList){
+            const payload = {
+                mediumHasMusicListEntries: mediumHasMusicList
+            }
 
-		// not yet needed (no translation data or translation table available at the moment)
-		// async updateMediumTranslation(medium) {
-		// 	// console.log("TCL: MediumService async updateMediumTranslation -> medium", medium);
-		// 	var updatedMediumTranslation = {
-		// 		id: medium.model.mediumTranslations[0].id, // TODO get the correct translation_id
-		// 		name: medium.model.mediumTranslations[0].name,
-		// 	};
-		// 	return new Promise(resolve => {
-		// 		$.ajax({
-		// 			url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+medium.model.id+"/translation/"+updatedMediumTranslation.id,
-		// 			type:"PATCH",
-		// 			data: JSON.stringify(updatedMediumTranslation),
-		// 			contentType:"application/json; charset=utf-8",
-		// 			dataType:"json",
-		// 			beforeSend: function (xhr) {
-		// 				xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-		// 			},
-		// 		}).done(function(translationData) {
-		// 		// console.log("TCL: updateMediumTranslation -> translationData", translationData);
-		// 			resolve(translationData);
-		// 		}).fail(function(error) {
-		// 			console.error("ERROR: ", error);
-		// 			console.error("ERROR responseText:", error.responseText);
-		// 		});
-		// 	}).catch((error) => {
-		// 		console.error("ERROR: ", error);
-		// 	});
-		// },
+            return new Promise(resolve => {
+                $.ajax({
+                    url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+mediumId + "/mediumHasMusicList",
+                    type:"PUT",
+                    data: JSON.stringify(payload),
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(updateData) {
+                    resolve(updateData);
+                }).fail(function(error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
 
 		async updateMediumSubtype(mediumSubtype, subtypeModel) {
 			// console.log("TCL: updateMediumSubtype -> mediumSubtype, subtypeModel", mediumSubtype, subtypeModel);

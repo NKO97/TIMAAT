@@ -218,7 +218,7 @@ public class EndpointAnalysis {
 		switch (methodTypeId) {
 			case 1: // Martinez Scheffel Unreliable Narration
 			for (AnalysisMethod analysisMethod : analysisMethodList) {
-				analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMartinezScheffelUnreliableNarration().getMartinezScheffelUnreliableNarrationTranslations().get(0).getType()));
+				analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getMartinezScheffelUnreliableNarration().getMartinezScheffelUnreliableNarrationTranslations().get(0).getType()));
 			}
 			break;
 			case 2: // Greimas Actantial Model //* won't be implemented
@@ -233,39 +233,39 @@ public class EndpointAnalysis {
 			break;
 			case 7: // Color temperature
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getColorTemperature().getColorTemperatureTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getColorTemperature().getColorTemperatureTranslations().get(0).getName()));
 				}
 			break;
 			case 8: // Concept Camera Position and Perspective
 			break;
 			case 9: // Camera Elevation
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraElevation().getCameraElevationTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraElevation().getCameraElevationTranslations().get(0).getName()));
 				}
 			break;
 			case 10: // Camera Axis of Action
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraAxisOfAction().getCameraAxisOfActionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraAxisOfAction().getCameraAxisOfActionTranslations().get(0).getName()));
 				}
 			break;
 			case 11: // Camera Horizontal Angle
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraHorizontalAngle().getCameraHorizontalAngleTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraHorizontalAngle().getCameraHorizontalAngleTranslations().get(0).getName()));
 				}
 			break;
 			case 12: // Camera Vertical Angle
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraVerticalAngle().getCameraVerticalAngleTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraVerticalAngle().getCameraVerticalAngleTranslations().get(0).getName()));
 				}
 			break;
 			case 13: // Camera Shot Type
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraShotType().getCameraShotTypeTranslations().get(0).getType()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraShotType().getCameraShotTypeTranslations().get(0).getType()));
 				}
 			break;
 			case 14: // Camera Distance
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraDistance().getCameraDistanceTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraDistance().getCameraDistanceTranslations().get(0).getName()));
 				}
 			break;
 			case 15: // Concept Camera Movement and Handling
@@ -274,7 +274,7 @@ public class EndpointAnalysis {
 			break;
 			case 17: // Camera Handling
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraHandling().getCameraHandlingTranslations().get(0).getType()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraHandling().getCameraHandlingTranslations().get(0).getType()));
 				}
 			break;
 			case 18: // Zelizer Beese Voice of the Visual //* won't be implemented
@@ -283,7 +283,7 @@ public class EndpointAnalysis {
 			break;
 			case 20: // Sound Effect Descriptive
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), "Sound Effect (Descriptive)")); // TODO
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), "Sound Effect (Descriptive)")); // TODO
 				}
 			break;
 			case 21: // Analysis Ambient Sound
@@ -296,47 +296,47 @@ public class EndpointAnalysis {
 			break;
 			case 25: // Lighting type - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightingType().getLightingTypeTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getLightingType().getLightingTypeTranslations().get(0).getName()));
 				}
 			break;
 			case 26: // Montage Figure Macro - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMontageFigureMacro().getMontageFigureMacroTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getMontageFigureMacro().getMontageFigureMacroTranslations().get(0).getName()));
 				}
 			break;
 			case 27: // Montage Figure Micro - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMontageFigureMicro().getMontageFigureMicroTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getMontageFigureMicro().getMontageFigureMicroTranslations().get(0).getName()));
 				}
 			break;
 			case 28: // Take Junction - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getTakeJunction().getTakeJunctionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getTakeJunction().getTakeJunctionTranslations().get(0).getName()));
 				}
 			break;
 			case 29: // Editing Rhythm - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getMontageFigureMacro().getMontageFigureMacroTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getMontageFigureMacro().getMontageFigureMacroTranslations().get(0).getName()));
 				}
 			break;
 			case 30: // Take Length - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getTakeLength().getText()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getTakeLength().getText()));
 				}
 			break;
 			case 31: // Take Type Progression - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getTakeTypeProgression().getTakeTypeProgressionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getTakeTypeProgression().getTakeTypeProgressionTranslations().get(0).getName()));
 				}
 			break;
 			case 32: // Playback Speed - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPlaybackSpeed().getPlaybackSpeedTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getPlaybackSpeed().getPlaybackSpeedTranslations().get(0).getName()));
 				}
 			break;
 			case 33: // Image Cadre Editing - Part of 34: Editing / Montage
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getImageCadreEditing().getImageCadreEditingTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getImageCadreEditing().getImageCadreEditingTranslations().get(0).getName()));
 				}
 			break;
 			case 34: // Editing / Montage
@@ -349,27 +349,27 @@ public class EndpointAnalysis {
 			break;
 			case 38: // Light Position General - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPosition().getLightPositionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getLightPosition().getLightPositionTranslations().get(0).getName()));
 				}
 			break;
 			case 39: // Light Position Angle Horizontal - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleHorizontal().getLightPositionAngleHorizontalTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getLightPositionAngleHorizontal().getLightPositionAngleHorizontalTranslations().get(0).getName()));
 				}
 			break;
 			case 40: // Light Position Angle Vertical - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightPositionAngleVertical().getLightPositionAngleVerticalTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getLightPositionAngleVertical().getLightPositionAngleVerticalTranslations().get(0).getName()));
 				}
 			break;
 			case 41: // Light Modifier - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightModifier().getLightModifierTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getLightModifier().getLightModifierTranslations().get(0).getName()));
 				}
 			break;
 			case 42: // Lighting Duration - Part of 43: Lighting
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getLightingDuration().getLightingDurationTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getLightingDuration().getLightingDurationTranslations().get(0).getName()));
 				}
 			break;
 			case 43: // Lighting
@@ -378,42 +378,42 @@ public class EndpointAnalysis {
 			break;
 			case 45: // Acting Technique - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getActingTechnique().getActingTechniqueTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getActingTechnique().getActingTechniqueTranslations().get(0).getName()));
 				}
 			break;
 			case 46: // Facial Expression - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getFacialExpression().getFacialExpressionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getFacialExpression().getFacialExpressionTranslations().get(0).getName()));
 				}
 			break;
 			case 47: // Facial Expression Intensity - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getFacialExpressionIntensity().getFacialExpressionIntensityTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getFacialExpressionIntensity().getFacialExpressionIntensityTranslations().get(0).getName()));
 				}
 			break;
 			case 48: // Gestural Emotion - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getGesturalEmotion().getGesturalEmotionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getGesturalEmotion().getGesturalEmotionTranslations().get(0).getName()));
 				}
 			break;
 			case 49: // Gestural Emotion Intensity - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getGesturalEmotionIntensity().getGesturalEmotionIntensityTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getGesturalEmotionIntensity().getGesturalEmotionIntensityTranslations().get(0).getName()));
 				}
 			break;
 			case 50: // Physical Expression - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPhysicalExpression().getPhysicalExpressionTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getPhysicalExpression().getPhysicalExpressionTranslations().get(0).getName()));
 				}
 			break;
 			case 51: // Physical Expression Intensity - Part of 44: Analysis Actor
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getPhysicalExpressionIntensity().getPhysicalExpressionIntensityTranslations().get(0).getName()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getPhysicalExpressionIntensity().getPhysicalExpressionIntensityTranslations().get(0).getName()));
 				}
 			break;
 			case 52: // Camera Depth of Focus - Part of 8: Concept Camera Position and Perspective
 				for (AnalysisMethod analysisMethod : analysisMethodList) {
-					analysisMethodSelectList.add(new SelectElement(analysisMethod.getId(), analysisMethod.getCameraDepthOfFocus().getCameraDepthOfFocusTranslations().get(0).getType()));
+					analysisMethodSelectList.add(new SelectElement<Integer>(analysisMethod.getId(), analysisMethod.getCameraDepthOfFocus().getCameraDepthOfFocusTranslations().get(0).getType()));
 				}
 			break;
 
@@ -472,7 +472,7 @@ public class EndpointAnalysis {
 						List<CameraDistanceTranslation> cameraDistanceTranslationList = castList(CameraDistanceTranslation.class, query.getResultList());
 						List<SelectElement> cameraDistanceSelectList = new ArrayList<>();
 						for (CameraDistanceTranslation cameraDistanceTranslation : cameraDistanceTranslationList) {
-							cameraDistanceSelectList.add(new SelectElement(cameraDistanceTranslation.getCameraDistance().getAnalysisMethodId(), cameraDistanceTranslation.getName()));
+							cameraDistanceSelectList.add(new SelectElement<Integer>(cameraDistanceTranslation.getCameraDistance().getAnalysisMethodId(), cameraDistanceTranslation.getName()));
 						}
 						selectElementList = cameraDistanceSelectList;
 					break;
@@ -482,7 +482,7 @@ public class EndpointAnalysis {
 						List<CameraShotTypeTranslation> cameraShotTypeTranslationList = castList(CameraShotTypeTranslation.class, query.getResultList());
 						List<SelectElement> cameraShotTypeSelectList = new ArrayList<>();
 						for (CameraShotTypeTranslation cameraShotTypeTranslation : cameraShotTypeTranslationList) {
-							cameraShotTypeSelectList.add(new SelectElement(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
+							cameraShotTypeSelectList.add(new SelectElement<Integer>(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
 						}
 						selectElementList = cameraShotTypeSelectList;
 					break;
@@ -492,7 +492,7 @@ public class EndpointAnalysis {
 						List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslationList = castList(CameraVerticalAngleTranslation.class, query.getResultList());
 						List<SelectElement> cameraVerticalAngleSelectList = new ArrayList<>();
 						for (CameraVerticalAngleTranslation cameraVerticalAngleTranslation : cameraVerticalAngleTranslationList) {
-							cameraVerticalAngleSelectList.add(new SelectElement(cameraVerticalAngleTranslation.getCameraVerticalAngle().getAnalysisMethodId(), cameraVerticalAngleTranslation.getName()));
+							cameraVerticalAngleSelectList.add(new SelectElement<Integer>(cameraVerticalAngleTranslation.getCameraVerticalAngle().getAnalysisMethodId(), cameraVerticalAngleTranslation.getName()));
 						}
 						selectElementList = cameraVerticalAngleSelectList;
 					break;
@@ -502,7 +502,7 @@ public class EndpointAnalysis {
 						List<CameraHorizontalAngleTranslation> cameraHorizontalAngleTranslationList = castList(CameraHorizontalAngleTranslation.class, query.getResultList());
 						List<SelectElement> cameraHorizontalAngleSelectList = new ArrayList<>();
 						for (CameraHorizontalAngleTranslation cameraHorizontalAngleTranslation : cameraHorizontalAngleTranslationList) {
-							cameraHorizontalAngleSelectList.add(new SelectElement(cameraHorizontalAngleTranslation.getCameraHorizontalAngle().getAnalysisMethodId(), cameraHorizontalAngleTranslation.getName()));
+							cameraHorizontalAngleSelectList.add(new SelectElement<Integer>(cameraHorizontalAngleTranslation.getCameraHorizontalAngle().getAnalysisMethodId(), cameraHorizontalAngleTranslation.getName()));
 						}
 						selectElementList = cameraHorizontalAngleSelectList;
 					break;
@@ -512,7 +512,7 @@ public class EndpointAnalysis {
 						List<CameraAxisOfActionTranslation> cameraAxisOfActionTranslationList = castList(CameraAxisOfActionTranslation.class, query.getResultList());
 						List<SelectElement> cameraAxisOfActionSelectList = new ArrayList<>();
 						for (CameraAxisOfActionTranslation cameraAxisOfActionTranslation : cameraAxisOfActionTranslationList) {
-							cameraAxisOfActionSelectList.add(new SelectElement(cameraAxisOfActionTranslation.getCameraAxisOfAction().getAnalysisMethodId(), cameraAxisOfActionTranslation.getName()));
+							cameraAxisOfActionSelectList.add(new SelectElement<Integer>(cameraAxisOfActionTranslation.getCameraAxisOfAction().getAnalysisMethodId(), cameraAxisOfActionTranslation.getName()));
 						}
 						selectElementList = cameraAxisOfActionSelectList;
 					break;
@@ -522,7 +522,7 @@ public class EndpointAnalysis {
 						List<CameraElevationTranslation> cameraElevationTranslationList = castList(CameraElevationTranslation.class, query.getResultList());
 						List<SelectElement> cameraElevationSelectList = new ArrayList<>();
 						for (CameraElevationTranslation cameraElevationTranslation : cameraElevationTranslationList) {
-							cameraElevationSelectList.add(new SelectElement(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
+							cameraElevationSelectList.add(new SelectElement<Integer>(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
 						}
 						selectElementList = cameraElevationSelectList;
 					break;
@@ -532,7 +532,7 @@ public class EndpointAnalysis {
 						List<CameraDepthOfFocusTranslation> cameraDepthOfFocusTranslationList = castList(CameraDepthOfFocusTranslation.class, query.getResultList());
 						List<SelectElement> cameraDepthOfFocusSelectList = new ArrayList<>();
 						for (CameraDepthOfFocusTranslation cameraDepthOfFocusTranslation : cameraDepthOfFocusTranslationList) {
-							cameraDepthOfFocusSelectList.add(new SelectElement(cameraDepthOfFocusTranslation.getCameraDepthOfFocus().getAnalysisMethodId(), cameraDepthOfFocusTranslation.getType()));
+							cameraDepthOfFocusSelectList.add(new SelectElement<Integer>(cameraDepthOfFocusTranslation.getCameraDepthOfFocus().getAnalysisMethodId(), cameraDepthOfFocusTranslation.getType()));
 						}
 						selectElementList = cameraDepthOfFocusSelectList;
 					break;
@@ -560,7 +560,7 @@ public class EndpointAnalysis {
 						List<CameraMovementTypeTranslation> cameraMovementTypeTranslationList = castList(CameraMovementTypeTranslation.class, query.getResultList());
 						List<SelectElement> cameraMovementTypeSelectList = new ArrayList<>();
 						for (CameraMovementTypeTranslation cameraMovementTypeTranslation : cameraMovementTypeTranslationList) {
-							cameraMovementTypeSelectList.add(new SelectElement(cameraMovementTypeTranslation.getCameraMovementType().getAnalysisMethodId(), cameraMovementTypeTranslation.getType()));
+							cameraMovementTypeSelectList.add(new SelectElement<Integer>(cameraMovementTypeTranslation.getCameraMovementType().getAnalysisMethodId(), cameraMovementTypeTranslation.getType()));
 						}
 						selectElementList = cameraMovementTypeSelectList;
 					break;
@@ -570,7 +570,7 @@ public class EndpointAnalysis {
 						List<CameraMovementCharacteristicTranslation> cameraMovementCharacteristicTranslationList = castList(CameraMovementCharacteristicTranslation.class, query.getResultList());
 						List<SelectElement> cameraMovementCharacteristicSelectList = new ArrayList<>();
 						for (CameraMovementCharacteristicTranslation cameraMovementCharacteristicTranslation : cameraMovementCharacteristicTranslationList) {
-							cameraMovementCharacteristicSelectList.add(new SelectElement(cameraMovementCharacteristicTranslation.getCameraMovementCharacteristic().getAnalysisMethodId(), cameraMovementCharacteristicTranslation.getType()));
+							cameraMovementCharacteristicSelectList.add(new SelectElement<Integer>(cameraMovementCharacteristicTranslation.getCameraMovementCharacteristic().getAnalysisMethodId(), cameraMovementCharacteristicTranslation.getType()));
 						}
 						selectElementList = cameraMovementCharacteristicSelectList;
 					break;
@@ -580,7 +580,7 @@ public class EndpointAnalysis {
 						List<CameraHandlingTranslation> cameraHandlingTranslationList = castList(CameraHandlingTranslation.class, query.getResultList());
 						List<SelectElement> cameraHandlingSelectList = new ArrayList<>();
 						for (CameraHandlingTranslation cameraHandlingTranslation : cameraHandlingTranslationList) {
-							cameraHandlingSelectList.add(new SelectElement(cameraHandlingTranslation.getCameraHandling().getAnalysisMethodId(), cameraHandlingTranslation.getType()));
+							cameraHandlingSelectList.add(new SelectElement<Integer>(cameraHandlingTranslation.getCameraHandling().getAnalysisMethodId(), cameraHandlingTranslation.getType()));
 						}
 						selectElementList = cameraHandlingSelectList;
 					break;
@@ -590,7 +590,7 @@ public class EndpointAnalysis {
 						List<ConceptDirectionTranslation> conceptDirectionTranslationList = castList(ConceptDirectionTranslation.class, query.getResultList());
 						List<SelectElement> conceptDirectionSelectList = new ArrayList<>();
 						for (ConceptDirectionTranslation conceptDirectionTranslation : conceptDirectionTranslationList) {
-							conceptDirectionSelectList.add(new SelectElement(conceptDirectionTranslation.getConceptDirection().getAnalysisMethodId(), conceptDirectionTranslation.getType()));
+							conceptDirectionSelectList.add(new SelectElement<Integer>(conceptDirectionTranslation.getConceptDirection().getAnalysisMethodId(), conceptDirectionTranslation.getType()));
 						}
 						selectElementList = conceptDirectionSelectList;
 					break;
@@ -600,7 +600,7 @@ public class EndpointAnalysis {
 						List<CameraDistanceTranslation> cameraDistanceTranslationList = castList(CameraDistanceTranslation.class, query.getResultList());
 						List<SelectElement> cameraDistanceSelectList = new ArrayList<>();
 						for (CameraDistanceTranslation cameraDistanceTranslation : cameraDistanceTranslationList) {
-							cameraDistanceSelectList.add(new SelectElement(cameraDistanceTranslation.getCameraDistance().getAnalysisMethodId(), cameraDistanceTranslation.getName()));
+							cameraDistanceSelectList.add(new SelectElement<Integer>(cameraDistanceTranslation.getCameraDistance().getAnalysisMethodId(), cameraDistanceTranslation.getName()));
 						}
 						selectElementList = cameraDistanceSelectList;
 					break;
@@ -610,7 +610,7 @@ public class EndpointAnalysis {
 						List<CameraShotTypeTranslation> cameraShotTypeTranslationList = castList(CameraShotTypeTranslation.class, query.getResultList());
 						List<SelectElement> cameraShotTypeSelectList = new ArrayList<>();
 						for (CameraShotTypeTranslation cameraShotTypeTranslation : cameraShotTypeTranslationList) {
-							cameraShotTypeSelectList.add(new SelectElement(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
+							cameraShotTypeSelectList.add(new SelectElement<Integer>(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
 						}
 						selectElementList = cameraShotTypeSelectList;
 					break;
@@ -620,7 +620,7 @@ public class EndpointAnalysis {
 						List<CameraVerticalAngleTranslation> cameraVerticalAngleTranslationList = castList(CameraVerticalAngleTranslation.class, query.getResultList());
 						List<SelectElement> cameraVerticalAngleSelectList = new ArrayList<>();
 						for (CameraVerticalAngleTranslation cameraVerticalAngleTranslation : cameraVerticalAngleTranslationList) {
-							cameraVerticalAngleSelectList.add(new SelectElement(cameraVerticalAngleTranslation.getCameraVerticalAngle().getAnalysisMethodId(), cameraVerticalAngleTranslation.getName()));
+							cameraVerticalAngleSelectList.add(new SelectElement<Integer>(cameraVerticalAngleTranslation.getCameraVerticalAngle().getAnalysisMethodId(), cameraVerticalAngleTranslation.getName()));
 						}
 						selectElementList = cameraVerticalAngleSelectList;
 					break;
@@ -630,7 +630,7 @@ public class EndpointAnalysis {
 						List<CameraHorizontalAngleTranslation> cameraHorizontalAngleTranslationList = castList(CameraHorizontalAngleTranslation.class, query.getResultList());
 						List<SelectElement> cameraHorizontalAngleSelectList = new ArrayList<>();
 						for (CameraHorizontalAngleTranslation cameraHorizontalAngleTranslation : cameraHorizontalAngleTranslationList) {
-							cameraHorizontalAngleSelectList.add(new SelectElement(cameraHorizontalAngleTranslation.getCameraHorizontalAngle().getAnalysisMethodId(), cameraHorizontalAngleTranslation.getName()));
+							cameraHorizontalAngleSelectList.add(new SelectElement<Integer>(cameraHorizontalAngleTranslation.getCameraHorizontalAngle().getAnalysisMethodId(), cameraHorizontalAngleTranslation.getName()));
 						}
 						selectElementList = cameraHorizontalAngleSelectList;
 					break;
@@ -640,7 +640,7 @@ public class EndpointAnalysis {
 						List<CameraAxisOfActionTranslation> cameraAxisOfActionTranslationList = castList(CameraAxisOfActionTranslation.class, query.getResultList());
 						List<SelectElement> cameraAxisOfActionSelectList = new ArrayList<>();
 						for (CameraAxisOfActionTranslation cameraAxisOfActionTranslation : cameraAxisOfActionTranslationList) {
-							cameraAxisOfActionSelectList.add(new SelectElement(cameraAxisOfActionTranslation.getCameraAxisOfAction().getAnalysisMethodId(), cameraAxisOfActionTranslation.getName()));
+							cameraAxisOfActionSelectList.add(new SelectElement<Integer>(cameraAxisOfActionTranslation.getCameraAxisOfAction().getAnalysisMethodId(), cameraAxisOfActionTranslation.getName()));
 						}
 						selectElementList = cameraAxisOfActionSelectList;
 					break;
@@ -650,7 +650,7 @@ public class EndpointAnalysis {
 						List<CameraElevationTranslation> cameraElevationTranslationList = castList(CameraElevationTranslation.class, query.getResultList());
 						List<SelectElement> cameraElevationSelectList = new ArrayList<>();
 						for (CameraElevationTranslation cameraElevationTranslation : cameraElevationTranslationList) {
-							cameraElevationSelectList.add(new SelectElement(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
+							cameraElevationSelectList.add(new SelectElement<Integer>(cameraElevationTranslation.getCameraElevation().getAnalysisMethodId(), cameraElevationTranslation.getName()));
 						}
 						selectElementList = cameraElevationSelectList;
 					break;
@@ -660,7 +660,7 @@ public class EndpointAnalysis {
 						List<CameraDepthOfFocusTranslation> cameraDepthOfFocusTranslationList = castList(CameraDepthOfFocusTranslation.class, query.getResultList());
 						List<SelectElement> cameraDepthOfFocusSelectList = new ArrayList<>();
 						for (CameraDepthOfFocusTranslation cameraDepthOfFocusTranslation : cameraDepthOfFocusTranslationList) {
-							cameraDepthOfFocusSelectList.add(new SelectElement(cameraDepthOfFocusTranslation.getCameraDepthOfFocus().getAnalysisMethodId(), cameraDepthOfFocusTranslation.getType()));
+							cameraDepthOfFocusSelectList.add(new SelectElement<Integer>(cameraDepthOfFocusTranslation.getCameraDepthOfFocus().getAnalysisMethodId(), cameraDepthOfFocusTranslation.getType()));
 						}
 						selectElementList = cameraDepthOfFocusSelectList;
 					break;
@@ -684,7 +684,7 @@ public class EndpointAnalysis {
 						List<ArticulationTranslation> articulationTranslationList = castList(ArticulationTranslation.class, query.getResultList());
 						List<SelectElement> articulationSelectList = new ArrayList<>();
 						for (ArticulationTranslation articulationTranslation : articulationTranslationList) {
-							articulationSelectList.add(new SelectElement(articulationTranslation.getArticulation().getId(), articulationTranslation.getType()));
+							articulationSelectList.add(new SelectElement<Integer>(articulationTranslation.getArticulation().getId(), articulationTranslation.getType()));
 						}
 						selectElementList = articulationSelectList;
 					break;
@@ -694,7 +694,7 @@ public class EndpointAnalysis {
 						List<DynamicMarkingTranslation> dynamicMarkingTranslationList = castList(DynamicMarkingTranslation.class, query.getResultList());
 						List<SelectElement> dynamicMarkingSelectList = new ArrayList<>();
 						for (DynamicMarkingTranslation dynamicMarkingTranslation : dynamicMarkingTranslationList) {
-							dynamicMarkingSelectList.add(new SelectElement(dynamicMarkingTranslation.getDynamicMarking().getId(), dynamicMarkingTranslation.getType()));
+							dynamicMarkingSelectList.add(new SelectElement<Integer>(dynamicMarkingTranslation.getDynamicMarking().getId(), dynamicMarkingTranslation.getType()));
 						}
 						selectElementList = dynamicMarkingSelectList;
 					break;
@@ -704,7 +704,7 @@ public class EndpointAnalysis {
 						List<ChangeInDynamicsTranslation> changeInDynamicsTranslationList = castList(ChangeInDynamicsTranslation.class, query.getResultList());
 						List<SelectElement> changeInDynamicsSelectList = new ArrayList<>();
 						for (ChangeInDynamicsTranslation changeInDynamicsTranslation : changeInDynamicsTranslationList) {
-							changeInDynamicsSelectList.add(new SelectElement(changeInDynamicsTranslation.getChangeInDynamics().getId(), changeInDynamicsTranslation.getType()));
+							changeInDynamicsSelectList.add(new SelectElement<Integer>(changeInDynamicsTranslation.getChangeInDynamics().getId(), changeInDynamicsTranslation.getType()));
 						}
 						selectElementList = changeInDynamicsSelectList;
 					break;
@@ -714,7 +714,7 @@ public class EndpointAnalysis {
 						List<ChangeInTempoTranslation> changeInTempoTranslationList = castList(ChangeInTempoTranslation.class, query.getResultList());
 						List<SelectElement> changeInTempoSelectList = new ArrayList<>();
 						for (ChangeInTempoTranslation changeInTempoTranslation : changeInTempoTranslationList) {
-							changeInTempoSelectList.add(new SelectElement(changeInTempoTranslation.getChangeInTempo().getId(), changeInTempoTranslation.getType()));
+							changeInTempoSelectList.add(new SelectElement<Integer>(changeInTempoTranslation.getChangeInTempo().getId(), changeInTempoTranslation.getType()));
 						}
 						selectElementList = changeInTempoSelectList;
 					break;
@@ -724,7 +724,7 @@ public class EndpointAnalysis {
 						List<TempoMarkingTranslation> tempoMarkingTranslationList = castList(TempoMarkingTranslation.class, query.getResultList());
 						List<SelectElement> tempoMarkingSelectList = new ArrayList<>();
 						for (TempoMarkingTranslation tempoMarkingTranslation : tempoMarkingTranslationList) {
-							tempoMarkingSelectList.add(new SelectElement(tempoMarkingTranslation.getTempoMarking().getId(), tempoMarkingTranslation.getType()));
+							tempoMarkingSelectList.add(new SelectElement<Integer>(tempoMarkingTranslation.getTempoMarking().getId(), tempoMarkingTranslation.getType()));
 						}
 						selectElementList = tempoMarkingSelectList;
 					break;
@@ -734,7 +734,7 @@ public class EndpointAnalysis {
 						List<MusicalKeyTranslation> musicalKeyTranslationList = castList(MusicalKeyTranslation.class, query.getResultList());
 						List<SelectElement> musicalKeySelectList = new ArrayList<>();
 						for (MusicalKeyTranslation musicalKeyTranslation : musicalKeyTranslationList) {
-							musicalKeySelectList.add(new SelectElement(musicalKeyTranslation.getMusicalKey().getId(), musicalKeyTranslation.getType()));
+							musicalKeySelectList.add(new SelectElement<Integer>(musicalKeyTranslation.getMusicalKey().getId(), musicalKeyTranslation.getType()));
 						}
 						selectElementList = musicalKeySelectList;
 					break;
@@ -744,7 +744,7 @@ public class EndpointAnalysis {
 						List<Rhythm> rhythmList = castList(Rhythm.class, query.getResultList());
 						List<SelectElement> rhythmSelectList = new ArrayList<>();
 						for (Rhythm rhythm : rhythmList) {
-							rhythmSelectList.add(new SelectElement(rhythm.getId(), rhythm.getType()));
+							rhythmSelectList.add(new SelectElement<Integer>(rhythm.getId(), rhythm.getType()));
 						}
 						selectElementList = rhythmSelectList;
 					break;
@@ -754,7 +754,7 @@ public class EndpointAnalysis {
 						List<Timbre> timbreList = castList(Timbre.class, query.getResultList());
 						List<SelectElement> timbreSelectList = new ArrayList<>();
 						for (Timbre timbre : timbreList) {
-							timbreSelectList.add(new SelectElement(timbre.getId(), "NO ENTRIES YET")); // TODO
+							timbreSelectList.add(new SelectElement<Integer>(timbre.getId(), "NO ENTRIES YET")); // TODO
 						}
 						selectElementList = timbreSelectList;
 					break;
@@ -764,7 +764,7 @@ public class EndpointAnalysis {
 						List<JinsTranslation> jinsTranslationList = castList(JinsTranslation.class, query.getResultList());
 						List<SelectElement> jinsSelectList = new ArrayList<>();
 						for (JinsTranslation jinsTranslation : jinsTranslationList) {
-							jinsSelectList.add(new SelectElement(jinsTranslation.getJins().getId(), jinsTranslation.getType()));
+							jinsSelectList.add(new SelectElement<Integer>(jinsTranslation.getJins().getId(), jinsTranslation.getType()));
 						}
 						selectElementList = jinsSelectList;
 					break;
@@ -774,7 +774,7 @@ public class EndpointAnalysis {
 						List<Maqam> maqamList = castList(Maqam.class, query.getResultList());
 						List<SelectElementWithChildren> maqamSelectListWithChildren = new ArrayList<>();
 						for (Maqam maqam : maqamList) {
-							SelectElement maqamSubtype = new SelectElement(maqam.getMaqamSubtype().getId(),
+							SelectElement maqamSubtype = new SelectElement<Integer>(maqam.getMaqamSubtype().getId(),
 																														 maqam.getMaqamSubtype().getMaqamSubtypeTranslations().get(0).getSubtype());
 							List<SelectElement> maqamSubtypeList = new ArrayList<>();
 							maqamSubtypeList.add(maqamSubtype);
@@ -826,7 +826,7 @@ public class EndpointAnalysis {
 					List<MontageFigureMacroTranslation> montageFigureMacroTranslationList = castList(MontageFigureMacroTranslation.class, query.getResultList());
 					List<SelectElement> montageFigureMacroSelectList = new ArrayList<>();
 					for (MontageFigureMacroTranslation montageFigureMacroTranslation : montageFigureMacroTranslationList) {
-						montageFigureMacroSelectList.add(new SelectElement(montageFigureMacroTranslation.getMontageFigureMacro().getAnalysisMethodId(), montageFigureMacroTranslation.getName()));
+						montageFigureMacroSelectList.add(new SelectElement<Integer>(montageFigureMacroTranslation.getMontageFigureMacro().getAnalysisMethodId(), montageFigureMacroTranslation.getName()));
 					}
 					selectElementList = montageFigureMacroSelectList;
 				break;
@@ -836,7 +836,7 @@ public class EndpointAnalysis {
 					List<MontageFigureMicroTranslation> montageFigureMicroTranslationList = castList(MontageFigureMicroTranslation.class, query.getResultList());
 					List<SelectElement> montageFigureMicroSelectList = new ArrayList<>();
 					for (MontageFigureMicroTranslation montageFigureMicroTranslation : montageFigureMicroTranslationList) {
-						montageFigureMicroSelectList.add(new SelectElement(montageFigureMicroTranslation.getMontageFigureMicro().getAnalysisMethodId(), montageFigureMicroTranslation.getName()));
+						montageFigureMicroSelectList.add(new SelectElement<Integer>(montageFigureMicroTranslation.getMontageFigureMicro().getAnalysisMethodId(), montageFigureMicroTranslation.getName()));
 					}
 					selectElementList = montageFigureMicroSelectList;
 				break;
@@ -846,7 +846,7 @@ public class EndpointAnalysis {
 					List<TakeJunctionTranslation> takeJunctionTranslationList = castList(TakeJunctionTranslation.class, query.getResultList());
 					List<SelectElement> takeJunctionSelectList = new ArrayList<>();
 					for (TakeJunctionTranslation takeJunctionTranslation : takeJunctionTranslationList) {
-						takeJunctionSelectList.add(new SelectElement(takeJunctionTranslation.getTakeJunction().getAnalysisMethodId(), takeJunctionTranslation.getName()));
+						takeJunctionSelectList.add(new SelectElement<Integer>(takeJunctionTranslation.getTakeJunction().getAnalysisMethodId(), takeJunctionTranslation.getName()));
 					}
 					selectElementList = takeJunctionSelectList;
 				break;
@@ -856,7 +856,7 @@ public class EndpointAnalysis {
 					List<EditingRhythmTranslation> editingRhythmTranslationList = castList(EditingRhythmTranslation.class, query.getResultList());
 					List<SelectElement> editingRhythmSelectList = new ArrayList<>();
 					for (EditingRhythmTranslation editingRhythmTranslation : editingRhythmTranslationList) {
-						editingRhythmSelectList.add(new SelectElement(editingRhythmTranslation.getEditingRhythm().getAnalysisMethodId(), editingRhythmTranslation.getName()));
+						editingRhythmSelectList.add(new SelectElement<Integer>(editingRhythmTranslation.getEditingRhythm().getAnalysisMethodId(), editingRhythmTranslation.getName()));
 					}
 					selectElementList = editingRhythmSelectList;
 				break;
@@ -866,7 +866,7 @@ public class EndpointAnalysis {
 					List<TakeTypeProgressionTranslation> takeTypeProgressionTranslationList = castList(TakeTypeProgressionTranslation.class, query.getResultList());
 					List<SelectElement> takeTypeProgressionSelectList = new ArrayList<>();
 					for (TakeTypeProgressionTranslation takeTypeProgressionTranslation : takeTypeProgressionTranslationList) {
-						takeTypeProgressionSelectList.add(new SelectElement(takeTypeProgressionTranslation.getTakeTypeProgression().getAnalysisMethodId(), takeTypeProgressionTranslation.getName()));
+						takeTypeProgressionSelectList.add(new SelectElement<Integer>(takeTypeProgressionTranslation.getTakeTypeProgression().getAnalysisMethodId(), takeTypeProgressionTranslation.getName()));
 					}
 					selectElementList = takeTypeProgressionSelectList;
 				break;
@@ -876,7 +876,7 @@ public class EndpointAnalysis {
 					List<CameraShotTypeTranslation> cameraShotTypeTranslationList = castList(CameraShotTypeTranslation.class, query.getResultList());
 					List<SelectElement> cameraShotTypeSelectList = new ArrayList<>();
 					for (CameraShotTypeTranslation cameraShotTypeTranslation : cameraShotTypeTranslationList) {
-						cameraShotTypeSelectList.add(new SelectElement(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
+						cameraShotTypeSelectList.add(new SelectElement<Integer>(cameraShotTypeTranslation.getCameraShotType().getAnalysisMethodId(), cameraShotTypeTranslation.getType()));
 					}
 					selectElementList = cameraShotTypeSelectList;
 				break;
@@ -886,7 +886,7 @@ public class EndpointAnalysis {
 					List<PlaybackSpeedTranslation> playbackSpeedTranslationList = castList(PlaybackSpeedTranslation.class, query.getResultList());
 					List<SelectElement> playbackSpeedSelectList = new ArrayList<>();
 					for (PlaybackSpeedTranslation playbackSpeedTranslation : playbackSpeedTranslationList) {
-						playbackSpeedSelectList.add(new SelectElement(playbackSpeedTranslation.getPlaybackSpeed().getAnalysisMethodId(), playbackSpeedTranslation.getName()));
+						playbackSpeedSelectList.add(new SelectElement<Integer>(playbackSpeedTranslation.getPlaybackSpeed().getAnalysisMethodId(), playbackSpeedTranslation.getName()));
 					}
 					selectElementList = playbackSpeedSelectList;
 				break;
@@ -896,7 +896,7 @@ public class EndpointAnalysis {
 					List<ImageCadreEditingTranslation> imageCadreEditingTranslationList = castList(ImageCadreEditingTranslation.class, query.getResultList());
 					List<SelectElement> imageCadreEditingSelectList = new ArrayList<>();
 					for (ImageCadreEditingTranslation imageCadreEditingTranslation : imageCadreEditingTranslationList) {
-						imageCadreEditingSelectList.add(new SelectElement(imageCadreEditingTranslation.getImageCadreEditing().getAnalysisMethodId(), imageCadreEditingTranslation.getName()));
+						imageCadreEditingSelectList.add(new SelectElement<Integer>(imageCadreEditingTranslation.getImageCadreEditing().getAnalysisMethodId(), imageCadreEditingTranslation.getName()));
 					}
 					selectElementList = imageCadreEditingSelectList;
 				break;
@@ -926,7 +926,7 @@ public class EndpointAnalysis {
 						List<LightingTypeTranslation> lightingTypeTranslationList = castList(LightingTypeTranslation.class, query.getResultList());
 						List<SelectElement> lightingTypeSelectList = new ArrayList<>();
 						for (LightingTypeTranslation lightingTypeTranslation : lightingTypeTranslationList) {
-							lightingTypeSelectList.add(new SelectElement(lightingTypeTranslation.getLightingType().getAnalysisMethodId(), lightingTypeTranslation.getName()));
+							lightingTypeSelectList.add(new SelectElement<Integer>(lightingTypeTranslation.getLightingType().getAnalysisMethodId(), lightingTypeTranslation.getName()));
 						}
 						selectElementList = lightingTypeSelectList;
 					break;
@@ -936,7 +936,7 @@ public class EndpointAnalysis {
 						List<LightPositionTranslation> lightPositionTranslationList = castList(LightPositionTranslation.class, query.getResultList());
 						List<SelectElement> lightPositionSelectList = new ArrayList<>();
 						for (LightPositionTranslation lightPositionTranslation : lightPositionTranslationList) {
-							lightPositionSelectList.add(new SelectElement(lightPositionTranslation.getLightPosition().getAnalysisMethodId(), lightPositionTranslation.getName()));
+							lightPositionSelectList.add(new SelectElement<Integer>(lightPositionTranslation.getLightPosition().getAnalysisMethodId(), lightPositionTranslation.getName()));
 						}
 						selectElementList = lightPositionSelectList;
 					break;
@@ -946,7 +946,7 @@ public class EndpointAnalysis {
 						List<LightPositionAngleHorizontalTranslation> lightPositionAngleHorizontalTranslationList = castList(LightPositionAngleHorizontalTranslation.class, query.getResultList());
 						List<SelectElement> lightPositionAngleHorizontalSelectList = new ArrayList<>();
 						for (LightPositionAngleHorizontalTranslation lightPositionAngleHorizontalTranslation : lightPositionAngleHorizontalTranslationList) {
-							lightPositionAngleHorizontalSelectList.add(new SelectElement(lightPositionAngleHorizontalTranslation.getLightPositionAngleHorizontal().getAnalysisMethodId(), lightPositionAngleHorizontalTranslation.getName()));
+							lightPositionAngleHorizontalSelectList.add(new SelectElement<Integer>(lightPositionAngleHorizontalTranslation.getLightPositionAngleHorizontal().getAnalysisMethodId(), lightPositionAngleHorizontalTranslation.getName()));
 						}
 						selectElementList = lightPositionAngleHorizontalSelectList;
 					break;
@@ -956,7 +956,7 @@ public class EndpointAnalysis {
 						List<LightPositionAngleVerticalTranslation> lightPositionAngleVerticalTranslationList = castList(LightPositionAngleVerticalTranslation.class, query.getResultList());
 						List<SelectElement> lightPositionAngleVerticalSelectList = new ArrayList<>();
 						for (LightPositionAngleVerticalTranslation lightPositionAngleVerticalTranslation : lightPositionAngleVerticalTranslationList) {
-							lightPositionAngleVerticalSelectList.add(new SelectElement(lightPositionAngleVerticalTranslation.getLightPositionAngleVertical().getAnalysisMethodId(), lightPositionAngleVerticalTranslation.getName()));
+							lightPositionAngleVerticalSelectList.add(new SelectElement<Integer>(lightPositionAngleVerticalTranslation.getLightPositionAngleVertical().getAnalysisMethodId(), lightPositionAngleVerticalTranslation.getName()));
 						}
 						selectElementList = lightPositionAngleVerticalSelectList;
 					break;
@@ -966,7 +966,7 @@ public class EndpointAnalysis {
 						List<LightModifierTranslation> lightModifierTranslationList = castList(LightModifierTranslation.class, query.getResultList());
 						List<SelectElement> lightModifierSelectList = new ArrayList<>();
 						for (LightModifierTranslation lightModifierTranslation : lightModifierTranslationList) {
-							lightModifierSelectList.add(new SelectElement(lightModifierTranslation.getLightModifier().getAnalysisMethodId(), lightModifierTranslation.getName()));
+							lightModifierSelectList.add(new SelectElement<Integer>(lightModifierTranslation.getLightModifier().getAnalysisMethodId(), lightModifierTranslation.getName()));
 						}
 						selectElementList = lightModifierSelectList;
 					break;
@@ -976,7 +976,7 @@ public class EndpointAnalysis {
 						List<LightingDurationTranslation> lightingDurationTranslationList = castList(LightingDurationTranslation.class, query.getResultList());
 						List<SelectElement> lightingDurationSelectList = new ArrayList<>();
 						for (LightingDurationTranslation lightingDurationTranslation : lightingDurationTranslationList) {
-							lightingDurationSelectList.add(new SelectElement(lightingDurationTranslation.getLightingDuration().getAnalysisMethodId(), lightingDurationTranslation.getName()));
+							lightingDurationSelectList.add(new SelectElement<Integer>(lightingDurationTranslation.getLightingDuration().getAnalysisMethodId(), lightingDurationTranslation.getName()));
 						}
 						selectElementList = lightingDurationSelectList;
 					break;
@@ -990,7 +990,7 @@ public class EndpointAnalysis {
 						List<ActingTechniqueTranslation> actingTechniqueTranslationList = castList(ActingTechniqueTranslation.class, query.getResultList());
 						List<SelectElement> actingTechniqueSelectList = new ArrayList<>();
 						for (ActingTechniqueTranslation actingTechniqueTranslation : actingTechniqueTranslationList) {
-							actingTechniqueSelectList.add(new SelectElement(actingTechniqueTranslation.getActingTechnique().getAnalysisMethodId(), actingTechniqueTranslation.getName()));
+							actingTechniqueSelectList.add(new SelectElement<Integer>(actingTechniqueTranslation.getActingTechnique().getAnalysisMethodId(), actingTechniqueTranslation.getName()));
 						}
 						selectElementList = actingTechniqueSelectList;
 					break;
@@ -1000,7 +1000,7 @@ public class EndpointAnalysis {
 						List<FacialExpressionTranslation> facialExpressionTranslationList = castList(FacialExpressionTranslation.class, query.getResultList());
 						List<SelectElement> facialExpressionSelectList = new ArrayList<>();
 						for (FacialExpressionTranslation facialExpressionTranslation : facialExpressionTranslationList) {
-							facialExpressionSelectList.add(new SelectElement(facialExpressionTranslation.getFacialExpression().getAnalysisMethodId(), facialExpressionTranslation.getName()));
+							facialExpressionSelectList.add(new SelectElement<Integer>(facialExpressionTranslation.getFacialExpression().getAnalysisMethodId(), facialExpressionTranslation.getName()));
 						}
 						selectElementList = facialExpressionSelectList;
 					break;
@@ -1010,7 +1010,7 @@ public class EndpointAnalysis {
 						List<FacialExpressionIntensityTranslation> facialExpressionIntensityTranslationList = castList(FacialExpressionIntensityTranslation.class, query.getResultList());
 						List<SelectElement> facialExpressionIntensitySelectList = new ArrayList<>();
 						for (FacialExpressionIntensityTranslation facialExpressionIntensityTranslation : facialExpressionIntensityTranslationList) {
-							facialExpressionIntensitySelectList.add(new SelectElement(facialExpressionIntensityTranslation.getFacialExpressionIntensity().getAnalysisMethodId(), facialExpressionIntensityTranslation.getFacialExpressionIntensity().getValue() + " " + facialExpressionIntensityTranslation.getName()));
+							facialExpressionIntensitySelectList.add(new SelectElement<Integer>(facialExpressionIntensityTranslation.getFacialExpressionIntensity().getAnalysisMethodId(), facialExpressionIntensityTranslation.getFacialExpressionIntensity().getValue() + " " + facialExpressionIntensityTranslation.getName()));
 						}
 						selectElementList = facialExpressionIntensitySelectList;
 					break;
@@ -1020,7 +1020,7 @@ public class EndpointAnalysis {
 						List<GesturalEmotionTranslation> gesturalEmotionTranslationList = castList(GesturalEmotionTranslation.class, query.getResultList());
 						List<SelectElement> gesturalEmotionSelectList = new ArrayList<>();
 						for (GesturalEmotionTranslation gesturalEmotionTranslation : gesturalEmotionTranslationList) {
-							gesturalEmotionSelectList.add(new SelectElement(gesturalEmotionTranslation.getGesturalEmotion().getAnalysisMethodId(), gesturalEmotionTranslation.getName()));
+							gesturalEmotionSelectList.add(new SelectElement<Integer>(gesturalEmotionTranslation.getGesturalEmotion().getAnalysisMethodId(), gesturalEmotionTranslation.getName()));
 						}
 						selectElementList = gesturalEmotionSelectList;
 					break;
@@ -1030,7 +1030,7 @@ public class EndpointAnalysis {
 						List<GesturalEmotionIntensityTranslation> gesturalEmotionIntensityTranslationList = castList(GesturalEmotionIntensityTranslation.class, query.getResultList());
 						List<SelectElement> gesturalEmotionIntensitySelectList = new ArrayList<>();
 						for (GesturalEmotionIntensityTranslation gesturalEmotionIntensityTranslation : gesturalEmotionIntensityTranslationList) {
-							gesturalEmotionIntensitySelectList.add(new SelectElement(gesturalEmotionIntensityTranslation.getGesturalEmotionIntensity().getAnalysisMethodId(), gesturalEmotionIntensityTranslation.getGesturalEmotionIntensity().getValue() + " " + gesturalEmotionIntensityTranslation.getName()));
+							gesturalEmotionIntensitySelectList.add(new SelectElement<Integer>(gesturalEmotionIntensityTranslation.getGesturalEmotionIntensity().getAnalysisMethodId(), gesturalEmotionIntensityTranslation.getGesturalEmotionIntensity().getValue() + " " + gesturalEmotionIntensityTranslation.getName()));
 						}
 						selectElementList = gesturalEmotionIntensitySelectList;
 					break;
@@ -1040,7 +1040,7 @@ public class EndpointAnalysis {
 						List<PhysicalExpressionTranslation> physicalExpressionTranslationList = castList(PhysicalExpressionTranslation.class, query.getResultList());
 						List<SelectElement> physicalExpressionSelectList = new ArrayList<>();
 						for (PhysicalExpressionTranslation physicalExpressionTranslation : physicalExpressionTranslationList) {
-							physicalExpressionSelectList.add(new SelectElement(physicalExpressionTranslation.getPhysicalExpression().getAnalysisMethodId(), physicalExpressionTranslation.getName()));
+							physicalExpressionSelectList.add(new SelectElement<Integer>(physicalExpressionTranslation.getPhysicalExpression().getAnalysisMethodId(), physicalExpressionTranslation.getName()));
 						}
 						selectElementList = physicalExpressionSelectList;
 					break;
@@ -1050,7 +1050,7 @@ public class EndpointAnalysis {
 						List<PhysicalExpressionIntensityTranslation> physicalExpressionIntensityTranslationList = castList(PhysicalExpressionIntensityTranslation.class, query.getResultList());
 						List<SelectElement> physicalExpressionIntensitySelectList = new ArrayList<>();
 						for (PhysicalExpressionIntensityTranslation physicalExpressionIntensityTranslation : physicalExpressionIntensityTranslationList) {
-							physicalExpressionIntensitySelectList.add(new SelectElement(physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getAnalysisMethodId(), physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getValue() + " " + physicalExpressionIntensityTranslation.getName()));
+							physicalExpressionIntensitySelectList.add(new SelectElement<Integer>(physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getAnalysisMethodId(), physicalExpressionIntensityTranslation.getPhysicalExpressionIntensity().getValue() + " " + physicalExpressionIntensityTranslation.getName()));
 						}
 						selectElementList = physicalExpressionIntensitySelectList;
 					break;

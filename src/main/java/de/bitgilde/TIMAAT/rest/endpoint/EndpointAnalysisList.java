@@ -231,14 +231,14 @@ public class EndpointAnalysisList {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			// System.out.println("EndpointCategory: getCategorySelectList - no search string");
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 
@@ -300,13 +300,13 @@ public class EndpointAnalysisList {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 
@@ -368,13 +368,13 @@ public class EndpointAnalysisList {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 
@@ -510,13 +510,13 @@ public class EndpointAnalysisList {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 
@@ -578,13 +578,13 @@ public class EndpointAnalysisList {
 			List<Category> searchCategoryList = castList(Category.class, query.getResultList());
 			for (Category category : searchCategoryList) {
 				if (categoryList.contains(category)) {
-					categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+					categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 				}
 			}
 		} else {
 			Collections.sort(categoryList, (Comparator<Category>) (Category c1, Category c2) -> c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()));
 			for (Category category : categoryList) {
-				categorySelectList.add(new SelectElement(category.getId(), category.getName()));
+				categorySelectList.add(new SelectElement<Integer>(category.getId(), category.getName()));
 			}
 		}
 
