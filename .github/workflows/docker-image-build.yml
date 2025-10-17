@@ -3,7 +3,7 @@ name: Build & Push Multi-Arch Docker Image
 on:
   push:
     branches:
-      - main
+      - 10-erstellung-einer-containerumgebung
   schedule:
     - cron: '0 2 * * *'
 
