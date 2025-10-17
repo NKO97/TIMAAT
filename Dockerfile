@@ -10,8 +10,6 @@ ARG TIMAAT_VERSION
 ENV TIMAAT_VERSION=$TIMAAT_VERSION
 
 # TIMAAT Configuration variables
-ENV STORAGE_LOCATION="/var/lib/timaat"
-ENV STORAGE_TEMP_LOCATION="/var/lib/timaat"
 ENV APP_TASK_QUEUESIZE=1000
 ENV APP_TASK_COREPARALLELCOUNT=2
 ENV APP_TASK_MAXPARALLELCOUNT=4
@@ -21,6 +19,10 @@ ENV APP_TASK_MAXPARALLELCOUNT=4
 COPY docker/timaat-entrypoint.sh /usr/local/bin/timaat-entrypoint.sh
 COPY src/main/resources/database/db_update.sql /var/lib/timmat/sql/db_update.sql
 COPY src/main/resources/database/fipop.sql /var/lib/timaat/sql/fipop.sql
+
+# TODO: Configure the cron job
+COPY src/main/resources/scripts/timaat-cron.sh /var/lib/timaat/scripts/timaat-cron.sh
+COPY src/main/resources/scripts/timaat-encoder.sh /var/lib/timaat/scripts/timaat-encoder.sh
 
 # Copy webapp to tomcat webapps directory
 COPY target/TIMAAT.war /usr/local/tomcat/webapps
