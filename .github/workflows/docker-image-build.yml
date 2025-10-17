@@ -42,7 +42,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: christophguentherunierfurt/timaat
+          images: ${{ DOCKERHUB_IMAGE_IDENTIFIER }}
           tags: |
             # Tag released versions (v1.2.3 → 1.2.3)
             type=semver,pattern={{version}}
