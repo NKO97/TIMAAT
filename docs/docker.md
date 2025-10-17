@@ -31,7 +31,6 @@ The image tags are named by following convention:
 * **latest**: Contains highest released version
 * **latest-snapshot**: Contains the highest unreleased snapshot version
 * **{major}.{minor}.{patch}**: Contains the specified released version
-* **{major}.{minor}.{patch}-snapshot**: Contains the specified snapshot version
 
 ### Environment Variables
 
