@@ -49,7 +49,7 @@ jobs:
             # Add "latest" to the highest released version
             type=semver,pattern=latest
             # Add "latest-snapshot" for master branch builds
-            type=ref,event=branch,enable=${{ github.ref == 'refs/heads/master' }},prefix=latest-,suffix=-snapshot
+            type=raw,value=latest-snapshot,enable={{is_default_branch}}
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
