@@ -19,8 +19,6 @@ ENV APP_TASK_MAXPARALLELCOUNT=4
 COPY docker/timaat-entrypoint.sh /usr/local/bin/timaat-entrypoint.sh
 COPY src/main/resources/database/db_update.sql /var/lib/timmat/sql/db_update.sql
 COPY src/main/resources/database/fipop.sql /var/lib/timaat/sql/fipop.sql
-
-# TODO: Configure the cron job
 COPY src/main/resources/scripts/timaat-cron.sh /var/lib/timaat/scripts/timaat-cron.sh
 COPY src/main/resources/scripts/timaat-encoder.sh /var/lib/timaat/scripts/timaat-encoder.sh
 
