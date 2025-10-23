@@ -1,5 +1,6 @@
 package de.bitgilde.TIMAAT.audio.io;
 
+import de.bitgilde.TIMAAT.processing.audio.io.WaveformBinaryFileReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

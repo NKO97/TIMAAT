@@ -1,9 +1,9 @@
 package de.bitgilde.TIMAAT.task.execution;
 
-import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
-import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
-import de.bitgilde.TIMAAT.audio.api.PcmMono16BitLittleEndian;
-import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
+import de.bitgilde.TIMAAT.processing.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.processing.audio.api.AudioMetaInformation;
+import de.bitgilde.TIMAAT.processing.audio.api.PcmMono16BitLittleEndian;
+import de.bitgilde.TIMAAT.processing.audio.exception.AudioEngineException;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioContainingMediumFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;

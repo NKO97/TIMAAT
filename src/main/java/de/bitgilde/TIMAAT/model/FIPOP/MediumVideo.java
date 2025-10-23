@@ -57,7 +57,7 @@ public class MediumVideo implements Serializable {
 	private String videoCodec;
 
   @Column(name="thumbnail_position_ms")
-  private int thumbnailPositionMs;
+  private Integer thumbnailPositionMs;
 
 	private int width;
 
@@ -171,11 +171,11 @@ public class MediumVideo implements Serializable {
     isEpisode = episode;
   }
 
-  public int getThumbnailPositionMs() {
+  public Integer getThumbnailPositionMs() {
     return thumbnailPositionMs;
   }
 
-  public void setThumbnailPositionMs(int thumbnailPositionMs) {
+  public void setThumbnailPositionMs(Integer thumbnailPositionMs) {
     this.thumbnailPositionMs = thumbnailPositionMs;
   }
 }

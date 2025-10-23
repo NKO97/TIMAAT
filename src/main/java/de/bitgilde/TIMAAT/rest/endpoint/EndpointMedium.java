@@ -6,9 +6,9 @@ import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.SelectElementWithToken;
 import de.bitgilde.TIMAAT.TIMAATApp;
-import de.bitgilde.TIMAAT.audio.api.FrequencyInformation;
-import de.bitgilde.TIMAAT.audio.io.FrequencyFileReader;
-import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileReader;
+import de.bitgilde.TIMAAT.processing.audio.api.FrequencyInformation;
+import de.bitgilde.TIMAAT.processing.audio.io.FrequencyFileReader;
+import de.bitgilde.TIMAAT.processing.audio.io.WaveformBinaryFileReader;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioPostProduction;
@@ -41,14 +41,17 @@ import de.bitgilde.TIMAAT.model.TimeRange;
 import de.bitgilde.TIMAAT.model.fileInformation.AudioInformation;
 import de.bitgilde.TIMAAT.model.fileInformation.ImageInformation;
 import de.bitgilde.TIMAAT.model.fileInformation.VideoInformation;
+import de.bitgilde.TIMAAT.processing.video.FfmpegVideoEngine;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumHasMusicListPayload;
 import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumHasMusicListPayload.MediumHasMusicListEntry;
+import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumVideoThumbnailPayload;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.entity.MediumStorage;
+import de.bitgilde.TIMAAT.storage.entity.MediumVideoStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage.ImageFileType;
@@ -67,6 +70,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -98,6 +102,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -137,6 +142,8 @@ import java.util.stream.Collectors;
 @Path("/medium")
 public class EndpointMedium {
 
+  private static final int DEFAULT_THUMBNAIL_TIMESTAMP_MS = 1000;
+
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
@@ -153,6 +160,10 @@ public class EndpointMedium {
 	private ImageFileStorage imageFileStorage;
   @Inject
   private MediumStorage mediumStorage;
+  @Inject
+  private MediumVideoStorage mediumVideoStorage;
+  @Inject
+  private FfmpegVideoEngine ffmpegVideoEngine;
 
 
 	@GET
@@ -2066,8 +2077,16 @@ public class EndpointMedium {
 																						UserLogManager.LogEvents.VIDEODELETED);
 
 		return Response.ok().build();
-
 	}
+
+  @POST
+  @Produces("image/png")
+  @Path("video/{id}/thumbnail")
+  @Secured
+  public Response updateMediumVideoThumbnail(@PathParam("id") int id, @Valid UpdateMediumVideoThumbnailPayload updateMediumVideoThumbnailPayload) throws IOException, InterruptedException {
+    java.nio.file.Path thumbnailPath = createVideoThumbnail(id, updateMediumVideoThumbnailPayload.getThumbnailPositionMs());
+    return Response.ok().entity(thumbnailPath.toFile()).build();
+  }
 
 	@POST
   @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -3220,7 +3239,7 @@ public class EndpointMedium {
 				stream.flush();
 				stream.close();
 
-                originalVideoFilePath = videoFileStorage.persistOriginalFile(uploadTempFile.getTemporaryFilePath(), mediumId);
+        originalVideoFilePath = videoFileStorage.persistOriginalFile(uploadTempFile.getTemporaryFilePath(), mediumId);
 			}
 
 			// get data from ffmpeg
@@ -3242,8 +3261,7 @@ public class EndpointMedium {
 			entityTransaction.commit();
 			entityManager.refresh(mediumVideo);
 
-			createVideoThumbnails(mediumId, originalVideoFilePath);
-
+			createVideoThumbnail(mediumId, DEFAULT_THUMBNAIL_TIMESTAMP_MS);
 			taskService.executeMediumAudioAnalysisTask(mediumId, SupportedMediumType.VIDEO);
 			// add log entry
 			UserLogManager.getLogger().addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
@@ -3597,7 +3615,7 @@ public class EndpointMedium {
 	 * @return
 	 */
 	@GET
-    @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+  @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
 	@Path("{id}/analysisLists")
 	@Secured
 	public Response getMediumAnalysisLists(@PathParam("id") int mediumId,
@@ -4179,32 +4197,21 @@ public class EndpointMedium {
 		return resizedImage;
 	}
 
-	private void createVideoThumbnails(int mediumId, java.nio.file.Path mediumFilePath) {
-		Runtime r = Runtime.getRuntime();
-	    Process p;     // Process tracks one external native process
+	private java.nio.file.Path createVideoThumbnail(int mediumId, int frameTimeStampMs) throws IOException, InterruptedException {
+    Optional<java.nio.file.Path> mediumVideoFilePathOptional = videoFileStorage.getPathToOriginalFile(mediumId);
 
-        try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
-            String[] commandLine = { TIMAATApp.timaatProps.getProp(PropertyConstants.FFMPEG_LOCATION)+"ffmpeg"+TIMAATApp.systemExt,
-                    "-i", mediumFilePath.toString(),
-                    "-ss", "00:00:01.000", // timecode of thumbnail
-                    "-vframes", "1", "-y",
-					"-f", "image2",
-					"-vcodec", "png",
-					"-update", "1",
-                    temporaryFile.getTemporaryFilePath().toString() };
+    float frameTimeStampInSeconds = frameTimeStampMs / 1000f;
 
-            p = r.exec(commandLine);
-            try {
-                p.waitFor();  // wait for process to complete
-            } catch (InterruptedException e) {
-                System.err.println(e);  // "Can'tHappen"
-            }
+    if(mediumVideoFilePathOptional.isPresent()) {
+      java.nio.file.Path mediumVideoFilePath = mediumVideoFilePathOptional.get();
+      try(TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()){
+        ffmpegVideoEngine.extractFrameOfVideo(mediumVideoFilePath, temporaryFile.getTemporaryFilePath(), frameTimeStampInSeconds);
+        mediumVideoStorage.updateThumbnailPositionMs(mediumId, frameTimeStampMs);
+        return videoFileStorage.persistThumbnailFile(temporaryFile.getTemporaryFilePath(), mediumId);
+      }
+    }
 
-			videoFileStorage.persistThumbnailFile(temporaryFile.getTemporaryFilePath(), mediumId);
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+    throw new FileNotFoundException();
 	}
 
 	public static String issueFileToken(int mediumID) {

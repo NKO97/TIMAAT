@@ -1,6 +1,7 @@
 package de.bitgilde.TIMAAT.audio.io;
 
-import de.bitgilde.TIMAAT.audio.api.FrequencyInformation;
+import de.bitgilde.TIMAAT.processing.audio.api.FrequencyInformation;
+import de.bitgilde.TIMAAT.processing.audio.io.FrequencyFileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

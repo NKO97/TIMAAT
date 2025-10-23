@@ -73,7 +73,7 @@ public class Annotation implements Serializable {
 	private long endTime;
 
   @Column(name="thumbnail_position_ms")
-  private int thumbnailPositionMs;
+  private Integer thumbnailPositionMs;
 
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
@@ -610,11 +610,11 @@ public class Annotation implements Serializable {
     return this.mediumAnalysisList.getId();
   }
 
-  public int getThumbnailPositionMs() {
+  public Integer getThumbnailPositionMs() {
     return thumbnailPositionMs;
   }
 
-  public void setThumbnailPositionMs(int thumbnailPositionMs) {
+  public void setThumbnailPositionMs(Integer thumbnailPositionMs) {
     this.thumbnailPositionMs = thumbnailPositionMs;
   }
 }

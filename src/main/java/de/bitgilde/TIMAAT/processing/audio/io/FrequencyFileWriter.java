@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.audio.io;
+package de.bitgilde.TIMAAT.processing.audio.io;
 
 import java.io.Closeable;
 import java.io.DataOutputStream;

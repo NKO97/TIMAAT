@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.task.execution;
 
-import de.bitgilde.TIMAAT.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.processing.audio.FfmpegAudioEngine;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioContainingMediumFileStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
