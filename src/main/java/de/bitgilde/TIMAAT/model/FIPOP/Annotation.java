@@ -72,6 +72,9 @@ public class Annotation implements Serializable {
 	@Column(name="end_time", columnDefinition = "INT")
 	private long endTime;
 
+  @Column(name="thumbnail_position_ms")
+  private int thumbnailPositionMs;
+
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
 	@JsonManagedReference(value= "Annotation-Analysis")
@@ -605,5 +608,13 @@ public class Annotation implements Serializable {
 
   public int getMediumAnalysisListId(){
     return this.mediumAnalysisList.getId();
+  }
+
+  public int getThumbnailPositionMs() {
+    return thumbnailPositionMs;
+  }
+
+  public void setThumbnailPositionMs(int thumbnailPositionMs) {
+    this.thumbnailPositionMs = thumbnailPositionMs;
   }
 }

@@ -256,12 +256,37 @@ BEGIN
     END IF;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE update_to_0_15_0()
+BEGIN
+    DECLARE db_major_version int;
+    DECLARE db_minor_version int;
+    DECLARE db_patch_version int;
+
+    SELECT major_version, minor_version, patch_version
+    INTO db_major_version, db_minor_version, db_patch_version
+    FROM db_version
+    LIMIT 1;
+
+    IF db_major_version = 0 AND db_minor_version = 14 AND db_patch_version = 2 THEN
+        SELECT 'execute update to 0.15.0' AS log_message;
+        DELETE FROM db_version;
+        INSERT INTO db_version (major_version, minor_version, patch_version) VALUES (0, 15, 0);
+
+        ALTER TABLE `fipop`.`medium_video` ADD COLUMN thumbnail_position_ms INT;
+        ALTER TABLE `fipop`.`annotation` ADD COLUMN thumbnail_position_ms INT;
+    END IF;
+END $$
+DELIMITER ;
+
 /**
  * Call update functions
  */
 CALL update_to_0_14_0();
 CALL update_to_0_14_1();
 CALL update_to_0_14_2();
+CALL update_to_0_15_0();
 
 /*
  * Delete update functions after finishing update script
@@ -269,3 +294,4 @@ CALL update_to_0_14_2();
 DROP PROCEDURE update_to_0_14_0;
 DROP PROCEDURE update_to_0_14_1;
 DROP PROCEDURE update_to_0_14_2;
+DROP PROCEDURE update_to_0_15_0;
