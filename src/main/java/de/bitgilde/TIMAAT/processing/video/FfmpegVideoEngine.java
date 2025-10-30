@@ -2,11 +2,10 @@ package de.bitgilde.TIMAAT.processing.video;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
-import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.processing.ExternalProcessExecutor;
+import de.bitgilde.TIMAAT.processing.video.exception.VideoEngineException;
 import jakarta.inject.Inject;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,15 +50,18 @@ public final class FfmpegVideoEngine extends ExternalProcessExecutor {
    * @param frameResult in which the frame will be persisted in
    * @param frameTimeStampInSeconds defines the position of the frame, which will be extracted
    */
-  public void extractFrameOfVideo(Path videoFile, Path frameResult, float frameTimeStampInSeconds) throws IOException, InterruptedException {
+  public void extractFrameOfVideo(Path videoFile, Path frameResult, float frameTimeStampInSeconds) throws VideoEngineException {
     logger.log(Level.FINE, "Extracting frame at {} from video located at {}",
             new Object[]{frameTimeStampInSeconds, videoFile});
 
-    String[] commandLine = {TIMAATApp.timaatProps.getProp(
-            PropertyConstants.FFMPEG_LOCATION) + "ffmpeg" + TIMAATApp.systemExt, "-i", videoFile.toString(), "-ss", String.valueOf(
+    String[] commandLine = {pathToFfmpeg.toString() , "-i", videoFile.toString(), "-ss", String.valueOf(
             frameTimeStampInSeconds), // timecode of thumbnail
             "-vframes", "1", "-y", "-f", "image2", "-vcodec", "png", "-update", "1", frameResult.toString()};
 
-    syncExecuteProcess(commandLine);
+    try{
+      syncExecuteProcess(commandLine);
+    }catch (Exception e){
+      throw new VideoEngineException("Failed to extract frame of video", e);
+    }
   }
 }

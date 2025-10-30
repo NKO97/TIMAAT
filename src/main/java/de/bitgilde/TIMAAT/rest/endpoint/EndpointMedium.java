@@ -42,6 +42,7 @@ import de.bitgilde.TIMAAT.model.fileInformation.AudioInformation;
 import de.bitgilde.TIMAAT.model.fileInformation.ImageInformation;
 import de.bitgilde.TIMAAT.model.fileInformation.VideoInformation;
 import de.bitgilde.TIMAAT.processing.video.FfmpegVideoEngine;
+import de.bitgilde.TIMAAT.processing.video.exception.VideoEngineException;
 import de.bitgilde.TIMAAT.rest.RangedStreamingOutput;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
@@ -2083,7 +2084,7 @@ public class EndpointMedium {
   @Produces("image/png")
   @Path("video/{id}/thumbnail")
   @Secured
-  public Response updateMediumVideoThumbnail(@PathParam("id") int id, @Valid UpdateMediumVideoThumbnailPayload updateMediumVideoThumbnailPayload) throws IOException, InterruptedException {
+  public Response updateMediumVideoThumbnail(@PathParam("id") int id, @Valid UpdateMediumVideoThumbnailPayload updateMediumVideoThumbnailPayload) throws IOException, VideoEngineException {
     java.nio.file.Path thumbnailPath = createVideoThumbnail(id, updateMediumVideoThumbnailPayload.getThumbnailPositionMs());
     return Response.ok().entity(thumbnailPath.toFile()).build();
   }
@@ -4197,7 +4198,7 @@ public class EndpointMedium {
 		return resizedImage;
 	}
 
-	private java.nio.file.Path createVideoThumbnail(int mediumId, int frameTimeStampMs) throws IOException, InterruptedException {
+	private java.nio.file.Path createVideoThumbnail(int mediumId, int frameTimeStampMs) throws IOException, VideoEngineException {
     Optional<java.nio.file.Path> mediumVideoFilePathOptional = videoFileStorage.getPathToOriginalFile(mediumId);
 
     float frameTimeStampInSeconds = frameTimeStampMs / 1000f;
