@@ -373,6 +373,15 @@
 				$('#mediumDatasetsMediumDeleteModal').modal('show');
 			});
 
+            $('.mediumDataSheetFormCaptureThumbnail').on('click', async function(event) {
+                const mediumId = $('#mediumFormMetadata').data('medium').model.id;
+
+                const currentVideoPreviewTimeSeconds = $('#mediumVideoPreview').get(0).currentTime
+                const currentVideoPreviewTimeMillis = Math.round(currentVideoPreviewTimeSeconds * 1000)
+
+                await TIMAAT.MediumService.updateMediumThumbnail(mediumId, currentVideoPreviewTimeMillis)
+            })
+
 			// confirm delete medium modal functionality
 			$('#mediumDatasetsModalDeleteSubmitButton').on('click', async function(event) {
 				let modal = $('#mediumDatasetsMediumDeleteModal');
@@ -2421,6 +2430,7 @@
 			$('.videoPreview').hide();
 			$('.imagePreview').hide();
 			$('.audioPreview').hide();
+
 			if ( data.model.fileStatus == 'noFile' || !data.model.fileStatus) {
 				if (data.model.mediumVideo || data.model.mediumImage || data.model.mediumAudio ) {
 					$('.uploadMediumButton').prop('disabled', false);
@@ -2469,6 +2479,7 @@
 						} else {
 							$('#mediumVideoPreview').attr('src', '/TIMAAT/api/medium/video/'+data.model.id+'/download'+'?token='+data.model.viewToken);
 							$('.videoPreview').show();
+                            $('.mediumDataSheetFormCaptureThumbnail').prop('disabled', false);
 						}
 					break;
 					default:

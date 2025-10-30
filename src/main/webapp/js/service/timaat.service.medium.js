@@ -647,6 +647,31 @@
 				console.error("ERROR: ", error);
 			});
 		},
+        async updateMediumThumbnail(mediumId, thumbnailPositionMs){
+            const payload = {
+                thumbnailPositionMs
+            }
+
+            return new Promise(resolve => {
+                $.ajax({
+                    url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/video/"+ mediumId + "/thumbnail",
+                    type:"POST",
+                    data: JSON.stringify(payload),
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(updateData) {
+                    resolve(updateData);
+                }).fail(function(error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
         async updateMediumHasMusicList(mediumId, mediumHasMusicList){
             const payload = {
                 mediumHasMusicListEntries: mediumHasMusicList
@@ -732,7 +757,6 @@
 				});
 			// }, Math.round(30000+(Math.random()*15000)));
 		},
-
 		async updateViewToken(medium) {
 			// console.log("TCL: updateViewToken(medium)", medium);
 				return new Promise(resolve => {

@@ -19,7 +19,7 @@ public class UpdateMediumVideoThumbnailPayload {
   private final int thumbnailPositionMs;
 
   @JsonCreator
-  public UpdateMediumVideoThumbnailPayload(Integer thumbnailPositionMs) {
+  public UpdateMediumVideoThumbnailPayload(@JsonProperty(THUMBNAIL_POSITION_MS_FIELD_NAME) Integer thumbnailPositionMs) {
     this.thumbnailPositionMs = thumbnailPositionMs;
   }
 
