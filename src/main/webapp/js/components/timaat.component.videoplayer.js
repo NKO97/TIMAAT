@@ -2620,9 +2620,9 @@
 
             $('#timelineMarkerPane').css('min-height', minHeightVideoAnnotationContainer + 'px');
 
-            let currentAudioMinHeight = parseInt($('.timeline__section--audio-waveform').css('min-height'))
+            let currentAudioMinHeight = parseInt($('.timeline__audio_annotation').css('min-height'))
             if(currentAudioMinHeight !== minHeightAudioAnnotationContainer){
-                $('.timeline__section--audio-waveform').css('min-height', minHeightAudioAnnotationContainer + 'px');
+                $('.timeline__audio_annotation').css('min-height', minHeightAudioAnnotationContainer + 'px');
                 this.drawWaveform()
             }
 		},
