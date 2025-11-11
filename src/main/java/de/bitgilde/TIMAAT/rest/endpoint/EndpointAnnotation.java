@@ -70,6 +70,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -714,12 +715,23 @@ public class EndpointAnnotation {
   @Produces("image/png")
   @Path("/{id}/thumbnail")
   @Secured
-  public Response getAnnotationThumbnail(@PathParam("id") int annotationId) {
+  public Response getAnnotationThumbnail(@PathParam("id") int annotationId) throws VideoEngineException, IOException {
     verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.READ);
     Optional<java.nio.file.Path> thumbnailFilePath = annotationFileStorage.getPathToThumbnail(annotationId);
 
     if (thumbnailFilePath.isPresent()) {
       return Response.ok(thumbnailFilePath.get().toFile()).build();
+    }else {
+      Annotation annotation = annotationStorage.getAnnotationById(annotationId);
+
+      if(annotation.getThumbnailPositionMs() != null){
+        logger.log(Level.WARNING, "Could not find thumbnail for annotation with id {0} which should be present. Creating new one.", annotationId);
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalFile(annotation.getMediumId());
+        if (originalVideoFilePath.isPresent()) {
+          java.nio.file.Path createdThumbnailPath = createThumbnailForAnnotation(annotationId, originalVideoFilePath.get(), annotation.getThumbnailPositionMs());
+          return Response.ok(createdThumbnailPath.toFile()).build();
+        }
+      }
     }
 
     return Response.status(Status.NOT_FOUND).build();

@@ -18,7 +18,7 @@ public class UpdateAnnotationThumbnailPayload {
   private final int thumbnailPositionMs;
 
   @JsonCreator
-  public UpdateAnnotationThumbnailPayload(Integer thumbnailPositionMs) {
+  public UpdateAnnotationThumbnailPayload(@JsonProperty(THUMBNAIL_POSITION_MS_FIELD_NAME) Integer thumbnailPositionMs) {
     this.thumbnailPositionMs = thumbnailPositionMs;
   }
 

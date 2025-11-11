@@ -274,8 +274,17 @@ BEGIN
         DELETE FROM db_version;
         INSERT INTO db_version (major_version, minor_version, patch_version) VALUES (0, 15, 0);
 
-        ALTER TABLE `fipop`.`medium_video` ADD COLUMN thumbnail_position_ms INT;
-        ALTER TABLE `fipop`.`annotation` ADD COLUMN thumbnail_position_ms INT;
+        ALTER TABLE `fipop`.`medium_video`
+            ADD COLUMN thumbnail_position_ms INT;
+        ALTER TABLE `fipop`.`annotation`
+            ADD COLUMN thumbnail_position_ms INT;
+
+        UPDATE `fipop`.`annotation`
+        set thumbnail_position_ms=start_time
+        where medium_analysis_list_id in (select medium_analysis_list.id
+                                          from medium_analysis_list
+                                                   join medium on medium_analysis_list.medium_id = medium.id
+                                          where medium.media_type_id = 6);
     END IF;
 END $$
 DELIMITER ;
