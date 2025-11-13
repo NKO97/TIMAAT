@@ -263,6 +263,23 @@
                       <i class="fas fa-list fa-fw"></i>
                     </a>
                 </li>
+                <li class="sidebar__li js-sidebar__li sidebarTabcategories">
+                    <a
+                            class="sidebar__a js-sidebar__a"
+                            onclick="TIMAAT.Categories.initCategoriesComponent()"
+                            data-toggle="popover"
+                            data-trigger="hover"
+                            data-animation="false"
+                            data-placement="right"
+                            data-template="
+                      <div class='popover' role='tooltip'>
+                        <div class='arrow'></div>
+                        <h3 class='popover-header'></h3>
+                      </div>"
+                            title="Categories">
+                        <i class="fas fa-sitemap fa-fw"></i>
+                    </a>
+                </li>
                 <li class="sidebar__li js-sidebar__li sidebarTabmedia">
                   <a
                     class="sidebar__a js-sidebar__a"
@@ -2265,6 +2282,20 @@
                   </div> <!-- row -->
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <!-------------------------------------------------------------------->
+        <!-- Categories                                                     -->
+        <!-------------------------------------------------------------------->
+        <div class="container-fluid component" id="componentCategories">
+          <div id="categoriesModalContainer"></div>
+          <div class="row pt-3">
+            <div class="col-md-4">
+              <p>col-4</p>
+            </div>
+            <div class="col-md-8">
+              <p>col-8</p>
             </div>
           </div>
         </div>

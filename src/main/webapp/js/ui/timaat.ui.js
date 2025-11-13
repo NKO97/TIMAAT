@@ -185,6 +185,9 @@
 				case 'lists':
 					$('#componentLists').show();
 				break;
+                case 'categories':
+                    $('#componentCategories').show();
+                break;
 				case 'media':
 					$('#componentMedia').show();
 				break;
