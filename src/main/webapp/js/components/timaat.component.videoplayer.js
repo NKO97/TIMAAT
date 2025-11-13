@@ -147,7 +147,6 @@
 			});
 
 			this.initNotifications();
-			this.initLogging();
 			this.initMenu();
 			this.initAnimationControls();
 			this.initInspectorControls();
@@ -1084,6 +1083,26 @@
 				}
 			});
 		},
+        updateTimeLineLayerConnectionVisibility: function () {
+            const timeLineLayerConnectionElement =  $('#timelineLayerConnection')
+            const timeLineLayerConnectionChecked = timeLineLayerConnectionElement.is(':checked')
+
+            let timeLineLayerConnectionVisible = false
+            if(timeLineLayerConnectionChecked) {
+                const timeLineLayerAudioChecked = $('#timelineAudioLayer').is(':checked')
+                const timeLineLayerVideoChecked = $('#timelineVisualLayer').is(':checked')
+
+                if(timeLineLayerAudioChecked && timeLineLayerVideoChecked) {
+                    timeLineLayerConnectionVisible = true
+                }
+            }
+
+            if (timeLineLayerConnectionVisible) {
+                $("#annotation_connection_layer").show()
+            } else {
+                $("#annotation_connection_layer").hide()
+            }
+        },
 
 		initTimeLineControls: function() {
 			// setup timeline view events
@@ -1093,6 +1112,7 @@
 				} else {
                     $("#timeline__video_annotation_section").hide()
 				}
+                TIMAAT.VideoPlayer.updateTimeLineLayerConnectionVisibility();
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
@@ -1102,15 +1122,12 @@
 				} else {
                     $(".timeline__audio_annotation").hide()
 				}
+                TIMAAT.VideoPlayer.updateTimeLineLayerConnectionVisibility();
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
             $('#timelineLayerConnection').on('click', function(ev) {
-                if ($('#timelineLayerConnection').is(':checked')) {
-                    $("#annotation_connection_layer").show()
-                } else {
-                    $("#annotation_connection_layer").hide()
-                }
+                TIMAAT.VideoPlayer.updateTimeLineLayerConnectionVisibility();
                 TIMAAT.VideoPlayer.sortListUI();
             });
 
