@@ -159,6 +159,10 @@
 
 			TIMAAT.EntityUpdate.registerEntityUpdateListener("MediumAudioAnalysis", this.handleMediumAudioAnalysisChanged.bind(this))
 			$('#retryWaveformGenerationButton').attr('onclick', 'TIMAAT.VideoPlayer.triggerWaveformGeneration()');
+
+            $('#audioWaveformTimelineCollapseWidgetIcon').on("click", () => {
+                TIMAAT.VideoPlayer.drawWaveform()
+            })
 		},
 
 		initNotifications: function() {
