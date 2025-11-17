@@ -35,10 +35,35 @@
 
 } (function (TIMAAT) {
     TIMAAT.Categories = {
+        init: function() {
+            $('#categorySetTab').on('click', function(event) {
+                TIMAAT.Categories.updateItemTypeSelection("categorySet")
+            });
 
+            $('#categoryTab').on('click', function(event) {
+                TIMAAT.Categories.updateItemTypeSelection("category")
+            });
+        },
         initCategoriesComponent: function () {
-            TIMAAT.URLHistory.setURL(null, 'Categories ', '#categories');
             TIMAAT.UI.showComponent('categories');
+            $('#categoryTab').trigger('click');
+        },
+
+        /**
+         * This method switches the selection of the current item type of the categories view
+         * @param itemType which will be selected. Can be category or categorySet
+         */
+        updateItemTypeSelection: function (itemType) {
+            switch (itemType) {
+                case 'category':
+                    TIMAAT.UI.displayComponent('category', 'categoryTab', 'categoryDataTable');
+                    TIMAAT.URLHistory.setURL(null, 'Categories', '#categories/categories');
+                    break
+                case 'categorySet':
+                    TIMAAT.UI.displayComponent('category', 'categorySetTab', 'categorySetDataTable');
+                    TIMAAT.URLHistory.setURL(null, 'Category Sets', '#categories/categorySets');
+                    break
+            }
         }
     }
 }))

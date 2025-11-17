@@ -74,6 +74,7 @@
 			TIMAAT.EntityUpdate.init()
 			TIMAAT.Datasets.init();
 			TIMAAT.Lists.init();
+            TIMAAT.Categories.init();
 			TIMAAT.UploadManager.init();
 			TIMAAT.VideoPlayer.init();
 			TIMAAT.Settings.init();

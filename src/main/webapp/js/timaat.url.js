@@ -72,7 +72,7 @@
         currentURL.hash = hash;
         let newURL = currentURL.href;
         history.pushState(data, title, newURL);
-        document.title = title;
+        document.title = `TIMAAT | ${title}`;
       }
     },
 
@@ -344,6 +344,21 @@
               }
             }
           break;
+          case 'categories':
+              TIMAAT.UI.showComponent('categories');
+              if ( pathSegments.length >= 2 ){
+                  switch (pathSegments[1]) {
+                    case 'categories':
+                        TIMAAT.Categories.updateItemTypeSelection("category");
+                    break
+                    case 'categorySets':
+                        TIMAAT.Categories.updateItemTypeSelection("categorySet");
+                    break
+                  }
+              }else {
+
+              }
+          break
           case 'actor': // #actor...
             // make sure actor list is loaded
             // if (!TIMAAT.ActorDatasets.actorsLoaded) {
@@ -622,92 +637,6 @@
                 } else {
                     this.redirectToDefaultView();
                 }
-              break;
-              default:
-                this.redirectToDefaultView();
-              break;
-            }
-          }
-          break;
-          case 'category': // #category...
-          // make sure category list is loaded
-          // if (!TIMAAT.Lists.listsLoaded) {
-          //   TIMAAT.Lists.setLists();
-          //   TIMAAT.Lists.listsLoaded = true;
-          // }
-          // show category component
-          TIMAAT.UI.showComponent('lists');
-          // show corresponding category form
-          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current category
-            $('#categoryList tr[id='+pathSegments[1]+']').trigger('click');
-            let category = {};
-            category.model = await TIMAAT.CategoryService.getCategory(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('category');
-            TIMAAT.UI.selectedCategoryId = pathSegments[1];
-            TIMAAT.UI.refreshDataTable('category');
-            $('#listsTabMetadata').data('type', 'category');
-            $('#categoryFormMetadata').data('category', category);
-            if ( pathSegments.length == 2 ) { //* #category/:id     (default view, show data sheet)
-              TIMAAT.UI.displayComponent('category', 'categoryTab', 'categoryDataTable', 'listsTabMetadata', 'categoryFormMetadata');
-              TIMAAT.UI.displayDataSetContent('dataSheet', category, 'category');
-            }
-            else { // other category form than data sheet
-              switch (pathSegments[2]) {
-                //* no further data tabs currently available
-                default:
-                  this.redirectToDefaultView();
-                break;
-              }
-            }
-          }
-          else {
-            switch (pathSegments[1]) {
-              case 'list': //* #category/list
-                TIMAAT.CategoryLists.loadCategories();
-                TIMAAT.UI.displayComponent('category', 'categoryTab', 'categoryDataTable');
-              break;
-              default:
-                this.redirectToDefaultView();
-              break;
-            }
-          }
-          break;
-          case 'categorySet': // #categorySet...
-          // make sure category set list is loaded
-          // if (!TIMAAT.Lists.listsLoaded) {
-          //   TIMAAT.Lists.setLists();
-          //   TIMAAT.Lists.listsLoaded = true;
-          // }
-          // show category set component
-          TIMAAT.UI.showComponent('lists');
-          // show corresponding category set form
-          if ( pathSegments.length >= 2 && !isNaN(pathSegments[1]) ) { // path segment is id of current category set
-            $('#categorySetList tr[id='+pathSegments[1]+']').trigger('click');
-            let categorySet = {};
-            categorySet.model = await TIMAAT.CategorySetService.getCategorySet(pathSegments[1]);
-            TIMAAT.UI.clearLastSelection('categorySet');
-            TIMAAT.UI.selectedCategorySetId = pathSegments[1];
-            TIMAAT.UI.refreshDataTable('categorySet');
-            $('#listsTabMetadata').data('type', 'categorySet');
-            $('#categorySetFormMetadata').data('categorySet', categorySet);
-            if ( pathSegments.length == 2 ) { //* #categorySet/:id     (default view, show data sheet)
-              TIMAAT.UI.displayComponent('categorySet', 'categorySetTab', 'categorySetDataTable', 'listsTabMetadata', 'categorySetFormMetadata');
-              TIMAAT.UI.displayDataSetContent('dataSheet', categorySet, 'categorySet');
-            }
-            else { // other category set form than data sheet
-              switch (pathSegments[2]) {
-                //* no further data tabs currently available
-                default:
-                  this.redirectToDefaultView();
-                break;
-              }
-            }
-          }
-          else {
-            switch (pathSegments[1]) {
-              case 'list': //* #categorySet/list
-                TIMAAT.CategoryLists.loadCategorySets();
-                TIMAAT.UI.displayComponent('categorySet', 'categorySetTab', 'categorySetDataTable');
               break;
               default:
                 this.redirectToDefaultView();

@@ -39,7 +39,6 @@
     listsLoaded: false,
 
     init: function() {
-      TIMAAT.CategoryLists.init();
       TIMAAT.RoleLists.init();
       TIMAAT.LanguageLists.initLanguages();
       TIMAAT.TagLists.init();
@@ -51,7 +50,7 @@
         this.setLists();
       }
       TIMAAT.UI.showComponent('lists');
-      // $('#categorySetTab').trigger('click');
+       $('#roleGroupTab').trigger('click');
     },
 
     initLists: function() {
@@ -62,20 +61,6 @@
         let id = 0;
         TIMAAT.UI.subNavTab = 'dataSheet';
         switch (type) {
-          case 'category':
-            data = $('#categoryFormMetadata').data('category');
-            name = data.model.name;
-            id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('categoryFormMetadata');
-            TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
-            break;
-          case 'categorySet':
-            data = $('#categorySetFormMetadata').data('categorySet');
-            name = data.model.name;
-            id = data.model.id;
-            TIMAAT.UI.displayDataSetContentArea('categorySetFormMetadata');
-            TIMAAT.URLHistory.setURL(null, name + ' · Datasets · ' + type[0].toUpperCase() + type.slice(1), '#'+type+'/' + id);
-            break;
           case 'role':
             data = $('#roleFormMetadata').data('role');
             name = data.model.roleTranslations[0].name;
@@ -104,7 +89,6 @@
     load: function() {
       // console.log("TCL: load: function()");
       // this.loadLists();
-      TIMAAT.CategoryLists.load();
       TIMAAT.RoleLists.load();
       TIMAAT.LanguageLists.load();
 			TIMAAT.TagLists.load();
@@ -118,14 +102,11 @@
     },
 
     loadDataTables: function() {
-			TIMAAT.CategoryLists.loadCategoriesDataTables();
       TIMAAT.RoleLists.loadRolesDataTables();
       TIMAAT.LanguageLists.loadLanguagesDataTables();
     },
 
     setLists: function() {
-      TIMAAT.CategoryLists.setCategoriesList();
-      TIMAAT.CategoryLists.setCategorySetsList();
       TIMAAT.RoleLists.setRolesList();
       TIMAAT.RoleLists.setRoleGroupsList();
       TIMAAT.LanguageLists.setLanguagesList();

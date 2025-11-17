@@ -1909,16 +1909,6 @@
             <div class="col-lg-12">
               <ul class="nav nav-pills" id="listTabs" role="tablist"> <!-- Nav bar tabs -->
                 <li class="nav-item">
-                  <a class="nav-link navBarLinkTop" id="categorySetTab" data-toggle="tab" role="tab" aria-controls="categoryset" aria-selected="false">
-                    <i class="fas fa-sitemap"></i> Category Sets
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link navBarLinkTop" id="categoryTab" data-toggle="tab" role="tab" aria-controls="category" aria-selected="false">
-                    <i class="fas fa-archive"></i> Categories
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a class="nav-link navBarLinkTop" id="roleGroupTab" data-toggle="tab" role="tab" aria-controls="roleGroup" aria-selected="false">
                     <i class="fas fa-users-cog"></i> Role Groups
                   </a>
@@ -2292,7 +2282,18 @@
           <div id="categoriesModalContainer"></div>
           <div class="row pt-3">
             <div class="col-md-4">
-              <p>col-4</p>
+              <ul class="nav nav-pills" id="categoryTabs" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link navBarLinkTop" id="categoryTab" data-toggle="tab" role="tab" aria-controls="category" aria-selected="false">
+                    <i class="fas fa-archive"></i> Categories
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link navBarLinkTop" id="categorySetTab" data-toggle="tab" role="tab" aria-controls="categoryset" aria-selected="false">
+                    <i class="fas fa-sitemap"></i> Category Sets
+                  </a>
+                </li>
+              </ul>
             </div>
             <div class="col-md-8">
               <p>col-8</p>
