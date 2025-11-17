@@ -431,3 +431,9 @@
 .annotationEditThumbnail{
     max-width: 200px;
 }
+
+.dataTablesHideSelectedRows table.dataTable tbody tr.selected,
+.dataTablesHideSelectedRows table.dataTable tbody tr.selected td  {
+    background-color: inherit !important;
+    color: inherit !important;
+}
