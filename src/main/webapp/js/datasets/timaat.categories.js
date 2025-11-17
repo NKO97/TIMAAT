@@ -67,6 +67,30 @@
                     }
                 }
             })
+
+            /*
+            Category related event handler
+             */
+            const $categoryDataTable = $('#categoryDataTable')
+            $categoryDataTable.on('click', '.categoryEditButton', function (event) {
+                const category = JSON.parse(decodeURIComponent($(event.currentTarget).data('category')));
+                TIMAAT.Categories.showEditCategoryPanel(category);
+            })
+            $categoryDataTable.on('click', '.categoryDeleteButton', function (event) {
+                const category = JSON.parse(decodeURIComponent($(event.currentTarget).data('category')));
+                TIMAAT.Categories.showDeleteCategoryModal(category);
+            })
+            $("#categoryDataTableSelectAll").on('click', function (event) {
+                if (TIMAAT.Categories.categoryDataTable) {
+                    if (event.currentTarget.checked) {
+                        TIMAAT.Categories.categoryDataTable.rows().select()
+                    } else {
+                        TIMAAT.Categories.categoryDataTable.rows.deselect()
+                    }
+                }
+            })
+
+
         }, initCategoriesComponent: function () {
             TIMAAT.UI.showComponent('categories');
             $('#categoryTab').trigger('click');
@@ -106,13 +130,20 @@
         showDeleteCategorySetModal(categorySet) {
             console.log("deleteCategorySet", categorySet)
         },
+        showEditCategoryPanel(category) {
+            console.log("editCategory", category)
+        },
+
+        showDeleteCategoryModal(category) {
+            console.log("deleteCategory", category)
+        },
 
         loadCategorySets() {
             if (!TIMAAT.Categories.categorySetDataTable) {
                 TIMAAT.Categories.categorySetDataTable = $('#categorySetDataTable').DataTable({
                     "autoWidth": false,
                     "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    "order": [[0, 'asc']],
+                    "order": [[1, 'asc']],
                     "pagingType": "full",
                     "dom": '<lf<t>ip>',
                     "processing": true,
@@ -185,15 +216,14 @@
                         "zeroRecords": "No category set found.",
                         "info": "Page _PAGE_ of _PAGES_ &middot; (_MAX_ category sets total)",
                         "infoEmpty": "No category set available.",
-                        "infoFiltered": "(&mdash; _TOTAL_ of _MAX_ music)",
+                        "infoFiltered": "(&mdash; _TOTAL_ of _MAX_ category sets)",
                         "paginate": {
                             "first": "<<", "previous": "<", "next": ">", "last": ">>"
                         },
                     },
                 });
                 TIMAAT.Categories.categorySetDataTable.on('select deselect', function () {
-                    const selectedCategorySets = TIMAAT.Categories.categorySetDataTable.rows({ selected: true }).data().toArray();
-                    console.log(selectedCategorySets)
+                    const selectedCategorySets = TIMAAT.Categories.categorySetDataTable.rows({selected: true}).data().toArray();
 
                     const selectedCount = selectedCategorySets.length;
                     const totalCount = TIMAAT.Categories.categorySetDataTable.rows().count();
@@ -206,10 +236,99 @@
         },
 
         loadCategories: function () {
-            if (!TIMAAT.Categories.categorySetDataTable) {
+            if (!TIMAAT.Categories.categoryDataTable) {
+                TIMAAT.Categories.categoryDataTable = $('#categoryDataTable').DataTable({
+                    "autoWidth": false,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "order": [[1, 'asc']],
+                    "pagingType": "full",
+                    "dom": '<lf<t>ip>',
+                    "processing": true,
+                    "stateSave": true,
+                    "scrollY": "60vh",
+                    "scrollCollapse": true,
+                    "scrollX": false,
+                    "rowId": 'id',
+                    "serverSide": true,
+                    "select": {
+                        "style": 'multi', "selector": 'td:not(.actions)'
+                    },
+                    "ajax": {
+                        "url": "api/category/list",
+                        "contentType": "application/json; charset=utf-8",
+                        "dataType": "json",
+                        "data": function (data) {
+                            let serverData = {
+                                draw: data.draw,
+                                start: data.start,
+                                length: data.length,
+                                orderby: data.columns[data.order[0].column].name,
+                                dir: data.order[0].dir, // musicSubtype: ''
+                            }
+                            if (data.search && data.search.value && data.search.value.length > 0) serverData.search = data.search.value;
+                            return serverData;
+                        },
+                        "beforeSend": function (xhr) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
+                        }
+                    },
+                    "columns": [{
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        defaultContent: '',
+                        width: '1%',
+                        className: "select-checkbox",
+                    }, {
+                        data: 'name',
+                        name: 'name',
+                        className: 'name',
+                        width: '100%',
+                        render: function (data, type, row) {
+                            // console.log("TCL: event", event);
+                            return `<p>` + `  ` + row.name + `</p>`;
+                        }
+                    }, {
+                        data: null,
+                        className: 'actions',
+                        orderable: false,
+                        searchable: false,
+                        width: '1%',
+                        render: function (data, type, row) {
+                            const rowJson = encodeURIComponent(JSON.stringify(row));
 
+                            return `<div class="d-flex justify-content-end">
+                                <div class="btn-group" role="group" aria-label="Categories row options">
+                                  <button type="button" class="btn btn-sm btn-outline btn-secondary categoryEditButton" data-category="${rowJson}"><i class="fas fa-edit"></i></button>
+                                  <button type="button" class="btn btn-sm btn-outline btn-danger categoryDeleteButton" data-category="${rowJson}"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                              </div>`
+                        }
+                    }],
+                    "language": {
+                        "decimal": ",",
+                        "thousands": ".",
+                        "search": "Search",
+                        "lengthMenu": "Show _MENU_ entries",
+                        "zeroRecords": "No category found.",
+                        "info": "Page _PAGE_ of _PAGES_ &middot; (_MAX_ categories total)",
+                        "infoEmpty": "No categories available.",
+                        "infoFiltered": "(&mdash; _TOTAL_ of _MAX_ categories)",
+                        "paginate": {
+                            "first": "<<", "previous": "<", "next": ">", "last": ">>"
+                        },
+                    },
+                });
+                TIMAAT.Categories.categoryDataTable.on('select deselect', function () {
+                    const selectedCategories = TIMAAT.Categories.categoryDataTable.rows({selected: true}).data().toArray();
+
+                    const selectedCount = selectedCategories.length;
+                    const totalCount = TIMAAT.Categories.categoryDataTable.rows().count();
+                    $('#categoryDataTableSelectAll').prop('checked', selectedCount === totalCount && totalCount > 0);
+                });
             } else {
                 //The datatable was already initialized. We just need to reload the entries
+                TIMAAT.Categories.categoryDataTable.ajax.reload();
             }
         }
     }
