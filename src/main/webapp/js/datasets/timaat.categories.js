@@ -56,14 +56,22 @@
         updateItemTypeSelection: function (itemType) {
             switch (itemType) {
                 case 'category':
-                    TIMAAT.UI.displayComponent('category', 'categoryTab', 'categoryDataTable');
+                    TIMAAT.UI.displayComponent('category', 'categoryTab', 'categoryDataTableCard');
                     TIMAAT.URLHistory.setURL(null, 'Categories', '#categories/categories');
                     break
                 case 'categorySet':
-                    TIMAAT.UI.displayComponent('category', 'categorySetTab', 'categorySetDataTable');
+                    TIMAAT.UI.displayComponent('category', 'categorySetTab', 'categorySetDataTableCard');
                     TIMAAT.URLHistory.setURL(null, 'Category Sets', '#categories/categorySets');
                     break
             }
+        },
+
+        showAddCategoryPanel(){
+
+        },
+
+        showAddCategorySetPanel(){
+
         }
     }
 }))

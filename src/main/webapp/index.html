@@ -1928,42 +1928,6 @@
                 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
                   <div class="row pt-3">
                     <div class="col-lg-4">
-                      <div class="card dataTables" id="categorySetDataTable">
-                        <div class="card-header">Category sets
-                          <button type="button" onclick="TIMAAT.CategoryLists.addCategorySet()" class="btn btn-outline btn-success btn-sm float-right addCategorySetButton" title="Add Category Set">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                        </div>
-                        <div class="card-body">
-                          <table id="categorySetTable" class="table table-striped table-bordered table-hover">
-                            <thead class="thead-dark">
-                              <tr>
-                                <th>Name</th>
-                              </tr>
-                            </thead>
-                            <tbody id="categorySetList">
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div class="card dataTables" id="categoryDataTable">
-                        <div class="card-header">Categories
-                          <button type="button" onclick="TIMAAT.CategoryLists.addCategory()" class="btn btn-outline btn-success btn-sm float-right addCategoryButton" title="Add Category">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                        </div>
-                        <div class="card-body">
-                          <table id="categoryTable" class="table table-striped table-bordered table-hover">
-                            <thead class="thead-dark">
-                              <tr>
-                                <th>Name</th>
-                              </tr>
-                            </thead>
-                            <tbody id="categoryList">
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
                       <div class="card dataTables" id="roleGroupDataTable">
                         <div class="card-header">RoleGroups
                           <button type="button" onclick="TIMAAT.RoleLists.addRoleGroup()" class="btn btn-outline btn-success btn-sm float-right addRoleGroupButton" title="Add RoleGroup">
@@ -2281,7 +2245,7 @@
         <div class="container-fluid component" id="componentCategories">
           <div id="categoriesModalContainer"></div>
           <div class="row pt-3">
-            <div class="col-md-4">
+            <div class="col-md-12">
               <ul class="nav nav-pills" id="categoryTabs" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link navBarLinkTop" id="categoryTab" data-toggle="tab" role="tab" aria-controls="category" aria-selected="false">
@@ -2295,7 +2259,45 @@
                 </li>
               </ul>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-4 pt-3">
+              <div class="card dataTables" id="categoryDataTableCard">
+                <div class="card-header">Categories
+                  <button type="button" onclick="TIMAAT.Categories.showAddCategoryPanel()" class="btn btn-outline btn-success btn-sm float-right addActorButton" title="Add category">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body">
+                  <table id="categoryDataTable" class="table table-striped table-bordered table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                    </tr>
+                    </thead>
+                    <tbody id="categoryList">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card dataTables" id="categorySetDataTableCard">
+                <div class="card-header">Category Sets
+                  <button type="button" onclick="TIMAAT.Categories.showAddCategorySetPanel()" class="btn btn-outline btn-success btn-sm float-right addActorButton" title="Add category">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <div class="card-body">
+                  <table id="categorySetDataTable" class="table table-striped table-bordered table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                    </tr>
+                    </thead>
+                    <tbody id="categorySetList">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 pt-3">
               <p>col-8</p>
             </div>
           </div>
