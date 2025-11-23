@@ -1,28 +1,19 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
-import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.model.categoryset.CreateUpdateCategorySetPayload;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.CategorySetStorage;
+import de.bitgilde.TIMAAT.storage.entity.CategoryStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -32,6 +23,7 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -42,6 +34,15 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,6 +71,10 @@ public class EndpointCategorySet {
 	ContainerRequestContext containerRequestContext;
 	@Context
   ServletContext servletContext;
+  @Inject
+  CategoryStorage categoryStorage;
+  @Inject
+  CategorySetStorage categorySetStorage;
 
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -204,111 +209,38 @@ public class EndpointCategorySet {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
 	@Secured
-	public Response createCategorySet(@PathParam("id") int id,
-																		String jsonData) {
-		// System.out.println("EndpointCategorySet: createCategorySet - jsonData: "+jsonData);
-
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		CategorySet newCategorySet = null;
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-
-		try {
-			newCategorySet = mapper.readValue(jsonData, CategorySet.class);
-		} catch (IOException e) {
-			System.out.println("EndpointCategorySet: createCategorySet: IOException");
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-
-		// parse JSON data
-		newCategorySet.setId(0);
-
-		// update log metadata
-		Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-		newCategorySet.setCreatedAt(creationDate);
-		newCategorySet.setLastEditedAt(creationDate);
-
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			newCategorySet.setCreatedByUserAccount(entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID")));
-			newCategorySet.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
-		} else {
-			// DEBUG do nothing - production system should abort with internal server error
-			return Response.serverError().build();
-		}
-
-		// persist Medium
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.persist(newCategorySet);
-		entityManager.flush();
-		entityTransaction.commit();
-		entityManager.refresh(newCategorySet);
+	public CategorySet createCategorySet(@PathParam("id") int id,
+																		CreateUpdateCategorySetPayload payload) {
+    int userId = (int) containerRequestContext.getProperty("TIMAAT.userID");
+    CategorySet categorySet = categorySetStorage.createCategorySet(payload.getCategorySetName(), userId);
+    Set<CategorySetHasCategory> categorySetHasCategoryList = categorySetStorage.updateCategoriesOfCategorySet(categorySet.getId(), payload.getCategoryIds());
+    categorySet.setCategorySetHasCategories(categorySetHasCategoryList);
 
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext.getProperty("TIMAAT.userID"),
 															 UserLogManager.LogEvents.CATEGORYSETCREATED);
-		return Response.ok().entity(newCategorySet).build();
+		return categorySet;
 	}
 
-	@PATCH
+	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response updateCategorySet(@PathParam("id") int id,
-																		String jsonData) {
-		// System.out.println("EndpointCategorySet: updateCategorySet - jsonData: "+ jsonData);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		CategorySet updatedCategorySet = null;
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		CategorySet categorySet = entityManager.find(CategorySet.class, id);
-		if ( categorySet == null ) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		// parse JSON data
-		try {
-			updatedCategorySet = mapper.readValue(jsonData, CategorySet.class);
-		} catch (IOException e) {
-			System.out.println("EndpointCategorySet: updateCategorySet: IOException e!");
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		if ( updatedCategorySet == null ) {
-			return Response.notModified().build();
-		}
+	public CategorySet updateCategorySet(@PathParam("id") int id,
+                                       CreateUpdateCategorySetPayload payload) {
+    int userId = (int) containerRequestContext.getProperty("TIMAAT.userID");
+    CategorySet categorySet = categorySetStorage.updateCategorySet(id, payload.getCategorySetName(), userId);
+    Set<CategorySetHasCategory> categorySetHasCategories = categorySetStorage.updateCategoriesOfCategorySet(id, payload.getCategoryIds());
+    categorySet.setCategorySetHasCategories(categorySetHasCategories);
 
-		// Set<CategorySetHasCategory> oldCategories = categorySet.getCategorySetHasCategories();
-		// update categorySet
-		if ( updatedCategorySet.getName() != null ) categorySet.setName(updatedCategorySet.getName());
-		// categorySet.setCategorySetHasCategories(updatedCategorySet.getCategorySetHasCategories());
-
-		// update log metadata
-		categorySet.setLastEditedAt(new Timestamp(System.currentTimeMillis()));
-		if ( containerRequestContext.getProperty("TIMAAT.userID") != null ) {
-			categorySet.setLastEditedByUserAccount((entityManager.find(UserAccount.class, containerRequestContext.getProperty("TIMAAT.userID"))));
-		} else {
-			// DEBUG do nothing - production system should abort with internal server error
-		}
-
-		// persist categorySet
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.merge(categorySet);
-		entityManager.persist(categorySet);
-		entityTransaction.commit();
-		entityManager.refresh(categorySet);
-
-		// add log entry
-		UserLogManager.getLogger()
-									.addLogEntry((int) containerRequestContext
-									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETEDITED);
-
-		return Response.ok().entity(categorySet).build();
+    // add log entry
+    UserLogManager.getLogger()
+                  .addLogEntry((int) containerRequestContext
+                          .getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETEDITED);
+    return categorySet;
 	}
 
 	@DELETE
@@ -340,6 +272,14 @@ public class EndpointCategorySet {
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYSETDELETED);
 		return Response.ok().build();
 	}
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/categories")
+  public List<Category> getCategoriesAssignedCategorySet(@PathParam("id") Integer id) {
+    return categoryStorage.getCategoriesAssignedToCategorySet(id);
+  }
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

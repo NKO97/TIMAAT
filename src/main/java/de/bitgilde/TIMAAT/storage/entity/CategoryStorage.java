@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,5 +88,13 @@ public class CategoryStorage extends DbAccessComponent {
 
       return result;
     });
+  }
+
+  public List<Category> getCategoriesAssignedToCategorySet(int categorySetId) {
+    logger.log(Level.FINE, "Loading categories assigned to category set with id {0}", categorySetId);
+
+    return executeDbTransaction(entityManager -> entityManager.createQuery(
+            "select category from Category category join category.categorySetHasCategories categorySetsHasCategories where categorySetsHasCategories.categorySet.id = :categorySetId",
+            Category.class).setParameter("categorySetId", categorySetId).getResultList());
   }
 }

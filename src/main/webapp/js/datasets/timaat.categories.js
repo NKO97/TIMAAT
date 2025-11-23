@@ -67,6 +67,9 @@
                     }
                 }
             })
+            $('#categorySetCreateChangeFormDismissButton').on('click', () => {
+                TIMAAT.Categories.showAssignedEntitiesPanel()
+            })
 
             /*
             Category related event handler
@@ -98,7 +101,7 @@
                 TIMAAT.Categories.updateCategorySelectAllCheckboxState()
             })
 
-            $('#categoryCreateChangeFormDismissButton').on('click',() =>  {
+            $('#categoryCreateChangeFormDismissButton').on('click', () => {
                 TIMAAT.Categories.showAssignedEntitiesPanel()
             })
 
@@ -125,6 +128,7 @@
                     TIMAAT.Categories.loadCategorySets()
                     break
             }
+            TIMAAT.Categories.showAssignedEntitiesPanel()
         },
 
         updateCategorySelectAllCheckboxState() {
@@ -133,7 +137,7 @@
             $('#categoryDataTableSelectAll').prop('checked', selectedCount === totalCount && totalCount > 0);
         },
 
-        createCategorySetDropDown: function (){
+        createCategorySetDropDown: function () {
             const categorySetsDropDown = $('#categorySetsMultiSelectDropdown')
             categorySetsDropDown.empty()
             categorySetsDropDown.select2({
@@ -173,6 +177,46 @@
             return categorySetsDropDown
         },
 
+        createCategoriesDropDown: function () {
+            const categoryDropDown = $('#categoryMultiSelectDropdown')
+            categoryDropDown.empty()
+            categoryDropDown.select2({
+                closeOnSelect: false,
+                scrollAfterSelect: true,
+                allowClear: true,
+                ajax: {
+                    url: 'api/category/selectList',
+                    type: 'GET',
+                    dataType: 'json',
+                    delay: 250,
+                    minWidth: "200px",
+                    headers: {
+                        "Authorization": "Bearer " + TIMAAT.Service.token,
+                        "Content-Type": "application/json",
+                    },
+                    // additional parameters
+                    data: function (params) {
+                        // console.log("TCL: data: params", params);
+                        return {
+                            search: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // console.log("TCL: processResults: data", data);
+                        params.page = params.page || 1;
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: false
+                },
+                minimumInputLength: 0,
+            })
+
+            return categoryDropDown
+        },
+
         showAddCategoryPanel() {
             $('.categoriesRightPanelContent').hide()
 
@@ -209,16 +253,80 @@
             $('.categoryCreateChangeFormName-error').remove()
         },
 
+        resetCategorySetCreateChangeFormState($categorySetCreateChangeForm) {
+            $categorySetCreateChangeForm.validate().resetForm()
+            $categorySetCreateChangeForm.find(".error").removeClass("error")
+            $categorySetCreateChangeForm.find(".valid").removeClass("valid")
+            $('.categoryCreateChangeFormName-error').remove()
+        },
+
         showAssignedEntitiesPanel() {
             $('.categoriesRightPanelContent').hide()
         },
 
         showAddCategorySetPanel() {
+            $('.categoriesRightPanelContent').hide()
 
+            const $categorySetCreateChangeForm = $('#categorySetCreateChangeForm')
+            TIMAAT.Categories.resetCategorySetCreateChangeFormState($categorySetCreateChangeForm)
+            $categorySetCreateChangeForm.find('#categorySetCreateChangeFormHeader').text('Create category set')
+
+            const categoriesDropDown = TIMAAT.Categories.createCategoriesDropDown()
+            const categorySetCreateChangeFormSubmitButton = $categorySetCreateChangeForm.find('#categorySetCreateChangeFormSubmitButton')
+            const categorySetNameInput = $categorySetCreateChangeForm.find('#categorySetCreateChangeFormName')
+
+            categoriesDropDown.val([]).trigger('change');
+            categorySetNameInput.val("")
+
+            categorySetCreateChangeFormSubmitButton.off('click')
+            categorySetCreateChangeFormSubmitButton.on('click', async function (event) {
+                event.preventDefault();
+                if ($categorySetCreateChangeForm.valid()) {
+                    const categorySetName = categorySetNameInput.val()
+                    const categoryIds = categoriesDropDown.val();
+
+                    await TIMAAT.CategorySetService.createCategorySet(categorySetName, categoryIds)
+                    TIMAAT.Categories.categorySetDataTable?.ajax.reload()
+                    TIMAAT.Categories.showAssignedEntitiesPanel()
+                }
+            })
+            $categorySetCreateChangeForm.show()
         },
 
         showEditCategorySetPanel(categorySet) {
-            console.log("editCategorySet", categorySet)
+            $('.categoriesRightPanelContent').hide()
+
+            const $categorySetCreateChangeForm = $('#categorySetCreateChangeForm')
+            TIMAAT.Categories.resetCategorySetCreateChangeFormState($categorySetCreateChangeForm)
+            $categorySetCreateChangeForm.find('#categoryCreateChangeFormHeader').text('Edit category set')
+
+            const categoriesDropDown = TIMAAT.Categories.createCategoriesDropDown()
+            const categorySetCreateChangeFormSubmitButton = $categorySetCreateChangeForm.find('#categorySetCreateChangeFormSubmitButton')
+            const categorySetNameInput = $categorySetCreateChangeForm.find('#categorySetCreateChangeFormName')
+
+            categoriesDropDown.val([]).trigger('change');
+            TIMAAT.CategorySetService.getCategoriesOfCategorySet(categorySet.id).then(categories => {
+                for (const currentCategory of categories) {
+                    const option = new Option(currentCategory.name, currentCategory.id, true, true)
+                    categoriesDropDown.append(option)
+                }
+            })
+            categoriesDropDown.trigger('change');
+
+            categorySetNameInput.val(categorySet.name).trigger('change');
+            categorySetCreateChangeFormSubmitButton.off('click')
+            categorySetCreateChangeFormSubmitButton.on('click', async function (event) {
+                event.preventDefault();
+                if ($categorySetCreateChangeForm.valid()) {
+                    const categorySetName = categorySetNameInput.val()
+                    const categoriesIds = categoriesDropDown.val();
+
+                    await TIMAAT.CategorySetService.updateCategorySet(categorySet.id, categorySetName, categoriesIds)
+                    TIMAAT.Categories.categorySetDataTable?.ajax.reload()
+                    TIMAAT.Categories.showAssignedEntitiesPanel()
+                }
+            })
+            $categorySetCreateChangeForm.show()
         },
 
         showDeleteCategorySetModal(categorySet) {
@@ -237,7 +345,7 @@
 
             categorySetsDropDown.val([]).trigger('change');
             TIMAAT.CategoryService.getCategorySetsOfCategory(category.id).then(categorySets => {
-                for(const currentCategorySet of categorySets) {
+                for (const currentCategorySet of categorySets) {
                     const option = new Option(currentCategorySet.name, currentCategorySet.id, true, true)
                     categorySetsDropDown.append(option)
                 }
