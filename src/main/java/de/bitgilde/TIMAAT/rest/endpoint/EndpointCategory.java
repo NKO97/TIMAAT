@@ -1,7 +1,5 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
@@ -9,16 +7,21 @@ import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.model.category.CreateUpdateCategoryPayload;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.CategorySetStorage;
+import de.bitgilde.TIMAAT.storage.entity.CategoryStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -31,7 +34,6 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 import org.jvnet.hk2.annotations.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,6 +68,10 @@ public class EndpointCategory {
 	ContainerRequestContext containerRequestContext;
 	@Context
   ServletContext servletContext;
+  @Inject
+  CategoryStorage categoryStorage;
+  @Inject
+  CategorySetStorage categorySetStorage;
 
   @GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -146,21 +152,12 @@ public class EndpointCategory {
 		return Response.ok().entity(category).build();
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Secured
-	@Path("{categoryId}/set/{categorySetId}")
-	public Response getCategoryHasCategorySet(@PathParam("categoryId") Integer categoryId,
-																						@PathParam("categorySetId") Integer categorySetId) {
-		// System.out.println("EndpointCategorySet: getCategoryHasCategorySet with ids  "+ categoryId + " " + categorySetId);
-
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Category category = entityManager.find(Category.class, categoryId);
-		CategorySet categorySet = entityManager.find(CategorySet.class, categorySetId);
-		CategorySetHasCategory cshckey = new CategorySetHasCategory(categorySet, category);
-		CategorySetHasCategory categorySetHasCategory = entityManager.find(CategorySetHasCategory.class, cshckey.getId());
-
-		return Response.ok().entity(categorySetHasCategory).build();
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/categorySets")
+  public List<CategorySet> getCategorySetsOfCategory(@PathParam("id") Integer id) {
+    return categorySetStorage.getCategorySetsAssignedToCategory(id);
   }
 
 	@GET
@@ -217,86 +214,37 @@ public class EndpointCategory {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
 	@Secured
-	public Response createCategory(@PathParam("id") int id,
-																 String jsonData) {
-		// System.out.println("EndpointCategorySet: createCategory: jsonData: "+ jsonData);
-
-		ObjectMapper mapper = new ObjectMapper();
-		Category newCategory = null;
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-
-		// parse JSON data
-		try {
-			newCategory = mapper.readValue(jsonData, Category.class);
-		} catch (IOException e) {
-			System.out.println("EndpointCategorySet: createCategory: IOException");
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		newCategory.setId(0);
-
-		// persist category
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.persist(newCategory);
-		entityManager.flush();
-		entityTransaction.commit();
-		entityManager.refresh(newCategory);
+	public Category createCategory(@Valid CreateUpdateCategoryPayload payload) {
+    Category category = categoryStorage.createCategory(payload.getCategoryName());
+    Set<CategorySetHasCategory> categorySetHasCategories = categoryStorage.updateCategorySetsOfCategory(category.getId(), payload.getCategorySetIds());
+    category.setCategorySetHasCategories(categorySetHasCategories);
 
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYCREATED);
-		return Response.ok().entity(newCategory).build();
+
+		return category;
 	}
 
-	@PATCH
+	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	@Secured
-	public Response updateCategory(@PathParam("id") int id,
-																 String jsonData) {
-		// System.out.println("EndpointCategorySet: updateCategory - jsonData: "+ jsonData);
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		Category updatedCategory = null;
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Category category = entityManager.find(Category.class, id);
-		if ( category == null ) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		// parse JSON data
-		try {
-			updatedCategory = mapper.readValue(jsonData, Category.class);
-		} catch (IOException e) {
-			System.out.println("EndpointCategorySet: updateCategory: IOException e!");
-			e.printStackTrace();
-			return Response.status(Status.BAD_REQUEST).build();
-		}
-		if ( updatedCategory == null ) {
-			return Response.notModified().build();
-		}
-
-		// update categorySet
-		if ( updatedCategory.getName() != null ) category.setName(updatedCategory.getName());
-
-		// persist categorySet
-		EntityTransaction entityTransaction = entityManager.getTransaction();
-		entityTransaction.begin();
-		entityManager.merge(category);
-		entityManager.persist(category);
-		entityTransaction.commit();
-		entityManager.refresh(category);
+	public Category updateCategory(@PathParam("id") int id,
+																 CreateUpdateCategoryPayload payload) {
+		Category category = categoryStorage.updateCategory(id, payload.getCategoryName());
+    Set<CategorySetHasCategory> categorySetHasCategories = categoryStorage.updateCategorySetsOfCategory(id, payload.getCategorySetIds());
+    category.setCategorySetHasCategories(categorySetHasCategories);
 
 		// add log entry
 		UserLogManager.getLogger()
 									.addLogEntry((int) containerRequestContext
 									.getProperty("TIMAAT.userID"), UserLogManager.LogEvents.CATEGORYEDITED);
 
-		return Response.ok().entity(category).build();
+		return category;
 	}
 
 	@DELETE

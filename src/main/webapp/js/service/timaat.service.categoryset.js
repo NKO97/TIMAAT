@@ -133,30 +133,6 @@
 			});
 		},
 
-		async updateCategorySet(categorySet) {
-			// console.log("TCL: updateCategorySet -> categorySet", categorySet);
-			// var tempCategorySet = categorySet.model;
-			// if (tempCategorySet.ui != undefined) {	tempCategorySet.ui = {};}
-			return new Promise(resolve => {
-				$.ajax({
-					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/categorySet/"+categorySet.id,
-					type       : "PATCH",
-					data       : JSON.stringify(categorySet),
-					contentType: "application/json; charset=utf-8",
-					dataType   : "json",
-					beforeSend : function (xhr) {
-						xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-					},
-				}).done(function(data) {
-					resolve(data);
-				}).fail(function(error) {
-					console.error("ERROR responseText:", error.responseText);
-				});
-			}).catch((error) => {
-				console.error("ERROR: ", error);
-			});
-		},
-
 		async deleteCategorySet(id) {
 			// console.log("TCL: deleteCategorySet -> id", id);
 			return new Promise(resolve => {
