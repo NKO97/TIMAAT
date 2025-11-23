@@ -71,6 +71,14 @@
                 TIMAAT.Categories.showAssignedEntitiesPanel()
             })
 
+            $('#categoriesCategorySetDeleteModalSubmitButton').on('click', async function (event) {
+                const categoryId = $(event.currentTarget).data("category-set-id")
+                await TIMAAT.CategorySetService.deleteCategorySet(categoryId)
+
+                TIMAAT.Categories.categorySetDataTable?.ajax.reload()
+                $('#categoriesCategorySetDeleteModal').modal('hide');
+            })
+
             /*
             Category related event handler
              */
@@ -330,7 +338,11 @@
         },
 
         showDeleteCategorySetModal(categorySet) {
-            console.log("deleteCategorySet", categorySet)
+            const $categoriesCategorySetDeleteModal = $('#categoriesCategorySetDeleteModal')
+
+            $categoriesCategorySetDeleteModal.find(".modal-body").text(`Do you really want to delete category set "${categorySet.name}"?`)
+            $('#categoriesCategorySetDeleteModalSubmitButton').data('category-set-id', categorySet.id)
+            $categoriesCategorySetDeleteModal.modal('show');
         },
         showEditCategoryPanel(category) {
             $('.categoriesRightPanelContent').hide()
