@@ -437,3 +437,7 @@
     background-color: inherit !important;
     color: inherit !important;
 }
+
+.categoriesAccordion{
+    margin-bottom: 8px;
+}

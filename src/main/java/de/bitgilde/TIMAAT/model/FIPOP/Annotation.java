@@ -601,11 +601,12 @@ public class Annotation implements Serializable {
   public void setLastEditedByUserAccountId(int lastEditedByUserAccountId) {
     this.lastEditedByUserAccountId = lastEditedByUserAccountId;
   }
-
+  @JsonIgnore
   public int getMediumId(){
     return this.mediumAnalysisList.getMedium().getId();
   }
 
+  @JsonIgnore
   public int getMediumAnalysisListId(){
     return this.mediumAnalysisList.getId();
   }

@@ -2223,7 +2223,7 @@
                     <tr>
                       <th><input type="checkbox" id="categoryDataTableSelectAll"></input></th>
                       <th>Name</th>
-                      <th>Action</th>
+                      <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody id="categoryList">
@@ -2324,6 +2324,66 @@
                   <button type="button" class="btn btn-secondary formDismissButton" id="categorySetCreateChangeFormDismissButton" name="dismiss">Cancel</button>
                 </div>
               </form>
+              <div class="categoriesRightPanelContent px-3" id="categoriesAssignedEntitiesPanel">
+                <div class="accordion categoriesAccordion" id="musicAccordion">
+                  <div class="card">
+                    <div class="card-header">
+                      <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#musicTableCollapse">
+                        <span class="fas fa-music mr-1"></span>Music
+                      </button>
+                    </div>
+                    <div id="musicTableCollapse" class="collapse" data-parent="#musicAccordion">
+                      <div class="card-body">
+                        <table id="categoriesMusicTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
+                          <thead class="thead-dark">
+                            <tr>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion categoriesAccordion" id="mediumAccordion">
+                  <div class="card">
+                    <div class="card-header">
+                      <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#mediumTableCollapse">
+                        <span class="fas fa-photo-video mr-1"></span>Medium
+                      </button>
+                    </div>
+                    <div id="mediumTableCollapse" class="collapse" data-parent="#mediumAccordion">
+                      <div class="card-body">
+                        <table id="categoriesMediumTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
+                          <thead class="thead-dark">
+                            <tr>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion categoriesAccordion" id="actorAccordion">
+                  <div class="card">
+                    <div class="card-header">
+                      <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#actorTableCollapse">
+                        <span class="fas fa-users mr-1"></span>Actor
+                      </button>
+                    </div>
+                    <div id="actorTableCollapse" class="collapse" data-parent="#actorAccordion">
+                      <div class="card-body">
+                        Some placeholder content for the first accordion panel. This panel is shown by default, thanks to the <code>.show</code> class.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

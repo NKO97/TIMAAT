@@ -35,7 +35,7 @@
 
 }(function (TIMAAT) {
     TIMAAT.Categories = {
-        categoryDataTable: null, categorySetDataTable: null,
+        categoryDataTable: null, categorySetDataTable: null, relatedMusicTable: null, relatedMediumTable: null,
 
         init: function () {
             $('#categorySetTab').on('click', function (event) {
@@ -114,6 +114,9 @@
             })
 
 
+            //init datatables
+            TIMAAT.Categories.relatedMusicTable = TIMAAT.Categories.initRelatedMusicTable()
+            TIMAAT.Categories.relatedMediumTable = TIMAAT.Categories.initRelatedMediumTable()
         }, initCategoriesComponent: function () {
             TIMAAT.UI.showComponent('categories');
             $('#categoryTab').trigger('click');
@@ -183,6 +186,66 @@
             })
 
             return categorySetsDropDown
+        },
+
+        initRelatedMusicTable: function () {
+            const musicTypesById = new Map([[1, "Anashid"], [2, "Church music"]])
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"), new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("beat", "Beat", "beat"),
+                new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
+                new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"),new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
+            const activeColumnIds = ["id", "title", "musicType", "beat", "instrumentation", "tempo", "remark", "harmony", "melody"]
+            const musicTable =  new TIMAAT.Table.Table("#categoriesMusicTable", columns, activeColumnIds, "api/music/list")
+            $('#musicTableCollapse').on('shown.bs.collapse', (event) => {
+                musicTable.resizeToParent()
+            });
+
+            return musicTable
+        },
+
+        initRelatedMediumTable: function () {
+            const mediaTypesById = new Map([[1, "Audio"], [2, "Document"], [3, "Image"], [4, "Software"], [5, "Text"], [6, " Video"], [7, "Videogame"]])
+
+            const MediumDurationColumnConfig = class MediumDurationColumnConfig extends TIMAAT.Table.TableColumnConfig {
+                constructor() {
+                    super("duration", "Duration", "");
+                }
+
+                render(data, type, row) {
+                    let cellValue;
+                    if (row.mediumVideo) {
+                        cellValue = TIMAAT.Util.formatTime(row.mediumVideo.length);
+                    } else if (row.mediumAudio) {
+                        cellValue = TIMAAT.Util.formatTime(row.mediumAudio.length);
+                    } else {
+                        cellValue = "-"
+                    }
+
+                    return `<p>${cellValue}</p>`
+                }
+            }
+
+            const imageThumbnailGeneratorFunction = (row) => {
+                let thumbnailPath = null
+                if(row.mediumVideo) {
+                    thumbnailPath = "/TIMAAT/api/medium/video/"+row.id+"/thumbnail"+"?token=" + row.viewToken
+                }
+
+                return thumbnailPath
+            }
+
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("copyright", "Copyright", "copyright"), new TIMAAT.Table.FieldTableColumnConfig("fileHash", "File Hash", "fileHash"),
+                new TIMAAT.Table.FieldTableColumnConfig("releaseDate", "ReleaseDate", "releaseDate"), new TIMAAT.Table.DateTableColumnConfig("releaseDate", "Release Date", "releaseDate"), new TIMAAT.Table.DateTableColumnConfig("recordingStartDate", "Recording Start Date", "recordingStartDate"),
+                new TIMAAT.Table.DateTableColumnConfig("recordingEndDate", "Recording End Date", "recordingEndDate"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"), new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"),
+                new TIMAAT.Table.ValueMapperTableColumnConfig("mediaType", "Media Type", "mediaType.id", mediaTypesById), new MediumDurationColumnConfig(), new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", imageThumbnailGeneratorFunction)]
+            const activeColumnIds = ["thumbnail", "id", "title", "mediaType", "duration", "releaseDate", 'recordingStartDate', 'recordingEndDate', "fileHash", "copyright", "remark"]
+            const mediumTable = new TIMAAT.Table.Table("#categoriesMediumTable", columns, activeColumnIds, "api/medium/list")
+
+            $('#mediumTableCollapse').on('shown.bs.collapse', (event) => {
+                mediumTable.resizeToParent()
+            });
+
+
+            return mediumTable
         },
 
         createCategoriesDropDown: function () {
@@ -270,6 +333,9 @@
 
         showAssignedEntitiesPanel() {
             $('.categoriesRightPanelContent').hide()
+            $('#categoriesAssignedEntitiesPanel').show()
+            TIMAAT.Categories.relatedMusicTable.draw()
+            TIMAAT.Categories.relatedMediumTable.draw()
         },
 
         showAddCategorySetPanel() {
