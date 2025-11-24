@@ -36,6 +36,7 @@
 }(function (TIMAAT) {
     TIMAAT.Categories = {
         categoryDataTable: null, categorySetDataTable: null, relatedMusicTable: null, relatedMediumTable: null,
+        relatedActorTable: null,
 
         init: function () {
             $('#categorySetTab').on('click', function (event) {
@@ -117,6 +118,7 @@
             //init datatables
             TIMAAT.Categories.relatedMusicTable = TIMAAT.Categories.initRelatedMusicTable()
             TIMAAT.Categories.relatedMediumTable = TIMAAT.Categories.initRelatedMediumTable()
+            TIMAAT.Categories.relatedActorTable = TIMAAT.Categories.initRelatedActorTable()
         }, initCategoriesComponent: function () {
             TIMAAT.UI.showComponent('categories');
             $('#categoryTab').trigger('click');
@@ -192,9 +194,9 @@
             const musicTypesById = new Map([[1, "Anashid"], [2, "Church music"]])
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"), new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("beat", "Beat", "beat"),
                 new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
-                new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"),new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
+                new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"), new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
             const activeColumnIds = ["id", "title", "musicType", "beat", "instrumentation", "tempo", "remark", "harmony", "melody"]
-            const musicTable =  new TIMAAT.Table.Table("#categoriesMusicTable", columns, activeColumnIds, "api/music/list")
+            const musicTable = new TIMAAT.Table.Table("#categoriesMusicTable", columns, activeColumnIds, "api/music/list")
             $('#musicTableCollapse').on('shown.bs.collapse', (event) => {
                 musicTable.resizeToParent()
             });
@@ -203,6 +205,7 @@
         },
 
         initRelatedMediumTable: function () {
+            //TODO: Check subtypes
             const mediaTypesById = new Map([[1, "Audio"], [2, "Document"], [3, "Image"], [4, "Software"], [5, "Text"], [6, " Video"], [7, "Videogame"]])
 
             const MediumDurationColumnConfig = class MediumDurationColumnConfig extends TIMAAT.Table.TableColumnConfig {
@@ -226,8 +229,8 @@
 
             const imageThumbnailGeneratorFunction = (row) => {
                 let thumbnailPath = null
-                if(row.mediumVideo) {
-                    thumbnailPath = "/TIMAAT/api/medium/video/"+row.id+"/thumbnail"+"?token=" + row.viewToken
+                if (row.mediumVideo) {
+                    thumbnailPath = "/TIMAAT/api/medium/video/" + row.id + "/thumbnail" + "?token=" + row.viewToken
                 }
 
                 return thumbnailPath
@@ -244,8 +247,31 @@
                 mediumTable.resizeToParent()
             });
 
-
             return mediumTable
+        },
+
+        initRelatedActorTable: function () {
+            const actorTypesById = new Map([[1, "Person"], [2, "Collective"]])
+            const sexTypesById = new Map([[1, "Female"], [2, "Male"], [3, "Other"], [4, "Unknown"]])
+
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "actorType.id", actorTypesById),
+                new TIMAAT.Table.FieldTableColumnConfig("name", "Name", "displayName.name"), new TIMAAT.Table.DateTableColumnConfig("nameUsedFrom", "Name used from", "displayName.usedFrom"),
+                new TIMAAT.Table.DateTableColumnConfig("nameUsedUntil", "Name used until", "displayName.usedUntil"), new TIMAAT.Table.AddressTableColumnConfig("primaryAddress", "Primary address", "primaryAddress"),
+                new TIMAAT.Table.FieldTableColumnConfig("primaryPhoneNumber", "Primary phone number", "primaryPhoneNumber.phoneNumber"), new TIMAAT.Table.FieldTableColumnConfig("primaryEmailAddress", "Primary email address", "primaryEmailAddress.email"),
+                new TIMAAT.Table.DateTableColumnConfig("disbanded", "Disbanded", "actorCollective.disbanded"), new TIMAAT.Table.DateTableColumnConfig("founded", "Founded", "actorCollective.founded"),
+                new TIMAAT.Table.DateTableColumnConfig("dateOfBirth", "Date of birth", "actorPerson.dateOfBirth"), new TIMAAT.Table.DateTableColumnConfig("dayOfDeath", "Day of death", "actorPerson.dayOfDeath"),
+                new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "actorPerson.title"), new TIMAAT.Table.FieldTableColumnConfig("citizenship", "Citizenship", "actorPerson.citizenship"),
+                new TIMAAT.Table.FieldTableColumnConfig("placeOfBirth", "Place of birth", "actorPerson.placeOfBirth"), new TIMAAT.Table.FieldTableColumnConfig("placeOfDeath", "Place of death", "actorPerson.placeOfDeath"),
+                new TIMAAT.Table.ValueMapperTableColumnConfig("sex", "Sex", "actorPerson.sex.id", sexTypesById)
+            ]
+            const activeColumnIds = ["id", "name", "nameUsedFrom", "nameUsedUntil", "type", "primaryAddress", "primaryPhoneNumber", "primaryEmailAddress", "disbanded", "founded", "dateOfBirth", "dayOfDeath", "title", "citizenship", "placeOfBirth", "placeOfDeath", "sex"]
+            const actorTable = new TIMAAT.Table.Table("#categoriesActorTable", columns, activeColumnIds, "api/actor/list")
+
+            $('#actorTableCollapse').on('shown.bs.collapse', (event) => {
+                actorTable.resizeToParent()
+            });
+
+            return actorTable
         },
 
         createCategoriesDropDown: function () {
@@ -336,6 +362,7 @@
             $('#categoriesAssignedEntitiesPanel').show()
             TIMAAT.Categories.relatedMusicTable.draw()
             TIMAAT.Categories.relatedMediumTable.draw()
+            TIMAAT.Categories.relatedActorTable.draw()
         },
 
         showAddCategorySetPanel() {

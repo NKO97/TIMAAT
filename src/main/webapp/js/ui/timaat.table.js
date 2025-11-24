@@ -115,7 +115,7 @@
          * imagePathGeneratorFunction.
          * @param id
          * @param title
-         * @param imagePathGeneratorFunction: (row) => string | null
+         * @param imagePathGeneratorFunction : (row) => string | null
          */
         constructor(id, title, imagePathGeneratorFunction) {
             super(id, title, "", false);
@@ -128,6 +128,19 @@
             const imagePath = this._imagePathGeneratorFunction(row);
             let imageSrc = imagePath ?? "img/preview-placeholder.png"
             return `<img src="${imageSrc}" width="150" height="auto" alt="Image column"/>`
+        }
+    }
+
+    TIMAAT.Table.AddressTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
+        constructor(id, title, data) {
+            super(id, title, data, false);
+        }
+
+        render(data, type, row) {
+            if(data){
+                return `<p>${data.street ?? ""} ${data.streetNumber ?? ""} ${data.streetAddition ?? ""}<br/>${data.postalCode} ${data.city}</p>`
+            }
+            return `<p>-</p>`
         }
     }
 
