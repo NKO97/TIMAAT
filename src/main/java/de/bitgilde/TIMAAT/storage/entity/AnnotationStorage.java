@@ -19,6 +19,9 @@ import de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
+import de.bitgilde.TIMAAT.storage.ListingResult;
+import de.bitgilde.TIMAAT.storage.PagingParameter;
+import de.bitgilde.TIMAAT.storage.SortingParameter;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -27,6 +30,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /*
@@ -59,6 +63,10 @@ public class AnnotationStorage extends DbAccessComponent {
   public AnnotationStorage(EntityManagerFactory emf, TagStorage tagStorage) {
     super(emf);
     this.tagStorage = tagStorage;
+  }
+
+  public ListingResult<Annotation> getAnnotations(AnnotationFilter filter, PagingParameter pagingParameter, SortingParameter sortingParameter){
+    return new ListingResult<>(Collections.emptyList(), 0L, 0L);
   }
 
   public boolean removeTranscriptionAreaFromAnnotationHasMusicForLanguage(int annotationId, int musicId, int languageId) throws DbTransactionExecutionException {
@@ -255,6 +263,22 @@ public class AnnotationStorage extends DbAccessComponent {
   public Annotation getAnnotationById(int annotationId) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Getting annotation with id {0} from DB", annotationId);
     return this.executeDbTransaction(entityManager -> entityManager.find(Annotation.class, annotationId));
+  }
+
+  public interface AnnotationFilter {
+    /**
+     * @return the category ids the returning annotations should belong to
+     */
+    Optional<Collection<Integer>> getCategoryIds();
+    /**
+     * @return the category set ids the retuning annotations should belong to
+     */
+    Optional<Collection<Integer>> getCategorySetIds();
+
+    /**
+     * @return the search text which the annotation name should match
+     */
+    Optional<String> getAnnotationNameSearch();
   }
 
   public static class CreateAnnotation {

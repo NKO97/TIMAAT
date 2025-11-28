@@ -22,6 +22,7 @@ import de.bitgilde.TIMAAT.processing.video.FfmpegVideoEngine;
 import de.bitgilde.TIMAAT.processing.video.exception.VideoEngineException;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.annotation.AnnotationListingQueryParameter;
 import de.bitgilde.TIMAAT.rest.model.annotation.CreateAnnotationPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationThumbnailPayload;
@@ -31,6 +32,7 @@ import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationV
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.PermissionType;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.ListingResult;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.CreateAnnotation;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateAnnotation;
@@ -44,6 +46,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.ForbiddenException;
@@ -112,6 +115,15 @@ public class EndpointAnnotation {
   FfmpegVideoEngine ffmpegVideoEngine;
   @Inject
   TemporaryFileStorage temporaryFileStorage;
+
+  @GET
+  @Produces
+  @Path("list")
+  public DataTableInfo<Annotation> getAnnotationList(@BeanParam @Valid AnnotationListingQueryParameter annotationListingQueryParameter) {
+    int draw = annotationListingQueryParameter.getDraw() == null ? 0 : annotationListingQueryParameter.getDraw();
+    ListingResult<Annotation> annotationListingResult =  annotationStorage.getAnnotations(annotationListingQueryParameter, annotationListingQueryParameter, annotationListingQueryParameter);
+    return new DataTableInfo<>(draw, annotationListingResult.getTotalItemCount(), annotationListingResult.getMatchedItemsCount(), annotationListingResult.getItems());
+  }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)

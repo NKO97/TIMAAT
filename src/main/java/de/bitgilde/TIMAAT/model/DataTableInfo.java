@@ -19,20 +19,20 @@ import java.util.List;
 /**
  * @author Mirko Scherf <mscherf@uni-mainz.de>
  */
-public class DataTableInfo {
+public class DataTableInfo<ENTITY_TYPE> {
 
 	public int draw;
 	public long recordsTotal;
 	public long recordsFiltered;
 
-	public List<?> data;
+	public List<ENTITY_TYPE> data;
 
 
 	public DataTableInfo() {
 
 	}
 
-	public DataTableInfo(int draw, long recordsTotal, long recordsFiltered, List<?> data) {
+	public DataTableInfo(int draw, long recordsTotal, long recordsFiltered, List<ENTITY_TYPE> data) {
 		this.draw = draw;
 		this.recordsTotal = recordsTotal;
 		this.recordsFiltered = recordsFiltered;

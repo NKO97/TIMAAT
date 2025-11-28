@@ -274,6 +274,13 @@
             return actorTable
         },
 
+        initRelatedAnnotationTable: function () {
+            const columns = []
+            const activeColumnIds = []
+
+            const annotationTable = new TIMAAT.Table.Table("#categoriesAnnotationTable", columns, activeColumnIds, "api/annotation/list")
+        },
+
         createCategoriesDropDown: function () {
             const categoryDropDown = $('#categoryMultiSelectDropdown')
             categoryDropDown.empty()
