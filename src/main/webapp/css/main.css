@@ -583,7 +583,7 @@ table.dataTable {
 	width: 0px;
 	background-color: #6c757d;
 	cursor: pointer;
-    z-index: 1001;
+    z-index: 100;
 }
 
 .timeline__music-form-element {

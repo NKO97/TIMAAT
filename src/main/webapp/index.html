@@ -1580,7 +1580,7 @@
                         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" title="Segment structure" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-layer-group fa-fw fa-lg"></i>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu"  id="drop-down-menu-segment-structure">
                           <a class="dropdown-item addSegmentElement addSegment" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('segment')">Add segment</a>
                           <a class="dropdown-item dropdown-item--indented addSegmentElement addSegmentSubElement addSequence" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('sequence')">Add sequence</a>
                           <a class="dropdown-item dropdown-item--double-indented addSegmentElement addSegmentSubElement addTake" onclick="TIMAAT.VideoPlayer.addAnalysisSegmentElement('take')">Add take</a>
@@ -1658,10 +1658,10 @@
                           </div>
                           <div class="timeline__section-content bg-light border-bottom border-dark pt-1 pb-1">
                             <div class="timeline__pane timeline__pane--segment" id="timelinePaneSegment"></div>
-                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--sequence" id="timelinePaneSequence"></span>
-                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--take" id="timelinePaneTake"></span>
-                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--scene" id="timelinePaneScene"></span>
-                            <span class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--action" id="timelinePaneAction"></span>
+                            <div class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--sequence" id="timelinePaneSequence"></div>
+                            <div class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--take" id="timelinePaneTake"></div>
+                            <div class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--scene" id="timelinePaneScene"></div>
+                            <div class="timeline__section-sub-lane js-timeline__section-sub-lane timeline__pane timeline__pane--action" id="timelinePaneAction"></div>
                           </div>
                         </div>
                         <div class="timeline__section timelineSectionMusicStructure"> <!-- music structure -->
@@ -1692,7 +1692,7 @@
                                 <i class="fas fa-wave-square fa-fw"></i> Audio waveform
                               </span>
                               <span class="timeline__section--widgets pr-1 text-light">
-                                <span class="timeline__collapse-widget timelineCollapseWidget">
+                                <span class="timeline__collapse-widget timelineCollapseWidget" id="audioWaveformTimelineCollapseWidgetIcon">
                                   <i class="timelineCollapseWidgetIcon fas fa-caret-down fa-fw"></i>
                                 </span>
                               </span>
