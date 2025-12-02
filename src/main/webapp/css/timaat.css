@@ -355,7 +355,7 @@
 }
 
 .timeline__marker {
-    z-index: 1001;
+    z-index: 500;
 }
 
 .inspectorMusicPaneLinkedMusicPane {
@@ -405,4 +405,9 @@
     position: absolute;
     z-index: 3;
     background-color: rgba(67, 197, 238, 0.2);
+}
+
+#drop-down-menu-segment-structure{
+    z-index: 10000;
+    transform: translateX(-50px) translateY(20px) !important;
 }
