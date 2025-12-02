@@ -36,7 +36,7 @@
 }(function (TIMAAT) {
     TIMAAT.Categories = {
         categoryDataTable: null, categorySetDataTable: null, relatedMusicTable: null, relatedMediumTable: null,
-        relatedActorTable: null,
+        relatedActorTable: null, relatedAnnotationTable: null,
 
         init: function () {
             $('#categorySetTab').on('click', function (event) {
@@ -119,6 +119,7 @@
             TIMAAT.Categories.relatedMusicTable = TIMAAT.Categories.initRelatedMusicTable()
             TIMAAT.Categories.relatedMediumTable = TIMAAT.Categories.initRelatedMediumTable()
             TIMAAT.Categories.relatedActorTable = TIMAAT.Categories.initRelatedActorTable()
+            TIMAAT.Categories.relatedAnnotationTable = TIMAAT.Categories.initRelatedAnnotationTable()
         }, initCategoriesComponent: function () {
             TIMAAT.UI.showComponent('categories');
             $('#categoryTab').trigger('click');
@@ -275,10 +276,17 @@
         },
 
         initRelatedAnnotationTable: function () {
-            const columns = []
-            const activeColumnIds = []
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id")]
+            const activeColumnIds = ["id"]
 
             const annotationTable = new TIMAAT.Table.Table("#categoriesAnnotationTable", columns, activeColumnIds, "api/annotation/list")
+
+            $('#annotationTableCollapse').on('shown.bs.collapse', (event) => {
+                annotationTable.resizeToParent()
+            });
+
+
+            return annotationTable
         },
 
         createCategoriesDropDown: function () {
@@ -370,6 +378,7 @@
             TIMAAT.Categories.relatedMusicTable.draw()
             TIMAAT.Categories.relatedMediumTable.draw()
             TIMAAT.Categories.relatedActorTable.draw()
+            TIMAAT.Categories.relatedAnnotationTable.draw()
         },
 
         showAddCategorySetPanel() {

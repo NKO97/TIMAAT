@@ -16,14 +16,12 @@ import java.util.Optional;
 public class AnnotationListingQueryParameter extends ListingQueryParameter implements AnnotationFilter {
 
   @QueryParam("categoryIds")
-  private final Collection<Integer> categoryIds;
+  private Collection<Integer> categoryIds;
   @QueryParam("categorySetIds")
-  private final Collection<Integer> categorySetIds;
+  private Collection<Integer> categorySetIds;
 
-  public AnnotationListingQueryParameter(Integer draw, Integer start, Integer length, String orderby, String direction, String search, Collection<Integer> categoryIds, Collection<Integer> categorySetIds) {
-    super(draw, start, length, orderby, direction, search);
-    this.categoryIds = categoryIds;
-    this.categorySetIds = categorySetIds;
+  public AnnotationListingQueryParameter() {
+
   }
 
   @Override
@@ -49,5 +47,13 @@ public class AnnotationListingQueryParameter extends ListingQueryParameter imple
     }
 
     return Optional.empty();
+  }
+
+  public void setCategoryIds(Collection<Integer> categoryIds) {
+    this.categoryIds = categoryIds;
+  }
+
+  public void setCategorySetIds(Collection<Integer> categorySetIds) {
+    this.categorySetIds = categorySetIds;
   }
 }

@@ -120,8 +120,11 @@ public class EndpointAnnotation {
   @Produces
   @Path("list")
   public DataTableInfo<Annotation> getAnnotationList(@BeanParam @Valid AnnotationListingQueryParameter annotationListingQueryParameter) {
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+
     int draw = annotationListingQueryParameter.getDraw() == null ? 0 : annotationListingQueryParameter.getDraw();
-    ListingResult<Annotation> annotationListingResult =  annotationStorage.getAnnotations(annotationListingQueryParameter, annotationListingQueryParameter, annotationListingQueryParameter);
+    ListingResult<Annotation> annotationListingResult =  annotationStorage.getAnnotations(annotationListingQueryParameter, annotationListingQueryParameter, annotationListingQueryParameter, userAccount);
     return new DataTableInfo<>(draw, annotationListingResult.getTotalItemCount(), annotationListingResult.getMatchedItemsCount(), annotationListingResult.getItems());
   }
 

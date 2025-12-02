@@ -24,6 +24,9 @@ import de.bitgilde.TIMAAT.storage.PagingParameter;
 import de.bitgilde.TIMAAT.storage.SortingParameter;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -65,7 +68,15 @@ public class AnnotationStorage extends DbAccessComponent {
     this.tagStorage = tagStorage;
   }
 
-  public ListingResult<Annotation> getAnnotations(AnnotationFilter filter, PagingParameter pagingParameter, SortingParameter sortingParameter){
+  public ListingResult<Annotation> getAnnotations(AnnotationFilter filter, PagingParameter pagingParameter, SortingParameter sortingParameter, UserAccount userAccount) {
+    executeDbTransaction(entityManager -> {
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+      CriteriaQuery<Annotation> criteriaQuery = criteriaBuilder.createQuery(Annotation.class);
+      Root<Annotation> root =  criteriaQuery.from(Annotation.class);
+
+
+      return Void.TYPE;
+    });
     return new ListingResult<>(Collections.emptyList(), 0L, 0L);
   }
 
