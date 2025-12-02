@@ -406,6 +406,8 @@
                 }
             })
 
+            this.ui.currentThumbnailContainer = $('.inspectorThumbnailThumbnailPreviewContainer')
+            this.ui.editThumbnailContainer = $('.inspectorThumbnailEditThumbnailPreviewContainer')
 			this.ui.dataTableActors = $('#annotationAvailableActorsTable').DataTable({
 				lengthChange	: false,
 				dom						: 'rft<"row"<"col-sm-10"i><"col-sm-2"p>>',
@@ -1897,6 +1899,58 @@
 					inspector.updateItem();
 				}
 			});
+
+            // thumbnail
+            const annotationThumbnailPositionSliderInput = $('.inspectorThumbnailEditSectionCustomRangeSliderInput')
+            const annotationThumbnailSaveButton = $('#inspectorThumbnailEditSectionSaveButton')
+            const setAnnotationThumbnailToCurrentPlayerPositionButton = $('#setCurrentPlayerPositionAsThumbnail')
+
+            const updateEditThumbnailPreview = TIMAAT.Util.debounce(async (positionMs) => {
+                const mediumToken = TIMAAT.VideoPlayer.model.medium.viewToken;
+                const mediumId = TIMAAT.VideoPlayer.model.medium.id;
+
+
+                const mediumPreviewImage = await TIMAAT.MediumService.getPreviewImageBlobForMediumVideoAtPlaybackPosition(mediumId, positionMs, mediumToken)
+                const imageObjectURL = URL.createObjectURL(mediumPreviewImage);
+
+                this.ui.editThumbnailContainer.empty()
+                this.ui.editThumbnailContainer.append(`<img class='annotationEditThumbnail' src='${imageObjectURL}' alt='edit image thumbnail preview'/>`);
+            }, 200)
+
+            annotationThumbnailPositionSliderInput.on('input', function(ev) {
+                const positionMs = ev.target.value
+
+                $('.inspectorThumbnailEditSectionCustomRangeSliderCurrentPosition').text(TIMAAT.Util.formatTime(ev.target.value, true));
+                annotationThumbnailSaveButton.prop('disabled', false);
+                updateEditThumbnailPreview(positionMs)
+            })
+
+            annotationThumbnailSaveButton.on('click', function(ev) {
+                const positionMs = annotationThumbnailPositionSliderInput.val()
+                const annotationId = TIMAAT.VideoPlayer.curAnnotation.model.id
+
+                TIMAAT.AnnotationService.updateAnnotationThumbnail(annotationId, positionMs).then(updatedThumbnailBlob => {
+                    const imageObjectURL = URL.createObjectURL(updatedThumbnailBlob);
+                    this.ui.currentThumbnailContainer.empty()
+                    this.ui.currentThumbnailContainer.append(`<img class='annotationThumbnail' src='${imageObjectURL}' alt='Thumbnail preview'/>`)
+                })
+
+                annotationThumbnailSaveButton.prop('disabled', true);
+            }.bind(this))
+
+            setAnnotationThumbnailToCurrentPlayerPositionButton.on('click', function(ev) {
+                const annotationStartTimeMs = TIMAAT.VideoPlayer.curAnnotation.model.startTime;
+                const annotationEndTimeMs = TIMAAT.VideoPlayer.curAnnotation.model.endTime;
+                const currentPlayerPositionMs = Math.round(TIMAAT.VideoPlayer.medium.currentTime * 1000)
+
+                if(currentPlayerPositionMs < annotationStartTimeMs) {
+                    annotationThumbnailPositionSliderInput.val(annotationStartTimeMs).trigger('input')
+                }else if (currentPlayerPositionMs > annotationEndTimeMs) {
+                    annotationThumbnailPositionSliderInput.val(annotationEndTimeMs).trigger('input')
+                }else{
+                    annotationThumbnailPositionSliderInput.val(currentPlayerPositionMs).trigger('input')
+                }
+            }).bind(this)
 		}
 
 		get isOpen() {
@@ -2011,6 +2065,7 @@
 			this.disablePanel('inspectorActors');
 			this.disablePanel('inspectorEvents');
             this.disablePanel('inspectorMusic')
+            this.disablePanel('inspectorThumbnail')
 			// this.disablePanel('inspectorLocations');
 			this.disablePanel('inspectorAnalysisGuidelines');
 			this.ui.keyframeList.children().detach();
@@ -2038,9 +2093,7 @@
 						TIMAAT.VideoPlayer.curAnnotation = null;
 					}
 					this.enablePanel('inspectorMetadata');
-					// animation panel
-					if ( TIMAAT.VideoPlayer.model.medium.mediumVideo ) this.enablePanel('inspectorAnimation');
-					else this.disablePanel('inspectorAnimation');
+
 					if ( item != null ) {
 						this.enablePanel('inspectorActors');
 						this.enablePanel('inspectorEvents');
@@ -2048,6 +2101,11 @@
 						// this.enablePanel('inspectorLocations');
 						this.enablePanel('inspectorAnalysisGuidelines');
 						this.enablePanel('inspectorCategoriesAndTags');
+
+                        if ( TIMAAT.VideoPlayer.model.medium.mediumVideo){
+                            this.enablePanel('inspectorAnimation');
+                            this.enablePanel('inspectorThumbnail')
+                        }
 					}
 					// metadata panel
 					$('#inspectorName').show();
@@ -2125,6 +2183,28 @@
 
 					if ( item ) {
 						// console.log("TCL: Inspector -> setItem -> item", item);
+                        // thumbnail panel
+                        if ( TIMAAT.VideoPlayer.model.medium.mediumVideo){
+                            $('#inspectorThumbnailEditSectionSaveButton').prop('disabled', true);
+
+                            this.ui.currentThumbnailContainer.empty()
+                            this.ui.editThumbnailContainer.empty()
+
+                            TIMAAT.AnnotationService.getAnnotationThumbnailBlob(item.model.id).then(annotationThumbnail => {
+                                const imageObjectURL = URL.createObjectURL(annotationThumbnail);
+                                this.ui.currentThumbnailContainer.append(`<img class='annotationThumbnail' src='${imageObjectURL}' alt='current image thumbnail'/>`);
+                            })
+
+                            const annotationThumbnailPositionMs = item.model.thumbnailPositionMs
+                            const formattedCurrentThumbnailPosition = TIMAAT.Util.formatTime(annotationThumbnailPositionMs, true)
+                            $('.inspectorThumbnailEditSectionCustomRangeSliderCurrentPosition').text(formattedCurrentThumbnailPosition);
+
+                            const annotationThumbnailPositionSliderInput = $('.inspectorThumbnailEditSectionCustomRangeSliderInput')
+                            annotationThumbnailPositionSliderInput.prop('min', anno.model.startTime)
+                            annotationThumbnailPositionSliderInput.prop('max', anno.model.endTime)
+                            annotationThumbnailPositionSliderInput.val(annotationThumbnailPositionMs).trigger('input')
+                        }
+
 						// actors panel
 						this.ui.dataTableAnnoActors.ajax.url('api/annotation/'+item.model.id+'/actors');
 						this.ui.dataTableAnnoActors.ajax.reload();

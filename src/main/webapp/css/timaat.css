@@ -407,6 +407,31 @@
     background-color: rgba(67, 197, 238, 0.2);
 }
 
+.slider{
+    width: 100%;
+}
+
+.sliderLabels{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.inspectorThumbnailEditSectionCustomRangeSlider{
+    width: 50%;
+}
+
+.annotationThumbnail{
+    max-width: 100%;
+    max-height: 140px;
+}
+
+.annotationEditThumbnail{
+    max-width: 200px;
+}
+
 #drop-down-menu-segment-structure{
     z-index: 10000;
     transform: translateX(-50px) translateY(20px) !important;

@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.audio.api;
+package de.bitgilde.TIMAAT.processing.audio.api;
 
 /**
  * Representation of a complex number

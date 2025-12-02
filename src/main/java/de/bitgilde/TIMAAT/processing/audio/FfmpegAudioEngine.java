@@ -1,31 +1,29 @@
-package de.bitgilde.TIMAAT.audio;
+package de.bitgilde.TIMAAT.processing.audio;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
-import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
-import de.bitgilde.TIMAAT.audio.api.Complex;
-import de.bitgilde.TIMAAT.audio.api.PcmMono16BitLittleEndian;
-import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
-import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
-import de.bitgilde.TIMAAT.audio.io.FrequencyFileWriter;
-import de.bitgilde.TIMAAT.audio.io.WaveformBinaryFileWriter;
+import de.bitgilde.TIMAAT.processing.ExternalProcessExecutor;
+import de.bitgilde.TIMAAT.processing.audio.api.AudioMetaInformation;
+import de.bitgilde.TIMAAT.processing.audio.api.Complex;
+import de.bitgilde.TIMAAT.processing.audio.api.PcmMono16BitLittleEndian;
+import de.bitgilde.TIMAAT.processing.audio.api.WaveformDataPoint;
+import de.bitgilde.TIMAAT.processing.audio.exception.AudioEngineException;
+import de.bitgilde.TIMAAT.processing.audio.io.FrequencyFileWriter;
+import de.bitgilde.TIMAAT.processing.audio.io.WaveformBinaryFileWriter;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
 import jakarta.inject.Inject;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +46,7 @@ import java.util.stream.Collectors;
  * @author Nico Kotlenga
  * @since 25.07.25
  */
-public class FfmpegAudioEngine {
+public final class FfmpegAudioEngine extends ExternalProcessExecutor {
 
     private static final Logger logger = Logger.getLogger(FfmpegAudioEngine.class.getName());
 
@@ -173,24 +171,6 @@ public class FfmpegAudioEngine {
         } catch (Exception e) {
             throw new AudioEngineException("Error during extracting Waveform information from mono file", e);
         }
-    }
-
-
-    private static JSONObject executeJsonResponseCommand(String[] commandLine) throws IOException, InterruptedException {
-        Process process = syncExecuteProcess(commandLine);
-
-        String json = new BufferedReader(new InputStreamReader(process.getInputStream()))
-                .lines().collect(Collectors.joining());
-        return new JSONObject(json);
-    }
-
-    private static Process syncExecuteProcess(String[] commandLine) throws IOException, InterruptedException {
-        Runtime runtime = Runtime.getRuntime();
-
-        Process process = runtime.exec(commandLine);
-        process.waitFor();
-
-        return process;
     }
 
     private static List<Double> readNextNormalizedSampleValuesFrom16BitLittleEndian(DataInputStream dataInputStream, int numberOfSamples) throws IOException {

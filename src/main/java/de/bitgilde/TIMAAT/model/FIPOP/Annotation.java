@@ -67,10 +67,13 @@ public class Annotation implements Serializable {
 	private Boolean layerVisual;
 
 	@Column(name="start_time", columnDefinition = "INT")
-	private long startTime;
+	private int startTime;
 
 	@Column(name="end_time", columnDefinition = "INT")
-	private long endTime;
+	private int endTime;
+
+  @Column(name="thumbnail_position_ms")
+  private Integer thumbnailPositionMs;
 
 	//bi-directional many-to-one association to Analysis
 	@OneToMany(mappedBy="annotation")
@@ -304,19 +307,19 @@ public class Annotation implements Serializable {
 		this.layerVisual = layerVisual;
 	}
 
-	public long getEndTime() {
+	public int getEndTime() {
 		return this.endTime;
 	}
 
-	public void setEndTime(long endTime) {
+	public void setEndTime(int endTime) {
 		this.endTime = endTime;
 	}
 
-	public long getStartTime() {
+	public int getStartTime() {
 		return this.startTime;
 	}
 
-	public void setStartTime(long startTime) {
+	public void setStartTime(int startTime) {
 		this.startTime = startTime;
 	}
 
@@ -605,5 +608,13 @@ public class Annotation implements Serializable {
 
   public int getMediumAnalysisListId(){
     return this.mediumAnalysisList.getId();
+  }
+
+  public Integer getThumbnailPositionMs() {
+    return thumbnailPositionMs;
+  }
+
+  public void setThumbnailPositionMs(Integer thumbnailPositionMs) {
+    this.thumbnailPositionMs = thumbnailPositionMs;
   }
 }

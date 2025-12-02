@@ -1,6 +1,6 @@
 package de.bitgilde.TIMAAT.storage.entity;
 
-import de.bitgilde.TIMAAT.audio.api.AudioMetaInformation;
+import de.bitgilde.TIMAAT.processing.audio.api.AudioMetaInformation;
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AudioAnalysis;

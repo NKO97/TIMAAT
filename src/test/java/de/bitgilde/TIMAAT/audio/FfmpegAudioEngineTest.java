@@ -2,10 +2,11 @@ package de.bitgilde.TIMAAT.audio;
 
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.PropertyManagement;
-import de.bitgilde.TIMAAT.audio.api.FrequencyInformation;
-import de.bitgilde.TIMAAT.audio.api.PcmMono16BitLittleEndian;
-import de.bitgilde.TIMAAT.audio.exception.AudioEngineException;
-import de.bitgilde.TIMAAT.audio.io.FrequencyFileReader;
+import de.bitgilde.TIMAAT.processing.audio.FfmpegAudioEngine;
+import de.bitgilde.TIMAAT.processing.audio.api.FrequencyInformation;
+import de.bitgilde.TIMAAT.processing.audio.api.PcmMono16BitLittleEndian;
+import de.bitgilde.TIMAAT.processing.audio.exception.AudioEngineException;
+import de.bitgilde.TIMAAT.processing.audio.io.FrequencyFileReader;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

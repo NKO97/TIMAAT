@@ -1,6 +1,6 @@
-package de.bitgilde.TIMAAT.audio.io;
+package de.bitgilde.TIMAAT.processing.audio.io;
 
-import de.bitgilde.TIMAAT.audio.api.FrequencyInformation;
+import de.bitgilde.TIMAAT.processing.audio.api.FrequencyInformation;
 import jakarta.annotation.Nullable;
 
 import java.io.DataInputStream;

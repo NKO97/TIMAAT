@@ -39,3 +39,8 @@ The versioning of the database schema follows the following pattern:
 * Added table `annotation_has_music` to persist reference between music and annotation
 * Added table `annotation_has_music_translation_area` to persist the hearable transcription range
 ![db_update_0_14_2_annotation_to_music.png](img/db_update_0_14_2_annotation_to_music.png)
+
+### 0.15.0
+
+* Added column `thumbnail_position_ms` to table `medium_video` to persist thumbnail position of videos
+* Added column `thumbnail_position_ms` to table `annotation` to persist thumbnail position of annotations 

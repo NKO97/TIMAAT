@@ -1,5 +1,6 @@
 package de.bitgilde.TIMAAT.audio.io;
 
+import de.bitgilde.TIMAAT.processing.audio.io.FrequencyFileWriter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

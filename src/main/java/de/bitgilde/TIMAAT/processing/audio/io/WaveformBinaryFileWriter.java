@@ -1,6 +1,6 @@
-package de.bitgilde.TIMAAT.audio.io;
+package de.bitgilde.TIMAAT.processing.audio.io;
 
-import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
+import de.bitgilde.TIMAAT.processing.audio.api.WaveformDataPoint;
 
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;

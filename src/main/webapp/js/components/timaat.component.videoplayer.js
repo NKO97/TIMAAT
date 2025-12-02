@@ -1291,6 +1291,12 @@
                 updateRepeatButtonStates()
             });
 
+            $('#mediumPlayerSetThumbnailButton').on('click', async function(ev) {
+                const currentPlayerPositionMillis = Math.round(TIMAAT.VideoPlayer.medium.currentTime * 1000)
+                const mediumId = TIMAAT.VideoPlayer.model.medium.id
+                await TIMAAT.MediumService.updateMediumThumbnail(mediumId, currentPlayerPositionMillis)
+            })
+
 			$('.volumeControlInput').on('input change', function() {
 				if ( !TIMAAT.VideoPlayer.medium ) return;
 				TIMAAT.VideoPlayer.medium.volume = $(this).val() / 100;
@@ -1529,9 +1535,11 @@
 					switch (this.mediaType) {
 						case 'audio':
 							$('#timelineLayerCheckboxes').hide();
+                            $('#mediumPlayerSetThumbnailButton').hide();
 							break;
 						case 'video':
 							$('#timelineLayerCheckboxes').show();
+                            $('#mediumPlayerSetThumbnailButton').show();
 							break;
 					}
 

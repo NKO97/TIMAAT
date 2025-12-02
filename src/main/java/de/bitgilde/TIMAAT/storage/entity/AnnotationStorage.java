@@ -166,6 +166,18 @@ public class AnnotationStorage extends DbAccessComponent {
     });
   }
 
+  public void updateThumbnailPositionMs(int annotationId, Integer thumbnailPositionMs, UserAccount userAccount) throws DbTransactionExecutionException {
+    executeDbTransaction(entityManager -> {
+      Annotation annotation = entityManager.find(Annotation.class, annotationId);
+
+      annotation.setThumbnailPositionMs(thumbnailPositionMs);
+      annotation.setLastEditedByUserAccount(userAccount);
+      annotation.setLastEditedAt(Timestamp.from(Instant.now()));
+
+      return Void.TYPE;
+    });
+  }
+
   public AnnotationHasMusicTranslationArea setTranscriptionAreaToAnnotationHasMusicForLanguage(int annotationId, int musicId, int languageId, IndexBasedRange indexBasedRange) throws DbTransactionExecutionException {
     logger.log(Level.FINE, "Adding transcription area to annotation {0} for music {1} in language {2}",
             new Object[]{annotationId, musicId, languageId});
@@ -248,14 +260,14 @@ public class AnnotationStorage extends DbAccessComponent {
   public static class CreateAnnotation {
     private final String title;
     private final String comment;
-    private final long startTime;
-    private final long endTime;
+    private final int startTime;
+    private final int endTime;
     private final boolean layerVisual;
     private final boolean layerAudio;
     private final UpdateSelectorSvg selectorSvg;
     private final int analysisListId;
 
-    public CreateAnnotation(String title, String comment, long startTime, long endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg, int analysisListId) {
+    public CreateAnnotation(String title, String comment, int startTime, int endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg, int analysisListId) {
       this.title = title;
       this.comment = comment;
       this.startTime = startTime;
@@ -274,11 +286,11 @@ public class AnnotationStorage extends DbAccessComponent {
       return comment;
     }
 
-    public long getStartTime() {
+    public int getStartTime() {
       return startTime;
     }
 
-    public long getEndTime() {
+    public int getEndTime() {
       return endTime;
     }
 
@@ -303,13 +315,13 @@ public class AnnotationStorage extends DbAccessComponent {
     private final int id;
     private final String title;
     private final String comment;
-    private final long startTime;
-    private final long endTime;
+    private final int startTime;
+    private final int endTime;
     private final boolean layerVisual;
     private final boolean layerAudio;
     private final UpdateSelectorSvg selectorSvg;
 
-    public UpdateAnnotation(int id, String title, String comment, long startTime, long endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg) {
+    public UpdateAnnotation(int id, String title, String comment, int startTime, int endTime, boolean layerVisual, boolean layerAudio, UpdateSelectorSvg selectorSvg) {
       this.id = id;
       this.title = title;
       this.comment = comment;
@@ -328,7 +340,7 @@ public class AnnotationStorage extends DbAccessComponent {
       return title;
     }
 
-    public long getStartTime() {
+    public int getStartTime() {
       return startTime;
     }
 
@@ -336,7 +348,7 @@ public class AnnotationStorage extends DbAccessComponent {
       return comment;
     }
 
-    public long getEndTime() {
+    public int getEndTime() {
       return endTime;
     }
 

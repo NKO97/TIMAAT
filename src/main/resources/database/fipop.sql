@@ -1567,6 +1567,7 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`annotation`
     `layer_audio`                    TINYINT(1)  NULL,
     `start_time`                     INT(11)     NOT NULL,
     `end_time`                       INT(11)     NOT NULL,
+    `thumbnail_position_ms`          INT         NOT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_annotation_user_account1`
         FOREIGN KEY (`created_by_user_account_id`)
@@ -5829,15 +5830,16 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_text`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`medium_video`
 (
-    `medium_id`     INT               NOT NULL,
-    `length`        INT(11)           NOT NULL,
-    `video_codec`   VARCHAR(45)       NOT NULL,
-    `width`         SMALLINT UNSIGNED NOT NULL,
-    `height`        SMALLINT UNSIGNED NOT NULL,
-    `frame_rate`    SMALLINT UNSIGNED NOT NULL,
-    `data_rate`     SMALLINT UNSIGNED NOT NULL,
-    `total_bitrate` SMALLINT UNSIGNED NOT NULL,
-    `is_episode`    TINYINT(1)        NOT NULL,
+    `medium_id`             INT               NOT NULL,
+    `length`                INT(11)           NOT NULL,
+    `video_codec`           VARCHAR(45)       NOT NULL,
+    `width`                 SMALLINT UNSIGNED NOT NULL,
+    `height`                SMALLINT UNSIGNED NOT NULL,
+    `frame_rate`            SMALLINT UNSIGNED NOT NULL,
+    `data_rate`             SMALLINT UNSIGNED NOT NULL,
+    `total_bitrate`         SMALLINT UNSIGNED NOT NULL,
+    `is_episode`            TINYINT(1)        NOT NULL,
+    `thumbnail_position_ms` INT,
     PRIMARY KEY (`medium_id`),
     CONSTRAINT `fk_medium_video_medium1`
         FOREIGN KEY (`medium_id`)

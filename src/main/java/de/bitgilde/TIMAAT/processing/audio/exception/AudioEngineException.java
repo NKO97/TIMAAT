@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.audio.exception;
+package de.bitgilde.TIMAAT.processing.audio.exception;
 
 
 /*
@@ -15,8 +15,10 @@ package de.bitgilde.TIMAAT.audio.exception;
    limitations under the License.
  */
 
+import de.bitgilde.TIMAAT.processing.audio.FfmpegAudioEngine;
+
 /**
- * This exception will be thrown by the {@link de.bitgilde.TIMAAT.audio.FfmpegAudioEngine}
+ * This exception will be thrown by the {@link FfmpegAudioEngine}
  *
  * @author Nico Kotlenga
  * @since 25.07.25

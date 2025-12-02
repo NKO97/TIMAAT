@@ -1,6 +1,7 @@
 package de.bitgilde.TIMAAT.audio.io;
 
-import de.bitgilde.TIMAAT.audio.api.WaveformDataPoint;
+import de.bitgilde.TIMAAT.processing.audio.api.WaveformDataPoint;
+import de.bitgilde.TIMAAT.processing.audio.io.WaveformBinaryFileWriter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.audio.api;
+package de.bitgilde.TIMAAT.processing.audio.api;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,10 @@ package de.bitgilde.TIMAAT.audio.api;
    limitations under the License.
  */
 
+import de.bitgilde.TIMAAT.processing.audio.FfmpegAudioEngine;
+
 /**
- * Meta information of an audio file extracted by the {@link de.bitgilde.TIMAAT.audio.FfmpegAudioEngine}
+ * Meta information of an audio file extracted by the {@link FfmpegAudioEngine}
  *
  * @author Nico Kotlenga
  * @since 25.07.25

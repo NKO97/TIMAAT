@@ -18,9 +18,13 @@ import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
+import de.bitgilde.TIMAAT.processing.video.FfmpegVideoEngine;
+import de.bitgilde.TIMAAT.processing.video.exception.VideoEngineException;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
-import de.bitgilde.TIMAAT.rest.model.annotation.CreateUpdateAnnotationPayload;
+import de.bitgilde.TIMAAT.rest.model.annotation.CreateAnnotationPayload;
+import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationPayload;
+import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationThumbnailPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAssignedCategoriesPayload;
 import de.bitgilde.TIMAAT.rest.model.tags.UpdateAssignedTagsPayload;
 import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationVerifier;
@@ -31,6 +35,10 @@ import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.CreateAnnotation;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateAnnotation;
 import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateSelectorSvg;
+import de.bitgilde.TIMAAT.storage.file.AnnotationFileStorage;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
+import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
+import de.bitgilde.TIMAAT.storage.file.VideoFileStorage;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -53,13 +61,17 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.jvnet.hk2.annotations.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,6 +94,7 @@ import java.util.Set;
 @Service
 @Path("/annotation")
 public class EndpointAnnotation {
+  private static final Logger logger = Logger.getLogger(EndpointAnnotation.class.getName());
 
   @Context
   ContainerRequestContext containerRequestContext;
@@ -91,6 +104,14 @@ public class EndpointAnnotation {
   AnnotationAuthorizationVerifier annotationAuthorizationVerifier;
   @Inject
   AnalysisListAuthorizationVerifier analysisListAuthorizationVerifier;
+  @Inject
+  AnnotationFileStorage annotationFileStorage;
+  @Inject
+  VideoFileStorage videoFileStorage;
+  @Inject
+  FfmpegVideoEngine ffmpegVideoEngine;
+  @Inject
+  TemporaryFileStorage temporaryFileStorage;
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -663,23 +684,110 @@ public class EndpointAnnotation {
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("mediumAnalysisList/{mediumAnalysisListId}")
   @Secured
-  public Annotation createAnnotation(@PathParam("mediumAnalysisListId") int mediumAnalysisListId, CreateUpdateAnnotationPayload createUpdateAnnotationPayload) {
+  public Annotation createAnnotation(@PathParam("mediumAnalysisListId") int mediumAnalysisListId, CreateAnnotationPayload createAnnotationPayload) throws VideoEngineException, IOException {
     verifyAuthorizationToAnalysisList(mediumAnalysisListId, PermissionType.WRITE);
 
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
     UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(
-            createUpdateAnnotationPayload.getSelectorSvg().getColorHex(),
-            createUpdateAnnotationPayload.getSelectorSvg().getOpacity(),
-            createUpdateAnnotationPayload.getSelectorSvg().getStrokeWidth(),
-            createUpdateAnnotationPayload.getSelectorSvg().getSvgData());
-    CreateAnnotation createAnnotation = new CreateAnnotation(createUpdateAnnotationPayload.getTitle(),
-            createUpdateAnnotationPayload.getComment(), createUpdateAnnotationPayload.getStartTime(),
-            createUpdateAnnotationPayload.getEndTime(), createUpdateAnnotationPayload.isLayerVisual(),
-            createUpdateAnnotationPayload.isLayerAudio(), updateSelectorSvg, mediumAnalysisListId);
+            createAnnotationPayload.getSelectorSvg().getColorHex(),
+            createAnnotationPayload.getSelectorSvg().getOpacity(),
+            createAnnotationPayload.getSelectorSvg().getStrokeWidth(),
+            createAnnotationPayload.getSelectorSvg().getSvgData());
 
-    return annotationStorage.createAnnotation(createAnnotation, userAccount);
+    CreateAnnotation createAnnotation = new CreateAnnotation(createAnnotationPayload.getTitle(),
+            createAnnotationPayload.getComment(), createAnnotationPayload.getStartTime(),
+            createAnnotationPayload.getEndTime(), createAnnotationPayload.isLayerVisual(),
+            createAnnotationPayload.isLayerAudio(), updateSelectorSvg, mediumAnalysisListId);
+
+    Annotation createdAnnotation = annotationStorage.createAnnotation(createAnnotation, userAccount);
+    int annotationThumbnailPosition = createAnnotationPayload.getThumbnailPositionMs() != null ? createAnnotationPayload.getThumbnailPositionMs() : createAnnotationPayload.getStartTime();
+
+    if(updateAnnotationThumbnail(createdAnnotation, annotationThumbnailPosition, userAccount).isPresent()){
+      createdAnnotation.setThumbnailPositionMs(annotationThumbnailPosition);
+    }
+
+    return createdAnnotation;
+  }
+
+  @GET
+  @Produces("image/png")
+  @Path("/{id}/thumbnail")
+  @Secured
+  public Response getAnnotationThumbnail(@PathParam("id") int annotationId) throws VideoEngineException, IOException {
+    verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.READ);
+    Optional<java.nio.file.Path> thumbnailFilePath = annotationFileStorage.getPathToThumbnail(annotationId);
+
+    if (thumbnailFilePath.isPresent()) {
+      return Response.ok(thumbnailFilePath.get().toFile()).build();
+    }else {
+      Annotation annotation = annotationStorage.getAnnotationById(annotationId);
+
+      if(annotation.getThumbnailPositionMs() != null){
+        logger.log(Level.WARNING, "Could not find thumbnail for annotation with id {0} which should be present. Creating new one.", annotationId);
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalFile(annotation.getMediumId());
+        if (originalVideoFilePath.isPresent()) {
+          java.nio.file.Path createdThumbnailPath = createThumbnailForAnnotation(annotationId, originalVideoFilePath.get(), annotation.getThumbnailPositionMs());
+          return Response.ok(createdThumbnailPath.toFile()).build();
+        }
+      }
+    }
+
+    return Response.status(Status.NOT_FOUND).build();
+  }
+
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces("image/png")
+  @Path("/{id}/thumbnail")
+  @Secured
+  public Response updateAnnotationThumbnail(@PathParam("id") int annotationId, UpdateAnnotationThumbnailPayload updateAnnotationThumbnailPayload) throws VideoEngineException, IOException {
+    verifyAuthorizationToAnnotationHavingId(annotationId, PermissionType.WRITE);
+
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+    Annotation annotation = annotationStorage.getAnnotationById(annotationId);
+
+    Optional<java.nio.file.Path> createdAnnotationThumbnail = updateAnnotationThumbnail(annotation,
+            updateAnnotationThumbnailPayload.getThumbnailPositionMs(), userAccount);
+    if (createdAnnotationThumbnail.isPresent()) {
+      return Response.ok(createdAnnotationThumbnail.get().toFile()).build();
+    }
+
+    return Response.status(Status.BAD_REQUEST).build();
+  }
+
+  private Optional<java.nio.file.Path> updateAnnotationThumbnail(Annotation annotation, int thumbnailPositionMs, UserAccount userAccount) throws VideoEngineException, IOException {
+    Optional<java.nio.file.Path> originalVideoFilePathOptional = videoFileStorage.getPathToOriginalFile(annotation.getMediumId());
+    if (originalVideoFilePathOptional.isPresent()) {
+      annotationStorage.updateThumbnailPositionMs(annotation.getId(), thumbnailPositionMs, userAccount);
+      return Optional.of(createThumbnailForAnnotation(annotation.getId(), originalVideoFilePathOptional.get(), thumbnailPositionMs));
+    }
+
+    return Optional.empty();
+  }
+
+  /**
+   * This method creates a thumbnail for the specified annotation
+   * <br/>
+   * To create a thumbnail the annotation must be related to a medium video. On other medium types there is no video stream
+   * to gather a thumbnail frame.
+   * @param annotationId
+   * @param thumbnailPositionMs
+   * @param originalVideoFilePath from which the thumbnail will be extracted from
+   * @return optional containing path to the created thumbnail.
+   *
+   * @throws IOException
+   * @throws VideoEngineException
+   */
+  private java.nio.file.Path createThumbnailForAnnotation(int annotationId, java.nio.file.Path originalVideoFilePath, int thumbnailPositionMs) throws IOException, VideoEngineException {
+    float frameTimeStampInSeconds = thumbnailPositionMs / 1000f;
+    try (TemporaryFile temporaryFile = temporaryFileStorage.createTemporaryFile()) {
+      ffmpegVideoEngine.extractFrameOfVideo(originalVideoFilePath, temporaryFile.getTemporaryFilePath(),
+              frameTimeStampInSeconds);
+      return annotationFileStorage.persistThumbnail(annotationId, temporaryFile.getTemporaryFilePath());
+    }
   }
 
   @PUT
@@ -687,21 +795,21 @@ public class EndpointAnnotation {
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("{id}")
   @Secured
-  public Annotation updateAnnotation(@PathParam("id") int id, @Valid CreateUpdateAnnotationPayload createUpdateAnnotationPayload) {
+  public Annotation updateAnnotation(@PathParam("id") int id, @Valid UpdateAnnotationPayload updateAnnotationPayload) {
     verifyAuthorizationToAnnotationHavingId(id, PermissionType.WRITE);
 
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
     UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(
-            createUpdateAnnotationPayload.getSelectorSvg().getColorHex(),
-            createUpdateAnnotationPayload.getSelectorSvg().getOpacity(),
-            createUpdateAnnotationPayload.getSelectorSvg().getStrokeWidth(),
-            createUpdateAnnotationPayload.getSelectorSvg().getSvgData());
-    UpdateAnnotation updateAnnotation = new UpdateAnnotation(id, createUpdateAnnotationPayload.getTitle(),
-            createUpdateAnnotationPayload.getComment(), createUpdateAnnotationPayload.getStartTime(),
-            createUpdateAnnotationPayload.getEndTime(), createUpdateAnnotationPayload.isLayerVisual(),
-            createUpdateAnnotationPayload.isLayerAudio(), updateSelectorSvg);
+            updateAnnotationPayload.getSelectorSvg().getColorHex(),
+            updateAnnotationPayload.getSelectorSvg().getOpacity(),
+            updateAnnotationPayload.getSelectorSvg().getStrokeWidth(),
+            updateAnnotationPayload.getSelectorSvg().getSvgData());
+    UpdateAnnotation updateAnnotation = new UpdateAnnotation(id, updateAnnotationPayload.getTitle(),
+            updateAnnotationPayload.getComment(), updateAnnotationPayload.getStartTime(),
+            updateAnnotationPayload.getEndTime(), updateAnnotationPayload.isLayerVisual(),
+            updateAnnotationPayload.isLayerAudio(), updateSelectorSvg);
     Annotation updatedAnnotation = annotationStorage.updateAnnotation(updateAnnotation, userAccount);
 
     // add log entry

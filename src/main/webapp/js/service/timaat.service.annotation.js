@@ -82,7 +82,31 @@
                 console.error("ERROR: ", error);
             });
         },
+        async updateAnnotationThumbnail(annotationId, thumbnailPositionMs){
+            const payload = {
+                thumbnailPositionMs
+            }
 
+            return new Promise(resolve => {
+                $.ajax({
+                    url:window.location.protocol+'//'+window.location.host+"/TIMAAT/api/annotation/"+ annotationId + "/thumbnail",
+                    type:"POST",
+                    data: JSON.stringify(payload),
+                    contentType:"application/json; charset=utf-8",
+                    xhrFields: { responseType: 'blob' },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(updateData) {
+                    resolve(updateData);
+                }).fail(function(error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
         async getAnnotation(annotationId) {
             return new Promise(resolve => {
                 $.ajax({
@@ -90,6 +114,28 @@
                     type: "GET",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
+                    },
+                }).done(function (data) {
+                    // console.log("TCL: getSelectedCategories -> data", data);
+                    resolve(data);
+                })
+                    .fail(function (error) {
+                        console.error("ERROR responseText: ", error.responseText);
+                        console.error("ERROR: ", error);
+                    });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
+
+        async getAnnotationThumbnailBlob(annotationId) {
+            return new Promise(resolve => {
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/" + annotationId + "/thumbnail",
+                    type: "GET",
+                    xhrFields: { responseType: 'blob' },
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
                     },

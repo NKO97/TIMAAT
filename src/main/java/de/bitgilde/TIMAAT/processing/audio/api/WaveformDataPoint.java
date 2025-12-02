@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.audio.api;
+package de.bitgilde.TIMAAT.processing.audio.api;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");

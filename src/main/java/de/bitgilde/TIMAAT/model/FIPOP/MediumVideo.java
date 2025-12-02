@@ -56,6 +56,9 @@ public class MediumVideo implements Serializable {
 	@Column(name="video_codec")
 	private String videoCodec;
 
+  @Column(name="thumbnail_position_ms")
+  private Integer thumbnailPositionMs;
+
 	private int width;
 
 	//bi-directional one-to-one association to EpisodeInformation
@@ -160,4 +163,19 @@ public class MediumVideo implements Serializable {
 		this.medium = medium;
 	}
 
+  public Boolean getEpisode() {
+    return isEpisode;
+  }
+
+  public void setEpisode(Boolean episode) {
+    isEpisode = episode;
+  }
+
+  public Integer getThumbnailPositionMs() {
+    return thumbnailPositionMs;
+  }
+
+  public void setThumbnailPositionMs(Integer thumbnailPositionMs) {
+    this.thumbnailPositionMs = thumbnailPositionMs;
+  }
 }
