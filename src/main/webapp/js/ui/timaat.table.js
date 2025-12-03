@@ -223,4 +223,23 @@
             this._dataTable?.columns.adjust().draw()
         }
     }
+
+    TIMAAT.Table.ColumnSelectorPopover = class {
+        _table
+        _tableColumnConfigs
+        constructor(table, columnSelectorButtonSelector, tableColumnConfigs) {
+            this._table = table;
+            this._tableColumnConfigs = tableColumnConfigs;
+            this.openPopover = this.openPopover.bind(this);
+
+            console.log(columnSelectorButtonSelector)
+            $(columnSelectorButtonSelector).on('click', () => {
+                console.log("test")
+            })
+        }
+
+        openPopover(event){
+            console.log(event)
+        }
+    }
 }, window))

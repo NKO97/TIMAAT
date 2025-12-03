@@ -122,7 +122,8 @@ public class AnnotationStorage extends DbAccessComponent {
     logger.log(Level.FINE, "Creating new annotation");
 
     return this.executeDbTransaction(entityManager -> {
-      MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class, createAnnotation.analysisListId);
+      MediumAnalysisList mediumAnalysisList = entityManager.find(MediumAnalysisList.class,
+              createAnnotation.analysisListId);
       Language defaultLanguage = entityManager.find(Language.class, 1);
       SvgShapeType polygonShapeType = entityManager.find(SvgShapeType.class, 5);
 
@@ -281,6 +282,7 @@ public class AnnotationStorage extends DbAccessComponent {
      * @return the category ids the returning annotations should belong to
      */
     Optional<Collection<Integer>> getCategoryIds();
+
     /**
      * @return the category set ids the retuning annotations should belong to
      */

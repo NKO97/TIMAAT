@@ -202,6 +202,7 @@
                 musicTable.resizeToParent()
             });
 
+            const musicColumnSelectorPopover = new TIMAAT.Table.ColumnSelectorPopover(musicTable, "#categoriesMusicTableColumnButton", columns)
             return musicTable
         },
 
