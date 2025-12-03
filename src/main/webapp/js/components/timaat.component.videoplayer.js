@@ -147,7 +147,6 @@
 			});
 
 			this.initNotifications();
-			this.initLogging();
 			this.initMenu();
 			this.initAnimationControls();
 			this.initInspectorControls();
@@ -159,6 +158,10 @@
 
 			TIMAAT.EntityUpdate.registerEntityUpdateListener("MediumAudioAnalysis", this.handleMediumAudioAnalysisChanged.bind(this))
 			$('#retryWaveformGenerationButton').attr('onclick', 'TIMAAT.VideoPlayer.triggerWaveformGeneration()');
+
+            $('#audioWaveformTimelineCollapseWidgetIcon').on("click", () => {
+                TIMAAT.VideoPlayer.drawWaveform()
+            })
 		},
 
 		initNotifications: function() {
@@ -1080,6 +1083,26 @@
 				}
 			});
 		},
+        updateTimeLineLayerConnectionVisibility: function () {
+            const timeLineLayerConnectionElement =  $('#timelineLayerConnection')
+            const timeLineLayerConnectionChecked = timeLineLayerConnectionElement.is(':checked')
+
+            let timeLineLayerConnectionVisible = false
+            if(timeLineLayerConnectionChecked) {
+                const timeLineLayerAudioChecked = $('#timelineAudioLayer').is(':checked')
+                const timeLineLayerVideoChecked = $('#timelineVisualLayer').is(':checked')
+
+                if(timeLineLayerAudioChecked && timeLineLayerVideoChecked) {
+                    timeLineLayerConnectionVisible = true
+                }
+            }
+
+            if (timeLineLayerConnectionVisible) {
+                $("#annotation_connection_layer").show()
+            } else {
+                $("#annotation_connection_layer").hide()
+            }
+        },
 
 		initTimeLineControls: function() {
 			// setup timeline view events
@@ -1089,6 +1112,7 @@
 				} else {
                     $("#timeline__video_annotation_section").hide()
 				}
+                TIMAAT.VideoPlayer.updateTimeLineLayerConnectionVisibility();
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
@@ -1098,15 +1122,12 @@
 				} else {
                     $(".timeline__audio_annotation").hide()
 				}
+                TIMAAT.VideoPlayer.updateTimeLineLayerConnectionVisibility();
 				TIMAAT.VideoPlayer.sortListUI();
 			});
 
             $('#timelineLayerConnection').on('click', function(ev) {
-                if ($('#timelineLayerConnection').is(':checked')) {
-                    $("#annotation_connection_layer").show()
-                } else {
-                    $("#annotation_connection_layer").hide()
-                }
+                TIMAAT.VideoPlayer.updateTimeLineLayerConnectionVisibility();
                 TIMAAT.VideoPlayer.sortListUI();
             });
 
@@ -2628,9 +2649,9 @@
 
             $('#timelineMarkerPane').css('min-height', minHeightVideoAnnotationContainer + 'px');
 
-            let currentAudioMinHeight = parseInt($('.timeline__section--audio-waveform').css('min-height'))
+            let currentAudioMinHeight = parseInt($('.timeline__audio_annotation').css('min-height'))
             if(currentAudioMinHeight !== minHeightAudioAnnotationContainer){
-                $('.timeline__section--audio-waveform').css('min-height', minHeightAudioAnnotationContainer + 'px');
+                $('.timeline__audio_annotation').css('min-height', minHeightAudioAnnotationContainer + 'px');
                 this.drawWaveform()
             }
 		},

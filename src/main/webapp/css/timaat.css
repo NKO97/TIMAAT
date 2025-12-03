@@ -355,7 +355,7 @@
 }
 
 .timeline__marker {
-    z-index: 1001;
+    z-index: 500;
 }
 
 .inspectorMusicPaneLinkedMusicPane {
@@ -430,6 +430,11 @@
 
 .annotationEditThumbnail{
     max-width: 200px;
+}
+
+#drop-down-menu-segment-structure{
+    z-index: 10000;
+    transform: translateX(-50px) translateY(20px) !important;
 }
 
 .dataTablesHideSelectedRows table.dataTable tbody tr.selected,
