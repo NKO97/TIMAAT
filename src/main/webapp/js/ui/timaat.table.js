@@ -149,7 +149,6 @@
         _activeTableColumnIds
         _selector
         _dataUrl
-        _$headerRow
         _dataTable = null;
 
         constructor(selector, tableColumnConfigs, activeTableColumnConfigIds, dataUrl) {
@@ -160,16 +159,37 @@
             this._selector = selector
             this._activeTableColumnIds = activeTableColumnConfigIds;
             this._dataUrl = dataUrl;
-            this._$headerRow = $(selector + " thead tr")
         }
 
-        set activeTableColumnIds(activeTableColumnConfigIds) {
-            this._activeTableColumnIds = activeTableColumnConfigIds;
+        /**
+         * Changes the active state of the specified column
+         * @param columnId
+         * @param active
+         * @return boolean indicating the new state
+         */
+        changeTableColumnActivState(columnId, active){
+            const activeColumnIndex = this._activeTableColumnIds.indexOf(columnId);
+            if(active && activeColumnIndex === -1) {
+                this._activeTableColumnIds.push(columnId);
+                this.draw()
+            }else if(!active && activeColumnIndex > -1 && this.activeTableColumnIds.length > 1){
+                this._activeTableColumnIds.splice(activeColumnIndex, 1);
+                this.draw()
+            }
+
+            return this._activeTableColumnIds.indexOf(columnId) > -1
+        }
+
+        get activeTableColumnIds() {
+            return this._activeTableColumnIds;
         }
 
         draw() {
+            this._dataTable?.clear().destroy()
+            const $headerRow = $(this._selector + " thead tr")
+
             const columnConfigs = []
-            this._$headerRow.empty()
+            $headerRow.empty()
             for (let activeTableColumnId of this._activeTableColumnIds) {
                 const currentTableColumnConfig = this._tableColumnConfigsById.get(activeTableColumnId);
                 columnConfigs.push({
@@ -178,7 +198,7 @@
                     render: currentTableColumnConfig.render,
                     orderable: currentTableColumnConfig.sortable
                 });
-                $('<th>').text(currentTableColumnConfig.title).appendTo(this._$headerRow);
+                $('<th>').text(currentTableColumnConfig.title).appendTo($headerRow);
             }
 
             this._dataTable = $(this._selector).DataTable({
@@ -227,19 +247,50 @@
     TIMAAT.Table.ColumnSelectorPopover = class {
         _table
         _tableColumnConfigs
+        _$columnSelectorButton
         constructor(table, columnSelectorButtonSelector, tableColumnConfigs) {
             this._table = table;
-            this._tableColumnConfigs = tableColumnConfigs;
-            this.openPopover = this.openPopover.bind(this);
+            this._tableColumnConfigs = tableColumnConfigs.sort((a, b) => a.title.localeCompare(b.title));
 
-            console.log(columnSelectorButtonSelector)
-            $(columnSelectorButtonSelector).on('click', () => {
-                console.log("test")
+            this._$columnSelectorButton = $(columnSelectorButtonSelector)
+            this._$columnSelectorButton.on('click', this.openPopover);
+
+            this.createPopover();
+        }
+
+        createPopover(){
+            const popoverMenuItems = this.createMenuItems();
+            this._$columnSelectorButton.popover({
+                title: "Columns",
+                content: popoverMenuItems,
+                html: true,
+                placement: "bottom"
             })
         }
 
-        openPopover(event){
-            console.log(event)
+        createMenuItems() {
+            const $listGroup = $(`<ul class="list-group"></ul>`)
+            const currentActiveTableColumnIds = this._table.activeTableColumnIds
+
+            for(const currentTableColumnConfig of this._tableColumnConfigs) {
+                const $currentListGroupItemCheckbox = $(`<input class="ml-2" type="checkbox">`)
+                const initialSelected = currentActiveTableColumnIds.indexOf(currentTableColumnConfig.id) > -1;
+
+                $currentListGroupItemCheckbox.prop("checked", initialSelected)
+
+                const table = this._table
+                $currentListGroupItemCheckbox.on("change", (e) => {
+                    const newState = table.changeTableColumnActivState(currentTableColumnConfig.id, e.target.checked);
+                    $currentListGroupItemCheckbox.prop("checked", newState)
+                })
+
+                const $currentListGroupItem = $(`<li class="list-group-item d-flex justify-content-between align-items-center">${currentTableColumnConfig.title}</li>`)
+                $currentListGroupItem.append($currentListGroupItemCheckbox)
+
+                $listGroup.append($currentListGroupItem)
+            }
+
+            return $listGroup
         }
     }
 }, window))
