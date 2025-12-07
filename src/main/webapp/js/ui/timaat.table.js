@@ -149,16 +149,18 @@
         _activeTableColumnIds
         _selector
         _dataUrl
+        _tableId
         _dataTable = null;
 
-        constructor(selector, tableColumnConfigs, activeTableColumnConfigIds, dataUrl) {
+        constructor(selector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl, tableId=selector) {
             this._tableColumnConfigsById = new Map()
             for (let tableColumnConfig of tableColumnConfigs) {
                 this._tableColumnConfigsById.set(tableColumnConfig.id, tableColumnConfig);
             }
             this._selector = selector
-            this._activeTableColumnIds = activeTableColumnConfigIds;
+            this._activeTableColumnIds = TIMAAT.Table.TableConfigurationStorage.getActiveColumnsForTable(tableId) ?? defaultActiveTableColumnConfigs
             this._dataUrl = dataUrl;
+            this._tableId = tableId
         }
 
         /**
@@ -169,19 +171,32 @@
          */
         changeTableColumnActivState(columnId, active){
             const activeColumnIndex = this._activeTableColumnIds.indexOf(columnId);
+            let changed = false
+
             if(active && activeColumnIndex === -1) {
+                changed = true
                 this._activeTableColumnIds.push(columnId);
                 this.draw()
             }else if(!active && activeColumnIndex > -1 && this.activeTableColumnIds.length > 1){
+                changed = true
                 this._activeTableColumnIds.splice(activeColumnIndex, 1);
                 this.draw()
             }
 
-            return this._activeTableColumnIds.indexOf(columnId) > -1
+            if(changed){
+                TIMAAT.Table.TableConfigurationStorage.saveActiveColumnsForTable(this._activeTableColumnIds, this._tableId)
+                return active
+            }
+
+            return !active
         }
 
         get activeTableColumnIds() {
             return this._activeTableColumnIds;
+        }
+
+        get tableColumnConfigs() {
+            return Array.from(this._tableColumnConfigsById.values());
         }
 
         draw() {
@@ -248,9 +263,9 @@
         _table
         _tableColumnConfigs
         _$columnSelectorButton
-        constructor(table, columnSelectorButtonSelector, tableColumnConfigs) {
+        constructor(table, columnSelectorButtonSelector) {
             this._table = table;
-            this._tableColumnConfigs = tableColumnConfigs.sort((a, b) => a.title.localeCompare(b.title));
+            this._tableColumnConfigs = table.tableColumnConfigs.sort((a, b) => a.title.localeCompare(b.title));
 
             this._$columnSelectorButton = $(columnSelectorButtonSelector)
             this._$columnSelectorButton.on('click', this.openPopover);
@@ -291,6 +306,27 @@
             }
 
             return $listGroup
+        }
+    }
+    TIMAAT.Table.TableConfigurationStorage = {
+        saveActiveColumnsForTable: function(activeColumns, tableId){
+            const localStorageIdentifier = TIMAAT.Table.TableConfigurationStorage.createLocalStorageIdentifierForActiveColumns(tableId)
+            localStorage.setItem(localStorageIdentifier, JSON.stringify(activeColumns))
+        },
+
+        getActiveColumnsForTable: function (tableId){
+            const localStorageIdentifier = TIMAAT.Table.TableConfigurationStorage.createLocalStorageIdentifierForActiveColumns(tableId)
+            const activeColumnsJson = localStorage.getItem(localStorageIdentifier)
+
+            if(activeColumnsJson){
+                return JSON.parse(activeColumnsJson)
+            }
+
+            return null
+        },
+
+        createLocalStorageIdentifierForActiveColumns: function(tableId){
+            return `TIMAAT.Table.${tableId}.activeColumns`
         }
     }
 }, window))

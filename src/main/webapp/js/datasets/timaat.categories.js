@@ -202,7 +202,7 @@
                 musicTable.resizeToParent()
             });
 
-            const musicColumnSelectorPopover = new TIMAAT.Table.ColumnSelectorPopover(musicTable, "#categoriesMusicTableColumnButton", columns)
+            new TIMAAT.Table.ColumnSelectorPopover(musicTable, "#categoriesMusicTableColumnButton")
             return musicTable
         },
 
@@ -249,6 +249,7 @@
                 mediumTable.resizeToParent()
             });
 
+            new TIMAAT.Table.ColumnSelectorPopover(mediumTable, "#categoriesMediumTableColumnButton")
             return mediumTable
         },
 
@@ -273,6 +274,7 @@
                 actorTable.resizeToParent()
             });
 
+            new TIMAAT.Table.ColumnSelectorPopover(actorTable, "#categoriesActorTableColumnButton")
             return actorTable
         },
 
@@ -286,7 +288,7 @@
                 annotationTable.resizeToParent()
             });
 
-
+            new TIMAAT.Table.ColumnSelectorPopover(annotationTable, "#categoriesAnnotationTableColumnButton")
             return annotationTable
         },
 
