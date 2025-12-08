@@ -158,6 +158,9 @@
                 closeOnSelect: false,
                 scrollAfterSelect: true,
                 allowClear: true,
+                colReorder: {
+                    enable: true
+                },
                 ajax: {
                     url: 'api/categorySet/selectList',
                     type: 'GET',
@@ -197,7 +200,7 @@
                 new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
                 new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"), new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
             const activeColumnIds = ["id", "title", "musicType", "beat", "instrumentation", "tempo", "remark", "harmony", "melody"]
-            const musicTable = new TIMAAT.Table.Table("#categoriesMusicTable", columns, activeColumnIds, "api/music/list")
+            const musicTable = new TIMAAT.Table.Table("categoriesMusicTable","#categoriesMusicTableContainer", columns, activeColumnIds, "api/music/list")
             $('#musicTableCollapse').on('shown.bs.collapse', (event) => {
                 musicTable.resizeToParent()
             });
@@ -243,7 +246,7 @@
                 new TIMAAT.Table.DateTableColumnConfig("recordingEndDate", "Recording End Date", "recordingEndDate"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"), new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"),
                 new TIMAAT.Table.ValueMapperTableColumnConfig("mediaType", "Media Type", "mediaType.id", mediaTypesById), new MediumDurationColumnConfig(), new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", imageThumbnailGeneratorFunction)]
             const activeColumnIds = ["thumbnail", "id", "title", "mediaType", "duration", "releaseDate", 'recordingStartDate', 'recordingEndDate', "fileHash", "copyright", "remark"]
-            const mediumTable = new TIMAAT.Table.Table("#categoriesMediumTable", columns, activeColumnIds, "api/medium/list")
+            const mediumTable = new TIMAAT.Table.Table("categoriesMediumTable", "#categoriesMediumTableContainer", columns, activeColumnIds, "api/medium/list")
 
             $('#mediumTableCollapse').on('shown.bs.collapse', (event) => {
                 mediumTable.resizeToParent()
@@ -268,7 +271,7 @@
                 new TIMAAT.Table.ValueMapperTableColumnConfig("sex", "Sex", "actorPerson.sex.id", sexTypesById)
             ]
             const activeColumnIds = ["id", "name", "nameUsedFrom", "nameUsedUntil", "type", "primaryAddress", "primaryPhoneNumber", "primaryEmailAddress", "disbanded", "founded", "dateOfBirth", "dayOfDeath", "title", "citizenship", "placeOfBirth", "placeOfDeath", "sex"]
-            const actorTable = new TIMAAT.Table.Table("#categoriesActorTable", columns, activeColumnIds, "api/actor/list")
+            const actorTable = new TIMAAT.Table.Table("categoriesActorTable","#categoriesActorTableContainer", columns, activeColumnIds, "api/actor/list")
 
             $('#actorTableCollapse').on('shown.bs.collapse', (event) => {
                 actorTable.resizeToParent()
@@ -282,7 +285,7 @@
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id")]
             const activeColumnIds = ["id"]
 
-            const annotationTable = new TIMAAT.Table.Table("#categoriesAnnotationTable", columns, activeColumnIds, "api/annotation/list")
+            const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list")
 
             $('#annotationTableCollapse').on('shown.bs.collapse', (event) => {
                 annotationTable.resizeToParent()

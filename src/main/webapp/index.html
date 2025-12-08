@@ -31,6 +31,7 @@
 
     <!-- Data Tables CSS -->
     <link href="third-party/datatables/datatables.min.css" rel="stylesheet" type="text/css">
+    <link href="third-party/datatables/ColReorder-1.5.2/css/colReorder.dataTables.css" rel="stylesheet" type="text/css">
 
     <!-- JQuery UI CSS -->
     <link href="third-party/jquery/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
@@ -2336,16 +2337,8 @@
                       </div>
                     </div>
                     <div id="musicTableCollapse" class="collapse" data-parent="#musicAccordion">
-                      <div class="card-body">
-                        <table id="categoriesMusicTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
-                          <thead class="thead-dark">
-                            <tr>
+                      <div id="categoriesMusicTableContainer" class="card-body">
 
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
                       </div>
                     </div>
                   </div>
@@ -2361,16 +2354,7 @@
                       </div>
                     </div>
                     <div id="mediumTableCollapse" class="collapse" data-parent="#mediumAccordion">
-                      <div class="card-body">
-                        <table id="categoriesMediumTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
-                          <thead class="thead-dark">
-                            <tr>
-
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
+                      <div id="categoriesMediumTableContainer" class="card-body">
                       </div>
                     </div>
                   </div>
@@ -2386,16 +2370,7 @@
                       </div>
                     </div>
                     <div id="actorTableCollapse" class="collapse" data-parent="#actorAccordion">
-                      <div class="card-body">
-                        <table id="categoriesActorTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
-                          <thead class="thead-dark">
-                            <tr>
-
-                            </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
+                      <div id="categoriesActorTableContainer" class="card-body">
                       </div>
                     </div>
                   </div>
@@ -2411,16 +2386,7 @@
                       </div>
                     </div>
                     <div id="annotationTableCollapse" class="collapse" data-parent="#annotationAccordion">
-                      <div class="card-body">
-                        <table id="categoriesAnnotationTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
-                          <thead class="thead-dark">
-                          <tr>
-
-                          </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
+                      <div id="categoriesAnnotationTableContainer" class="card-body">
                       </div>
                     </div>
                   </div>
@@ -2436,16 +2402,7 @@
                       </div>
                     </div>
                     <div id="segmentStructureTableCollapse" class="collapse" data-parent="#annotationAccordion">
-                      <div class="card-body">
-                        <table id="categoriesSegmentStructureTable" class="table table-striped table-bordered table-hover mediumDatasetTable">
-                          <thead class="thead-dark">
-                          <tr>
-
-                          </tr>
-                          </thead>
-                          <tbody>
-                          </tbody>
-                        </table>
+                      <div id="categoriesSegmentStructureTableContainer" class="card-body">
                       </div>
                     </div>
                   </div>

@@ -16,6 +16,7 @@ requirejs.config({
         "datatables.net-bs4"              : '../third-party/datatables/DataTables-1.11.5/js/dataTables.bootstrap4',
         "datatables.net-responsive"       : '../third-party/datatables/Responsive-2.2.9/js/dataTables.responsive',
         "datatables.select"               : '../third-party/datatables/Select-1.3.4/js/dataTables.select',
+        "datatables.col-reorder"          : '../third-party/datatables/ColReorder-1.5.2/js/colReorder.dataTables',
 		"domReady"                        : '../third-party/requirejs/domReady',
 		"moment"                          : '../third-party/moment/moment-with-locales',
 		"leaflet"                         : '../third-party/leaflet/leaflet',
@@ -153,8 +154,9 @@ require(['domReady',
 	  console.info("TIMAAT::Init");
 		requirejs([
 			'moment',
-            'datatables.select',
 			'datatables',
+            'datatables.col-reorder',
+            'datatables.select',
 			'TIMAAT',
 			'TIMAAT-entityupdate',
 			'TIMAAT-html',

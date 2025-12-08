@@ -147,20 +147,22 @@
     TIMAAT.Table.Table = class {
         _tableColumnConfigsById
         _activeTableColumnIds
-        _selector
+        _$container
         _dataUrl
         _tableId
+        _reorderableColumns
         _dataTable = null;
 
-        constructor(selector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl, tableId=selector) {
+        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl,reorderableColumns=true) {
             this._tableColumnConfigsById = new Map()
             for (let tableColumnConfig of tableColumnConfigs) {
                 this._tableColumnConfigsById.set(tableColumnConfig.id, tableColumnConfig);
             }
-            this._selector = selector
+            this._$container = $(containerSelector)
             this._activeTableColumnIds = TIMAAT.Table.TableConfigurationStorage.getActiveColumnsForTable(tableId) ?? defaultActiveTableColumnConfigs
             this._dataUrl = dataUrl;
             this._tableId = tableId
+            this._reorderableColumns = reorderableColumns;
         }
 
         /**
@@ -200,11 +202,20 @@
         }
 
         draw() {
-            this._dataTable?.clear().destroy()
-            const $headerRow = $(this._selector + " thead tr")
+           const self = this
+           this._dataTable?.clear().destroy(true)
+           this._$container.empty()
+
+            const $table = $(`<table id="${this._tableId}" class="table table-striped table-bordered table-hover"></table>`)
+            const $tableHead = $(`<thead class="thead-dark"></thead>`)
+            const $tableBody = $(`<tbody></tbody>`)
+            $tableHead.appendTo($table)
+            $tableBody.appendTo($table)
+
+            const $headerRow = $("<tr></tr>")
+            $headerRow.appendTo($tableHead)
 
             const columnConfigs = []
-            $headerRow.empty()
             for (let activeTableColumnId of this._activeTableColumnIds) {
                 const currentTableColumnConfig = this._tableColumnConfigsById.get(activeTableColumnId);
                 columnConfigs.push({
@@ -215,10 +226,15 @@
                 });
                 $('<th>').text(currentTableColumnConfig.title).appendTo($headerRow);
             }
+            $table.appendTo(this._$container)
 
-            this._dataTable = $(this._selector).DataTable({
+            this._dataTable = $table.DataTable({
                 "destroy": true,
                 "autoWidth": false,
+                "colReorder": {
+                  "enable": this._reorderableColumns,
+                  "order": Array.from(columnConfigs.keys())
+                },
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 "pagingType": "full",
                 "dom": '<lf<t>ip>',
@@ -246,8 +262,23 @@
                         return serverData;
                     }
                 },
+                "initComplete": function () {
+                    if(self._reorderableColumns){
+                        self._dataTable?.colReorder.reset()
+                    }
+                },
                 "columns": columnConfigs
             })
+
+            $table.on('column-reorder.dt', (e, settings, details) => {
+                if (!details || !details.mapping) return;
+
+                const newOrder = details.mapping.map(i => self._activeTableColumnIds[i]);
+
+                self._activeTableColumnIds = newOrder;
+                TIMAAT.Table.TableConfigurationStorage
+                    .saveActiveColumnsForTable(newOrder, this._tableId);
+            });
         }
 
         /*
