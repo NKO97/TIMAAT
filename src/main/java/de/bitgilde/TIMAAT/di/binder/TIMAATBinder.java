@@ -9,13 +9,13 @@ import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationV
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.DbAnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
-import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
+import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
 import de.bitgilde.TIMAAT.storage.entity.CategorySetStorage;
 import de.bitgilde.TIMAAT.storage.entity.CategoryStorage;
 import de.bitgilde.TIMAAT.storage.entity.MediumStorage;
 import de.bitgilde.TIMAAT.storage.entity.MediumVideoStorage;
-import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
+import de.bitgilde.TIMAAT.storage.entity.music.MusicStorage;
 import de.bitgilde.TIMAAT.storage.entity.TagStorage;
 import de.bitgilde.TIMAAT.storage.file.AnnotationFileStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;

@@ -46,6 +46,7 @@ import de.bitgilde.TIMAAT.model.TimeRange;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.rest.model.music.CreateUpdateMusicPayload;
+import de.bitgilde.TIMAAT.rest.model.music.MusicListingQueryParameter;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicListPayload;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMediumHasMusicListPayload.MediumHasMusicListEntry;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicCategoriesPayload;
@@ -53,7 +54,10 @@ import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicCategorySetsPayload;
 import de.bitgilde.TIMAAT.rest.model.music.UpdateMusicTranslationListPayload;
 import de.bitgilde.TIMAAT.rest.model.tags.UpdateAssignedTagsPayload;
 import de.bitgilde.TIMAAT.security.UserLogManager;
-import de.bitgilde.TIMAAT.storage.entity.MusicStorage;
+import de.bitgilde.TIMAAT.storage.api.PagingParameter;
+import de.bitgilde.TIMAAT.storage.api.SortingParameter;
+import de.bitgilde.TIMAAT.storage.entity.music.MusicStorage;
+import de.bitgilde.TIMAAT.storage.entity.music.api.MusicFilterCriteria;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -61,6 +65,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -193,93 +198,21 @@ public class EndpointMusic {
   @Produces(MediaType.APPLICATION_JSON)
   @Secured
   @Path("list")
-  public Response getMusicList(@QueryParam("draw") Integer draw, @QueryParam("start") Integer start, @QueryParam("length") Integer length, @QueryParam("orderby") String orderby, @QueryParam("dir") String direction, @QueryParam("exclude_annotation") Integer excludedAnnotationId, @QueryParam("search") String search, @QueryParam("musicTypeId") Integer musicTypeId, @Context HttpHeaders httpHeaders) {
-    // System.out.println("EndpointMusic: getMusicList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search);
-    String authToken = httpHeaders.getHeaderString("Authorization").substring(7);
-    int userId = 0;
-    if (AuthenticationFilter.isTokenValid(authToken)) {
-      userId = AuthenticationFilter.getTokenClaimUserId(authToken);
-    }
-    else {
-      return Response.status(Status.UNAUTHORIZED).build();
-    }
+  public DataTableInfo<Music> getMusicList(@BeanParam MusicListingQueryParameter queryParameter) {
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+    int draw = queryParameter.getDraw().orElse(0);
 
-    if (draw == null) {
-      draw = 0;
-    }
+    List<Music> matchingMusic = musicStorage.getMusicEntriesStream(queryParameter, queryParameter, queryParameter,
+            userAccount).collect(Collectors.toList());
+    long totalMusicEntries = musicStorage.getNumberOfTotalMusicEntries();
+    long filteredMusicEntries = musicStorage.getNumberOfMatchingMusicEntries(queryParameter);
 
-    // sanitize user input
-    if (direction != null && direction.equalsIgnoreCase("desc")) {
-      direction = "DESC";
-    }
-    else {
-      direction = "ASC";
-    }
-    String column = "m.id";
-    if (orderby != null) {
-      if (orderby.equalsIgnoreCase("title")) {
-        column = "m.displayTitle.name";
-      }
-    }
-
-    EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-    // calculate total # of records
-    Query countQuery = entityManager.createQuery("SELECT COUNT(m) FROM Music m");
-    long recordsTotal = (long) countQuery.getSingleResult();
-    long recordsFiltered = recordsTotal;
-
-    // search
-    Query query;
-    String sql;
-    List<Music> musicList = new ArrayList<>();
-    if ((search != null && !search.isEmpty()) || excludedAnnotationId != null || musicTypeId != null) {
-      // find all matching titles
-      sql = "SELECT m FROM Music m where (:musicTypeId is null or m.musicType.id = :musicTypeId) and (:excludedAnnotationId is null or m.id not in (select m2.id from Music m2 left join m2.annotationHasMusic annotationHasMusic where annotationHasMusic.annotation.id = :excludedAnnotationId))" + "AND  (:search is null or lower(m.displayTitle.name) LIKE lower(concat('%', :search, '%'))) ORDER BY " + column + " " + direction;
-      query = entityManager.createQuery(sql).setParameter("search", search)
-                           .setParameter("excludedAnnotationId", excludedAnnotationId)
-                           .setParameter("musicTypeId", musicTypeId);
-      musicList = castList(Music.class, query.getResultList());
-      // find all music belonging to those titles
-      if (start != null && start > 0) {
-        query.setFirstResult(start);
-      }
-      if (length != null && length > 0) {
-        query.setMaxResults(length);
-      }
-      if (length == -1) { // display all results
-        length = musicList.size();
-        query.setMaxResults(length);
-      }
-      recordsFiltered = musicList.size();
-      List<Music> filteredMusicList = new ArrayList<>();
-      int i = start;
-      int end;
-      if ((recordsFiltered - start) < length) {
-        end = (int) recordsFiltered;
-      }
-      else {
-        end = start + length;
-      }
-      for (; i < end; i++) {
-        filteredMusicList.add(musicList.get(i));
-      }
-      filterAnnotationReferencesByPermission(userId, filteredMusicList);
-      return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredMusicList)).build();
-    }
-    else {
-      sql = "SELECT m FROM Music m ORDER BY " + column + " " + direction;
-      query = entityManager.createQuery(sql);
-      if (start != null && start > 0) {
-        query.setFirstResult(start);
-      }
-      if (length != null && length > 0) {
-        query.setMaxResults(length);
-      }
-      musicList = castList(Music.class, query.getResultList());
-    }
-
-    filterAnnotationReferencesByPermission(userId, musicList);
-    return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, musicList)).build();
+    /**
+     * TODO: This one can be removed when directly filter on storage layer
+     */
+    filterAnnotationReferencesByPermission(userAccount.getId(), matchingMusic);
+    return new DataTableInfo<>(draw, totalMusicEntries, filteredMusicEntries, matchingMusic);
   }
 
   @GET
@@ -287,8 +220,13 @@ public class EndpointMusic {
   @Secured
   @Path("selectList")
   public List<SelectElement<Integer>> getMusicSelectList(@QueryParam("search") String searchText) {
-    return musicStorage.getMusicEntries(searchText).map(currentMusic -> new SelectElement<>(currentMusic.getId(),
-            currentMusic.getDisplayTitle().getName())).collect(Collectors.toList());
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+    MusicFilterCriteria filterCriteria = new MusicFilterCriteria.Builder().musicNameSearch(searchText).build();
+    return musicStorage.getMusicEntriesStream(filterCriteria, PagingParameter.NO_PAGING,
+                               SortingParameter.defaultSortOrder(), userAccount)
+                       .map(currentMusic -> new SelectElement<>(currentMusic.getId(),
+                               currentMusic.getDisplayTitle().getName())).collect(Collectors.toList());
   }
 
   @GET

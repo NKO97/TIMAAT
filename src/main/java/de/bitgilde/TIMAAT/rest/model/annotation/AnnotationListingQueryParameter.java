@@ -1,7 +1,8 @@
 package de.bitgilde.TIMAAT.rest.model.annotation;
 
 import de.bitgilde.TIMAAT.rest.model.parameter.ListingQueryParameter;
-import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.AnnotationFilter;
+import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage.AnnotationFilter;
+import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationSortingField;
 import jakarta.ws.rs.QueryParam;
 
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.Optional;
  * @author Nico Kotlenga
  * @since 28.11.25
  */
-public class AnnotationListingQueryParameter extends ListingQueryParameter implements AnnotationFilter {
+public class AnnotationListingQueryParameter extends ListingQueryParameter<AnnotationSortingField> implements AnnotationFilter {
 
   @QueryParam("categoryIds")
   private Collection<Integer> categoryIds;

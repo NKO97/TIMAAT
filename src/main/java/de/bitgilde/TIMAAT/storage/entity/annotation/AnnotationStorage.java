@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.storage.entity;
+package de.bitgilde.TIMAAT.storage.entity.annotation;
 
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
@@ -19,9 +19,11 @@ import de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
-import de.bitgilde.TIMAAT.storage.ListingResult;
-import de.bitgilde.TIMAAT.storage.PagingParameter;
-import de.bitgilde.TIMAAT.storage.SortingParameter;
+import de.bitgilde.TIMAAT.storage.api.ListingResult;
+import de.bitgilde.TIMAAT.storage.api.PagingParameter;
+import de.bitgilde.TIMAAT.storage.api.SortingParameter;
+import de.bitgilde.TIMAAT.storage.entity.TagStorage;
+import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -68,7 +70,7 @@ public class AnnotationStorage extends DbAccessComponent {
     this.tagStorage = tagStorage;
   }
 
-  public ListingResult<Annotation> getAnnotations(AnnotationFilter filter, PagingParameter pagingParameter, SortingParameter sortingParameter, UserAccount userAccount) {
+  public ListingResult<Annotation> getAnnotations(AnnotationFilter filter, PagingParameter pagingParameter, SortingParameter<AnnotationSortingField> sortingParameter, UserAccount userAccount) {
     executeDbTransaction(entityManager -> {
       CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Annotation> criteriaQuery = criteriaBuilder.createQuery(Annotation.class);

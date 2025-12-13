@@ -1,9 +1,9 @@
 package de.bitgilde.TIMAAT.rest.model.parameter;
 
-import de.bitgilde.TIMAAT.model.SortOrder;
-import de.bitgilde.TIMAAT.storage.PagingParameter;
-import de.bitgilde.TIMAAT.storage.SortingParameter;
-import jakarta.annotation.Nullable;
+import de.bitgilde.TIMAAT.storage.api.SortOrder;
+import de.bitgilde.TIMAAT.storage.api.PagingParameter;
+import de.bitgilde.TIMAAT.storage.api.SortingField;
+import de.bitgilde.TIMAAT.storage.api.SortingParameter;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.QueryParam;
 
@@ -31,7 +31,7 @@ import java.util.Optional;
  * @author Nico Kotlenga
  * @since 28.11.25
  */
-public class ListingQueryParameter implements SortingParameter, PagingParameter {
+public class ListingQueryParameter<SORTING_FIELD extends SortingField> implements SortingParameter<SORTING_FIELD>, PagingParameter {
 
   @QueryParam("draw")
   private Integer draw;
@@ -42,9 +42,9 @@ public class ListingQueryParameter implements SortingParameter, PagingParameter 
   @QueryParam("length")
   private Integer length;
   @QueryParam("orderby")
-  private String orderby;
+  private SORTING_FIELD orderby;
   @QueryParam("dir")
-  private  String direction;
+  private SortOrder direction;
   @QueryParam("search")
   private String search;
 
@@ -61,11 +61,11 @@ public class ListingQueryParameter implements SortingParameter, PagingParameter 
     this.length = length;
   }
 
-  public void setOrderby(String orderby) {
+  public void setOrderby(SORTING_FIELD orderby) {
     this.orderby = orderby;
   }
 
-  public void setDirection(String direction) {
+  public void setDirection(SortOrder direction) {
     this.direction = direction;
   }
 
@@ -73,8 +73,8 @@ public class ListingQueryParameter implements SortingParameter, PagingParameter 
     this.search = search;
   }
 
-  public Integer getDraw() {
-    return draw;
+  public Optional<Integer> getDraw() {
+    return Optional.ofNullable(draw);
   }
 
   @Override
@@ -87,15 +87,13 @@ public class ListingQueryParameter implements SortingParameter, PagingParameter 
     return Optional.ofNullable(length);
   }
 
-  @Nullable
   @Override
   public Optional<SortOrder> getSortOrder() {
-    return Optional.ofNullable(direction).map(SortOrder::valueOf);
+    return Optional.ofNullable(direction);
   }
 
-  @Nullable
   @Override
-  public Optional<String> getSortFieldName() {
+  public Optional<SORTING_FIELD> getSortingField() {
     return Optional.ofNullable(orderby);
   }
 

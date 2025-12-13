@@ -32,11 +32,11 @@ import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationV
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.PermissionType;
 import de.bitgilde.TIMAAT.security.UserLogManager;
-import de.bitgilde.TIMAAT.storage.ListingResult;
-import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage;
-import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.CreateAnnotation;
-import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateAnnotation;
-import de.bitgilde.TIMAAT.storage.entity.AnnotationStorage.UpdateSelectorSvg;
+import de.bitgilde.TIMAAT.storage.api.ListingResult;
+import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage;
+import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage.CreateAnnotation;
+import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage.UpdateAnnotation;
+import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage.UpdateSelectorSvg;
 import de.bitgilde.TIMAAT.storage.file.AnnotationFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage;
 import de.bitgilde.TIMAAT.storage.file.TemporaryFileStorage.TemporaryFile;
@@ -122,10 +122,12 @@ public class EndpointAnnotation {
   public DataTableInfo<Annotation> getAnnotationList(@BeanParam @Valid AnnotationListingQueryParameter annotationListingQueryParameter) {
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
-
-    int draw = annotationListingQueryParameter.getDraw() == null ? 0 : annotationListingQueryParameter.getDraw();
-    ListingResult<Annotation> annotationListingResult =  annotationStorage.getAnnotations(annotationListingQueryParameter, annotationListingQueryParameter, annotationListingQueryParameter, userAccount);
-    return new DataTableInfo<>(draw, annotationListingResult.getTotalItemCount(), annotationListingResult.getMatchedItemsCount(), annotationListingResult.getItems());
+    int draw = annotationListingQueryParameter.getDraw().orElse(0);
+    ListingResult<Annotation> annotationListingResult = annotationStorage.getAnnotations(
+            annotationListingQueryParameter, annotationListingQueryParameter, annotationListingQueryParameter,
+            userAccount);
+    return new DataTableInfo<>(draw, annotationListingResult.getTotalItemCount(),
+            annotationListingResult.getMatchedItemsCount(), annotationListingResult.getItems());
   }
 
   @GET
@@ -705,8 +707,7 @@ public class EndpointAnnotation {
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
-    UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(
-            createAnnotationPayload.getSelectorSvg().getColorHex(),
+    UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(createAnnotationPayload.getSelectorSvg().getColorHex(),
             createAnnotationPayload.getSelectorSvg().getOpacity(),
             createAnnotationPayload.getSelectorSvg().getStrokeWidth(),
             createAnnotationPayload.getSelectorSvg().getSvgData());
@@ -719,7 +720,7 @@ public class EndpointAnnotation {
     Annotation createdAnnotation = annotationStorage.createAnnotation(createAnnotation, userAccount);
     int annotationThumbnailPosition = createAnnotationPayload.getThumbnailPositionMs() != null ? createAnnotationPayload.getThumbnailPositionMs() : createAnnotationPayload.getStartTime();
 
-    if(updateAnnotationThumbnail(createdAnnotation, annotationThumbnailPosition, userAccount).isPresent()){
+    if (updateAnnotationThumbnail(createdAnnotation, annotationThumbnailPosition, userAccount).isPresent()) {
       createdAnnotation.setThumbnailPositionMs(annotationThumbnailPosition);
     }
 
@@ -736,14 +737,19 @@ public class EndpointAnnotation {
 
     if (thumbnailFilePath.isPresent()) {
       return Response.ok(thumbnailFilePath.get().toFile()).build();
-    }else {
+    }
+    else {
       Annotation annotation = annotationStorage.getAnnotationById(annotationId);
 
-      if(annotation.getThumbnailPositionMs() != null){
-        logger.log(Level.WARNING, "Could not find thumbnail for annotation with id {0} which should be present. Creating new one.", annotationId);
-        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalFile(annotation.getMediumId());
+      if (annotation.getThumbnailPositionMs() != null) {
+        logger.log(Level.WARNING,
+                "Could not find thumbnail for annotation with id {0} which should be present. Creating new one.",
+                annotationId);
+        Optional<java.nio.file.Path> originalVideoFilePath = videoFileStorage.getPathToOriginalFile(
+                annotation.getMediumId());
         if (originalVideoFilePath.isPresent()) {
-          java.nio.file.Path createdThumbnailPath = createThumbnailForAnnotation(annotationId, originalVideoFilePath.get(), annotation.getThumbnailPositionMs());
+          java.nio.file.Path createdThumbnailPath = createThumbnailForAnnotation(annotationId,
+                  originalVideoFilePath.get(), annotation.getThumbnailPositionMs());
           return Response.ok(createdThumbnailPath.toFile()).build();
         }
       }
@@ -774,10 +780,12 @@ public class EndpointAnnotation {
   }
 
   private Optional<java.nio.file.Path> updateAnnotationThumbnail(Annotation annotation, int thumbnailPositionMs, UserAccount userAccount) throws VideoEngineException, IOException {
-    Optional<java.nio.file.Path> originalVideoFilePathOptional = videoFileStorage.getPathToOriginalFile(annotation.getMediumId());
+    Optional<java.nio.file.Path> originalVideoFilePathOptional = videoFileStorage.getPathToOriginalFile(
+            annotation.getMediumId());
     if (originalVideoFilePathOptional.isPresent()) {
       annotationStorage.updateThumbnailPositionMs(annotation.getId(), thumbnailPositionMs, userAccount);
-      return Optional.of(createThumbnailForAnnotation(annotation.getId(), originalVideoFilePathOptional.get(), thumbnailPositionMs));
+      return Optional.of(createThumbnailForAnnotation(annotation.getId(), originalVideoFilePathOptional.get(),
+              thumbnailPositionMs));
     }
 
     return Optional.empty();
@@ -816,8 +824,7 @@ public class EndpointAnnotation {
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
-    UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(
-            updateAnnotationPayload.getSelectorSvg().getColorHex(),
+    UpdateSelectorSvg updateSelectorSvg = new UpdateSelectorSvg(updateAnnotationPayload.getSelectorSvg().getColorHex(),
             updateAnnotationPayload.getSelectorSvg().getOpacity(),
             updateAnnotationPayload.getSelectorSvg().getStrokeWidth(),
             updateAnnotationPayload.getSelectorSvg().getSvgData());

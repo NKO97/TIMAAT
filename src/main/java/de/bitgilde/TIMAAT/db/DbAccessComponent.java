@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * Components which require database connectivity can extend to this class.
@@ -41,6 +42,31 @@ public abstract class DbAccessComponent {
         } finally {
             em.close();
         }
+    }
+
+  /**
+   * Exceutes a {@link DbTransactionOperation} having a stream as result
+   * Always use this when working with {@link Stream}s. Otherwise the db transaction is already closed
+   * and results can't be gathered.
+   *
+   * @param dbTransactionOperation
+   * @return
+   * @param <RESULT_TYPE>
+   * @throws DbTransactionExecutionException
+   */
+    protected <RESULT_TYPE> Stream<RESULT_TYPE> executeStreamDbTransaction(DbTransactionOperation<Stream<RESULT_TYPE>> dbTransactionOperation) throws DbTransactionExecutionException {
+      logger.log(Level.FINE, "Start execution of db transaction");
+      EntityManager em = emf.createEntityManager();
+      try {
+        em.getTransaction().begin();
+        Stream<RESULT_TYPE> result = dbTransactionOperation.execute(em);
+
+        return result.onClose(em::close);
+      } catch (Exception e) {
+        logger.log(Level.SEVERE, "Error in execution of db transaction", e);
+        em.getTransaction().rollback();
+        throw new DbTransactionExecutionException(e);
+      }
     }
 
     @FunctionalInterface

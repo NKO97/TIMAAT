@@ -1,6 +1,4 @@
-package de.bitgilde.TIMAAT.storage;
-
-import de.bitgilde.TIMAAT.model.SortOrder;
+package de.bitgilde.TIMAAT.storage.api;
 
 import java.util.Optional;
 
@@ -24,7 +22,7 @@ import java.util.Optional;
  * @author Nico Kotlenga
  * @since 28.11.25
  */
-public interface SortingParameter {
+public interface SortingParameter<S extends SortingField> {
 
   /**
    * @return the sorting order which should be used for listing results
@@ -34,5 +32,20 @@ public interface SortingParameter {
   /**
    * @return the name of the field on which the listing results should be sort on
    */
-  Optional<String> getSortFieldName();
+  Optional<S> getSortingField();
+
+  static <SORTING_FIELD_TYPE extends SortingField> SortingParameter<SORTING_FIELD_TYPE> defaultSortOrder() {
+    return new SortingParameter<SORTING_FIELD_TYPE>() {
+
+      @Override
+      public Optional<SortOrder> getSortOrder() {
+        return Optional.empty();
+      }
+
+      @Override
+      public Optional<SORTING_FIELD_TYPE> getSortingField() {
+        return Optional.empty();
+      }
+    };
+  }
 }

@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.api;
 
 import java.util.List;
 

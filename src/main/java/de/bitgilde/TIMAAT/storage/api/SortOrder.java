@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.model;
+package de.bitgilde.TIMAAT.storage.api;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");

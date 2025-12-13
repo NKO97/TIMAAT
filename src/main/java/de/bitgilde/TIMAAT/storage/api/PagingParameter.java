@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.storage;
+package de.bitgilde.TIMAAT.storage.api;
 
 import java.util.Optional;
 
@@ -32,4 +32,15 @@ public interface PagingParameter {
    * @return number of maximum allowed listing results
    */
   Optional<Integer> limit();
+
+  PagingParameter NO_PAGING = new PagingParameter() {
+    @Override
+    public Optional<Integer> startIndex() {
+      return Optional.empty();
+    }
+    @Override
+    public Optional<Integer> limit() {
+      return Optional.empty();
+    }
+  };
 }
