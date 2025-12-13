@@ -2,7 +2,7 @@ package de.bitgilde.TIMAAT.storage.entity.annotation.api;
 
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation_;
-import de.bitgilde.TIMAAT.storage.api.DbSortingField;
+import de.bitgilde.TIMAAT.storage.db.DbSortingField;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 

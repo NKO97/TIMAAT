@@ -3,7 +3,7 @@ package de.bitgilde.TIMAAT.storage.entity.music.api;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.Music_;
 import de.bitgilde.TIMAAT.model.FIPOP.Title_;
-import de.bitgilde.TIMAAT.storage.api.DbSortingField;
+import de.bitgilde.TIMAAT.storage.db.DbSortingField;
 import de.bitgilde.TIMAAT.storage.entity.music.MusicStorage;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;

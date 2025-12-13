@@ -1,6 +1,5 @@
 package de.bitgilde.TIMAAT.storage.entity.music;
 
-import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
@@ -23,19 +22,15 @@ import de.bitgilde.TIMAAT.model.FIPOP.Title;
 import de.bitgilde.TIMAAT.model.FIPOP.Title_;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.FIPOP.VoiceLeadingPattern;
-import de.bitgilde.TIMAAT.storage.api.SortOrder;
 import de.bitgilde.TIMAAT.model.TimeRange;
-import de.bitgilde.TIMAAT.storage.api.PagingParameter;
-import de.bitgilde.TIMAAT.storage.api.SortingParameter;
+import de.bitgilde.TIMAAT.storage.db.DbStorage;
 import de.bitgilde.TIMAAT.storage.entity.TagStorage;
 import de.bitgilde.TIMAAT.storage.entity.music.api.MusicFilterCriteria;
 import de.bitgilde.TIMAAT.storage.entity.music.api.MusicSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
@@ -52,7 +47,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,7 +68,7 @@ import java.util.stream.Stream;
  * @author Nico Kotlenga
  * @since 27.08.25
  */
-public class MusicStorage extends DbAccessComponent {
+public class MusicStorage extends DbStorage<Music, MusicFilterCriteria, MusicSortingField> {
 
   private static final Logger logger = Logger.getLogger(MusicStorage.class.getName());
 
@@ -82,89 +76,12 @@ public class MusicStorage extends DbAccessComponent {
 
   @Inject
   public MusicStorage(EntityManagerFactory emf, TagStorage tagStorage) {
-    super(emf);
+    super(Music.class, MusicSortingField.ID, emf);
     this.tagStorage = tagStorage;
   }
 
-  public Long getNumberOfTotalMusicEntries(){
-    logger.log(Level.FINE, "Loading number of total music entries");
-    return executeDbTransaction(entityManager -> {
-      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
 
-      Root<?> root = criteriaQuery.from(Music.class);
-      criteriaQuery.select(criteriaBuilder.count(root));
-
-      return entityManager.createQuery(criteriaQuery).getSingleResult();
-    });
-  }
-
-  public Long getNumberOfMatchingMusicEntries(MusicFilterCriteria filter) {
-    logger.log(Level.FINE, "Loading number of matching music entries");
-    return executeDbTransaction(entityManager -> {
-      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-
-      Root<Music> root = criteriaQuery.from(Music.class);
-      criteriaQuery.select(criteriaBuilder.count(root));
-      List<Predicate> predicates = createPredicates(filter, root,criteriaBuilder);
-
-      criteriaQuery.where(predicates.toArray(new Predicate[0]));
-      return entityManager.createQuery(criteriaQuery).getSingleResult();
-    });
-  }
-
-  public Stream<Music> getMusicEntriesStream(MusicFilterCriteria filter, PagingParameter pagingParameter, SortingParameter<MusicSortingField> sortingParameter, UserAccount userAccount) {
-    logger.log(Level.FINER, "Loading music entries matching the specified filter criteria");
-    return executeStreamDbTransaction(entityManager -> {
-      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-      CriteriaQuery<Music> criteriaQuery = criteriaBuilder.createQuery(Music.class);
-      Root<Music> root = criteriaQuery.from(Music.class);
-
-      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder);
-      Order sortOrder = createSortOrder(sortingParameter, root, criteriaBuilder);
-
-      criteriaQuery.where(predicates.toArray(new Predicate[0]));
-      criteriaQuery.orderBy(sortOrder);
-      criteriaQuery.select(root);
-
-      Stream<Music> musicStream = entityManager.createQuery(criteriaQuery).getResultStream();
-      return adjustStreamToPassedPagingParameter(musicStream, pagingParameter);
-    });
-  }
-
-  private Stream<Music> adjustStreamToPassedPagingParameter(Stream<Music> stream, PagingParameter pagingParameter) {
-    Stream<Music> musicStream = stream;
-    if(pagingParameter.startIndex().isPresent()){
-      musicStream = musicStream.skip(pagingParameter.startIndex().get());
-    }
-    if(pagingParameter.limit().isPresent()){
-      musicStream = musicStream.limit(pagingParameter.limit().get());
-    }
-
-    return musicStream;
-  }
-
-  private Order createSortOrder(SortingParameter<MusicSortingField> sortingParameter, Root<Music> root, CriteriaBuilder criteriaBuilder) {
-    SortOrder sortOrder = SortOrder.ASC;
-    if (sortingParameter.getSortOrder().isPresent()) {
-      sortOrder = sortingParameter.getSortOrder().get();
-    }
-
-    MusicSortingField musicSortingField = MusicSortingField.ID;
-    if (sortingParameter.getSortingField().isPresent()) {
-      musicSortingField = sortingParameter.getSortingField().get();
-    }
-
-    if (SortOrder.ASC.equals(sortOrder)) {
-      return criteriaBuilder.asc(musicSortingField.getPathFromRootEntity(root));
-    }
-    else {
-      return criteriaBuilder.desc(musicSortingField.getPathFromRootEntity(root));
-    }
-  }
-
-  private List<Predicate> createPredicates(MusicFilterCriteria filter, Root<Music> root, CriteriaBuilder criteriaBuilder) {
+  protected List<Predicate> createPredicates(MusicFilterCriteria filter, Root<Music> root, CriteriaBuilder criteriaBuilder) {
     List<Predicate> predicates = new ArrayList<>();
 
     if (filter.getMusicNameSearch().isPresent()) {

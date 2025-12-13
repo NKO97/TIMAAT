@@ -51,7 +51,7 @@ import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumHasMusicListPayload.Medi
 import de.bitgilde.TIMAAT.rest.model.medium.UpdateMediumVideoThumbnailPayload;
 import de.bitgilde.TIMAAT.security.TIMAATKeyGenerator;
 import de.bitgilde.TIMAAT.security.UserLogManager;
-import de.bitgilde.TIMAAT.storage.entity.MediumStorage;
+import de.bitgilde.TIMAAT.storage.entity.medium.MediumStorage;
 import de.bitgilde.TIMAAT.storage.entity.MediumVideoStorage;
 import de.bitgilde.TIMAAT.storage.file.AudioFileStorage;
 import de.bitgilde.TIMAAT.storage.file.ImageFileStorage;

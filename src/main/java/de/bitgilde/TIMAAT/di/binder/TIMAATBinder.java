@@ -13,7 +13,7 @@ import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
 import de.bitgilde.TIMAAT.storage.entity.CategorySetStorage;
 import de.bitgilde.TIMAAT.storage.entity.CategoryStorage;
-import de.bitgilde.TIMAAT.storage.entity.MediumStorage;
+import de.bitgilde.TIMAAT.storage.entity.medium.MediumStorage;
 import de.bitgilde.TIMAAT.storage.entity.MediumVideoStorage;
 import de.bitgilde.TIMAAT.storage.entity.music.MusicStorage;
 import de.bitgilde.TIMAAT.storage.entity.TagStorage;

@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.storage.entity;
+package de.bitgilde.TIMAAT.storage.entity.medium;
 
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;

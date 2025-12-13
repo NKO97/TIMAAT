@@ -46,7 +46,7 @@ public class CaseInsensitiveEnumParamConverterProvider implements ParamConverter
           return constant;
         }
       }
-      throw new IllegalArgumentException("No enum constant " + rawType.getName() + "." + value);
+      return null;
     }
 
     @Override
