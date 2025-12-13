@@ -90,14 +90,14 @@ public class MusicStorage extends DbStorage<Music, MusicFilterCriteria, MusicSor
               criteriaBuilder.like(root.get(Music_.displayTitle).get(Title_.name), "%" + musicNameSearchText + "%"));
     }
 
-    if (filter.getCategoryIds().isPresent()) {
+    if (filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty()) {
       Collection<Integer> categoryIds = filter.getCategoryIds().get();
       Join<Music, Category> categoryJoin = root.join(Music_.categories);
 
       predicates.add(categoryJoin.get(Category_.id).in(categoryIds));
     }
 
-    if (filter.getCategorySetIds().isPresent()) {
+    if (filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get().isEmpty()) {
       Collection<Integer> categorySetIds = filter.getCategorySetIds().get();
       Join<Music, CategorySet> categorySetJoin = root.join(Music_.categorySets);
 

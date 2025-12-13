@@ -1,13 +1,25 @@
 package de.bitgilde.TIMAAT.storage.entity.medium;
 
-import de.bitgilde.TIMAAT.db.DbAccessComponent;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet_;
+import de.bitgilde.TIMAAT.model.FIPOP.Category_;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
+import de.bitgilde.TIMAAT.model.FIPOP.Medium_;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
+import de.bitgilde.TIMAAT.model.FIPOP.Title_;
 import de.bitgilde.TIMAAT.model.TimeRange;
+import de.bitgilde.TIMAAT.storage.db.DbStorage;
+import de.bitgilde.TIMAAT.storage.entity.medium.api.MediumFilterCriteria;
+import de.bitgilde.TIMAAT.storage.entity.medium.api.MediumSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,22 +48,22 @@ import java.util.logging.Logger;
  * @author Nico Kotlenga
  * @since 27.09.25
  */
-public class MediumStorage extends DbAccessComponent {
+public class MediumStorage extends DbStorage<Medium, MediumFilterCriteria, MediumSortingField> {
 
   private static final Logger logger = Logger.getLogger(MediumStorage.class.getName());
 
   @Inject
   public MediumStorage(EntityManagerFactory emf) {
-    super(emf);
+    super(Medium.class, MediumSortingField.ID, emf);
   }
 
-  public List<MediumHasMusic> updateMediumHasMusicList(int mediumId, Map<Integer, Collection<TimeRange>> timeRangesByMusicId){
+  public List<MediumHasMusic> updateMediumHasMusicList(int mediumId, Map<Integer, Collection<TimeRange>> timeRangesByMusicId) {
     logger.log(Level.FINE, "Updating medium has music list of medium with id " + mediumId);
     return executeDbTransaction(entityManager -> {
       Medium medium = entityManager.find(Medium.class, mediumId);
 
-      entityManager.createQuery("delete from MediumHasMusic where medium.id= :mediumId").setParameter("mediumId", mediumId)
-                   .executeUpdate();
+      entityManager.createQuery("delete from MediumHasMusic where medium.id= :mediumId")
+                   .setParameter("mediumId", mediumId).executeUpdate();
       List<MediumHasMusic> updatedMediumHasMusic = new ArrayList<>();
       for (Map.Entry<Integer, Collection<TimeRange>> currentTimeRangeByMediumId : timeRangesByMusicId.entrySet()) {
         MediumHasMusic currentMediumHasMusic = new MediumHasMusic();
@@ -78,5 +90,31 @@ public class MediumStorage extends DbAccessComponent {
       updatedMediumHasMusic.forEach(entityManager::refresh);
       return updatedMediumHasMusic;
     });
+  }
+
+  @Override
+  protected List<Predicate> createPredicates(MediumFilterCriteria filter, Root<Medium> root, CriteriaBuilder criteriaBuilder) {
+    List<Predicate> predicates = new ArrayList<>();
+
+    if (filter.getMediumNameSearch().isPresent()) {
+      String searchText = filter.getMediumNameSearch().get();
+      predicates.add(criteriaBuilder.like(root.get(Medium_.displayTitle).get(Title_.name), "%" + searchText + "%"));
+    }
+
+    if (filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty()) {
+      Collection<Integer> categoryIds = filter.getCategoryIds().get();
+      Join<Medium, Category> categoryJoin = root.join(Medium_.categories);
+
+      predicates.add(categoryJoin.get(Category_.id).in(categoryIds));
+    }
+
+    if (filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get().isEmpty()) {
+      Collection<Integer> categorySetIds = filter.getCategorySetIds().get();
+      Join<Medium, CategorySet> categorySetJoin = root.join(Medium_.categorySets);
+
+      predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
+    }
+
+    return predicates;
   }
 }
