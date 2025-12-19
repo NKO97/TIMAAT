@@ -72,6 +72,7 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
       List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder);
       Order sortOrder = createSortOrder(sortingParameter, root, criteriaBuilder);
 
+      criteriaQuery.distinct(true);
       criteriaQuery.where(predicates.toArray(new Predicate[0]));
       criteriaQuery.orderBy(sortOrder);
       criteriaQuery.select(root);
@@ -93,7 +94,7 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
       CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
 
       Root<ENTITY_TYPE> root = criteriaQuery.from(entityTypeClass);
-      criteriaQuery.select(criteriaBuilder.count(root));
+      criteriaQuery.select(criteriaBuilder.countDistinct(root));
       List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder);
 
       criteriaQuery.where(predicates.toArray(new Predicate[0]));

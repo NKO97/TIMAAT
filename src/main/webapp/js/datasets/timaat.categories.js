@@ -140,9 +140,9 @@
                     TIMAAT.URLHistory.setURL(null, 'Categories', '#categories/categories');
                     $categoryNoSelectionPanelText.text("No category selected")
 
-                    if(!TIMAAT.Categories.categoryDataTable){
+                    if (!TIMAAT.Categories.categoryDataTable) {
                         TIMAAT.Categories.initCategoriesDataTable()
-                    }else {
+                    } else {
                         TIMAAT.Categories.categoryDataTable.rows().deselect()
                         TIMAAT.Categories.categoryDataTable.ajax.reload()
                     }
@@ -152,7 +152,7 @@
                     TIMAAT.URLHistory.setURL(null, 'Category Sets', '#categories/categorySets');
                     $categoryNoSelectionPanelText.text("No category set selected")
 
-                    if(!TIMAAT.Categories.categorySetDataTable){
+                    if (!TIMAAT.Categories.categorySetDataTable) {
                         TIMAAT.Categories.initCategorySetsDataTable()
                     } else {
                         TIMAAT.Categories.categorySetDataTable.rows().deselect()
@@ -169,7 +169,7 @@
             $('#categoryDataTableSelectAll').prop('checked', selectedCount === totalCount && totalCount > 0);
         },
 
-        updateCategorySetSelectAllCheckboxState(){
+        updateCategorySetSelectAllCheckboxState() {
             const selectedCategorySets = TIMAAT.Categories.categorySetDataTable.rows({selected: true}).data().toArray();
 
             const selectedCount = selectedCategorySets.length;
@@ -226,7 +226,7 @@
                 new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
                 new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"), new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
             const activeColumnIds = ["id", "title", "musicType", "beat", "instrumentation", "tempo", "remark", "harmony", "melody"]
-            const musicTable = new TIMAAT.Table.Table("categoriesMusicTable","#categoriesMusicTableContainer", columns, activeColumnIds, "api/music/list")
+            const musicTable = new TIMAAT.Table.Table("categoriesMusicTable", "#categoriesMusicTableContainer", columns, activeColumnIds, "api/music/list", true, false)
             $('#musicTableCollapse').on('shown.bs.collapse', (event) => {
                 musicTable.resizeToParent()
             });
@@ -272,7 +272,7 @@
                 new TIMAAT.Table.DateTableColumnConfig("recordingEndDate", "Recording End Date", "recordingEndDate"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"), new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"),
                 new TIMAAT.Table.ValueMapperTableColumnConfig("mediaType", "Media Type", "mediaType.id", mediaTypesById), new MediumDurationColumnConfig(), new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", imageThumbnailGeneratorFunction)]
             const activeColumnIds = ["thumbnail", "id", "title", "mediaType", "duration", "releaseDate", 'recordingStartDate', 'recordingEndDate', "fileHash", "copyright", "remark"]
-            const mediumTable = new TIMAAT.Table.Table("categoriesMediumTable", "#categoriesMediumTableContainer", columns, activeColumnIds, "api/medium/list")
+            const mediumTable = new TIMAAT.Table.Table("categoriesMediumTable", "#categoriesMediumTableContainer", columns, activeColumnIds, "api/medium/list", true, false)
 
             $('#mediumTableCollapse').on('shown.bs.collapse', (event) => {
                 mediumTable.resizeToParent()
@@ -297,7 +297,7 @@
                 new TIMAAT.Table.ValueMapperTableColumnConfig("sex", "Sex", "actorPerson.sex.id", sexTypesById)
             ]
             const activeColumnIds = ["id", "name", "nameUsedFrom", "nameUsedUntil", "type", "primaryAddress", "primaryPhoneNumber", "primaryEmailAddress", "disbanded", "founded", "dateOfBirth", "dayOfDeath", "title", "citizenship", "placeOfBirth", "placeOfDeath", "sex"]
-            const actorTable = new TIMAAT.Table.Table("categoriesActorTable","#categoriesActorTableContainer", columns, activeColumnIds, "api/actor/list")
+            const actorTable = new TIMAAT.Table.Table("categoriesActorTable", "#categoriesActorTableContainer", columns, activeColumnIds, "api/actor/list", true, false)
 
             $('#actorTableCollapse').on('shown.bs.collapse', (event) => {
                 actorTable.resizeToParent()
@@ -311,7 +311,7 @@
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id")]
             const activeColumnIds = ["id"]
 
-            const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list")
+            const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list", true, false)
 
             $('#annotationTableCollapse').on('shown.bs.collapse', (event) => {
                 annotationTable.resizeToParent()
@@ -407,31 +407,36 @@
         showAssignedEntitiesPanel() {
             $('.categoriesRightPanelContent').hide()
             $('#categoriesAssignedEntitiesPanel').show()
-            TIMAAT.Categories.relatedMusicTable.draw()
-            TIMAAT.Categories.relatedMediumTable.draw()
-            TIMAAT.Categories.relatedActorTable.draw()
-            TIMAAT.Categories.relatedAnnotationTable.draw()
+            TIMAAT.Categories.relatedMusicTable.active = true
+            TIMAAT.Categories.relatedMediumTable.active = true
+            TIMAAT.Categories.relatedActorTable.active = true
+            TIMAAT.Categories.relatedAnnotationTable.active = true
         },
 
         showNoSelectionPanel() {
             $('.categoriesRightPanelContent').hide()
             $('#categoriesNoSelectionPanel').show()
+
+            TIMAAT.Categories.relatedMusicTable.active = false
+            TIMAAT.Categories.relatedMediumTable.active = false
+            TIMAAT.Categories.relatedActorTable.active = false
+            TIMAAT.Categories.relatedAnnotationTable.active = false
         },
 
-        showEntitiesPanel(){
+        showEntitiesPanel() {
             let count
-            switch (TIMAAT.Categories.currentItemType){
+            switch (TIMAAT.Categories.currentItemType) {
                 case 'category':
-                    count= TIMAAT.Categories.categoryDataTable.rows({selected: true}).count()
+                    count = TIMAAT.Categories.categoryDataTable.rows({selected: true}).count()
                     break
                 case 'categorySet':
                     count = TIMAAT.Categories.categoryDataTable.rows({selected: true}).count()
                     break
             }
 
-            if(count > 0){
+            if (count > 0) {
                 TIMAAT.Categories.showAssignedEntitiesPanel()
-            }else{
+            } else {
                 TIMAAT.Categories.showNoSelectionPanel()
             }
         },
@@ -732,24 +737,37 @@
             TIMAAT.Categories.categoryDataTable.on('select deselect', TIMAAT.Categories.handleSelectionChanged);
         },
 
-        handleSelectionChanged(){
+        handleSelectionChanged() {
             let selectionCount
-            switch (TIMAAT.Categories.currentItemType){
+            let urlSearchParameters = new URLSearchParams
+            switch (TIMAAT.Categories.currentItemType) {
                 case "category":
                     TIMAAT.Categories.updateCategorySelectAllCheckboxState()
-                    const selectedCategories = TIMAAT.Categories.categoryDataTable.rows({selected: true}).data()
+                    const selectedCategories = TIMAAT.Categories.categoryDataTable.rows({selected: true}).data().toArray()
                     selectionCount = selectedCategories.length
+
+                    for (let currentCategory of selectedCategories) {
+                        urlSearchParameters.append("categoryIds", currentCategory.id)
+                    }
+
                     break
                 case "categorySet":
                     TIMAAT.Categories.updateCategorySetSelectAllCheckboxState()
-                    const selectedCategorySets = TIMAAT.Categories.categorySetDataTable.rows({selected: true}).data()
+                    const selectedCategorySets = TIMAAT.Categories.categorySetDataTable.rows({selected: true}).data().toArray()
                     selectionCount = selectedCategorySets.length
+
+                    for (let currentCategorySet of selectedCategorySets) {
+                        urlSearchParameters.append("categorySetIds", currentCategorySet.id)
+                    }
+
                     break
             }
 
-            if(selectionCount > 0){
+            if (selectionCount > 0) {
                 TIMAAT.Categories.showAssignedEntitiesPanel()
-            }else {
+                TIMAAT.Categories.relatedMusicTable.urlSearchParams = urlSearchParameters
+                TIMAAT.Categories.relatedMediumTable.urlSearchParams = urlSearchParameters
+            } else {
                 TIMAAT.Categories.showNoSelectionPanel()
             }
         }

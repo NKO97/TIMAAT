@@ -6,6 +6,7 @@ import de.bitgilde.TIMAAT.storage.entity.medium.api.MediumSortingField;
 import jakarta.ws.rs.QueryParam;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -30,9 +31,9 @@ import java.util.Optional;
  */
 public class MediumListingQueryParameter extends ListingQueryParameter<MediumSortingField> implements MediumFilterCriteria {
   @QueryParam("categoryIds")
-  private Collection<Integer> categoryIds;
+  private List<Integer> categoryIds;
   @QueryParam("categorySetIds")
-  private Collection<Integer> categorySetIds;
+  private List<Integer> categorySetIds;
   @QueryParam("search")
   private String search;
 
@@ -49,5 +50,18 @@ public class MediumListingQueryParameter extends ListingQueryParameter<MediumSor
   @Override
   public Optional<String> getMediumNameSearch() {
     return Optional.ofNullable(search);
+  }
+
+  public void setCategorySetIds(List<Integer> categorySetIds) {
+    this.categorySetIds = categorySetIds;
+  }
+
+  public void setCategoryIds(List<Integer> categoryIds) {
+    this.categoryIds = categoryIds;
+  }
+
+  @Override
+  public void setSearch(String search) {
+    this.search = search;
   }
 }

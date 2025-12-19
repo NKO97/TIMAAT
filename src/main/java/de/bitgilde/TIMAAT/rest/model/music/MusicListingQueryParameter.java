@@ -6,6 +6,7 @@ import de.bitgilde.TIMAAT.storage.entity.music.api.MusicSortingField;
 import jakarta.ws.rs.QueryParam;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,9 +17,9 @@ import java.util.Optional;
  */
 public class MusicListingQueryParameter extends ListingQueryParameter<MusicSortingField> implements MusicFilterCriteria {
   @QueryParam("categoryIds")
-  private Collection<Integer> categoryIds;
+  private List<Integer> categoryIds;
   @QueryParam("categorySetIds")
-  private Collection<Integer> categorySetIds;
+  private List<Integer> categorySetIds;
   @QueryParam("search")
   private String search;
 
@@ -35,5 +36,18 @@ public class MusicListingQueryParameter extends ListingQueryParameter<MusicSorti
   @Override
   public Optional<String> getMusicNameSearch() {
     return Optional.ofNullable(search);
+  }
+
+  public void setCategorySetIds(List<Integer> categorySetIds) {
+    this.categorySetIds = categorySetIds;
+  }
+
+  @Override
+  public void setSearch(String search) {
+    this.search = search;
+  }
+
+  public void setCategoryIds(List<Integer> categoryIds) {
+    this.categoryIds = categoryIds;
   }
 }

@@ -152,9 +152,10 @@
         _dataUrl
         _tableId
         _reorderableColumns
+        _urlSearchParams
         _dataTable = null;
 
-        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl,reorderableColumns=true, active=true) {
+        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl,reorderableColumns=true, active=true, urlSearchParams=new URLSearchParams()) {
             this._tableColumnConfigsById = new Map()
             for (let tableColumnConfig of tableColumnConfigs) {
                 this._tableColumnConfigsById.set(tableColumnConfig.id, tableColumnConfig);
@@ -165,6 +166,9 @@
             this._tableId = tableId
             this._reorderableColumns = reorderableColumns;
             this._active = active
+            this._urlSearchParams = urlSearchParams
+
+            this.draw()
         }
 
         /**
@@ -196,7 +200,17 @@
         }
 
         set active(active){
+            const redrawNecessary = this._active !== active
             this._active = active
+
+            if(redrawNecessary){
+                this.draw()
+            }
+        }
+
+        set urlSearchParams(urlSearchParams){
+            this._urlSearchParams = urlSearchParams
+            this.draw()
         }
 
         get activeTableColumnIds() {
@@ -235,6 +249,8 @@
                 }
                 $table.appendTo(this._$container)
 
+                const ajaxUrl = this._dataUrl +  "?" +  this._urlSearchParams.toString()
+                console.log(ajaxUrl)
                 this._dataTable = $table.DataTable({
                     "destroy": true,
                     "autoWidth": false,
@@ -251,7 +267,7 @@
                     "rowId": 'id',
                     "serverSide": true,
                     "ajax": {
-                        "url": this._dataUrl,
+                        "url": ajaxUrl,
                         "contentType": "application/json; charset=utf-8",
                         "dataType": "json",
                         "beforeSend": function (xhr) {
