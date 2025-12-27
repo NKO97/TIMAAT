@@ -1670,7 +1670,6 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`annotation_has_category`
 (
     `annotation_id`   INT NOT NULL,
     `category_id`     INT NOT NULL,
-    `category_set_id` INT NULL,
     PRIMARY KEY (`annotation_id`, `category_id`),
     CONSTRAINT `fk_annotation_has_category_annotation1`
         FOREIGN KEY (`annotation_id`)

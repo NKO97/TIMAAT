@@ -37,30 +37,46 @@
 }(function (TIMAAT) {
 
     TIMAAT.AnnotationService = {
+        createAnnotationFilterUrlSearchParams(mediumAnalysisListIds=null, categoryIds=null, categorySetIds=null, hasCategories = null) {
+            const result = new URLSearchParams()
+            if(mediumAnalysisListIds){
+                mediumAnalysisListIds.forEach(currentMediumAnalysisListId => result.append("mediumAnalysisListIds", currentMediumAnalysisListId))
+            }
+            if(categoryIds){
+                categoryIds.forEach(currentCategoryId => result.append("categoryIds", currentCategoryId))
+            }
+            if(categorySetIds){
+                categorySetIds.forEach(currentCategorySetId => result.append("categorySetIds", currentCategorySetId))
+            }
+            if(hasCategories){
+                result.append("hasCategories", hasCategories)
+            }
 
-        //* not in use anymore
-        // getAnnotations(videoId, callback) {
-        // 	// console.log("TCL: getAnnotations -> getAnnotations(videoId, callback) ");
-        // 	// console.log("TCL: getAnnotations -> videoId", videoId);
-        // 	jQuery.ajax({
-        // 		url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/medium/"+videoId+"/annotations",
-        // 		type       : "GET",
-        // 		contentType: "application/json; charset=utf-8",
-        // 		dataType   : "json",
-        // 		beforeSend : function (xhr) {
-        // 			xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
-        // 		},
-        // 	}).done(function(data) {
-        // 		callback(data);
-        // 	})
-        // 	.fail(function(error) {
-        // 		console.error("ERROR: ", error);
-        // 	});
-
-        // },
-
+            return result
+        },
+        async getAnnotationCount(mediumAnalysisListIds=null, categoryIds = null, categorySetIds = null, hasCategories = null) {
+            const urlSearchParams = TIMAAT.AnnotationService.createAnnotationFilterUrlSearchParams(mediumAnalysisListIds, categoryIds, categorySetIds, hasCategories)
+            return new Promise(resolve => {
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/count?" + urlSearchParams.toString() ,
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
+                    },
+                }).done(function (data) {
+                    resolve(data.count);
+                })
+                    .fail(function (error) {
+                        console.error("ERROR responseText: ", error.responseText);
+                        console.error("ERROR: ", error);
+                    });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
         async getSelectedCategories(annotationId) {
-            // console.log("TCL: getSelectedCategories -> annotationId", annotationId);
             return new Promise(resolve => {
                 $.ajax({
                     url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/" + annotationId + "/category/list/",

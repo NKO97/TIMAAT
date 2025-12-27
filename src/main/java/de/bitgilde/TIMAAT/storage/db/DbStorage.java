@@ -69,7 +69,7 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
       CriteriaQuery<ENTITY_TYPE> criteriaQuery = criteriaBuilder.createQuery(entityTypeClass);
       Root<ENTITY_TYPE> root = criteriaQuery.from(entityTypeClass);
 
-      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder);
+      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder, criteriaQuery);
       Order sortOrder = createSortOrder(sortingParameter, root, criteriaBuilder);
 
       criteriaQuery.distinct(true);
@@ -95,7 +95,7 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
 
       Root<ENTITY_TYPE> root = criteriaQuery.from(entityTypeClass);
       criteriaQuery.select(criteriaBuilder.countDistinct(root));
-      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder);
+      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder, criteriaQuery);
 
       criteriaQuery.where(predicates.toArray(new Predicate[0]));
       return entityManager.createQuery(criteriaQuery).getSingleResult();
@@ -125,7 +125,7 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
    * @param criteriaBuilder which can be used the create the {@link Predicate}s
    * @return a {@link List} of {@link Predicate}s
    */
-  protected abstract List<Predicate> createPredicates(FILTER_TYPE filter, Root<ENTITY_TYPE> root, CriteriaBuilder criteriaBuilder);
+  protected abstract List<Predicate> createPredicates(FILTER_TYPE filter, Root<ENTITY_TYPE> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery);
 
   /**
    * Creates the {@link Order} to match current defined {@link SortingParameter}

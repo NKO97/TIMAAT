@@ -17,6 +17,7 @@ import de.bitgilde.TIMAAT.storage.entity.medium.api.MediumSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -93,7 +94,7 @@ public class MediumStorage extends DbStorage<Medium, MediumFilterCriteria, Mediu
   }
 
   @Override
-  protected List<Predicate> createPredicates(MediumFilterCriteria filter, Root<Medium> root, CriteriaBuilder criteriaBuilder) {
+  protected List<Predicate> createPredicates(MediumFilterCriteria filter, Root<Medium> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
     List<Predicate> predicates = new ArrayList<>();
 
     if (filter.getMediumNameSearch().isPresent()) {

@@ -1,26 +1,11 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.DisplayElementNameAndPermission;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
+import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisActionTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisScene;
@@ -46,17 +31,22 @@ import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
 import de.bitgilde.TIMAAT.notification.NotificationWebSocket;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.analysislist.UpdateAnalysisListCategorySetsPayload;
+import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationVerifier;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.analysislist.AnalysisListStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
-import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -66,7 +56,20 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,11 +95,11 @@ import jakarta.ws.rs.core.UriInfo;
 public class EndpointAnalysisList {
 
 	@Context
-	private UriInfo uriInfo;
-	@Context
 	ContainerRequestContext containerRequestContext;
-	@Context
-	ServletContext ctx;
+  @Inject
+  AnalysisListStorage analysisListStorage;
+  @Inject
+  AnalysisListAuthorizationVerifier analysisListAuthorizationVerifier;
 
 	@GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -2527,7 +2530,18 @@ public class EndpointAnalysisList {
 		return Response.ok().entity(category).build();
 	}
 
-	@DELETE
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Path("{analysisListId}/categorySets")
+  @Secured
+  public List<CategorySet> updateCategorySets(@PathParam("analysisListId") int analysisListId, UpdateAnalysisListCategorySetsPayload updateAnalysisListCategorySetsPayload) throws DbTransactionExecutionException {
+    verifyAuthorizationToAnalysisList(analysisListId, de.bitgilde.TIMAAT.rest.security.authorization.PermissionType.WRITE);
+    return analysisListStorage.updateCategorySets(analysisListId, updateAnalysisListCategorySetsPayload.getCategorySetIds());
+  }
+
+
+  @DELETE
   @Produces(MediaType.APPLICATION_JSON)
 	@Path("{analysisListId}/categorySet/{categorySetId}")
 	@Secured
@@ -3025,5 +3039,13 @@ public class EndpointAnalysisList {
     return r;
   }
 
+  private void verifyAuthorizationToAnalysisList(int analysisListId, de.bitgilde.TIMAAT.rest.security.authorization.PermissionType permissionType) {
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
+    if (!analysisListAuthorizationVerifier.verifyAuthorizationToAnalysisList(analysisListId, userAccount,
+            permissionType)) {
+      throw new ForbiddenException("User has no access to analysis list");
+    }
+  }
 }

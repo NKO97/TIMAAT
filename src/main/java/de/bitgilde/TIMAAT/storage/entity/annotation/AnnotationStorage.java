@@ -1,6 +1,5 @@
 package de.bitgilde.TIMAAT.storage.entity.annotation;
 
-import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.db.exception.DbTransactionExecutionException;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusic;
@@ -8,9 +7,17 @@ import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicPK;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationArea;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationHasMusicTranslationAreaPK;
 import de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation;
+import de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation_;
+import de.bitgilde.TIMAAT.model.FIPOP.Annotation_;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory_;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet_;
+import de.bitgilde.TIMAAT.model.FIPOP.Category_;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList_;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslationPK;
@@ -19,23 +26,26 @@ import de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
-import de.bitgilde.TIMAAT.storage.api.ListingResult;
-import de.bitgilde.TIMAAT.storage.api.PagingParameter;
-import de.bitgilde.TIMAAT.storage.api.SortingParameter;
+import de.bitgilde.TIMAAT.storage.db.DbStorage;
 import de.bitgilde.TIMAAT.storage.entity.TagStorage;
+import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationFilterCriteria;
 import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /*
@@ -58,7 +68,7 @@ import java.util.logging.Logger;
  * @author Nico Kotlenga
  * @since 03.09.25
  */
-public class AnnotationStorage extends DbAccessComponent {
+public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCriteria, AnnotationSortingField> {
 
   private static final Logger logger = Logger.getLogger(AnnotationStorage.class.getName());
 
@@ -66,20 +76,8 @@ public class AnnotationStorage extends DbAccessComponent {
 
   @Inject
   public AnnotationStorage(EntityManagerFactory emf, TagStorage tagStorage) {
-    super(emf);
+    super(Annotation.class, AnnotationSortingField.ID, emf);
     this.tagStorage = tagStorage;
-  }
-
-  public ListingResult<Annotation> getAnnotations(AnnotationFilter filter, PagingParameter pagingParameter, SortingParameter<AnnotationSortingField> sortingParameter, UserAccount userAccount) {
-    executeDbTransaction(entityManager -> {
-      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-      CriteriaQuery<Annotation> criteriaQuery = criteriaBuilder.createQuery(Annotation.class);
-      Root<Annotation> root =  criteriaQuery.from(Annotation.class);
-
-
-      return Void.TYPE;
-    });
-    return new ListingResult<>(Collections.emptyList(), 0L, 0L);
   }
 
   public boolean removeTranscriptionAreaFromAnnotationHasMusicForLanguage(int annotationId, int musicId, int languageId) throws DbTransactionExecutionException {
@@ -111,9 +109,10 @@ public class AnnotationStorage extends DbAccessComponent {
   public List<Category> updateCategoriesOfAnnotation(int annotationId, Collection<Integer> categoryIds) throws DbTransactionExecutionException {
     return executeDbTransaction(entityManager -> {
       Annotation currentAnnotation = entityManager.find(Annotation.class, annotationId);
+
       List<Category> categories = categoryIds.isEmpty() ? Collections.emptyList() : entityManager.createQuery(
-              "select category from Category category where category.id in :categoryIds", Category.class).setParameter(
-              "categoryIds", categoryIds).getResultList();
+              "select category from Category category where category.id in (select categorySetHasCategories.category.id from MediumAnalysisList mediumAnalysisList join mediumAnalysisList.categorySets categorySets join categorySets.categorySetHasCategories categorySetHasCategories where categorySetHasCategories.category.id in :categoryIds)",
+              Category.class).setParameter("categoryIds", categoryIds).getResultList();
 
       currentAnnotation.setCategories(categories);
       return categories;
@@ -279,21 +278,62 @@ public class AnnotationStorage extends DbAccessComponent {
     return this.executeDbTransaction(entityManager -> entityManager.find(Annotation.class, annotationId));
   }
 
-  public interface AnnotationFilter {
-    /**
-     * @return the category ids the returning annotations should belong to
-     */
-    Optional<Collection<Integer>> getCategoryIds();
+  @Override
+  protected List<Predicate> createPredicates(AnnotationFilterCriteria filter, Root<Annotation> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
+    List<Predicate> predicates = new ArrayList<>();
 
-    /**
-     * @return the category set ids the retuning annotations should belong to
-     */
-    Optional<Collection<Integer>> getCategorySetIds();
+    if (filter.getAnnotationNameSearch().isPresent() && !filter.getAnnotationNameSearch().get().isBlank()) {
+      String annotationNameSearch = filter.getAnnotationNameSearch().get();
+      Join<Annotation, AnnotationTranslation> annotationTranslationJoin = root.join(Annotation_.annotationTranslations);
 
-    /**
-     * @return the search text which the annotation name should match
-     */
-    Optional<String> getAnnotationNameSearch();
+      predicates.add(criteriaBuilder.like(annotationTranslationJoin.get(AnnotationTranslation_.title),
+              "%" + annotationNameSearch + "%"));
+    }
+
+    if (filter.getMediumAnalysisListIds().isPresent() && !filter.getMediumAnalysisListIds().get().isEmpty()) {
+      predicates.add(root.get(Annotation_.mediumAnalysisList).get(MediumAnalysisList_.id)
+                         .in(filter.getMediumAnalysisListIds().get()));
+    }
+
+    boolean categoryFilterActive = filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty();
+    boolean categorySetFilterActive = filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get()
+                                                                                       .isEmpty();
+    boolean hasCategoryFilterActive = filter.hasCategories().isPresent();
+
+    if (categoryFilterActive || categorySetFilterActive || hasCategoryFilterActive) {
+      Join<Annotation, Category> categoryJoin = root.join(Annotation_.categories, JoinType.LEFT);
+
+      if (hasCategoryFilterActive) {
+        if (filter.hasCategories().get()) {
+          predicates.add(categoryJoin.get(Category_.id).isNotNull());
+        }
+        else {
+          predicates.add(categoryJoin.get(Category_.id).isNull());
+        }
+      }
+
+      if (categoryFilterActive) {
+        predicates.add(categoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
+      }
+
+      if (categorySetFilterActive) {
+        Join<Category, CategorySetHasCategory> categorySetJoin = categoryJoin.join(Category_.categorySetHasCategories);
+
+        Subquery<Integer> assignedCategorySetIdsSubquery = criteriaQuery.subquery(Integer.class);
+        Root<MediumAnalysisList> mediumAnalysisListRoot = assignedCategorySetIdsSubquery.from(MediumAnalysisList.class);
+        Join<MediumAnalysisList, CategorySet> analysisListCategorySet = mediumAnalysisListRoot.join(
+                MediumAnalysisList_.categorySets);
+        assignedCategorySetIdsSubquery.select(analysisListCategorySet.get(CategorySet_.id));
+        assignedCategorySetIdsSubquery.where(
+                criteriaBuilder.equal(root.get(Annotation_.mediumAnalysisList).get(MediumAnalysisList_.id),
+                        mediumAnalysisListRoot.get(MediumAnalysisList_.id)));
+
+        predicates.add(categorySetJoin.get(CategorySetHasCategory_.categorySet).get(CategorySet_.id)
+                                      .in(assignedCategorySetIdsSubquery));
+      }
+    }
+
+    return predicates;
   }
 
   public static class CreateAnnotation {

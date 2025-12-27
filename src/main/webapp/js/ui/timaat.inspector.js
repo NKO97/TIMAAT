@@ -1758,21 +1758,6 @@
 				}
 			});
 
-			// $('#inspectorColorPicker').on('change', function(event) {
-      //   if ( inspector.state.type == 'annotation' ) {
-			// 		console.log("TCL: Inspector -> inspectorColorPicker -> on change");
-			// 		let anno = inspector.state.item;
-      //     console.log("TCL: Inspector -> $ -> anno", anno);
-			// 		if (!anno) return;
-			// 		let color = $('#inspectorColorPicker').data("plugin_tinycolorpicker").colorHex;
-      //     console.log("TCL: Inspector -> $ -> color", color);
-			// 		for (let item of anno.svg.items) {
-			// 			item.setStyle({color: + color });
-			// 		};
-			// 		// inspector.state.item = anno; // needed?
-			// 	}
-			// })
-
 			$('#inspectorOpacity').on('change input', function(ev) {
 				if ( inspector.state.type == 'annotation' ) {
 					var anno = inspector.state.item;
@@ -1899,6 +1884,196 @@
 					inspector.updateItem();
 				}
 			});
+
+            $('#analysisCategorySetFormSubmitButton').on('click', async function(event) {
+                event.preventDefault();
+                if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+                    $('#analysisListNoPermissionModal').modal('show');
+                    return;
+                }
+                const $mediumAnalysisListCategorySetsForm = $('#mediumAnalysisListCategorySetsForm')
+                if (!$mediumAnalysisListCategorySetsForm.valid())
+                    return false;
+                let mediumAnalysisList = TIMAAT.VideoPlayer.curAnalysisList;
+                let formDataRaw = $mediumAnalysisListCategorySetsForm.serializeArray();
+
+                let i = 0;
+                let categorySetIdList = [];
+
+                for (; i < formDataRaw.length; i++) {
+                    categorySetIdList.push( Number(formDataRaw[i].value));
+                }
+
+                const mediumAnalysisListAnnotationCount = await TIMAAT.AnnotationService.getAnnotationCount([mediumAnalysisList.id], null, null, true)
+                let annotationsUseCategorySet
+                if(categorySetIdList.length === 0){
+                    annotationsUseCategorySet = mediumAnalysisListAnnotationCount > 0
+                }else{
+                    const mediumAnalysisListAnnotationCountAfterChangingCategorySets = await  TIMAAT.AnnotationService.getAnnotationCount([mediumAnalysisList.id], null, categorySetIdList, true)
+                    annotationsUseCategorySet = mediumAnalysisListAnnotationCountAfterChangingCategorySets < mediumAnalysisListAnnotationCount
+                }
+
+                if (annotationsUseCategorySet) {
+                    const $mediumAnalysisCategorySetInUseModal = $('#mediumAnalysisCategorySetInUseModal')
+                    $mediumAnalysisCategorySetInUseModal.data('mediumAnalysisList', mediumAnalysisList);
+                    $mediumAnalysisCategorySetInUseModal.data('categorySetIdList', categorySetIdList);
+                    $mediumAnalysisCategorySetInUseModal.modal('show');
+                }else {
+                    mediumAnalysisList.categorySets = await TIMAAT.AnalysisListService.updateAnalysisListCategorySets(mediumAnalysisList.id, categorySetIdList)
+                }
+            });
+
+            $('#analysisCategorySetFormDismissButton,#mediumAnalysisCategorySetInUseModalCancelButton').on('click', async function(event) {
+                const $analysisCategorySetsMultiSelectDropdown = $('#AnalysisCategorySetsMultiSelectDropdown')
+                $analysisCategorySetsMultiSelectDropdown.val(null).trigger('change');
+                $analysisCategorySetsMultiSelectDropdown.select2('destroy');
+                $analysisCategorySetsMultiSelectDropdown.find('option').remove();
+
+                $analysisCategorySetsMultiSelectDropdown.select2({
+                    closeOnSelect: false,
+                    scrollAfterSelect: true,
+                    allowClear: true,
+                    ajax: {
+                        url: 'api/categorySet/selectList/',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        headers: {
+                            "Authorization": "Bearer "+TIMAAT.Service.token,
+                            "Content-Type": "application/json",
+                        },
+                        // additional parameters
+                        data: function(params) {
+                            return {
+                                search: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function(data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: false
+                    },
+                    minimumInputLength: 0,
+                });
+                TIMAAT.AnalysisListService.getCategorySetList(TIMAAT.VideoPlayer.curAnalysisList.id).then(function(data) {
+                    var categorySetSelect = $('#AnalysisCategorySetsMultiSelectDropdown');
+                    if (data.length > 0) {
+                        data.sort((a, b) => (a.name > b.name)? 1 : -1);
+                        // create the options and append to Select2
+                        var i = 0;
+                        for (; i < data.length; i++) {
+                            var option = new Option(data[i].name, data[i].id, true, true);
+                            categorySetSelect.append(option).trigger('change');
+                        }
+                        // manually trigger the 'select2:select' event
+                        categorySetSelect.trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: data
+                            }
+                        });
+                    }
+                });
+
+                const modal = $('#mediumAnalysisCategorySetInUseModal');
+                modal.hide()
+            });
+
+            $('#mediumAnalysisCategorySetInUseModalConfirmButton').on('click', async  () => {
+                const modal = $('#mediumAnalysisCategorySetInUseModal');
+                const mediumAnalysisList = modal.data('mediumAnalysisList');
+                const categorySetIdList = modal.data('categorySetIdList');
+
+                mediumAnalysisList.categorySets = await TIMAAT.AnalysisListService.updateAnalysisListCategorySets(mediumAnalysisList.id, categorySetIdList)
+                modal.modal('hide');
+            });
+
+            $('#annotationCategoryFormSubmitButton').on('click', async function(event) {
+                event.preventDefault();
+                if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+                    $('#analysisListNoPermissionModal').modal('show');
+                    return;
+                }
+
+                const $annotationCategoriesForm = $('#annotationCategoriesForm')
+
+                if (!$annotationCategoriesForm.valid()){
+                    return false;
+                }
+
+                const annotation = TIMAAT.VideoPlayer.curAnnotation;
+                const formDataRaw = $annotationCategoriesForm.serializeArray();
+
+                let i = 0;
+                const categoryIdList = [];
+                for (; i < formDataRaw.length; i++) {
+                    categoryIdList.push( Number(formDataRaw[i].value));
+                }
+
+                annotation.model.categories = await TIMAAT.AnnotationService.updateAnnotationCategories(annotation.model.id, categoryIdList)
+            });
+
+            $('#annotationCategoryFormDismissButton').on('click', async function(event) {
+                const $annotationCategoriesMultiSelectDropdown = $('#annotationCategoriesMultiSelectDropdown')
+                $annotationCategoriesMultiSelectDropdown.val(null).trigger('change');
+                $annotationCategoriesMultiSelectDropdown.select2('destroy');
+                $annotationCategoriesMultiSelectDropdown.find('option').remove();
+
+                $annotationCategoriesMultiSelectDropdown.select2({
+                    closeOnSelect: false,
+                    scrollAfterSelect: true,
+                    allowClear: true,
+                    ajax: {
+                        url: 'api/category/selectList/',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        headers: {
+                            "Authorization": "Bearer "+TIMAAT.Service.token,
+                            "Content-Type": "application/json",
+                        },
+                        // additional parameters
+                        data: function(params) {
+                            return {
+                                search: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function(data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: false
+                    },
+                    minimumInputLength: 0,
+                });
+                TIMAAT.AnnotationService.getSelectedCategories(TIMAAT.VideoPlayer.curAnnotation.model.id).then(function(data) {
+                    // console.log("TCL: then: data", data);
+                    var categorySelect = $('#annotationCategoriesMultiSelectDropdown');
+                    if (data.length > 0) {
+                        data.sort((a, b) => (a.name > b.name)? 1 : -1);
+                        // create the options and append to Select2
+                        var i = 0;
+                        for (; i < data.length; i++) {
+                            var option = new Option(data[i].name, data[i].id, true, true);
+                            categorySelect.append(option).trigger('change');
+                        }
+                        // manually trigger the 'select2:select' event
+                        categorySelect.trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: data
+                            }
+                        });
+                    }
+                });
+            });
 
             // thumbnail
             const annotationThumbnailPositionSliderInput = $('.inspectorThumbnailEditSectionCustomRangeSliderInput')

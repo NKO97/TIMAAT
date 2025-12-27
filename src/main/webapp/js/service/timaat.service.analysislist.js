@@ -187,7 +187,30 @@
 				console.error("ERROR responseText:", error.responseText);
 			});
 		},
-
+        async updateAnalysisListCategorySets(analysisListId, categorySetIds){
+            const updateCategorySetIdsPayload = {
+                categorySetIds
+            }
+            return new Promise(resolve => {
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/analysisList/" + analysisListId + "/categorySets",
+                    type: "PUT",
+                    data: JSON.stringify(updateCategorySetIdsPayload),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
+                    },
+                }).done(function (data) {
+                    resolve(data);
+                }).fail(function (error) {
+                    console.error("ERROR: ", error);
+                    console.error("ERROR responseText:", error.responseText);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
 		updateAnalysisList(analysisList) {
 			// console.log("TCL: updateAnalysisList -> analysisList", analysisList);
 			var list = {

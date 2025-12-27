@@ -22,6 +22,7 @@ import de.bitgilde.TIMAAT.processing.video.FfmpegVideoEngine;
 import de.bitgilde.TIMAAT.processing.video.exception.VideoEngineException;
 import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.CountResult;
 import de.bitgilde.TIMAAT.rest.model.annotation.AnnotationListingQueryParameter;
 import de.bitgilde.TIMAAT.rest.model.annotation.CreateAnnotationPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationPayload;
@@ -32,7 +33,6 @@ import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationV
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.PermissionType;
 import de.bitgilde.TIMAAT.security.UserLogManager;
-import de.bitgilde.TIMAAT.storage.api.ListingResult;
 import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage.CreateAnnotation;
 import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage.UpdateAnnotation;
@@ -75,6 +75,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -116,6 +117,7 @@ public class EndpointAnnotation {
   @Inject
   TemporaryFileStorage temporaryFileStorage;
 
+  //TODO: Filter by permission (currently no permissions are respected)
   @GET
   @Produces
   @Path("list")
@@ -123,11 +125,25 @@ public class EndpointAnnotation {
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
     int draw = annotationListingQueryParameter.getDraw().orElse(0);
-    ListingResult<Annotation> annotationListingResult = annotationStorage.getAnnotations(
-            annotationListingQueryParameter, annotationListingQueryParameter, annotationListingQueryParameter,
-            userAccount);
-    return new DataTableInfo<>(draw, annotationListingResult.getTotalItemCount(),
-            annotationListingResult.getMatchedItemsCount(), annotationListingResult.getItems());
+
+    List<Annotation> matchingAnnotations = annotationStorage.getEntriesAsStream(annotationListingQueryParameter,
+            annotationListingQueryParameter, annotationListingQueryParameter, userAccount).collect(Collectors.toList());
+    long totalAnnotationsCount = annotationStorage.getNumberOfTotalEntries();
+    long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntries(annotationListingQueryParameter);
+
+    return new DataTableInfo<>(draw, totalAnnotationsCount,
+            filteredAnnotationsCount, matchingAnnotations);
+  }
+
+  @GET
+  @Produces
+  @Path("count")
+  public CountResult getCountOfAnnotations(@BeanParam @Valid AnnotationListingQueryParameter annotationListingQueryParameter) {
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+    long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntries(annotationListingQueryParameter);
+
+    return new CountResult(filteredAnnotationsCount);
   }
 
   @GET

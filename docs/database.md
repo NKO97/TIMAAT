@@ -44,3 +44,7 @@ The versioning of the database schema follows the following pattern:
 
 * Added column `thumbnail_position_ms` to table `medium_video` to persist thumbnail position of videos
 * Added column `thumbnail_position_ms` to table `annotation` to persist thumbnail position of annotations 
+
+### 0.15.1
+
+* Removed unused column `category_set_id` from table `annotation_has_category`

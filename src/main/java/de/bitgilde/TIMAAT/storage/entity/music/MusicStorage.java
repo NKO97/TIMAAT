@@ -30,6 +30,7 @@ import de.bitgilde.TIMAAT.storage.entity.music.api.MusicSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -81,7 +82,7 @@ public class MusicStorage extends DbStorage<Music, MusicFilterCriteria, MusicSor
   }
 
 
-  protected List<Predicate> createPredicates(MusicFilterCriteria filter, Root<Music> root, CriteriaBuilder criteriaBuilder) {
+  protected List<Predicate> createPredicates(MusicFilterCriteria filter, Root<Music> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
     List<Predicate> predicates = new ArrayList<>();
 
     if (filter.getMusicNameSearch().isPresent()) {

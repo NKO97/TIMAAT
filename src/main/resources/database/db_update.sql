@@ -289,6 +289,29 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE update_to_0_15_1()
+BEGIN
+    DECLARE db_major_version int;
+    DECLARE db_minor_version int;
+    DECLARE db_patch_version int;
+
+    SELECT major_version, minor_version, patch_version
+    INTO db_major_version, db_minor_version, db_patch_version
+    FROM db_version
+    LIMIT 1;
+
+    IF db_major_version = 0 AND db_minor_version = 15 AND db_patch_version = 0 THEN
+        SELECT 'execute update to 0.15.1' AS log_message;
+        DELETE FROM db_version;
+        INSERT INTO db_version (major_version, minor_version, patch_version) VALUES (0, 15, 1);
+
+        ALTER TABLE `fipop`.`annotation_has_category`
+            DROP COLUMN category_set_id;
+    END IF;
+END $$
+DELIMITER ;
+
 /**
  * Call update functions
  */
