@@ -442,7 +442,6 @@
 					"dataSrc": function(data) { return data.data; }
 				},
 				"createdRow": function(row, data, dataIndex) {
-        	// console.log("TCL: Inspector -> constructor -> data", data);
 					let actorElement = $(row);
 					let actor = data;
 					actorElement.data('actor', actor);
@@ -2357,8 +2356,6 @@
 					else this.updateItem();
 
 					if ( item ) {
-						// console.log("TCL: Inspector -> setItem -> item", item);
-                        // thumbnail panel
                         if ( TIMAAT.VideoPlayer.model.medium.mediumVideo){
                             $('#inspectorThumbnailEditSectionSaveButton').prop('disabled', true);
 

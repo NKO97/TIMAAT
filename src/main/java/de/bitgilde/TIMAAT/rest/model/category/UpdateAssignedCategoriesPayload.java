@@ -1,4 +1,4 @@
-package de.bitgilde.TIMAAT.rest.model.annotation;
+package de.bitgilde.TIMAAT.rest.model.category;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * This payload is used to change the assigned categories of an {@link de.bitgilde.TIMAAT.model.FIPOP.Annotation}
+ * This payload is used to change the assigned categories of an entity
  *
  * @author Nico Kotlenga
  * @since 22.09.25

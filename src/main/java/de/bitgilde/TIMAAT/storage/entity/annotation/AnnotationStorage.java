@@ -11,8 +11,6 @@ import de.bitgilde.TIMAAT.model.FIPOP.AnnotationTranslation_;
 import de.bitgilde.TIMAAT.model.FIPOP.Annotation_;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
-import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
-import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory_;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet_;
 import de.bitgilde.TIMAAT.model.FIPOP.Category_;
 import de.bitgilde.TIMAAT.model.FIPOP.Language;
@@ -38,7 +36,6 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -300,7 +297,7 @@ public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCri
                                                                                        .isEmpty();
     boolean hasCategoryFilterActive = filter.hasCategories().isPresent();
 
-    if (categoryFilterActive || categorySetFilterActive || hasCategoryFilterActive) {
+    if (categoryFilterActive || hasCategoryFilterActive) {
       Join<Annotation, Category> categoryJoin = root.join(Annotation_.categories, JoinType.LEFT);
 
       if (hasCategoryFilterActive) {
@@ -315,22 +312,13 @@ public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCri
       if (categoryFilterActive) {
         predicates.add(categoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
       }
+    }
 
-      if (categorySetFilterActive) {
-        Join<Category, CategorySetHasCategory> categorySetJoin = categoryJoin.join(Category_.categorySetHasCategories);
 
-        Subquery<Integer> assignedCategorySetIdsSubquery = criteriaQuery.subquery(Integer.class);
-        Root<MediumAnalysisList> mediumAnalysisListRoot = assignedCategorySetIdsSubquery.from(MediumAnalysisList.class);
-        Join<MediumAnalysisList, CategorySet> analysisListCategorySet = mediumAnalysisListRoot.join(
-                MediumAnalysisList_.categorySets);
-        assignedCategorySetIdsSubquery.select(analysisListCategorySet.get(CategorySet_.id));
-        assignedCategorySetIdsSubquery.where(
-                criteriaBuilder.equal(root.get(Annotation_.mediumAnalysisList).get(MediumAnalysisList_.id),
-                        mediumAnalysisListRoot.get(MediumAnalysisList_.id)));
-
-        predicates.add(categorySetJoin.get(CategorySetHasCategory_.categorySet).get(CategorySet_.id)
-                                      .in(assignedCategorySetIdsSubquery));
-      }
+    if (categorySetFilterActive) {
+      Join<MediumAnalysisList, CategorySet> categorySetJoin = root.join(Annotation_.mediumAnalysisList)
+                                                                  .join(MediumAnalysisList_.categorySets);
+      predicates.add(categorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
     }
 
     return predicates;

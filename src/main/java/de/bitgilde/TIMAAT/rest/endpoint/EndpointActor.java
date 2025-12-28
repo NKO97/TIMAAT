@@ -1,18 +1,8 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jvnet.hk2.annotations.Service;
-
 import de.bitgilde.TIMAAT.PropertyConstants;
 import de.bitgilde.TIMAAT.SelectElement;
 import de.bitgilde.TIMAAT.TIMAATApp;
@@ -29,7 +19,8 @@ import de.bitgilde.TIMAAT.model.FIPOP.ActorPersonTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorType;
 import de.bitgilde.TIMAAT.model.FIPOP.Address;
 import de.bitgilde.TIMAAT.model.FIPOP.AddressType;
-import de.bitgilde.TIMAAT.model.FIPOP.Annotation;
+import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.Citizenship;
 import de.bitgilde.TIMAAT.model.FIPOP.CitizenshipTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.EmailAddress;
@@ -47,16 +38,24 @@ import de.bitgilde.TIMAAT.model.FIPOP.SexTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.Secured;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.actor.ActorListingQueryParameter;
+import de.bitgilde.TIMAAT.rest.model.category.UpdateAssignedCategoriesPayload;
+import de.bitgilde.TIMAAT.rest.model.categoryset.UpdateAssignedCategorySetsPayload;
 import de.bitgilde.TIMAAT.security.UserLogManager;
+import de.bitgilde.TIMAAT.storage.entity.actor.ActorStorage;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
+import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -66,7 +65,15 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
+import org.jvnet.hk2.annotations.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,8 +96,8 @@ import jakarta.ws.rs.core.UriInfo;
 @Service
 @Path("/actor")
 public class EndpointActor {
-	@Context
-	private UriInfo uriInfo;
+  @Inject
+  private ActorStorage actorStorage;
 	@Context
 	ContainerRequestContext containerRequestContext;
 	@Context
@@ -100,112 +107,18 @@ public class EndpointActor {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("list")
-	public Response getActorList(@QueryParam("draw") Integer draw,
-															 @QueryParam("start") Integer start,
-															 @QueryParam("length") Integer length,
-															 @QueryParam("orderby") String orderby,
-															 @QueryParam("dir") String direction,
-															 @QueryParam("search") String search,
-															 @QueryParam("exclude_annotation") Integer annotationID)
+	public DataTableInfo<Actor> getActorList(@BeanParam ActorListingQueryParameter queryParameter)
 	{
-		// System.out.println("EndpointActor: getActorList: draw: "+draw+" start: "+start+" length: "+length+" orderby: "+orderby+" dir: "+direction+" search: "+search+" exclude: "+annotationID);
-		if ( draw == null ) draw = 0;
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
-		// sanitize user input
-		if ( direction != null && direction.equalsIgnoreCase("desc") ) direction = "DESC"; else direction = "ASC";
+		int draw = queryParameter.getDraw().isPresent() ? queryParameter.getDraw().get() : 0;
+    List<Actor> actors = actorStorage.getEntriesAsStream(queryParameter, queryParameter, queryParameter, userAccount).collect(
+            Collectors.toList());
+    Long actorsCount = actorStorage.getNumberOfTotalEntries();
+    Long matchingActorsCount = actorStorage.getNumberOfMatchingEntries(queryParameter);
 
-		String column = "a.displayName.name";
-		if ( orderby != null ) {
-			if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name";
-		}
-
-		// define default query strings
-		String actorQuery = "SELECT a FROM Actor a ORDER BY ";
-		String actorCountQuery = "SELECT COUNT(a) FROM Actor a";
-		// String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-		// String actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :displayTitle,'%'))";
-
-		// exclude actors from annotation if specified
-		if ( annotationID != null ) {
-			Annotation anno = TIMAATApp.emf.createEntityManager().find(Annotation.class, annotationID);
-			if ( anno != null && anno.getActors().size() > 0 ) {
-				actorQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors ORDER BY ";
-				actorCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors";
-				// actorSearchQuery = "SELECT a FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY ";
-				// actorSearchCountQuery = "SELECT COUNT(a) FROM Actor a, Annotation anno WHERE anno.id="+annotationID+" AND a NOT MEMBER OF anno.actors AND lower(a.displayName.name) LIKE lower(concat('%', :displayTitle,'%'))";
-			}
-		}
-
-		// calculate total # of records
-		EntityManager entityManager = TIMAATApp.emf.createEntityManager();
-		Query countQuery = entityManager.createQuery(actorCountQuery);
-		long recordsTotal = (long) countQuery.getSingleResult();
-		long recordsFiltered = recordsTotal;
-
-		// search
-		Query query;
-		String sql;
-		List<Actor> actorList = new ArrayList<>();
-		if ( search != null && search.length() > 0 ) {
-			// find all matching names
-			sql = "SELECT DISTINCT a FROM Actor a, ActorName an WHERE lower(an.name) LIKE lower(concat('%', :search, '%')) AND an.actor = a ORDER BY a.displayName.name "+direction;
-			query = entityManager.createQuery(sql)
-													 .setParameter("search", search);
-			actorList = castList(Actor.class, query.getResultList());
-			// find all media belonging to those titles
-			if ( start != null && start > 0 ) query.setFirstResult(start);
-			if ( length != null && length > 0 ) query.setMaxResults(length);
-			if ( length == -1 ) { // display all results
-				length = actorList.size();
-				query.setMaxResults(length);
-			}
-
-			for (Actor actor : actorList) {
-				if (annotationID != null) { // TODO structure needs to be reversed?
-					Boolean annoConnected = false;
-					for (Annotation annotation : actor.getAnnotations()) {
-						if (annotation.getId() == annotationID) {
-							annoConnected = true;
-						}
-					}
-					if (!annoConnected && !(actorList.contains(actor))) {
-						actorList.add(actor);
-					}
-				}
-				// else if (!(actorList.contains(actor))) { // TODO: should be obsolete with SELECT DISTINCT
-				// 	actorList.add(actor);
-				// }
-			}
-			recordsFiltered = actorList.size();
-			List<Actor> filteredActorList = new ArrayList<>();
-			int i = start;
-			int end;
-			if ((recordsFiltered - start) < length) {
-				end = (int)recordsFiltered;
-			}
-			else {
-				end = start + length;
-			}
-			for(; i < end; i++) {
-				filteredActorList.add(actorList.get(i));
-			}
-			return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, filteredActorList)).build();
-			// calculate search result # of records
-			// countQuery = entityManager.createQuery(actorSearchCountQuery);
-			// countQuery.setParameter("displayTitle", search);
-			// recordsFiltered = (long) countQuery.getSingleResult();
-			// // perform search
-			// query = entityManager.createQuery(
-			// 	actorSearchQuery+column+" "+direction);
-			// query.setParameter("name", search);
-		} else {
-			query = entityManager.createQuery(actorQuery + column + " " + direction);
-			if ( start != null && start > 0 ) query.setFirstResult(start);
-			if ( length != null && length > 0 ) query.setMaxResults(length);
-			actorList = castList(Actor.class, query.getResultList());
-		}
-
-		return Response.ok().entity(new DataTableInfo(draw, recordsTotal, recordsFiltered, actorList)).build();
+		return new DataTableInfo<>(draw, actorsCount, matchingActorsCount, actors);
 
 	}
 
@@ -213,45 +126,13 @@ public class EndpointActor {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured
 	@Path("selectList")
-	public Response getActorSelectList(@QueryParam("start") Integer start,
-																		 @QueryParam("length") Integer length,
-																		 @QueryParam("orderby") String orderby,
-																		 @QueryParam("search") String search)
+	public List<SelectElement<Integer>> getActorSelectList(@BeanParam ActorListingQueryParameter queryParameter)
 	{
-		// System.out.println("EndpointActor: getActorList: start: "+start+" length: "+length+" orderby: "+orderby+" search: "+search);
-
-		// String column = "a.id";
-		// if ( orderby != null ) {
-		// 	if (orderby.equalsIgnoreCase("name")) column = "a.displayName.name"; // TODO change displayName access in DB-Schema
-		// }
-
-		// define default query strings
-		String actorQuery = "SELECT a FROM Actor a ORDER BY a.displayName.name";
-		String actorSearchQuery = "SELECT a FROM Actor a WHERE lower(a.displayName.name) LIKE lower(concat('%', :name,'%')) ORDER BY a.displayName.name";
-
-		// search
-		Query query;
-		if ( search != null && search.length() > 0 ) {
-			// perform search
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				actorSearchQuery);
-			query.setParameter("name", search);
-			// query.setParameter("actorName", search); // birthName
-		} else {
-			query = TIMAATApp.emf.createEntityManager().createQuery(
-				actorQuery);
-		}
-		// if ( start != null && start > 0 ) query.setFirstResult(start);
-		// if ( length != null && length > 0 ) query.setMaxResults(length);
-
-		List<Actor> actorList = castList(Actor.class, query.getResultList());
-		List<SelectElement> actorSelectList = new ArrayList<>();
-		for (Actor actor : actorList) {
-			actorSelectList.add(new SelectElement<Integer>(actor.getId(), actor.getDisplayName().getName()));
-		}
-
-		return Response.ok().entity(actorSelectList).build();
-
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+		return actorStorage.getEntriesAsStream(queryParameter, queryParameter, queryParameter, userAccount)
+                .map(currentActor -> new SelectElement<>(currentActor.getId(), currentActor.getDisplayName().getName()))
+                .collect(Collectors.toList());
 	}
 
 	@GET
@@ -274,6 +155,47 @@ public class EndpointActor {
 		return Response.ok().entity(actorSelectList).build();
 
 	}
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/categorySets")
+  public Collection<CategorySet> getCategorySetsOfActor(@PathParam("id") Integer id) {
+    return actorStorage.getCategorySetsOfActor(id);
+  }
+
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/categorySets")
+  public Collection<CategorySet> updateCategorySetsOfActor(@PathParam("id") Integer id, UpdateAssignedCategorySetsPayload updateAssignedCategorySetsPayload){
+    return actorStorage.updateAssignedCategorySetsOfActor(id, updateAssignedCategorySetsPayload.getCategorySetIds());
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/categories")
+  public Collection<Category> getCategoriesOfActor(@PathParam("id") Integer id) {
+    return actorStorage.getCategoriesOfActor(id);
+  }
+
+  @PUT
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/categories")
+  public Collection<Category> updateCategoriesOfActor(@PathParam("id") Integer id, UpdateAssignedCategoriesPayload updateAssignedCategoriesPayload){
+    return actorStorage.updateAssignedCategoriesOfActor(id, updateAssignedCategoriesPayload.getCategoryIds());
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Secured
+  @Path("{id}/assignableCategories/selectList")
+  public List<SelectElement<Integer>> getAssignableCategories(@PathParam("id") Integer id){
+    return actorStorage.getAssignableCategoriesOfActor(id).map(category -> new SelectElement<>(category.getId(), category.getName())).collect(
+            Collectors.toList());
+  }
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

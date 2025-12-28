@@ -308,8 +308,20 @@
         },
 
         initRelatedAnnotationTable: function () {
-            const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id")]
-            const activeColumnIds = ["id"]
+            const annotationThumbnailGeneratorFunction = async (row) => {
+                if (row.layerVisual) {
+                    const imgBlob = await TIMAAT.AnnotationService.getAnnotationThumbnailBlob()
+                    return URL.createObjectURL(imgBlob);
+                }
+
+                return null
+            }
+
+
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime", false),
+                new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime", false), new TIMAAT.Table.BooleanTableColumnConfig("layerAudio", "Audio", "layerAudio", false),
+                new TIMAAT.Table.BooleanTableColumnConfig("layerVisual", "Video", "layerVisual", false), new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", annotationThumbnailGeneratorFunction)]
+            const activeColumnIds = ["thumbnail", "startTime", "endTime", "layerAudio", "layerVisual", "id"]
 
             const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list", true, false)
 
@@ -767,6 +779,8 @@
                 TIMAAT.Categories.showAssignedEntitiesPanel()
                 TIMAAT.Categories.relatedMusicTable.urlSearchParams = urlSearchParameters
                 TIMAAT.Categories.relatedMediumTable.urlSearchParams = urlSearchParameters
+                TIMAAT.Categories.relatedAnnotationTable.urlSearchParams = urlSearchParameters
+                TIMAAT.Categories.relatedActorTable.urlSearchParams = urlSearchParameters
             } else {
                 TIMAAT.Categories.showNoSelectionPanel()
             }

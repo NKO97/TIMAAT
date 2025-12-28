@@ -1,15 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +18,11 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -135,6 +134,30 @@ public class Actor implements Serializable {
 			}
 		)
 	private List<Role> roles;
+
+  @ManyToMany
+  @JoinTable(
+          name="actor_has_category_set"
+          , joinColumns={
+          @JoinColumn(name="actor_id")
+  }
+          , inverseJoinColumns={
+          @JoinColumn(name="category_set_id")
+  }
+  )
+  private List<CategorySet> categorySets;
+
+  @ManyToMany
+  @JoinTable(
+          name="actor_has_category"
+          , joinColumns={
+          @JoinColumn(name="actor_id")
+  }
+          , inverseJoinColumns={
+          @JoinColumn(name="category_id")
+  }
+  )
+  private List<Category> categories;
 
 	//bi-directional many-to-many association to Medium_Image
 	@ManyToMany
@@ -568,4 +591,19 @@ public class Actor implements Serializable {
 		this.tags = tags;
 	}
 
+  public List<Category> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<Category> categories) {
+    this.categories = categories;
+  }
+
+  public List<CategorySet> getCategorySets() {
+    return categorySets;
+  }
+
+  public void setCategorySets(List<CategorySet> categorySets) {
+    this.categorySets = categorySets;
+  }
 }

@@ -9,6 +9,7 @@ import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationV
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.DbAnnotationAuthorizationVerifier;
 import de.bitgilde.TIMAAT.sse.EntityUpdateEventService;
+import de.bitgilde.TIMAAT.storage.entity.actor.ActorStorage;
 import de.bitgilde.TIMAAT.storage.entity.analysislist.AnalysisListStorage;
 import de.bitgilde.TIMAAT.storage.entity.annotation.AnnotationStorage;
 import de.bitgilde.TIMAAT.storage.entity.AudioAnalysisResultStorage;
@@ -77,6 +78,7 @@ public class TIMAATBinder extends AbstractBinder {
             bindAsContract(MusicStorage.class).in(Singleton.class);
             bindAsContract(AnnotationStorage.class).in(Singleton.class);
             bindAsContract(TagStorage.class).in(Singleton.class);
+            bindAsContract(ActorStorage.class).in(Singleton.class);
             bindAsContract(MediumStorage.class).in(Singleton.class);
             bindAsContract(AnalysisListStorage.class).in(Singleton.class);
             bindAsContract(MediumVideoStorage.class).in(Singleton.class);

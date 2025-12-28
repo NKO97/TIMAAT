@@ -48,3 +48,4 @@ The versioning of the database schema follows the following pattern:
 ### 0.15.1
 
 * Removed unused column `category_set_id` from table `annotation_has_category`
+* Added tables `actor_has_category_set` and `actor_has_category` to link actors with categories

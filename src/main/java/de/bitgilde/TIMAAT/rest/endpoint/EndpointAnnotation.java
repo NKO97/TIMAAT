@@ -27,7 +27,7 @@ import de.bitgilde.TIMAAT.rest.model.annotation.AnnotationListingQueryParameter;
 import de.bitgilde.TIMAAT.rest.model.annotation.CreateAnnotationPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationPayload;
 import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAnnotationThumbnailPayload;
-import de.bitgilde.TIMAAT.rest.model.annotation.UpdateAssignedCategoriesPayload;
+import de.bitgilde.TIMAAT.rest.model.category.UpdateAssignedCategoriesPayload;
 import de.bitgilde.TIMAAT.rest.model.tags.UpdateAssignedTagsPayload;
 import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationVerifier;
 import de.bitgilde.TIMAAT.rest.security.authorization.AnnotationAuthorizationVerifier;

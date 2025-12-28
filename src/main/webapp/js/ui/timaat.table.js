@@ -86,6 +86,44 @@
         }
     }
 
+    TIMAAT.Table.TimeStampTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
+        constructor(id, title, data, sortable = true) {
+            super(id, title, data, sortable);
+        }
+
+        render(data, type, row) {
+            let cellValue
+            if (!data) {
+                cellValue = "-"
+            } else {
+                cellValue = TIMAAT.Util.formatTime(data);
+            }
+
+            return `<p>${cellValue}</p>`
+        }
+    }
+
+    TIMAAT.Table.BooleanTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
+        constructor(id, title, data, sortable = true) {
+            super(id, title, data, sortable);
+        }
+
+        render(data, type, row) {
+            let cellValue
+            if (data == null) {
+                cellValue = "<p>-</p>"
+            } else {
+                if (data) {
+                    cellValue = `<span class="fas fa-check"></span>`
+                } else {
+                    cellValue = `<span><strong>X</strong></span>`
+                }
+            }
+
+            return cellValue
+        }
+    }
+
     TIMAAT.Table.ValueMapperTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         _valueMap;
 
@@ -115,7 +153,7 @@
          * imagePathGeneratorFunction.
          * @param id
          * @param title
-         * @param imagePathGeneratorFunction : (row) => string | null
+         * @param imagePathGeneratorFunction : (row) => string | null , (row) => Promise<string | null>
          */
         constructor(id, title, imagePathGeneratorFunction) {
             super(id, title, "", false);
@@ -127,7 +165,7 @@
         render(data, type, row) {
             const imagePath = this._imagePathGeneratorFunction(row);
             let imageSrc = imagePath ?? "img/preview-placeholder.png"
-            return `<img src="${imageSrc}" width="150" height="auto" alt="Image column"/>`
+            return `<img src="${imageSrc}" width="150" height="auto" alt="Image cell"/>`
         }
     }
 
@@ -137,7 +175,7 @@
         }
 
         render(data, type, row) {
-            if(data){
+            if (data) {
                 return `<p>${data.street ?? ""} ${data.streetNumber ?? ""} ${data.streetAddition ?? ""}<br/>${data.postalCode} ${data.city}</p>`
             }
             return `<p>-</p>`
@@ -155,7 +193,7 @@
         _urlSearchParams
         _dataTable = null;
 
-        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl,reorderableColumns=true, active=true, urlSearchParams=new URLSearchParams()) {
+        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl, reorderableColumns = true, active = true, urlSearchParams = new URLSearchParams()) {
             this._tableColumnConfigsById = new Map()
             for (let tableColumnConfig of tableColumnConfigs) {
                 this._tableColumnConfigsById.set(tableColumnConfig.id, tableColumnConfig);
@@ -177,21 +215,21 @@
          * @param active
          * @return boolean indicating the new state
          */
-        changeTableColumnActivState(columnId, active){
+        changeTableColumnActivState(columnId, active) {
             const activeColumnIndex = this._activeTableColumnIds.indexOf(columnId);
             let changed = false
 
-            if(active && activeColumnIndex === -1) {
+            if (active && activeColumnIndex === -1) {
                 changed = true
                 this._activeTableColumnIds.push(columnId);
                 this.draw()
-            }else if(!active && activeColumnIndex > -1 && this.activeTableColumnIds.length > 1){
+            } else if (!active && activeColumnIndex > -1 && this.activeTableColumnIds.length > 1) {
                 changed = true
                 this._activeTableColumnIds.splice(activeColumnIndex, 1);
                 this.draw()
             }
 
-            if(changed){
+            if (changed) {
                 TIMAAT.Table.TableConfigurationStorage.saveActiveColumnsForTable(this._activeTableColumnIds, this._tableId)
                 return active
             }
@@ -199,16 +237,16 @@
             return !active
         }
 
-        set active(active){
+        set active(active) {
             const redrawNecessary = this._active !== active
             this._active = active
 
-            if(redrawNecessary){
+            if (redrawNecessary) {
                 this.draw()
             }
         }
 
-        set urlSearchParams(urlSearchParams){
+        set urlSearchParams(urlSearchParams) {
             this._urlSearchParams = urlSearchParams
             this.draw()
         }
@@ -222,11 +260,11 @@
         }
 
         draw() {
-           const self = this
-           this._dataTable?.clear().destroy(true)
-           this._$container.empty()
+            const self = this
+            this._dataTable?.clear().destroy(true)
+            this._$container.empty()
 
-            if(this._active){
+            if (this._active) {
                 const $table = $(`<table id="${this._tableId}" class="table table-striped table-bordered table-hover"></table>`)
                 const $tableHead = $(`<thead class="thead-dark"></thead>`)
                 const $tableBody = $(`<tbody></tbody>`)
@@ -239,17 +277,18 @@
                 const columnConfigs = []
                 for (let activeTableColumnId of this._activeTableColumnIds) {
                     const currentTableColumnConfig = this._tableColumnConfigsById.get(activeTableColumnId);
+
                     columnConfigs.push({
                         title: currentTableColumnConfig.title,
                         data: currentTableColumnConfig.data,
                         render: currentTableColumnConfig.render,
-                        orderable: currentTableColumnConfig.sortable
+                        orderable: currentTableColumnConfig.sortable,
                     });
                     $('<th>').text(currentTableColumnConfig.title).appendTo($headerRow);
                 }
                 $table.appendTo(this._$container)
 
-                const ajaxUrl = this._dataUrl +  "?" +  this._urlSearchParams.toString()
+                const ajaxUrl = this._dataUrl + "?" + this._urlSearchParams.toString()
                 console.log(ajaxUrl)
                 this._dataTable = $table.DataTable({
                     "destroy": true,
@@ -286,7 +325,7 @@
                         }
                     },
                     "initComplete": function () {
-                        if(self._reorderableColumns){
+                        if (self._reorderableColumns) {
                             self._dataTable?.colReorder.reset()
                         }
                     },
@@ -318,6 +357,7 @@
         _table
         _tableColumnConfigs
         _$columnSelectorButton
+
         constructor(table, columnSelectorButtonSelector) {
             this._table = table;
             this._tableColumnConfigs = table.tableColumnConfigs.sort((a, b) => a.title.localeCompare(b.title));
@@ -328,7 +368,7 @@
             this.createPopover();
         }
 
-        createPopover(){
+        createPopover() {
             const popoverMenuItems = this.createMenuItems();
             this._$columnSelectorButton.popover({
                 title: "Columns",
@@ -342,7 +382,7 @@
             const $listGroup = $(`<ul class="list-group"></ul>`)
             const currentActiveTableColumnIds = this._table.activeTableColumnIds
 
-            for(const currentTableColumnConfig of this._tableColumnConfigs) {
+            for (const currentTableColumnConfig of this._tableColumnConfigs) {
                 const $currentListGroupItemCheckbox = $(`<input class="ml-2" type="checkbox">`)
                 const initialSelected = currentActiveTableColumnIds.indexOf(currentTableColumnConfig.id) > -1;
 
@@ -364,23 +404,23 @@
         }
     }
     TIMAAT.Table.TableConfigurationStorage = {
-        saveActiveColumnsForTable: function(activeColumns, tableId){
+        saveActiveColumnsForTable: function (activeColumns, tableId) {
             const localStorageIdentifier = TIMAAT.Table.TableConfigurationStorage.createLocalStorageIdentifierForActiveColumns(tableId)
             localStorage.setItem(localStorageIdentifier, JSON.stringify(activeColumns))
         },
 
-        getActiveColumnsForTable: function (tableId){
+        getActiveColumnsForTable: function (tableId) {
             const localStorageIdentifier = TIMAAT.Table.TableConfigurationStorage.createLocalStorageIdentifierForActiveColumns(tableId)
             const activeColumnsJson = localStorage.getItem(localStorageIdentifier)
 
-            if(activeColumnsJson){
+            if (activeColumnsJson) {
                 return JSON.parse(activeColumnsJson)
             }
 
             return null
         },
 
-        createLocalStorageIdentifierForActiveColumns: function(tableId){
+        createLocalStorageIdentifierForActiveColumns: function (tableId) {
             return `TIMAAT.Table.${tableId}.activeColumns`
         }
     }

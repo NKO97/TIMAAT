@@ -538,6 +538,195 @@
 				}
 			});
 
+            // category set button handler
+            $('#actorFormDataSheetCategorySetButton').on('click', async function(event) {
+                event.stopPropagation();
+                TIMAAT.UI.hidePopups();
+                const $modal = $('#actorDatasetsEditActorCategorySetsModal');
+                $modal.data('actor', $('#actorFormMetadata').data('actor'));
+                const actor = $modal.data('actor');
+                $modal.find('.modal-body').html(`
+					<form role="form" id="actorCategorySetsForm">
+						<div class="form-group">
+							<div class="col-md-12">
+								<select class="form-control form-control-md multi-select-dropdown"
+												style="width:100%;"
+												id="actorCategorySetsMultiSelectDropdown"
+												name="categorySetId"
+												data-role="categorySetId"
+												data-placeholder="Select actor category sets"
+												multiple="multiple">
+								</select>
+							</div>
+						</div>
+					</form>`);
+
+                $('#actorCategorySetsMultiSelectDropdown').select2({
+                    closeOnSelect: false,
+                    scrollAfterSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: 10,
+                    ajax: {
+                        url: 'api/categorySet/selectList/',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        headers: {
+                            "Authorization": "Bearer "+TIMAAT.Service.token,
+                            "Content-Type": "application/json",
+                        },
+                        // additional parameters
+                        data: function(params) {
+                            return {
+                                search: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function(data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: false
+                    },
+                    minimumInputLength: 0,
+                });
+                TIMAAT.ActorService.getActorCategorySets(actor.model.id).then(function(data) {
+                    var categorySetSelect = $('#actorCategorySetsMultiSelectDropdown');
+                    if (data.length > 0) {
+                        data.sort((a, b) => (a.name > b.name)? 1 : -1);
+                        // create the options and append to Select2
+                        var i = 0;
+                        for (; i < data.length; i++) {
+                            var option = new Option(data[i].name, data[i].id, true, true);
+                            categorySetSelect.append(option).trigger('change');
+                        }
+                        // manually trigger the 'select2:select' event
+                        categorySetSelect.trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: data
+                            }
+                        });
+                    }
+                });
+                $modal.modal('show');
+            });
+
+            $('#actorDatasetsEditActorCategorySetsModalSubmitButton').on('click', async function(event) {
+                event.preventDefault();
+                const $modal = $('#actorDatasetsEditActorCategorySetsModal');
+                if (!$('#actorCategorySetsForm').valid())
+                    return false;
+                const actor = $modal.data('actor');
+
+                const formDataRaw = $('#actorCategorySetsForm').serializeArray();
+
+                let i = 0;
+                const categorySetIdList = [];
+                for (; i < formDataRaw.length; i++) {
+                    categorySetIdList.push(Number(formDataRaw[i].value));
+                }
+
+                actor.model.categorySets = await TIMAAT.ActorService.updateActorCategorySets(actor.model.id, categorySetIdList);
+                $modal.modal('hide');
+            });
+
+            // category button handler
+            $('#actorFormDataSheetCategoryButton').on('click', async function(event) {
+                event.stopPropagation();
+                TIMAAT.UI.hidePopups();
+
+                const $modal = $('#actorDatasetsEditActorCategoriesModal');
+                $modal.data('actor', $('#actorFormMetadata').data('actor'));
+                const actor = $modal.data('actor');
+
+                $modal.find('.modal-body').html(`
+					<form role="form" id="actorCategoriesForm">
+						<div class="form-group">
+							<div class="col-md-12">
+								<select class="form-control form-control-md multi-select-dropdown"
+												style="width:100%;"
+												id="actorCategoriesMultiSelectDropdown"
+												name="categoryId"
+												data-role="categoryId"
+												data-placeholder="Select actor categories"
+												multiple="multiple">
+								</select>
+							</div>
+						</div>
+					</form>`);
+                $('#actorCategoriesMultiSelectDropdown').select2({
+                    closeOnSelect: false,
+                    scrollAfterSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: 10,
+                    ajax: {
+                        url: 'api/actor/'+actor.model.id+'/assignableCategories/selectList',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        headers: {
+                            "Authorization": "Bearer "+TIMAAT.Service.token,
+                            "Content-Type": "application/json",
+                        },
+                        // additional parameters
+                        data: function(params) {
+                            return {
+                                search: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function(data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: false
+                    },
+                    minimumInputLength: 0,
+                });
+                TIMAAT.ActorService.getActorCategories(actor.model.id).then(function(data) {
+                    const categorySelect = $('#actorCategoriesMultiSelectDropdown');
+                    if (data.length > 0) {
+                        data.sort((a, b) => (a.name > b.name)? 1 : -1);
+                        // create the options and append to Select2
+                        let i = 0;
+                        for (; i < data.length; i++) {
+                            var option = new Option(data[i].name, data[i].id, true, true);
+                            categorySelect.append(option).trigger('change');
+                        }
+                        // manually trigger the 'select2:select' event
+                        categorySelect.trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: data
+                            }
+                        });
+                    }
+                });
+                $modal.modal('show');
+            });
+
+            $('#actorDatasetsEditActorCategoriesModalSubmitButton').on('click', async function(event) {
+                event.preventDefault();
+
+                const $modal = $('#actorDatasetsEditActorCategoriesModal');
+                if (!$('#actorCategoriesForm').valid())
+                    return false;
+                const actor = $modal.data('actor');
+                const formDataRaw = $('#actorCategoriesForm').serializeArray();
+
+                let i = 0;
+                const categoryIdList = [];
+                for (; i < formDataRaw.length; i++) {
+                    categoryIdList.push( Number(formDataRaw[i].value));
+                }
+                actor.model.categories = await TIMAAT.ActorService.updateActorCategories(actor.model.id, categoryIdList);
+                $modal.modal('hide');
+            });
 		},
 
 		initNames: function() {

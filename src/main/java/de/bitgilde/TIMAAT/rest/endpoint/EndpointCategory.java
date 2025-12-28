@@ -15,7 +15,6 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
-import jakarta.servlet.ServletContext;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -31,7 +30,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import jakarta.ws.rs.core.UriInfo;
 import org.jvnet.hk2.annotations.Service;
 
 import java.util.ArrayList;
@@ -62,12 +60,9 @@ import java.util.Set;
 @Service
 @Path("/category")
 public class EndpointCategory {
-	@Context
-	private UriInfo uriInfo;
+
 	@Context
 	ContainerRequestContext containerRequestContext;
-	@Context
-  ServletContext servletContext;
   @Inject
   CategoryStorage categoryStorage;
   @Inject

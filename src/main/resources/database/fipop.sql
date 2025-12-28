@@ -134,8 +134,6 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`actor`
 )
     ENGINE = InnoDB;
 
-
-
 -- -----------------------------------------------------
 -- Table `FIPOP`.`actor_actor_relationship_type`
 -- -----------------------------------------------------
@@ -1668,8 +1666,8 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`annotation_has_audience`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FIPOP`.`annotation_has_category`
 (
-    `annotation_id`   INT NOT NULL,
-    `category_id`     INT NOT NULL,
+    `annotation_id` INT NOT NULL,
+    `category_id`   INT NOT NULL,
     PRIMARY KEY (`annotation_id`, `category_id`),
     CONSTRAINT `fk_annotation_has_category_annotation1`
         FOREIGN KEY (`annotation_id`)
@@ -2651,6 +2649,53 @@ CREATE TABLE IF NOT EXISTS `FIPOP`.`category_set`
 
 CREATE UNIQUE INDEX `name_UNIQUE` ON `FIPOP`.`category_set` (`name` ASC);
 
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`actor_has_category_set`
+-- -----------------------------------------------------
+CREATE TABLE `fipop`.`actor_has_category_set`
+(
+    `actor_id`        INT NOT NULL,
+    `category_set_id` INT NOT NULL,
+    CONSTRAINT `fk_actor_has_category_set_actor`
+        FOREIGN KEY (`actor_id`)
+            REFERENCES `fipop`.`actor` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_actor_has_category_set_category_set`
+        FOREIGN KEY (`category_set_id`)
+            REFERENCES `fipop`.`category_set` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `pk_actor_has_category_set` PRIMARY KEY (actor_id, category_set_id)
+) ENGINE = InnoDB;
+
+
+CREATE INDEX fk_actor_has_category_set_actor1_idx ON `fipop`.`actor_has_category_set` (actor_id ASC);
+CREATE INDEX fk_actor_has_category_set_category_set1_idx ON `fipop`.`actor_has_category_set` (category_set_id ASC);
+
+-- -----------------------------------------------------
+-- Table `FIPOP`.`actor_has_category`
+-- -----------------------------------------------------
+CREATE TABLE `fipop`.`actor_has_category`
+(
+    `actor_id`      INT NOT NULL,
+    `category_id` INT NOT NULL,
+    CONSTRAINT `fk_actor_has_category_actor`
+        FOREIGN KEY (`actor_id`)
+            REFERENCES `fipop`.`actor` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `fk_actor_has_category_category`
+        FOREIGN KEY (`category_id`)
+            REFERENCES `fipop`.`category` (`id`)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+    CONSTRAINT `pk_actor_has_category_set` PRIMARY KEY (actor_id, category_id)
+);
+
+CREATE INDEX fk_actor_has_category_actor1_idx ON `fipop`.`actor_has_category` (actor_id ASC);
+CREATE INDEX fk_actor_has_category_category1_idx ON `fipop`.`actor_has_category` (category_id ASC);
 
 
 -- -----------------------------------------------------

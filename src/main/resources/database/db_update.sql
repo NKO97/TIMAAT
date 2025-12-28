@@ -308,6 +308,47 @@ BEGIN
 
         ALTER TABLE `fipop`.`annotation_has_category`
             DROP COLUMN category_set_id;
+
+        CREATE TABLE `fipop`.`actor_has_category_set`
+        (
+            `actor_id`      INT NOT NULL,
+            `category_set_id` INT NOT NULL,
+            CONSTRAINT `fk_actor_has_category_set_actor`
+                FOREIGN KEY (`actor_id`)
+                    REFERENCES `fipop`.`actor` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `fk_actor_has_category_set_category_set`
+                FOREIGN KEY (`category_set_id`)
+                    REFERENCES `fipop`.`category_set` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `pk_actor_has_category_set` PRIMARY KEY (actor_id, category_set_id)
+        );
+
+        CREATE INDEX fk_actor_has_category_set_actor1_idx ON `fipop`.`actor_has_category_set` (actor_id ASC);
+        CREATE INDEX fk_actor_has_category_set_category_set1_idx ON `fipop`.`actor_has_category_set` (category_set_id ASC);
+
+        CREATE TABLE `fipop`.`actor_has_category`
+        (
+            `actor_id`      INT NOT NULL,
+            `category_id` INT NOT NULL,
+            CONSTRAINT `fk_actor_has_category_actor`
+                FOREIGN KEY (`actor_id`)
+                    REFERENCES `fipop`.`actor` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `fk_actor_has_category_category`
+                FOREIGN KEY (`category_id`)
+                    REFERENCES `fipop`.`category` (`id`)
+                    ON DELETE CASCADE
+                    ON UPDATE NO ACTION,
+            CONSTRAINT `pk_actor_has_category_set` PRIMARY KEY (actor_id, category_id)
+        );
+
+        CREATE INDEX fk_actor_has_category_actor1_idx ON `fipop`.`actor_has_category` (actor_id ASC);
+        CREATE INDEX fk_actor_has_category_category1_idx ON `fipop`.`actor_has_category` (category_id ASC);
+
     END IF;
 END $$
 DELIMITER ;
@@ -319,6 +360,7 @@ CALL update_to_0_14_0();
 CALL update_to_0_14_1();
 CALL update_to_0_14_2();
 CALL update_to_0_15_0();
+CALL update_to_0_15_1();
 
 /*
  * Delete update functions after finishing update script
@@ -327,3 +369,4 @@ DROP PROCEDURE update_to_0_14_0;
 DROP PROCEDURE update_to_0_14_1;
 DROP PROCEDURE update_to_0_14_2;
 DROP PROCEDURE update_to_0_15_0;
+DROP PROCEDURE update_to_0_15_1;

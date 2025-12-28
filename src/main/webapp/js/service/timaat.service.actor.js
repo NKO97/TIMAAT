@@ -120,6 +120,96 @@
 			});
 		},
 
+        async getActorCategorySets(id) {
+            return new Promise(resolve => {
+                $.ajax({
+                    url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/" +id + "/categorySets",
+                    type       : "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType   : "json",
+                    beforeSend : function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(data) {
+                    resolve(data);
+                }).fail(function(error) {
+                    console.error("ERROR responseText: ", error.responseText);
+                    console.error("ERROR: ", error);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
+
+        async updateActorCategorySets(id, categorySetIds){
+            const payload = {
+                categorySetIds
+            }
+            return new Promise(resolve => {
+                $.ajax({
+                    url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/" +id + "/categorySets",
+                    type       : "PUT",
+                    contentType: "application/json; charset=utf-8",
+                    data       : JSON.stringify(payload),
+                    dataType   : "json",
+                    beforeSend : function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(data) {
+                    resolve(data);
+                }).fail(function(error) {
+                    console.error("ERROR responseText: ", error.responseText);
+                    console.error("ERROR: ", error);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
+        async getActorCategories(id) {
+            return new Promise(resolve => {
+                $.ajax({
+                    url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/" +id + "/categories",
+                    type       : "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType   : "json",
+                    beforeSend : function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(data) {
+                    resolve(data);
+                }).fail(function(error) {
+                    console.error("ERROR responseText: ", error.responseText);
+                    console.error("ERROR: ", error);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
+
+        async updateActorCategories(id, categoryIds){
+            const payload = {
+                categoryIds
+            }
+            return new Promise(resolve => {
+                $.ajax({
+                    url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/actor/" +id + "/categories",
+                    type       : "PUT",
+                    contentType: "application/json; charset=utf-8",
+                    data       : JSON.stringify(payload),
+                    dataType   : "json",
+                    beforeSend : function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(data) {
+                    resolve(data);
+                }).fail(function(error) {
+                    console.error("ERROR responseText: ", error.responseText);
+                    console.error("ERROR: ", error);
+                });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
 		async getActorName(id) {
 			return new Promise(resolve => {
 				$.ajax({
