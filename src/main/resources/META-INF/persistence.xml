@@ -43,6 +43,7 @@
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisScene</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSceneTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment</class>
+        <class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentTranslation</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSequence</class>
 		<class>de.bitgilde.TIMAAT.model.FIPOP.AnalysisSequenceTranslation</class>

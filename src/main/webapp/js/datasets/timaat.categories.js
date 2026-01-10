@@ -35,8 +35,14 @@
 
 }(function (TIMAAT) {
     TIMAAT.Categories = {
-        categoryDataTable: null, categorySetDataTable: null, relatedMusicTable: null, relatedMediumTable: null,
-        relatedActorTable: null, relatedAnnotationTable: null, currentItemType: null,
+        categoryDataTable: null,
+        categorySetDataTable: null,
+        relatedMusicTable: null,
+        relatedMediumTable: null,
+        relatedActorTable: null,
+        relatedAnnotationTable: null,
+        relatedSegmentStructureTable: null,
+        currentItemType: null,
 
         init: function () {
             $('#categorySetTab').on('click', function (event) {
@@ -120,7 +126,10 @@
             TIMAAT.Categories.relatedMediumTable = TIMAAT.Categories.initRelatedMediumTable()
             TIMAAT.Categories.relatedActorTable = TIMAAT.Categories.initRelatedActorTable()
             TIMAAT.Categories.relatedAnnotationTable = TIMAAT.Categories.initRelatedAnnotationTable()
-        }, initCategoriesComponent: function () {
+            TIMAAT.Categories.relatedSegmentStructureTable = TIMAAT.Categories.initRelatedSegmentStructureTable()
+
+        },
+        initCategoriesComponent: function () {
             TIMAAT.UI.showComponent('categories');
             $('#categoryTab').trigger('click');
         },
@@ -235,8 +244,23 @@
             return musicTable
         },
 
+        initRelatedSegmentStructureTable: function () {
+            const segmentStructureTypeByEnumTypeName = new Map([["SEGMENT", "Segment"], ["SEQUENCE", "Sequence"], ["TAKE", "Take"], ["SCENE", "Scene"], ["ACTION", "Action"]])
+
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("name", "Name", "name"),
+            new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "segmentStructureElementType", segmentStructureTypeByEnumTypeName, true),
+            new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime"), new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime")]
+            const activeColumnIds = ["id", "name", "type", "startTime", "endTime"]
+            const segmentStructureTable = new TIMAAT.Table.Table("categoriesSegmentStructureTable", "#categoriesSegmentStructureTableContainer", columns, activeColumnIds, "api/segment-structure-elements/list", true, false)
+            $('#segmentStructureTableCollapse').on('shown.bs.collapse', (event) => {
+                segmentStructureTable.resizeToParent()
+            });
+
+            new TIMAAT.Table.ColumnSelectorPopover(segmentStructureTable, "#categoriesSegmentStructureColumnButton")
+            return segmentStructureTable
+        },
+
         initRelatedMediumTable: function () {
-            //TODO: Check subtypes
             const mediaTypesById = new Map([[1, "Audio"], [2, "Document"], [3, "Image"], [4, "Software"], [5, "Text"], [6, " Video"], [7, "Videogame"]])
 
             const MediumDurationColumnConfig = class MediumDurationColumnConfig extends TIMAAT.Table.TableColumnConfig {
@@ -423,6 +447,7 @@
             TIMAAT.Categories.relatedMediumTable.active = true
             TIMAAT.Categories.relatedActorTable.active = true
             TIMAAT.Categories.relatedAnnotationTable.active = true
+            TIMAAT.Categories.relatedSegmentStructureTable.active = true
         },
 
         showNoSelectionPanel() {
@@ -433,6 +458,7 @@
             TIMAAT.Categories.relatedMediumTable.active = false
             TIMAAT.Categories.relatedActorTable.active = false
             TIMAAT.Categories.relatedAnnotationTable.active = false
+            TIMAAT.Categories.relatedSegmentStructureTable.active = false
         },
 
         showEntitiesPanel() {
@@ -781,6 +807,7 @@
                 TIMAAT.Categories.relatedMediumTable.urlSearchParams = urlSearchParameters
                 TIMAAT.Categories.relatedAnnotationTable.urlSearchParams = urlSearchParameters
                 TIMAAT.Categories.relatedActorTable.urlSearchParams = urlSearchParameters
+                TIMAAT.Categories.relatedSegmentStructureTable.urlSearchParams = urlSearchParameters
             } else {
                 TIMAAT.Categories.showNoSelectionPanel()
             }

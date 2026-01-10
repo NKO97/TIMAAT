@@ -37,7 +37,7 @@ public class AnalysisSegmentStructureElement {
   private MediumAnalysisList mediumAnalysisList;
 
   @ManyToMany
-  @JoinTable(name = "analysis_segment_structure_element_has_category", inverseJoinColumns = {@JoinColumn(name = "category_id")}, joinColumns = {@JoinColumn(name = "id"), @JoinColumn(name = "structure_element_type")})
+  @JoinTable(name = "analysis_segment_structure_element_has_category", inverseJoinColumns = {@JoinColumn(name = "category_id")}, joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id"), @JoinColumn(name = "structure_element_type", referencedColumnName = "structure_element_type")})
   private List<Category> categories;
 
   public AnalysisSegmentStructureElementId getId() {
