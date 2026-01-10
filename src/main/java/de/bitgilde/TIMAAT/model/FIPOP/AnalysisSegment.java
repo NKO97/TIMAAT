@@ -1,6 +1,7 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -111,7 +112,13 @@ public class AnalysisSegment implements Serializable, SegmentStructureEntity {
 		return this.startTime;
 	}
 
-	public void setStartTime(long startTime) {
+  @JsonIgnore
+  @Override
+  public String getName() {
+    return analysisSegmentTranslations.get(0).getName();
+  }
+
+  public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 

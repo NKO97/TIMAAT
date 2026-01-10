@@ -1,8 +1,10 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
 import de.bitgilde.TIMAAT.model.DataTableInfo;
-import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
-import de.bitgilde.TIMAAT.rest.model.analysissegment.AnalysisSegmentListingQueryParameter;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
+import de.bitgilde.TIMAAT.rest.model.analysissegment.SegmentStructureElementListingQueryParameter;
+import de.bitgilde.TIMAAT.rest.model.segment.SegmentStructureElement;
 import de.bitgilde.TIMAAT.storage.entity.segment.SegmentStructureElementsStorage;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
@@ -13,7 +15,8 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import org.jvnet.hk2.annotations.Service;
 
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,8 +39,8 @@ import java.util.Collections;
  * @since 31.12.25
  */
 @Service
-@Path("/analysis-segments")
-public class EndpointAnalysisSegment {
+@Path("/segment-structure-elements")
+public class EndpointSegmentStructureElement {
   @Inject
   SegmentStructureElementsStorage segmentStructureElements;
   @Context
@@ -46,7 +49,15 @@ public class EndpointAnalysisSegment {
   @GET
   @Produces
   @Path("list")
-  public DataTableInfo<AnalysisSegment> listAnalysisSegments(@BeanParam AnalysisSegmentListingQueryParameter queryParameter) {
-    return new DataTableInfo<>(0, 0, 0, Collections.emptyList());
+  public DataTableInfo<SegmentStructureElement> listSegmentStructureElements(@BeanParam SegmentStructureElementListingQueryParameter queryParameter) {
+    int draw = queryParameter.getDraw().orElse(0);
+
+    UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
+            AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
+    List<SegmentStructureElement> matchingEntries = segmentStructureElements.getEntriesAsStream(queryParameter,
+            queryParameter, queryParameter, userAccount).map(SegmentStructureElement::new).collect(Collectors.toList());
+    long countOfMatchingEntries = segmentStructureElements.getNumberOfMatchingEntries(queryParameter);
+    long totalCount = segmentStructureElements.getNumberOfTotalEntries();
+    return new DataTableInfo<>(draw, totalCount, countOfMatchingEntries, matchingEntries);
   }
 }

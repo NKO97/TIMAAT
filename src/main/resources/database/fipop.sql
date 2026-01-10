@@ -8787,6 +8787,114 @@ INSERT INTO `FIPOP`.`db_version` (major_version, minor_version, patch_version)
 VALUES (0, 14, 2);
 COMMIT;
 
+
+-- -----------------------------------------------------
+-- view analysis_segment_structure_element
+-- -----------------------------------------------------
+
+START TRANSACTION;
+USE `FIPOP`;
+create view `fipop`.`analysis_segment_structure_element` as
+(select 'SEGMENT'                        as structure_element_type,
+        analysisSegment.id               as id,
+        analysisSegment.analysis_list_id as analysis_list_id,
+        analysisSegment.start_time       as start_time,
+        analysisSegment.end_time         as end_time,
+        translation.name                 as name
+ from analysis_segment analysisSegment
+          join analysis_segment_translation translation
+               on analysisSegment.id = translation.analysis_segment_id)
+UNION
+(select 'SEQUENCE'                       as structure_element_type,
+        analysisSequence.id              as id,
+        analysisSegment.analysis_list_id as analysis_list_id,
+        analysisSequence.start_time      as start_time,
+        analysisSequence.end_time        as end_time,
+        translation.name                 as name
+ from analysis_sequence analysisSequence
+          join analysis_segment analysisSegment on analysisSequence.analysis_segment_id = analysisSegment.id
+          join analysis_sequence_translation translation
+               on analysisSequence.id = translation.analysis_sequence_id)
+UNION
+(select 'TAKE'                           as structure_element_type,
+        analysisTake.id                  as id,
+        analysisSegment.analysis_list_id as analysis_list_id,
+        analysisTake.start_time          as start_time,
+        analysisTake.end_time            as end_time,
+        translation.name                 as name
+ from analysis_take analysisTake
+          join analysis_sequence analysisSequence on analysisTake.analysis_sequence_id = analysisSequence.id
+          join analysis_segment analysisSegment on analysisSequence.analysis_segment_id = analysisSegment.id
+          join analysis_take_translation translation
+               on analysisTake.id = translation.analysis_take_id)
+UNION
+(select 'SCENE'                          as structure_element_type,
+        analysisScene.id                 as id,
+        analysisSegment.analysis_list_id as analysis_list_id,
+        analysisScene.start_time         as start_time,
+        analysisScene.end_time           as end_time,
+        translation.name                 as name
+ from analysis_scene analysisScene
+          join analysis_segment analysisSegment on analysisScene.analysis_segment_id = analysisSegment.id
+          join analysis_scene_translation translation
+               on analysisScene.id = translation.analysis_scene_id)
+UNION
+(select 'ACTION'                         as structure_element_type,
+        analysisAction.id                as id,
+        analysisSegment.analysis_list_id as analysis_list_id,
+        analysisAction.start_time        as start_time,
+        analysisAction.end_time          as end_time,
+        translation.name                 as name
+ from analysis_action analysisAction
+          join analysis_scene analysisScene on analysisAction.analysis_scene_id = analysisScene.id
+          join analysis_segment analysisSegment on analysisScene.analysis_segment_id = analysisSegment.id
+          join analysis_action_translation translation
+               on analysisAction.id = translation.analysis_action_id);
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- view analysis_segment_structure_element_has_category
+-- ----------------------------------------------------
+START TRANSACTION;
+USE `FIPOP`;
+create view `fipop`.`analysis_segment_structure_element_has_category` as
+(select structureElement.id                     as id,
+        structureElement.structure_element_type as structure_element_type,
+        hasCategory.category_id                 as category_id
+ from analysis_segment_structure_element structureElement
+          join analysis_segment_has_category hasCategory on structureElement.id = hasCategory.analysis_segment_id
+ where structure_element_type = 'SEGMENT')
+UNION
+(select structureElement.id                     as id,
+        structureElement.structure_element_type as structure_element_type,
+        hasCategory.category_id                 as category_id
+ from analysis_segment_structure_element structureElement
+          join analysis_sequence_has_category hasCategory on structureElement.id = hasCategory.analysis_sequence_id
+ where structure_element_type = 'SEQUENCE')
+UNION
+(select structureElement.id                     as id,
+        structureElement.structure_element_type as structure_element_type,
+        hasCategory.category_id                 as category_id
+ from analysis_segment_structure_element structureElement
+          join analysis_take_has_category hasCategory on structureElement.id = hasCategory.analysis_take_id
+ where structure_element_type = 'TAKE')
+UNION
+(select structureElement.id                     as id,
+        structureElement.structure_element_type as structure_element_type,
+        hasCategory.category_id                 as category_id
+ from analysis_segment_structure_element structureElement
+          join analysis_scene_has_category hasCategory on structureElement.id = hasCategory.analysis_scene_id
+ where structure_element_type = 'SCENE')
+UNION
+(select structureElement.id                     as id,
+        structureElement.structure_element_type as structure_element_type,
+        hasCategory.category_id                 as category_id
+ from analysis_segment_structure_element structureElement
+          join analysis_action_has_category hasCategory on structureElement.id = hasCategory.analysis_action_id
+ where structure_element_type = 'ACTION');
+COMMIT;
+
 -- -----------------------------------------------------
 -- Data for table `FIPOP`.`analysis_method_type`
 -- -----------------------------------------------------

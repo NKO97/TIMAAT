@@ -18,12 +18,12 @@ import java.util.Optional;
  */
 
 /**
- * Filters which can be passed when listing items of {@link de.bitgilde.TIMAAT.storage.entity.actor.ActorStorage}
+ * Filters which can be passed when listing items of {@link de.bitgilde.TIMAAT.storage.entity.segment.SegmentStructureElementsStorage}
  *
  * @author Nico Kotlenga
  * @since 27.12.25
  */
-public interface AnalysisSegmentFilterCriteria {
+public interface SegmentStructureElementFilterCriteria {
   /**
    * @return the category ids the returning actor should belong to
    */
@@ -37,7 +37,7 @@ public interface AnalysisSegmentFilterCriteria {
   /**
    * @return the search text which the actor name should match
    */
-  Optional<String> getAnalysisSegmentNameSearch();
+  Optional<String> getSegmentStructureElementNameSearch();
 
   class Builder {
 
@@ -45,23 +45,23 @@ public interface AnalysisSegmentFilterCriteria {
     private Collection<Integer> categorySetIds = null;
     private String analysisSegmentNameSearch = null;
 
-    public AnalysisSegmentFilterCriteria.Builder categoryIds(Collection<Integer> categoryIds) {
+    public SegmentStructureElementFilterCriteria.Builder categoryIds(Collection<Integer> categoryIds) {
       this.categoryIds = categoryIds;
       return this;
     }
 
-    public AnalysisSegmentFilterCriteria.Builder categorySetIds(Collection<Integer> categorySetIds) {
+    public SegmentStructureElementFilterCriteria.Builder categorySetIds(Collection<Integer> categorySetIds) {
       this.categorySetIds = categorySetIds;
       return this;
     }
 
-    public AnalysisSegmentFilterCriteria.Builder analysisSegmentNameSearch(String actorNameSearch) {
+    public SegmentStructureElementFilterCriteria.Builder analysisSegmentNameSearch(String actorNameSearch) {
       this.analysisSegmentNameSearch = actorNameSearch;
       return this;
     }
 
-    public AnalysisSegmentFilterCriteria build() {
-      return new AnalysisSegmentFilterCriteria() {
+    public SegmentStructureElementFilterCriteria build() {
+      return new SegmentStructureElementFilterCriteria() {
         @Override
         public Optional<Collection<Integer>> getCategoryIds() {
           return Optional.ofNullable(categoryIds);
@@ -73,7 +73,7 @@ public interface AnalysisSegmentFilterCriteria {
         }
 
         @Override
-        public Optional<String> getAnalysisSegmentNameSearch() {
+        public Optional<String> getSegmentStructureElementNameSearch() {
           return Optional.ofNullable(analysisSegmentNameSearch);
         }
 

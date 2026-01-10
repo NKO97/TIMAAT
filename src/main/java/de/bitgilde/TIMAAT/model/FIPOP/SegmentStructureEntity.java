@@ -10,6 +10,14 @@ import java.util.List;
  */
 public interface SegmentStructureEntity {
 
+  int getId();
+
+  long getEndTime();
+
+  long getStartTime();
+
+  String getName();
+
   List<Category> getCategories();
 
   void setCategories(List<Category> categories);

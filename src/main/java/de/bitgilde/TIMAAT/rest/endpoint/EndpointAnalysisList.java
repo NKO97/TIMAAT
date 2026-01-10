@@ -37,7 +37,7 @@ import de.bitgilde.TIMAAT.rest.security.authorization.AnalysisListAuthorizationV
 import de.bitgilde.TIMAAT.security.UserLogManager;
 import de.bitgilde.TIMAAT.storage.entity.analysislist.AnalysisListStorage;
 import de.bitgilde.TIMAAT.storage.entity.segment.SegmentStructureElementsStorage;
-import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureType;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementType;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -189,16 +189,16 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
   @Secured
   @Path("{segmentType}/{id}/category/list")
-  public List<Category> getSegmentStructureElementCategories(@PathParam("id") int id, @PathParam("segmentType") SegmentStructureType segmentStructureType) {
-    return segmentStructureElementsStorage.getAssignedCategories(id, segmentStructureType);
+  public List<Category> getSegmentStructureElementCategories(@PathParam("id") int id, @PathParam("segmentType") SegmentStructureElementType segmentStructureElementType) {
+    return segmentStructureElementsStorage.getAssignedCategories(id, segmentStructureElementType);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Secured
   @Path("{segmentType}/{id}/category/selectList")
-  public List<SelectElement<Integer>> getSegmentStructureElementCategoriesSelectList(@PathParam("id") int id, @PathParam("segmentType") SegmentStructureType segmentStructureType) {
-    return segmentStructureElementsStorage.getAssignableCategories(id, segmentStructureType).stream().map(currentCategory -> new SelectElement<>(currentCategory.getId(), currentCategory.getName())).collect(
+  public List<SelectElement<Integer>> getSegmentStructureElementCategoriesSelectList(@PathParam("id") int id, @PathParam("segmentType") SegmentStructureElementType segmentStructureElementType) {
+    return segmentStructureElementsStorage.getAssignableCategories(id, segmentStructureElementType).stream().map(currentCategory -> new SelectElement<>(currentCategory.getId(), currentCategory.getName())).collect(
             Collectors.toList());
   }
 
@@ -206,8 +206,8 @@ public class EndpointAnalysisList {
   @Produces(MediaType.APPLICATION_JSON)
   @Secured
   @Path("{segmentType}/{id}/categories")
-  public List<Category> updateSegmentStructureElementCategories(@PathParam("id") int id, @PathParam("segmentType") SegmentStructureType segmentStructureType, UpdateAssignedCategoriesPayload updateAssignedCategoriesPayload) {
-    return segmentStructureElementsStorage.updateCategories(id, segmentStructureType,
+  public List<Category> updateSegmentStructureElementCategories(@PathParam("id") int id, @PathParam("segmentType") SegmentStructureElementType segmentStructureElementType, UpdateAssignedCategoriesPayload updateAssignedCategoriesPayload) {
+    return segmentStructureElementsStorage.updateCategories(id, segmentStructureElementType,
             updateAssignedCategoriesPayload.getCategoryIds());
   }
 

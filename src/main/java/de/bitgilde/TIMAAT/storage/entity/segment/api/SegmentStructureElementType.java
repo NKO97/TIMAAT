@@ -6,7 +6,7 @@ package de.bitgilde.TIMAAT.storage.entity.segment.api;
  * @author Nico Kotlenga
  * @since 31.12.25
  */
-public enum SegmentStructureType {
+public enum SegmentStructureElementType {
   SEGMENT,
   SEQUENCE,
   TAKE,

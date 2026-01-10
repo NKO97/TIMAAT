@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.storage.db;
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.storage.api.EntityStorage;
 import de.bitgilde.TIMAAT.storage.api.PagingParameter;
 import de.bitgilde.TIMAAT.storage.api.SortOrder;
 import de.bitgilde.TIMAAT.storage.api.SortingParameter;
@@ -41,7 +42,7 @@ import java.util.stream.Stream;
  * @author Nico Kotlenga
  * @since 13.12.25
  */
-public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE extends DbSortingField<ENTITY_TYPE>> extends DbAccessComponent {
+public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE extends DbSortingField<ENTITY_TYPE>> extends DbAccessComponent implements EntityStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE> {
 
   private static final Logger logger = Logger.getLogger(DbStorage.class.getName());
 

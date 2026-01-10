@@ -1,7 +1,8 @@
 package de.bitgilde.TIMAAT.storage.entity.segment.api;
 
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
-import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment_;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement_;
 import de.bitgilde.TIMAAT.storage.db.DbSortingField;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
@@ -26,14 +27,14 @@ import jakarta.persistence.criteria.Root;
  * @author Nico Kotlenga
  * @since 31.12.25
  */
-public enum AnalysisSegmentSortingField implements DbSortingField<AnalysisSegment> {
+public enum SegmentStructureSortingField implements DbSortingField<AnalysisSegmentStructureElement> {
   ID;
 
   @Override
-  public Path<?> getPathFromRootEntity(Root<AnalysisSegment> root) {
+  public Path<?> getPathFromRootEntity(Root<AnalysisSegmentStructureElement> root) {
     switch (this) {
       case ID:
-        return root.get(AnalysisSegment_.id);
+        return root.get(AnalysisSegmentStructureElement_.id);
       default:
         throw new IllegalArgumentException("Unexpected sorting field");
     }

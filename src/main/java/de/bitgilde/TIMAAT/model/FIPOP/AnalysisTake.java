@@ -114,7 +114,13 @@ public class AnalysisTake implements Serializable, SegmentStructureEntity {
 		return this.startTime;
 	}
 
-	public void setStartTime(long startTime) {
+  @JsonIgnore
+  @Override
+  public String getName() {
+    return analysisTakeTranslations.get(0).getName();
+  }
+
+  public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 

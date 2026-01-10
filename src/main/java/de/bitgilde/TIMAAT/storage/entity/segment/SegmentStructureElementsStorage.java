@@ -1,18 +1,33 @@
 package de.bitgilde.TIMAAT.storage.entity.segment;
 
-import de.bitgilde.TIMAAT.db.DbAccessComponent;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisScene;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement_;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSequence;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisTake;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySetHasCategory;
+import de.bitgilde.TIMAAT.model.FIPOP.CategorySet_;
+import de.bitgilde.TIMAAT.model.FIPOP.Category_;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList_;
 import de.bitgilde.TIMAAT.model.FIPOP.SegmentStructureEntity;
-import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureType;
+import de.bitgilde.TIMAAT.storage.db.DbStorage;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementFilterCriteria;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementType;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureSortingField;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -25,23 +40,24 @@ import java.util.stream.Collectors;
  * @author Nico Kotlenga
  * @since 31.12.25
  */
-public class SegmentStructureElementsStorage extends DbAccessComponent {
+public class SegmentStructureElementsStorage extends DbStorage<AnalysisSegmentStructureElement, SegmentStructureElementFilterCriteria, SegmentStructureSortingField> {
 
-  private static final Map<SegmentStructureType, Class<? extends SegmentStructureEntity>> SEGMENT_STRUCTURE_ENTITY_CLASS_BY_SEGMENT_STRUCTURE_TYPE = Map.of(
-          SegmentStructureType.SEGMENT, AnalysisSegment.class, SegmentStructureType.SEQUENCE, AnalysisSequence.class,
-          SegmentStructureType.TAKE, AnalysisTake.class, SegmentStructureType.SCENE, AnalysisScene.class,
-          SegmentStructureType.ACTION, AnalysisAction.class);
+  private static final Map<SegmentStructureElementType, Class<? extends SegmentStructureEntity>> SEGMENT_STRUCTURE_ENTITY_CLASS_BY_SEGMENT_STRUCTURE_TYPE = Map.of(
+          SegmentStructureElementType.SEGMENT, AnalysisSegment.class, SegmentStructureElementType.SEQUENCE,
+          AnalysisSequence.class, SegmentStructureElementType.TAKE, AnalysisTake.class,
+          SegmentStructureElementType.SCENE, AnalysisScene.class, SegmentStructureElementType.ACTION,
+          AnalysisAction.class);
 
 
   @Inject
   public SegmentStructureElementsStorage(EntityManagerFactory emf) {
-    super(emf);
+    super(AnalysisSegmentStructureElement.class, SegmentStructureSortingField.ID, emf);
   }
 
-  public List<Category> updateCategories(int segmentStructureId, SegmentStructureType segmentStructureType, Collection<Integer> categoryIds) {
+  public List<Category> updateCategories(int segmentStructureId, SegmentStructureElementType segmentStructureElementType, Collection<Integer> categoryIds) {
     return executeDbTransaction(entityManager -> {
       Class<? extends SegmentStructureEntity> segmentTypeEntityClass = SEGMENT_STRUCTURE_ENTITY_CLASS_BY_SEGMENT_STRUCTURE_TYPE.get(
-              segmentStructureType);
+              segmentStructureElementType);
 
       SegmentStructureEntity segmentStructureEntity = entityManager.find(segmentTypeEntityClass, segmentStructureId);
       int mediumAnalysisListId = segmentStructureEntity.getMediumAnalysisList().getId();
@@ -56,23 +72,52 @@ public class SegmentStructureElementsStorage extends DbAccessComponent {
     });
   }
 
-  public List<Category> getAssignedCategories(int segmentStructureId, SegmentStructureType segmentStructureType) {
+  public List<Category> getAssignedCategories(int segmentStructureId, SegmentStructureElementType segmentStructureElementType) {
     return executeDbTransaction(entityManager -> {
       Class<? extends SegmentStructureEntity> segmentTypeEntityClass = SEGMENT_STRUCTURE_ENTITY_CLASS_BY_SEGMENT_STRUCTURE_TYPE.get(
-              segmentStructureType);
+              segmentStructureElementType);
       SegmentStructureEntity segmentStructureEntity = entityManager.find(segmentTypeEntityClass, segmentStructureId);
       return segmentStructureEntity.getCategories();
     });
   }
 
-  public List<Category> getAssignableCategories(int segmentStructureId, SegmentStructureType segmentStructureType) {
+  public List<Category> getAssignableCategories(int segmentStructureId, SegmentStructureElementType segmentStructureElementType) {
     return executeDbTransaction(entityManager -> {
       Class<? extends SegmentStructureEntity> segmentTypeEntityClass = SEGMENT_STRUCTURE_ENTITY_CLASS_BY_SEGMENT_STRUCTURE_TYPE.get(
-              segmentStructureType);
+              segmentStructureElementType);
       SegmentStructureEntity segmentStructureEntity = entityManager.find(segmentTypeEntityClass, segmentStructureId);
       return segmentStructureEntity.getMediumAnalysisList().getCategorySets().stream()
                                    .flatMap(categorySet -> categorySet.getCategorySetHasCategories().stream())
                                    .map(CategorySetHasCategory::getCategory).collect(Collectors.toList());
     });
+  }
+
+  @Override
+  protected List<Predicate> createPredicates(SegmentStructureElementFilterCriteria filter, Root<AnalysisSegmentStructureElement> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
+    List<Predicate> predicates = new ArrayList<>();
+
+    if (filter.getSegmentStructureElementNameSearch().isPresent()) {
+      String searchText = filter.getSegmentStructureElementNameSearch().get();
+      predicates.add(criteriaBuilder.like(root.get(AnalysisSegmentStructureElement_.name), "%" + searchText + "%"));
+    }
+
+    boolean categoryFilterActive = filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty();
+    if (categoryFilterActive) {
+      Join<AnalysisSegmentStructureElement, Category> categoryJoin = root.join(
+              AnalysisSegmentStructureElement_.categories);
+      predicates.add(categoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
+    }
+
+    boolean categorySetFilterActive = filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get()
+                                                                                       .isEmpty();
+    if (categorySetFilterActive) {
+      Join<AnalysisSegmentStructureElement, MediumAnalysisList> mediumAnalysisListJoin = root.join(
+              AnalysisSegmentStructureElement_.mediumAnalysisList);
+      Join<MediumAnalysisList, CategorySet> categorySetJoin = mediumAnalysisListJoin.join(
+              MediumAnalysisList_.categorySets);
+      predicates.add(categorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
+    }
+
+    return predicates;
   }
 }

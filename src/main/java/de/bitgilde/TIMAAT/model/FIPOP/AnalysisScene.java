@@ -120,7 +120,13 @@ public class AnalysisScene implements Serializable, SegmentStructureEntity {
 		return this.startTime;
 	}
 
-	public void setStartTime(long startTime) {
+  @JsonIgnore
+  @Override
+  public String getName() {
+    return analysisSceneTranslations.get(0).getName();
+  }
+
+  public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 

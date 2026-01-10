@@ -1,8 +1,8 @@
 package de.bitgilde.TIMAAT.rest.model.analysissegment;
 
 import de.bitgilde.TIMAAT.rest.model.parameter.ListingQueryParameter;
-import de.bitgilde.TIMAAT.storage.entity.segment.api.AnalysisSegmentFilterCriteria;
-import de.bitgilde.TIMAAT.storage.entity.segment.api.AnalysisSegmentSortingField;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementFilterCriteria;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureSortingField;
 import jakarta.ws.rs.QueryParam;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.Optional;
  * @author Nico Kotlenga
  * @since 31.12.25
  */
-public class AnalysisSegmentListingQueryParameter extends ListingQueryParameter<AnalysisSegmentSortingField> implements AnalysisSegmentFilterCriteria {
+public class SegmentStructureElementListingQueryParameter extends ListingQueryParameter<SegmentStructureSortingField> implements SegmentStructureElementFilterCriteria {
 
   @QueryParam("categoryIds")
   private List<Integer> categoryIds;
@@ -34,7 +34,7 @@ public class AnalysisSegmentListingQueryParameter extends ListingQueryParameter<
   }
 
   @Override
-  public Optional<String> getAnalysisSegmentNameSearch() {
+  public Optional<String> getSegmentStructureElementNameSearch() {
     return Optional.ofNullable(this.getSearch());
   }
 
