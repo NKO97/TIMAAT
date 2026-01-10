@@ -312,8 +312,6 @@
             this.uiElement.remove();
             this.resizeObserver.disconnect();
             $(document).off('timaat.timelineSortableSectionsUpdate', this.updateConnection)
-
-            console.log("Remove marker connection")
         }
     }
     TIMAAT.TemporaryWaveformMarker = class TemporaryWaveformMarker {

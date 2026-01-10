@@ -1,11 +1,7 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +15,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.io.Serializable;
+import java.util.List;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +42,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="analysis_segment")
 @NamedQuery(name="AnalysisSegment.findAll", query="SELECT a FROM AnalysisSegment a")
-public class AnalysisSegment implements Serializable {
+public class AnalysisSegment implements Serializable, SegmentStructureEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -116,10 +115,11 @@ public class AnalysisSegment implements Serializable {
 		this.startTime = startTime;
 	}
 
+  @Override
 	public List<Category> getCategories() {
 		return this.categories;
 	}
-
+  @Override
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
@@ -167,7 +167,7 @@ public class AnalysisSegment implements Serializable {
 
 		return analysisSequence;
 	}
-
+  @Override
 	public MediumAnalysisList getMediumAnalysisList() {
 		return this.mediumAnalysisList;
 	}

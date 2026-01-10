@@ -107,8 +107,35 @@
 			});
 		},
 
+        async updateCategoriesOfSegmentStructureElement(segmentStructureId, segmentStructureType, categoryIds){
+            const payload = {
+                categoryIds
+            }
+
+            return new Promise(resolve => {
+                $.ajax({
+                    url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+segmentStructureType+"/"+segmentStructureId+"/categories",
+                    type       : "PUT",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(payload),
+                    dataType   : "json",
+                    beforeSend : function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer '+TIMAAT.Service.token);
+                    },
+                }).done(function(data) {
+                    // console.log("TCL: getSelectedCategories -> data", data);
+                    resolve(data);
+                })
+                    .fail(function(error) {
+                        console.error("ERROR responseText: ", error.responseText);
+                        console.error("ERROR: ", error);
+                    });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
+
 		async getSelectedCategories(typeId, type) {
-			// console.log("TCL: getSelectedCategories -> typeId, type", typeId, type);
 			return new Promise(resolve => {
 				$.ajax({
 					url        : window.location.protocol+'//'+window.location.host+"/TIMAAT/api/analysisList/"+type+"/"+typeId+"/category/list/",

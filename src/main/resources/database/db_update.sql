@@ -349,6 +349,9 @@ BEGIN
         CREATE INDEX fk_actor_has_category_actor1_idx ON `fipop`.`actor_has_category` (actor_id ASC);
         CREATE INDEX fk_actor_has_category_category1_idx ON `fipop`.`actor_has_category` (category_id ASC);
 
+
+
+
     END IF;
 END $$
 DELIMITER ;

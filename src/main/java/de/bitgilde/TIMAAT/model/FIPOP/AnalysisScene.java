@@ -1,12 +1,9 @@
 package de.bitgilde.TIMAAT.model.FIPOP;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +18,9 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.util.List;
 
 /*
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ import jakarta.persistence.Transient;
 @Entity
 @Table(name="analysis_scene")
 @NamedQuery(name="AnalysisScene.findAll", query="SELECT a FROM AnalysisScene a")
-public class AnalysisScene implements Serializable {
+public class AnalysisScene implements Serializable, SegmentStructureEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -124,15 +124,23 @@ public class AnalysisScene implements Serializable {
 		this.startTime = startTime;
 	}
 
+  @Override
 	public List<Category> getCategories() {
 		return this.categories;
 	}
 
+  @Override
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
 
-	public List<AnalysisAction> getAnalysisActions() {
+  @JsonIgnore
+  @Override
+  public MediumAnalysisList getMediumAnalysisList() {
+    return analysisSegment.getMediumAnalysisList();
+  }
+
+  public List<AnalysisAction> getAnalysisActions() {
 		return this.analysisActions;
 	}
 

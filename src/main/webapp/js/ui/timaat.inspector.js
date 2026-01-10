@@ -2022,12 +2022,14 @@
                 $annotationCategoriesMultiSelectDropdown.select2('destroy');
                 $annotationCategoriesMultiSelectDropdown.find('option').remove();
 
+                const annotation = TIMAAT.VideoPlayer.curAnnotation;
+
                 $annotationCategoriesMultiSelectDropdown.select2({
                     closeOnSelect: false,
                     scrollAfterSelect: true,
                     allowClear: true,
                     ajax: {
-                        url: 'api/category/selectList/',
+                        url: 'api/annotation/'+annotation.model.id+'/category/selectList/',
                         type: 'GET',
                         dataType: 'json',
                         delay: 250,
@@ -2052,8 +2054,7 @@
                     },
                     minimumInputLength: 0,
                 });
-                TIMAAT.AnnotationService.getSelectedCategories(TIMAAT.VideoPlayer.curAnnotation.model.id).then(function(data) {
-                    // console.log("TCL: then: data", data);
+                TIMAAT.AnnotationService.getSelectedCategories(TIMAAT.VideoPlayer.curAnnotation.model.id).then(function(data) {;
                     var categorySelect = $('#annotationCategoriesMultiSelectDropdown');
                     if (data.length > 0) {
                         data.sort((a, b) => (a.name > b.name)? 1 : -1);
@@ -2073,6 +2074,124 @@
                     }
                 });
             });
+            $('#segmentElementCategoryFormSubmitButton').on('click', async function(event) {
+                event.preventDefault();
+                if (TIMAAT.VideoPlayer.currentPermissionLevel < 2) {
+                    $('#analysisListNoPermissionModal').modal('show');
+                    return;
+                }
+                const $segmentElementCategoriesForm = $('#segmentElementCategoriesForm')
+
+                let type = $segmentElementCategoriesForm.data('type');
+                // var modal = $('#segmentDatasetsSegmentCategories');
+                if (!$segmentElementCategoriesForm.valid()) return false;
+                let segmentElement;
+                switch (type) {
+                    case 'segment':
+                        segmentElement= TIMAAT.VideoPlayer.curSegment;
+                        break;
+                    case 'sequence':
+                        segmentElement= TIMAAT.VideoPlayer.curSequence;
+                        break;
+                    case 'take':
+                        segmentElement= TIMAAT.VideoPlayer.curTake;
+                        break;
+                    case 'scene':
+                        segmentElement= TIMAAT.VideoPlayer.curScene;
+                        break;
+                    case 'action':
+                        segmentElement= TIMAAT.VideoPlayer.curAction;
+                        break;
+                }
+
+                const formDataRaw = $segmentElementCategoriesForm.serializeArray();
+
+                let i = 0;
+                const categoryIdList = [];
+                for (; i < formDataRaw.length; i++) {
+                    categoryIdList.push(Number(formDataRaw[i].value));
+                }
+
+                segmentElement.model.categories = await TIMAAT.AnalysisListService.updateCategoriesOfSegmentStructureElement(segmentElement.model.id, type, categoryIdList)
+            });
+
+            $('#segmentElementCategoryFormDismissButton').on('click', function(event) {
+                const $segmentElementCategoriesMultiSelectDropdown = $('#segmentElementCategoriesMultiSelectDropdown')
+                $segmentElementCategoriesMultiSelectDropdown.val(null).trigger('change');
+                $segmentElementCategoriesMultiSelectDropdown.select2('destroy');
+                $segmentElementCategoriesMultiSelectDropdown.find('option').remove();
+                let type = $('#segmentElementCategoriesForm').data('type');
+
+                let segmentElementId;
+                switch (type) {
+                    case 'segment':
+                        segmentElementId = TIMAAT.VideoPlayer.curSegment.model.id
+                        break;
+                    case 'sequence':
+                        segmentElementId = TIMAAT.VideoPlayer.curSequence.model.id
+                        break;
+                    case 'take':
+                        segmentElementId = TIMAAT.VideoPlayer.curTake.model.id
+                        break;
+                    case 'scene':
+                        segmentElementId = TIMAAT.VideoPlayer.curScene.model.id
+                        break;
+                    case 'action':
+                        segmentElementId = TIMAAT.VideoPlayer.curAction.model.id
+                        break;
+                }
+
+                $segmentElementCategoriesMultiSelectDropdown.select2({
+                    closeOnSelect: false,
+                    scrollAfterSelect: true,
+                    allowClear: true,
+                    minimumResultsForSearch: 10,
+                    ajax: {
+                        url: 'api/analysisList/'+type+'/'+segmentElementId+'/category/selectList/',
+                        type: 'GET',
+                        dataType: 'json',
+                        delay: 250,
+                        headers: {
+                            "Authorization": "Bearer "+TIMAAT.Service.token,
+                            "Content-Type": "application/json",
+                        },
+                        // additional parameters
+                        data: function(params) {
+                            return {
+                                search: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function(data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: false
+                    },
+                    minimumInputLength: 0,
+                });
+
+                TIMAAT.AnalysisListService.getSelectedCategories(segmentElementId, type).then(function(data) {;
+                    if (data.length > 0) {
+                        data.sort((a, b) => (a.name > b.name)? 1 : -1);
+                        // create the options and append to Select2
+                        let i = 0;
+                        for (; i < data.length; i++) {
+                            const option = new Option(data[i].name, data[i].id, true, true);
+                            $segmentElementCategoriesMultiSelectDropdown.append(option).trigger('change');
+                        }
+                        // manually trigger the 'select2:select' event
+                        $segmentElementCategoriesMultiSelectDropdown.trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: data
+                            }
+                        });
+                    }
+                });
+            })
 
             // thumbnail
             const annotationThumbnailPositionSliderInput = $('.inspectorThumbnailEditSectionCustomRangeSliderInput')
