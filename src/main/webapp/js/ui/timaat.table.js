@@ -246,9 +246,21 @@
             }
         }
 
-        set urlSearchParams(urlSearchParams) {
-            this._urlSearchParams = urlSearchParams
+        updateUrlSearchParam(parameterName, parameterValues) {
+            this._urlSearchParams.delete(parameterName)
+            for (let parameterValue of parameterValues) {
+                this._urlSearchParams.append(parameterName, parameterValue)
+            }
+
             this.draw()
+        }
+
+        clearUrlSearchParam(parameterName) {
+            this._urlSearchParams.delete(parameterName)
+        }
+
+        getUrlSearchParamValues(parameterName) {
+            return this._urlSearchParams.getAll(parameterName)
         }
 
         get activeTableColumnIds() {
@@ -289,7 +301,7 @@
                 $table.appendTo(this._$container)
 
                 const ajaxUrl = this._dataUrl + "?" + this._urlSearchParams.toString()
-                console.log(ajaxUrl)
+
                 this._dataTable = $table.DataTable({
                     "destroy": true,
                     "autoWidth": false,
@@ -362,16 +374,28 @@
         _title
         _queryParameterValues
         _$queryParameterSelectorButton
+        _minimumSelectedValues
+        _currentSelectedParameterValues
 
-        constructor(title, table, queryParameterName, queryParameterValues, queryParameterSelectorButtonSelector) {
+        constructor(title, table, queryParameterName, queryParameterValues, queryParameterSelectorButtonSelector, minimumSelectedValues = 1, initiallyAllSelected = true) {
             this._table = table;
-            this._queryParameterValues = queryParameterValues.sort((a,b) => a.title.localeCompare(b.title))
+            this._queryParameterValues = queryParameterValues.sort((a, b) => a.title.localeCompare(b.title))
             this._queryParameterName = queryParameterName
             this._$queryParameterSelectorButton = $(queryParameterSelectorButtonSelector)
             this._title = title
+            this._minimumSelectedValues = minimumSelectedValues
+            this._currentSelectedParameterValues = new Set()
 
             this._$queryParameterSelectorButton.on('click', this.openPopover);
             this._$queryParameterSelectorButton.prop("title", this._title)
+
+            if(initiallyAllSelected) {
+                for(let queryParameterValue of queryParameterValues) {
+                    this._currentSelectedParameterValues.add(queryParameterValue.value)
+                }
+
+                this._table.updateUrlSearchParam(queryParameterName, Array.from(this._currentSelectedParameterValues))
+            }
 
             this.createPopover();
         }
@@ -391,14 +415,25 @@
 
             for (const currentQueryParameterValue of this._queryParameterValues) {
                 const $currentListGroupItemCheckbox = $(`<input class="ml-2" type="checkbox">`)
-                // const initialSelected = currentActiveTableColumnIds.indexOf(currentTableColumnConfig.id) > -1;
-                //$currentListGroupItemCheckbox.prop("checked", initialSelected)
+                console.log(this._currentSelectedParameterValues)
+                const initialSelected = this._currentSelectedParameterValues.has(currentQueryParameterValue.value);
+                $currentListGroupItemCheckbox.prop("checked", initialSelected)
 
                 const table = this._table
+                const queryParameterName = this._queryParameterName
+                const selectedParameterValues = this._currentSelectedParameterValues
+                const minimumSelectedValues = this._minimumSelectedValues
+
                 $currentListGroupItemCheckbox.on("change", (e) => {
-                    console.log(currentTableColumnConfig)
-                    //const newState = table.changeTableColumnActivState(currentTableColumnConfig.id, e.target.checked);
-                    //$currentListGroupItemCheckbox.prop("checked", e.target.checked)
+                    if (e.target.checked) {
+                        selectedParameterValues.add(currentQueryParameterValue.value)
+                    } else if (selectedParameterValues.size > minimumSelectedValues && selectedParameterValues.has(currentQueryParameterValue.value)) {
+                        selectedParameterValues.delete(currentQueryParameterValue.value)
+                    } else {
+                        $currentListGroupItemCheckbox.prop("checked", true)
+                    }
+
+                    table.updateUrlSearchParam(queryParameterName, Array.from(selectedParameterValues))
                 })
 
                 const $currentListGroupItem = $(`<li class="list-group-item d-flex justify-content-between align-items-center">${currentQueryParameterValue.title}</li>`)

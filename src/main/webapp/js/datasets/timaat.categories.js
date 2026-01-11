@@ -142,7 +142,7 @@
             TIMAAT.Categories.currentItemType = itemType
 
             const $categoryNoSelectionPanelText = $('#categoriesNoSelectionPanelText')
-
+            let clearableQueryParameterName
             switch (itemType) {
                 case 'category':
                     TIMAAT.UI.displayComponent('category', 'categoryTab', 'categoryDataTableCard');
@@ -155,6 +155,7 @@
                         TIMAAT.Categories.categoryDataTable.rows().deselect()
                         TIMAAT.Categories.categoryDataTable.ajax.reload()
                     }
+                    clearableQueryParameterName = "categorySetIds"
                     break
                 case 'categorySet':
                     TIMAAT.UI.displayComponent('category', 'categorySetTab', 'categorySetDataTableCard');
@@ -167,8 +168,15 @@
                         TIMAAT.Categories.categorySetDataTable.rows().deselect()
                         TIMAAT.Categories.categorySetDataTable.ajax.reload()
                     }
+                    clearableQueryParameterName = "categoryIds"
                     break
             }
+
+            TIMAAT.Categories.relatedMusicTable.clearUrlSearchParam(clearableQueryParameterName)
+            TIMAAT.Categories.relatedMediumTable.clearUrlSearchParam(clearableQueryParameterName)
+            TIMAAT.Categories.relatedAnnotationTable.clearUrlSearchParam(clearableQueryParameterName)
+            TIMAAT.Categories.relatedActorTable.clearUrlSearchParam(clearableQueryParameterName)
+            TIMAAT.Categories.relatedSegmentStructureTable.clearUrlSearchParam(clearableQueryParameterName)
             TIMAAT.Categories.showNoSelectionPanel()
         },
 
@@ -248,7 +256,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(musicTable, "#categoriesMusicTableColumnButton")
-            new TIMAAT.Table.QueryParameterSelectorPopover("Type", musicTable, "typeId", musicTypesQueryParameterValues, "#categoriesMusicTableTypeButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", musicTable, "musicTypeIds", musicTypesQueryParameterValues, "#categoriesMusicTableTypeButton")
             return musicTable
         },
 
@@ -272,7 +280,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(segmentStructureTable, "#categoriesSegmentStructureColumnButton")
-            new TIMAAT.Table.QueryParameterSelectorPopover("Type", segmentStructureTable, "type", segmentStructureTypeQueryParameterValues, "#categoriesSegmentStructureTableTypeButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", segmentStructureTable, "segmentStructureElementTypes", segmentStructureTypeQueryParameterValues, "#categoriesSegmentStructureTableTypeButton")
             return segmentStructureTable
         },
 
@@ -325,7 +333,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(mediumTable, "#categoriesMediumTableColumnButton")
-            new TIMAAT.Table.QueryParameterSelectorPopover("Type", mediumTable, "type", mediaTypesQueryParameterValues, "#categoriesMediumTableTypeButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", mediumTable, "mediaTypeIds", mediaTypesQueryParameterValues, "#categoriesMediumTableTypeButton")
             return mediumTable
         },
 
@@ -357,7 +365,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(actorTable, "#categoriesActorTableColumnButton")
-            new TIMAAT.Table.QueryParameterSelectorPopover("Type", actorTable, "type", actorTypesQueryParameters, "#categoriesActorTableTypeButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", actorTable, "actorTypeIds", actorTypesQueryParameters, "#categoriesActorTableTypeButton")
             return actorTable
         },
 
@@ -384,7 +392,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(annotationTable, "#categoriesAnnotationTableColumnButton")
-            new TIMAAT.Table.QueryParameterSelectorPopover("Type", annotationTable, "type", annotationTypeQueryParameters, "#categoriesAnnotationTableTypeButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", annotationTable, "annotationTypes", annotationTypeQueryParameters, "#categoriesAnnotationTableTypeButton")
             return annotationTable
         },
 
@@ -808,15 +816,17 @@
 
         handleSelectionChanged() {
             let selectionCount
-            let urlSearchParameters = new URLSearchParams
+            let queryParameterName;
+            let queryParameterValues = []
             switch (TIMAAT.Categories.currentItemType) {
                 case "category":
                     TIMAAT.Categories.updateCategorySelectAllCheckboxState()
                     const selectedCategories = TIMAAT.Categories.categoryDataTable.rows({selected: true}).data().toArray()
                     selectionCount = selectedCategories.length
+                    queryParameterName = "categoryIds"
 
                     for (let currentCategory of selectedCategories) {
-                        urlSearchParameters.append("categoryIds", currentCategory.id)
+                        queryParameterValues.push(currentCategory.id)
                     }
 
                     break
@@ -824,9 +834,10 @@
                     TIMAAT.Categories.updateCategorySetSelectAllCheckboxState()
                     const selectedCategorySets = TIMAAT.Categories.categorySetDataTable.rows({selected: true}).data().toArray()
                     selectionCount = selectedCategorySets.length
+                    queryParameterName = "categorySetIds"
 
                     for (let currentCategorySet of selectedCategorySets) {
-                        urlSearchParameters.append("categorySetIds", currentCategorySet.id)
+                        queryParameterValues.push(currentCategorySet.id)
                     }
 
                     break
@@ -834,11 +845,11 @@
 
             if (selectionCount > 0) {
                 TIMAAT.Categories.showAssignedEntitiesPanel()
-                TIMAAT.Categories.relatedMusicTable.urlSearchParams = urlSearchParameters
-                TIMAAT.Categories.relatedMediumTable.urlSearchParams = urlSearchParameters
-                TIMAAT.Categories.relatedAnnotationTable.urlSearchParams = urlSearchParameters
-                TIMAAT.Categories.relatedActorTable.urlSearchParams = urlSearchParameters
-                TIMAAT.Categories.relatedSegmentStructureTable.urlSearchParams = urlSearchParameters
+                TIMAAT.Categories.relatedMusicTable.updateUrlSearchParam(queryParameterName, queryParameterValues)
+                TIMAAT.Categories.relatedMediumTable.updateUrlSearchParam(queryParameterName, queryParameterValues)
+                TIMAAT.Categories.relatedAnnotationTable.updateUrlSearchParam(queryParameterName, queryParameterValues)
+                TIMAAT.Categories.relatedActorTable.updateUrlSearchParam(queryParameterName, queryParameterValues)
+                TIMAAT.Categories.relatedSegmentStructureTable.updateUrlSearchParam(queryParameterName, queryParameterValues)
             } else {
                 TIMAAT.Categories.showNoSelectionPanel()
             }

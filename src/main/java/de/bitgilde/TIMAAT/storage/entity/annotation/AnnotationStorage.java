@@ -323,14 +323,17 @@ public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCri
     }
 
     if (filter.getAnnotationTypes().isPresent() && !filter.getAnnotationTypes().get().isEmpty()) {
+      List<Predicate> typePredicates = new ArrayList<>();
       for (AnnotationType annotationType : filter.getAnnotationTypes().get()) {
         if (AnnotationType.VIDEO.equals(annotationType)) {
-          predicates.add(criteriaBuilder.equal(root.get(Annotation_.layerVisual), true));
+          typePredicates.add(criteriaBuilder.equal(root.get(Annotation_.layerVisual), true));
         }
         if (AnnotationType.AUDIO.equals(annotationType)) {
-          predicates.add(criteriaBuilder.equal(root.get(Annotation_.layerAudio), true));
+          typePredicates.add(criteriaBuilder.equal(root.get(Annotation_.layerAudio), true));
         }
       }
+
+      predicates.add(criteriaBuilder.or(typePredicates.toArray(new Predicate[0])));
     }
 
     return predicates;
