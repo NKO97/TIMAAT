@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.AnalysisAction;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisScene;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElementId_;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement_;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSequence;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisTake;
@@ -116,6 +117,13 @@ public class SegmentStructureElementsStorage extends DbStorage<AnalysisSegmentSt
       Join<MediumAnalysisList, CategorySet> categorySetJoin = mediumAnalysisListJoin.join(
               MediumAnalysisList_.categorySets);
       predicates.add(categorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
+    }
+
+    if (filter.getSegmentStructureElementTypes().isPresent() && !filter.getSegmentStructureElementTypes().get()
+                                                                       .isEmpty()) {
+      predicates.add(
+              root.get(AnalysisSegmentStructureElement_.id).get(AnalysisSegmentStructureElementId_.structureElementType)
+                  .in(filter.getSegmentStructureElementTypes().get()));
     }
 
     return predicates;

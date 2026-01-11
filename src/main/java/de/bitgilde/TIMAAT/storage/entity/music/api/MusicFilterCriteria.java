@@ -26,12 +26,18 @@ public interface MusicFilterCriteria {
    */
   Optional<String> getMusicNameSearch();
 
+  /**
+   * @return the ids of music types the returned music entries should have
+   */
+  Optional<Collection<Integer>> getMusicTypeIds();
+
 
   class Builder {
 
     private Collection<Integer> categoryIds = null;
     private Collection<Integer> categorySetIds = null;
     private String musicNameSearch = null;
+    private Collection<Integer> musicTypeIds = null;
 
     public Builder categoryIds(Collection<Integer> categoryIds) {
       this.categoryIds = categoryIds;
@@ -45,6 +51,11 @@ public interface MusicFilterCriteria {
 
     public Builder musicNameSearch(String musicNameSearch) {
       this.musicNameSearch = musicNameSearch;
+      return this;
+    }
+
+    public Builder musicTypeIds(Collection<Integer> musicTypeIds) {
+      this.musicTypeIds = musicTypeIds;
       return this;
     }
 
@@ -63,6 +74,11 @@ public interface MusicFilterCriteria {
         @Override
         public Optional<String> getMusicNameSearch() {
           return Optional.ofNullable(musicNameSearch);
+        }
+
+        @Override
+        public Optional<Collection<Integer>> getMusicTypeIds() {
+          return Optional.ofNullable(musicTypeIds);
         }
       };
     }

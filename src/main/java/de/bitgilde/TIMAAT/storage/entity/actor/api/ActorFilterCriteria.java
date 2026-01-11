@@ -44,10 +44,16 @@ public interface ActorFilterCriteria {
    */
   Optional<Integer> getExcludedAnnotationId();
 
+  /**
+   * @return the ids of the {@link de.bitgilde.TIMAAT.model.FIPOP.ActorType}s the returned {@link de.bitgilde.TIMAAT.model.FIPOP.Actor}s should have
+   */
+  Optional<Collection<Integer>> getActorTypeIds();
+
   class Builder {
 
     private Collection<Integer> categoryIds = null;
     private Collection<Integer> categorySetIds = null;
+    private Collection<Integer> actorTypeIds = null;
     private String actorNameSearch = null;
     private Integer excludeAnnotationId = null;
 
@@ -71,6 +77,11 @@ public interface ActorFilterCriteria {
       return this;
     }
 
+    public ActorFilterCriteria.Builder actorTypeIds(Collection<Integer> actorTypeIds) {
+      this.actorTypeIds = actorTypeIds;
+      return this;
+    }
+
     public ActorFilterCriteria build() {
       return new ActorFilterCriteria() {
         @Override
@@ -91,6 +102,11 @@ public interface ActorFilterCriteria {
         @Override
         public Optional<Integer> getExcludedAnnotationId() {
           return Optional.ofNullable(excludeAnnotationId);
+        }
+
+        @Override
+        public Optional<Collection<Integer>> getActorTypeIds() {
+          return Optional.ofNullable(actorTypeIds);
         }
       };
     }

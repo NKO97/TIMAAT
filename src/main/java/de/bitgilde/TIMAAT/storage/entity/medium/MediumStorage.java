@@ -4,6 +4,8 @@ import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet_;
 import de.bitgilde.TIMAAT.model.FIPOP.Category_;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaType;
+import de.bitgilde.TIMAAT.model.FIPOP.MediaType_;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusic;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
@@ -114,6 +116,13 @@ public class MediumStorage extends DbStorage<Medium, MediumFilterCriteria, Mediu
       Join<Medium, CategorySet> categorySetJoin = root.join(Medium_.categorySets);
 
       predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
+    }
+
+    if (filter.getMediaTypeIds().isPresent() && !filter.getMediaTypeIds().get().isEmpty()) {
+      Collection<Integer> mediaTypeIds = filter.getMediaTypeIds().get();
+      Join<Medium, MediaType> mediaTypeJoin = root.join(Medium_.mediaType);
+
+      predicates.add(mediaTypeJoin.get(MediaType_.id).in(mediaTypeIds));
     }
 
     return predicates;

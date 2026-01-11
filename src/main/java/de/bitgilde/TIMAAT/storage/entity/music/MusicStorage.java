@@ -14,6 +14,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTextSettingElementType;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicTranslation;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicType;
+import de.bitgilde.TIMAAT.model.FIPOP.MusicType_;
 import de.bitgilde.TIMAAT.model.FIPOP.Music_;
 import de.bitgilde.TIMAAT.model.FIPOP.MusicalKey;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
@@ -103,6 +104,13 @@ public class MusicStorage extends DbStorage<Music, MusicFilterCriteria, MusicSor
       Join<Music, CategorySet> categorySetJoin = root.join(Music_.categorySets);
 
       predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
+    }
+
+    if (filter.getMusicTypeIds().isPresent() && !filter.getMusicTypeIds().get().isEmpty()) {
+      Collection<Integer> musicTypeIds = filter.getMusicTypeIds().get();
+      Join<Music, MusicType> musicTypeJoin = root.join(Music_.musicType);
+
+      predicates.add(musicTypeJoin.get(MusicType_.id).in(musicTypeIds));
     }
 
     return predicates;

@@ -16,6 +16,8 @@ package de.bitgilde.TIMAAT.storage.entity.actor;
 
 import de.bitgilde.TIMAAT.model.FIPOP.Actor;
 import de.bitgilde.TIMAAT.model.FIPOP.ActorName_;
+import de.bitgilde.TIMAAT.model.FIPOP.ActorType;
+import de.bitgilde.TIMAAT.model.FIPOP.ActorType_;
 import de.bitgilde.TIMAAT.model.FIPOP.Actor_;
 import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
@@ -82,6 +84,11 @@ public class ActorStorage extends DbStorage<Actor, ActorFilterCriteria, ActorSor
       predicates.add(actorCategorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
     }
 
+    if (filter.getActorTypeIds().isPresent() && !filter.getActorTypeIds().get().isEmpty()) {
+      Join<Actor, ActorType> actorTypeJoin = root.join(Actor_.actorType);
+      predicates.add(actorTypeJoin.get(ActorType_.id).in(filter.getActorTypeIds().get()));
+    }
+
     return predicates;
   }
 
@@ -98,9 +105,8 @@ public class ActorStorage extends DbStorage<Actor, ActorFilterCriteria, ActorSor
       Actor actor = entityManager.find(Actor.class, actorId, LockModeType.PESSIMISTIC_WRITE);
 
       List<Category> categories = categoryIds.isEmpty() ? Collections.emptyList() : entityManager.createQuery(
-                                                       "select category from Actor actor join actor.categorySets categorySets join categorySets.categorySetHasCategories cshc join cshc.category category where category.id in :categoryIds",
-                                                       Category.class).setParameter("categoryIds", categoryIds)
-                                               .getResultList();
+              "select category from Actor actor join actor.categorySets categorySets join categorySets.categorySetHasCategories cshc join cshc.category category where category.id in :categoryIds",
+              Category.class).setParameter("categoryIds", categoryIds).getResultList();
       actor.setCategories(categories);
       return categories;
     });

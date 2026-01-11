@@ -28,6 +28,7 @@ import de.bitgilde.TIMAAT.storage.db.DbStorage;
 import de.bitgilde.TIMAAT.storage.entity.TagStorage;
 import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationFilterCriteria;
 import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationSortingField;
+import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationType;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -319,6 +320,17 @@ public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCri
       Join<MediumAnalysisList, CategorySet> categorySetJoin = root.join(Annotation_.mediumAnalysisList)
                                                                   .join(MediumAnalysisList_.categorySets);
       predicates.add(categorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
+    }
+
+    if (filter.getAnnotationTypes().isPresent() && !filter.getAnnotationTypes().get().isEmpty()) {
+      for (AnnotationType annotationType : filter.getAnnotationTypes().get()) {
+        if (AnnotationType.VIDEO.equals(annotationType)) {
+          predicates.add(criteriaBuilder.equal(root.get(Annotation_.layerVisual), true));
+        }
+        if (AnnotationType.AUDIO.equals(annotationType)) {
+          predicates.add(criteriaBuilder.equal(root.get(Annotation_.layerAudio), true));
+        }
+      }
     }
 
     return predicates;

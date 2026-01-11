@@ -39,11 +39,15 @@ public interface SegmentStructureElementFilterCriteria {
    */
   Optional<String> getSegmentStructureElementNameSearch();
 
+
+  Optional<Collection<SegmentStructureElementType>> getSegmentStructureElementTypes();
+
   class Builder {
 
     private Collection<Integer> categoryIds = null;
     private Collection<Integer> categorySetIds = null;
     private String analysisSegmentNameSearch = null;
+    private Collection<SegmentStructureElementType> segmentStructureElementTypes = null;
 
     public SegmentStructureElementFilterCriteria.Builder categoryIds(Collection<Integer> categoryIds) {
       this.categoryIds = categoryIds;
@@ -57,6 +61,11 @@ public interface SegmentStructureElementFilterCriteria {
 
     public SegmentStructureElementFilterCriteria.Builder analysisSegmentNameSearch(String actorNameSearch) {
       this.analysisSegmentNameSearch = actorNameSearch;
+      return this;
+    }
+
+    public SegmentStructureElementFilterCriteria.Builder segmentStructureElementTypes(Collection<SegmentStructureElementType> segmentStructureElementTypes) {
+      this.segmentStructureElementTypes = segmentStructureElementTypes;
       return this;
     }
 
@@ -77,6 +86,10 @@ public interface SegmentStructureElementFilterCriteria {
           return Optional.ofNullable(analysisSegmentNameSearch);
         }
 
+        @Override
+        public Optional<Collection<SegmentStructureElementType>> getSegmentStructureElementTypes() {
+          return Optional.ofNullable(segmentStructureElementTypes);
+        }
       };
     }
   }

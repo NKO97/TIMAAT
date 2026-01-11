@@ -39,10 +39,16 @@ public interface MediumFilterCriteria {
    */
   Optional<String> getMediumNameSearch();
 
+  /**
+   * @return the ids of the {@link de.bitgilde.TIMAAT.model.FIPOP.MediaType}s the medium should belong to
+   */
+  Optional<Collection<Integer>> getMediaTypeIds();
+
   class Builder {
 
     private Collection<Integer> categoryIds = null;
     private Collection<Integer> categorySetIds = null;
+    private Collection<Integer> mediaTypeIds = null;
     private String mediumNameSearch = null;
 
     public MediumFilterCriteria.Builder categoryIds(Collection<Integer> categoryIds) {
@@ -57,6 +63,11 @@ public interface MediumFilterCriteria {
 
     public MediumFilterCriteria.Builder mediumNameSearch(String musicNameSearch) {
       this.mediumNameSearch = musicNameSearch;
+      return this;
+    }
+
+    public MediumFilterCriteria.Builder mediaTypeIds(Collection<Integer> mediaTypeIds) {
+      this.mediaTypeIds = mediaTypeIds;
       return this;
     }
 
@@ -75,6 +86,11 @@ public interface MediumFilterCriteria {
         @Override
         public Optional<String> getMediumNameSearch() {
           return Optional.ofNullable(mediumNameSearch);
+        }
+
+        @Override
+        public Optional<Collection<Integer>> getMediaTypeIds() {
+          return Optional.ofNullable(mediaTypeIds);
         }
       };
     }

@@ -20,8 +20,8 @@ public class MusicListingQueryParameter extends ListingQueryParameter<MusicSorti
   private List<Integer> categoryIds;
   @QueryParam("categorySetIds")
   private List<Integer> categorySetIds;
-  @QueryParam("search")
-  private String search;
+  @QueryParam("musicTypeIds")
+  private List<Integer> musicTypeIds;
 
   @Override
   public Optional<Collection<Integer>> getCategoryIds() {
@@ -35,19 +35,23 @@ public class MusicListingQueryParameter extends ListingQueryParameter<MusicSorti
 
   @Override
   public Optional<String> getMusicNameSearch() {
-    return Optional.ofNullable(search);
+    return Optional.ofNullable(getSearch());
+  }
+
+  @Override
+  public Optional<Collection<Integer>> getMusicTypeIds() {
+    return Optional.ofNullable(musicTypeIds);
   }
 
   public void setCategorySetIds(List<Integer> categorySetIds) {
     this.categorySetIds = categorySetIds;
   }
 
-  @Override
-  public void setSearch(String search) {
-    this.search = search;
-  }
-
   public void setCategoryIds(List<Integer> categoryIds) {
     this.categoryIds = categoryIds;
+  }
+
+  public void setMusicTypeIds(List<Integer> musicTypeIds) {
+    this.musicTypeIds = musicTypeIds;
   }
 }

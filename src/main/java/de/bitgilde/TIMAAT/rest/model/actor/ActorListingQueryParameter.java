@@ -23,6 +23,8 @@ public class ActorListingQueryParameter extends ListingQueryParameter<ActorSorti
   private List<Integer> categorySetIds;
   @QueryParam("exclude_annotation")
   private Integer excludedAnnotationId;
+  @QueryParam("actorTypeIds")
+  private List<Integer> actorTypeIds;
 
   public ActorListingQueryParameter() {
 
@@ -54,6 +56,14 @@ public class ActorListingQueryParameter extends ListingQueryParameter<ActorSorti
     return Optional.ofNullable(excludedAnnotationId);
   }
 
+  @Override
+  public Optional<Collection<Integer>> getActorTypeIds() {
+    return Optional.ofNullable(actorTypeIds);
+  }
+
+  public void setActorTypeIds(List<Integer> actorTypeIds) {
+    this.actorTypeIds = actorTypeIds;
+  }
 
   public void setCategorySetIds(List<Integer> categorySetIds) {
     this.categorySetIds = categorySetIds;

@@ -36,6 +36,11 @@ public interface AnnotationFilterCriteria {
    */
   Optional<Boolean> hasCategories();
 
+  /**
+   * @return the {@link AnnotationType}s the returned {@link de.bitgilde.TIMAAT.model.FIPOP.Annotation}s should have
+   */
+  Optional<Collection<AnnotationType>> getAnnotationTypes();
+
   class Builder {
 
     private Collection<Integer> categoryIds = null;
@@ -43,6 +48,7 @@ public interface AnnotationFilterCriteria {
     private String annotationNameSearch = null;
     private Collection<Integer> mediumAnalysisListIds = null;
     private Boolean hasCategories = null;
+    private Collection<AnnotationType> annotationTypes = null;
 
     public AnnotationFilterCriteria.Builder categoryIds(Collection<Integer> categoryIds) {
       this.categoryIds = categoryIds;
@@ -59,13 +65,18 @@ public interface AnnotationFilterCriteria {
       return this;
     }
 
-    public AnnotationFilterCriteria.Builder mediumAnalysisListIds(Collection<Integer> mediumAnalysisListIds){
+    public AnnotationFilterCriteria.Builder mediumAnalysisListIds(Collection<Integer> mediumAnalysisListIds) {
       this.mediumAnalysisListIds = mediumAnalysisListIds;
       return this;
     }
 
-    public AnnotationFilterCriteria.Builder hasCategories(Boolean hasCategories){
+    public AnnotationFilterCriteria.Builder hasCategories(Boolean hasCategories) {
       this.hasCategories = hasCategories;
+      return this;
+    }
+
+    public AnnotationFilterCriteria.Builder annotationTypes(Collection<AnnotationType> annotationTypes) {
+      this.annotationTypes = annotationTypes;
       return this;
     }
 
@@ -94,6 +105,11 @@ public interface AnnotationFilterCriteria {
         @Override
         public Optional<Boolean> hasCategories() {
           return Optional.ofNullable(hasCategories);
+        }
+
+        @Override
+        public Optional<Collection<AnnotationType>> getAnnotationTypes() {
+          return Optional.ofNullable(annotationTypes);
         }
 
       };

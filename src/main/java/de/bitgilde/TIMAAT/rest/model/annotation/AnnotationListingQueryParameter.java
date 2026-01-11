@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.rest.model.annotation;
 import de.bitgilde.TIMAAT.rest.model.parameter.ListingQueryParameter;
 import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationFilterCriteria;
 import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationSortingField;
+import de.bitgilde.TIMAAT.storage.entity.annotation.api.AnnotationType;
 import jakarta.ws.rs.QueryParam;
 
 import java.util.Collection;
@@ -17,8 +18,6 @@ import java.util.Optional;
  */
 public class AnnotationListingQueryParameter extends ListingQueryParameter<AnnotationSortingField> implements AnnotationFilterCriteria {
 
-  @QueryParam("search")
-  private String search;
   @QueryParam("categoryIds")
   private List<Integer> categoryIds;
   @QueryParam("categorySetIds")
@@ -27,6 +26,8 @@ public class AnnotationListingQueryParameter extends ListingQueryParameter<Annot
   private List<Integer> mediumAnalysisListIds;
   @QueryParam("hasCategories")
   private Boolean hasCategories;
+  @QueryParam("annotationTypes")
+  private List<AnnotationType> annotationTypes;
 
 
   public AnnotationListingQueryParameter() {
@@ -71,6 +72,11 @@ public class AnnotationListingQueryParameter extends ListingQueryParameter<Annot
     return Optional.ofNullable(hasCategories);
   }
 
+  @Override
+  public Optional<Collection<AnnotationType>> getAnnotationTypes() {
+    return Optional.ofNullable(annotationTypes);
+  }
+
   public void setCategoryIds(List<Integer> categoryIds) {
     this.categoryIds = categoryIds;
   }
@@ -83,12 +89,11 @@ public class AnnotationListingQueryParameter extends ListingQueryParameter<Annot
     this.hasCategories = hasCategories;
   }
 
-  @Override
-  public void setSearch(String search) {
-    this.search = search;
-  }
-
   public void setMediumAnalysisListIds(List<Integer> mediumAnalysisListIds) {
     this.mediumAnalysisListIds = mediumAnalysisListIds;
+  }
+
+  public void setAnnotationTypes(List<AnnotationType> annotationTypes) {
+    this.annotationTypes = annotationTypes;
   }
 }

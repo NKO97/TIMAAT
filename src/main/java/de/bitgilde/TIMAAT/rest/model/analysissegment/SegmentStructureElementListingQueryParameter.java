@@ -2,6 +2,7 @@ package de.bitgilde.TIMAAT.rest.model.analysissegment;
 
 import de.bitgilde.TIMAAT.rest.model.parameter.ListingQueryParameter;
 import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementFilterCriteria;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementType;
 import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureSortingField;
 import jakarta.ws.rs.QueryParam;
 
@@ -21,6 +22,8 @@ public class SegmentStructureElementListingQueryParameter extends ListingQueryPa
   private List<Integer> categoryIds;
   @QueryParam("categorySetIds")
   private List<Integer> categorySetIds;
+  @QueryParam("segmentStructureElementTypes")
+  private List<SegmentStructureElementType> segmentStructureElementTypes;
 
 
   @Override
@@ -38,11 +41,20 @@ public class SegmentStructureElementListingQueryParameter extends ListingQueryPa
     return Optional.ofNullable(this.getSearch());
   }
 
+  @Override
+  public Optional<Collection<SegmentStructureElementType>> getSegmentStructureElementTypes() {
+    return Optional.ofNullable(segmentStructureElementTypes);
+  }
+
   public void setCategoryIds(List<Integer> categoryIds) {
     this.categoryIds = categoryIds;
   }
 
   public void setCategorySetIds(List<Integer> categorySetIds) {
     this.categorySetIds = categorySetIds;
+  }
+
+  public void setSegmentStructureElementTypes(List<SegmentStructureElementType> segmentStructureElementTypes) {
+    this.segmentStructureElementTypes = segmentStructureElementTypes;
   }
 }

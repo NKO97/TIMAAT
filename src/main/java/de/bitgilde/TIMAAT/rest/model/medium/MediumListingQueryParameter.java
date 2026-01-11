@@ -34,8 +34,9 @@ public class MediumListingQueryParameter extends ListingQueryParameter<MediumSor
   private List<Integer> categoryIds;
   @QueryParam("categorySetIds")
   private List<Integer> categorySetIds;
-  @QueryParam("search")
-  private String search;
+  @QueryParam("mediaTypeIds")
+  private List<Integer> mediaTypeIds;
+
 
   @Override
   public Optional<Collection<Integer>> getCategoryIds() {
@@ -49,7 +50,12 @@ public class MediumListingQueryParameter extends ListingQueryParameter<MediumSor
 
   @Override
   public Optional<String> getMediumNameSearch() {
-    return Optional.ofNullable(search);
+    return Optional.ofNullable(getSearch());
+  }
+
+  @Override
+  public Optional<Collection<Integer>> getMediaTypeIds() {
+    return Optional.ofNullable(mediaTypeIds);
   }
 
   public void setCategorySetIds(List<Integer> categorySetIds) {
@@ -60,8 +66,7 @@ public class MediumListingQueryParameter extends ListingQueryParameter<MediumSor
     this.categoryIds = categoryIds;
   }
 
-  @Override
-  public void setSearch(String search) {
-    this.search = search;
+  public void setMediaTypeIds(List<Integer> mediaTypeIds) {
+    this.mediaTypeIds = mediaTypeIds;
   }
 }
