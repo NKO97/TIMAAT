@@ -231,6 +231,13 @@
 
         initRelatedMusicTable: function () {
             const musicTypesById = new Map([[1, "Anashid"], [2, "Church music"]])
+            const musicTypesQueryParameterValues = musicTypesById.entries().map(entry => {
+                return {
+                    title: entry[1],
+                    value: entry[0]
+                }
+            }).toArray()
+
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"), new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("beat", "Beat", "beat"),
                 new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
                 new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"), new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
@@ -241,15 +248,23 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(musicTable, "#categoriesMusicTableColumnButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", musicTable, "typeId", musicTypesQueryParameterValues, "#categoriesMusicTableTypeButton")
             return musicTable
         },
 
         initRelatedSegmentStructureTable: function () {
             const segmentStructureTypeByEnumTypeName = new Map([["SEGMENT", "Segment"], ["SEQUENCE", "Sequence"], ["TAKE", "Take"], ["SCENE", "Scene"], ["ACTION", "Action"]])
+            const segmentStructureTypeQueryParameterValues = segmentStructureTypeByEnumTypeName.entries().map(entry => {
+                return {
+                    title: entry[1],
+                    value: entry[0]
+                }
+            }).toArray()
+
 
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("name", "Name", "name"),
-            new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "segmentStructureElementType", segmentStructureTypeByEnumTypeName, true),
-            new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime"), new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime")]
+                new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "segmentStructureElementType", segmentStructureTypeByEnumTypeName, true),
+                new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime"), new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime")]
             const activeColumnIds = ["id", "name", "type", "startTime", "endTime"]
             const segmentStructureTable = new TIMAAT.Table.Table("categoriesSegmentStructureTable", "#categoriesSegmentStructureTableContainer", columns, activeColumnIds, "api/segment-structure-elements/list", true, false)
             $('#segmentStructureTableCollapse').on('shown.bs.collapse', (event) => {
@@ -257,11 +272,18 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(segmentStructureTable, "#categoriesSegmentStructureColumnButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", segmentStructureTable, "type", segmentStructureTypeQueryParameterValues, "#categoriesSegmentStructureTableTypeButton")
             return segmentStructureTable
         },
 
         initRelatedMediumTable: function () {
             const mediaTypesById = new Map([[1, "Audio"], [2, "Document"], [3, "Image"], [4, "Software"], [5, "Text"], [6, " Video"], [7, "Videogame"]])
+            const mediaTypesQueryParameterValues = mediaTypesById.entries().map(entry => {
+                return {
+                    title: entry[1],
+                    value: entry[0]
+                }
+            }).toArray()
 
             const MediumDurationColumnConfig = class MediumDurationColumnConfig extends TIMAAT.Table.TableColumnConfig {
                 constructor() {
@@ -303,11 +325,18 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(mediumTable, "#categoriesMediumTableColumnButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", mediumTable, "type", mediaTypesQueryParameterValues, "#categoriesMediumTableTypeButton")
             return mediumTable
         },
 
         initRelatedActorTable: function () {
             const actorTypesById = new Map([[1, "Person"], [2, "Collective"]])
+            const actorTypesQueryParameters = actorTypesById.entries().map(entry => {
+                return {
+                    title: entry[1],
+                    value: entry[0]
+                }
+            }).toArray()
             const sexTypesById = new Map([[1, "Female"], [2, "Male"], [3, "Other"], [4, "Unknown"]])
 
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "actorType.id", actorTypesById),
@@ -328,6 +357,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(actorTable, "#categoriesActorTableColumnButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", actorTable, "type", actorTypesQueryParameters, "#categoriesActorTableTypeButton")
             return actorTable
         },
 
@@ -340,7 +370,7 @@
 
                 return null
             }
-
+            const annotationTypeQueryParameters = [{title: "Video", value: "VIDEO"}, {title: "Audio", value: "AUDIO"}]
 
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime", false),
                 new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime", false), new TIMAAT.Table.BooleanTableColumnConfig("layerAudio", "Audio", "layerAudio", false),
@@ -354,6 +384,7 @@
             });
 
             new TIMAAT.Table.ColumnSelectorPopover(annotationTable, "#categoriesAnnotationTableColumnButton")
+            new TIMAAT.Table.QueryParameterSelectorPopover("Type", annotationTable, "type", annotationTypeQueryParameters, "#categoriesAnnotationTableTypeButton")
             return annotationTable
         },
 

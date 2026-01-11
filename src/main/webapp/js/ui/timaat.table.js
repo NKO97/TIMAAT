@@ -352,6 +352,65 @@
             this._dataTable?.columns.adjust().draw()
         }
     }
+    /**
+     * This component opens a popover when clicking on the target button showing a list menu
+     * which can be used to select specific values used as query parameter of a list
+     */
+    TIMAAT.Table.QueryParameterSelectorPopover = class {
+        _table
+        _queryParameterName
+        _title
+        _queryParameterValues
+        _$queryParameterSelectorButton
+
+        constructor(title, table, queryParameterName, queryParameterValues, queryParameterSelectorButtonSelector) {
+            this._table = table;
+            this._queryParameterValues = queryParameterValues.sort((a,b) => a.title.localeCompare(b.title))
+            this._queryParameterName = queryParameterName
+            this._$queryParameterSelectorButton = $(queryParameterSelectorButtonSelector)
+            this._title = title
+
+            this._$queryParameterSelectorButton.on('click', this.openPopover);
+            this._$queryParameterSelectorButton.prop("title", this._title)
+
+            this.createPopover();
+        }
+
+        createPopover() {
+            const popoverMenuItems = this.createMenuItems();
+            this._$queryParameterSelectorButton.popover({
+                title: this._title,
+                content: popoverMenuItems,
+                html: true,
+                placement: "bottom"
+            })
+        }
+
+        createMenuItems() {
+            const $listGroup = $(`<ul class="list-group"></ul>`)
+
+            for (const currentQueryParameterValue of this._queryParameterValues) {
+                const $currentListGroupItemCheckbox = $(`<input class="ml-2" type="checkbox">`)
+                // const initialSelected = currentActiveTableColumnIds.indexOf(currentTableColumnConfig.id) > -1;
+                //$currentListGroupItemCheckbox.prop("checked", initialSelected)
+
+                const table = this._table
+                $currentListGroupItemCheckbox.on("change", (e) => {
+                    console.log(currentTableColumnConfig)
+                    //const newState = table.changeTableColumnActivState(currentTableColumnConfig.id, e.target.checked);
+                    //$currentListGroupItemCheckbox.prop("checked", e.target.checked)
+                })
+
+                const $currentListGroupItem = $(`<li class="list-group-item d-flex justify-content-between align-items-center">${currentQueryParameterValue.title}</li>`)
+                $currentListGroupItem.append($currentListGroupItemCheckbox)
+
+                $listGroup.append($currentListGroupItem)
+            }
+
+            return $listGroup
+        }
+    }
+
 
     TIMAAT.Table.ColumnSelectorPopover = class {
         _table
@@ -364,6 +423,7 @@
 
             this._$columnSelectorButton = $(columnSelectorButtonSelector)
             this._$columnSelectorButton.on('click', this.openPopover);
+            this._$columnSelectorButton.prop("title", "Columns")
 
             this.createPopover();
         }
