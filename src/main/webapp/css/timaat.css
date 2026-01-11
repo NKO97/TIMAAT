@@ -446,3 +446,8 @@
 .categoriesAccordion{
     margin-bottom: 8px;
 }
+
+#categoriesAssignedEntitiesPanel{
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+}
