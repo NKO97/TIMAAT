@@ -27,12 +27,14 @@
         _title;
         _data;
         _sortable;
+        _groupName;
 
-        constructor(id, title, data, sortable = true) {
+        constructor(id, title, data, sortable = true, groupName = null) {
             this._id = id;
             this._title = title;
             this._data = data;
             this._sortable = sortable;
+            this._groupName = groupName;
         }
 
         get title() {
@@ -51,13 +53,17 @@
             return this._sortable;
         }
 
+        get groupName() {
+            return this._groupName;
+        }
+
         render(data, type, row) {
             throw new Error("This method need to get overridden")
         }
     }
     TIMAAT.Table.FieldTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true) {
-            super(id, title, data, sortable);
+        constructor(id, title, data, sortable = true, groupName = null) {
+            super(id, title, data, sortable, groupName);
         }
 
         render(data, type, row) {
@@ -70,8 +76,8 @@
         }
     }
     TIMAAT.Table.DateTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true) {
-            super(id, title, data, sortable);
+        constructor(id, title, data, sortable = true, groupName = null) {
+            super(id, title, data, sortable, groupName);
         }
 
         render(data, type, row) {
@@ -87,8 +93,8 @@
     }
 
     TIMAAT.Table.TimeStampTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true) {
-            super(id, title, data, sortable);
+        constructor(id, title, data, sortable = true, groupName = null) {
+            super(id, title, data, sortable, groupName);
         }
 
         render(data, type, row) {
@@ -104,8 +110,8 @@
     }
 
     TIMAAT.Table.BooleanTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true) {
-            super(id, title, data, sortable);
+        constructor(id, title, data, sortable = true, groupName = null) {
+            super(id, title, data, sortable, groupName);
         }
 
         render(data, type, row) {
@@ -127,8 +133,8 @@
     TIMAAT.Table.ValueMapperTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         _valueMap;
 
-        constructor(id, title, data, valueMap, sortable = true) {
-            super(id, title, data, sortable);
+        constructor(id, title, data, valueMap, sortable = true, groupName = null) {
+            super(id, title, data, sortable, groupName);
             this._valueMap = valueMap;
 
             this.render = this.render.bind(this);
@@ -155,8 +161,8 @@
          * @param title
          * @param imagePathGeneratorFunction : (row) => string | null , (row) => Promise<string | null>
          */
-        constructor(id, title, imagePathGeneratorFunction) {
-            super(id, title, "", false);
+        constructor(id, title, imagePathGeneratorFunction, groupName = null) {
+            super(id, title, "", false, groupName);
             this._imagePathGeneratorFunction = imagePathGeneratorFunction;
 
             this.render = this.render.bind(this);
@@ -170,8 +176,8 @@
     }
 
     TIMAAT.Table.AddressTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data) {
-            super(id, title, data, false);
+        constructor(id, title, data, groupName = null) {
+            super(id, title, data, false, groupName);
         }
 
         render(data, type, row) {
@@ -389,8 +395,8 @@
             this._$queryParameterSelectorButton.on('click', this.openPopover);
             this._$queryParameterSelectorButton.prop("title", this._title)
 
-            if(initiallyAllSelected) {
-                for(let queryParameterValue of queryParameterValues) {
+            if (initiallyAllSelected) {
+                for (let queryParameterValue of queryParameterValues) {
                     this._currentSelectedParameterValues.add(queryParameterValue.value)
                 }
 
@@ -464,7 +470,7 @@
         }
 
         createPopover() {
-            const popoverMenuItems = this.createMenuItems();
+            const popoverMenuItems = this.createPopoverContent();
             this._$columnSelectorButton.popover({
                 title: "Columns",
                 content: popoverMenuItems,
@@ -473,11 +479,11 @@
             })
         }
 
-        createMenuItems() {
-            const $listGroup = $(`<ul class="list-group"></ul>`)
+        createListGroup(tableColumnConfigs) {
             const currentActiveTableColumnIds = this._table.activeTableColumnIds
+            const $listGroup = $(`<ul class="list-group"></ul>`)
 
-            for (const currentTableColumnConfig of this._tableColumnConfigs) {
+            for (const currentTableColumnConfig of tableColumnConfigs) {
                 const $currentListGroupItemCheckbox = $(`<input class="ml-2" type="checkbox">`)
                 const initialSelected = currentActiveTableColumnIds.indexOf(currentTableColumnConfig.id) > -1;
 
@@ -496,6 +502,41 @@
             }
 
             return $listGroup
+        }
+
+        createPopoverContent() {
+            const defaultGroupColumnConfigs = []
+            const columnConfigsByGroupName = new Map()
+
+            const $popoverContent = $('<div></div>')
+
+            for (let currentTableColumnConfig of this._tableColumnConfigs) {
+                const currentGroupName = currentTableColumnConfig.groupName
+                if (currentGroupName) {
+                    if(!columnConfigsByGroupName.has(currentGroupName)) {
+                        columnConfigsByGroupName.set(currentGroupName, [])
+                    }
+                    const groupColumnConfigs = columnConfigsByGroupName.get(currentGroupName)
+                    groupColumnConfigs.push(currentTableColumnConfig)
+                } else {
+                    defaultGroupColumnConfigs.push(currentTableColumnConfig)
+                }
+            }
+
+
+            const $defaultListGroup = this.createListGroup(defaultGroupColumnConfigs)
+            $popoverContent.append($defaultListGroup)
+
+
+            for (const currentGroupName of columnConfigsByGroupName.keys().toArray().sort((a, b) => a.localeCompare(b))) {
+                const groupColumnConfigs = columnConfigsByGroupName.get(currentGroupName)
+                $popoverContent.append(`<span>${currentGroupName}</span>`)
+
+                const $currentListGroup = this.createListGroup(groupColumnConfigs)
+                $popoverContent.append($currentListGroup)
+            }
+
+            return $popoverContent
         }
     }
     TIMAAT.Table.TableConfigurationStorage = {

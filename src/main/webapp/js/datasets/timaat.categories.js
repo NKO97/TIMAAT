@@ -246,7 +246,7 @@
                 }
             }).toArray()
 
-            const columns = [new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"), new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("beat", "Beat", "beat"),
+            const columns = [new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name", true), new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id", true), new TIMAAT.Table.FieldTableColumnConfig("beat", "Beat", "beat"),
                 new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
                 new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"), new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById)]
             const activeColumnIds = ["id", "title", "musicType", "beat", "instrumentation", "tempo", "remark", "harmony", "melody"]
