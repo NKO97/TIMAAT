@@ -37,6 +37,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.websocket.server.PathParam;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -269,6 +270,13 @@ public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCri
 
       return false;
     });
+  }
+
+  public MediumAnalysisList getMediumAnalysisListOfAnnotation(@PathParam("id") int id) {
+    logger.log(Level.FINE, "Loading medium analysis list from annotation {0}", new Object[]{id});
+    return this.executeDbTransaction(entityManager -> entityManager.createQuery(
+            "select mediumAnalysisList from Annotation annotation join annotation.mediumAnalysisList mediumAnalysisList where annotation.id = :annotationId",
+            MediumAnalysisList.class).setParameter("annotationId", id).getSingleResult());
   }
 
   public Annotation getAnnotationById(int annotationId) throws DbTransactionExecutionException {

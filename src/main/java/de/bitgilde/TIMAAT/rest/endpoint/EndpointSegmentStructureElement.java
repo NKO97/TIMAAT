@@ -1,15 +1,18 @@
 package de.bitgilde.TIMAAT.rest.endpoint;
 
 import de.bitgilde.TIMAAT.model.DataTableInfo;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.rest.model.analysissegment.SegmentStructureElementListingQueryParameter;
 import de.bitgilde.TIMAAT.rest.model.segment.SegmentStructureElement;
 import de.bitgilde.TIMAAT.storage.entity.segment.SegmentStructureElementsStorage;
+import de.bitgilde.TIMAAT.storage.entity.segment.api.SegmentStructureElementType;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
@@ -42,7 +45,7 @@ import java.util.stream.Collectors;
 @Path("/segment-structure-elements")
 public class EndpointSegmentStructureElement {
   @Inject
-  SegmentStructureElementsStorage segmentStructureElements;
+  SegmentStructureElementsStorage segmentStructureElementsStorage;
   @Context
   ContainerRequestContext containerRequestContext;
 
@@ -54,10 +57,18 @@ public class EndpointSegmentStructureElement {
 
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
-    List<SegmentStructureElement> matchingEntries = segmentStructureElements.getEntriesAsStream(queryParameter,
+    List<SegmentStructureElement> matchingEntries = segmentStructureElementsStorage.getEntriesAsStream(queryParameter,
             queryParameter, queryParameter, userAccount).map(SegmentStructureElement::new).collect(Collectors.toList());
-    long countOfMatchingEntries = segmentStructureElements.getNumberOfMatchingEntries(queryParameter);
-    long totalCount = segmentStructureElements.getNumberOfTotalEntries();
+    long countOfMatchingEntries = segmentStructureElementsStorage.getNumberOfMatchingEntries(queryParameter);
+    long totalCount = segmentStructureElementsStorage.getNumberOfTotalEntries();
     return new DataTableInfo<>(draw, totalCount, countOfMatchingEntries, matchingEntries);
+  }
+
+  @GET
+  @Produces
+  @Path("{segmentStructureType}/{segmentStructureId}/analysis-list")
+  public MediumAnalysisList loadAnalysisListOfSegmentStructureElement(@PathParam("segmentStructureType") SegmentStructureElementType segmentStructureType, @PathParam("segmentStructureId") int segmentStructureId) {
+    return segmentStructureElementsStorage.getMediumAnalysisListOfSegmentStructureElement(segmentStructureType,
+            segmentStructureId);
   }
 }

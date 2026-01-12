@@ -131,8 +131,7 @@ public class EndpointAnnotation {
     long totalAnnotationsCount = annotationStorage.getNumberOfTotalEntries();
     long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntries(annotationListingQueryParameter);
 
-    return new DataTableInfo<>(draw, totalAnnotationsCount,
-            filteredAnnotationsCount, matchingAnnotations);
+    return new DataTableInfo<>(draw, totalAnnotationsCount, filteredAnnotationsCount, matchingAnnotations);
   }
 
   @GET
@@ -160,6 +159,15 @@ public class EndpointAnnotation {
 
     return Response.ok().entity(annotation).build();
   }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("{id}/analysis-list")
+  @Secured
+  public MediumAnalysisList getMediumAnalysisListOfAnnotation(@PathParam("id") int id) {
+    return annotationStorage.getMediumAnalysisListOfAnnotation(id);
+  }
+
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)

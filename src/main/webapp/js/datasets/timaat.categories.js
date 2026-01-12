@@ -251,13 +251,18 @@
                 return data.musicalKey?.musicalKeyTranslations?.[0]?.type
             }
 
+            const navigateToMusicEntry = (music) => {
+                window.navigation.navigate(`/TIMAAT/#music/${music.id}`);
+            }
+            const actionTableColumnButtons = [new TIMAAT.Table.ActionsTableColumnButton("Jump to entity", navigateToMusicEntry, "fa-arrow-right")]
+
 
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name", true), new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id", true), new TIMAAT.Table.FieldTableColumnConfig("beat", "Beat", "beat"),
                 new TIMAAT.Table.FieldTableColumnConfig("instrumentation", "Instrumentation", "instrumentation"), new TIMAAT.Table.FieldTableColumnConfig("tempo", "Tempo", "tempo"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"),
                 new TIMAAT.Table.FieldTableColumnConfig("harmony", "Harmony", "harmony"), new TIMAAT.Table.FieldTableColumnConfig("melody", "Melody", "melody"), new TIMAAT.Table.ValueMapperTableColumnConfig("musicType", "Music Type", "musicType.id", musicTypesById),
-                new TIMAAT.Table.FieldTableColumnConfig("musicalKey", "Musical Key", musicalKeyData)]
+                new TIMAAT.Table.FieldTableColumnConfig("musicalKey", "Musical Key", musicalKeyData), new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons)]
 
-            const activeColumnIds = ["id", "title", "musicType"]
+            const activeColumnIds = ["id", "title", "musicType", "actions"]
             const musicTable = new TIMAAT.Table.Table("categoriesMusicTable", "#categoriesMusicTableContainer", columns, activeColumnIds, "api/music/list", true, false)
             $('#musicTableCollapse').on('shown.bs.collapse', (event) => {
                 musicTable.resizeToParent()
@@ -278,10 +283,20 @@
             }).toArray()
 
 
+            const navigateToSegmentStructureEntry = (segmentStructure) => {
+                TIMAAT.SegmentStructureElementService.getMediumAnalysisList(segmentStructure.segmentStructureElementType, segmentStructure.id).then(analysisList => {
+                    TIMAAT.VideoPlayer.initializeAnnotationModeWithSegmentPreselected(analysisList.mediumID, analysisList.id, segmentStructure.id, segmentStructure.segmentStructureElementType)
+                })
+            }
+            const actionTableColumnButtons = [new TIMAAT.Table.ActionsTableColumnButton("Jump to entity", navigateToSegmentStructureEntry, "fa-arrow-right")]
+
+
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("name", "Name", "name"),
                 new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "segmentStructureElementType", segmentStructureTypeByEnumTypeName, true),
-                new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime"), new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime")]
-            const activeColumnIds = ["id", "name", "type"]
+                new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime"), new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime"),
+                new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons)]
+
+            const activeColumnIds = ["id", "name", "type", "actions"]
             const segmentStructureTable = new TIMAAT.Table.Table("categoriesSegmentStructureTable", "#categoriesSegmentStructureTableContainer", columns, activeColumnIds, "api/segment-structure-elements/list", true, false)
             $('#segmentStructureTableCollapse').on('shown.bs.collapse', (event) => {
                 segmentStructureTable.resizeToParent()
@@ -352,15 +367,21 @@
             const videoFramRateData = (row) => row.mediumVideo?.frameRate;
             const videoIsEpisode = (row) => row.mediumVideo?.isEpisode
 
+            const navigateToMediumEntry = (medium) => {
+                window.navigation.navigate(`/TIMAAT/#medium/${medium.id}`);
+            }
+            const actionTableColumnButtons = [new TIMAAT.Table.ActionsTableColumnButton("Jump to entity", navigateToMediumEntry, "fa-arrow-right")]
+
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.FieldTableColumnConfig("copyright", "Copyright", "copyright"), new TIMAAT.Table.FieldTableColumnConfig("fileHash", "File Hash", "fileHash"),
                 new TIMAAT.Table.DateTableColumnConfig("releaseDate", "Release Date", "releaseDate"), new TIMAAT.Table.DateTableColumnConfig("recordingStartDate", "Recording Start Date", "recordingStartDate"),
                 new TIMAAT.Table.DateTableColumnConfig("recordingEndDate", "Recording End Date", "recordingEndDate"), new TIMAAT.Table.FieldTableColumnConfig("remark", "Remark", "remark"), new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "displayTitle.name"),
                 new TIMAAT.Table.ValueMapperTableColumnConfig("mediaType", "Media Type", "mediaType.id", mediaTypesById), new MediumDurationColumnConfig(), new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", imageThumbnailGeneratorFunction),
                 new TIMAAT.Table.FieldTableColumnConfig("width", "Width", withData, true), new TIMAAT.Table.FieldTableColumnConfig("height", "Height", heightData, true),
                 new TIMAAT.Table.FieldTableColumnConfig("softwareVersion", "Software Version", softwareVersionData, true, "Software"), new TIMAAT.Table.FieldTableColumnConfig("textContent", "Text Content", textContentData, true, "Text"),
-                new TIMAAT.Table.FieldTableColumnConfig("videoFrameRate", "Video Frame Rate", videoFramRateData, true, "Video"), new TIMAAT.Table.BooleanTableColumnConfig("videoIsEpisode", "Video Is Episode", videoIsEpisode, "Video")
+                new TIMAAT.Table.FieldTableColumnConfig("videoFrameRate", "Video Frame Rate", videoFramRateData, true, "Video"), new TIMAAT.Table.BooleanTableColumnConfig("videoIsEpisode", "Video Is Episode", videoIsEpisode, "Video"),
+                new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons)
             ]
-            const activeColumnIds = ["thumbnail", "id", "title", "mediaType"]
+            const activeColumnIds = ["thumbnail", "id", "title", "mediaType", "actions"]
             const mediumTable = new TIMAAT.Table.Table("categoriesMediumTable", "#categoriesMediumTableContainer", columns, activeColumnIds, "api/medium/list", true, false)
 
             $('#mediumTableCollapse').on('shown.bs.collapse', (event) => {
@@ -382,6 +403,11 @@
             }).toArray()
             const sexTypesById = new Map([[1, "Female"], [2, "Male"], [3, "Other"], [4, "Unknown"]])
 
+            const navigateToActorEntry = (actor) => {
+                window.navigation.navigate(`/TIMAAT/#actor/${actor.id}`);
+            }
+            const actionTableColumnButtons = [new TIMAAT.Table.ActionsTableColumnButton("Jump to entity", navigateToActorEntry, "fa-arrow-right")]
+
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.ValueMapperTableColumnConfig("type", "Type", "actorType.id", actorTypesById),
                 new TIMAAT.Table.FieldTableColumnConfig("name", "Name", "displayName.name"), new TIMAAT.Table.DateTableColumnConfig("nameUsedFrom", "Name used from", "displayName.usedFrom"),
                 new TIMAAT.Table.DateTableColumnConfig("nameUsedUntil", "Name used until", "displayName.usedUntil"), new TIMAAT.Table.AddressTableColumnConfig("primaryAddress", "Primary address", "primaryAddress"),
@@ -390,9 +416,10 @@
                 new TIMAAT.Table.DateTableColumnConfig("dateOfBirth", "Date of birth", "actorPerson.dateOfBirth", true, "Person"), new TIMAAT.Table.DateTableColumnConfig("dayOfDeath", "Day of death", "actorPerson.dayOfDeath", true, "Person"),
                 new TIMAAT.Table.FieldTableColumnConfig("title", "Title", "actorPerson.title", true, "Person"), new TIMAAT.Table.FieldTableColumnConfig("citizenship", "Citizenship", "actorPerson.citizenship", true, "Person"),
                 new TIMAAT.Table.FieldTableColumnConfig("placeOfBirth", "Place of birth", "actorPerson.placeOfBirth", true, "Person"), new TIMAAT.Table.FieldTableColumnConfig("placeOfDeath", "Place of death", "actorPerson.placeOfDeath", true, "Person"),
-                new TIMAAT.Table.ValueMapperTableColumnConfig("sex", "Sex", "actorPerson.sex.id", sexTypesById, true, "Person"), new TIMAAT.Table.BooleanTableColumnConfig("isFictional", "Fictional", "isFictional")
+                new TIMAAT.Table.ValueMapperTableColumnConfig("sex", "Sex", "actorPerson.sex.id", sexTypesById, true, "Person"), new TIMAAT.Table.BooleanTableColumnConfig("isFictional", "Fictional", "isFictional"),
+                new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons)
             ]
-            const activeColumnIds = ["id", "name", "type"]
+            const activeColumnIds = ["id", "name", "type", "actions"]
             const actorTable = new TIMAAT.Table.Table("categoriesActorTable", "#categoriesActorTableContainer", columns, activeColumnIds, "api/actor/list", true, false)
 
             $('#actorTableCollapse').on('shown.bs.collapse', (event) => {
@@ -415,10 +442,18 @@
             }
             const annotationTypeQueryParameters = [{title: "Video", value: "VIDEO"}, {title: "Audio", value: "AUDIO"}]
 
+            const navigateToAnnotationEntry = (annotation) => {
+                TIMAAT.AnnotationService.getMediumAnalysisList(annotation.id).then(analysisList => {
+                    TIMAAT.VideoPlayer.initializeAnnotationModeWithAnnotationByIds(analysisList.mediumID, annotation.id)
+                })
+            }
+            const actionTableColumnButtons = [new TIMAAT.Table.ActionsTableColumnButton("Jump to entity", navigateToAnnotationEntry, "fa-arrow-right")]
+
+
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id"), new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime", false),
                 new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime", false), new TIMAAT.Table.BooleanTableColumnConfig("layerAudio", "Audio", "layerAudio", false),
-                new TIMAAT.Table.BooleanTableColumnConfig("layerVisual", "Video", "layerVisual", false), new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", annotationThumbnailGeneratorFunction)]
-            const activeColumnIds = ["id", "thumbnail", "startTime", "endTime", "layerAudio", "layerVisual"]
+                new TIMAAT.Table.BooleanTableColumnConfig("layerVisual", "Video", "layerVisual", false), new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons)]
+            const activeColumnIds = ["id", "startTime", "endTime", "layerAudio", "layerVisual", "actions"]
 
             const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list", true, false)
 

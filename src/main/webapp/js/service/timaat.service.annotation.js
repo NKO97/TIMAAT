@@ -98,6 +98,27 @@
                 console.error("ERROR: ", error);
             });
         },
+        async getMediumAnalysisList(annotationId) {
+            return new Promise(resolve => {
+                $.ajax({
+                    url: window.location.protocol + '//' + window.location.host + "/TIMAAT/api/annotation/" + annotationId + "/analysis-list",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + TIMAAT.Service.token);
+                    },
+                }).done(function (data) {
+                    resolve(data);
+                })
+                    .fail(function (error) {
+                        console.error("ERROR responseText: ", error.responseText);
+                        console.error("ERROR: ", error);
+                    });
+            }).catch((error) => {
+                console.error("ERROR: ", error);
+            });
+        },
         async updateAnnotationThumbnail(annotationId, thumbnailPositionMs){
             const payload = {
                 thumbnailPositionMs

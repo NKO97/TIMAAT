@@ -63,6 +63,30 @@
 			var take = this; // save annotation for events
 		}
 
+        openInInspector(collapseInspector) {
+            let index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === this.model.sequenceId);
+            TIMAAT.VideoPlayer.curSequence = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI[index];
+            index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSequence.model.segmentId);
+            TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
+            TIMAAT.VideoPlayer.curTake = this;
+            this.timelineView.removeClass('bg-info');
+            this.timelineView.addClass('bg-primary');
+
+            TIMAAT.VideoPlayer.selectedElementType = 'take';
+            TIMAAT.VideoPlayer.jumpVisible(this.model.startTime, this.model.endTime);
+            TIMAAT.VideoPlayer.pause();
+            // TIMAAT.VideoPlayer.selectAnnotation(null);
+            if (TIMAAT.VideoPlayer.curAnnotation) {
+                TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
+            }
+            $('#timelineKeyframePane').hide();
+            TIMAAT.VideoPlayer.inspector.setItem(this, 'take');
+
+            if(collapseInspector){
+                TIMAAT.VideoPlayer.inspector.open('inspectorMetadata');
+            }
+        }
+
 		updateUI() {
 			// console.log("TCL: AnalysisTake -> updateUI -> updateUI()");
 			this.listView.attr('data-start-time', this.model.startTime);
@@ -91,49 +115,13 @@
 			// $('#analysisList').append(this.listView);
 			$('#timelinePaneTake').append(this.timelineView);
 
-			var take = this; // save annotation for events
+			const take = this; // save annotation for events
 			// attach event handlers
 			this.timelineView.on('click', this, function(ev) {
-				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === take.model.sequenceId);
-				TIMAAT.VideoPlayer.curSequence = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI[index];
-				index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSequence.model.segmentId);
-				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
-				TIMAAT.VideoPlayer.curTake = take;
-				this.classList.replace('bg-info', 'bg-primary');
-				this.classList.add('bg-primary');
-				TIMAAT.VideoPlayer.selectedElementType = 'take';
-				TIMAAT.VideoPlayer.jumpVisible(take.model.startTime, take.model.endTime);
-				TIMAAT.VideoPlayer.pause();
-				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				if (TIMAAT.VideoPlayer.curAnnotation) {
-					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
-				}
-				$('#timelineKeyframePane').hide();
-				TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
-				// TODO
-				// TIMAAT.URLHistory.setURL(null, 'Take · '+take.model.analysisTakeTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/take/'+take.model.id);
+                take.openInInspector(false)
 			});
 			this.timelineView.on('dblclick', this, function(ev) {
-				var index = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI.findIndex(({model}) => model.id === take.model.sequenceId);
-				TIMAAT.VideoPlayer.curSequence = TIMAAT.VideoPlayer.curAnalysisList.analysisSequencesUI[index];
-				index = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI.findIndex(({model}) => model.id === TIMAAT.VideoPlayer.curSequence.model.segmentId);
-				TIMAAT.VideoPlayer.curSegment = TIMAAT.VideoPlayer.curAnalysisList.analysisSegmentsUI[index];
-				TIMAAT.VideoPlayer.curTake = take;
-				this.classList.replace('bg-info', 'bg-primary');
-				this.classList.add('bg-primary');
-				TIMAAT.VideoPlayer.selectedElementType = 'take';
-				TIMAAT.VideoPlayer.jumpTo(take.model.startTime);
-				// TIMAAT.VideoPlayer.jumpVisible(take.model.startTime, take.model.endTime);
-				TIMAAT.VideoPlayer.pause();
-				// TIMAAT.VideoPlayer.selectAnnotation(null);
-				if (TIMAAT.VideoPlayer.curAnnotation) {
-					TIMAAT.VideoPlayer.curAnnotation.setSelected(false);
-				}
-				$('#timelineKeyframePane').hide();
-				TIMAAT.VideoPlayer.inspector.setItem(take, 'take');
-				TIMAAT.VideoPlayer.inspector.open('inspectorMetadata');
-				// TODO
-				// TIMAAT.URLHistory.setURL(null, 'Take · '+take.model.analysisTakeTranslations[0].name, '#analysis/'+TIMAAT.VideoPlayer.curAnalysisList.id+'/take/'+take.model.id);
+                take.openInInspector(true)
 			});
 			// console.log("TCL: AnalysisTake -> addUI -> this.updateUI()");
 			this.updateUI();

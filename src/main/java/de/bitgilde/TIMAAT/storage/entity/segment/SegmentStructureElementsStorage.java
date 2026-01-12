@@ -73,6 +73,14 @@ public class SegmentStructureElementsStorage extends DbStorage<AnalysisSegmentSt
     });
   }
 
+  public MediumAnalysisList getMediumAnalysisListOfSegmentStructureElement(SegmentStructureElementType segmentStructureElementType, int segmentStructureId) {
+    return executeDbTransaction(entityManager -> entityManager.createQuery(
+                                                                      "select mediumAnalysisList from AnalysisSegmentStructureElement segmentStructureElement join segmentStructureElement.mediumAnalysisList mediumAnalysisList where segmentStructureElement.id.id = :id and segmentStructureElement.id.structureElementType = :type",
+                                                                      MediumAnalysisList.class).setParameter("id", segmentStructureId)
+                                                              .setParameter("type", segmentStructureElementType.toString())
+                                                              .getSingleResult());
+  }
+
   public List<Category> getAssignedCategories(int segmentStructureId, SegmentStructureElementType segmentStructureElementType) {
     return executeDbTransaction(entityManager -> {
       Class<? extends SegmentStructureEntity> segmentTypeEntityClass = SEGMENT_STRUCTURE_ENTITY_CLASS_BY_SEGMENT_STRUCTURE_TYPE.get(

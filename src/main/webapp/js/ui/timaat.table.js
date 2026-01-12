@@ -60,6 +60,9 @@
         render(data, type, row) {
             throw new Error("This method need to get overridden")
         }
+
+        createdCell(td, cellData, rowData, row, col) {
+        }
     }
     TIMAAT.Table.FieldTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         constructor(id, title, data, sortable = true, groupName = null) {
@@ -130,6 +133,58 @@
         }
     }
 
+    TIMAAT.Table.ActionsTableColumnButton = class {
+        _onClick
+        _faIconClass
+        _title
+
+        /**
+         * @param title used as tooltip
+         * @param onClick (row) => void
+         * @param faIconClass the name of the fontawesome icon class
+         */
+        constructor(title, onClick, faIconClass) {
+            this._onClick = onClick
+            this._faIconClass = faIconClass
+            this._title = title
+        }
+
+        createButton(){
+            return  $(`<button title="${this._title}" class="btn btn-sm btn-outline btn-secondary fas ${this._faIconClass}"></button>`)
+        }
+
+        get onClick(){
+            return this._onClick;
+        }
+    }
+
+    TIMAAT.Table.ActionsTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
+        _actionTableColumnButtons
+
+        constructor(id, actionTableColumnButtons){
+            super(id, "Actions", null , false);
+            this._actionTableColumnButtons = actionTableColumnButtons;
+
+            this.render = this.render.bind(this);
+            this.createdCell = this.createdCell.bind(this);
+        }
+
+        render(data, type, row) {
+            const $actionsTableCell = $("<div class='d-flex justify-content-between actionsTableCell'></div>")
+
+            return $actionsTableCell.prop('outerHTML')
+        }
+
+        createdCell(td, cellData, rowData, row, col) {
+            const $actionsTableCell = $(td).find(".actionsTableCell")
+            for(let actionTableColumnButton of this._actionTableColumnButtons){
+                const $button = actionTableColumnButton.createButton()
+                $button.on("click", () => actionTableColumnButton.onClick(rowData))
+                $actionsTableCell.append($button)
+            }
+        }
+    }
+
     TIMAAT.Table.ValueMapperTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         _valueMap;
 
@@ -162,7 +217,7 @@
          * @param imagePathGeneratorFunction : (row) => string | null , (row) => Promise<string | null>
          */
         constructor(id, title, imagePathGeneratorFunction, groupName = null) {
-            super(id, title, "", false, groupName);
+            super(id, title, null, false, groupName);
             this._imagePathGeneratorFunction = imagePathGeneratorFunction;
 
             this.render = this.render.bind(this);
@@ -295,12 +350,12 @@
                 const columnConfigs = []
                 for (let activeTableColumnId of this._activeTableColumnIds) {
                     const currentTableColumnConfig = this._tableColumnConfigsById.get(activeTableColumnId);
-                    console.log(currentTableColumnConfig)
                     columnConfigs.push({
                         title: currentTableColumnConfig.title,
                         data: currentTableColumnConfig.data,
                         render: currentTableColumnConfig.render,
                         orderable: currentTableColumnConfig.sortable,
+                        fnCreatedCell: currentTableColumnConfig.createdCell
                     });
                     $('<th>').text(currentTableColumnConfig.title).appendTo($headerRow);
                 }
