@@ -1,8 +1,13 @@
 package de.bitgilde.TIMAAT.storage.entity.medium.api;
 
 import de.bitgilde.TIMAAT.model.FIPOP.Medium;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumSoftware_;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumText_;
+import de.bitgilde.TIMAAT.model.FIPOP.MediumVideo_;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium_;
+import de.bitgilde.TIMAAT.model.FIPOP.Title_;
 import de.bitgilde.TIMAAT.storage.db.DbSortingField;
+import de.bitgilde.TIMAAT.storage.db.SortingFieldPathProducer;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 
@@ -27,18 +32,25 @@ import jakarta.persistence.criteria.Root;
  * @since 13.12.25
  */
 public enum MediumSortingField implements DbSortingField<Medium> {
-  ID,
-  RELEASEDATE;
+  ID(root -> root.get(Medium_.id)), COPYRIGHT(root -> root.get(Medium_.copyright)), FILE_HASH(
+          root -> root.get(Medium_.fileHash)), RELEASE_DATE(
+          root -> root.get(Medium_.releaseDate)), RECORDING_START_DATE(
+          root -> root.get(Medium_.recordingStartDate)), RECORDING_END_DATE(
+          root -> root.get(Medium_.recordingEndDate)), REMARK(root -> root.get(Medium_.remark)), TITLE(
+          root -> root.get(Medium_.displayTitle).get(Title_.name)), SOFTWARE_VERSION(
+          root -> root.get(Medium_.mediumSoftware).get(MediumSoftware_.version)), TEXT_CONTENT(
+          root -> root.get(Medium_.mediumText).get(MediumText_.content)), VIDEO_FRAME_RATE(
+          root -> root.get(Medium_.mediumVideo).get(MediumVideo_.frameRate)), VIDEO_IS_EPISODE(
+          root -> root.get(Medium_.mediumVideo).get(MediumVideo_.isEpisode));
+
+  private final SortingFieldPathProducer<Medium> pathProducer;
+
+  MediumSortingField(SortingFieldPathProducer<Medium> pathProducer) {
+    this.pathProducer = pathProducer;
+  }
 
   @Override
   public Path<?> getPathFromRootEntity(Root<Medium> root) {
-    switch (this) {
-      case ID:
-        return root.get(Medium_.id);
-      case RELEASEDATE:
-        return root.get(Medium_.releaseDate);
-      default:
-        throw new IllegalArgumentException("Unexpected enum value");
-    }
+    return pathProducer.getPathFromRoot(root);
   }
 }

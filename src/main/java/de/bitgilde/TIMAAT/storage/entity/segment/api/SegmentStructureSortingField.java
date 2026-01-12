@@ -2,8 +2,10 @@ package de.bitgilde.TIMAAT.storage.entity.segment.api;
 
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegment;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement;
+import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElementId_;
 import de.bitgilde.TIMAAT.model.FIPOP.AnalysisSegmentStructureElement_;
 import de.bitgilde.TIMAAT.storage.db.DbSortingField;
+import de.bitgilde.TIMAAT.storage.db.SortingFieldPathProducer;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 
@@ -28,15 +30,21 @@ import jakarta.persistence.criteria.Root;
  * @since 31.12.25
  */
 public enum SegmentStructureSortingField implements DbSortingField<AnalysisSegmentStructureElement> {
-  ID;
+  ID(root -> root.get(AnalysisSegmentStructureElement_.id)), NAME(
+          root -> root.get(AnalysisSegmentStructureElement_.name)), TYPE(
+          root -> root.get(AnalysisSegmentStructureElement_.id)
+                      .get(AnalysisSegmentStructureElementId_.structureElementType)), START_TIME(
+          root -> root.get(AnalysisSegmentStructureElement_.startTime)), END_TIME(
+          root -> root.get(AnalysisSegmentStructureElement_.endTime));
+
+  private final SortingFieldPathProducer<AnalysisSegmentStructureElement> pathProducer;
+
+  SegmentStructureSortingField(SortingFieldPathProducer<AnalysisSegmentStructureElement> pathProducer) {
+    this.pathProducer = pathProducer;
+  }
 
   @Override
   public Path<?> getPathFromRootEntity(Root<AnalysisSegmentStructureElement> root) {
-    switch (this) {
-      case ID:
-        return root.get(AnalysisSegmentStructureElement_.id);
-      default:
-        throw new IllegalArgumentException("Unexpected sorting field");
-    }
+    return pathProducer.getPathFromRoot(root);
   }
 }

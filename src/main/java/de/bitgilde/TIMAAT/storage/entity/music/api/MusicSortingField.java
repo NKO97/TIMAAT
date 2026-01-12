@@ -4,6 +4,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.Music_;
 import de.bitgilde.TIMAAT.model.FIPOP.Title_;
 import de.bitgilde.TIMAAT.storage.db.DbSortingField;
+import de.bitgilde.TIMAAT.storage.db.SortingFieldPathProducer;
 import de.bitgilde.TIMAAT.storage.entity.music.MusicStorage;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
@@ -15,18 +16,20 @@ import jakarta.persistence.criteria.Root;
  * @since 12.12.25
  */
 public enum MusicSortingField implements DbSortingField<Music> {
-  ID, TITLE;
+  ID(root -> root.get(Music_.id)), TITLE(root -> root.get(Music_.displayTitle).get(Title_.name)), BEAT(
+          root -> root.get(Music_.beat)), INSTRUMENTATION(root -> root.get(Music_.instrumentation)), TEMPO(
+          root -> root.get(Music_.tempo)), REMARK(root -> root.get(Music_.remark)), HARMONY(
+          root -> root.get(Music_.harmony)), MELODY(root -> root.get(Music_.melody));
+
+  private final SortingFieldPathProducer<Music> pathProducer;
+
+  MusicSortingField(SortingFieldPathProducer<Music> pathProducer) {
+    this.pathProducer = pathProducer;
+  }
 
   @Override
   public Path<?> getPathFromRootEntity(Root<Music> root) {
-    switch (this) {
-      case ID:
-        return root.get(Music_.id);
-      case TITLE:
-        return root.get(Music_.displayTitle).get(Title_.name);
-      default:
-        throw new IllegalStateException("Unexpected value: " + this);
-    }
+    return pathProducer.getPathFromRoot(root);
   }
 }
 

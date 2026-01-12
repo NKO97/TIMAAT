@@ -26,14 +26,14 @@
         _id;
         _title;
         _data;
-        _sortable;
+        _sortingParameterName;
         _groupName;
 
-        constructor(id, title, data, sortable = true, groupName = null) {
+        constructor(id, title, data, sortingParameterName=null, groupName = null) {
             this._id = id;
             this._title = title;
             this._data = data;
-            this._sortable = sortable;
+            this._sortingParameterName = sortingParameterName;
             this._groupName = groupName;
         }
 
@@ -49,8 +49,8 @@
             return this._id;
         }
 
-        get sortable() {
-            return this._sortable;
+        get sortingParameterName() {
+            return this._sortingParameterName;
         }
 
         get groupName() {
@@ -65,8 +65,8 @@
         }
     }
     TIMAAT.Table.FieldTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true, groupName = null) {
-            super(id, title, data, sortable, groupName);
+        constructor(id, title, data, sortingParameterName = null, groupName = null) {
+            super(id, title, data, sortingParameterName, groupName);
         }
 
         render(data, type, row) {
@@ -79,8 +79,8 @@
         }
     }
     TIMAAT.Table.DateTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true, groupName = null) {
-            super(id, title, data, sortable, groupName);
+        constructor(id, title, data, sortingParameterName = null, groupName = null) {
+            super(id, title, data, sortingParameterName, groupName);
         }
 
         render(data, type, row) {
@@ -96,8 +96,8 @@
     }
 
     TIMAAT.Table.TimeStampTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true, groupName = null) {
-            super(id, title, data, sortable, groupName);
+        constructor(id, title, data, sortingParameterName = null, groupName = null) {
+            super(id, title, data, sortingParameterName, groupName);
         }
 
         render(data, type, row) {
@@ -113,8 +113,8 @@
     }
 
     TIMAAT.Table.BooleanTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
-        constructor(id, title, data, sortable = true, groupName = null) {
-            super(id, title, data, sortable, groupName);
+        constructor(id, title, data, sortingParameterName = null, groupName = null) {
+            super(id, title, data, sortingParameterName, groupName);
         }
 
         render(data, type, row) {
@@ -162,7 +162,7 @@
         _actionTableColumnButtons
 
         constructor(id, actionTableColumnButtons){
-            super(id, "Actions", null , false);
+            super(id, "Actions", null , null);
             this._actionTableColumnButtons = actionTableColumnButtons;
 
             this.render = this.render.bind(this);
@@ -188,8 +188,8 @@
     TIMAAT.Table.ValueMapperTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         _valueMap;
 
-        constructor(id, title, data, valueMap, sortable = true, groupName = null) {
-            super(id, title, data, sortable, groupName);
+        constructor(id, title, data, valueMap, sortingParameterName=null, groupName = null) {
+            super(id, title, data, sortingParameterName, groupName);
             this._valueMap = valueMap;
 
             this.render = this.render.bind(this);
@@ -217,7 +217,7 @@
          * @param imagePathGeneratorFunction : (row) => string | null , (row) => Promise<string | null>
          */
         constructor(id, title, imagePathGeneratorFunction, groupName = null) {
-            super(id, title, null, false, groupName);
+            super(id, title, null, null, groupName);
             this._imagePathGeneratorFunction = imagePathGeneratorFunction;
 
             this.render = this.render.bind(this);
@@ -232,7 +232,7 @@
 
     TIMAAT.Table.AddressTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         constructor(id, title, data, groupName = null) {
-            super(id, title, data, false, groupName);
+            super(id, title, data, null, groupName);
         }
 
         render(data, type, row) {
@@ -354,8 +354,9 @@
                         title: currentTableColumnConfig.title,
                         data: currentTableColumnConfig.data,
                         render: currentTableColumnConfig.render,
-                        orderable: currentTableColumnConfig.sortable,
-                        fnCreatedCell: currentTableColumnConfig.createdCell
+                        orderable: currentTableColumnConfig.sortingParameterName !== null,
+                        fnCreatedCell: currentTableColumnConfig.createdCell,
+                        name: currentTableColumnConfig.sortingParameterName,
                     });
                     $('<th>').text(currentTableColumnConfig.title).appendTo($headerRow);
                 }
@@ -376,7 +377,6 @@
                     "processing": true,
                     "stateSave": true,
                     "scrollX": true,
-                    "rowId": 'id',
                     "serverSide": true,
                     "ajax": {
                         "url": ajaxUrl,
