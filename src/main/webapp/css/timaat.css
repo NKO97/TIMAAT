@@ -451,3 +451,8 @@
     max-height: calc(100vh - 180px);
     overflow-y: auto;
 }
+
+.ColumnSelectorPopover .popover-body{
+    max-height: calc(0.25 * 100vh);
+    overflow-y: auto;
+}

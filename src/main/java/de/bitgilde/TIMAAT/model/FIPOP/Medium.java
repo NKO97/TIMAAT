@@ -423,14 +423,6 @@ public class Medium implements Serializable {
 		this.remark = remark;
 	}
 
-	// public List<Annotation> getAnnotations() {
-	// 	return this.annotations;
-	// }
-
-	// public void setAnnotations(List<Annotation> annotations) {
-	// 	this.annotations = annotations;
-	// }
-
 	public List<MediaCollectionHasMedium> getMediaCollectionHasMediums() {
 		return this.mediaCollectionHasMediums;
 	}

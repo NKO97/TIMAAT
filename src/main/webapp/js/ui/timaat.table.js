@@ -295,7 +295,7 @@
                 const columnConfigs = []
                 for (let activeTableColumnId of this._activeTableColumnIds) {
                     const currentTableColumnConfig = this._tableColumnConfigsById.get(activeTableColumnId);
-
+                    console.log(currentTableColumnConfig)
                     columnConfigs.push({
                         title: currentTableColumnConfig.title,
                         data: currentTableColumnConfig.data,
@@ -421,7 +421,6 @@
 
             for (const currentQueryParameterValue of this._queryParameterValues) {
                 const $currentListGroupItemCheckbox = $(`<input class="ml-2" type="checkbox">`)
-                console.log(this._currentSelectedParameterValues)
                 const initialSelected = this._currentSelectedParameterValues.has(currentQueryParameterValue.value);
                 $currentListGroupItemCheckbox.prop("checked", initialSelected)
 
@@ -475,7 +474,8 @@
                 title: "Columns",
                 content: popoverMenuItems,
                 html: true,
-                placement: "bottom"
+                placement: "bottom",
+                customClass: "ColumnSelectorPopover"
             })
         }
 
@@ -530,7 +530,7 @@
 
             for (const currentGroupName of columnConfigsByGroupName.keys().toArray().sort((a, b) => a.localeCompare(b))) {
                 const groupColumnConfigs = columnConfigsByGroupName.get(currentGroupName)
-                $popoverContent.append(`<span>${currentGroupName}</span>`)
+                $popoverContent.append(`<span class="mt-1">${currentGroupName}</span>`)
 
                 const $currentListGroup = this.createListGroup(groupColumnConfigs)
                 $popoverContent.append($currentListGroup)
