@@ -461,7 +461,7 @@
             }
 
             const imageThumbnailGeneratorFunction = async (row) => {
-               const annotationThumbnailBlob = await TIMAAT.AnnotationService.getAnnotationThumbnailBlob(row.id)
+                const annotationThumbnailBlob = await TIMAAT.AnnotationService.getAnnotationThumbnailBlob(row.id)
                 return URL.createObjectURL(annotationThumbnailBlob)
             }
 
@@ -474,7 +474,7 @@
                 new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", imageThumbnailGeneratorFunction)]
             const activeColumnIds = ["thumbnail", "id", "startTime", "endTime", "layerAudio", "layerVisual", "actions"]
 
-            const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list", true, false)
+            const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list", true, false, new URLSearchParams(), false)
 
             $('#annotationTableCollapse').on('shown.bs.collapse', (event) => {
                 annotationTable.resizeToParent()

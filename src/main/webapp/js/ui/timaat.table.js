@@ -269,8 +269,9 @@
         _reorderableColumns
         _urlSearchParams
         _dataTable = null;
+        _searchable;
 
-        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl, reorderableColumns = true, active = true, urlSearchParams = new URLSearchParams()) {
+        constructor(tableId, containerSelector, tableColumnConfigs, defaultActiveTableColumnConfigs, dataUrl, reorderableColumns = true, active = true, urlSearchParams = new URLSearchParams(), searchable = true) {
             this._tableColumnConfigsById = new Map()
             for (let tableColumnConfig of tableColumnConfigs) {
                 this._tableColumnConfigsById.set(tableColumnConfig.id, tableColumnConfig);
@@ -282,6 +283,7 @@
             this._reorderableColumns = reorderableColumns;
             this._active = active
             this._urlSearchParams = urlSearchParams
+            this._searchable = searchable
 
             this.draw()
         }
@@ -391,6 +393,7 @@
                     "pagingType": "full",
                     "dom": '<lf<t>ip>',
                     "processing": true,
+                    "searching": this._searchable,
                     "stateSave": true,
                     "scrollX": true,
                     "serverSide": true,
