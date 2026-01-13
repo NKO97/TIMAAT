@@ -421,6 +421,16 @@
                             self._dataTable?.colReorder.reset()
                         }
                     },
+                    "language": {
+                        info: "Page _PAGE_ of _PAGES_ ( _TOTAL_ total entries)",
+                        infoFiltered: "",
+                        paginate    : {
+                            "first"   : "<<",
+                            "previous": "<",
+                            "next"    : ">",
+                            "last"    : ">>"
+                        }
+                    },
                     "columns": columnConfigs
                 })
 
