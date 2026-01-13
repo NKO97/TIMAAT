@@ -184,7 +184,7 @@
 
 .timeline__position-indicator {
 	position: absolute;
-	z-index: 100;
+	z-index: 2500;
 	margin-left: 0;
 	height: 100%;
 	width: 1px;
@@ -355,7 +355,7 @@
 }
 
 .timeline__marker {
-    z-index: 500;
+    z-index: 2000;
 }
 
 .inspectorMusicPaneLinkedMusicPane {
