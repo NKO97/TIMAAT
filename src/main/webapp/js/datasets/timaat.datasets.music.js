@@ -687,9 +687,9 @@
 					return false;
 				if (title != '' && languageId != null) {
 					var titlesInForm = $('#musicFormTitles').serializeArray();
-					// console.log("TCL: titlesInForm", titlesInForm);
+
 					var numberOfTitleElements = 2;
-					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements-1].name; // find last used indexed name
+					var indexName = titlesInForm[titlesInForm.length-numberOfTitleElements].name; // find last used indexed name
 					var indexString = indexName.substring(indexName.lastIndexOf("[") + 1, indexName.lastIndexOf("]"));
 					var i = Number(indexString)+1;
           // console.log("i", i);
