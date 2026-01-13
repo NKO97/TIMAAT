@@ -29,7 +29,7 @@
         _sortingParameterName;
         _groupName;
 
-        constructor(id, title, data, sortingParameterName=null, groupName = null) {
+        constructor(id, title, data, sortingParameterName = null, groupName = null) {
             this._id = id;
             this._title = title;
             this._data = data;
@@ -149,11 +149,11 @@
             this._title = title
         }
 
-        createButton(){
-            return  $(`<button title="${this._title}" class="btn btn-sm btn-outline btn-secondary fas ${this._faIconClass}"></button>`)
+        createButton() {
+            return $(`<button title="${this._title}" class="btn btn-sm btn-outline btn-secondary fas ${this._faIconClass}"></button>`)
         }
 
-        get onClick(){
+        get onClick() {
             return this._onClick;
         }
     }
@@ -161,8 +161,8 @@
     TIMAAT.Table.ActionsTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         _actionTableColumnButtons
 
-        constructor(id, actionTableColumnButtons){
-            super(id, "Actions", null , null);
+        constructor(id, actionTableColumnButtons) {
+            super(id, "Actions", null, null);
             this._actionTableColumnButtons = actionTableColumnButtons;
 
             this.render = this.render.bind(this);
@@ -177,7 +177,7 @@
 
         createdCell(td, cellData, rowData, row, col) {
             const $actionsTableCell = $(td).find(".actionsTableCell")
-            for(let actionTableColumnButton of this._actionTableColumnButtons){
+            for (let actionTableColumnButton of this._actionTableColumnButtons) {
                 const $button = actionTableColumnButton.createButton()
                 $button.on("click", () => actionTableColumnButton.onClick(rowData))
                 $actionsTableCell.append($button)
@@ -188,7 +188,7 @@
     TIMAAT.Table.ValueMapperTableColumnConfig = class extends TIMAAT.Table.TableColumnConfig {
         _valueMap;
 
-        constructor(id, title, data, valueMap, sortingParameterName=null, groupName = null) {
+        constructor(id, title, data, valueMap, sortingParameterName = null, groupName = null) {
             super(id, title, data, sortingParameterName, groupName);
             this._valueMap = valueMap;
 
@@ -221,12 +221,28 @@
             this._imagePathGeneratorFunction = imagePathGeneratorFunction;
 
             this.render = this.render.bind(this);
+            this.createdCell = this.createdCell.bind(this);
         }
 
         render(data, type, row) {
-            const imagePath = this._imagePathGeneratorFunction(row);
-            let imageSrc = imagePath ?? "img/preview-placeholder.png"
-            return `<img src="${imageSrc}" width="150" height="auto" alt="Image cell"/>`
+            return `<img src="img/preview-placeholder.png" width="150" height="auto" alt="Image cell"/>`
+        }
+
+        createdCell(td, cellData, rowData, row, col) {
+            const $img = $(td).find("img");
+
+            if (this._imagePathGeneratorFunction.constructor.name === 'AsyncFunction') {
+                this._imagePathGeneratorFunction(rowData).then(imgSrc => {
+                    if (imgSrc) {
+                        $img.prop("src", imgSrc);
+                    }
+                })
+            } else {
+                const imgSrc = this._imagePathGeneratorFunction(rowData)
+                if (imgSrc) {
+                    $img.prop("src", imgSrc);
+                }
+            }
         }
     }
 
@@ -568,7 +584,7 @@
             for (let currentTableColumnConfig of this._tableColumnConfigs) {
                 const currentGroupName = currentTableColumnConfig.groupName
                 if (currentGroupName) {
-                    if(!columnConfigsByGroupName.has(currentGroupName)) {
+                    if (!columnConfigsByGroupName.has(currentGroupName)) {
                         columnConfigsByGroupName.set(currentGroupName, [])
                     }
                     const groupColumnConfigs = columnConfigsByGroupName.get(currentGroupName)

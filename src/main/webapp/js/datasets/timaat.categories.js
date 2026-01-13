@@ -459,13 +459,20 @@
                     TIMAAT.VideoPlayer.initializeAnnotationModeWithAnnotationByIds(analysisList.mediumID, annotation.id)
                 })
             }
+
+            const imageThumbnailGeneratorFunction = async (row) => {
+               const annotationThumbnailBlob = await TIMAAT.AnnotationService.getAnnotationThumbnailBlob(row.id)
+                return URL.createObjectURL(annotationThumbnailBlob)
+            }
+
             const actionTableColumnButtons = [new TIMAAT.Table.ActionsTableColumnButton("Jump to entity", navigateToAnnotationEntry, "fa-arrow-right")]
 
 
             const columns = [new TIMAAT.Table.FieldTableColumnConfig("id", "ID", "id", "ID"), new TIMAAT.Table.TimeStampTableColumnConfig("startTime", "Start time", "startTime", "START_TIME"),
                 new TIMAAT.Table.TimeStampTableColumnConfig("endTime", "End time", "endTime", "END_TIME"), new TIMAAT.Table.BooleanTableColumnConfig("layerAudio", "Audio", "layerAudio", "LAYER_AUDIO"),
-                new TIMAAT.Table.BooleanTableColumnConfig("layerVisual", "Video", "layerVisual", "LAYER_VISUAL"), new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons)]
-            const activeColumnIds = ["id", "startTime", "endTime", "layerAudio", "layerVisual", "actions"]
+                new TIMAAT.Table.BooleanTableColumnConfig("layerVisual", "Video", "layerVisual", "LAYER_VISUAL"), new TIMAAT.Table.ActionsTableColumnConfig("actions", actionTableColumnButtons),
+                new TIMAAT.Table.ImageDownloadTableColumnConfig("thumbnail", "Thumbnail", imageThumbnailGeneratorFunction)]
+            const activeColumnIds = ["thumbnail", "id", "startTime", "endTime", "layerAudio", "layerVisual", "actions"]
 
             const annotationTable = new TIMAAT.Table.Table("categoriesAnnotationTable", "#categoriesAnnotationTableContainer", columns, activeColumnIds, "api/annotation/list", true, false)
 
