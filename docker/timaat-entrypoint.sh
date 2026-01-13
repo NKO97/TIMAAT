@@ -18,9 +18,7 @@ for var in "${required_vars[@]}"; do
   fi
 done
 echo "Verify database and create or upgrade schema (if necessary)"
-if [ "$(mysql -u"${DATABASE_USER}" -p"${DATABASE_PASSWORD}" -h"${DATABASE_HOST}" -P"${DATABASE_PORT}" -N -s -e \
-  "SELECT COUNT(*) FROM information_schema.tables WHERE \
-     table_schema='${DATABASE_SCHEMA_NAME}' AND table_name='db_version';")" -eq 1 ]; then
+if [ "$(mysql -u"${DATABASE_USER}" -p"${DATABASE_PASSWORD}" -h"${DATABASE_HOST}" -P"${DATABASE_PORT}" -N -s -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='${DATABASE_SCHEMA_NAME}' AND table_name='db_version';")" -eq 1 ]; then
 echo "Database schema already exists. Executing schema update when necessary."
   mysql -u"${DATABASE_USER}" -p"${DATABASE_PASSWORD}" -h"${DATABASE_HOST}" -P"${DATABASE_PORT}" ${DATABASE_SCHEMA_NAME} < /var/lib/timmat/sql/db_update.sql
 else
