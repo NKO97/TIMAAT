@@ -82,36 +82,39 @@ public class MusicStorage extends DbStorage<Music, MusicFilterCriteria, MusicSor
     this.tagStorage = tagStorage;
   }
 
-
-  protected List<Predicate> createPredicates(MusicFilterCriteria filter, Root<Music> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
+  @Override
+  protected List<Predicate> createPredicates(MusicFilterCriteria filter, Root<Music> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, UserAccount userAccount) {
     List<Predicate> predicates = new ArrayList<>();
 
-    if (filter.getMusicNameSearch().isPresent()) {
-      String musicNameSearchText = filter.getMusicNameSearch().get();
-      predicates.add(
-              criteriaBuilder.like(root.get(Music_.displayTitle).get(Title_.name), "%" + musicNameSearchText + "%"));
+    if(filter != null) {
+      if (filter.getMusicNameSearch().isPresent()) {
+        String musicNameSearchText = filter.getMusicNameSearch().get();
+        predicates.add(
+                criteriaBuilder.like(root.get(Music_.displayTitle).get(Title_.name), "%" + musicNameSearchText + "%"));
+      }
+
+      if (filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty()) {
+        Collection<Integer> categoryIds = filter.getCategoryIds().get();
+        Join<Music, Category> categoryJoin = root.join(Music_.categories);
+
+        predicates.add(categoryJoin.get(Category_.id).in(categoryIds));
+      }
+
+      if (filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get().isEmpty()) {
+        Collection<Integer> categorySetIds = filter.getCategorySetIds().get();
+        Join<Music, CategorySet> categorySetJoin = root.join(Music_.categorySets);
+
+        predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
+      }
+
+      if (filter.getMusicTypeIds().isPresent() && !filter.getMusicTypeIds().get().isEmpty()) {
+        Collection<Integer> musicTypeIds = filter.getMusicTypeIds().get();
+        Join<Music, MusicType> musicTypeJoin = root.join(Music_.musicType);
+
+        predicates.add(musicTypeJoin.get(MusicType_.id).in(musicTypeIds));
+      }
     }
 
-    if (filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty()) {
-      Collection<Integer> categoryIds = filter.getCategoryIds().get();
-      Join<Music, Category> categoryJoin = root.join(Music_.categories);
-
-      predicates.add(categoryJoin.get(Category_.id).in(categoryIds));
-    }
-
-    if (filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get().isEmpty()) {
-      Collection<Integer> categorySetIds = filter.getCategorySetIds().get();
-      Join<Music, CategorySet> categorySetJoin = root.join(Music_.categorySets);
-
-      predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
-    }
-
-    if (filter.getMusicTypeIds().isPresent() && !filter.getMusicTypeIds().get().isEmpty()) {
-      Collection<Integer> musicTypeIds = filter.getMusicTypeIds().get();
-      Join<Music, MusicType> musicTypeJoin = root.join(Music_.musicType);
-
-      predicates.add(musicTypeJoin.get(MusicType_.id).in(musicTypeIds));
-    }
 
     return predicates;
   }

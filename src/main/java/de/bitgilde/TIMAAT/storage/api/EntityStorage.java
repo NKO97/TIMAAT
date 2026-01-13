@@ -20,17 +20,23 @@ public interface EntityStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE exte
    * @param userAccount used to filter entries by authorization
    * @return the resulting {@link Stream}
    */
-  Stream<ENTITY_TYPE> getEntriesAsStream(FILTER_TYPE filter, PagingParameter pagingParameter, SortingParameter<SORTING_FIELD_TYPE> sortingParameter, UserAccount userAccount);
+  Stream<ENTITY_TYPE> getEntriesAsStreamRespectingAuthorization(FILTER_TYPE filter, PagingParameter pagingParameter, SortingParameter<SORTING_FIELD_TYPE> sortingParameter, UserAccount userAccount);
 
   /**
-   * Loads the count of entities matching the specified filters
+   * Loads the count of entities matching the specified filters which are accessible for the specified
    * @param filter which the items will match
    * @return the number of matching entries
    */
-  Long getNumberOfMatchingEntries(FILTER_TYPE filter);
+  Long getNumberOfMatchingEntriesRespectingAuthorization(FILTER_TYPE filter, UserAccount userAccount);
 
   /**
    * @return the number of total entries inside the storage
    */
   Long getNumberOfTotalEntries();
+
+  /**
+   * @param userAccount which will be respected by the query
+   * @return the number of entries to which the passed user has access to
+   */
+  Long getNumberOfTotalEntriesRespectingAuthorization(UserAccount userAccount);
 }

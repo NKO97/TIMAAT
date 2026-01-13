@@ -1,12 +1,12 @@
 package de.bitgilde.TIMAAT.storage.db;
 
 import de.bitgilde.TIMAAT.db.DbAccessComponent;
-import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.storage.api.EntityStorage;
 import de.bitgilde.TIMAAT.storage.api.PagingParameter;
 import de.bitgilde.TIMAAT.storage.api.SortOrder;
 import de.bitgilde.TIMAAT.storage.api.SortingParameter;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -63,14 +63,19 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
    * @param userAccount used to filter entries by authorization
    * @return the resulting {@link Stream}
    */
-  public Stream<ENTITY_TYPE> getEntriesAsStream(FILTER_TYPE filter, PagingParameter pagingParameter, SortingParameter<SORTING_FIELD_TYPE> sortingParameter, UserAccount userAccount) {
-    logger.log(Level.FINER, "Loading music entries matching the specified filter criteria");
+  public Stream<ENTITY_TYPE> getEntriesAsStreamRespectingAuthorization(FILTER_TYPE filter, PagingParameter pagingParameter, SortingParameter<SORTING_FIELD_TYPE> sortingParameter, UserAccount userAccount) {
+    logger.log(Level.FINER, "Loading  entries matching the specified filter criteria");
+
+    if(userAccount == null) {
+      throw new IllegalArgumentException("user account has to be set for an authorization respecting loading of entities");
+    }
+
     return executeStreamDbTransaction(entityManager -> {
       CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<ENTITY_TYPE> criteriaQuery = criteriaBuilder.createQuery(entityTypeClass);
       Root<ENTITY_TYPE> root = criteriaQuery.from(entityTypeClass);
 
-      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder, criteriaQuery);
+      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder, criteriaQuery, userAccount);
       Order sortOrder = createSortOrder(sortingParameter, root, criteriaBuilder);
 
       criteriaQuery.distinct(true);
@@ -88,7 +93,8 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
    * @param filter which the items will match
    * @return the number of matching entries
    */
-  public Long getNumberOfMatchingEntries(FILTER_TYPE filter) {
+  @Override
+  public Long getNumberOfMatchingEntriesRespectingAuthorization(FILTER_TYPE filter, UserAccount userAccount) {
     logger.log(Level.FINE, "Loading number of matching music entries");
     return executeDbTransaction(entityManager -> {
       CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -96,7 +102,7 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
 
       Root<ENTITY_TYPE> root = criteriaQuery.from(entityTypeClass);
       criteriaQuery.select(criteriaBuilder.countDistinct(root));
-      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder, criteriaQuery);
+      List<Predicate> predicates = createPredicates(filter, root, criteriaBuilder, criteriaQuery, userAccount);
 
       criteriaQuery.where(predicates.toArray(new Predicate[0]));
       return entityManager.createQuery(criteriaQuery).getSingleResult();
@@ -107,26 +113,44 @@ public abstract class DbStorage<ENTITY_TYPE, FILTER_TYPE, SORTING_FIELD_TYPE ext
    * @return the number of total entries inside the storage
    */
   public Long getNumberOfTotalEntries() {
-    logger.log(Level.FINE, "Loading number of total music entries");
+    logger.log(Level.FINE, "Loading number of total entries");
     return executeDbTransaction(entityManager -> {
       CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
       CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
 
-      Root<?> root = criteriaQuery.from(Music.class);
-      criteriaQuery.select(criteriaBuilder.count(root));
+      Root<?> root = criteriaQuery.from(entityTypeClass);
+      criteriaQuery.select(criteriaBuilder.countDistinct(root));
 
       return entityManager.createQuery(criteriaQuery).getSingleResult();
     });
   }
+
+  public Long getNumberOfTotalEntriesRespectingAuthorization(UserAccount userAccount) {
+    logger.log(Level.FINE, "Loading number of total entries accessible for user account");
+    return executeDbTransaction(entityManager -> {
+      CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+      CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+
+      Root<ENTITY_TYPE> root = criteriaQuery.from(entityTypeClass);
+      List<Predicate> predicates = createPredicates(null, root, criteriaBuilder, criteriaQuery, userAccount);
+
+      criteriaQuery.select(criteriaBuilder.countDistinct(root));
+      criteriaQuery.where(predicates.toArray(new Predicate[0]));
+
+      return entityManager.createQuery(criteriaQuery).getSingleResult();
+    });
+  }
+
 
   /**
    * Creates the {@link Predicate}s to filter entities by the specified filter criteria
    * @param filter which need to get fulfilled
    * @param root of the current query
    * @param criteriaBuilder which can be used the create the {@link Predicate}s
+   * @param userAccount which can be provided to create filters respecting the authorization
    * @return a {@link List} of {@link Predicate}s
    */
-  protected abstract List<Predicate> createPredicates(FILTER_TYPE filter, Root<ENTITY_TYPE> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery);
+  protected abstract List<Predicate> createPredicates(@Nullable FILTER_TYPE filter, Root<ENTITY_TYPE> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, @Nullable UserAccount userAccount);
 
   /**
    * Creates the {@link Order} to match current defined {@link SortingParameter}

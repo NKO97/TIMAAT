@@ -181,10 +181,10 @@ public class EndpointMedium {
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
     int draw = queryParameter.getDraw().orElse(0);
 
-    List<Medium> matchingMediums = mediumStorage.getEntriesAsStream(queryParameter, queryParameter, queryParameter,
+    List<Medium> matchingMediums = mediumStorage.getEntriesAsStreamRespectingAuthorization(queryParameter, queryParameter, queryParameter,
             userAccount).collect(Collectors.toList());
-    long totalMediumEntries = mediumStorage.getNumberOfTotalEntries();
-    long filteredMediumEntries = mediumStorage.getNumberOfMatchingEntries(queryParameter);
+    long totalMediumEntries = mediumStorage.getNumberOfTotalEntriesRespectingAuthorization(userAccount);
+    long filteredMediumEntries = mediumStorage.getNumberOfMatchingEntriesRespectingAuthorization(queryParameter, userAccount);
 
 
     return new DataTableInfo<>(draw, totalMediumEntries, filteredMediumEntries, matchingMediums);
@@ -200,7 +200,7 @@ public class EndpointMedium {
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
     MediumFilterCriteria filterCriteria = new MediumFilterCriteria.Builder().mediumNameSearch(search).build();
 
-    return mediumStorage.getEntriesAsStream(filterCriteria, PagingParameter.NO_PAGING,
+    return mediumStorage.getEntriesAsStreamRespectingAuthorization(filterCriteria, PagingParameter.NO_PAGING,
                                 SortingParameter.defaultSortOrder(), userAccount)
                         .map(currentMedium -> new SelectElement<Integer>(currentMedium.getId(),
                                 currentMedium.getDisplayTitle().getName())).collect(Collectors.toList());

@@ -23,6 +23,9 @@ import de.bitgilde.TIMAAT.model.FIPOP.SelectorSvg;
 import de.bitgilde.TIMAAT.model.FIPOP.SvgShapeType;
 import de.bitgilde.TIMAAT.model.FIPOP.Tag;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccountHasMediumAnalysisList_;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount_;
 import de.bitgilde.TIMAAT.model.IndexBasedRange;
 import de.bitgilde.TIMAAT.storage.db.DbStorage;
 import de.bitgilde.TIMAAT.storage.entity.TagStorage;
@@ -285,65 +288,82 @@ public class AnnotationStorage extends DbStorage<Annotation, AnnotationFilterCri
   }
 
   @Override
-  protected List<Predicate> createPredicates(AnnotationFilterCriteria filter, Root<Annotation> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
+  protected List<Predicate> createPredicates(AnnotationFilterCriteria filter, Root<Annotation> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, UserAccount userAccount) {
     List<Predicate> predicates = new ArrayList<>();
 
-    if (filter.getAnnotationNameSearch().isPresent() && !filter.getAnnotationNameSearch().get().isBlank()) {
-      String annotationNameSearch = filter.getAnnotationNameSearch().get();
-      Join<Annotation, AnnotationTranslation> annotationTranslationJoin = root.join(Annotation_.annotationTranslations);
+    if (filter != null) {
+      if (filter.getAnnotationNameSearch().isPresent() && !filter.getAnnotationNameSearch().get().isBlank()) {
+        String annotationNameSearch = filter.getAnnotationNameSearch().get();
+        Join<Annotation, AnnotationTranslation> annotationTranslationJoin = root.join(
+                Annotation_.annotationTranslations);
 
-      predicates.add(criteriaBuilder.like(annotationTranslationJoin.get(AnnotationTranslation_.title),
-              "%" + annotationNameSearch + "%"));
-    }
+        predicates.add(criteriaBuilder.like(annotationTranslationJoin.get(AnnotationTranslation_.title),
+                "%" + annotationNameSearch + "%"));
+      }
 
-    if (filter.getMediumAnalysisListIds().isPresent() && !filter.getMediumAnalysisListIds().get().isEmpty()) {
-      predicates.add(root.get(Annotation_.mediumAnalysisList).get(MediumAnalysisList_.id)
-                         .in(filter.getMediumAnalysisListIds().get()));
-    }
+      if (filter.getMediumAnalysisListIds().isPresent() && !filter.getMediumAnalysisListIds().get().isEmpty()) {
+        predicates.add(root.get(Annotation_.mediumAnalysisList).get(MediumAnalysisList_.id)
+                           .in(filter.getMediumAnalysisListIds().get()));
+      }
 
-    boolean categoryFilterActive = filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty();
-    boolean categorySetFilterActive = filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get()
-                                                                                       .isEmpty();
-    boolean hasCategoryFilterActive = filter.hasCategories().isPresent();
+      boolean categoryFilterActive = filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty();
+      boolean categorySetFilterActive = filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get()
+                                                                                         .isEmpty();
+      boolean hasCategoryFilterActive = filter.hasCategories().isPresent();
 
-    if (categoryFilterActive || hasCategoryFilterActive) {
-      Join<Annotation, Category> categoryJoin = root.join(Annotation_.categories, JoinType.LEFT);
+      if (categoryFilterActive || hasCategoryFilterActive) {
+        Join<Annotation, Category> categoryJoin = root.join(Annotation_.categories, JoinType.LEFT);
 
-      if (hasCategoryFilterActive) {
-        if (filter.hasCategories().get()) {
-          predicates.add(categoryJoin.get(Category_.id).isNotNull());
+        if (hasCategoryFilterActive) {
+          if (filter.hasCategories().get()) {
+            predicates.add(categoryJoin.get(Category_.id).isNotNull());
+          }
+          else {
+            predicates.add(categoryJoin.get(Category_.id).isNull());
+          }
         }
-        else {
-          predicates.add(categoryJoin.get(Category_.id).isNull());
+
+        if (categoryFilterActive) {
+          predicates.add(categoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
         }
       }
 
-      if (categoryFilterActive) {
-        predicates.add(categoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
+
+      if (categorySetFilterActive) {
+        Join<MediumAnalysisList, CategorySet> categorySetJoin = root.join(Annotation_.mediumAnalysisList)
+                                                                    .join(MediumAnalysisList_.categorySets);
+        predicates.add(categorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
+      }
+
+      if (filter.getAnnotationTypes().isPresent() && !filter.getAnnotationTypes().get().isEmpty()) {
+        List<Predicate> typePredicates = new ArrayList<>();
+        for (AnnotationType annotationType : filter.getAnnotationTypes().get()) {
+          if (AnnotationType.VIDEO.equals(annotationType)) {
+            typePredicates.add(criteriaBuilder.equal(root.get(Annotation_.layerVisual), true));
+          }
+          if (AnnotationType.AUDIO.equals(annotationType)) {
+            typePredicates.add(criteriaBuilder.equal(root.get(Annotation_.layerAudio), true));
+          }
+        }
+
+        predicates.add(criteriaBuilder.or(typePredicates.toArray(new Predicate[0])));
       }
     }
 
+    if (userAccount != null) {
+      Join<Annotation, MediumAnalysisList> mediumAnalysisListJoin = root.join(Annotation_.mediumAnalysisList);
+      Join<MediumAnalysisList, UserAccountHasMediumAnalysisList> userAccountHasMediumAnalysisList = mediumAnalysisListJoin.join(
+              MediumAnalysisList_.userAccountHasMediumAnalysisLists);
+      Join<UserAccountHasMediumAnalysisList, UserAccount> userAccountJoin = userAccountHasMediumAnalysisList.join(
+              UserAccountHasMediumAnalysisList_.userAccount);
 
-    if (categorySetFilterActive) {
-      Join<MediumAnalysisList, CategorySet> categorySetJoin = root.join(Annotation_.mediumAnalysisList)
-                                                                  .join(MediumAnalysisList_.categorySets);
-      predicates.add(categorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
+
+      Predicate mediumAnalysisListHasGlobalAccess = criteriaBuilder.greaterThanOrEqualTo(
+              mediumAnalysisListJoin.get(MediumAnalysisList_.globalPermission), (byte) 1);
+      Predicate userHasAccess = criteriaBuilder.equal(userAccountJoin.get(UserAccount_.id), userAccount.getId());
+
+      predicates.add(criteriaBuilder.or(mediumAnalysisListHasGlobalAccess, userHasAccess));
     }
-
-    if (filter.getAnnotationTypes().isPresent() && !filter.getAnnotationTypes().get().isEmpty()) {
-      List<Predicate> typePredicates = new ArrayList<>();
-      for (AnnotationType annotationType : filter.getAnnotationTypes().get()) {
-        if (AnnotationType.VIDEO.equals(annotationType)) {
-          typePredicates.add(criteriaBuilder.equal(root.get(Annotation_.layerVisual), true));
-        }
-        if (AnnotationType.AUDIO.equals(annotationType)) {
-          typePredicates.add(criteriaBuilder.equal(root.get(Annotation_.layerAudio), true));
-        }
-      }
-
-      predicates.add(criteriaBuilder.or(typePredicates.toArray(new Predicate[0])));
-    }
-
     return predicates;
   }
 

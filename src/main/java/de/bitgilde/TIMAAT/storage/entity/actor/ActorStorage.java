@@ -23,6 +23,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.Category;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet;
 import de.bitgilde.TIMAAT.model.FIPOP.CategorySet_;
 import de.bitgilde.TIMAAT.model.FIPOP.Category_;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.storage.db.DbStorage;
 import de.bitgilde.TIMAAT.storage.entity.actor.api.ActorFilterCriteria;
 import de.bitgilde.TIMAAT.storage.entity.actor.api.ActorSortingField;
@@ -57,36 +58,39 @@ public class ActorStorage extends DbStorage<Actor, ActorFilterCriteria, ActorSor
   }
 
   @Override
-  protected List<Predicate> createPredicates(ActorFilterCriteria filter, Root<Actor> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
+  protected List<Predicate> createPredicates(ActorFilterCriteria filter, Root<Actor> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, UserAccount userAccount) {
     List<Predicate> predicates = new ArrayList<>();
 
-    if (filter.getActorNameSearch().isPresent()) {
-      String searchText = filter.getActorNameSearch().get();
-      predicates.add(criteriaBuilder.like(root.get(Actor_.displayName).get(ActorName_.name), "%" + searchText + "%"));
-    }
+    if(filter != null){
+      if (filter.getActorNameSearch().isPresent()) {
+        String searchText = filter.getActorNameSearch().get();
+        predicates.add(criteriaBuilder.like(root.get(Actor_.displayName).get(ActorName_.name), "%" + searchText + "%"));
+      }
 
-    if (filter.getExcludedAnnotationId().isPresent()) {
-      Integer excludedAnnotationId = filter.getExcludedAnnotationId().get();
-      predicates.add(criteriaBuilder.notEqual(root.get(Actor_.id), excludedAnnotationId));
-    }
+      if (filter.getExcludedAnnotationId().isPresent()) {
+        Integer excludedAnnotationId = filter.getExcludedAnnotationId().get();
+        predicates.add(criteriaBuilder.notEqual(root.get(Actor_.id), excludedAnnotationId));
+      }
 
-    boolean categoryFilterActive = filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty();
-    boolean categorySetFilterActive = filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get()
-                                                                                       .isEmpty();
+      boolean categoryFilterActive = filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty();
+      boolean categorySetFilterActive = filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get()
+                                                                                         .isEmpty();
 
-    if (categoryFilterActive) {
-      Join<Actor, Category> actorCategoryJoin = root.join(Actor_.categories);
-      predicates.add(actorCategoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
-    }
+      if (categoryFilterActive) {
+        Join<Actor, Category> actorCategoryJoin = root.join(Actor_.categories);
+        predicates.add(actorCategoryJoin.get(Category_.id).in(filter.getCategoryIds().get()));
+      }
 
-    if (categorySetFilterActive) {
-      Join<Actor, CategorySet> actorCategorySetJoin = root.join(Actor_.categorySets);
-      predicates.add(actorCategorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
-    }
+      if (categorySetFilterActive) {
+        Join<Actor, CategorySet> actorCategorySetJoin = root.join(Actor_.categorySets);
+        predicates.add(actorCategorySetJoin.get(CategorySet_.id).in(filter.getCategorySetIds().get()));
+      }
 
-    if (filter.getActorTypeIds().isPresent() && !filter.getActorTypeIds().get().isEmpty()) {
-      Join<Actor, ActorType> actorTypeJoin = root.join(Actor_.actorType);
-      predicates.add(actorTypeJoin.get(ActorType_.id).in(filter.getActorTypeIds().get()));
+      if (filter.getActorTypeIds().isPresent() && !filter.getActorTypeIds().get().isEmpty()) {
+        Join<Actor, ActorType> actorTypeJoin = root.join(Actor_.actorType);
+        predicates.add(actorTypeJoin.get(ActorType_.id).in(filter.getActorTypeIds().get()));
+      }
+
     }
 
     return predicates;

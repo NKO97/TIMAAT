@@ -3,6 +3,7 @@ package de.bitgilde.TIMAAT.rest.endpoint;
 import de.bitgilde.TIMAAT.model.DataTableInfo;
 import de.bitgilde.TIMAAT.model.FIPOP.MediumAnalysisList;
 import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
+import de.bitgilde.TIMAAT.rest.Secured;
 import de.bitgilde.TIMAAT.rest.filter.AuthenticationFilter;
 import de.bitgilde.TIMAAT.rest.model.analysissegment.SegmentStructureElementListingQueryParameter;
 import de.bitgilde.TIMAAT.rest.model.segment.SegmentStructureElement;
@@ -52,15 +53,16 @@ public class EndpointSegmentStructureElement {
   @GET
   @Produces
   @Path("list")
+  @Secured
   public DataTableInfo<SegmentStructureElement> listSegmentStructureElements(@BeanParam SegmentStructureElementListingQueryParameter queryParameter) {
     int draw = queryParameter.getDraw().orElse(0);
 
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
-    List<SegmentStructureElement> matchingEntries = segmentStructureElementsStorage.getEntriesAsStream(queryParameter,
+    List<SegmentStructureElement> matchingEntries = segmentStructureElementsStorage.getEntriesAsStreamRespectingAuthorization(queryParameter,
             queryParameter, queryParameter, userAccount).map(SegmentStructureElement::new).collect(Collectors.toList());
-    long countOfMatchingEntries = segmentStructureElementsStorage.getNumberOfMatchingEntries(queryParameter);
-    long totalCount = segmentStructureElementsStorage.getNumberOfTotalEntries();
+    long countOfMatchingEntries = segmentStructureElementsStorage.getNumberOfMatchingEntriesRespectingAuthorization(queryParameter, userAccount);
+    long totalCount = segmentStructureElementsStorage.getNumberOfTotalEntriesRespectingAuthorization(userAccount);
     return new DataTableInfo<>(draw, totalCount, countOfMatchingEntries, matchingEntries);
   }
 

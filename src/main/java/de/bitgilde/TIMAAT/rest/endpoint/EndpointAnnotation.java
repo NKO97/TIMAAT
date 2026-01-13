@@ -117,19 +117,19 @@ public class EndpointAnnotation {
   @Inject
   TemporaryFileStorage temporaryFileStorage;
 
-  //TODO: Filter by permission (currently no permissions are respected)
   @GET
   @Produces
   @Path("list")
+  @Secured
   public DataTableInfo<Annotation> getAnnotationList(@BeanParam @Valid AnnotationListingQueryParameter annotationListingQueryParameter) {
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
     int draw = annotationListingQueryParameter.getDraw().orElse(0);
 
-    List<Annotation> matchingAnnotations = annotationStorage.getEntriesAsStream(annotationListingQueryParameter,
+    List<Annotation> matchingAnnotations = annotationStorage.getEntriesAsStreamRespectingAuthorization(annotationListingQueryParameter,
             annotationListingQueryParameter, annotationListingQueryParameter, userAccount).collect(Collectors.toList());
-    long totalAnnotationsCount = annotationStorage.getNumberOfTotalEntries();
-    long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntries(annotationListingQueryParameter);
+    long totalAnnotationsCount = annotationStorage.getNumberOfTotalEntriesRespectingAuthorization(userAccount);
+    long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntriesRespectingAuthorization(annotationListingQueryParameter, userAccount);
 
     return new DataTableInfo<>(draw, totalAnnotationsCount, filteredAnnotationsCount, matchingAnnotations);
   }
@@ -140,7 +140,7 @@ public class EndpointAnnotation {
   public CountResult getCountOfAnnotations(@BeanParam @Valid AnnotationListingQueryParameter annotationListingQueryParameter) {
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
-    long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntries(annotationListingQueryParameter);
+    long filteredAnnotationsCount = annotationStorage.getNumberOfMatchingEntriesRespectingAuthorization(annotationListingQueryParameter, userAccount);
 
     return new CountResult(filteredAnnotationsCount);
   }

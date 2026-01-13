@@ -113,10 +113,10 @@ public class EndpointActor {
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
 
 		int draw = queryParameter.getDraw().isPresent() ? queryParameter.getDraw().get() : 0;
-    List<Actor> actors = actorStorage.getEntriesAsStream(queryParameter, queryParameter, queryParameter, userAccount).collect(
+    List<Actor> actors = actorStorage.getEntriesAsStreamRespectingAuthorization(queryParameter, queryParameter, queryParameter, userAccount).collect(
             Collectors.toList());
-    Long actorsCount = actorStorage.getNumberOfTotalEntries();
-    Long matchingActorsCount = actorStorage.getNumberOfMatchingEntries(queryParameter);
+    Long actorsCount = actorStorage.getNumberOfTotalEntriesRespectingAuthorization(userAccount);
+    Long matchingActorsCount = actorStorage.getNumberOfMatchingEntriesRespectingAuthorization(queryParameter, userAccount);
 
 		return new DataTableInfo<>(draw, actorsCount, matchingActorsCount, actors);
 
@@ -130,7 +130,7 @@ public class EndpointActor {
 	{
     UserAccount userAccount = (UserAccount) containerRequestContext.getProperty(
             AuthenticationFilter.USER_ACCOUNT_PROPERTY_NAME);
-		return actorStorage.getEntriesAsStream(queryParameter, queryParameter, queryParameter, userAccount)
+		return actorStorage.getEntriesAsStreamRespectingAuthorization(queryParameter, queryParameter, queryParameter, userAccount)
                 .map(currentActor -> new SelectElement<>(currentActor.getId(), currentActor.getDisplayName().getName()))
                 .collect(Collectors.toList());
 	}

@@ -12,6 +12,7 @@ import de.bitgilde.TIMAAT.model.FIPOP.MediumHasMusicDetail;
 import de.bitgilde.TIMAAT.model.FIPOP.Medium_;
 import de.bitgilde.TIMAAT.model.FIPOP.Music;
 import de.bitgilde.TIMAAT.model.FIPOP.Title_;
+import de.bitgilde.TIMAAT.model.FIPOP.UserAccount;
 import de.bitgilde.TIMAAT.model.TimeRange;
 import de.bitgilde.TIMAAT.storage.db.DbStorage;
 import de.bitgilde.TIMAAT.storage.entity.medium.api.MediumFilterCriteria;
@@ -96,33 +97,35 @@ public class MediumStorage extends DbStorage<Medium, MediumFilterCriteria, Mediu
   }
 
   @Override
-  protected List<Predicate> createPredicates(MediumFilterCriteria filter, Root<Medium> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery) {
+  protected List<Predicate> createPredicates(MediumFilterCriteria filter, Root<Medium> root, CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, UserAccount userAccount) {
     List<Predicate> predicates = new ArrayList<>();
 
-    if (filter.getMediumNameSearch().isPresent()) {
-      String searchText = filter.getMediumNameSearch().get();
-      predicates.add(criteriaBuilder.like(root.get(Medium_.displayTitle).get(Title_.name), "%" + searchText + "%"));
-    }
+    if(filter != null) {
+      if (filter.getMediumNameSearch().isPresent()) {
+        String searchText = filter.getMediumNameSearch().get();
+        predicates.add(criteriaBuilder.like(root.get(Medium_.displayTitle).get(Title_.name), "%" + searchText + "%"));
+      }
 
-    if (filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty()) {
-      Collection<Integer> categoryIds = filter.getCategoryIds().get();
-      Join<Medium, Category> categoryJoin = root.join(Medium_.categories);
+      if (filter.getCategoryIds().isPresent() && !filter.getCategoryIds().get().isEmpty()) {
+        Collection<Integer> categoryIds = filter.getCategoryIds().get();
+        Join<Medium, Category> categoryJoin = root.join(Medium_.categories);
 
-      predicates.add(categoryJoin.get(Category_.id).in(categoryIds));
-    }
+        predicates.add(categoryJoin.get(Category_.id).in(categoryIds));
+      }
 
-    if (filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get().isEmpty()) {
-      Collection<Integer> categorySetIds = filter.getCategorySetIds().get();
-      Join<Medium, CategorySet> categorySetJoin = root.join(Medium_.categorySets);
+      if (filter.getCategorySetIds().isPresent() && !filter.getCategorySetIds().get().isEmpty()) {
+        Collection<Integer> categorySetIds = filter.getCategorySetIds().get();
+        Join<Medium, CategorySet> categorySetJoin = root.join(Medium_.categorySets);
 
-      predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
-    }
+        predicates.add(categorySetJoin.get(CategorySet_.id).in(categorySetIds));
+      }
 
-    if (filter.getMediaTypeIds().isPresent() && !filter.getMediaTypeIds().get().isEmpty()) {
-      Collection<Integer> mediaTypeIds = filter.getMediaTypeIds().get();
-      Join<Medium, MediaType> mediaTypeJoin = root.join(Medium_.mediaType);
+      if (filter.getMediaTypeIds().isPresent() && !filter.getMediaTypeIds().get().isEmpty()) {
+        Collection<Integer> mediaTypeIds = filter.getMediaTypeIds().get();
+        Join<Medium, MediaType> mediaTypeJoin = root.join(Medium_.mediaType);
 
-      predicates.add(mediaTypeJoin.get(MediaType_.id).in(mediaTypeIds));
+        predicates.add(mediaTypeJoin.get(MediaType_.id).in(mediaTypeIds));
+      }
     }
 
     return predicates;
