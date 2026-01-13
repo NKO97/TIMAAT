@@ -527,6 +527,8 @@
 
         showAddCategoryPanel() {
             $('.categoriesRightPanelContent').hide()
+            $('.formSubmitButton').show()
+            $('.formDismissButton').show()
 
             const $categoryCreateChangeForm = $('#categoryCreateChangeForm')
             TIMAAT.Categories.resetCategoryCreateChangeFormState($categoryCreateChangeForm)
@@ -609,6 +611,8 @@
 
         showAddCategorySetPanel() {
             $('.categoriesRightPanelContent').hide()
+            $('.formSubmitButton').show()
+            $('.formDismissButton').show()
 
             const $categorySetCreateChangeForm = $('#categorySetCreateChangeForm')
             TIMAAT.Categories.resetCategorySetCreateChangeFormState($categorySetCreateChangeForm)
@@ -638,6 +642,8 @@
 
         showEditCategorySetPanel(categorySet) {
             $('.categoriesRightPanelContent').hide()
+            $('.formSubmitButton').show()
+            $('.formDismissButton').show()
 
             const $categorySetCreateChangeForm = $('#categorySetCreateChangeForm')
             TIMAAT.Categories.resetCategorySetCreateChangeFormState($categorySetCreateChangeForm)
@@ -681,6 +687,8 @@
         },
         showEditCategoryPanel(category) {
             $('.categoriesRightPanelContent').hide()
+            $('.formSubmitButton').show()
+            $('.formDismissButton').show()
 
             const $categoryCreateChangeForm = $('#categoryCreateChangeForm')
             TIMAAT.Categories.resetCategoryCreateChangeFormState($categoryCreateChangeForm)
